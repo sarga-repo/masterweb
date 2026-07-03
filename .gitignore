@@ -28,5 +28,6 @@ sarga_multisite_codex_ready_package/
 .rtk/
 .claude/
 .agents/
+CLAUDE.md
 skills-lock.json
 AGENTS.md

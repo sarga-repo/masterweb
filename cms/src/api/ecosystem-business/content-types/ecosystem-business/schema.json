@@ -1,0 +1,85 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ecosystem_businesses",
+  "info": {
+    "singularName": "ecosystem-business",
+    "pluralName": "ecosystem-businesses",
+    "displayName": "Ecosystem Business",
+    "description": "A Sarga business or intellectual property"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "pillar": {
+      "type": "enumeration",
+      "enum": ["sports", "venue", "media", "technology", "festival", "other"],
+      "required": true
+    },
+    "shortDescription": { "type": "text", "required": true },
+    "overview": { "type": "richtext" },
+    "highlights": {
+      "type": "component",
+      "component": "shared.key-highlight",
+      "repeatable": true
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images", "videos"]
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "cardImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "ctaLabel": { "type": "string", "default": "Find Out More" },
+    "ctaUrl": { "type": "string" },
+    "businessStatus": {
+      "type": "enumeration",
+      "enum": ["active", "comingSoon", "hidden"],
+      "default": "active",
+      "required": true
+    },
+    "launchTarget": { "type": "string" },
+    "order": { "type": "integer", "default": 0 },
+    "relatedArticles": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::news-article.news-article",
+      "mappedBy": "relatedBusinesses"
+    },
+    "relatedEvents": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::event.event",
+      "mappedBy": "business"
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    }
+  }
+}

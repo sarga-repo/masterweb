@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "newsletter_subscriptions",
+  "info": {
+    "singularName": "newsletter-subscription",
+    "pluralName": "newsletter-subscriptions",
+    "displayName": "Newsletter Subscription",
+    "description": "Server-submitted newsletter subscriptions"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": { "type": "email", "required": true, "unique": true },
+    "sourcePage": { "type": "string" },
+    "consent": { "type": "boolean", "default": false },
+    "subscribedAt": { "type": "datetime" },
+    "status": {
+      "type": "enumeration",
+      "enum": ["active", "unsubscribed"],
+      "default": "active",
+      "required": true
+    }
+  }
+}

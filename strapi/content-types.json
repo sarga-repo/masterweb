@@ -1,0 +1,181 @@
+{
+  "singleTypes": {
+    "siteSettings": {
+      "fields": {
+        "siteName": "string",
+        "legalCompanyName": "string",
+        "logo": "media",
+        "footerLogo": "media",
+        "primaryEmail": "email",
+        "phone": "string",
+        "address": "richtext",
+        "socialLinks": "repeatableComponent",
+        "defaultOgImage": "media"
+      }
+    },
+    "homepage": {
+      "fields": {
+        "heroEyebrow": "string",
+        "heroTitle": "string",
+        "heroDescription": "richtext",
+        "heroImage": "media",
+        "heroImageMobile": "media",
+        "primaryCtaLabel": "string",
+        "primaryCtaUrl": "string",
+        "secondaryCtaLabel": "string",
+        "secondaryCtaUrl": "string",
+        "aboutSummaryTitle": "string",
+        "aboutSummaryBody": "richtext",
+        "featuredBusinesses": "relation:ecosystemBusiness",
+        "featuredArticles": "relation:newsArticle",
+        "featuredEvents": "relation:event",
+        "seo": "component:seo"
+      }
+    }
+  },
+  "collectionTypes": {
+    "ecosystemBusiness": {
+      "fields": {
+        "name": "string",
+        "slug": "uid",
+        "pillar": [
+          "sports",
+          "venue",
+          "media",
+          "technology",
+          "festival",
+          "other"
+        ],
+        "shortDescription": "text",
+        "overview": "richtext",
+        "heroImage": "media",
+        "cardImage": "media",
+        "logo": "media",
+        "ctaLabel": "string",
+        "ctaUrl": "string",
+        "businessStatus": [
+          "active",
+          "comingSoon",
+          "hidden"
+        ],
+        "launchTarget": "string",
+        "order": "integer",
+        "relatedArticles": "relation:newsArticle",
+        "relatedEvents": "relation:event",
+        "seo": "component:seo"
+      }
+    },
+    "newsArticle": {
+      "fields": {
+        "title": "string",
+        "slug": "uid",
+        "excerpt": "text",
+        "body": "richtext_or_blocks",
+        "coverImage": "media",
+        "category": [
+          "news",
+          "publication",
+          "press-release",
+          "report",
+          "magazine"
+        ],
+        "publishedDate": "date",
+        "isHotTopic": "boolean",
+        "author": "string",
+        "relatedBusinesses": "relation:ecosystemBusiness",
+        "seo": "component:seo",
+        "publishedAt": "datetime"
+      }
+    },
+    "event": {
+      "fields": {
+        "title": "string",
+        "slug": "uid",
+        "description": "richtext",
+        "eventDate": "datetime",
+        "endDate": "datetime",
+        "venue": "string",
+        "coverImage": "media",
+        "business": "relation:ecosystemBusiness",
+        "ticketCtaLabel": "string",
+        "ticketUrl": "string",
+        "ticketIntegrationType": [
+          "redirect",
+          "deepLink",
+          "embed"
+        ],
+        "embedCode": "text",
+        "eventStatus": [
+          "upcoming",
+          "live",
+          "past",
+          "hidden"
+        ],
+        "seo": "component:seo"
+      }
+    },
+    "timelineItem": {
+      "fields": {
+        "year": "string",
+        "label": "string",
+        "title": "string",
+        "description": "text",
+        "image": "media",
+        "order": "integer"
+      }
+    },
+    "leadershipPerson": {
+      "fields": {
+        "name": "string",
+        "role": "string",
+        "group": [
+          "board",
+          "executive"
+        ],
+        "portrait": "media",
+        "biography": "richtext",
+        "order": "integer",
+        "publishedAt": "datetime"
+      }
+    },
+    "inquirySubmission": {
+      "fields": {
+        "name": "string",
+        "email": "email",
+        "phone": "string",
+        "company": "string",
+        "inquiryType": "enum",
+        "message": "text",
+        "sourcePage": "string",
+        "submittedAt": "datetime",
+        "status": "enum",
+        "internalNotes": "text"
+      }
+    },
+    "newsletterSubscription": {
+      "fields": {
+        "email": "email",
+        "sourcePage": "string",
+        "consent": "boolean",
+        "subscribedAt": "datetime",
+        "status": "enum"
+      }
+    }
+  },
+  "components": {
+    "seo": {
+      "fields": {
+        "metaTitle": "string",
+        "metaDescription": "text",
+        "ogTitle": "string",
+        "ogDescription": "text",
+        "ogImage": "media",
+        "canonicalUrl": "string",
+        "noIndex": "boolean"
+      }
+    }
+  },
+  "_notes": [
+    "businessStatus/eventStatus were renamed from 'status': 'status' is a reserved attribute name in Strapi v5 (document draft/publish state)."
+  ]
+}

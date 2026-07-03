@@ -1,0 +1,11 @@
+.git
+.env
+**/node_modules
+**/.next
+**/.cache
+**/.tmp
+tmp
+reference/source-pdfs
+docs
+prompts
+checklists

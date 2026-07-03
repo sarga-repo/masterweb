@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "news_articles",
+  "info": {
+    "singularName": "news-article",
+    "pluralName": "news-articles",
+    "displayName": "News Article",
+    "description": "News, publications, reports, and magazine stories"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "excerpt": { "type": "text", "required": true },
+    "body": { "type": "richtext" },
+    "coverImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": ["news", "publication", "press-release", "report", "magazine"],
+      "default": "news",
+      "required": true
+    },
+    "publishedDate": { "type": "date", "required": true },
+    "isHotTopic": { "type": "boolean", "default": false },
+    "author": { "type": "string" },
+    "relatedBusinesses": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::ecosystem-business.ecosystem-business",
+      "inversedBy": "relatedArticles"
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    }
+  }
+}

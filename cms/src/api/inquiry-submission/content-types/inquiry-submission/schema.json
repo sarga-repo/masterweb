@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "inquiry_submissions",
+  "info": {
+    "singularName": "inquiry-submission",
+    "pluralName": "inquiry-submissions",
+    "displayName": "Inquiry Submission",
+    "description": "Server-submitted contact inquiries"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "email": { "type": "email", "required": true },
+    "phone": { "type": "string" },
+    "company": { "type": "string" },
+    "inquiryType": {
+      "type": "enumeration",
+      "enum": [
+        "partnership",
+        "sponsorship",
+        "media",
+        "event",
+        "venue",
+        "career",
+        "general"
+      ],
+      "required": true
+    },
+    "message": { "type": "text", "required": true },
+    "sourcePage": { "type": "string" },
+    "submittedAt": { "type": "datetime" },
+    "status": {
+      "type": "enumeration",
+      "enum": ["new", "contacted", "closed"],
+      "default": "new",
+      "required": true
+    },
+    "internalNotes": { "type": "text", "private": true }
+  }
+}

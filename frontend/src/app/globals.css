@@ -1,0 +1,437 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Sarga.co brand colors sampled from preview PDF page 7. */
+  --color-sarga-black: #000b1d;
+  --color-sarga-dark: #07111f;
+  --color-sarga-soft: #434343;
+  --color-sarga-white: #ffffff;
+  --color-sarga-light: #f3f3f3;
+  --color-sarga-muted: #cccccc;
+  --color-sarga-text: #000b1d;
+  --color-sarga-text-muted: #434343;
+  --color-sarga-red: #e2321e;
+  --color-sarga-red-dark: #bd2818;
+  --color-sarga-orange: #ff5032;
+  --color-sarga-pink: #f4c3bd;
+  --color-sarga-gold: #d9a441;
+  --color-sarga-border: #d9d9d9;
+
+  /* Radius tokens */
+  --radius-sarga-sm: 8px;
+  --radius-sarga-md: 16px;
+  --radius-sarga-lg: 28px;
+  --radius-sarga-pill: 999px;
+
+  /* Page 7: Plus Jakarta Sans body, Zalando expanded display. */
+  --font-sans:
+    var(--font-plus-jakarta-sans), "Plus Jakarta Sans", system-ui,
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-heading:
+    var(--font-zalando-sans-expanded), "Zalando Sans Expanded",
+    var(--font-plus-jakarta-sans), "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+/* Layout scale tokens (used by .site-container and components) */
+:root {
+  --container-max: 96rem; /* 1536px */
+  --container-pad-mobile: 1.25rem; /* 20px */
+  --container-pad-tablet: 2.5rem; /* 40px */
+  --container-pad-desktop: 4.5rem; /* 72px */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--color-sarga-white);
+  color: var(--color-sarga-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-sarga-red);
+  color: var(--color-sarga-white);
+}
+
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-sarga-orange);
+  outline-offset: 3px;
+}
+
+/* Centered responsive content column */
+.site-container {
+  width: min(100% - (2 * var(--container-pad-mobile)), var(--container-max));
+  margin-inline: auto;
+}
+
+@media (min-width: 48rem) {
+  .site-container {
+    width: min(100% - (2 * var(--container-pad-tablet)), var(--container-max));
+  }
+}
+
+@media (min-width: 80rem) {
+  .site-container {
+    width: min(100% - (2 * var(--container-pad-desktop)), var(--container-max));
+  }
+}
+
+/* Uppercase accent label used above section titles */
+.eyebrow {
+  color: var(--color-sarga-orange);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Cinematic Editorial Velocity system */
+.velocity-hero__media {
+  transform: translateZ(0);
+}
+
+.velocity-hero__image {
+  object-position: 58% center;
+  transform: scale(1.035);
+}
+
+.velocity-hero__video {
+  object-position: 58% center;
+}
+
+.velocity-speed-lines {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 2.3rem,
+      rgb(255 255 255 / 0%) 2.34rem,
+      rgb(255 255 255 / 16%) 2.38rem,
+      transparent 2.44rem 4.8rem
+    ),
+    linear-gradient(90deg, transparent, rgb(226 50 30 / 15%), transparent);
+  filter: blur(0.4px);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 24%,
+    black 82%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 24%,
+    black 82%,
+    transparent
+  );
+  opacity: 0;
+  transform: skewX(-14deg) translate3d(14%, 0, 0);
+}
+
+.velocity-race-dust {
+  background:
+    radial-gradient(ellipse at 68% 62%, rgb(255 142 82 / 22%), transparent 34%),
+    radial-gradient(
+      ellipse at 34% 74%,
+      rgb(244 195 189 / 13%),
+      transparent 42%
+    ),
+    radial-gradient(ellipse at 84% 38%, rgb(255 255 255 / 8%), transparent 28%);
+  filter: blur(20px);
+  opacity: 0.18;
+  transform: translate3d(5%, 4%, 0) scale(0.94);
+}
+
+.velocity-road-glow {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(226 50 30 / 24%),
+    transparent
+  );
+  filter: blur(18px);
+  opacity: 0.2;
+  transform: skewX(-18deg) translate3d(10%, 0, 0);
+}
+
+.velocity-hero__veil {
+  background:
+    linear-gradient(
+      90deg,
+      rgb(0 11 29 / 99%) 0%,
+      rgb(0 11 29 / 92%) 32%,
+      rgb(0 11 29 / 65%) 54%,
+      rgb(0 11 29 / 12%) 78%,
+      rgb(0 11 29 / 22%) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgb(0 11 29 / 38%) 0%,
+      transparent 38%,
+      rgb(0 11 29 / 82%) 100%
+    );
+}
+
+.velocity-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.34'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: soft-light;
+  opacity: 0.08;
+}
+
+.velocity-title__word {
+  display: inline-block;
+  /* inline-block trims the trailing space inside the span; restore word gap */
+  margin-right: 0.24em;
+  opacity: 0;
+  transform: translate3d(0, 0.65em, 0);
+  animation: velocity-word-in 720ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.velocity-reveal {
+  opacity: 0;
+  transform: translate3d(0, 1rem, 0);
+  animation: velocity-fade-in 600ms 80ms ease-out forwards;
+}
+
+@keyframes velocity-word-in {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes velocity-fade-in {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes velocity-camera-race {
+  0% {
+    transform: scale(1.035) translate3d(0, 0, 0);
+  }
+  48% {
+    transform: scale(1.075) translate3d(-1.2%, 0.25%, 0);
+  }
+  100% {
+    transform: scale(1.11) translate3d(-2.1%, 0.55%, 0);
+  }
+}
+
+@keyframes velocity-lines-race {
+  0% {
+    opacity: 0;
+    transform: skewX(-14deg) translate3d(16%, 0, 0);
+  }
+  18% {
+    opacity: 0.3;
+  }
+  78% {
+    opacity: 0.16;
+  }
+  100% {
+    opacity: 0;
+    transform: skewX(-14deg) translate3d(-14%, 0, 0);
+  }
+}
+
+@keyframes velocity-dust-race {
+  0% {
+    opacity: 0.12;
+    transform: translate3d(7%, 5%, 0) scale(0.92);
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.14;
+    transform: translate3d(-4%, -1%, 0) scale(1.12);
+  }
+}
+
+@keyframes velocity-road-race {
+  from {
+    opacity: 0.12;
+    transform: skewX(-18deg) translate3d(18%, 0, 0);
+  }
+  to {
+    opacity: 0.3;
+    transform: skewX(-18deg) translate3d(-12%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .velocity-hero__image {
+    animation: velocity-camera-race 12s cubic-bezier(0.45, 0.05, 0.55, 0.95)
+      infinite alternate;
+    will-change: transform;
+  }
+
+  .velocity-speed-lines {
+    animation: velocity-lines-race 2.8s linear infinite;
+    will-change: transform, opacity;
+  }
+
+  .velocity-race-dust {
+    animation: velocity-dust-race 7.5s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+  }
+
+  .velocity-road-glow {
+    animation: velocity-road-race 3.6s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+  }
+}
+
+@media (max-width: 48rem) {
+  .velocity-hero__image {
+    object-position: 66% center;
+  }
+
+  .velocity-hero__video {
+    object-position: 66% center;
+  }
+
+  .velocity-speed-lines,
+  .velocity-race-dust,
+  .velocity-road-glow {
+    opacity: 0.1;
+  }
+
+  .velocity-hero__veil {
+    background:
+      linear-gradient(90deg, rgb(0 11 29 / 95%), rgb(0 11 29 / 48%)),
+      linear-gradient(
+        180deg,
+        rgb(0 11 29 / 24%) 0%,
+        rgb(0 11 29 / 78%) 74%,
+        rgb(0 11 29 / 96%) 100%
+      );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .velocity-title__word,
+  .velocity-reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .velocity-hero__image {
+    transform: scale(1.035);
+  }
+
+  .velocity-hero__video,
+  .velocity-speed-lines,
+  .velocity-race-dust,
+  .velocity-road-glow {
+    display: none;
+  }
+}
+
+/* Legacy button utilities retained for Phase 1 pages; new work should use <Button>. */
+.button-primary,
+.button-secondary {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-radius: var(--radius-sarga-pill);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: 100%;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.button-primary {
+  background: var(--color-sarga-red);
+  color: var(--color-sarga-white);
+}
+
+.button-primary:hover {
+  background: var(--color-sarga-red-dark);
+}
+
+.button-secondary {
+  border: 1px solid rgb(255 255 255 / 55%);
+  color: var(--color-sarga-white);
+}
+
+.button-secondary:hover {
+  border-color: var(--color-sarga-white);
+  background: rgb(255 255 255 / 8%);
+}
+
+@media (min-width: 40rem) {
+  .button-primary,
+  .button-secondary {
+    width: auto;
+  }
+}
+
+/* The About timeline uses its own persistent left-side position indicator. */
+@media (min-width: 64rem) {
+  .about-timeline-scroll {
+    scrollbar-width: none;
+  }
+
+  .about-timeline-scroll::-webkit-scrollbar {
+    display: none;
+  }
+}

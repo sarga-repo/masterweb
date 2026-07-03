@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_shared_key_highlights",
+  "info": {
+    "displayName": "Key Highlight",
+    "description": "A concise operating or audience advantage"
+  },
+  "options": {},
+  "attributes": {
+    "label": { "type": "string" },
+    "title": { "type": "string", "required": true },
+    "description": { "type": "text", "required": true }
+  }
+}

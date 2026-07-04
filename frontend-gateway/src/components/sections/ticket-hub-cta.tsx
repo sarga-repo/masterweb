@@ -7,7 +7,7 @@ export function TicketHubCta() {
   return (
     <section
       id="ticket-hub"
-      className="gateway-surface-accent-signature relative isolate overflow-hidden bg-sarga-red-dark text-white"
+      className="relative isolate overflow-hidden bg-sarga-red-dark text-white"
     >
       <span
         aria-hidden="true"

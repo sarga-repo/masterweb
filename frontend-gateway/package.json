@@ -2,6 +2,7 @@
   "name": "frontend-gateway",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.22.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -32,6 +33,5 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.9"
-  },
-  "packageManager": "pnpm@11.7.0"
+  }
 }

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "A Strapi application",
+  "packageManager": "pnpm@10.22.0",
   "scripts": {
     "build": "strapi build",
     "console": "strapi console",
@@ -33,7 +34,6 @@
     "node": ">=20.0.0 <=26.x.x",
     "npm": ">=6.0.0"
   },
-  "packageManager": "pnpm@11.7.0",
   "strapi": {
     "uuid": "23b28709-f2a3-4b3c-bd1b-4fcaaffa5111",
     "installId": "826d7bf4e2161f5df6922ce6dda406b87a83b020b751a6737703809bf09c80f1"

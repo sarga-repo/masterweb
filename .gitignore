@@ -13,8 +13,8 @@ build/
 .strapi-updater.json
 tmp/
 
-cms/public/uploads/*
-!cms/public/uploads/.gitkeep
+# Strapi media uploads are intentionally tracked in the repo.
+# (Previously ignored via `cms/public/uploads/*`.)
 
 *.log
 *.tsbuildinfo

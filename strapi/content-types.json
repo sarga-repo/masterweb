@@ -34,18 +34,23 @@
     }
   },
   "collectionTypes": {
+    "site": {
+      "fields": {
+        "name": "string",
+        "slug": "uid",
+        "baseUrl": "string",
+        "description": "text",
+        "logo": "media",
+        "favicon": "media",
+        "themeKey": "string",
+        "isActive": "boolean"
+      }
+    },
     "ecosystemBusiness": {
       "fields": {
         "name": "string",
         "slug": "uid",
-        "pillar": [
-          "sports",
-          "venue",
-          "media",
-          "technology",
-          "festival",
-          "other"
-        ],
+        "pillar": ["sports", "venue", "media", "technology", "festival", "other"],
         "shortDescription": "text",
         "overview": "richtext",
         "heroImage": "media",
@@ -53,13 +58,11 @@
         "logo": "media",
         "ctaLabel": "string",
         "ctaUrl": "string",
-        "businessStatus": [
-          "active",
-          "comingSoon",
-          "hidden"
-        ],
+        "businessStatus": ["active", "comingSoon", "hidden"],
         "launchTarget": "string",
         "order": "integer",
+        "siteScope": ["gateway", "motorsport", "shared", "hidden"],
+        "dedicatedSiteUrl": "string",
         "relatedArticles": "relation:newsArticle",
         "relatedEvents": "relation:event",
         "seo": "component:seo"
@@ -77,12 +80,24 @@
           "publication",
           "press-release",
           "report",
-          "magazine"
+          "magazine",
+          "race-report",
+          "announcement",
+          "lifestyle",
+          "community",
+          "media"
         ],
         "publishedDate": "date",
         "isHotTopic": "boolean",
         "author": "string",
         "relatedBusinesses": "relation:ecosystemBusiness",
+        "relatedEvent": "relation:event",
+        "siteScope": ["gateway", "motorsport", "shared", "hidden"],
+        "sites": "relation:site",
+        "showOnGateway": "boolean",
+        "showOnMotorsport": "boolean",
+        "featuredOnGateway": "boolean",
+        "featuredOnMotorsport": "boolean",
         "seo": "component:seo",
         "publishedAt": "datetime"
       }
@@ -99,19 +114,85 @@
         "business": "relation:ecosystemBusiness",
         "ticketCtaLabel": "string",
         "ticketUrl": "string",
-        "ticketIntegrationType": [
-          "redirect",
-          "deepLink",
-          "embed"
-        ],
+        "ticketIntegrationType": ["redirect", "deepLink", "embed"],
         "embedCode": "text",
+        "embedUrl": "string",
         "eventStatus": [
           "upcoming",
           "live",
           "past",
-          "hidden"
+          "hidden",
+          "announced",
+          "ticketsOpen",
+          "soldOut",
+          "completed",
+          "cancelled"
         ],
+        "siteScope": ["gateway", "motorsport", "shared", "hidden"],
+        "sites": "relation:site",
+        "showOnGateway": "boolean",
+        "showOnMotorsport": "boolean",
+        "racingCategory": "string",
+        "seriesName": "string",
+        "venueAddress": "text",
+        "circuitName": "string",
+        "schedule": "repeatableComponent:eventSession",
+        "heroMedia": "media",
+        "gallery": "media",
+        "broadcastUrl": "string",
+        "ticketCtas": "relation:ticketCta",
+        "sponsors": "relation:partner",
         "seo": "component:seo"
+      }
+    },
+    "ticketCta": {
+      "fields": {
+        "title": "string",
+        "label": "string",
+        "provider": "string",
+        "ctaType": ["redirect", "deepLink", "embed"],
+        "url": "string",
+        "embedCode": "text",
+        "embedConfigJson": "json",
+        "trackingParams": "json",
+        "activeFrom": "datetime",
+        "activeUntil": "datetime",
+        "isActive": "boolean",
+        "siteScope": ["gateway", "motorsport", "shared", "hidden"],
+        "sites": "relation:site",
+        "relatedEvent": "relation:event"
+      }
+    },
+    "partner": {
+      "fields": {
+        "name": "string",
+        "slug": "uid",
+        "logo": "media",
+        "websiteUrl": "string",
+        "partnerType": [
+          "sponsor",
+          "technical",
+          "media",
+          "broadcast",
+          "government",
+          "community",
+          "other"
+        ],
+        "siteScope": ["gateway", "motorsport", "shared", "hidden"],
+        "sites": "relation:site",
+        "sortOrder": "integer",
+        "isActive": "boolean"
+      }
+    },
+    "mediaGallery": {
+      "fields": {
+        "title": "string",
+        "slug": "uid",
+        "description": "text",
+        "mediaItems": "media",
+        "relatedEvent": "relation:event",
+        "siteScope": ["gateway", "motorsport", "shared", "hidden"],
+        "sites": "relation:site"
       }
     },
     "timelineItem": {
@@ -128,10 +209,7 @@
       "fields": {
         "name": "string",
         "role": "string",
-        "group": [
-          "board",
-          "executive"
-        ],
+        "group": ["board", "executive"],
         "portrait": "media",
         "biography": "richtext",
         "order": "integer",
@@ -173,9 +251,29 @@
         "canonicalUrl": "string",
         "noIndex": "boolean"
       }
+    },
+    "keyHighlight": {
+      "fields": {
+        "label": "string",
+        "title": "string",
+        "description": "text"
+      }
+    },
+    "eventSession": {
+      "fields": {
+        "label": "string",
+        "day": "string",
+        "startTime": "datetime",
+        "endTime": "datetime",
+        "description": "text"
+      }
     }
   },
   "_notes": [
-    "businessStatus/eventStatus were renamed from 'status': 'status' is a reserved attribute name in Strapi v5 (document draft/publish state)."
+    "businessStatus/eventStatus were renamed from 'status': 'status' is a reserved attribute name in Strapi v5 (document draft/publish state).",
+    "Phase 2 multisite: siteScope enum (gateway|motorsport|shared|hidden) + optional many-to-many 'sites' relation added to event, news-article, ticket-cta, partner, media-gallery, and ecosystem-business. showOnGateway/showOnMotorsport booleans drive cross-site teasers.",
+    "eventStatus and newsArticle.category enums were extended (not replaced) with motorsport values to preserve backward compatibility with existing gateway content.",
+    "event.ticketCtas <-> ticketCta.relatedEvent is a single bidirectional one-to-many relation (one event, many ticket CTAs), replacing the singular 'ticketCta' field named in the spec to avoid a duplicate relation.",
+    "This file mirrors the Strapi schemas under cms/src/api and cms/src/components; it is documentation, not the source of truth."
   ]
 }

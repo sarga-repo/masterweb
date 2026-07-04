@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "leadership_people",
+  "info": {
+    "singularName": "leadership-person",
+    "pluralName": "leadership-people",
+    "displayName": "Leadership Person",
+    "description": "Leadership team members for the About page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "role": { "type": "string" },
+    "group": {
+      "type": "enumeration",
+      "enum": ["board", "executive", "advisor"],
+      "default": "executive"
+    },
+    "order": { "type": "integer", "default": 0 },
+    "portrait": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

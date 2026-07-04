@@ -64,6 +64,13 @@
     },
     "launchTarget": { "type": "string" },
     "order": { "type": "integer", "default": 0 },
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["gateway", "motorsport", "shared", "hidden"],
+      "default": "shared",
+      "required": true
+    },
+    "dedicatedSiteUrl": { "type": "string" },
     "relatedArticles": {
       "type": "relation",
       "relation": "manyToMany",

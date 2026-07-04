@@ -1,0 +1,730 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Sarga.co brand colors sampled from preview PDF page 7. */
+  --color-sarga-black: #000b1d;
+  --color-sarga-dark: #07111f;
+  --color-sarga-soft: #434343;
+  --color-sarga-white: #ffffff;
+  --color-sarga-light: #f3f3f3;
+  --color-sarga-muted: #cccccc;
+  --color-sarga-text: #000b1d;
+  --color-sarga-text-muted: #434343;
+  --color-sarga-red: #e2321e;
+  --color-sarga-red-dark: #bd2818;
+  --color-sarga-orange: #ff5032;
+  --color-sarga-pink: #f4c3bd;
+  --color-sarga-gold: #d9a441;
+  --color-sarga-border: #d9d9d9;
+
+  /* Radius tokens */
+  --radius-sarga-sm: 8px;
+  --radius-sarga-md: 16px;
+  --radius-sarga-lg: 28px;
+  --radius-sarga-pill: 999px;
+
+  /* Page 7: Plus Jakarta Sans body, Zalando expanded display. */
+  --font-sans:
+    var(--font-plus-jakarta-sans), "Plus Jakarta Sans", system-ui,
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-heading:
+    var(--font-zalando-sans-expanded), "Zalando Sans Expanded",
+    var(--font-plus-jakarta-sans), "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+/* Layout scale tokens (used by .site-container and components) */
+:root {
+  --container-max: 96rem; /* 1536px */
+  --container-pad-mobile: 1.25rem; /* 20px */
+  --container-pad-tablet: 2.5rem; /* 40px */
+  --container-pad-desktop: 4.5rem; /* 72px */
+  --gateway-surface-canvas: #f6f5f2;
+  --gateway-surface-ink: #000b1d;
+  --gateway-line-light: rgb(0 11 29 / 12%);
+  --gateway-line-dark: rgb(255 255 255 / 14%);
+  --gateway-shadow-elevated: 0 24px 70px rgb(0 11 29 / 8%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--color-sarga-white);
+  color: var(--color-sarga-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-sarga-red);
+  color: var(--color-sarga-white);
+}
+
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-sarga-orange);
+  outline-offset: 3px;
+}
+
+/* Centered responsive content column */
+.site-container {
+  width: min(100% - (2 * var(--container-pad-mobile)), var(--container-max));
+  margin-inline: auto;
+}
+
+@media (min-width: 48rem) {
+  .site-container {
+    width: min(100% - (2 * var(--container-pad-tablet)), var(--container-max));
+  }
+}
+
+@media (min-width: 80rem) {
+  .site-container {
+    width: min(100% - (2 * var(--container-pad-desktop)), var(--container-max));
+  }
+}
+
+/* Uppercase accent label used above section titles */
+.eyebrow {
+  color: var(--color-sarga-orange);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Cinematic Editorial Velocity system */
+.velocity-hero__media {
+  transform: translateZ(0);
+}
+
+.velocity-hero__image {
+  object-position: 58% center;
+  transform: scale(1.035);
+}
+
+.velocity-hero__video {
+  object-position: 58% center;
+}
+
+.velocity-speed-lines {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 2.3rem,
+      rgb(255 255 255 / 0%) 2.34rem,
+      rgb(255 255 255 / 16%) 2.38rem,
+      transparent 2.44rem 4.8rem
+    ),
+    linear-gradient(90deg, transparent, rgb(226 50 30 / 15%), transparent);
+  filter: blur(0.4px);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 24%,
+    black 82%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 24%,
+    black 82%,
+    transparent
+  );
+  opacity: 0;
+  transform: skewX(-14deg) translate3d(14%, 0, 0);
+}
+
+.velocity-race-dust {
+  background:
+    radial-gradient(ellipse at 68% 62%, rgb(255 142 82 / 22%), transparent 34%),
+    radial-gradient(
+      ellipse at 34% 74%,
+      rgb(244 195 189 / 13%),
+      transparent 42%
+    ),
+    radial-gradient(ellipse at 84% 38%, rgb(255 255 255 / 8%), transparent 28%);
+  filter: blur(20px);
+  opacity: 0.18;
+  transform: translate3d(5%, 4%, 0) scale(0.94);
+}
+
+.velocity-road-glow {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(226 50 30 / 24%),
+    transparent
+  );
+  filter: blur(18px);
+  opacity: 0.2;
+  transform: skewX(-18deg) translate3d(10%, 0, 0);
+}
+
+.velocity-hero__veil {
+  background:
+    linear-gradient(
+      90deg,
+      rgb(0 11 29 / 98%) 0%,
+      rgb(0 11 29 / 90%) 34%,
+      rgb(0 11 29 / 54%) 59%,
+      rgb(0 11 29 / 8%) 82%,
+      rgb(0 11 29 / 20%) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgb(0 11 29 / 38%) 0%,
+      transparent 38%,
+      rgb(0 11 29 / 82%) 100%
+    );
+}
+
+.gateway-hero-mark {
+  opacity: 0.72;
+  -webkit-mask-image: linear-gradient(90deg, black 0 62%, transparent 96%);
+  mask-image: linear-gradient(90deg, black 0 62%, transparent 96%);
+}
+
+/* Homepage surface system: one controlled gesture per section. */
+.gateway-section-light {
+  background: var(--gateway-surface-canvas);
+  border-top: 1px solid var(--gateway-line-light);
+}
+
+/*
+ * Gateway surface signature
+ * A cropped two-row interpretation of the solid Sarga.co mark shown on page 7
+ * of the brand comparison. Modules increase in opacity across the sequence.
+ */
+.gateway-section-light,
+.gateway-surface-light-signature,
+.gateway-surface-accent-signature {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.gateway-section-light::before,
+.gateway-surface-light-signature::before,
+.gateway-surface-accent-signature::before {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  width: clamp(24rem, 46vw, 46rem);
+  height: clamp(13rem, 23vw, 23rem);
+  content: "";
+  pointer-events: none;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 810 280' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='white'%3E%3Cpath d='M130 0h72l-81 140H49L130 0Z' opacity='.16'/%3E%3Cpath d='M265 0h72l-81 140h-72L265 0Z' opacity='.31'/%3E%3Cpath d='M400 0h72l-81 140h-72L400 0Z' opacity='.47'/%3E%3Cpath d='M535 0h72l-81 140h-72L535 0Z' opacity='.64'/%3E%3Cpath d='M670 0h72l-81 140h-72L670 0Z' opacity='.82'/%3E%3Cpath d='M117 140h72l-81 140H36l81-140Z' opacity='.16'/%3E%3Cpath d='M252 140h72l-81 140h-72l81-140Z' opacity='.31'/%3E%3Cpath d='M387 140h72l-81 140h-72l81-140Z' opacity='.47'/%3E%3Cpath d='M522 140h72l-81 140h-72l81-140Z' opacity='.64'/%3E%3Cpath d='M657 140h72l-81 140h-72l81-140Z' opacity='.82'/%3E%3C/g%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 810 280' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='white'%3E%3Cpath d='M130 0h72l-81 140H49L130 0Z' opacity='.16'/%3E%3Cpath d='M265 0h72l-81 140h-72L265 0Z' opacity='.31'/%3E%3Cpath d='M400 0h72l-81 140h-72L400 0Z' opacity='.47'/%3E%3Cpath d='M535 0h72l-81 140h-72L535 0Z' opacity='.64'/%3E%3Cpath d='M670 0h72l-81 140h-72L670 0Z' opacity='.82'/%3E%3Cpath d='M117 140h72l-81 140H36l81-140Z' opacity='.16'/%3E%3Cpath d='M252 140h72l-81 140h-72l81-140Z' opacity='.31'/%3E%3Cpath d='M387 140h72l-81 140h-72l81-140Z' opacity='.47'/%3E%3Cpath d='M522 140h72l-81 140h-72l81-140Z' opacity='.64'/%3E%3Cpath d='M657 140h72l-81 140h-72l81-140Z' opacity='.82'/%3E%3C/g%3E%3C/svg%3E");
+  -webkit-mask-position: right top;
+  mask-position: right top;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+.gateway-section-light::before,
+.gateway-surface-light-signature::before {
+  background: linear-gradient(
+    112deg,
+    rgb(226 50 30 / 18%),
+    rgb(255 80 50 / 42%)
+  );
+}
+
+.gateway-surface-accent-signature::before {
+  background: linear-gradient(
+    112deg,
+    rgb(255 255 255 / 10%),
+    rgb(255 255 255 / 34%)
+  );
+}
+
+.gateway-surface-light-signature--left::before,
+.gateway-surface-accent-signature--left::before {
+  right: auto;
+  left: 0;
+  transform: scaleX(-1);
+}
+
+.gateway-section-light > .site-container,
+.gateway-surface-light-signature > .site-container,
+.gateway-surface-accent-signature > .site-container {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 40rem) {
+  .gateway-section-light::before,
+  .gateway-surface-light-signature::before,
+  .gateway-surface-accent-signature::before {
+    width: 20rem;
+    height: 11rem;
+    opacity: 0.78;
+  }
+}
+
+.gateway-360-panel {
+  background:
+    linear-gradient(145deg, rgb(255 80 50 / 30%), transparent 48%),
+    var(--color-sarga-red-dark);
+}
+
+.gateway-dark-halo {
+  background: radial-gradient(
+    circle,
+    rgb(226 50 30 / 14%) 0,
+    rgb(226 50 30 / 4%) 38%,
+    transparent 70%
+  );
+  filter: blur(10px);
+}
+
+.gateway-signal-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 4%,
+    rgb(226 50 30 / 60%) 28%,
+    rgb(255 80 50 / 28%) 52%,
+    transparent 82%
+  );
+}
+
+.gateway-newsletter-glow {
+  background: rgb(226 50 30 / 12%);
+  filter: blur(80px);
+}
+
+.velocity-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.34'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: soft-light;
+  opacity: 0.08;
+}
+
+.velocity-title__word {
+  display: inline-block;
+  /* inline-block trims the trailing space inside the span; restore word gap */
+  margin-right: 0.24em;
+  opacity: 0;
+  transform: translate3d(0, 0.65em, 0);
+  animation: velocity-word-in 720ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.velocity-reveal {
+  opacity: 0;
+  transform: translate3d(0, 1rem, 0);
+  animation: velocity-fade-in 600ms 80ms ease-out forwards;
+}
+
+@keyframes velocity-word-in {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes velocity-fade-in {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes velocity-camera-race {
+  0% {
+    transform: scale(1.035) translate3d(0, 0, 0);
+  }
+  48% {
+    transform: scale(1.075) translate3d(-1.2%, 0.25%, 0);
+  }
+  100% {
+    transform: scale(1.11) translate3d(-2.1%, 0.55%, 0);
+  }
+}
+
+@keyframes velocity-lines-race {
+  0% {
+    opacity: 0;
+    transform: skewX(-14deg) translate3d(16%, 0, 0);
+  }
+  18% {
+    opacity: 0.3;
+  }
+  78% {
+    opacity: 0.16;
+  }
+  100% {
+    opacity: 0;
+    transform: skewX(-14deg) translate3d(-14%, 0, 0);
+  }
+}
+
+@keyframes velocity-dust-race {
+  0% {
+    opacity: 0.12;
+    transform: translate3d(7%, 5%, 0) scale(0.92);
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.14;
+    transform: translate3d(-4%, -1%, 0) scale(1.12);
+  }
+}
+
+@keyframes velocity-road-race {
+  from {
+    opacity: 0.12;
+    transform: skewX(-18deg) translate3d(18%, 0, 0);
+  }
+  to {
+    opacity: 0.3;
+    transform: skewX(-18deg) translate3d(-12%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .velocity-hero__image {
+    animation: velocity-camera-race 18s cubic-bezier(0.45, 0.05, 0.55, 0.95)
+      infinite alternate;
+    will-change: transform;
+  }
+
+  .velocity-speed-lines {
+    animation: velocity-lines-race 2.8s linear infinite;
+    will-change: transform, opacity;
+  }
+
+  .velocity-race-dust {
+    animation: velocity-dust-race 7.5s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+  }
+
+  .velocity-road-glow {
+    animation: velocity-road-race 3.6s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+  }
+}
+
+@media (max-width: 48rem) {
+  .velocity-hero__image {
+    object-position: 66% center;
+  }
+
+  .velocity-hero__video {
+    object-position: 66% center;
+  }
+
+  .velocity-speed-lines,
+  .velocity-race-dust,
+  .velocity-road-glow {
+    opacity: 0.1;
+  }
+
+  .velocity-hero__veil {
+    background:
+      linear-gradient(90deg, rgb(0 11 29 / 95%), rgb(0 11 29 / 48%)),
+      linear-gradient(
+        180deg,
+        rgb(0 11 29 / 24%) 0%,
+        rgb(0 11 29 / 78%) 74%,
+        rgb(0 11 29 / 96%) 100%
+      );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .velocity-title__word,
+  .velocity-reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .velocity-hero__image {
+    transform: scale(1.035);
+  }
+
+  .velocity-hero__video,
+  .velocity-speed-lines,
+  .velocity-race-dust,
+  .velocity-road-glow {
+    display: none;
+  }
+}
+
+/* ── Gateway Premium Decorative System ───────────────────────────────
+   Layered ambient overlays inspired by the motorsport decorative system,
+   adapted for the gateway editorial palette.
+─────────────────────────────────────────────────────────────────────── */
+
+/* Visible radial dot grid for light/white sections */
+.gateway-dot-grid {
+  background-image: radial-gradient(
+    circle,
+    rgb(0 11 29 / 12%) 1.2px,
+    transparent 1.2px
+  );
+  background-size: 24px 24px;
+  opacity: 0.7;
+}
+
+/* Ambient radial glow using Sarga brand colors (red/orange/gold) — LIGHT sections */
+.gateway-ambient-glow {
+  background:
+    radial-gradient(ellipse at 18% 35%, rgb(226 50 30 / 18%), transparent 52%),
+    radial-gradient(ellipse at 78% 68%, rgb(255 80 50 / 14%), transparent 48%),
+    radial-gradient(ellipse at 50% 90%, rgb(217 164 65 / 10%), transparent 40%);
+  filter: blur(48px);
+  opacity: 0.8;
+}
+
+/* Dark-section ambient glow (brighter red/orange for dark backgrounds) */
+.gateway-ambient-glow-dark {
+  background:
+    radial-gradient(ellipse at 22% 40%, rgb(226 50 30 / 18%), transparent 50%),
+    radial-gradient(ellipse at 76% 62%, rgb(255 80 50 / 12%), transparent 45%),
+    radial-gradient(ellipse at 55% 85%, rgb(217 164 65 / 8%), transparent 38%);
+  filter: blur(40px);
+  opacity: 0.55;
+}
+
+/* Thin horizontal speed-line accent (single line) — visible */
+.gateway-speed-line {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(226 50 30 / 35%),
+    rgb(255 80 50 / 22%),
+    transparent
+  );
+  height: 1px;
+  opacity: 0.8;
+}
+
+/* Gradient section divider — red fading to transparent */
+.gateway-section-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(226 50 30 / 50%),
+    rgb(255 80 50 / 30%),
+    transparent
+  );
+}
+
+/* Shimmer rail for bottom edges of dark sections */
+.gateway-shimmer {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(226 50 30 / 40%),
+    rgb(217 164 65 / 30%),
+    rgb(255 80 50 / 40%),
+    transparent
+  );
+  background-size: 200% 100%;
+  opacity: 0;
+}
+
+/* Triangular mesh / net pattern for light backgrounds (like hero HeroMesh) */
+.gateway-mesh-light {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 87' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 87L50 0l50 87H0zM50 87L100 0H0l50 87z' fill='none' stroke='%23000b1d' stroke-width='.5' opacity='.12'/%3E%3C/svg%3E");
+  background-size: 40px 35px;
+  opacity: 0.55;
+}
+
+/* Race flag diagonal band pattern — LIGHT sections (visible on white/light bg) */
+.gateway-race-flag-light {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Crect width='200' height='200'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c)'%3E%3Cpath d='M-20 220L80-20h40L20 220z' fill='%23e2321e' opacity='.06'/%3E%3Cpath d='M40 220L140-20h40L80 220z' fill='%23ff5032' opacity='.04'/%3E%3Cpath d='M100 220L200-20h40L140 220z' fill='%23e2321e' opacity='.06'/%3E%3Cpath d='M160 220L260-20h40L200 220z' fill='%23ff5032' opacity='.04'/%3E%3Cpath d='M-80 220L20-20h40L-40 220z' fill='%23d9a441' opacity='.03'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 1;
+}
+
+/* Race flag diagonal band pattern — DARK sections (white bands on dark bg) */
+.gateway-race-flag-dark {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Crect width='200' height='200'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c)'%3E%3Cpath d='M-20 220L80-20h40L20 220z' fill='white' opacity='.04'/%3E%3Cpath d='M40 220L140-20h40L80 220z' fill='white' opacity='.025'/%3E%3Cpath d='M100 220L200-20h40L140 220z' fill='white' opacity='.04'/%3E%3Cpath d='M160 220L260-20h40L200 220z' fill='white' opacity='.025'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 1;
+}
+
+/* Hero-style net/mesh SVG overlay — for light sections (dark strokes) */
+.gateway-hero-net {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1000 900' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='tri' width='24' height='21' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 21L12 0l12 21M0 21h24M0 0l12 21L24 0' fill='none' stroke='%23000b1d' stroke-width='.35'/%3E%3C/pattern%3E%3ClinearGradient id='fade' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='white' stop-opacity='0'/%3E%3Cstop offset='.18' stop-color='white' stop-opacity='.55'/%3E%3Cstop offset='.72' stop-color='white' stop-opacity='.5'/%3E%3Cstop offset='1' stop-color='white' stop-opacity='0'/%3E%3C/linearGradient%3E%3Cmask id='m'%3E%3Crect width='1000' height='900' fill='url(%23fade)'/%3E%3C/mask%3E%3C/defs%3E%3Crect width='1000' height='900' fill='url(%23tri)' mask='url(%23m)'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: right center;
+  opacity: 0.5;
+}
+
+@keyframes gateway-shimmer-rail {
+  0% {
+    background-position: -200% 0;
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    background-position: 200% 0;
+    opacity: 0.3;
+  }
+}
+
+@keyframes gateway-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes gateway-speed-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(2%, 0, 0);
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .gateway-shimmer {
+    animation: gateway-shimmer-rail 6s ease-in-out infinite;
+  }
+
+  .gateway-ambient-glow,
+  .gateway-ambient-glow-dark {
+    animation: gateway-glow-pulse 8s ease-in-out infinite;
+  }
+
+  .gateway-speed-line {
+    animation: gateway-speed-drift 5s ease-in-out infinite alternate;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gateway-shimmer,
+  .gateway-ambient-glow,
+  .gateway-ambient-glow-dark,
+  .gateway-speed-line {
+    animation: none !important;
+    opacity: 0.5;
+  }
+}
+
+/* Legacy button utilities retained for Phase 1 pages; new work should use <Button>. */
+.button-primary,
+.button-secondary {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-radius: var(--radius-sarga-pill);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: 100%;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.button-primary {
+  background: var(--color-sarga-red);
+  color: var(--color-sarga-white);
+}
+
+.button-primary:hover {
+  background: var(--color-sarga-red-dark);
+}
+
+.button-secondary {
+  border: 1px solid rgb(255 255 255 / 55%);
+  color: var(--color-sarga-white);
+}
+
+.button-secondary:hover {
+  border-color: var(--color-sarga-white);
+  background: rgb(255 255 255 / 8%);
+}
+
+@media (min-width: 40rem) {
+  .button-primary,
+  .button-secondary {
+    width: auto;
+  }
+}
+
+/* The About timeline uses its own persistent left-side position indicator. */
+@media (min-width: 64rem) {
+  .about-timeline-scroll {
+    scrollbar-width: none;
+  }
+
+  .about-timeline-scroll::-webkit-scrollbar {
+    display: none;
+  }
+}

@@ -45,9 +45,65 @@
     "embedUrl": { "type": "string" },
     "eventStatus": {
       "type": "enumeration",
-      "enum": ["upcoming", "live", "past", "hidden"],
+      "enum": [
+        "upcoming",
+        "live",
+        "past",
+        "hidden",
+        "announced",
+        "ticketsOpen",
+        "soldOut",
+        "completed",
+        "cancelled"
+      ],
       "default": "upcoming",
       "required": true
+    },
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["gateway", "motorsport", "shared", "hidden"],
+      "default": "gateway",
+      "required": true
+    },
+    "sites": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::site.site"
+    },
+    "showOnGateway": { "type": "boolean", "default": true },
+    "showOnMotorsport": { "type": "boolean", "default": false },
+    "racingCategory": { "type": "string" },
+    "seriesName": { "type": "string" },
+    "venueAddress": { "type": "text" },
+    "circuitName": { "type": "string" },
+    "schedule": {
+      "type": "component",
+      "component": "shared.event-session",
+      "repeatable": true
+    },
+    "heroMedia": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "videos"]
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images", "videos"]
+    },
+    "broadcastUrl": { "type": "string" },
+    "ticketCtas": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::ticket-cta.ticket-cta",
+      "mappedBy": "relatedEvent"
+    },
+    "sponsors": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::partner.partner"
     },
     "seo": {
       "type": "component",

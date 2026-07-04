@@ -28,6 +28,10 @@ Environment (`.env.local`, gitignored):
 - `STRAPI_API_TOKEN` — server-only read token (blank locally; seed grants public read)
 - `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GATEWAY_SITE_URL`, `NEXT_PUBLIC_SITE_KEY`
 
+For production sharing previews (WhatsApp, LinkedIn, X, etc.), set
+`NEXT_PUBLIC_SITE_URL` to the live public domain so Open Graph images and
+canonical URLs resolve correctly.
+
 ## Ports
 
 - Motorsport frontend: `http://localhost:3001` (host and container)

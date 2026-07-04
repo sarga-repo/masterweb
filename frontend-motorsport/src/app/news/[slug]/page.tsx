@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { GradientRule, PageShell } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { fetchArticleBySlug } from "@/lib/cms-data";
+import { resolveSiteUrl, resolveSocialImageUrl, siteConfig } from "@/lib/site-config";
 import type { MotorsportArticle } from "@/types/design-system";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -67,13 +68,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const desc =
     resolved.excerpt ??
     `${resolved.title} — Sarga Motorsport news and editorial.`;
+  const canonical = resolveSiteUrl(`/news/${slug}`);
+  const socialImage = resolveSocialImageUrl(resolved.image);
   return {
     title: resolved.title,
     description: desc,
+    alternates: {
+      canonical,
+    },
     openGraph: {
       type: "article",
+      url: canonical,
+      siteName: siteConfig.name,
       title: resolved.title,
       description: desc,
+      images: socialImage
+        ? [
+            {
+              url: socialImage,
+              alt: resolved.imageAlt,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: resolved.title,
+      description: desc,
+      images: socialImage ? [socialImage] : undefined,
     },
   };
 }

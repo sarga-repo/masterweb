@@ -15,6 +15,10 @@ tmp/
 
 # Strapi media uploads are intentionally tracked in the repo.
 # (Previously ignored via `cms/public/uploads/*`.)
+cms/public/uploads/*
+!cms/public/uploads/logo-sarga-reverse.png
+!cms/public/uploads/logo-sarga.png
+!cms/public/uploads/favicon-sarga.png
 
 *.log
 *.tsbuildinfo

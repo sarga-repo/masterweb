@@ -13,6 +13,7 @@ import {
 } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { fetchEventBySlug, fetchPartners } from "@/lib/cms-data";
+import { resolveSiteUrl, resolveSocialImageUrl, siteConfig } from "@/lib/site-config";
 import type { MotorsportEvent } from "@/types/design-system";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -82,13 +83,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolved = event ?? fallback;
   if (!resolved) return { title: "Event not found" };
   const desc = `${resolved.title} — ${resolved.dateLabel} at ${resolved.venue}. Sarga Motorsport event.`;
+  const canonical = resolveSiteUrl(`/events/${slug}`);
+  const socialImage = resolveSocialImageUrl(resolved.image);
   return {
     title: resolved.title,
     description: desc,
+    alternates: {
+      canonical,
+    },
     openGraph: {
-      type: "article",
+      type: "website",
+      url: canonical,
+      siteName: siteConfig.name,
       title: resolved.title,
       description: desc,
+      images: socialImage
+        ? [
+            {
+              url: socialImage,
+              alt: resolved.imageAlt,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: resolved.title,
+      description: desc,
+      images: socialImage ? [socialImage] : undefined,
     },
   };
 }

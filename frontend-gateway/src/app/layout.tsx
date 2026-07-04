@@ -3,7 +3,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
-import { siteUrl } from "@/lib/seo/metadata";
+import { resolveSiteUrl, siteUrl } from "@/lib/seo/metadata";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -31,22 +31,33 @@ export const metadata: Metadata = {
   description:
     "The group gateway for Sarga's integrated sport and entertainment ecosystem.",
   applicationName: "Sarga.co",
+  alternates: {
+    canonical: siteUrl,
+  },
   openGraph: {
     type: "website",
     siteName: "Sarga.co",
+    locale: "en_US",
+    url: siteUrl,
     title: "Sarga.co | 360° Sport & Entertainment",
     description:
       "The group gateway for Sarga's integrated sport and entertainment ecosystem.",
     images: [
       {
-        url: "/assets/media/sarga-cinematic-hero-concept.png",
+        url: resolveSiteUrl("/assets/media/sarga-cinematic-hero-concept.png"),
         width: 1200,
         height: 630,
         alt: "Sarga.co | 360° Sport & Entertainment",
       },
     ],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sarga.co | 360° Sport & Entertainment",
+    description:
+      "The group gateway for Sarga's integrated sport and entertainment ecosystem.",
+    images: [resolveSiteUrl("/assets/media/sarga-cinematic-hero-concept.png")],
+  },
 };
 
 export default function RootLayout({

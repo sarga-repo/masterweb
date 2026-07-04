@@ -32,6 +32,7 @@ Environment variables (see the repo-root `.env.example`):
 | `STRAPI_API_URL`             | server-only | Base URL used for content fetching (Docker: `http://strapi:1337`, local: `http://localhost:1337`) |
 | `NEXT_PUBLIC_STRAPI_API_URL` | public      | Browser-reachable base URL used to build absolute media/image URLs                                |
 | `STRAPI_API_TOKEN`           | server-only | Read-only API token; never exposed to the browser. Blank ⇒ mock fallback                          |
+| `NEXT_PUBLIC_SITE_URL`       | public      | Canonical public site URL used for Open Graph, sitemap, and share-card image resolution           |
 
 The Strapi client imports `server-only`, guaranteeing the token and fetch logic
 are never bundled into client-side JavaScript.

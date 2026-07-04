@@ -1,5 +1,20 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface SharedEventSession extends Struct.ComponentSchema {
+  collectionName: 'components_shared_event_sessions';
+  info: {
+    description: 'A single session/slot in an event schedule (e.g. practice, qualifying, race)';
+    displayName: 'Event Session';
+  };
+  attributes: {
+    day: Schema.Attribute.String;
+    description: Schema.Attribute.Text;
+    endTime: Schema.Attribute.DateTime;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    startTime: Schema.Attribute.DateTime;
+  };
+}
+
 export interface SharedKeyHighlight extends Struct.ComponentSchema {
   collectionName: 'components_shared_key_highlights';
   info: {
@@ -39,6 +54,7 @@ export interface SharedSeo extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'shared.event-session': SharedEventSession;
       'shared.key-highlight': SharedKeyHighlight;
       'shared.seo': SharedSeo;
     }

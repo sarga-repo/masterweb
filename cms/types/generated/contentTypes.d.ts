@@ -465,6 +465,7 @@ export interface ApiEcosystemBusinessEcosystemBusiness
     ctaLabel: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Find Out More'>;
     ctaUrl: Schema.Attribute.String;
+    dedicatedSiteUrl: Schema.Attribute.String;
     gallery: Schema.Attribute.Media<'images' | 'videos', true>;
     heroImage: Schema.Attribute.Media<'images'>;
     highlights: Schema.Attribute.Component<'shared.key-highlight', true>;
@@ -491,6 +492,11 @@ export interface ApiEcosystemBusinessEcosystemBusiness
     relatedEvents: Schema.Attribute.Relation<'oneToMany', 'api::event.event'>;
     seo: Schema.Attribute.Component<'shared.seo', false>;
     shortDescription: Schema.Attribute.Text & Schema.Attribute.Required;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'shared'>;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -510,10 +516,12 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    broadcastUrl: Schema.Attribute.String;
     business: Schema.Attribute.Relation<
       'manyToOne',
       'api::ecosystem-business.ecosystem-business'
     >;
+    circuitName: Schema.Attribute.String;
     coverImage: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -524,17 +532,46 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     endDate: Schema.Attribute.DateTime;
     eventDate: Schema.Attribute.DateTime;
     eventStatus: Schema.Attribute.Enumeration<
-      ['upcoming', 'live', 'past', 'hidden']
+      [
+        'upcoming',
+        'live',
+        'past',
+        'hidden',
+        'announced',
+        'ticketsOpen',
+        'soldOut',
+        'completed',
+        'cancelled',
+      ]
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'upcoming'>;
+    gallery: Schema.Attribute.Media<'images' | 'videos', true>;
+    heroMedia: Schema.Attribute.Media<'images' | 'videos'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::event.event'> &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    racingCategory: Schema.Attribute.String;
+    schedule: Schema.Attribute.Component<'shared.event-session', true>;
     seo: Schema.Attribute.Component<'shared.seo', false>;
+    seriesName: Schema.Attribute.String;
+    showOnGateway: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showOnMotorsport: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'gateway'>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    sponsors: Schema.Attribute.Relation<'manyToMany', 'api::partner.partner'>;
     ticketCtaLabel: Schema.Attribute.String;
+    ticketCtas: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::ticket-cta.ticket-cta'
+    >;
     ticketIntegrationType: Schema.Attribute.Enumeration<
       ['redirect', 'deepLink', 'embed']
     > &
@@ -545,6 +582,7 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     venue: Schema.Attribute.String;
+    venueAddress: Schema.Attribute.Text;
   };
 }
 
@@ -649,6 +687,81 @@ export interface ApiInquirySubmissionInquirySubmission
   };
 }
 
+export interface ApiLeadershipPersonLeadershipPerson
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'leadership_people';
+  info: {
+    description: 'Leadership team members for the About page';
+    displayName: 'Leadership Person';
+    pluralName: 'leadership-people';
+    singularName: 'leadership-person';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    group: Schema.Attribute.Enumeration<['board', 'executive', 'advisor']> &
+      Schema.Attribute.DefaultTo<'executive'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::leadership-person.leadership-person'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    portrait: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    role: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMediaGalleryMediaGallery
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'media_galleries';
+  info: {
+    description: 'A gallery of images/videos, optionally tied to an event';
+    displayName: 'Media Gallery';
+    pluralName: 'media-galleries';
+    singularName: 'media-gallery';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::media-gallery.media-gallery'
+    > &
+      Schema.Attribute.Private;
+    mediaItems: Schema.Attribute.Media<'images' | 'videos', true>;
+    publishedAt: Schema.Attribute.DateTime;
+    relatedEvent: Schema.Attribute.Relation<'manyToOne', 'api::event.event'>;
+    sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'shared'>;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
   collectionName: 'news_articles';
   info: {
@@ -664,7 +777,18 @@ export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
     author: Schema.Attribute.String;
     body: Schema.Attribute.RichText;
     category: Schema.Attribute.Enumeration<
-      ['news', 'publication', 'press-release', 'report', 'magazine']
+      [
+        'news',
+        'publication',
+        'press-release',
+        'report',
+        'magazine',
+        'race-report',
+        'announcement',
+        'lifestyle',
+        'community',
+        'media',
+      ]
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'news'>;
@@ -673,6 +797,10 @@ export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     excerpt: Schema.Attribute.Text & Schema.Attribute.Required;
+    featuredOnGateway: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    featuredOnMotorsport: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
     isHotTopic: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -686,7 +814,17 @@ export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
       'manyToMany',
       'api::ecosystem-business.ecosystem-business'
     >;
+    relatedEvent: Schema.Attribute.Relation<'manyToOne', 'api::event.event'>;
     seo: Schema.Attribute.Component<'shared.seo', false>;
+    showOnGateway: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showOnMotorsport: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'gateway'>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
@@ -730,6 +868,174 @@ export interface ApiNewsletterSubscriptionNewsletterSubscription
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPartnerPartner extends Struct.CollectionTypeSchema {
+  collectionName: 'partners';
+  info: {
+    description: 'Sponsors and partners displayed across Sarga sites';
+    displayName: 'Partner';
+    pluralName: 'partners';
+    singularName: 'partner';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::partner.partner'
+    > &
+      Schema.Attribute.Private;
+    logo: Schema.Attribute.Media<'images'>;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    partnerType: Schema.Attribute.Enumeration<
+      [
+        'sponsor',
+        'technical',
+        'media',
+        'broadcast',
+        'government',
+        'community',
+        'other',
+      ]
+    > &
+      Schema.Attribute.DefaultTo<'sponsor'>;
+    publishedAt: Schema.Attribute.DateTime;
+    sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'shared'>;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    websiteUrl: Schema.Attribute.String;
+  };
+}
+
+export interface ApiSiteSite extends Struct.CollectionTypeSchema {
+  collectionName: 'sites';
+  info: {
+    description: 'A public frontend in the Sarga multisite (gateway, motorsport, future sites)';
+    displayName: 'Site';
+    pluralName: 'sites';
+    singularName: 'site';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    baseUrl: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    favicon: Schema.Attribute.Media<'images'>;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::site.site'> &
+      Schema.Attribute.Private;
+    logo: Schema.Attribute.Media<'images'>;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    themeKey: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiTicketCtaTicketCta extends Struct.CollectionTypeSchema {
+  collectionName: 'ticket_ctas';
+  info: {
+    description: 'Centralized partner ticket call-to-action (redirect / deep link / configurable embed). No internal payment.';
+    displayName: 'Ticket CTA';
+    pluralName: 'ticket-ctas';
+    singularName: 'ticket-cta';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    activeFrom: Schema.Attribute.DateTime;
+    activeUntil: Schema.Attribute.DateTime;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ctaType: Schema.Attribute.Enumeration<['redirect', 'deepLink', 'embed']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'redirect'>;
+    embedCode: Schema.Attribute.Text & Schema.Attribute.Private;
+    embedConfigJson: Schema.Attribute.JSON;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    label: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::ticket-cta.ticket-cta'
+    > &
+      Schema.Attribute.Private;
+    provider: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    relatedEvent: Schema.Attribute.Relation<'manyToOne', 'api::event.event'>;
+    sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'shared'>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    trackingParams: Schema.Attribute.JSON;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    url: Schema.Attribute.String;
+  };
+}
+
+export interface ApiTimelineItemTimelineItem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'timeline_items';
+  info: {
+    description: 'Corporate timeline entries for the About page';
+    displayName: 'Timeline Item';
+    pluralName: 'timeline-items';
+    singularName: 'timeline-item';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    image: Schema.Attribute.Media<'images'>;
+    label: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::timeline-item.timeline-item'
+    > &
+      Schema.Attribute.Private;
+    order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    year: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
@@ -1248,8 +1554,14 @@ declare module '@strapi/strapi' {
       'api::event.event': ApiEventEvent;
       'api::homepage.homepage': ApiHomepageHomepage;
       'api::inquiry-submission.inquiry-submission': ApiInquirySubmissionInquirySubmission;
+      'api::leadership-person.leadership-person': ApiLeadershipPersonLeadershipPerson;
+      'api::media-gallery.media-gallery': ApiMediaGalleryMediaGallery;
       'api::news-article.news-article': ApiNewsArticleNewsArticle;
       'api::newsletter-subscription.newsletter-subscription': ApiNewsletterSubscriptionNewsletterSubscription;
+      'api::partner.partner': ApiPartnerPartner;
+      'api::site.site': ApiSiteSite;
+      'api::ticket-cta.ticket-cta': ApiTicketCtaTicketCta;
+      'api::timeline-item.timeline-item': ApiTimelineItemTimelineItem;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

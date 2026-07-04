@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "media_galleries",
+  "info": {
+    "singularName": "media-gallery",
+    "pluralName": "media-galleries",
+    "displayName": "Media Gallery",
+    "description": "A gallery of images/videos, optionally tied to an event"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "description": { "type": "text" },
+    "mediaItems": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images", "videos"]
+    },
+    "relatedEvent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::event.event"
+    },
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["gateway", "motorsport", "shared", "hidden"],
+      "default": "shared",
+      "required": true
+    },
+    "sites": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::site.site"
+    }
+  }
+}

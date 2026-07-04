@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "timeline_items",
+  "info": {
+    "singularName": "timeline-item",
+    "pluralName": "timeline-items",
+    "displayName": "Timeline Item",
+    "description": "Corporate timeline entries for the About page"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "year": { "type": "string", "required": true },
+    "label": { "type": "string" },
+    "title": { "type": "string", "required": true },
+    "description": { "type": "text" },
+    "order": { "type": "integer", "default": 0 },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

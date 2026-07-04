@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_shared_event_sessions",
+  "info": {
+    "displayName": "Event Session",
+    "description": "A single session/slot in an event schedule (e.g. practice, qualifying, race)"
+  },
+  "options": {},
+  "attributes": {
+    "label": { "type": "string", "required": true },
+    "day": { "type": "string" },
+    "startTime": { "type": "datetime" },
+    "endTime": { "type": "datetime" },
+    "description": { "type": "text" }
+  }
+}

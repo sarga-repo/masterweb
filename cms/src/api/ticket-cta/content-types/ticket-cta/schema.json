@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ticket_ctas",
+  "info": {
+    "singularName": "ticket-cta",
+    "pluralName": "ticket-ctas",
+    "displayName": "Ticket CTA",
+    "description": "Centralized partner ticket call-to-action (redirect / deep link / configurable embed). No internal payment."
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "label": { "type": "string", "required": true },
+    "provider": { "type": "string" },
+    "ctaType": {
+      "type": "enumeration",
+      "enum": ["redirect", "deepLink", "embed"],
+      "default": "redirect",
+      "required": true
+    },
+    "url": { "type": "string" },
+    "embedCode": { "type": "text", "private": true },
+    "embedConfigJson": { "type": "json" },
+    "trackingParams": { "type": "json" },
+    "activeFrom": { "type": "datetime" },
+    "activeUntil": { "type": "datetime" },
+    "isActive": { "type": "boolean", "default": true },
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["gateway", "motorsport", "shared", "hidden"],
+      "default": "shared",
+      "required": true
+    },
+    "sites": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::site.site"
+    },
+    "relatedEvent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::event.event",
+      "inversedBy": "ticketCtas"
+    }
+  }
+}

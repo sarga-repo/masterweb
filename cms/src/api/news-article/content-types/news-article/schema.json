@@ -28,7 +28,18 @@
     },
     "category": {
       "type": "enumeration",
-      "enum": ["news", "publication", "press-release", "report", "magazine"],
+      "enum": [
+        "news",
+        "publication",
+        "press-release",
+        "report",
+        "magazine",
+        "race-report",
+        "announcement",
+        "lifestyle",
+        "community",
+        "media"
+      ],
       "default": "news",
       "required": true
     },
@@ -41,6 +52,26 @@
       "target": "api::ecosystem-business.ecosystem-business",
       "inversedBy": "relatedArticles"
     },
+    "relatedEvent": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::event.event"
+    },
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["gateway", "motorsport", "shared", "hidden"],
+      "default": "gateway",
+      "required": true
+    },
+    "sites": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::site.site"
+    },
+    "showOnGateway": { "type": "boolean", "default": true },
+    "showOnMotorsport": { "type": "boolean", "default": false },
+    "featuredOnGateway": { "type": "boolean", "default": false },
+    "featuredOnMotorsport": { "type": "boolean", "default": false },
     "seo": {
       "type": "component",
       "component": "shared.seo",

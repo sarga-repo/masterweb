@@ -30,7 +30,7 @@
     "isActive": { "type": "boolean", "default": true },
     "siteScope": {
       "type": "enumeration",
-      "enum": ["gateway", "motorsport", "shared", "hidden"],
+      "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
       "default": "shared",
       "required": true
     },

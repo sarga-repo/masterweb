@@ -61,7 +61,8 @@
         "businessStatus": ["active", "comingSoon", "hidden"],
         "launchTarget": "string",
         "order": "integer",
-        "siteScope": ["gateway", "motorsport", "shared", "hidden"],
+        "siteScope": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+        "dedicatedSiteKey": ["none", "motorsport", "horsesport"],
         "dedicatedSiteUrl": "string",
         "relatedArticles": "relation:newsArticle",
         "relatedEvents": "relation:event",
@@ -85,19 +86,29 @@
           "announcement",
           "lifestyle",
           "community",
-          "media"
+          "media",
+          "race-results",
+          "event-announcement",
+          "turf-venue",
+          "stable-life",
+          "jockey-story",
+          "equine-performance",
+          "partnership"
         ],
         "publishedDate": "date",
         "isHotTopic": "boolean",
         "author": "string",
         "relatedBusinesses": "relation:ecosystemBusiness",
         "relatedEvent": "relation:event",
-        "siteScope": ["gateway", "motorsport", "shared", "hidden"],
+        "relatedGallery": "relation:mediaGallery",
+        "siteScope": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
         "sites": "relation:site",
         "showOnGateway": "boolean",
         "showOnMotorsport": "boolean",
+        "showOnHorseSport": "boolean",
         "featuredOnGateway": "boolean",
         "featuredOnMotorsport": "boolean",
+        "featuredOnHorseSport": "boolean",
         "seo": "component:seo",
         "publishedAt": "datetime"
       }
@@ -128,10 +139,11 @@
           "completed",
           "cancelled"
         ],
-        "siteScope": ["gateway", "motorsport", "shared", "hidden"],
+        "siteScope": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
         "sites": "relation:site",
         "showOnGateway": "boolean",
         "showOnMotorsport": "boolean",
+        "showOnHorseSport": "boolean",
         "racingCategory": "string",
         "seriesName": "string",
         "venueAddress": "text",
@@ -140,6 +152,19 @@
         "heroMedia": "media",
         "gallery": "media",
         "broadcastUrl": "string",
+        "eventDiscipline": [
+          "derby",
+          "turf",
+          "exhibition",
+          "championship",
+          "hospitality",
+          "training",
+          "other"
+        ],
+        "raceClass": "string",
+        "trackType": ["turf", "dirt", "mixed", "indoor", "other"],
+        "hospitalityInfo": "richtext",
+        "stableAccessInfo": "richtext",
         "ticketCtas": "relation:ticketCta",
         "sponsors": "relation:partner",
         "seo": "component:seo"
@@ -158,7 +183,7 @@
         "activeFrom": "datetime",
         "activeUntil": "datetime",
         "isActive": "boolean",
-        "siteScope": ["gateway", "motorsport", "shared", "hidden"],
+        "siteScope": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
         "sites": "relation:site",
         "relatedEvent": "relation:event"
       }
@@ -178,7 +203,7 @@
           "community",
           "other"
         ],
-        "siteScope": ["gateway", "motorsport", "shared", "hidden"],
+        "siteScope": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
         "sites": "relation:site",
         "sortOrder": "integer",
         "isActive": "boolean"
@@ -189,9 +214,19 @@
         "title": "string",
         "slug": "uid",
         "description": "text",
+        "category": [
+          "race-day",
+          "stable-life",
+          "venue",
+          "jockey",
+          "hospitality",
+          "press",
+          "other"
+        ],
+        "coverImage": "media",
         "mediaItems": "media",
         "relatedEvent": "relation:event",
-        "siteScope": ["gateway", "motorsport", "shared", "hidden"],
+        "siteScope": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
         "sites": "relation:site"
       }
     },
@@ -273,6 +308,7 @@
     "businessStatus/eventStatus were renamed from 'status': 'status' is a reserved attribute name in Strapi v5 (document draft/publish state).",
     "Phase 2 multisite: siteScope enum (gateway|motorsport|shared|hidden) + optional many-to-many 'sites' relation added to event, news-article, ticket-cta, partner, media-gallery, and ecosystem-business. showOnGateway/showOnMotorsport booleans drive cross-site teasers.",
     "eventStatus and newsArticle.category enums were extended (not replaced) with motorsport values to preserve backward compatibility with existing gateway content.",
+    "Horse Sport Phase 2: 'horsesport' added to every siteScope enum; showOnHorseSport (event, news) and featuredOnHorseSport (news) flags added; event gained eventDiscipline/raceClass/trackType/hospitalityInfo/stableAccessInfo; newsArticle.category extended with horse-sport values (race-results, event-announcement, turf-venue, stable-life, jockey-story, equine-performance, partnership) and a relatedGallery relation; ecosystemBusiness gained dedicatedSiteKey; mediaGallery gained category + coverImage. Horse Sport filtering uses siteScope IN [horsesport, shared] AND business.slug == 'sarga-horse-sport'.",
     "event.ticketCtas <-> ticketCta.relatedEvent is a single bidirectional one-to-many relation (one event, many ticket CTAs), replacing the singular 'ticketCta' field named in the spec to avoid a duplicate relation.",
     "This file mirrors the Strapi schemas under cms/src/api and cms/src/components; it is documentation, not the source of truth."
   ]

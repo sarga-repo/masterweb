@@ -48,4 +48,8 @@ export const siteConfig = {
   gatewayUrl:
     normalizeSiteUrl(process.env.NEXT_PUBLIC_GATEWAY_SITE_URL) ??
     "http://localhost:3000",
+  /** Cross-link to the Sarga Horse Sport dedicated site. */
+  horsesportUrl:
+    normalizeSiteUrl(process.env.NEXT_PUBLIC_HORSESPORT_SITE_URL) ??
+    "http://localhost:3002",
 } as const;

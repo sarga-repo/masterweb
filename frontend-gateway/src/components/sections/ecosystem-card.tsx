@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
-import { motorsportUrl } from "@/lib/site-config";
+import { businessSiteUrl } from "@/lib/cross-site";
 import type { EcosystemBusiness } from "@/lib/strapi/types";
 
 const businessNumbers: Record<string, string> = {
@@ -15,9 +15,9 @@ const businessNumbers: Record<string, string> = {
 
 export function EcosystemCard({ business }: { business: EcosystemBusiness }) {
   const isActive = business.status === "active";
-  /* Sarga Motorsport has a dedicated frontend — link externally when configured. */
-  const isMotorsport = business.slug === "sarga-motorsport";
-  const externalHref = isMotorsport ? motorsportUrl("/") : undefined;
+  /* Motorsport / Horse Sport have dedicated frontends — link externally when
+     configured, otherwise fall back to the gateway detail page. */
+  const externalHref = businessSiteUrl(business.slug);
   const href = isActive
     ? externalHref ?? `/ecosystem/${business.slug}`
     : undefined;

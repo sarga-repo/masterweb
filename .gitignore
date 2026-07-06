@@ -36,6 +36,8 @@ sarga_multisite_codex_ready_package/
 .rtk/
 .claude/
 .agents/
+sarga_multisite_horsesport_codex_ready_package/
+supporting-docs/
 CLAUDE.md
 skills-lock.json
 AGENTS.md

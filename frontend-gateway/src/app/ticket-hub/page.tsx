@@ -79,7 +79,7 @@ export default async function TicketHubPage() {
                     <span>{event.venue ?? "Venue to be announced"}</span>
                   </div>
                   <div className="mt-20">
-                    <h2 className="font-heading text-4xl font-black uppercase leading-[0.94] tracking-[-0.035em] sm:text-[2.5rem]">
+                    <h2 className="font-heading text-4xl font-bold uppercase leading-[0.94] tracking-[-0.035em] sm:text-[2.5rem]">
                       {event.title}
                     </h2>
                     <p className="mt-6 text-sm leading-7 text-white/58">

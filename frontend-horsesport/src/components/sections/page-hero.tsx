@@ -23,6 +23,10 @@ export function PageHero({
   children,
 }: PageHeroProps) {
   const accentHex = HS_ACCENT_HEX[accent];
+  const overImage = Boolean(backgroundImage);
+  // Light text over a scrimmed photo; warm dark ink on the cheerful light bg.
+  const titleColor = overImage ? "text-hs-white" : "text-hs-cream";
+  const descColor = overImage ? "text-hs-white/70" : "text-hs-cream/70";
 
   return (
     <section className="relative isolate flex min-h-[55vh] items-end overflow-hidden pt-[calc(var(--hs-header-height)+2rem)]">
@@ -31,9 +35,9 @@ export function PageHero({
           className="hs-animate-zoom absolute inset-0 -z-10 object-cover object-center" />
       ) : null}
       <div aria-hidden className="absolute inset-0 -z-10" style={{
-        background: backgroundImage
-          ? "linear-gradient(0deg, rgba(8,6,4,0.96) 0%, rgba(8,6,4,0.58) 45%, rgba(8,6,4,0.24) 100%)"
-          : `radial-gradient(55% 65% at 18% 0%, ${accentHex}22, transparent 55%), radial-gradient(50% 55% at 92% 100%, #FF6B0018, transparent 55%), #080604`,
+        background: overImage
+          ? "linear-gradient(0deg, rgba(20,15,10,0.86) 0%, rgba(20,15,10,0.42) 48%, rgba(20,15,10,0.12) 100%)"
+          : `radial-gradient(60% 70% at 16% 0%, ${accentHex}1f, transparent 58%), radial-gradient(55% 60% at 92% 100%, #87B2A529, transparent 58%), linear-gradient(180deg, #fbf6e9, #f7eed0)`,
       }} />
       {/* Brand marker — full-height staircase stripes down the left edge */}
       <div
@@ -63,11 +67,11 @@ export function PageHero({
             <span aria-hidden className="hs-rule inline-block h-px w-10 align-middle" />
             {eyebrow}
           </div>
-          <h1 className="hs-display hs-animate-2 mt-6 max-w-[14ch] text-[clamp(2.6rem,7vw,6rem)] leading-[0.9] text-hs-cream">
+          <h1 className={`hs-display hs-animate-2 mt-6 max-w-[14ch] text-[clamp(2.6rem,7vw,6rem)] leading-[0.9] ${titleColor}`}>
             {title}
           </h1>
           {description ? (
-            <p className="hs-body-lg hs-animate-3 mt-6 max-w-[38rem] text-hs-cream/58">{description}</p>
+            <p className={`hs-body-lg hs-animate-3 mt-6 max-w-[38rem] ${descColor}`}>{description}</p>
           ) : null}
           {children ? <div className="hs-animate-4 mt-8">{children}</div> : null}
         </div>

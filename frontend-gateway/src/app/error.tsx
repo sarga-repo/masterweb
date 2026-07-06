@@ -69,7 +69,7 @@ export default function Error({
 
         {/* Giant number */}
         <p
-          className="mt-6 select-none font-heading text-[clamp(8rem,22vw,18rem)] font-black leading-[0.82] tracking-[-0.04em]"
+          className="mt-6 select-none font-heading text-[clamp(8rem,22vw,18rem)] font-bold leading-[0.82] tracking-[-0.04em]"
           aria-hidden="true"
         >
           <span className="bg-gradient-to-br from-sarga-red/90 via-sarga-orange/60 to-white/10 bg-clip-text text-transparent">
@@ -78,7 +78,7 @@ export default function Error({
         </p>
 
         {/* Headline */}
-        <h1 className="mt-4 max-w-[14ch] font-heading text-[clamp(2.4rem,6vw,5rem)] font-black uppercase leading-[0.88] tracking-[-0.04em]">
+        <h1 className="mt-4 max-w-[14ch] font-heading text-[clamp(2.4rem,6vw,5rem)] font-bold uppercase leading-[0.88] tracking-[-0.04em]">
           Connection interrupted.
         </h1>
 

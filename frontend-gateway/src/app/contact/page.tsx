@@ -61,10 +61,10 @@ export default function ContactPage() {
                 key={index}
                 className="group grid gap-5 border-b border-sarga-black/20 py-8 sm:grid-cols-[5rem_0.8fr_1.2fr_auto] sm:items-center lg:py-10"
               >
-                <span className="font-heading text-2xl font-black text-sarga-red">
+                <span className="font-heading text-2xl font-bold text-sarga-red">
                   {index}
                 </span>
-                <h2 className="font-heading text-3xl font-black uppercase tracking-[-0.04em]">
+                <h2 className="font-heading text-3xl font-bold uppercase tracking-[-0.04em]">
                   {title}
                 </h2>
                 <p className="max-w-xl text-sm leading-7 text-sarga-text-muted">
@@ -83,7 +83,7 @@ export default function ContactPage() {
             <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-sarga-red">
               02 / Inquiry form
             </p>
-            <h2 className="mt-5 max-w-[12ch] font-heading text-4xl font-black uppercase leading-[0.92] tracking-[-0.04em] sm:text-[2.5rem]">
+            <h2 className="mt-5 max-w-[12ch] font-heading text-4xl font-bold uppercase leading-[0.92] tracking-[-0.04em] sm:text-[2.5rem]">
               Context moves conversations faster.
             </h2>
             <p className="mt-7 max-w-lg text-sm leading-7 text-sarga-text-muted">
@@ -100,7 +100,7 @@ export default function ContactPage() {
 
       <section className="bg-sarga-black py-20 text-white sm:py-28 lg:py-36">
         <div className="site-container grid gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
-          <h2 className="max-w-full break-words font-heading text-[clamp(2.1rem,9.5vw,3rem)] font-black uppercase leading-[0.88] tracking-[-0.045em] sm:max-w-[13ch] sm:text-[clamp(3rem,4.4vw,4.8rem)]">
+          <h2 className="max-w-full break-words font-heading text-[clamp(2.1rem,9.5vw,3rem)] font-bold uppercase leading-[0.88] tracking-[-0.045em] sm:max-w-[13ch] sm:text-[clamp(3rem,4.4vw,4.8rem)]">
             The next move begins with context.
           </h2>
           <div>

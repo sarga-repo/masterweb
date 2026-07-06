@@ -2,19 +2,20 @@
 
 @theme inline {
   /* Sarga.co brand colors sampled from preview PDF page 7. */
-  --color-sarga-black: #000b1d;
-  --color-sarga-dark: #07111f;
+  --color-sarga-black: #10141b;
+  --color-sarga-dark: #1a1f29;
   --color-sarga-soft: #434343;
   --color-sarga-white: #ffffff;
   --color-sarga-light: #f3f3f3;
   --color-sarga-muted: #cccccc;
-  --color-sarga-text: #000b1d;
+  --color-sarga-text: #10141b;
   --color-sarga-text-muted: #434343;
   --color-sarga-red: #e2321e;
   --color-sarga-red-dark: #bd2818;
   --color-sarga-orange: #ff5032;
   --color-sarga-pink: #f4c3bd;
   --color-sarga-gold: #d9a441;
+  --color-sarga-gray: #999999;
   --color-sarga-border: #d9d9d9;
 
   /* Radius tokens */
@@ -23,12 +24,12 @@
   --radius-sarga-lg: 28px;
   --radius-sarga-pill: 999px;
 
-  /* Page 7: Plus Jakarta Sans body, Zalando expanded display. */
+  /* Page 7: Plus Jakarta Sans body, Zalando Sans Expanded display. */
   --font-sans:
     var(--font-plus-jakarta-sans), "Plus Jakarta Sans", system-ui,
     -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-heading:
-    var(--font-zalando-sans-expanded), "Zalando Sans Expanded",
+    var(--font-zalando-sans), "Zalando Sans Expanded", "Zalando Sans",
     var(--font-plus-jakarta-sans), "Plus Jakarta Sans", system-ui, sans-serif;
 }
 
@@ -39,10 +40,10 @@
   --container-pad-tablet: 2.5rem; /* 40px */
   --container-pad-desktop: 4.5rem; /* 72px */
   --gateway-surface-canvas: #f6f5f2;
-  --gateway-surface-ink: #000b1d;
-  --gateway-line-light: rgb(0 11 29 / 12%);
+  --gateway-surface-ink: #10141b;
+  --gateway-line-light: rgb(16 20 27 / 12%);
   --gateway-line-dark: rgb(255 255 255 / 14%);
-  --gateway-shadow-elevated: 0 24px 70px rgb(0 11 29 / 8%);
+  --gateway-shadow-elevated: 0 24px 70px rgb(16 20 27 / 8%);
 }
 
 * {
@@ -197,17 +198,17 @@ body {
   background:
     linear-gradient(
       90deg,
-      rgb(0 11 29 / 98%) 0%,
-      rgb(0 11 29 / 90%) 34%,
-      rgb(0 11 29 / 54%) 59%,
-      rgb(0 11 29 / 8%) 82%,
-      rgb(0 11 29 / 20%) 100%
+      rgb(16 20 27 / 98%) 0%,
+      rgb(16 20 27 / 90%) 34%,
+      rgb(16 20 27 / 54%) 59%,
+      rgb(16 20 27 / 8%) 82%,
+      rgb(16 20 27 / 20%) 100%
     ),
     linear-gradient(
       180deg,
-      rgb(0 11 29 / 38%) 0%,
+      rgb(16 20 27 / 38%) 0%,
       transparent 38%,
-      rgb(0 11 29 / 82%) 100%
+      rgb(16 20 27 / 82%) 100%
     );
 }
 
@@ -460,12 +461,12 @@ body {
 
   .velocity-hero__veil {
     background:
-      linear-gradient(90deg, rgb(0 11 29 / 95%), rgb(0 11 29 / 48%)),
+      linear-gradient(90deg, rgb(16 20 27 / 95%), rgb(16 20 27 / 48%)),
       linear-gradient(
         180deg,
-        rgb(0 11 29 / 24%) 0%,
-        rgb(0 11 29 / 78%) 74%,
-        rgb(0 11 29 / 96%) 100%
+        rgb(16 20 27 / 24%) 0%,
+        rgb(16 20 27 / 78%) 74%,
+        rgb(16 20 27 / 96%) 100%
       );
   }
 }
@@ -511,7 +512,7 @@ body {
 .gateway-dot-grid {
   background-image: radial-gradient(
     circle,
-    rgb(0 11 29 / 12%) 1.2px,
+    rgb(16 20 27 / 12%) 1.2px,
     transparent 1.2px
   );
   background-size: 24px 24px;
@@ -580,7 +581,7 @@ body {
 
 /* Triangular mesh / net pattern for light backgrounds (like hero HeroMesh) */
 .gateway-mesh-light {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 87' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 87L50 0l50 87H0zM50 87L100 0H0l50 87z' fill='none' stroke='%23000b1d' stroke-width='.5' opacity='.12'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 87' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 87L50 0l50 87H0zM50 87L100 0H0l50 87z' fill='none' stroke='%2310141b' stroke-width='.5' opacity='.12'/%3E%3C/svg%3E");
   background-size: 40px 35px;
   opacity: 0.55;
 }
@@ -601,7 +602,7 @@ body {
 
 /* Hero-style net/mesh SVG overlay — for light sections (dark strokes) */
 .gateway-hero-net {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1000 900' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='tri' width='24' height='21' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 21L12 0l12 21M0 21h24M0 0l12 21L24 0' fill='none' stroke='%23000b1d' stroke-width='.35'/%3E%3C/pattern%3E%3ClinearGradient id='fade' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='white' stop-opacity='0'/%3E%3Cstop offset='.18' stop-color='white' stop-opacity='.55'/%3E%3Cstop offset='.72' stop-color='white' stop-opacity='.5'/%3E%3Cstop offset='1' stop-color='white' stop-opacity='0'/%3E%3C/linearGradient%3E%3Cmask id='m'%3E%3Crect width='1000' height='900' fill='url(%23fade)'/%3E%3C/mask%3E%3C/defs%3E%3Crect width='1000' height='900' fill='url(%23tri)' mask='url(%23m)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1000 900' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='tri' width='24' height='21' patternUnits='userSpaceOnUse'%3E%3Cpath d='M0 21L12 0l12 21M0 21h24M0 0l12 21L24 0' fill='none' stroke='%2310141b' stroke-width='.35'/%3E%3C/pattern%3E%3ClinearGradient id='fade' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='white' stop-opacity='0'/%3E%3Cstop offset='.18' stop-color='white' stop-opacity='.55'/%3E%3Cstop offset='.72' stop-color='white' stop-opacity='.5'/%3E%3Cstop offset='1' stop-color='white' stop-opacity='0'/%3E%3C/linearGradient%3E%3Cmask id='m'%3E%3Crect width='1000' height='900' fill='url(%23fade)'/%3E%3C/mask%3E%3C/defs%3E%3Crect width='1000' height='900' fill='url(%23tri)' mask='url(%23m)'/%3E%3C/svg%3E");
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: right center;

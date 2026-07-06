@@ -130,7 +130,7 @@ export function AboutTabs({ tabs }: { tabs: AboutTab[] }) {
                         <p className="text-xs font-extrabold uppercase tracking-[0.04em] text-sarga-red sm:text-sm">
                           {item.meta}
                         </p>
-                        <h3 className="mt-3 max-w-2xl font-heading text-2xl font-black uppercase leading-[0.95] tracking-[-0.035em] text-sarga-text sm:text-3xl">
+                        <h3 className="mt-3 max-w-2xl font-heading text-2xl font-bold uppercase leading-[0.95] tracking-[-0.035em] text-sarga-text sm:text-3xl">
                           {item.title}
                         </h3>
                         <p className="mt-4 max-w-3xl text-sm leading-7 text-sarga-text-muted sm:text-base">

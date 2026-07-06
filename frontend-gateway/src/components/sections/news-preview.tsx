@@ -15,7 +15,7 @@ function StoryMedia({ article }: { article: NewsArticle }) {
       className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]"
     />
   ) : (
-    <span className="absolute inset-0 bg-[linear-gradient(145deg,#434343,#07111f_58%,#000b1d)]" />
+    <span className="absolute inset-0 bg-[linear-gradient(145deg,#434343,#1a1f29_58%,#10141b)]" />
   );
 }
 
@@ -43,7 +43,7 @@ export function NewsPreview({ articles }: { articles: NewsArticle[] }) {
         </div>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-          <h2 className="max-w-[12ch] font-heading text-[clamp(3.25rem,10vw,4rem)] font-black uppercase leading-[0.86] tracking-[-0.05em] text-sarga-text sm:text-[clamp(3.25rem,4.8vw,4.8rem)]">
+          <h2 className="max-w-[12ch] font-heading text-[clamp(3.25rem,10vw,4rem)] font-bold uppercase leading-[0.86] tracking-[-0.05em] text-sarga-text sm:text-[clamp(3.25rem,4.8vw,4.8rem)]">
             News moves fast.
           </h2>
           <div className="lg:justify-self-end">
@@ -69,7 +69,7 @@ export function NewsPreview({ articles }: { articles: NewsArticle[] }) {
                 return (
               <Link
                 href={featuredLink.href}
-                className="group relative isolate flex min-h-[34rem] overflow-hidden bg-sarga-black text-white shadow-[0_24px_70px_rgb(0_11_29_/_14%)] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-4 focus-visible:outline-sarga-orange sm:min-h-[42rem]"
+                className="group relative isolate flex min-h-[34rem] overflow-hidden bg-sarga-black text-white shadow-[0_24px_70px_rgb(16_20_27_/_14%)] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-4 focus-visible:outline-sarga-orange sm:min-h-[42rem]"
                 {...(featuredLink.isExternal
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
@@ -82,7 +82,7 @@ export function NewsPreview({ articles }: { articles: NewsArticle[] }) {
                       {featured.isHotTopic ? "Featured / " : ""}
                       {formatDisplayDate(featured.publishedDate)}
                     </p>
-                    <h3 className="mt-4 max-w-[16ch] font-heading text-3xl font-black uppercase leading-[0.92] tracking-[-0.03em] sm:text-[2.4rem]">
+                    <h3 className="mt-4 max-w-[16ch] font-heading text-3xl font-bold uppercase leading-[0.92] tracking-[-0.03em] sm:text-[2.4rem]">
                       {featured.title}
                     </h3>
                   </div>
@@ -113,7 +113,7 @@ export function NewsPreview({ articles }: { articles: NewsArticle[] }) {
                       className="absolute inset-y-0 left-0 w-[3px] origin-top scale-y-0 bg-sarga-red transition-transform duration-300 group-hover:scale-y-100"
                     />
                     <div className="flex items-start justify-between gap-4">
-                      <span className="font-heading text-2xl font-black text-sarga-red">
+                      <span className="font-heading text-2xl font-bold text-sarga-red">
                         0{index + 2}
                       </span>
                       <span className="text-[0.6rem] font-bold uppercase tracking-[0.16em] text-sarga-text-muted">
@@ -121,7 +121,7 @@ export function NewsPreview({ articles }: { articles: NewsArticle[] }) {
                       </span>
                     </div>
                     <div className="self-end">
-                      <h3 className="font-heading text-2xl font-black uppercase leading-[0.92] tracking-[-0.025em] text-sarga-text sm:text-3xl">
+                      <h3 className="font-heading text-2xl font-bold uppercase leading-[0.92] tracking-[-0.025em] text-sarga-text sm:text-3xl">
                         {article.title}
                       </h3>
                       <span className="mt-5 inline-flex items-center gap-3 text-[0.62rem] font-extrabold uppercase tracking-[0.15em]">

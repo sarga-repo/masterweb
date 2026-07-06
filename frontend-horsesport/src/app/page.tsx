@@ -123,7 +123,7 @@ export default async function Homepage() {
                     />
                     <div
                       aria-hidden
-                      className="absolute inset-0 bg-gradient-to-t from-hs-black/88 via-hs-black/20 to-transparent"
+                      className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/8"
                     />
                     <span className="hs-kicker absolute right-4 top-4 text-hs-cream/55">
                       Since 2023

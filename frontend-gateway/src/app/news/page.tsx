@@ -113,7 +113,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
           {featured ? (
             <Link
               href={`/news/${featured.slug}`}
-              className="group mt-14 grid overflow-hidden bg-sarga-black text-white shadow-[0_24px_70px_rgb(0_11_29_/_14%)] lg:grid-cols-[1.15fr_0.85fr]"
+              className="group mt-14 grid overflow-hidden bg-sarga-black text-white shadow-[0_24px_70px_rgb(16_20_27_/_14%)] lg:grid-cols-[1.15fr_0.85fr]"
             >
               <div className="relative min-h-[22rem] overflow-hidden lg:min-h-[38rem]">
                 {featured.coverImage ? (
@@ -137,7 +137,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                   <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/45">
                     {categoryLabel(featured.category)}
                   </p>
-                  <h2 className="mt-5 font-heading text-3xl font-black uppercase leading-[0.92] tracking-[-0.035em] sm:text-[2.4rem]">
+                  <h2 className="mt-5 font-heading text-3xl font-bold uppercase leading-[0.92] tracking-[-0.035em] sm:text-[2.4rem]">
                     {featured.title}
                   </h2>
                   <p className="mt-6 text-sm leading-7 text-white/58">
@@ -161,7 +161,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
       <section className="gateway-surface-light-signature gateway-surface-light-signature--left border-t border-sarga-black/10 bg-white py-20 sm:py-28 lg:py-36">
         <div className="site-container relative z-10">
           <div className="flex items-end justify-between gap-8 border-b border-sarga-black pb-6">
-            <h2 className="font-heading text-3xl font-black uppercase tracking-[-0.03em] sm:text-[2.4rem]">
+            <h2 className="font-heading text-3xl font-bold uppercase tracking-[-0.03em] sm:text-[2.4rem]">
               The editorial desk
             </h2>
             <span className="hidden text-xs font-bold uppercase tracking-[0.16em] text-sarga-text/45 sm:block">
@@ -185,7 +185,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                       className="object-cover opacity-85 transition duration-700 group-hover:scale-[1.03]"
                     />
                   ) : null}
-                  <span className="absolute left-5 top-5 font-heading text-2xl font-black text-white">
+                  <span className="absolute left-5 top-5 font-heading text-2xl font-bold text-white">
                     {String(index + 2).padStart(2, "0")}
                   </span>
                 </div>
@@ -197,7 +197,7 @@ export default async function NewsPage({ searchParams }: NewsPageProps) {
                     {article.publishedDate}
                   </time>
                 </div>
-                <h3 className="mt-5 max-w-xl font-heading text-2xl font-black uppercase leading-[0.96] tracking-[-0.035em] sm:text-3xl">
+                <h3 className="mt-5 max-w-xl font-heading text-2xl font-bold uppercase leading-[0.96] tracking-[-0.035em] sm:text-3xl">
                   {article.title}
                 </h3>
               </Link>

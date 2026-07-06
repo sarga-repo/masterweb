@@ -50,7 +50,7 @@ export function HeroRaceSection({
         className="absolute inset-0 -z-10"
         style={{
           background:
-            "linear-gradient(180deg, rgba(8,6,4,0.62) 0%, transparent 24%, transparent 38%, rgba(8,6,4,0.9) 100%), linear-gradient(90deg, rgba(8,6,4,0.88) 0%, rgba(8,6,4,0.4) 48%, transparent 78%)",
+            "linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 24%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.95) 100%), linear-gradient(90deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 48%, transparent 78%)",
         }}
       />
       {/* Single warm brand bloom — one restrained accent */}
@@ -86,24 +86,24 @@ export function HeroRaceSection({
 
       <div className="hs-shell relative z-10 flex min-h-[100dvh] flex-col pb-10 pt-[calc(var(--hs-header-height)+1.75rem)] sm:pb-12">
         {/* ── Top data rail ── */}
-        <div className="flex items-center justify-between gap-4 border-b border-hs-cream/16 pb-5">
+        <div className="flex items-center justify-between gap-4 border-b border-hs-white/16 pb-5">
           <span className="hs-kicker inline-flex items-center gap-3 text-hs-orange">
             <span aria-hidden className="hs-rule inline-block h-px w-10 align-middle" />
             {eyebrow}
           </span>
-          <span className="hs-kicker hidden text-hs-cream/45 sm:inline">
+          <span className="hs-kicker hidden text-hs-white/45 sm:inline">
             Championship Calendar
           </span>
-          <span className="hs-kicker text-hs-cream/45">Est. 2023 · IDN</span>
+          <span className="hs-kicker text-hs-white/45">Est. 2023 · IDN</span>
         </div>
 
         {/* ── Title block (grows, sits low) ── */}
         <div className="flex flex-1 flex-col justify-end pt-16">
-          <h1 className="hs-display max-w-[13ch] text-[clamp(3rem,8vw,7.5rem)] leading-[0.86] text-hs-cream">
+          <h1 className="hs-display max-w-[13ch] text-[clamp(3rem,8vw,7.5rem)] leading-[0.86] text-hs-white">
             {title}
           </h1>
           {description ? (
-            <p className="hs-body-lg mt-6 max-w-[34rem] border-l-2 border-hs-red pl-5 text-hs-cream/72">
+            <p className="hs-body-lg mt-6 max-w-[34rem] border-l-2 border-hs-red pl-5 text-hs-white/72">
               {description}
             </p>
           ) : null}
@@ -132,14 +132,14 @@ export function HeroRaceSection({
 
         {/* ── Single bottom stat band ── */}
         {stats.length > 0 ? (
-          <dl className="mt-14 grid grid-cols-2 border-t border-hs-cream/16 pt-7 sm:grid-cols-4">
+          <dl className="mt-14 grid grid-cols-2 border-t border-hs-white/16 pt-7 sm:grid-cols-4">
             {stats.map((stat, i) => (
               <div
                 key={stat.label}
-                className={`px-0 sm:px-6 ${i === 0 ? "sm:pl-0" : ""} ${i > 0 ? "sm:border-l sm:border-hs-cream/12" : ""} max-sm:mb-4`}
+                className={`px-0 sm:px-6 ${i === 0 ? "sm:pl-0" : ""} ${i > 0 ? "sm:border-l sm:border-hs-white/12" : ""} max-sm:mb-4`}
               >
-                <dt className="hs-kicker text-hs-cream/45">{stat.label}</dt>
-                <dd className="hs-display mt-2 text-[clamp(1.6rem,2.4vw,2.1rem)] text-hs-cream">
+                <dt className="hs-kicker text-hs-white/45">{stat.label}</dt>
+                <dd className="hs-display mt-2 text-[clamp(1.6rem,2.4vw,2.1rem)] text-hs-white">
                   {stat.value}
                 </dd>
               </div>

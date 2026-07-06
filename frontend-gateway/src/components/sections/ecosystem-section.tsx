@@ -21,7 +21,7 @@ export function EcosystemSection({
       content: (
         <div>
           <div className="grid gap-6 border-b border-white/15 pb-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
-            <h3 className="font-heading text-3xl font-black uppercase leading-[0.92] tracking-[-0.03em] text-white sm:text-[2.4rem]">
+            <h3 className="font-heading text-3xl font-bold uppercase leading-[0.92] tracking-[-0.03em] text-white sm:text-[2.4rem]">
               {pillar.headline}
             </h3>
             <p className="max-w-2xl text-sm leading-6 text-white/58 sm:text-base sm:leading-7 lg:justify-self-end">
@@ -70,7 +70,7 @@ export function EcosystemSection({
         </div>
 
         <div className="mt-10 grid gap-10 xl:grid-cols-[minmax(0,1.45fr)_minmax(22rem,0.75fr)] xl:items-end">
-          <h2 className="min-w-0 font-heading font-black uppercase leading-[0.72] tracking-[-0.07em]">
+          <h2 className="min-w-0 font-heading font-bold uppercase leading-[0.72] tracking-[-0.07em]">
             <span className="block text-[clamp(3.8rem,12vw,4.5rem)] text-sarga-red sm:text-[clamp(3.8rem,5vw,5.2rem)]">
               360°
             </span>

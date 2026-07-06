@@ -60,7 +60,7 @@ export function NewsArticleCard({
         )}
         <div
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-t from-hs-black/70 via-transparent to-transparent"
+          className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/5"
         />
       </div>
       <div

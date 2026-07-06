@@ -18,7 +18,7 @@ export function Footer() {
       />
       <div className="site-container pb-8 pt-16 sm:pt-20">
         <div className="grid gap-8 border-b border-white/15 pb-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-          <h2 className="max-w-[13ch] font-heading text-[clamp(3rem,10vw,3.5rem)] font-black uppercase leading-[0.86] tracking-[-0.045em] sm:text-[clamp(3rem,4vw,4.2rem)]">
+          <h2 className="max-w-[13ch] font-heading text-[clamp(3rem,10vw,3.5rem)] font-bold uppercase leading-[0.86] tracking-[-0.045em] sm:text-[clamp(3rem,4vw,4.2rem)]">
             One network. Many ways in.
           </h2>
           <p className="max-w-lg text-sm leading-6 text-white/55 sm:text-base sm:leading-7 lg:justify-self-end">

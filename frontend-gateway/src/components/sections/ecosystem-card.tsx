@@ -37,12 +37,12 @@ export function EcosystemCard({ business }: { business: EcosystemBusiness }) {
       ) : (
         <span
           aria-hidden="true"
-          className="absolute inset-0 -z-20 bg-[linear-gradient(145deg,#283443_0%,#07111f_55%,#000b1d_100%)]"
+          className="absolute inset-0 -z-20 bg-[linear-gradient(145deg,#283443_0%,#1a1f29_55%,#10141b_100%)]"
         />
       )}
       <span
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(0,11,29,0.08)_0%,rgba(0,11,29,0.12)_35%,rgba(0,11,29,0.94)_100%)]"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(16,20,27,0.08)_0%,rgba(16,20,27,0.12)_35%,rgba(16,20,27,0.94)_100%)]"
       />
       <span
         aria-hidden="true"
@@ -52,7 +52,7 @@ export function EcosystemCard({ business }: { business: EcosystemBusiness }) {
       <div className="relative flex h-full flex-col p-6 sm:p-8">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
-            <span className="font-heading text-3xl font-black text-white/92">
+            <span className="font-heading text-3xl font-bold text-white/92">
               {number}
             </span>
             {business.brandLogo ? (
@@ -78,7 +78,7 @@ export function EcosystemCard({ business }: { business: EcosystemBusiness }) {
               In development
             </span>
           ) : null}
-          <h4 className="max-w-[13ch] font-heading text-3xl font-black uppercase leading-[0.94] tracking-[-0.03em] text-white">
+          <h4 className="max-w-[13ch] font-heading text-3xl font-bold uppercase leading-[0.94] tracking-[-0.03em] text-white">
             {business.name}
           </h4>
           <p className="mt-5 max-w-md text-sm leading-6 text-white/68 sm:text-base sm:leading-7">

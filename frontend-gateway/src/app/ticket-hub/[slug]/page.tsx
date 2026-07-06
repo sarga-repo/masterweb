@@ -95,7 +95,7 @@ export default async function EventPage({ params }: EventPageProps) {
             Event access protocol
           </div>
           <div>
-            <h2 className="max-w-[15ch] font-heading text-[clamp(3rem,10vw,3.25rem)] font-black uppercase leading-[0.9] tracking-[-0.04em] sm:text-[clamp(3rem,3.6vw,4rem)]">
+            <h2 className="max-w-[15ch] font-heading text-[clamp(3rem,10vw,3.25rem)] font-bold uppercase leading-[0.9] tracking-[-0.04em] sm:text-[clamp(3rem,3.6vw,4rem)]">
               One weekend. Every Sarga world in motion.
             </h2>
             <p className="mt-8 max-w-3xl text-lg leading-9 text-sarga-text-muted">
@@ -149,7 +149,7 @@ export default async function EventPage({ params }: EventPageProps) {
                 <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-sarga-red">
                   Approved partner embed
                 </p>
-                <h2 className="mt-3 font-heading text-3xl font-black uppercase tracking-[-0.03em] sm:text-[2rem]">
+                <h2 className="mt-3 font-heading text-3xl font-bold uppercase tracking-[-0.03em] sm:text-[2rem]">
                   Continue with the ticket partner.
                 </h2>
               </div>

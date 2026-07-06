@@ -40,7 +40,7 @@ export function HorseSportFooter({
 }: HorseSportFooterProps) {
   return (
     <footer
-      className="hs-dark-panel-glow relative overflow-hidden"
+      className="bg-black relative overflow-hidden"
       role="contentinfo"
     >
       {/* Top ember glow */}
@@ -77,7 +77,7 @@ export function HorseSportFooter({
       <div className="hs-shell relative py-16 sm:py-20 md:py-24">
         <div className="mb-10 max-w-[28rem]">
           <p className="hs-kicker text-hs-orange">Horse sport by Sarga</p>
-          <h2 className="hs-display mt-4 max-w-[12ch] text-[clamp(2rem,4.5vw,3.6rem)] text-hs-cream">
+          <h2 className="hs-display mt-4 max-w-[12ch] text-[clamp(2rem,4.5vw,3.6rem)] text-white">
             Where sport meets spectacle.
           </h2>
         </div>
@@ -91,7 +91,7 @@ export function HorseSportFooter({
                 className="w-[clamp(9rem,14vw,12rem)]"
               />
             </Link>
-            <p className="mt-6 max-w-[18rem] text-sm leading-6 text-hs-cream/42">
+            <p className="mt-6 max-w-[18rem] text-sm leading-6 text-gray-300">
               Championship equestrian sport, premium hospitality, and
               international-grade race day experiences.
             </p>
@@ -105,7 +105,7 @@ export function HorseSportFooter({
                     href={link.href}
                     target={link.external ? "_blank" : undefined}
                     rel={link.external ? "noreferrer" : undefined}
-                    className="hs-glass-chip text-[0.58rem] transition-colors duration-300 hover:border-hs-orange/30 hover:text-hs-orange"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-[0.58rem] font-semibold uppercase tracking-[0.1em] text-gray-300 backdrop-blur-sm transition-colors duration-300 hover:border-white/40 hover:text-white"
                   >
                     {link.label}
                     <ArrowUpRightIcon className="size-3" />
@@ -123,7 +123,7 @@ export function HorseSportFooter({
                     target="_blank"
                     rel="noreferrer"
                     aria-label={s.label}
-                    className="grid size-9 place-items-center rounded-full border border-hs-cream/12 text-hs-cream/55 transition-colors duration-300 hover:border-hs-orange/50 hover:text-hs-orange"
+                    className="grid size-9 place-items-center rounded-full border border-white/15 text-gray-300 transition-colors duration-300 hover:border-hs-orange/50 hover:text-hs-orange"
                   >
                     <s.Icon className="size-4" />
                   </a>
@@ -135,7 +135,7 @@ export function HorseSportFooter({
           {/* Link columns */}
           {columns.map((col) => (
             <div key={col.title}>
-              <h4 className="text-[0.66rem] font-extrabold uppercase tracking-[0.18em] text-hs-cream/55">
+              <h4 className="text-[0.66rem] font-extrabold uppercase tracking-[0.18em] text-gray-300">
                 {col.title}
               </h4>
               <ul className="mt-5 space-y-3.5" role="list">
@@ -143,7 +143,7 @@ export function HorseSportFooter({
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-hs-cream/45 transition-colors duration-300 hover:text-hs-cream/80"
+                      className="text-sm text-gray-300 transition-colors duration-300 hover:text-white"
                     >
                       {link.label}
                     </Link>
@@ -155,14 +155,14 @@ export function HorseSportFooter({
 
           {/* Contact column */}
           <div>
-            <h4 className="text-[0.66rem] font-extrabold uppercase tracking-[0.18em] text-hs-cream/55">
+            <h4 className="text-[0.66rem] font-extrabold uppercase tracking-[0.18em] text-gray-300">
               Connect
             </h4>
             <ul className="mt-5 space-y-3.5" role="list">
               <li>
                 <Link
                   href="/contact"
-                  className="text-sm text-hs-cream/45 transition-colors duration-300 hover:text-hs-cream/80"
+                  className="text-sm text-gray-300 transition-colors duration-300 hover:text-white"
                 >
                   Contact us
                 </Link>
@@ -170,7 +170,7 @@ export function HorseSportFooter({
               <li>
                 <Link
                   href="/partners"
-                  className="text-sm text-hs-cream/45 transition-colors duration-300 hover:text-hs-cream/80"
+                  className="text-sm text-gray-300 transition-colors duration-300 hover:text-white"
                 >
                   Partnerships
                 </Link>
@@ -178,7 +178,7 @@ export function HorseSportFooter({
               <li>
                 <Link
                   href="/tickets"
-                  className="text-sm text-hs-cream/45 transition-colors duration-300 hover:text-hs-cream/80"
+                  className="text-sm text-gray-300 transition-colors duration-300 hover:text-white"
                 >
                   Hospitality
                 </Link>
@@ -191,7 +191,7 @@ export function HorseSportFooter({
         <div className="mt-16 sm:mt-20">
           <div className="hs-luxe-rule mb-8" />
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-            <p className="text-[0.64rem] text-hs-cream/28">{copyright}</p>
+            <p className="text-[0.64rem] text-gray-400">{copyright}</p>
             {legalLinks.length > 0 ? (
               <nav aria-label="Legal links">
                 <ul className="flex flex-wrap gap-x-6 gap-y-2" role="list">
@@ -199,7 +199,7 @@ export function HorseSportFooter({
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="text-[0.64rem] text-hs-cream/30 transition-colors duration-300 hover:text-hs-cream/60"
+                        className="text-[0.64rem] text-gray-400 transition-colors duration-300 hover:text-gray-300"
                       >
                         {link.label}
                       </Link>

@@ -31,7 +31,7 @@ function CellInner({
       )}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-t from-hs-black/85 via-hs-black/22 to-hs-black/8"
+        className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/8"
       />
       {item.category ? (
         <span className="absolute left-4 top-4 z-10 rounded-full border border-hs-cream/15 bg-hs-black/40 px-3 py-1.5 text-[0.56rem] font-extrabold uppercase tracking-[0.16em] text-hs-cream/80 backdrop-blur-sm">

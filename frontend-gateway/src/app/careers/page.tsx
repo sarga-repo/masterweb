@@ -69,10 +69,10 @@ export default function CareersPage() {
                 key={index}
                 className="min-h-[20rem] border-b border-r border-sarga-black/20 p-7 sm:p-10"
               >
-                <span className="font-heading text-2xl font-black text-sarga-red">
+                <span className="font-heading text-2xl font-bold text-sarga-red">
                   {index}
                 </span>
-                <h3 className="mt-16 font-heading text-3xl font-black uppercase leading-[0.94] tracking-[-0.03em]">
+                <h3 className="mt-16 font-heading text-3xl font-bold uppercase leading-[0.94] tracking-[-0.03em]">
                   {title}
                 </h3>
                 <p className="mt-6 max-w-md text-sm leading-7 text-sarga-text-muted">
@@ -86,7 +86,7 @@ export default function CareersPage() {
 
       <section className="gateway-surface-accent-signature gateway-surface-accent-signature--left bg-sarga-red py-20 text-white sm:py-28 lg:py-36">
         <div className="site-container grid gap-12 lg:grid-cols-[1.25fr_0.75fr] lg:items-end">
-          <h2 className="max-w-full break-words font-heading text-[clamp(2.1rem,9.5vw,3rem)] font-black uppercase leading-[0.88] tracking-[-0.045em] sm:max-w-[14ch] sm:text-[clamp(3rem,4.4vw,4.8rem)]">
+          <h2 className="max-w-full break-words font-heading text-[clamp(2.1rem,9.5vw,3rem)] font-bold uppercase leading-[0.88] tracking-[-0.045em] sm:max-w-[14ch] sm:text-[clamp(3rem,4.4vw,4.8rem)]">
             No generic applications. Make your intent count.
           </h2>
           <div>

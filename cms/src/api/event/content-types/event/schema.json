@@ -61,7 +61,7 @@
     },
     "siteScope": {
       "type": "enumeration",
-      "enum": ["gateway", "motorsport", "shared", "hidden"],
+      "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
       "default": "gateway",
       "required": true
     },
@@ -72,6 +72,7 @@
     },
     "showOnGateway": { "type": "boolean", "default": true },
     "showOnMotorsport": { "type": "boolean", "default": false },
+    "showOnHorseSport": { "type": "boolean", "default": false },
     "racingCategory": { "type": "string" },
     "seriesName": { "type": "string" },
     "venueAddress": { "type": "text" },
@@ -94,6 +95,25 @@
       "allowedTypes": ["images", "videos"]
     },
     "broadcastUrl": { "type": "string" },
+    "eventDiscipline": {
+      "type": "enumeration",
+      "enum": [
+        "derby",
+        "turf",
+        "exhibition",
+        "championship",
+        "hospitality",
+        "training",
+        "other"
+      ]
+    },
+    "raceClass": { "type": "string" },
+    "trackType": {
+      "type": "enumeration",
+      "enum": ["turf", "dirt", "mixed", "indoor", "other"]
+    },
+    "hospitalityInfo": { "type": "richtext" },
+    "stableAccessInfo": { "type": "richtext" },
     "ticketCtas": {
       "type": "relation",
       "relation": "oneToMany",

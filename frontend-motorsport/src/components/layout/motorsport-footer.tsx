@@ -14,6 +14,8 @@ type MotorsportFooterProps = {
   socialLinks?: LinkItem[];
   legalLinks?: LinkItem[];
   gatewayLink?: LinkItem;
+  /** Cross-links into other Sarga dedicated sites (e.g. Horse Sport). */
+  crossSiteLinks?: LinkItem[];
   copyright: string;
   statement?: string;
 };
@@ -23,6 +25,7 @@ export function MotorsportFooter({
   socialLinks = [],
   legalLinks = [],
   gatewayLink,
+  crossSiteLinks = [],
   copyright,
   statement = "Racing, amplified.",
 }: MotorsportFooterProps) {
@@ -73,6 +76,17 @@ export function MotorsportFooter({
                 href={item.href}
                 target="_blank"
                 rel="noreferrer"
+                className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-ms-warm-white/65 hover:text-ms-electric-yellow"
+              >
+                {item.label} <ArrowUpRightIcon className="size-3.5" />
+              </a>
+            ))}
+            {crossSiteLinks.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noreferrer" : undefined}
                 className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-ms-warm-white/65 hover:text-ms-electric-yellow"
               >
                 {item.label} <ArrowUpRightIcon className="size-3.5" />

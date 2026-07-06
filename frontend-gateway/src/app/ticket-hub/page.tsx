@@ -5,7 +5,7 @@ import { EditorialHeading } from "@/components/sections/editorial-heading";
 import { InteriorHero } from "@/components/sections/interior-hero";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { getEvents } from "@/lib/strapi/events";
-import { motorsportUrl } from "@/lib/site-config";
+import { dedicatedSiteLabel, resolveContentUrl } from "@/lib/cross-site";
 import { createMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = createMetadata({
@@ -45,12 +45,11 @@ export default async function TicketHubPage() {
           />
           <div className="mt-14">
             {events.map((event) => {
-              const isMotorsport = event.siteScope === "motorsport";
-              const externalHref = isMotorsport
-                ? motorsportUrl(`/events/${event.slug}`)
-                : undefined;
-              const href = externalHref ?? `/ticket-hub/${event.slug}`;
-              const isExternal = Boolean(externalHref);
+              const { href, isExternal } = resolveContentUrl({
+                slug: event.slug,
+                contentType: "events",
+                siteScope: event.siteScope,
+              });
               return (
                 <Link
                   key={event.slug}
@@ -87,7 +86,9 @@ export default async function TicketHubPage() {
                       {event.description}
                     </p>
                     <span className="mt-10 inline-flex items-center gap-4 text-xs font-extrabold uppercase tracking-[0.16em]">
-                      {isMotorsport ? "View on motorsport site" : "View event details"}
+                      {isExternal
+                        ? `View on ${dedicatedSiteLabel(event.siteScope)}`
+                        : "View event details"}
                       <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </span>
                   </div>

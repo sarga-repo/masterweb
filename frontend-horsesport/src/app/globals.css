@@ -1,0 +1,1029 @@
+@import "tailwindcss";
+
+/*
+ * Sarga Horse Sport — Premium Editorial-Luxury Design System
+ * Recalibrated for international investor-facing quality.
+ *
+ * Design Direction: Editorial Luxury (warm creams × deep warm darks ×
+ * cinematic photography × subtle grain) with "Double-Bezel" card
+ * architecture and intentional brand-pattern integration.
+ *
+ * Reference: page 7 of sarga_website_preview.pdf
+ * Typefaces: StadtMitte (display) + Masifa (body)
+ * Brand motifs: orange zigzag bands, red dotted spiral, black structural anchors
+ */
+
+/* ========================================================================= */
+/*  THEME TOKENS                                                              */
+/* ========================================================================= */
+
+@theme {
+  /* ── Brand palette (page 7 + brand guide) ── */
+  --color-hs-red: #ed1b2f;
+  --color-hs-red-deep: #c4122a;
+  --color-hs-orange: #ff6b00;
+  --color-hs-orange-warm: #e65d00;
+  --color-hs-gold: #d4a843;
+  --color-hs-black: #080604;
+  --color-hs-night: #0e0b08;
+  --color-hs-ink: #14100b;
+  --color-hs-espresso: #1a1410;
+  --color-hs-cream: #fef9f0;
+  --color-hs-cream-warm: #faf3e6;
+  --color-hs-sand: #ede0c8;
+  --color-hs-sand-light: #f4ecdb;
+  --color-hs-brown: #8b5742;
+  --color-hs-brown-light: #a07a68;
+  --color-hs-turf: #7a9a8a;
+  --color-hs-white: #ffffff;
+  --color-hs-muted: #9b948b;
+  --color-hs-muted-warm: #b8a898;
+
+  /* ── Typography ── */
+  --font-display:
+    "StadtMitte", "STADMITTE", "Stadmitte", "Archivo Variable", "Archivo",
+    "Arial Black", "Impact", sans-serif;
+  --font-body:
+    "Masifa", "masifa", "MASIFA", "Plus Jakarta Sans Variable",
+    "Plus Jakarta Sans", "Noto Sans", system-ui, sans-serif;
+
+  /* ── Layout ── */
+  --spacing-content: 88rem;
+  --spacing-reading: 44rem;
+
+  /* ── Shadows (softer, warmer, more dimensional) ── */
+  --shadow-hs-glow: 0 0 4rem rgb(237 27 47 / 0.18);
+  --shadow-hs-ambient: 0 2rem 6rem rgb(8 6 4 / 0.5);
+  --shadow-hs-lift: 0 1.5rem 4rem rgb(8 6 4 / 0.45);
+  --shadow-hs-card: 0 1.25rem 3.5rem rgb(8 6 4 / 0.38);
+  --shadow-hs-subtle: 0 0.5rem 2rem rgb(8 6 4 / 0.18);
+
+  /* ── Easing (physics-based, no linear/ease-in-out) ── */
+  --ease-hs-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-hs-snap: cubic-bezier(0.22, 0.8, 0.36, 1);
+  --ease-hs-premium: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-hs-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-hs-glide: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================================================= */
+/*  CSS CUSTOM PROPERTIES (semantic layer)                                    */
+/* ========================================================================= */
+
+:root {
+  color-scheme: dark;
+
+  /* Surfaces — warm, not cold black */
+  --hs-surface-base: #080604;
+  --hs-surface-page: #0a0806;
+  --hs-surface-panel: #100d09;
+  --hs-surface-raised: #16120d;
+  --hs-surface-deep: #060403;
+  --hs-surface-cream: #fef9f0;
+  --hs-surface-cream-soft: #faf4ea;
+
+  /* Text */
+  --hs-text-primary: #fef9f0;
+  --hs-text-secondary: rgb(254 249 240 / 0.7);
+  --hs-text-quiet: rgb(254 249 240 / 0.42);
+  --hs-text-inverse: #0a0806;
+
+  /* Lines */
+  --hs-line-dim: rgb(254 249 240 / 0.1);
+  --hs-line-bright: rgb(254 249 240 / 0.22);
+  --hs-line-soft: rgb(254 249 240 / 0.06);
+  --hs-line-cream: rgb(10 8 6 / 0.08);
+
+  /* Gradients */
+  --hs-gradient-mark: linear-gradient(100deg, #ff6b00 0%, #ed1b2f 100%);
+  --hs-gradient-ember: linear-gradient(
+    120deg,
+    #ed1b2f 0%,
+    #ff6b00 55%,
+    #ede0c8 130%
+  );
+  --hs-gradient-warm: linear-gradient(
+    160deg,
+    rgb(255 107 0 / 0.22),
+    rgb(237 27 47 / 0.14)
+  );
+  --hs-gradient-cream: linear-gradient(
+    180deg,
+    rgb(254 249 240 / 0.96),
+    rgb(250 244 234 / 0.98)
+  );
+
+  /* Layout rhythm — generous breathing room */
+  --hs-page-gutter: clamp(1.5rem, 5vw, 5rem);
+  --hs-section-gap: clamp(4.5rem, 8vw, 8.5rem);
+  --hs-section-gap-tight: clamp(3rem, 5.5vw, 5.5rem);
+  --hs-header-height: 5.5rem;
+
+  /* Radius — sharp, modern, architectural */
+  --radius-hs-xs: 0.25rem;
+  --radius-hs-sm: 0.375rem;
+  --radius-hs-md: 0.5rem;
+  --radius-hs-lg: 0.625rem;
+  --radius-hs-xl: 0.75rem;
+  --radius-hs-pill: 999px;
+}
+
+/* ========================================================================= */
+/*  RESET & BASE                                                              */
+/* ========================================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--hs-surface-base);
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  background: var(--hs-surface-page);
+  color: var(--hs-text-primary);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.65;
+  background-image:
+    radial-gradient(60% 60% at 18% 0%, rgb(255 107 0 / 0.09), transparent 55%),
+    radial-gradient(50% 55% at 92% 94%, rgb(237 27 47 / 0.09), transparent 55%),
+    linear-gradient(180deg, #0d0a08 0%, #080604 52%, #0a0605 100%);
+  text-rendering: optimizeLegibility;
+}
+
+/* Global film grain overlay — editorial luxury texture */
+body::after {
+  content: "";
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+::selection {
+  background: var(--color-hs-red);
+  color: var(--color-hs-white);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-hs-orange);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+/* ========================================================================= */
+/*  LAYOUT PRIMITIVES                                                         */
+/* ========================================================================= */
+
+.hs-shell {
+  width: min(100%, var(--spacing-content));
+  margin-inline: auto;
+  padding-inline: var(--hs-page-gutter);
+}
+
+.hs-section {
+  padding-block: var(--hs-section-gap);
+}
+
+.hs-section-tight {
+  padding-block: var(--hs-section-gap-tight);
+}
+
+/* ========================================================================= */
+/*  TYPOGRAPHY                                                                */
+/* ========================================================================= */
+
+.hs-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.hs-display-light {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 0.96;
+  text-transform: uppercase;
+}
+
+.hs-kicker {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.hs-eyebrow-gradient {
+  background-image: var(--hs-gradient-mark);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hs-text-gradient {
+  background-image: var(--hs-gradient-ember);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Body text refinements ── */
+.hs-body-lg {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.75;
+  letter-spacing: 0.005em;
+  color: var(--hs-text-secondary);
+}
+
+.hs-body {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  color: var(--hs-text-secondary);
+}
+
+/* ========================================================================= */
+/*  DOUBLE-BEZEL CARD ARCHITECTURE                                            */
+/* ========================================================================= */
+
+/*
+ * Outer shell: subtle gradient border ring + ambient shadow.
+ * Inner core: distinct surface with inner highlight — like a glass plate
+ * seated in a machined aluminium tray.
+ */
+
+.hs-card-shell {
+  border-radius: var(--radius-hs-xl);
+  padding: 1px;
+  background: linear-gradient(
+    180deg,
+    rgb(254 249 240 / 0.1),
+    rgb(254 249 240 / 0.02) 50%,
+    rgb(254 249 240 / 0.06)
+  );
+  box-shadow: var(--shadow-hs-card);
+}
+
+.hs-card-shell-light {
+  border-radius: var(--radius-hs-xl);
+  padding: 1px;
+  background: linear-gradient(
+    180deg,
+    rgb(20 14 10 / 0.12),
+    rgb(20 14 10 / 0.03) 55%,
+    rgb(20 14 10 / 0.08)
+  );
+  box-shadow: var(--shadow-hs-subtle);
+}
+
+.hs-card-shell-gold {
+  border-radius: var(--radius-hs-xl);
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgb(237 27 47 / 0.25),
+    rgb(255 107 0 / 0.18) 40%,
+    rgb(212 168 67 / 0.12) 70%,
+    rgb(254 249 240 / 0.06)
+  );
+  box-shadow: var(--shadow-hs-ambient);
+}
+
+/* ── Inner core (dark surfaces) ── */
+.hs-card {
+  border: 1px solid var(--hs-line-dim);
+  border-radius: calc(var(--radius-hs-xl) - 1px);
+  background:
+    linear-gradient(180deg, rgb(254 249 240 / 0.018), transparent 18%),
+    linear-gradient(180deg, rgb(18 14 10 / 0.98), rgb(10 8 6 / 0.98));
+  box-shadow: inset 0 1px 0 rgb(254 249 240 / 0.05);
+  overflow: hidden;
+}
+
+/* ── Inner core (cream/light surfaces) ── */
+.hs-card-cream {
+  border: 1px solid var(--hs-line-cream);
+  border-radius: calc(var(--radius-hs-xl) - 1px);
+  background: var(--hs-gradient-cream);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.7);
+  color: var(--hs-text-inverse);
+  overflow: hidden;
+}
+
+/* ── Panel (subtler variant for less prominent containers) ── */
+.hs-panel {
+  border: 1px solid var(--hs-line-soft);
+  border-radius: calc(var(--radius-hs-xl) - 1px);
+  background:
+    linear-gradient(180deg, rgb(254 249 240 / 0.03), transparent 22%),
+    linear-gradient(180deg, rgb(18 14 10 / 0.97), rgb(10 8 6 / 0.95));
+  box-shadow: inset 0 1px 0 rgb(254 249 240 / 0.04);
+}
+
+.hs-panel-light {
+  border: 1px solid rgb(20 14 10 / 0.06);
+  border-radius: calc(var(--radius-hs-xl) - 1px);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.85), rgb(254 249 240 / 0.94)),
+    var(--hs-surface-cream);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.75);
+}
+
+/* ── Compact shell (smaller cards, chips) ── */
+.hs-card-shell-sm {
+  border-radius: var(--radius-hs-lg);
+  padding: 1px;
+  background: linear-gradient(
+    180deg,
+    rgb(254 249 240 / 0.08),
+    rgb(254 249 240 / 0.01) 55%,
+    rgb(254 249 240 / 0.05)
+  );
+  box-shadow: var(--shadow-hs-subtle);
+}
+
+/* ── Glass card — modern backdrop-blur theme ── */
+.hs-card-glass {
+  border: 1px solid rgb(254 249 240 / 0.08);
+  border-radius: 2rem;
+  background:
+    linear-gradient(180deg, rgb(254 249 240 / 0.028), rgb(254 249 240 / 0.014)),
+    rgb(254 249 240 / 0.015);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+  transition:
+    transform 500ms var(--ease-hs-spring),
+    border-color 400ms var(--ease-hs-premium),
+    background-color 400ms var(--ease-hs-premium),
+    box-shadow 400ms var(--ease-hs-premium);
+}
+
+.hs-card-glass:hover {
+  transform: translateY(-0.125rem);
+  border-color: rgb(254 249 240 / 0.16);
+  background:
+    linear-gradient(180deg, rgb(254 249 240 / 0.04), rgb(254 249 240 / 0.022)),
+    rgb(254 249 240 / 0.035);
+  box-shadow: 0 0.75rem 3rem rgb(255 107 0 / 0.06);
+}
+
+/* Glass card variant for cream/light backgrounds */
+.hs-card-glass-light {
+  border: 1px solid rgb(20 14 10 / 0.06);
+  border-radius: 2rem;
+  background: rgb(255 255 255 / 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+  transition:
+    transform 500ms var(--ease-hs-spring),
+    border-color 400ms var(--ease-hs-premium),
+    box-shadow 400ms var(--ease-hs-premium);
+}
+
+.hs-card-glass-light:hover {
+  transform: translateY(-0.125rem);
+  border-color: rgb(237 27 47 / 0.15);
+  box-shadow: 0 0.75rem 3rem rgb(8 6 4 / 0.08);
+}
+
+/* ========================================================================= */
+/*  PILL / BUTTON SYSTEM                                                      */
+/* ========================================================================= */
+
+.hs-pill {
+  border-radius: var(--radius-hs-pill);
+}
+
+/* Primary CTA — "Button-in-Button" trailing icon pattern */
+.hs-cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-hs-pill);
+  padding: 0.25rem 0.25rem 0.25rem 1.75rem;
+  background: var(--color-hs-red);
+  color: var(--color-hs-white);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition:
+    background-color 350ms var(--ease-hs-premium),
+    transform 500ms var(--ease-hs-spring),
+    box-shadow 400ms var(--ease-hs-premium);
+  box-shadow: 0 0.5rem 2rem rgb(237 27 47 / 0.3);
+}
+
+.hs-cta-primary:hover {
+  background: var(--color-hs-orange);
+  transform: scale(1.02);
+  box-shadow: 0 0.75rem 2.5rem rgb(255 107 0 / 0.35);
+}
+
+.hs-cta-primary:active {
+  transform: scale(0.98);
+}
+
+.hs-cta-primary .hs-cta-icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.14);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2);
+  transition:
+    transform 420ms var(--ease-hs-spring),
+    background-color 300ms ease;
+}
+
+.hs-cta-primary:hover .hs-cta-icon-circle {
+  transform: translate3d(0.15rem, -0.05rem, 0) scale(1.06);
+  background: rgb(255 255 255 / 0.2);
+}
+
+/* Secondary CTA — outline pill */
+.hs-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-hs-pill);
+  padding: 0.25rem 0.25rem 0.25rem 1.75rem;
+  border: 1px solid rgb(254 249 240 / 0.2);
+  background: rgb(254 249 240 / 0.04);
+  color: var(--hs-text-primary);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition:
+    border-color 350ms var(--ease-hs-premium),
+    color 350ms var(--ease-hs-premium),
+    transform 500ms var(--ease-hs-spring),
+    background-color 350ms var(--ease-hs-premium);
+}
+
+.hs-cta-secondary:hover {
+  border-color: var(--color-hs-orange);
+  color: var(--color-hs-orange);
+  background: rgb(255 107 0 / 0.06);
+  transform: scale(1.02);
+}
+
+.hs-cta-secondary:active {
+  transform: scale(0.98);
+}
+
+.hs-cta-secondary .hs-cta-icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  background: rgb(254 249 240 / 0.08);
+  transition:
+    transform 420ms var(--ease-hs-spring),
+    background-color 300ms ease;
+}
+
+.hs-cta-secondary:hover .hs-cta-icon-circle {
+  transform: translate3d(0.15rem, -0.05rem, 0) scale(1.06);
+  background: rgb(255 107 0 / 0.12);
+}
+
+/* Small icon button */
+.hs-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14);
+  transition:
+    transform 420ms var(--ease-hs-spring),
+    background-color 300ms ease;
+}
+
+/* ========================================================================= */
+/*  CLEAN DECORATIVE SYSTEM                                                   */
+/* ========================================================================= */
+
+/* ── Cinematic frame (thin bezel for hero images) ── */
+.hs-frame-cinematic {
+  border-radius: var(--radius-hs-md);
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 0 1px rgb(254 249 240 / 0.06),
+    var(--shadow-hs-ambient);
+}
+
+/* ── Luxe rule — brand-colored horizontal divider ── */
+.hs-luxe-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-hs-red) 15%,
+    var(--color-hs-orange) 50%,
+    var(--color-hs-gold) 85%,
+    transparent 100%
+  );
+  border-radius: 1px;
+  opacity: 0.7;
+}
+
+/* ── Full-width section divider — solid brand gradient, edge-to-edge ── */
+.hs-divider-full {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--color-hs-red) 0%,
+    var(--color-hs-orange) 50%,
+    var(--color-hs-red) 100%
+  );
+  opacity: 0.7;
+}
+
+/* ── Clean section divider — simple gradient line with breathing room ── */
+.hs-section-divider {
+  padding-block: clamp(2rem, 5vw, 4rem);
+}
+
+.hs-section-divider .hs-divider-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(254 249 240 / 0.08) 15%,
+    rgb(254 249 240 / 0.14) 50%,
+    rgb(254 249 240 / 0.08) 85%,
+    transparent
+  );
+}
+
+/* ── Simple brand rule (orange → red gradient, for accent moments) ── */
+.hs-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--color-hs-red) 0%,
+    var(--color-hs-orange) 45%,
+    transparent 100%
+  );
+  border-radius: 1px;
+}
+
+.hs-rule-center {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-hs-orange) 30%,
+    var(--color-hs-red) 70%,
+    transparent
+  );
+  border-radius: 1px;
+}
+
+/* ── Diagonal slash (from the logo mark) ── */
+.hs-slant {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 1.2rem),
+    calc(100% - 1.2rem) 100%,
+    0 100%
+  );
+}
+
+/* ── Stat callout — oversized number for credibility blocks ── */
+.hs-stat-number {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  background: var(--hs-gradient-mark);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hs-stat-label {
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--hs-text-quiet);
+}
+
+/* ── Editorial quote block ── */
+.hs-quote {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--hs-text-primary);
+  position: relative;
+  padding-left: 2.5rem;
+  border-left: 3px solid var(--color-hs-orange);
+}
+
+.hs-quote::before {
+  content: "\201C";
+  position: absolute;
+  left: -0.6rem;
+  top: -1.2rem;
+  font-family: var(--font-display);
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--color-hs-orange);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* ── Brand corner accent ── */
+.hs-brand-corner {
+  position: relative;
+}
+
+.hs-brand-corner::after {
+  content: "";
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  width: 4rem;
+  height: 4rem;
+  background: var(--hs-gradient-mark);
+  border-radius: 0 0 0 var(--radius-hs-lg);
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Cream section (light background with dark text) ── */
+.hs-cream-section {
+  background: var(--hs-gradient-cream), var(--hs-surface-cream);
+  color: var(--hs-text-inverse);
+  position: relative;
+}
+
+.hs-cream-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    rgb(10 8 6 / 0.06) 0.8px,
+    transparent 1px
+  );
+  background-size: 1rem 1rem;
+  mask-image: linear-gradient(
+    180deg,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+}
+
+/* ── Charcoal section (lifted warm-grey band; subtle tonal shift from the
+   near-black page — used for editorial rhythm instead of high-contrast cream) ── */
+.hs-charcoal-section {
+  background: #1c1814;
+  color: var(--hs-text-primary);
+  position: relative;
+}
+
+.hs-charcoal-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    rgb(254 249 240 / 0.04) 0.8px,
+    transparent 1px
+  );
+  background-size: 1.1rem 1.1rem;
+  mask-image: linear-gradient(
+    180deg,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+}
+
+/* ── Brand zigzag/staircase pattern (page-7 motif) — orange stepped squares
+   tiling into a continuous diagonal staircase. Used as a decorative marker. ── */
+.hs-zigzag-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Crect x='0' y='20' width='10' height='10' fill='%23FF6B00'/%3E%3Crect x='10' y='10' width='10' height='10' fill='%23FF6B00'/%3E%3Crect x='20' y='0' width='10' height='10' fill='%23FF6B00'/%3E%3C/svg%3E");
+  background-size: 1.35rem 1.35rem;
+}
+
+/* ── Dark panel with warm ambient glow ── */
+.hs-dark-panel-glow {
+  background:
+    radial-gradient(55% 55% at 20% 10%, rgb(255 107 0 / 0.1), transparent 55%),
+    radial-gradient(45% 50% at 85% 90%, rgb(237 27 47 / 0.08), transparent 55%),
+    var(--hs-surface-deep);
+}
+
+/* ── Overlapping section connector (visual bridge between dark/cream) ── */
+.hs-section-bridge {
+  position: relative;
+  margin-top: -3rem;
+  z-index: 2;
+}
+
+/* ── Glass micro-card (for stat / info chips) ── */
+.hs-glass-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: var(--radius-hs-pill);
+  padding: 0.35rem 1rem;
+  border: 1px solid rgb(254 249 240 / 0.12);
+  background: rgb(254 249 240 / 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--hs-text-secondary);
+}
+
+/* ── Gradient number display (for sequential markers) ── */
+.hs-gradient-number {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 0.9;
+  background: var(--hs-gradient-ember);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Thin rule with dot accent ── */
+.hs-rule-dot {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.hs-rule-dot::before,
+.hs-rule-dot::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--hs-line-dim);
+}
+
+.hs-rule-dot::before {
+  background: linear-gradient(90deg, transparent, var(--hs-line-dim));
+}
+
+.hs-rule-dot::after {
+  background: linear-gradient(90deg, var(--hs-line-dim), transparent);
+}
+
+/* ========================================================================= */
+/*  INTERACTION UTILITIES                                                     */
+/* ========================================================================= */
+
+.hs-interactive {
+  transition:
+    transform 500ms var(--ease-hs-spring),
+    border-color 350ms var(--ease-hs-premium),
+    color 350ms var(--ease-hs-premium),
+    background-color 350ms var(--ease-hs-premium),
+    box-shadow 450ms var(--ease-hs-premium),
+    opacity 350ms var(--ease-hs-premium);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hs-interactive:hover {
+    transform: translate3d(0, -0.35rem, 0);
+  }
+
+  .group:hover .hs-button-icon {
+    transform: translate3d(0.15rem, -0.05rem, 0) scale(1.05);
+    background: rgb(255 255 255 / 0.16);
+  }
+
+  /* Image scale on card hover */
+  .hs-card-img {
+    transition: transform 800ms var(--ease-hs-out);
+  }
+  .group:hover .hs-card-img {
+    transform: scale(1.06);
+  }
+}
+
+/* ========================================================================= */
+/*  ANIMATION SYSTEM                                                           */
+/* ========================================================================= */
+
+/* Slow cinematic zoom (hero backgrounds) */
+@keyframes hs-slow-zoom {
+  from {
+    transform: scale(1.03);
+  }
+  to {
+    transform: scale(1.14);
+  }
+}
+
+/* Staggered fade-up entrance */
+@keyframes hs-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 2rem, 0);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+}
+
+/* Gentle float */
+@keyframes hs-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -0.5rem, 0);
+  }
+}
+
+/* Shimmer sweep */
+@keyframes hs-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Marquee scroll */
+@keyframes hs-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Scroll-reveal system (progressive enhancement) ── */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-hs-reveal="on"] .hs-reveal {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0);
+    filter: blur(2px);
+    transition:
+      opacity 0.8s var(--ease-hs-out),
+      transform 0.8s var(--ease-hs-out),
+      filter 0.8s var(--ease-hs-out);
+    transition-delay: var(--hs-reveal-delay, 0ms);
+    will-change: opacity, transform, filter;
+  }
+  html[data-hs-reveal="on"] .hs-reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hs-animate-zoom {
+    animation: hs-slow-zoom 24s ease-out forwards;
+    will-change: transform;
+  }
+
+  .hs-animate-1 {
+    animation: hs-fade-up 750ms var(--ease-hs-out) 60ms both;
+    will-change: opacity, transform, filter;
+  }
+  .hs-animate-2 {
+    animation: hs-fade-up 750ms var(--ease-hs-out) 200ms both;
+    will-change: opacity, transform, filter;
+  }
+  .hs-animate-3 {
+    animation: hs-fade-up 750ms var(--ease-hs-out) 340ms both;
+    will-change: opacity, transform, filter;
+  }
+  .hs-animate-4 {
+    animation: hs-fade-up 750ms var(--ease-hs-out) 480ms both;
+    will-change: opacity, transform, filter;
+  }
+  .hs-animate-5 {
+    animation: hs-fade-up 750ms var(--ease-hs-out) 620ms both;
+    will-change: opacity, transform, filter;
+  }
+
+  .hs-shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgb(254 249 240 / 0.04) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: hs-shimmer 3.5s ease-in-out infinite;
+  }
+
+  .hs-marquee-track {
+    animation: hs-marquee 40s linear infinite;
+  }
+  .hs-marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  .hs-animate-float {
+    animation: hs-float 8s ease-in-out infinite;
+    will-change: transform;
+  }
+}
+
+/* ── Reduced motion: respect user preference ── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================================================= */
+/*  RESPONSIVE                                                                */
+/* ========================================================================= */
+
+@media (max-width: 47.99rem) {
+  :root {
+    --hs-header-height: 4.5rem;
+    --hs-section-gap: clamp(3.5rem, 9vw, 6rem);
+  }
+}

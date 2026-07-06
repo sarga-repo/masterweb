@@ -3,7 +3,7 @@ import { Logo } from "@/components/ui/logo";
 import { RacingGraphic } from "@/components/ui/racing-graphic";
 import { NewsletterForm } from "@/components/forms/newsletter-form";
 import { footerGroups, newsletter, siteMeta } from "@/lib/mock-data";
-import { motorsportUrl } from "@/lib/site-config";
+import { businessSiteUrl } from "@/lib/cross-site";
 
 export function Footer() {
   return (
@@ -45,13 +45,15 @@ export function Footer() {
               </h2>
               <ul className="mt-6 space-y-3 text-sm text-white/55">
                 {group.items.map((item) => {
-                  /* Sarga Motorsport footer link → dedicated frontend when configured. */
-                  const isMotorsportLink =
-                    item.href === "/ecosystem/sarga-motorsport";
-                  const resolvedHref =
-                    isMotorsportLink && motorsportUrl("/")
-                      ? motorsportUrl("/")!
-                      : item.href;
+                  /* Ecosystem links for businesses with a dedicated frontend
+                     (Motorsport, Horse Sport) → that site when configured. */
+                  const ecosystemSlug = item.href.startsWith("/ecosystem/")
+                    ? item.href.slice("/ecosystem/".length)
+                    : undefined;
+                  const dedicatedHref = ecosystemSlug
+                    ? businessSiteUrl(ecosystemSlug)
+                    : undefined;
+                  const resolvedHref = dedicatedHref ?? item.href;
                   const isExternal = resolvedHref.startsWith("http");
                   return (
                     <li key={`${group.title}-${item.label}`}>

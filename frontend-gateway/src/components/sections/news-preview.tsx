@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "@/components/ui/icons";
-import { motorsportUrl } from "@/lib/site-config";
+import { resolveContentUrl } from "@/lib/cross-site";
 import { formatDisplayDate } from "@/lib/utils";
 import type { NewsArticle } from "@/lib/strapi/types";
 
@@ -19,15 +19,12 @@ function StoryMedia({ article }: { article: NewsArticle }) {
   );
 }
 
-function articleHref(article: NewsArticle): string {
-  if (article.siteScope === "motorsport") {
-    return motorsportUrl(`/news/${article.slug}`) ?? `/news/${article.slug}`;
-  }
-  return `/news/${article.slug}`;
-}
-
-function isExternalHref(href: string): boolean {
-  return href.startsWith("http");
+function articleLink(article: NewsArticle) {
+  return resolveContentUrl({
+    slug: article.slug,
+    contentType: "news",
+    siteScope: article.siteScope,
+  });
 }
 
 export function NewsPreview({ articles }: { articles: NewsArticle[] }) {
@@ -67,10 +64,13 @@ export function NewsPreview({ articles }: { articles: NewsArticle[] }) {
         {featured ? (
           <div className="mt-16 grid gap-5 lg:mt-20 lg:grid-cols-[1.35fr_0.65fr]">
             <div className="relative">
+              {(() => {
+                const featuredLink = articleLink(featured);
+                return (
               <Link
-                href={articleHref(featured)}
+                href={featuredLink.href}
                 className="group relative isolate flex min-h-[34rem] overflow-hidden bg-sarga-black text-white shadow-[0_24px_70px_rgb(0_11_29_/_14%)] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-4 focus-visible:outline-sarga-orange sm:min-h-[42rem]"
-                {...(isExternalHref(articleHref(featured))
+                {...(featuredLink.isExternal
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
               >
@@ -91,17 +91,19 @@ export function NewsPreview({ articles }: { articles: NewsArticle[] }) {
                   </span>
                 </div>
               </Link>
+                );
+              })()}
             </div>
 
             <div className="grid border-t border-sarga-border lg:border-t-0 lg:border-l">
               {secondary.map((article, index) => {
-                const href = articleHref(article);
+                const link = articleLink(article);
                 return (
                   <Link
-                    href={href}
+                    href={link.href}
                     key={article.slug}
                     className="group relative grid min-h-[17rem] gap-6 border-b border-sarga-border py-8 transition-colors duration-300 hover:bg-sarga-light lg:px-8"
-                    {...(isExternalHref(href)
+                    {...(link.isExternal
                       ? { target: "_blank", rel: "noopener noreferrer" }
                       : {})}
                   >

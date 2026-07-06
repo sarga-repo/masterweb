@@ -60,6 +60,13 @@ export function PageShell({ children }: PageShellProps) {
       <main>{children}</main>
       <MotorsportFooter
         columns={FOOTER_COLUMNS}
+        crossSiteLinks={[
+          {
+            label: "Sarga Horse Sport",
+            href: siteConfig.horsesportUrl,
+            external: true,
+          },
+        ]}
         gatewayLink={{
           label: "Visit Sarga.co",
           href: siteConfig.gatewayUrl,

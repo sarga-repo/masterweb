@@ -7,7 +7,7 @@ import { EcosystemCard } from "@/components/sections/ecosystem-card";
 import { InteriorHero } from "@/components/sections/interior-hero";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { ecosystemPillars } from "@/lib/mock-data";
-import { motorsportUrl } from "@/lib/site-config";
+import { dedicatedSiteLabel, resolveContentUrl } from "@/lib/cross-site";
 import {
   getEcosystemBusinessBySlug,
   getEcosystemBusinesses,
@@ -223,12 +223,11 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
           />
           <div className="mt-16 grid gap-6 lg:grid-cols-3">
             {relatedArticles.map((article) => {
-              const isMotorsport = article.siteScope === "motorsport";
-              const href = isMotorsport
-                ? (motorsportUrl(`/news/${article.slug}`) ??
-                  `/news/${article.slug}`)
-                : `/news/${article.slug}`;
-              const isExternal = href.startsWith("http");
+              const { href, isExternal } = resolveContentUrl({
+                slug: article.slug,
+                contentType: "news",
+                siteScope: article.siteScope,
+              });
               return (
                 <Link
                   key={article.slug}
@@ -259,12 +258,11 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
               );
             })}
             {relatedEvents.map((event) => {
-              const isMotorsport = event.siteScope === "motorsport";
-              const href = isMotorsport
-                ? (motorsportUrl(`/events/${event.slug}`) ??
-                  `/ticket-hub/${event.slug}`)
-                : `/ticket-hub/${event.slug}`;
-              const isExternal = href.startsWith("http");
+              const { href, isExternal } = resolveContentUrl({
+                slug: event.slug,
+                contentType: "events",
+                siteScope: event.siteScope,
+              });
               return (
                 <Link
                   key={event.slug}
@@ -286,7 +284,9 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
                     ) : null}
                   </div>
                   <p className="mt-5 text-[0.62rem] font-extrabold uppercase tracking-[0.16em] text-sarga-red">
-                    {isMotorsport ? "Motorsport event" : "Live event"}
+                    {isExternal
+                      ? `On the ${dedicatedSiteLabel(event.siteScope)}`
+                      : "Live event"}
                   </p>
                   <h3 className="mt-3 font-heading text-2xl font-black uppercase leading-[0.95] tracking-[-0.035em]">
                     {event.title}

@@ -66,9 +66,14 @@
     "order": { "type": "integer", "default": 0 },
     "siteScope": {
       "type": "enumeration",
-      "enum": ["gateway", "motorsport", "shared", "hidden"],
+      "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
       "default": "shared",
       "required": true
+    },
+    "dedicatedSiteKey": {
+      "type": "enumeration",
+      "enum": ["none", "motorsport", "horsesport"],
+      "default": "none"
     },
     "dedicatedSiteUrl": { "type": "string" },
     "relatedArticles": {

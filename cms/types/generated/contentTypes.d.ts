@@ -465,6 +465,10 @@ export interface ApiEcosystemBusinessEcosystemBusiness
     ctaLabel: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Find Out More'>;
     ctaUrl: Schema.Attribute.String;
+    dedicatedSiteKey: Schema.Attribute.Enumeration<
+      ['none', 'motorsport', 'horsesport']
+    > &
+      Schema.Attribute.DefaultTo<'none'>;
     dedicatedSiteUrl: Schema.Attribute.String;
     gallery: Schema.Attribute.Media<'images' | 'videos', true>;
     heroImage: Schema.Attribute.Media<'images'>;
@@ -493,7 +497,7 @@ export interface ApiEcosystemBusinessEcosystemBusiness
     seo: Schema.Attribute.Component<'shared.seo', false>;
     shortDescription: Schema.Attribute.Text & Schema.Attribute.Required;
     siteScope: Schema.Attribute.Enumeration<
-      ['gateway', 'motorsport', 'shared', 'hidden']
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'shared'>;
@@ -531,6 +535,17 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     embedUrl: Schema.Attribute.String;
     endDate: Schema.Attribute.DateTime;
     eventDate: Schema.Attribute.DateTime;
+    eventDiscipline: Schema.Attribute.Enumeration<
+      [
+        'derby',
+        'turf',
+        'exhibition',
+        'championship',
+        'hospitality',
+        'training',
+        'other',
+      ]
+    >;
     eventStatus: Schema.Attribute.Enumeration<
       [
         'upcoming',
@@ -548,25 +563,30 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<'upcoming'>;
     gallery: Schema.Attribute.Media<'images' | 'videos', true>;
     heroMedia: Schema.Attribute.Media<'images' | 'videos'>;
+    hospitalityInfo: Schema.Attribute.RichText;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::event.event'> &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    raceClass: Schema.Attribute.String;
     racingCategory: Schema.Attribute.String;
     schedule: Schema.Attribute.Component<'shared.event-session', true>;
     seo: Schema.Attribute.Component<'shared.seo', false>;
     seriesName: Schema.Attribute.String;
     showOnGateway: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showOnHorseSport: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
     showOnMotorsport: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<false>;
     sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
     siteScope: Schema.Attribute.Enumeration<
-      ['gateway', 'motorsport', 'shared', 'hidden']
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'gateway'>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     sponsors: Schema.Attribute.Relation<'manyToMany', 'api::partner.partner'>;
+    stableAccessInfo: Schema.Attribute.RichText;
     ticketCtaLabel: Schema.Attribute.String;
     ticketCtas: Schema.Attribute.Relation<
       'oneToMany',
@@ -578,6 +598,9 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<'redirect'>;
     ticketUrl: Schema.Attribute.String;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    trackType: Schema.Attribute.Enumeration<
+      ['turf', 'dirt', 'mixed', 'indoor', 'other']
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -735,6 +758,18 @@ export interface ApiMediaGalleryMediaGallery
     draftAndPublish: true;
   };
   attributes: {
+    category: Schema.Attribute.Enumeration<
+      [
+        'race-day',
+        'stable-life',
+        'venue',
+        'jockey',
+        'hospitality',
+        'press',
+        'other',
+      ]
+    >;
+    coverImage: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -750,7 +785,7 @@ export interface ApiMediaGalleryMediaGallery
     relatedEvent: Schema.Attribute.Relation<'manyToOne', 'api::event.event'>;
     sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
     siteScope: Schema.Attribute.Enumeration<
-      ['gateway', 'motorsport', 'shared', 'hidden']
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'shared'>;
@@ -788,6 +823,13 @@ export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
         'lifestyle',
         'community',
         'media',
+        'race-results',
+        'event-announcement',
+        'turf-venue',
+        'stable-life',
+        'jockey-story',
+        'equine-performance',
+        'partnership',
       ]
     > &
       Schema.Attribute.Required &
@@ -798,6 +840,8 @@ export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     excerpt: Schema.Attribute.Text & Schema.Attribute.Required;
     featuredOnGateway: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    featuredOnHorseSport: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<false>;
     featuredOnMotorsport: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<false>;
@@ -815,13 +859,19 @@ export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
       'api::ecosystem-business.ecosystem-business'
     >;
     relatedEvent: Schema.Attribute.Relation<'manyToOne', 'api::event.event'>;
+    relatedGallery: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::media-gallery.media-gallery'
+    >;
     seo: Schema.Attribute.Component<'shared.seo', false>;
     showOnGateway: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showOnHorseSport: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
     showOnMotorsport: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<false>;
     sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
     siteScope: Schema.Attribute.Enumeration<
-      ['gateway', 'motorsport', 'shared', 'hidden']
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'gateway'>;
@@ -910,7 +960,7 @@ export interface ApiPartnerPartner extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
     siteScope: Schema.Attribute.Enumeration<
-      ['gateway', 'motorsport', 'shared', 'hidden']
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'shared'>;
@@ -991,7 +1041,7 @@ export interface ApiTicketCtaTicketCta extends Struct.CollectionTypeSchema {
     relatedEvent: Schema.Attribute.Relation<'manyToOne', 'api::event.event'>;
     sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
     siteScope: Schema.Attribute.Enumeration<
-      ['gateway', 'motorsport', 'shared', 'hidden']
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'shared'>;

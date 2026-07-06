@@ -19,6 +19,24 @@
       "required": true
     },
     "description": { "type": "text" },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "race-day",
+        "stable-life",
+        "venue",
+        "jockey",
+        "hospitality",
+        "press",
+        "other"
+      ]
+    },
+    "coverImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
     "mediaItems": {
       "type": "media",
       "multiple": true,
@@ -32,7 +50,7 @@
     },
     "siteScope": {
       "type": "enumeration",
-      "enum": ["gateway", "motorsport", "shared", "hidden"],
+      "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
       "default": "shared",
       "required": true
     },

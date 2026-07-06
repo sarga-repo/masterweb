@@ -38,7 +38,14 @@
         "announcement",
         "lifestyle",
         "community",
-        "media"
+        "media",
+        "race-results",
+        "event-announcement",
+        "turf-venue",
+        "stable-life",
+        "jockey-story",
+        "equine-performance",
+        "partnership"
       ],
       "default": "news",
       "required": true
@@ -59,7 +66,7 @@
     },
     "siteScope": {
       "type": "enumeration",
-      "enum": ["gateway", "motorsport", "shared", "hidden"],
+      "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
       "default": "gateway",
       "required": true
     },
@@ -70,8 +77,15 @@
     },
     "showOnGateway": { "type": "boolean", "default": true },
     "showOnMotorsport": { "type": "boolean", "default": false },
+    "showOnHorseSport": { "type": "boolean", "default": false },
     "featuredOnGateway": { "type": "boolean", "default": false },
     "featuredOnMotorsport": { "type": "boolean", "default": false },
+    "featuredOnHorseSport": { "type": "boolean", "default": false },
+    "relatedGallery": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::media-gallery.media-gallery"
+    },
     "seo": {
       "type": "component",
       "component": "shared.seo",

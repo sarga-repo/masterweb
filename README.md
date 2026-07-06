@@ -1,48 +1,62 @@
-# Sarga Website
+# Sarga Website — Multisite Gateway, Motorsport, and Horse Sport
 
-Single-repository multisite web platform for the **Sarga** ecosystem — a group gateway and a dedicated motorsport site, powered by a shared Strapi CMS.
+Single-repository multisite web platform for the **Sarga** ecosystem — a group gateway, dedicated motorsport site, and dedicated horse sport site, powered by one shared Strapi CMS.
 
 ## Architecture
 
 ```text
 sarga-website/
-├── frontend-gateway/      # Sarga.co — group gateway (Next.js, port 3000)
-├── frontend-motorsport/   # Sarga Motorsport — dedicated site (Next.js, port 3001)
-├── cms/                   # Shared Strapi CMS (port 1337)
-├── docker-compose.yml     # PostgreSQL + optional containerized apps
-├── docker/                # Dockerfiles for each service
-├── docs/                  # Project documentation (brief, specs, design, deployment)
-├── checklists/            # UAT and go-live checklists
-├── prompts/               # AI agent phase prompts (build history)
-├── assets/brand/          # Logo and brand assets
-├── reference/             # Source PDFs and reference material
-└── .env.example           # Environment variable reference
+├── frontend-gateway/       # Sarga.co — group gateway (Next.js, port 3000)
+├── frontend-motorsport/    # motorsport.sarga.co — dedicated motorsport site (Next.js, port 3001)
+├── frontend-horsesport/    # horsesport.sarga.co — dedicated horse sport site (Next.js, port 3002)
+├── cms/                    # Shared Strapi CMS (port 1337)
+├── docker-compose.yml      # PostgreSQL + optional containerized apps
+├── docker/                 # Dockerfiles for each service
+├── docs/                   # Project documentation
+├── docs/motorsport/        # Motorsport-specific specs
+├── docs/horsesport/        # Horse Sport-specific specs
+├── docs/multisite/         # Shared multisite architecture and CMS strategy
+├── prompts/                # AI agent phase prompts
+├── prompts/motorsport/     # Motorsport implementation prompts
+├── prompts/horsesport/     # Horse Sport implementation prompts
+├── assets/brand/           # Logo and brand assets
+├── reference/              # Source PDFs and reference material
+└── .env.example            # Environment variable reference
 ```
 
-### Sites
+## Local services
 
-| Site | URL (local) | Purpose |
-|------|-------------|---------|
-| **Sarga.co Gateway** | `http://localhost:3000` | Group entry point — ecosystem overview, corporate info, links to business units |
-| **Sarga Motorsport** | `http://localhost:3001` | Dedicated motorsport site — events, news, tickets, gallery, dark kinetic design |
-| **Strapi CMS** | `http://localhost:1337/admin` | Shared content management for both sites |
-| **PostgreSQL** | `localhost:5435` | Shared database (host port `5435` to avoid conflict with local Postgres on `5432`) |
+| Site / service | URL | Purpose |
+|---|---:|---|
+| Sarga.co Gateway | `http://localhost:3000` | Group entry point and ecosystem overview |
+| Sarga Motorsport | `http://localhost:3001` | Dedicated motorsport content, events, news, tickets |
+| Sarga Horse Sport | `http://localhost:3002` | Dedicated horse sport content, events, derby/turf/stable stories, tickets |
+| Strapi CMS | `http://localhost:1337/admin` | Shared content management for all sites |
+| PostgreSQL | `localhost:5435` | Shared database, host port avoids local PostgreSQL conflict |
 
-### Tech stack
+## Tech stack
 
-- **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS v4
-- **CMS:** Strapi (headless, shared between both frontends)
-- **Database:** PostgreSQL 16 (in Docker locally)
+- **Frontend:** Next.js, React, TypeScript, Tailwind CSS
+- **CMS:** Strapi shared by all sites
+- **Database:** PostgreSQL 16 locally through Docker
 - **Package manager:** pnpm
 - **Containerization:** Docker Compose
 
-### Content model
+## Multisite content model
 
-Content is site-scoped using a `siteScope` field (`gateway`, `motorsport`, `shared`, `hidden`):
+Content is site-scoped using a `siteScope` field:
 
-- **News articles**, **events**, **partners**, **media galleries**, and **ticket CTAs** can target one or both sites.
-- Motorsport content is authored once in the CMS and consumed by both frontends where configured.
-- Cross-site teasers: events/news can flag `showOnGateway` / `showOnMotorsport` for appearances on the other site.
+```text
+gateway | motorsport | horsesport | shared | hidden
+```
+
+Recommended behavior:
+
+- Gateway can show high-level teasers for all ecosystem businesses.
+- Motorsport content opens on the dedicated Motorsport frontend.
+- Horse Sport content opens on the dedicated Horse Sport frontend.
+- Shared content can appear on multiple frontends with site-specific visual rendering.
+- Ticket CTAs are centralized in Strapi and filtered by site/business.
 
 ## Getting started
 
@@ -66,7 +80,7 @@ cp .env.example .env
 docker compose up -d postgres
 ```
 
-### 3. Start Strapi CMS
+Run Strapi:
 
 ```bash
 cd cms
@@ -74,11 +88,7 @@ pnpm install
 pnpm develop
 ```
 
-Strapi starts at `http://localhost:1337`. On first run, create an admin account at `http://localhost:1337/admin`.
-
-With `SEED_DEMO_CONTENT=true` (the default), Strapi seeds demo content and grants public read access so frontends work immediately without an API token.
-
-### 4. Start the gateway frontend
+Run the gateway:
 
 ```bash
 cd frontend-gateway
@@ -86,7 +96,7 @@ pnpm install
 pnpm dev
 ```
 
-### 5. Start the motorsport frontend
+Run Motorsport:
 
 ```bash
 cd frontend-motorsport
@@ -94,19 +104,15 @@ pnpm install
 pnpm dev
 ```
 
-### Local URLs
+Run Horse Sport:
 
-| Service | URL |
-|---------|-----|
-| Gateway | http://localhost:3000 |
-| Motorsport | http://localhost:3001 |
-| Strapi admin | http://localhost:1337/admin |
-| Strapi API | http://localhost:1337/api |
-| PostgreSQL | localhost:5435 |
+```bash
+cd frontend-horsesport
+pnpm install
+pnpm dev
+```
 
-### Optional: full containerized stack
-
-Run all services in Docker:
+## Optional full Docker run
 
 ```bash
 docker compose --profile apps up --build
@@ -127,6 +133,8 @@ STRAPI_API_URL=http://localhost:1337
 NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337
 STRAPI_API_TOKEN=
 NEXT_PUBLIC_MOTORSPORT_SITE_URL=http://localhost:3001
+NEXT_PUBLIC_HORSESPORT_SITE_URL=http://localhost:3002
+NEXT_PUBLIC_SITE_KEY=gateway
 ```
 
 ### Motorsport `frontend-motorsport/.env.local`
@@ -137,113 +145,55 @@ NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337
 STRAPI_API_TOKEN=
 NEXT_PUBLIC_SITE_URL=http://localhost:3001
 NEXT_PUBLIC_GATEWAY_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_SITE_KEY=sarga-motorsport
+NEXT_PUBLIC_HORSESPORT_SITE_URL=http://localhost:3002
+NEXT_PUBLIC_SITE_KEY=motorsport
 ```
 
-### CMS `cms/.env`
+### Horse Sport `frontend-horsesport/.env.local`
 
 ```env
-DATABASE_HOST=localhost
-DATABASE_PORT=5435
-DATABASE_NAME=sarga_strapi
-DATABASE_USERNAME=sarga
-DATABASE_PASSWORD=sarga_local_password
-# Plus APP_KEYS, API_TOKEN_SALT, ADMIN_JWT_SECRET, etc. (see cms/.env.example)
+STRAPI_API_URL=http://localhost:1337
+NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337
+STRAPI_API_TOKEN=
+NEXT_PUBLIC_SITE_URL=http://localhost:3002
+NEXT_PUBLIC_GATEWAY_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_MOTORSPORT_SITE_URL=http://localhost:3001
+NEXT_PUBLIC_SITE_KEY=horsesport
+
+# Optional (safe defaults if unset) — see docs/horsesport/08 for production values
+FORM_SUBMISSION_MODE=placeholder   # non-placeholder value persists inquiries to Strapi
+RECAPTCHA_SITE_KEY=                 # enables reCAPTCHA when paired with the secret
+RECAPTCHA_SECRET_KEY=              # server-side reCAPTCHA verification (secret)
+TICKETING_DEEP_LINK_SCHEMES=       # comma-separated allowed deep-link schemes
+TICKETING_EMBED_ALLOWLIST=         # comma-separated hosts allowed to iframe-embed (empty = off)
 ```
 
-## Key features
+## Documentation map
 
-### Gateway (sarga.co)
-- Corporate ecosystem gateway with business unit cards, news, events, and ticket hub
-- Links to Sarga Motorsport site for motorsport-scoped content
-- Scope-aware routing: motorsport news/events link to the dedicated motorsport frontend
+| Document | Purpose |
+|---|---|
+| `docs/multisite/04_three_site_integration_strategy.md` | Gateway, Motorsport, and Horse Sport routing/content strategy |
+| `docs/horsesport/01_horsesport_project_brief.md` | Horse Sport product brief |
+| `docs/horsesport/02_horsesport_brand_translation.md` | Brand translation from preview PDF page 7 into web UI direction |
+| `docs/horsesport/03_horsesport_sitemap_page_specs.md` | Dedicated Horse Sport sitemap and page specs |
+| `docs/horsesport/04_horsesport_design_system.md` | Horse Sport visual system, tokens, components |
+| `docs/horsesport/05_horsesport_content_model_extensions.md` | Strapi additions for Horse Sport and three-site publishing |
+| `docs/horsesport/06_horsesport_implementation_plan.md` | Phased implementation plan |
+| `docs/horsesport/07_horsesport_asset_usage_guideline.md` | Approved logos, imagery, favicon, and asset usage |
+| `docs/horsesport/08_horsesport_deployment_handover.md` | Production env, deployment, CMS editorial guide, rollback, monitoring |
+| `checklists/horsesport/horsesport_uat_checklist.md` | UAT verification log and sign-off |
+| `prompts/horsesport/` | Codex-ready implementation prompts |
 
-### Motorsport (motorsport.sarga.co)
-- Dark, kinetic, high-contrast premium motorsport UI
-- 11 page routes: home, events, tickets, experience, news, gallery, partners, about, contact, campaigns
-- Server-side validated contact form with rate limiting and honeypot spam protection
-- Optional ticket embed iframe support (CMS-configured)
-- Dynamic sitemap.xml and robots.txt
-- Open Graph metadata on all pages
+## Recommended Codex flow
 
-### Shared CMS
-- Site-scoped content types: news articles, events, ticket CTAs, partners, media galleries, ecosystem businesses
-- Cross-site visibility flags for teasers and shared content
-- Idempotent demo seed for local development
-
-## Build and verify
-
-```bash
-# Gateway
-cd frontend-gateway && pnpm build
-
-# Motorsport
-cd frontend-motorsport && pnpm build
-
-# CMS type check
-cd cms && npx tsc --noEmit
-```
-
-## Documentation
-
-| Document | Description |
-|----------|-------------|
-| `docs/01_project_brief.md` | Project overview and goals |
-| `docs/06_technical_architecture.md` | Technical design decisions |
-| `docs/07_design_system.md` | Gateway design system |
-| `docs/10_deployment_handover_maintenance.md` | Deployment, production, and maintenance guide |
-| `docs/13_local_docker_deployment.md` | Detailed local Docker setup |
-| `docs/motorsport/04_motorsport_design_system.md` | Motorsport brand and design tokens |
-| `docs/PHASE_PROGRESS.md` | Build history — all 10 phases logged |
-| `checklists/go_live_checklist.md` | Production go-live checklist |
-| `checklists/motorsport/motorsport_uat_checklist.md` | Motorsport UAT results |
-
-## Project status
-
-All 10 build phases are complete:
-
-| Phase | Title | Status |
-|-------|-------|--------|
-| 1 | Repository restructure | ✅ Done |
-| 2 | Shared CMS multisite model | ✅ Done |
-| 3 | Motorsport frontend bootstrap | ✅ Done |
-| 4 | Motorsport design system | ✅ Done |
-| 5 | Motorsport homepage | ✅ Done |
-| 6 | Motorsport pages | ✅ Done |
-| 7 | Gateway integration | ✅ Done |
-| 8 | Forms, ticketing, SEO | ✅ Done |
-| 9 | Quality & UAT | ✅ Done |
-| 10 | Deployment & handover | ✅ Done |
-
-See `docs/PHASE_PROGRESS.md` for detailed phase logs.
+1. Read `AGENTS.md` and all documents in `docs/horsesport/`.
+2. Run `prompts/horsesport/01_repo_restructure.md` first.
+3. Run each prompt sequentially and stop after each phase for review.
+4. Do not paste all prompts at once.
 
 ## Scope exclusions
 
 - No internal payment processing
-- No public user accounts or login
-- No internal ticketing engine (partner redirect/deep link only)
-
-## Production deployment
-
-See `docs/10_deployment_handover_maintenance.md` for full production guidance. Recommended approach:
-
-- **Frontends:** Vercel (separate projects for gateway and motorsport)
-- **Strapi:** Strapi Cloud, Railway, or managed container
-- **PostgreSQL:** Managed database (Supabase, Neon, AWS RDS)
-- **Media:** S3-compatible storage (Cloudflare R2, AWS S3)
-
-Key production steps:
-1. Replace all placeholder secrets
-2. Set `SEED_DEMO_CONTENT=false`
-3. Create least-privilege API tokens
-4. Configure S3 media storage
-5. Enable HTTPS on all domains
-6. Set `FORM_SUBMISSION_MODE=strapi` with create-permission token
-
-## Source references
-
-- `reference/source-pdfs/requirements.pdf` — vendor briefing
-- `reference/source-pdfs/sarga_website_preview.pdf` — gateway visual reference
-- `reference/source-pdfs/sarga_motorsport_brand_playbook.pdf` — motorsport brand system
-- `assets/brand/logos/` — Sarga.co logo variants
-- `assets/brand/motorsport/logos/` — Sarga Motorsport logo variants
+- No public user accounts/login
+- No internal ticketing engine
+- No second CMS unless explicitly approved

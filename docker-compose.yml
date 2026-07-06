@@ -1,6 +1,6 @@
 # Local development model:
 #   - `postgres` runs in Docker and starts by default (`docker compose up -d postgres`).
-#   - Strapi and both frontends normally run on the HOST (see README / docs/13).
+#   - Strapi and all three frontends normally run on the HOST (see README / docs/13).
 #   - The containerized app services below are opt-in via the `apps` profile:
 #       docker compose --profile apps up --build
 services:
@@ -114,6 +114,36 @@ services:
       - "3001:3001"
     volumes:
       - ./frontend-motorsport:/app
+      - /app/node_modules
+      - /app/.next
+
+  frontend-horsesport:
+    profiles: ["apps"]
+    build:
+      context: .
+      dockerfile: docker/frontend-horsesport.Dockerfile
+    container_name: sarga-frontend-horsesport-local
+    restart: unless-stopped
+    depends_on:
+      - strapi
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: development
+      NEXT_PUBLIC_SITE_KEY: sarga-horse-sport
+      # This site is served on 3002 (override the gateway value from .env).
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_HORSESPORT_SITE_URL:-http://localhost:3002}
+      NEXT_PUBLIC_GATEWAY_SITE_URL: ${NEXT_PUBLIC_GATEWAY_SITE_URL:-http://localhost:3000}
+      NEXT_PUBLIC_MOTORSPORT_SITE_URL: ${NEXT_PUBLIC_MOTORSPORT_SITE_URL:-http://localhost:3001}
+      # Browser-reachable Strapi (media/image URLs).
+      NEXT_PUBLIC_STRAPI_API_URL: ${NEXT_PUBLIC_STRAPI_API_URL:-http://localhost:1337}
+      # Server-side content fetch uses the internal service hostname.
+      STRAPI_API_URL: ${STRAPI_API_URL:-http://strapi:1337}
+      STRAPI_API_TOKEN: ${STRAPI_API_TOKEN:-}
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./frontend-horsesport:/app
       - /app/node_modules
       - /app/.next
 

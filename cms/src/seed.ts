@@ -60,6 +60,14 @@ const SITES = [
     themeKey: 'motorsport',
     isActive: true,
   },
+  {
+    name: 'Sarga Horse Sport',
+    slug: 'sarga-horse-sport',
+    baseUrl: 'http://localhost:3002',
+    description: 'Dedicated Sarga Horse Sport website.',
+    themeKey: 'horsesport',
+    isActive: true,
+  },
 ];
 
 const HOMEPAGE = {
@@ -87,7 +95,9 @@ const ECOSYSTEM_BUSINESSES = [
       'Sarga Horse Sport formulates premium national race classifications, elite jockey programs, and strict veterinary compliance protocols across Indonesian horse sport.',
     ctaLabel: 'Find Out More',
     businessStatus: 'active',
-    siteScope: 'gateway',
+    siteScope: 'shared',
+    dedicatedSiteKey: 'horsesport',
+    dedicatedSiteUrl: 'http://localhost:3002',
     order: 1,
   },
   {
@@ -101,6 +111,7 @@ const ECOSYSTEM_BUSINESSES = [
     ctaLabel: 'Find Out More',
     businessStatus: 'active',
     siteScope: 'shared',
+    dedicatedSiteKey: 'motorsport',
     dedicatedSiteUrl: 'http://localhost:3001',
     order: 2,
   },
@@ -469,6 +480,209 @@ const MOTORSPORT_GALLERIES = [
 ];
 
 /**
+ * Horse Sport demo set (Horse Sport Phase 2). Mirrors the motorsport demo:
+ * horsesport-scoped content, one shared item flagged for a gateway teaser, all
+ * linked to the Sarga Horse Sport business. Demonstrates three-site querying.
+ */
+const HORSESPORT_PARTNERS = [
+  {
+    name: 'Meridian Stables',
+    slug: 'meridian-stables',
+    websiteUrl: 'https://example.com',
+    partnerType: 'sponsor',
+    siteScope: 'horsesport',
+    sortOrder: 1,
+    isActive: true,
+  },
+  {
+    name: 'Turfline Grounds',
+    slug: 'turfline-grounds',
+    websiteUrl: 'https://example.com',
+    partnerType: 'technical',
+    siteScope: 'horsesport',
+    sortOrder: 2,
+    isActive: true,
+  },
+  {
+    name: 'Derby Day Hospitality',
+    slug: 'derby-day-hospitality',
+    websiteUrl: 'https://example.com',
+    partnerType: 'community',
+    siteScope: 'horsesport',
+    sortOrder: 3,
+    isActive: true,
+  },
+];
+
+const HORSESPORT_EVENTS = [
+  {
+    title: 'Sarga National Derby — Merdeka Cup',
+    slug: 'sarga-national-derby-merdeka-cup',
+    description:
+      'The flagship national derby under golden-hour turf conditions: elite jockeys, championship classification, and full race-day hospitality.',
+    eventDate: '2026-08-17T08:00:00.000Z',
+    endDate: '2026-08-17T18:00:00.000Z',
+    venue: 'Sarga Turf Park',
+    venueAddress: 'Bogor, West Java, Indonesia',
+    eventStatus: 'ticketsOpen',
+    eventDiscipline: 'derby',
+    raceClass: 'Group 1 — National Championship',
+    trackType: 'turf',
+    hospitalityInfo:
+      'Grandstand lounge, paddock club, and family zone with trackside dining.',
+    stableAccessInfo:
+      'Guided pre-race stable tours available for hospitality ticket holders.',
+    ticketCtaLabel: 'Buy Tickets',
+    ticketIntegrationType: 'redirect',
+    siteScope: 'horsesport',
+    showOnGateway: true,
+    showOnMotorsport: false,
+    showOnHorseSport: true,
+  },
+  {
+    title: 'Turf Classic Twilight Meeting',
+    slug: 'turf-classic-twilight-meeting',
+    description:
+      'An evening turf meeting pairing sprint classifications with an open-air lifestyle program across the infield.',
+    eventDate: '2026-09-12T10:00:00.000Z',
+    endDate: '2026-09-12T21:00:00.000Z',
+    venue: 'Sarga Turf Park',
+    venueAddress: 'Bogor, West Java, Indonesia',
+    eventStatus: 'announced',
+    eventDiscipline: 'turf',
+    raceClass: 'Listed — Sprint',
+    trackType: 'turf',
+    hospitalityInfo: 'Twilight terrace and premium turf-side seating.',
+    ticketCtaLabel: 'Register Interest',
+    ticketIntegrationType: 'redirect',
+    siteScope: 'horsesport',
+    showOnGateway: false,
+    showOnMotorsport: false,
+    showOnHorseSport: true,
+  },
+  {
+    title: 'Sarga Champions Sprint',
+    slug: 'sarga-champions-sprint',
+    description:
+      'A championship sprint spectacle decided in the first furlongs — the fastest field of the season breaks from the gates in a high-stakes dash to the line.',
+    eventDate: '2026-10-04T09:00:00.000Z',
+    endDate: '2026-10-04T17:00:00.000Z',
+    venue: 'Grand Paddock Arena',
+    venueAddress: 'Bogor, West Java, Indonesia',
+    eventStatus: 'announced',
+    eventDiscipline: 'championship',
+    raceClass: 'Group 2 — Sprint Championship',
+    trackType: 'turf',
+    hospitalityInfo:
+      'Trackside champions lounge with a direct view of the starting gates.',
+    ticketCtaLabel: 'Register Interest',
+    ticketIntegrationType: 'redirect',
+    siteScope: 'horsesport',
+    showOnGateway: true,
+    showOnMotorsport: false,
+    showOnHorseSport: true,
+  },
+];
+
+const HORSESPORT_TICKET_CTAS = [
+  {
+    title: 'Sarga National Derby — Merdeka Cup Tickets',
+    label: 'Buy Tickets',
+    provider: 'Partner Ticketing',
+    ctaType: 'redirect',
+    url: 'https://example.com/tickets/sarga-national-derby',
+    isActive: true,
+    siteScope: 'horsesport',
+  },
+];
+
+const HORSESPORT_NEWS = [
+  {
+    title: 'Merdeka Cup Returns to a Sold-Out Grandstand',
+    slug: 'merdeka-cup-returns-sold-out-grandstand',
+    excerpt:
+      'The Sarga National Derby headlines a record race-day program with elite jockeys and championship turf classifications.',
+    body: 'The Sarga National Derby returns for the Merdeka Cup, headlining a record race-day program with elite jockeys, championship turf classifications, and a full hospitality experience across the Sarga Turf Park.',
+    category: 'event-announcement',
+    publishedDate: '2026-07-20',
+    isHotTopic: true,
+    siteScope: 'horsesport',
+    showOnGateway: true,
+    showOnMotorsport: false,
+    showOnHorseSport: true,
+    featuredOnHorseSport: true,
+  },
+  {
+    title: 'Inside the Stable: Conditioning an Elite Derby Contender',
+    slug: 'inside-the-stable-conditioning-derby-contender',
+    excerpt:
+      'A behind-the-scenes look at nutrition, veterinary care, and the daily routines that shape a championship horse.',
+    body: 'A behind-the-scenes look at the nutrition programs, veterinary care, and disciplined daily routines that shape a championship derby contender inside the Sarga Horse Sport network.',
+    category: 'stable-life',
+    publishedDate: '2026-07-05',
+    isHotTopic: false,
+    siteScope: 'horsesport',
+    showOnGateway: false,
+    showOnMotorsport: false,
+    showOnHorseSport: true,
+  },
+  {
+    title: 'Turf Track Development Reaches Championship Grade',
+    slug: 'turf-track-development-championship-grade',
+    excerpt:
+      'New drainage and turf management bring the Sarga Turf Park to international championship standards.',
+    body: 'New drainage systems and turf management protocols have brought the Sarga Turf Park to international championship standards, ahead of the upcoming national derby season.',
+    category: 'turf-venue',
+    publishedDate: '2026-06-22',
+    isHotTopic: false,
+    siteScope: 'horsesport',
+    showOnGateway: false,
+    showOnMotorsport: false,
+    showOnHorseSport: true,
+  },
+  {
+    title: 'The Making of a Champion Jockey',
+    slug: 'the-making-of-a-champion-jockey',
+    excerpt:
+      'Discipline, weight management, and split-second race-craft — an intimate profile of the riders behind Sarga Horse Sport victories.',
+    body: 'Behind every championship result is a rider whose craft is honed over years. This profile follows the discipline, weight management, and split-second decision-making that define an elite Sarga Horse Sport jockey — from dawn track work to the roar of the home straight.',
+    category: 'jockey-story',
+    publishedDate: '2026-07-28',
+    isHotTopic: true,
+    siteScope: 'horsesport',
+    showOnGateway: false,
+    showOnMotorsport: false,
+    showOnHorseSport: true,
+    featuredOnHorseSport: true,
+  },
+  {
+    title: 'Photo Finish Decides the Turf Classic',
+    slug: 'photo-finish-decides-turf-classic',
+    excerpt:
+      'A blanket finish separated by inches — the Turf Classic delivered one of the closest results in Sarga Horse Sport history.',
+    body: 'Inches decided the Turf Classic as the leading contenders flashed across the line together, sending the result to a photo finish. This race report breaks down the closing sectionals, the winning ride, and what the result means for the championship standings.',
+    category: 'race-results',
+    publishedDate: '2026-07-15',
+    isHotTopic: false,
+    siteScope: 'horsesport',
+    showOnGateway: false,
+    showOnMotorsport: false,
+    showOnHorseSport: true,
+  },
+];
+
+/** Gallery entries for the horse sport gallery page. */
+const HORSESPORT_GALLERIES = [
+  {
+    title: 'Race Day Gallery',
+    slug: 'horse-sport-race-day',
+    description: 'Race-day, turf, and stable photography from Sarga Horse Sport events.',
+    category: 'race-day',
+    siteScope: 'horsesport',
+  },
+];
+
+/**
  * Placeholder media manifest: files in cms/data/seed-media, attached to the
  * record/field pairs below only while those fields are still empty.
  */
@@ -579,6 +793,73 @@ const SEED_MEDIA: Array<{
     slug: 'moto-festival-weekend',
     field: 'coverImage',
   },
+  // Horse Sport event cover images
+  {
+    file: 'news-merdeka-jockeys.jpg',
+    alt: 'Two jockeys racing side by side past a blurred grandstand',
+    uid: 'api::event.event',
+    slug: 'sarga-national-derby-merdeka-cup',
+    field: 'coverImage',
+  },
+  {
+    file: 'news-turf-track-aerial.jpg',
+    alt: 'Aerial view of curved turf and dirt racing track lanes',
+    uid: 'api::event.event',
+    slug: 'turf-classic-twilight-meeting',
+    field: 'coverImage',
+  },
+  // Horse Sport news cover images
+  {
+    file: 'news-merdeka-jockeys.jpg',
+    alt: 'Two jockeys racing side by side past a blurred grandstand',
+    uid: 'api::news-article.news-article',
+    slug: 'merdeka-cup-returns-sold-out-grandstand',
+    field: 'coverImage',
+  },
+  {
+    file: 'news-stable-interior.jpg',
+    alt: 'Elite race horse inside a premium stable interior',
+    uid: 'api::news-article.news-article',
+    slug: 'inside-the-stable-conditioning-derby-contender',
+    field: 'coverImage',
+  },
+  {
+    file: 'news-turf-track-aerial.jpg',
+    alt: 'Aerial view of curved turf and dirt racing track lanes',
+    uid: 'api::news-article.news-article',
+    slug: 'turf-track-development-championship-grade',
+    field: 'coverImage',
+  },
+  // Horse Sport — new high-res posts (HS-media refresh)
+  {
+    file: 'hs-starting-gates.png',
+    alt: 'A field of racehorses bursting from the starting gates, turf flying',
+    uid: 'api::event.event',
+    slug: 'sarga-champions-sprint',
+    field: 'coverImage',
+  },
+  {
+    file: 'hs-jockey-portrait.png',
+    alt: 'Editorial close-up portrait of a determined jockey in racing silks',
+    uid: 'api::news-article.news-article',
+    slug: 'the-making-of-a-champion-jockey',
+    field: 'coverImage',
+  },
+  {
+    file: 'hs-closeup-action.png',
+    alt: 'High-speed close-up of racehorses straining toward a photo finish',
+    uid: 'api::news-article.news-article',
+    slug: 'photo-finish-decides-turf-classic',
+    field: 'coverImage',
+  },
+  // Horse Sport gallery cover image
+  {
+    file: 'sarga-horse-sport-turf-aerial.jpg',
+    alt: 'Aerial view of a jockey galloping across turf',
+    uid: 'api::media-gallery.media-gallery',
+    slug: 'horse-sport-race-day',
+    field: 'coverImage',
+  },
 ];
 
 /** Upload a seed-media file to the media library unless already present. */
@@ -604,14 +885,21 @@ async function uploadIfMissing(
   }
 
   const stat = fs.statSync(filePath);
+  const ext = path.extname(filename).toLowerCase();
+  const mime =
+    ext === '.png'
+      ? 'image/png'
+      : ext === '.webp'
+        ? 'image/webp'
+        : 'image/jpeg';
   // Provide both formidable v2 and v3 style keys for compatibility.
   const fileDescriptor = {
     filepath: filePath,
     path: filePath,
     originalFilename: filename,
     name: filename,
-    mimetype: 'image/jpeg',
-    type: 'image/jpeg',
+    mimetype: mime,
+    type: mime,
     size: stat.size,
   };
 
@@ -661,6 +949,139 @@ async function seedMedia(
     strapi.log.info(
       `[seed] Attached ${item.file} → ${item.uid}${item.slug ? `(${item.slug})` : ''}.${item.field}`,
     );
+  }
+}
+
+/**
+ * Horse Sport cover refresh: swaps the earlier low-resolution placeholder
+ * covers for the curated high-resolution art. Unlike `seedMedia`, this DOES
+ * replace an existing image — but only when the current cover isn't already the
+ * target file, so it stays idempotent across re-seeds.
+ */
+const HORSESPORT_COVER_REFRESH: Array<{
+  uid: string;
+  slug: string;
+  field: string;
+  file: string;
+  alt: string;
+}> = [
+  {
+    uid: 'api::event.event',
+    slug: 'sarga-national-derby-merdeka-cup',
+    field: 'coverImage',
+    file: 'hs-home-straight-finish.png',
+    alt: 'Two racehorses neck-and-neck down the home straight toward the line',
+  },
+  {
+    uid: 'api::event.event',
+    slug: 'turf-classic-twilight-meeting',
+    field: 'coverImage',
+    file: 'hs-night-race.png',
+    alt: 'A twilight horse race under bright stadium floodlights',
+  },
+  {
+    uid: 'api::news-article.news-article',
+    slug: 'merdeka-cup-returns-sold-out-grandstand',
+    field: 'coverImage',
+    file: 'hs-winners-circle.png',
+    alt: 'Triumphant winner’s circle celebration on race day',
+  },
+  {
+    uid: 'api::news-article.news-article',
+    slug: 'inside-the-stable-conditioning-derby-contender',
+    field: 'coverImage',
+    file: 'hs-champion-horse.png',
+    alt: 'Studio portrait of a champion thoroughbred racehorse',
+  },
+  {
+    uid: 'api::news-article.news-article',
+    slug: 'turf-track-development-championship-grade',
+    field: 'coverImage',
+    file: 'hs-racecourse-aerial.png',
+    alt: 'Cinematic aerial of a sweeping green turf racecourse at golden hour',
+  },
+];
+
+/** Curated high-res set for the Horse Sport race-day gallery. */
+const HORSESPORT_GALLERY_REFRESH = [
+  { file: 'hs-home-straight-finish.png', alt: 'Racehorses neck-and-neck down the home straight' },
+  { file: 'hs-winners-circle.png', alt: 'Winner’s circle celebration on race day' },
+  { file: 'hs-champion-horse.png', alt: 'Studio portrait of a champion racehorse' },
+  { file: 'hs-racecourse-aerial.png', alt: 'Aerial view of a sweeping turf racecourse' },
+  { file: 'hs-night-race.png', alt: 'Night horse race under stadium floodlights' },
+  { file: 'hs-starting-gates.png', alt: 'Racehorses bursting from the starting gates' },
+  { file: 'hs-closeup-action.png', alt: 'High-speed close-up of racehorses at full gallop' },
+  { file: 'hs-jockey-portrait.png', alt: 'Editorial portrait of a jockey in racing silks' },
+];
+
+async function refreshHorseSportMedia(
+  strapi: Core.Strapi,
+  documents: (uid: string) => {
+    findFirst: (params?: Record<string, unknown>) => Promise<unknown>;
+    update: (params: Record<string, unknown>) => Promise<unknown>;
+  },
+) {
+  // Single covers
+  for (const item of HORSESPORT_COVER_REFRESH) {
+    const doc = (await documents(item.uid).findFirst({
+      filters: { slug: { $eq: item.slug } },
+      populate: [item.field],
+    })) as
+      | ({ documentId: string } & Record<string, unknown>)
+      | null;
+    if (!doc) continue;
+
+    const current = doc[item.field] as { name?: string } | null | undefined;
+    if (current?.name === item.file) continue; // already the high-res art
+
+    const file = await uploadIfMissing(strapi, item.file, item.alt);
+    if (!file) continue;
+
+    await documents(item.uid).update({
+      documentId: doc.documentId,
+      data: { [item.field]: file.id },
+      status: 'published',
+    });
+    strapi.log.info(
+      `[seed] Refreshed cover ${item.file} → ${item.uid}(${item.slug}).${item.field}`,
+    );
+  }
+
+  // Gallery mediaItems — replace the low-res set with the curated high-res set.
+  const gallery = (await documents('api::media-gallery.media-gallery').findFirst(
+    {
+      filters: { slug: { $eq: 'horse-sport-race-day' } },
+      populate: ['mediaItems'],
+    },
+  )) as
+    | { documentId: string; mediaItems?: Array<{ name?: string }> }
+    | null;
+  if (gallery) {
+    const currentNames = (gallery.mediaItems ?? [])
+      .map((m) => m.name)
+      .filter(Boolean)
+      .sort();
+    const targetNames = HORSESPORT_GALLERY_REFRESH.map((g) => g.file).sort();
+    const alreadySet =
+      currentNames.length === targetNames.length &&
+      currentNames.every((n, i) => n === targetNames[i]);
+    if (!alreadySet) {
+      const fileIds: number[] = [];
+      for (const g of HORSESPORT_GALLERY_REFRESH) {
+        const file = await uploadIfMissing(strapi, g.file, g.alt);
+        if (file) fileIds.push(file.id);
+      }
+      if (fileIds.length > 0) {
+        await documents('api::media-gallery.media-gallery').update({
+          documentId: gallery.documentId,
+          data: { mediaItems: fileIds },
+          status: 'published',
+        });
+        strapi.log.info(
+          `[seed] Refreshed ${fileIds.length} gallery images → horse-sport-race-day`,
+        );
+      }
+    }
   }
 }
 
@@ -867,6 +1288,162 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
     }
   }
 
+  // --- Horse Sport (Horse Sport Phase 2): horsesport demo set ---
+
+  // Normalize dedicated-business routing (idempotent). The business create
+  // block above is count-gated, so businesses seeded before the three-site
+  // fields existed keep stale scope/routing on an existing DB. Bring the two
+  // dedicated businesses in line so gateway → dedicated-site routing works.
+  const DEDICATED_BUSINESS_ROUTING = [
+    {
+      slug: 'sarga-horse-sport',
+      siteScope: 'shared',
+      dedicatedSiteKey: 'horsesport',
+      dedicatedSiteUrl: 'http://localhost:3002',
+    },
+    {
+      slug: 'sarga-motorsport',
+      siteScope: 'shared',
+      dedicatedSiteKey: 'motorsport',
+      dedicatedSiteUrl: 'http://localhost:3001',
+    },
+  ];
+  for (const routing of DEDICATED_BUSINESS_ROUTING) {
+    const biz = (await documents(
+      'api::ecosystem-business.ecosystem-business',
+    ).findFirst({ filters: { slug: { $eq: routing.slug } } })) as
+      | ({ documentId: string } & Record<string, unknown>)
+      | null;
+    if (!biz) continue;
+    const needsUpdate =
+      biz.siteScope !== routing.siteScope ||
+      biz.dedicatedSiteKey !== routing.dedicatedSiteKey ||
+      biz.dedicatedSiteUrl !== routing.dedicatedSiteUrl;
+    if (needsUpdate) {
+      await documents('api::ecosystem-business.ecosystem-business').update({
+        documentId: biz.documentId,
+        data: {
+          siteScope: routing.siteScope,
+          dedicatedSiteKey: routing.dedicatedSiteKey,
+          dedicatedSiteUrl: routing.dedicatedSiteUrl,
+        },
+        status: 'published',
+      });
+      strapi.log.info(
+        `[seed] Normalized dedicated business routing: ${routing.slug}`,
+      );
+    }
+  }
+
+  // Resolve the Sarga Horse Sport business for relations.
+  const horseSportBusiness = (await documents(
+    'api::ecosystem-business.ecosystem-business',
+  ).findFirst({ filters: { slug: { $eq: 'sarga-horse-sport' } } })) as
+    | { documentId: string }
+    | null;
+
+  // Horse Sport events (idempotent by slug), linked to the horse sport business.
+  for (const hsEvent of HORSESPORT_EVENTS) {
+    const existing = await documents('api::event.event').findFirst({
+      filters: { slug: { $eq: hsEvent.slug } },
+    });
+    if (!existing) {
+      await documents('api::event.event').create({
+        data: {
+          ...hsEvent,
+          ...(horseSportBusiness
+            ? { business: horseSportBusiness.documentId }
+            : {}),
+        },
+        status: 'published',
+      });
+      strapi.log.info(`[seed] Created horse sport event: ${hsEvent.title}`);
+    }
+  }
+
+  // Horse Sport partners (idempotent by slug)
+  for (const partner of HORSESPORT_PARTNERS) {
+    const existing = await documents('api::partner.partner').findFirst({
+      filters: { slug: { $eq: partner.slug } },
+    });
+    if (!existing) {
+      await documents('api::partner.partner').create({
+        data: partner,
+        status: 'published',
+      });
+      strapi.log.info(`[seed] Created horse sport partner: ${partner.name}`);
+    }
+  }
+
+  // Horse Sport ticket CTAs (idempotent by title), linked to the first event.
+  const firstHorseSportEvent = (await documents('api::event.event').findFirst({
+    filters: { slug: { $eq: HORSESPORT_EVENTS[0].slug } },
+  })) as { documentId: string } | null;
+
+  for (const cta of HORSESPORT_TICKET_CTAS) {
+    const existing = await documents('api::ticket-cta.ticket-cta').findFirst({
+      filters: { title: { $eq: cta.title } },
+    });
+    if (!existing) {
+      await documents('api::ticket-cta.ticket-cta').create({
+        data: {
+          ...cta,
+          ...(firstHorseSportEvent
+            ? { relatedEvent: firstHorseSportEvent.documentId }
+            : {}),
+        },
+        status: 'published',
+      });
+      strapi.log.info(`[seed] Created horse sport ticket CTA: ${cta.title}`);
+    }
+  }
+
+  // Horse Sport gallery (idempotent by slug)
+  for (const gallery of HORSESPORT_GALLERIES) {
+    const existing = await documents(
+      'api::media-gallery.media-gallery',
+    ).findFirst({ filters: { slug: { $eq: gallery.slug } } });
+    if (!existing) {
+      await documents('api::media-gallery.media-gallery').create({
+        data: gallery,
+        status: 'published',
+      });
+      strapi.log.info(`[seed] Created horse sport gallery: ${gallery.title}`);
+    }
+  }
+
+  // Horse Sport news articles (idempotent by slug), linked to the business,
+  // first event, and race-day gallery.
+  const horseSportGallery = (await documents(
+    'api::media-gallery.media-gallery',
+  ).findFirst({ filters: { slug: { $eq: HORSESPORT_GALLERIES[0].slug } } })) as
+    | { documentId: string }
+    | null;
+
+  for (const article of HORSESPORT_NEWS) {
+    const existing = await documents(
+      'api::news-article.news-article',
+    ).findFirst({ filters: { slug: { $eq: article.slug } } });
+    if (!existing) {
+      await documents('api::news-article.news-article').create({
+        data: {
+          ...article,
+          ...(horseSportBusiness
+            ? { relatedBusinesses: [horseSportBusiness.documentId] }
+            : {}),
+          ...(firstHorseSportEvent
+            ? { relatedEvent: firstHorseSportEvent.documentId }
+            : {}),
+          ...(horseSportGallery
+            ? { relatedGallery: horseSportGallery.documentId }
+            : {}),
+        },
+        status: 'published',
+      });
+      strapi.log.info(`[seed] Created horse sport news: ${article.title}`);
+    }
+  }
+
   // Timeline items (About page corporate record)
   const timelineCount = await documents(
     'api::timeline-item.timeline-item',
@@ -901,6 +1478,9 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
 
   // Placeholder media (upload + attach where image fields are empty)
   await seedMedia(strapi, documents);
+
+  // Horse Sport: replace low-res placeholders with curated high-res art
+  await refreshHorseSportMedia(strapi, documents);
 
   // Timeline item images (matched by order field)
   const TIMELINE_MEDIA = [
@@ -974,6 +1554,33 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         status: 'published',
       });
       strapi.log.info(`[seed] Attached ${fileIds.length} images \u2192 media-gallery (media-gallery)`);
+    }
+  }
+
+  // Horse Sport gallery mediaItems (attach existing seed images)
+  const HORSESPORT_GALLERY_FILES = [
+    { file: 'news-merdeka-jockeys.jpg', alt: 'Two jockeys racing side by side past a blurred grandstand' },
+    { file: 'news-turf-track-aerial.jpg', alt: 'Aerial view of curved turf and dirt racing track lanes' },
+    { file: 'news-stable-interior.jpg', alt: 'Elite race horse inside a premium stable interior' },
+    { file: 'sarga-horse-sport-turf-aerial.jpg', alt: 'Aerial view of a jockey galloping across turf' },
+  ];
+  const horseSportGalleryDoc = (await documents('api::media-gallery.media-gallery').findFirst({
+    filters: { slug: { $eq: 'horse-sport-race-day' } },
+    populate: ['mediaItems'],
+  })) as { documentId: string; mediaItems?: unknown[] } | null;
+  if (horseSportGalleryDoc && !horseSportGalleryDoc.mediaItems?.length) {
+    const fileIds: number[] = [];
+    for (const item of HORSESPORT_GALLERY_FILES) {
+      const file = await uploadIfMissing(strapi, item.file, item.alt);
+      if (file) fileIds.push(file.id);
+    }
+    if (fileIds.length > 0) {
+      await documents('api::media-gallery.media-gallery').update({
+        documentId: horseSportGalleryDoc.documentId,
+        data: { mediaItems: fileIds },
+        status: 'published',
+      });
+      strapi.log.info(`[seed] Attached ${fileIds.length} images \u2192 media-gallery (horse-sport-race-day)`);
     }
   }
 

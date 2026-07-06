@@ -75,10 +75,10 @@ export function HorseSportHeader({
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className={`relative rounded-full px-4 py-2.5 text-[0.68rem] font-semibold tracking-[0.06em] transition-colors duration-350 ${
+                    className={`hs-kicker relative rounded-full px-4 py-2.5 text-[0.78rem] font-semibold tracking-[0.06em] transition-colors duration-350 ${
                       active
                         ? "text-hs-orange"
-                        : "text-hs-cream/58 hover:text-hs-cream/88"
+                        : "text-hs-cream/88 hover:text-hs-orange"
                     }`}
                   >
                     {link.label}

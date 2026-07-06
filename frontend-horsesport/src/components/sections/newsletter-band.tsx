@@ -57,7 +57,7 @@ export function NewsletterBand({
               type="email"
               required
               placeholder="Your email address"
-              className="min-w-0 flex-1 bg-transparent text-sm text-hs-cream placeholder:text-hs-cream/35 focus:outline-none"
+              className="min-w-0 flex-1 bg-transparent text-sm text-hs-cream placeholder:text-hs-cream/55 focus:outline-none"
             />
             <button
               type="submit"
@@ -68,7 +68,7 @@ export function NewsletterBand({
             </button>
           </form>
         )}
-        <p className="mt-3 pl-2 text-[0.6rem] uppercase tracking-[0.14em] text-hs-cream/30">
+        <p className="mt-3 pl-2 text-[0.6rem] uppercase tracking-[0.14em] text-hs-cream/50">
           No spam · Unsubscribe anytime · Race-day alerts first
         </p>
       </div>

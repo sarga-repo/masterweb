@@ -519,9 +519,10 @@ body::after {
   gap: 0.5rem;
   border-radius: var(--radius-hs-pill);
   padding: 0.25rem 0.25rem 0.25rem 1.75rem;
-  border: 1px solid rgb(255 255 255 / 0.25);
-  background: rgb(255 255 255 / 0.06);
-  color: var(--hs-text-inverse);
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  opacity: 1;
+  background: transparent;
+  color: inherit;
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -553,7 +554,7 @@ body::after {
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 999px;
-  background: rgb(255 255 255 / 0.12);
+  background: color-mix(in srgb, currentColor 10%, transparent);
   transition:
     transform 420ms var(--ease-hs-spring),
     background-color 300ms ease;

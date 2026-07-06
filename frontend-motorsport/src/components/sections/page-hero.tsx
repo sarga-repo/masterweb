@@ -137,7 +137,7 @@ export function PageHero({
         <span className="ms-kicker ms-animate-stagger-1" style={kickerStyle}>
           {kicker}
         </span>
-        <h1 className="ms-display ms-animate-stagger-2 mt-6 text-[clamp(4rem,10vw,9rem)]">
+        <h1 className="ms-display ms-animate-stagger-2 mt-6 text-[clamp(3rem,7.5vw,6.75rem)]">
           {title}
         </h1>
         {description ? (

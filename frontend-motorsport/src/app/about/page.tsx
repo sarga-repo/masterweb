@@ -101,7 +101,7 @@ export default function AboutPage() {
               <span className="ms-data-label text-ms-warm-white/38">
                 {item.index}
               </span>
-              <h3 className="ms-display mt-3 text-[clamp(1.5rem,3vw,2.5rem)]">
+              <h3 className="ms-display mt-3 text-[clamp(1.13rem,2.25vw,1.88rem)]">
                 {item.title}
               </h3>
               <p className="mt-3 text-sm leading-6 text-ms-warm-white/52">
@@ -119,7 +119,7 @@ export default function AboutPage() {
             <span className="ms-kicker text-ms-slipstream-teal">
               Mission & positioning
             </span>
-            <h2 className="ms-display mt-6 text-[clamp(2.5rem,5vw,5rem)]">
+            <h2 className="ms-display mt-6 text-[clamp(1.88rem,3.75vw,3.75rem)]">
               Racing, amplified.
             </h2>
             <p className="mt-6 max-w-xl text-base leading-8 text-ms-warm-white/60">
@@ -169,7 +169,7 @@ export default function AboutPage() {
               },
             ].map((item) => (
               <div key={item.trait}>
-                <h3 className="ms-display text-[clamp(2rem,4vw,3.5rem)]">
+                <h3 className="ms-display text-[clamp(1.5rem,3vw,2.63rem)]">
                   {item.trait}
                 </h3>
                 <p className="mt-4 text-sm leading-6 text-ms-warm-white/55">
@@ -187,7 +187,7 @@ export default function AboutPage() {
           <span className="ms-data-label text-ms-warm-white/42">
             Part of the Sarga group
           </span>
-          <h2 className="ms-display mt-6 max-w-[12ch] text-[clamp(2.5rem,5vw,5rem)]">
+          <h2 className="ms-display mt-6 max-w-[12ch] text-[clamp(1.88rem,3.75vw,3.75rem)]">
             One ecosystem. Two front doors.
           </h2>
           <p className="mt-6 max-w-xl text-base leading-7 text-ms-warm-white/60">

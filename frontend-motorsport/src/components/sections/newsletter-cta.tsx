@@ -35,7 +35,7 @@ export function NewsletterCtaSection({
         {/* Left — copy */}
         <div>
           <span className="ms-kicker text-ms-ignition-orange">{eyebrow}</span>
-          <h2 className="ms-display mt-6 max-w-[12ch] text-[clamp(3rem,7vw,7rem)]">
+          <h2 className="ms-display mt-6 max-w-[12ch] text-[clamp(2.25rem,5.25vw,5.25rem)]">
             {title}
           </h2>
           <p className="mt-6 max-w-xl text-lg leading-8 text-ms-warm-white/60">

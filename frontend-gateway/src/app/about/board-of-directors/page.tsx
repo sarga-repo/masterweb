@@ -37,16 +37,16 @@ function LeadershipCard({
         ) : null}
         <span
           aria-hidden="true"
-          className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(0,11,29,.62)_100%)]"
+          className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(16,20,27,.62)_100%)]"
         />
-        <span className="absolute bottom-4 left-4 font-heading text-xl font-black text-white/50">
+        <span className="absolute bottom-4 left-4 font-heading text-xl font-bold text-white/50">
           {String(index + 1).padStart(2, "0")}
         </span>
       </div>
       <p className="mt-5 text-[0.62rem] font-extrabold uppercase tracking-[0.18em] text-sarga-red">
         {person.role}
       </p>
-      <h3 className="mt-2 max-w-[14ch] font-heading text-2xl font-black uppercase leading-[0.92] tracking-[-0.035em] sm:text-3xl">
+      <h3 className="mt-2 max-w-[14ch] font-heading text-2xl font-bold uppercase leading-[0.92] tracking-[-0.035em] sm:text-3xl">
         {person.name}
       </h3>
     </article>
@@ -123,7 +123,7 @@ export default async function BoardOfDirectorsPage() {
             <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-white/65">
               Follow the operating line
             </p>
-            <h2 className="mt-4 max-w-[14ch] font-heading text-4xl font-black uppercase leading-[0.92] tracking-[-0.04em] sm:text-[2.5rem]">
+            <h2 className="mt-4 max-w-[14ch] font-heading text-4xl font-bold uppercase leading-[0.92] tracking-[-0.04em] sm:text-[2.5rem]">
               See how the group connects.
             </h2>
           </div>

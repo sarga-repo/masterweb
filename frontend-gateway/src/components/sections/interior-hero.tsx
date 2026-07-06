@@ -41,7 +41,7 @@ export function InteriorHero({
           />
           <span
             aria-hidden="true"
-            className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(0,11,29,.98)_0%,rgba(0,11,29,.84)_48%,rgba(0,11,29,.26)_100%),linear-gradient(0deg,rgba(0,11,29,.72),transparent_58%)]"
+            className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(16,20,27,.98)_0%,rgba(16,20,27,.84)_48%,rgba(16,20,27,.26)_100%),linear-gradient(0deg,rgba(16,20,27,.72),transparent_58%)]"
           />
         </>
       ) : null}
@@ -75,7 +75,7 @@ export function InteriorHero({
         </div>
 
         <div className="py-16 sm:py-20">
-          <h1 className="max-w-[13ch] font-heading text-[clamp(2.1rem,9vw,3rem)] font-black uppercase leading-[0.84] tracking-[-0.055em] sm:text-[clamp(2.75rem,5.2vw,5.4rem)]">
+          <h1 className="max-w-[13ch] font-heading text-[clamp(2.1rem,9vw,3rem)] font-bold uppercase leading-[0.84] tracking-[-0.055em] sm:text-[clamp(2.75rem,5.2vw,5.4rem)]">
             {title}
           </h1>
         </div>

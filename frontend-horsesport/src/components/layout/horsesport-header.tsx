@@ -59,12 +59,12 @@ export function HorseSportHeader({
         role="banner"
       >
         <nav
-          className="flex w-full max-w-[86rem] items-center justify-between rounded-full border border-hs-cream/10 bg-hs-black/55 px-5 py-3 shadow-[0_1rem_3rem_rgb(8_6_4_/_0.55)] backdrop-blur-2xl sm:px-7 sm:py-3.5"
+          className="flex w-full max-w-[86rem] items-center justify-between rounded-full border border-hs-cream/10 bg-hs-white/85 px-5 py-3 shadow-[0_0.75rem_2.5rem_rgb(20_20_25_/_0.12)] backdrop-blur-2xl sm:px-7 sm:py-3.5"
           aria-label="Primary navigation"
         >
           {/* Logo */}
           <Link href="/" className="shrink-0" aria-label="Sarga Horse Sport — Home">
-            <HorseSportLogo variant="white" className="w-[clamp(8rem,13vw,11rem)]" priority />
+            <HorseSportLogo variant="black" className="w-[clamp(8rem,13vw,11rem)]" priority />
           </Link>
 
           {/* Desktop nav links */}

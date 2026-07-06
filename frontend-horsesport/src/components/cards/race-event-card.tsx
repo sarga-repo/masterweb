@@ -44,7 +44,7 @@ export function RaceEventCard({
         )}
         <div
           aria-hidden
-          className={`absolute inset-0 ${feature ? "bg-gradient-to-t from-hs-black/88 via-hs-black/18 to-transparent xl:bg-gradient-to-r xl:from-transparent xl:via-transparent xl:to-hs-black/35" : "bg-gradient-to-t from-hs-black/90 via-hs-black/20 to-transparent"}`}
+          className={`absolute inset-0 ${feature ? "bg-gradient-to-t from-black/90 via-black/35 to-black/8 xl:bg-gradient-to-r xl:from-black/8 xl:via-black/30 xl:to-black/40" : "bg-gradient-to-t from-black/92 via-black/35 to-black/8"}`}
         />
         <div className="absolute left-4 top-4 flex flex-wrap gap-2">
           {event.discipline ? (

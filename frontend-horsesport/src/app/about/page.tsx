@@ -69,7 +69,7 @@ export default async function AboutPage() {
                 sizes="(max-width: 1024px) 100vw, 40vw"
                 className="object-cover"
               />
-              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-hs-black/50 to-transparent" />
+              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/5" />
             </div>
           </ScrollReveal>
         </div>

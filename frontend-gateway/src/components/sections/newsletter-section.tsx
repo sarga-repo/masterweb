@@ -24,7 +24,7 @@ export function NewsletterSection() {
         <div className="grid gap-10 border-y border-white/15 py-10 lg:grid-cols-[1.25fr_0.75fr] lg:items-center lg:py-14">
           <div>
             <p className="eyebrow">{newsletterSection.eyebrow}</p>
-            <h2 className="mt-4 font-heading text-3xl font-black uppercase leading-[0.94] tracking-[-0.03em] sm:text-[2.4rem]">
+            <h2 className="mt-4 font-heading text-3xl font-bold uppercase leading-[0.94] tracking-[-0.03em] sm:text-[2.4rem]">
               {newsletterSection.title}
             </h2>
             <p className="mt-5 max-w-xl text-sm leading-6 text-white/58 sm:text-base">

@@ -27,10 +27,10 @@ export default async function EcosystemPage() {
       content: (
         <section id={pillar.id}>
           <div className="grid gap-6 border-b border-white/20 pb-8 lg:grid-cols-[0.2fr_0.8fr_1fr] lg:items-end">
-            <span className="font-heading text-2xl font-black text-sarga-red">
+            <span className="font-heading text-2xl font-bold text-sarga-red">
               {String(pillarIndex + 1).padStart(2, "0")}
             </span>
-            <h2 className="font-heading text-4xl font-black uppercase leading-[0.92] tracking-[-0.04em] sm:text-[2.4rem]">
+            <h2 className="font-heading text-4xl font-bold uppercase leading-[0.92] tracking-[-0.04em] sm:text-[2.4rem]">
               {pillar.headline}
             </h2>
             <p className="max-w-xl text-sm leading-7 text-white/55 lg:justify-self-end">

@@ -17,7 +17,7 @@ export function AboutPreview({ content }: { content: HomepageContent }) {
               <span className="h-px w-12 bg-sarga-red-dark" />
               <span>{content.aboutEyebrow}</span>
             </div>
-            <h2 className="mt-8 max-w-[10ch] font-heading text-[clamp(3.25rem,10vw,4rem)] font-black uppercase leading-[0.86] tracking-[-0.05em] sm:text-[clamp(3.25rem,4.8vw,4.8rem)]">
+            <h2 className="mt-8 max-w-[10ch] font-heading text-[clamp(3.25rem,10vw,4rem)] font-bold uppercase leading-[0.86] tracking-[-0.05em] sm:text-[clamp(3.25rem,4.8vw,4.8rem)]">
               One group. Every arena.
             </h2>
           </div>
@@ -36,7 +36,7 @@ export function AboutPreview({ content }: { content: HomepageContent }) {
           </div>
         </div>
 
-        <div className="mt-20 grid overflow-hidden border border-sarga-border/80 bg-white shadow-[0_24px_70px_rgb(0_11_29_/_8%)] lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="mt-20 grid overflow-hidden border border-sarga-border/80 bg-white shadow-[0_24px_70px_rgb(16_20_27_/_8%)] lg:grid-cols-[0.85fr_1.15fr]">
           <div className="gateway-360-panel relative isolate min-h-[25rem] overflow-hidden p-8 text-white sm:p-12 lg:min-h-[34rem]">
             <RacingGraphic
               variant="bands"
@@ -45,7 +45,7 @@ export function AboutPreview({ content }: { content: HomepageContent }) {
             <span className="text-[0.68rem] font-bold uppercase tracking-[0.2em] text-white">
               Integrated by design
             </span>
-            <strong className="absolute bottom-0 left-5 font-heading text-[clamp(6rem,10vw,12.5rem)] font-black leading-none tracking-[-0.09em] text-white sm:left-8">
+            <strong className="absolute bottom-0 left-5 font-heading text-[clamp(6rem,10vw,12.5rem)] font-bold leading-none tracking-[-0.09em] text-white sm:left-8">
               360°
             </strong>
           </div>
@@ -62,14 +62,14 @@ export function AboutPreview({ content }: { content: HomepageContent }) {
                     aria-hidden="true"
                     className="absolute inset-y-0 left-0 w-[3px] origin-top scale-y-0 bg-sarga-red transition-transform duration-300 group-hover:scale-y-100 group-focus-visible:scale-y-100"
                   />
-                  <span className="font-heading text-3xl font-black text-sarga-red-dark group-hover:text-sarga-orange group-focus-visible:text-sarga-orange">
+                  <span className="font-heading text-3xl font-bold text-sarga-red-dark group-hover:text-sarga-orange group-focus-visible:text-sarga-orange">
                     0{index + 1}
                   </span>
                   <div>
                     <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-sarga-red-dark group-hover:text-sarga-orange group-focus-visible:text-sarga-orange">
                       {highlight.label}
                     </p>
-                    <h3 className="mt-3 font-heading text-2xl font-black uppercase leading-[1.02] tracking-[-0.025em] sm:text-3xl">
+                    <h3 className="mt-3 font-heading text-2xl font-bold uppercase leading-[1.02] tracking-[-0.025em] sm:text-3xl">
                       {highlight.title}
                     </h3>
                     <p className="mt-5 max-w-xl text-sm leading-6 opacity-65 sm:text-base sm:leading-7">

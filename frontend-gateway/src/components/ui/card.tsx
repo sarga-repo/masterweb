@@ -78,7 +78,7 @@ export function Card({
                 {eyebrow}
               </p>
             ) : null}
-            <h3 className="mt-2 font-heading text-xl font-black uppercase leading-tight tracking-[-0.01em] text-white">
+            <h3 className="mt-2 font-heading text-xl font-bold uppercase leading-tight tracking-[-0.01em] text-white">
               {title}
             </h3>
             {description ? (
@@ -145,7 +145,7 @@ export function Card({
             {eyebrow}
           </p>
         ) : null}
-        <h3 className="mt-3 font-heading text-lg font-black uppercase leading-snug tracking-[-0.01em] text-sarga-text">
+        <h3 className="mt-3 font-heading text-lg font-bold uppercase leading-snug tracking-[-0.01em] text-sarga-text">
           {title}
         </h3>
         {description ? (

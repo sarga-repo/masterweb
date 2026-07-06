@@ -18,7 +18,7 @@ export function VenueHighlightCard({ venue }: { venue: VenueCardData }) {
         ) : (
           <div className="absolute inset-0 bg-hs-espresso/60" aria-hidden />
         )}
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-hs-black via-hs-black/28 to-hs-black/5" />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/5" />
         <div className="relative z-10 p-6">
           {venue.location ? (
             <span className="inline-flex items-center gap-1.5 text-[0.6rem] font-extrabold uppercase tracking-[0.16em] text-hs-orange">

@@ -24,7 +24,7 @@ export default function GlobalError({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#000b1d",
+          background: "#10141b",
           color: "#ffffff",
           fontFamily:
             '"Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',

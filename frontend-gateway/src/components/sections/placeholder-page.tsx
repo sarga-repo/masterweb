@@ -17,7 +17,7 @@ export function PlaceholderPage({
     <section className="flex flex-1 items-center bg-sarga-light py-20 sm:py-28">
       <div className="site-container">
         <p className="eyebrow">{eyebrow}</p>
-        <h1 className="mt-4 max-w-4xl text-5xl font-black uppercase tracking-[-0.04em] text-sarga-black sm:text-7xl">
+        <h1 className="mt-4 max-w-4xl text-5xl font-bold uppercase tracking-[-0.04em] text-sarga-black sm:text-7xl">
           {title}
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">

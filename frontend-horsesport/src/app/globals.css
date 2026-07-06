@@ -18,45 +18,65 @@
 /* ========================================================================= */
 
 @theme {
-  /* ── Brand palette (page 7 + brand guide) ── */
-  --color-hs-red: #ed1b2f;
-  --color-hs-red-deep: #c4122a;
+  /*
+   * ── Brand palette — LIGHT / CHEERFUL theme (approved 2026-07) ──
+   * Mapping: Horse Sport Red #ED1C24 · Ignition Orange #FF6B00 ·
+   * Pure Black #010101 · Deep Maroon #9F1C20 · Saddle Brown #763627 ·
+   * Warm Cream #F7EED0 · Cool Gray #6E6F72 · Muted Equestrian Green #87B2A5.
+   *
+   * NOTE ON THE FLIP: the theme was inverted from dark to light in place. To
+   * avoid rewriting 37 components, the two heavily-used foreground/surface
+   * tokens keep their class names but swap meaning:
+   *   - `hs-cream`  → now a DARK warm ink (primary text / hairlines on light).
+   *   - `hs-black` / `hs-night` / `hs-espresso` → now LIGHT surfaces.
+   * Image-overlay text uses `hs-white`/`hs-paper` explicitly instead of cream.
+   */
+  --color-hs-red: #ed1c24;
+  --color-hs-red-deep: #9f1c20; /* Deep Maroon */
   --color-hs-orange: #ff6b00;
   --color-hs-orange-warm: #e65d00;
   --color-hs-gold: #d4a843;
-  --color-hs-black: #080604;
-  --color-hs-night: #0e0b08;
-  --color-hs-ink: #14100b;
-  --color-hs-espresso: #1a1410;
-  --color-hs-cream: #fef9f0;
-  --color-hs-cream-warm: #faf3e6;
+  --color-hs-maroon: #9f1c20;
+  --color-hs-saddle: #763627; /* Saddle Brown */
+  --color-hs-green: #87b2a5; /* Muted Equestrian Green */
+
+  /* Surfaces — White canvas + light-grey bands (2026-07) */
+  --color-hs-black: #ffffff; /* primary white surface */
+  --color-hs-night: #aaacb0; /* grey band (slightly darker) */
+  --color-hs-ink: #ffffff; /* clean paper surface */
+  --color-hs-espresso: #ffffff; /* card paper surface */
+
+  /* Foreground (formerly cream) — now warm dark ink */
+  --color-hs-cream: #211a12; /* primary text / hairlines */
+  --color-hs-cream-warm: #2c231a;
+  --color-hs-paper: #fffdf7; /* explicit light for overlays */
+
   --color-hs-sand: #ede0c8;
   --color-hs-sand-light: #f4ecdb;
-  --color-hs-brown: #8b5742;
+  --color-hs-brown: #763627; /* Saddle Brown */
   --color-hs-brown-light: #a07a68;
-  --color-hs-turf: #7a9a8a;
+  --color-hs-turf: #87b2a5; /* equestrian green */
   --color-hs-white: #ffffff;
-  --color-hs-muted: #9b948b;
-  --color-hs-muted-warm: #b8a898;
+  --color-hs-muted: #6e6f72; /* Cool Gray */
+  --color-hs-muted-warm: #6e6f72;
 
   /* ── Typography ── */
   --font-display:
-    "StadtMitte", "STADMITTE", "Stadmitte", "Archivo Variable", "Archivo",
-    "Arial Black", "Impact", sans-serif;
+    "Archivo Variable", "Archivo", "Arial Black", "Impact", sans-serif;
   --font-body:
-    "Masifa", "masifa", "MASIFA", "Plus Jakarta Sans Variable",
-    "Plus Jakarta Sans", "Noto Sans", system-ui, sans-serif;
+    "Plus Jakarta Sans Variable", "Plus Jakarta Sans", "Noto Sans", system-ui,
+    sans-serif;
 
   /* ── Layout ── */
   --spacing-content: 88rem;
   --spacing-reading: 44rem;
 
-  /* ── Shadows (softer, warmer, more dimensional) ── */
-  --shadow-hs-glow: 0 0 4rem rgb(237 27 47 / 0.18);
-  --shadow-hs-ambient: 0 2rem 6rem rgb(8 6 4 / 0.5);
-  --shadow-hs-lift: 0 1.5rem 4rem rgb(8 6 4 / 0.45);
-  --shadow-hs-card: 0 1.25rem 3.5rem rgb(8 6 4 / 0.38);
-  --shadow-hs-subtle: 0 0.5rem 2rem rgb(8 6 4 / 0.18);
+  /* ── Shadows (neutral dark elevation) ── */
+  --shadow-hs-glow: 0 0.5rem 4rem rgb(0 0 0 / 0.35);
+  --shadow-hs-ambient: 0 1.75rem 4.5rem rgb(0 0 0 / 0.4);
+  --shadow-hs-lift: 0 1.25rem 3rem rgb(0 0 0 / 0.35);
+  --shadow-hs-card: 0 1rem 2.5rem rgb(0 0 0 / 0.3);
+  --shadow-hs-subtle: 0 0.5rem 1.5rem rgb(0 0 0 / 0.25);
 
   /* ── Easing (physics-based, no linear/ease-in-out) ── */
   --ease-hs-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -71,46 +91,46 @@
 /* ========================================================================= */
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* Surfaces — warm, not cold black */
-  --hs-surface-base: #080604;
-  --hs-surface-page: #0a0806;
-  --hs-surface-panel: #100d09;
-  --hs-surface-raised: #16120d;
-  --hs-surface-deep: #060403;
-  --hs-surface-cream: #fef9f0;
-  --hs-surface-cream-soft: #faf4ea;
+  /* Surfaces — White canvas + light-grey bands */
+  --hs-surface-base: #ffffff;
+  --hs-surface-page: #ffffff;
+  --hs-surface-panel: #ffffff;
+  --hs-surface-raised: #ffffff;
+  --hs-surface-deep: #aaacb0; /* grey band (slightly darker) */
+  --hs-surface-cream: #f6f6f7;
+  --hs-surface-cream-soft: #fafafb;
 
-  /* Text */
-  --hs-text-primary: #fef9f0;
-  --hs-text-secondary: rgb(254 249 240 / 0.7);
-  --hs-text-quiet: rgb(254 249 240 / 0.42);
-  --hs-text-inverse: #0a0806;
+  /* Text — warm dark ink */
+  --hs-text-primary: #211a12;
+  --hs-text-secondary: rgb(33 26 18 / 0.72);
+  --hs-text-quiet: rgb(33 26 18 / 0.5);
+  --hs-text-inverse: #fffdf7;
 
-  /* Lines */
-  --hs-line-dim: rgb(254 249 240 / 0.1);
-  --hs-line-bright: rgb(254 249 240 / 0.22);
-  --hs-line-soft: rgb(254 249 240 / 0.06);
-  --hs-line-cream: rgb(10 8 6 / 0.08);
+  /* Lines — dark hairlines on light */
+  --hs-line-dim: rgb(33 26 18 / 0.12);
+  --hs-line-bright: rgb(33 26 18 / 0.24);
+  --hs-line-soft: rgb(33 26 18 / 0.08);
+  --hs-line-cream: rgb(33 26 18 / 0.08);
 
   /* Gradients */
-  --hs-gradient-mark: linear-gradient(100deg, #ff6b00 0%, #ed1b2f 100%);
+  --hs-gradient-mark: linear-gradient(100deg, #ff6b00 0%, #ed1c24 100%);
   --hs-gradient-ember: linear-gradient(
     120deg,
-    #ed1b2f 0%,
+    #ed1c24 0%,
     #ff6b00 55%,
-    #ede0c8 130%
+    #87b2a5 135%
   );
   --hs-gradient-warm: linear-gradient(
     160deg,
-    rgb(255 107 0 / 0.22),
-    rgb(237 27 47 / 0.14)
+    rgb(255 107 0 / 0.18),
+    rgb(237 28 36 / 0.1)
   );
   --hs-gradient-cream: linear-gradient(
     180deg,
-    rgb(254 249 240 / 0.96),
-    rgb(250 244 234 / 0.98)
+    rgb(255 255 255 / 0.96),
+    rgb(247 238 208 / 0.98)
   );
 
   /* Layout rhythm — generous breathing room */
@@ -154,10 +174,16 @@ body {
   font-family: var(--font-body);
   font-weight: 400;
   line-height: 1.65;
+  background-color: #ffffff;
+  /* Subtle dotted-grid texture on the white canvas + faint warm brand glow. */
   background-image:
-    radial-gradient(60% 60% at 18% 0%, rgb(255 107 0 / 0.09), transparent 55%),
-    radial-gradient(50% 55% at 92% 94%, rgb(237 27 47 / 0.09), transparent 55%),
-    linear-gradient(180deg, #0d0a08 0%, #080604 52%, #0a0605 100%);
+    radial-gradient(circle, rgb(33 26 18 / 0.06) 1px, transparent 1.6px),
+    radial-gradient(60% 55% at 12% 0%, rgb(255 107 0 / 0.05), transparent 58%),
+    radial-gradient(55% 55% at 94% 98%, rgb(135 178 165 / 0.08), transparent 60%);
+  background-size:
+    22px 22px,
+    auto,
+    auto;
   text-rendering: optimizeLegibility;
 }
 
@@ -184,23 +210,26 @@ body::after {
   border-radius: 2px;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+/* Reset rules layered so Tailwind utilities can override them */
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 
-button,
-input,
-textarea,
-select {
-  font: inherit;
-  color: inherit;
-}
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
 
-img,
-video {
-  display: block;
-  max-width: 100%;
+  img,
+  video {
+    display: block;
+    max-width: 100%;
+  }
 }
 
 /* ========================================================================= */
@@ -296,9 +325,9 @@ video {
   padding: 1px;
   background: linear-gradient(
     180deg,
-    rgb(254 249 240 / 0.1),
-    rgb(254 249 240 / 0.02) 50%,
-    rgb(254 249 240 / 0.06)
+    rgb(33 26 18 / 0.1),
+    rgb(33 26 18 / 0.02) 50%,
+    rgb(33 26 18 / 0.06)
   );
   box-shadow: var(--shadow-hs-card);
 }
@@ -323,7 +352,7 @@ video {
     rgb(237 27 47 / 0.25),
     rgb(255 107 0 / 0.18) 40%,
     rgb(212 168 67 / 0.12) 70%,
-    rgb(254 249 240 / 0.06)
+    rgb(33 26 18 / 0.06)
   );
   box-shadow: var(--shadow-hs-ambient);
 }
@@ -332,10 +361,8 @@ video {
 .hs-card {
   border: 1px solid var(--hs-line-dim);
   border-radius: calc(var(--radius-hs-xl) - 1px);
-  background:
-    linear-gradient(180deg, rgb(254 249 240 / 0.018), transparent 18%),
-    linear-gradient(180deg, rgb(18 14 10 / 0.98), rgb(10 8 6 / 0.98));
-  box-shadow: inset 0 1px 0 rgb(254 249 240 / 0.05);
+  background: linear-gradient(180deg, #ffffff, #fffdf7);
+  box-shadow: var(--shadow-hs-subtle);
   overflow: hidden;
 }
 
@@ -353,17 +380,15 @@ video {
 .hs-panel {
   border: 1px solid var(--hs-line-soft);
   border-radius: calc(var(--radius-hs-xl) - 1px);
-  background:
-    linear-gradient(180deg, rgb(254 249 240 / 0.03), transparent 22%),
-    linear-gradient(180deg, rgb(18 14 10 / 0.97), rgb(10 8 6 / 0.95));
-  box-shadow: inset 0 1px 0 rgb(254 249 240 / 0.04);
+  background: linear-gradient(180deg, #fffdf7, #f7eed6);
+  box-shadow: var(--shadow-hs-subtle);
 }
 
 .hs-panel-light {
   border: 1px solid rgb(20 14 10 / 0.06);
   border-radius: calc(var(--radius-hs-xl) - 1px);
   background:
-    linear-gradient(180deg, rgb(255 255 255 / 0.85), rgb(254 249 240 / 0.94)),
+    linear-gradient(180deg, rgb(255 255 255 / 0.85), rgb(33 26 18 / 0.94)),
     var(--hs-surface-cream);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.75);
 }
@@ -374,22 +399,28 @@ video {
   padding: 1px;
   background: linear-gradient(
     180deg,
-    rgb(254 249 240 / 0.08),
-    rgb(254 249 240 / 0.01) 55%,
-    rgb(254 249 240 / 0.05)
+    rgb(33 26 18 / 0.08),
+    rgb(33 26 18 / 0.01) 55%,
+    rgb(33 26 18 / 0.05)
   );
   box-shadow: var(--shadow-hs-subtle);
 }
 
-/* ── Glass card — modern backdrop-blur theme ── */
+/* ── Card surface — clean warm paper on the light theme ── */
 .hs-card-glass {
-  border: 1px solid rgb(254 249 240 / 0.08);
+  /* White cards keep dark text even inside a dark band (reset the flipped
+     tokens so text-hs-cream/* stay dark on the paper surface). */
+  --color-hs-cream: #211a12;
+  --hs-text-primary: #211a12;
+  --hs-text-secondary: rgb(33 26 18 / 0.72);
+  --hs-text-quiet: rgb(33 26 18 / 0.5);
+  --hs-line-dim: rgb(33 26 18 / 0.12);
+  --hs-line-soft: rgb(33 26 18 / 0.08);
+  color: #211a12;
+  border: 1px solid rgb(33 26 18 / 0.08);
   border-radius: 2rem;
-  background:
-    linear-gradient(180deg, rgb(254 249 240 / 0.028), rgb(254 249 240 / 0.014)),
-    rgb(254 249 240 / 0.015);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: #f4f2ee;
+  box-shadow: var(--shadow-hs-subtle);
   overflow: hidden;
   transition:
     transform 500ms var(--ease-hs-spring),
@@ -400,11 +431,8 @@ video {
 
 .hs-card-glass:hover {
   transform: translateY(-0.125rem);
-  border-color: rgb(254 249 240 / 0.16);
-  background:
-    linear-gradient(180deg, rgb(254 249 240 / 0.04), rgb(254 249 240 / 0.022)),
-    rgb(254 249 240 / 0.035);
-  box-shadow: 0 0.75rem 3rem rgb(255 107 0 / 0.06);
+  border-color: rgb(237 28 36 / 0.24);
+  box-shadow: 0 1.25rem 3.5rem rgb(0 0 0 / 0.35);
 }
 
 /* Glass card variant for cream/light backgrounds */
@@ -424,7 +452,7 @@ video {
 .hs-card-glass-light:hover {
   transform: translateY(-0.125rem);
   border-color: rgb(237 27 47 / 0.15);
-  box-shadow: 0 0.75rem 3rem rgb(8 6 4 / 0.08);
+  box-shadow: 0 0.75rem 3rem rgb(0 0 0 / 0.18);
 }
 
 /* ========================================================================= */
@@ -491,9 +519,9 @@ video {
   gap: 0.5rem;
   border-radius: var(--radius-hs-pill);
   padding: 0.25rem 0.25rem 0.25rem 1.75rem;
-  border: 1px solid rgb(254 249 240 / 0.2);
-  background: rgb(254 249 240 / 0.04);
-  color: var(--hs-text-primary);
+  border: 1px solid rgb(255 255 255 / 0.25);
+  background: rgb(255 255 255 / 0.06);
+  color: var(--hs-text-inverse);
   font-size: 0.7rem;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -525,7 +553,7 @@ video {
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 999px;
-  background: rgb(254 249 240 / 0.08);
+  background: rgb(255 255 255 / 0.12);
   transition:
     transform 420ms var(--ease-hs-spring),
     background-color 300ms ease;
@@ -560,7 +588,7 @@ video {
   border-radius: var(--radius-hs-md);
   overflow: hidden;
   box-shadow:
-    inset 0 0 0 1px rgb(254 249 240 / 0.06),
+    inset 0 0 0 1px rgb(33 26 18 / 0.06),
     var(--shadow-hs-ambient);
 }
 
@@ -602,9 +630,9 @@ video {
   background: linear-gradient(
     90deg,
     transparent,
-    rgb(254 249 240 / 0.08) 15%,
-    rgb(254 249 240 / 0.14) 50%,
-    rgb(254 249 240 / 0.08) 85%,
+    rgb(33 26 18 / 0.08) 15%,
+    rgb(33 26 18 / 0.14) 50%,
+    rgb(33 26 18 / 0.08) 85%,
     transparent
   );
 }
@@ -740,23 +768,34 @@ video {
 
 /* ── Charcoal section (lifted warm-grey band; subtle tonal shift from the
    near-black page — used for editorial rhythm instead of high-contrast cream) ── */
+/* Dark editorial band — warm charcoal with a clear dotted grid (matches the
+   footer / Motorsport). Text tokens flip to light within this scope; white
+   cards reset them back to dark (see .hs-card-glass below). */
 .hs-charcoal-section {
-  background: #1c1814;
-  color: var(--hs-text-primary);
+  background: #16130e;
+  color: #f4efe6;
   position: relative;
+  isolation: isolate;
+  --color-hs-cream: #f4efe6;
+  --hs-text-primary: #f4efe6;
+  --hs-text-secondary: rgb(244 239 230 / 0.72);
+  --hs-text-quiet: rgb(244 239 230 / 0.46);
+  --hs-line-dim: rgb(244 239 230 / 0.14);
+  --hs-line-soft: rgb(244 239 230 / 0.08);
 }
 
 .hs-charcoal-section::before {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: -1;
   pointer-events: none;
   background-image: radial-gradient(
     circle,
-    rgb(254 249 240 / 0.04) 0.8px,
-    transparent 1px
+    rgb(244 239 230 / 0.08) 1px,
+    transparent 1.6px
   );
-  background-size: 1.1rem 1.1rem;
+  background-size: 22px 22px;
   mask-image: linear-gradient(
     180deg,
     transparent,
@@ -773,12 +812,37 @@ video {
   background-size: 1.35rem 1.35rem;
 }
 
-/* ── Dark panel with warm ambient glow ── */
+/* ── Dark footer panel — warm charcoal with a clear dotted grid (matches the
+   Motorsport footer). Text tokens are flipped to light within this scope. ── */
 .hs-dark-panel-glow {
+  position: relative;
+  isolation: isolate;
+  color: #f4efe6; /* links use `color: inherit`; keep them light on the dark */
   background:
-    radial-gradient(55% 55% at 20% 10%, rgb(255 107 0 / 0.1), transparent 55%),
-    radial-gradient(45% 50% at 85% 90%, rgb(237 27 47 / 0.08), transparent 55%),
-    var(--hs-surface-deep);
+    radial-gradient(55% 55% at 20% 10%, rgb(255 107 0 / 0.16), transparent 55%),
+    radial-gradient(45% 50% at 85% 90%, rgb(237 28 36 / 0.13), transparent 55%),
+    #16130e;
+  /* Flip foreground/line tokens to light so text-hs-cream/* read on the dark. */
+  --color-hs-cream: #f4efe6;
+  --hs-text-primary: #f4efe6;
+  --hs-text-secondary: rgb(244 239 230 / 0.72);
+  --hs-text-quiet: rgb(244 239 230 / 0.46);
+  --hs-line-dim: rgb(244 239 230 / 0.14);
+  --hs-line-soft: rgb(244 239 230 / 0.08);
+}
+
+.hs-dark-panel-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    rgb(244 239 230 / 0.08) 1px,
+    transparent 1.6px
+  );
+  background-size: 22px 22px;
 }
 
 /* ── Overlapping section connector (visual bridge between dark/cream) ── */
@@ -795,8 +859,8 @@ video {
   gap: 0.35rem;
   border-radius: var(--radius-hs-pill);
   padding: 0.35rem 1rem;
-  border: 1px solid rgb(254 249 240 / 0.12);
-  background: rgb(254 249 240 / 0.04);
+  border: 1px solid rgb(33 26 18 / 0.12);
+  background: rgb(33 26 18 / 0.04);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   font-size: 0.64rem;
@@ -983,7 +1047,7 @@ video {
     background: linear-gradient(
       90deg,
       transparent 0%,
-      rgb(254 249 240 / 0.04) 50%,
+      rgb(33 26 18 / 0.04) 50%,
       transparent 100%
     );
     background-size: 200% 100%;

@@ -19,8 +19,11 @@
   --color-ms-steel: #85858b;
 
   --font-display:
-    "Owners Wide", "Noto Sans Variable", "Arial Black", sans-serif;
-  --font-body: "Noto Sans Variable", "Noto Sans", Arial, system-ui, sans-serif;
+    var(--font-owners-wide), "Owners Wide", var(--font-noto-sans),
+    "Arial Black", sans-serif;
+  --font-body:
+    var(--font-noto-sans), "Noto Sans Display", "Noto Sans", Arial, system-ui,
+    sans-serif;
 
   --spacing-content: 90rem;
   --spacing-reading: 45rem;
@@ -131,13 +134,9 @@ select {
 
 .ms-display {
   font-family: var(--font-display);
-  font-stretch: expanded;
   font-weight: 900;
-  font-variation-settings:
-    "wdth" 100,
-    "wght" 900;
-  letter-spacing: -0.045em;
-  line-height: 0.9;
+  letter-spacing: 0;
+  line-height: 0.98;
   text-transform: uppercase;
 }
 

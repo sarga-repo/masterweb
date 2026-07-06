@@ -121,7 +121,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
             </div>
           </div>
           <div>
-            <h2 className="max-w-[15ch] font-heading text-[clamp(2.8rem,10vw,3.2rem)] font-black uppercase leading-[0.9] tracking-[-0.04em] sm:text-[clamp(2.8rem,3.35vw,3.85rem)]">
+            <h2 className="max-w-[15ch] font-heading text-[clamp(2.8rem,10vw,3.2rem)] font-bold uppercase leading-[0.9] tracking-[-0.04em] sm:text-[clamp(2.8rem,3.35vw,3.85rem)]">
               Built to move its category forward.
             </h2>
             <p className="mt-8 max-w-3xl text-lg leading-8 text-sarga-text-muted">
@@ -164,7 +164,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
                     {highlight.label ?? "Advantage"}
                   </span>
                 </div>
-                <h3 className="mt-16 font-heading text-3xl font-black uppercase leading-[0.92] tracking-[-0.04em]">
+                <h3 className="mt-16 font-heading text-3xl font-bold uppercase leading-[0.92] tracking-[-0.04em]">
                   {highlight.title}
                 </h3>
                 <p className="mt-5 text-sm leading-7 text-white/55">
@@ -251,7 +251,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
                   <p className="mt-5 text-[0.62rem] font-extrabold uppercase tracking-[0.16em] text-sarga-red">
                     {article.category.replace("-", " ")}
                   </p>
-                  <h3 className="mt-3 font-heading text-2xl font-black uppercase leading-[0.95] tracking-[-0.035em]">
+                  <h3 className="mt-3 font-heading text-2xl font-bold uppercase leading-[0.95] tracking-[-0.035em]">
                     {article.title}
                   </h3>
                 </Link>
@@ -288,7 +288,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
                       ? `On the ${dedicatedSiteLabel(event.siteScope)}`
                       : "Live event"}
                   </p>
-                  <h3 className="mt-3 font-heading text-2xl font-black uppercase leading-[0.95] tracking-[-0.035em]">
+                  <h3 className="mt-3 font-heading text-2xl font-bold uppercase leading-[0.95] tracking-[-0.035em]">
                     {event.title}
                   </h3>
                 </Link>
@@ -320,7 +320,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
             <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-white/65">
               Continue the journey
             </p>
-            <h2 className="mt-4 max-w-[15ch] font-heading text-4xl font-black uppercase leading-[0.92] tracking-[-0.04em] sm:text-[2.5rem]">
+            <h2 className="mt-4 max-w-[15ch] font-heading text-4xl font-bold uppercase leading-[0.92] tracking-[-0.04em] sm:text-[2.5rem]">
               Enter the live calendar or start a partnership.
             </h2>
           </div>

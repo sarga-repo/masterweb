@@ -101,7 +101,7 @@ export function Hero({ content }: { content: HomepageContent }) {
           <p className="eyebrow velocity-reveal">{content.heroEyebrow}</p>
           <h1
             aria-label={content.heroTitle}
-            className="velocity-title mt-5 max-w-[14ch] font-heading text-[clamp(2.1rem,8.6vw,2.3rem)] font-black uppercase leading-[0.84] tracking-[-0.055em] sm:text-[clamp(2.75rem,5.3vw,5.8rem)]"
+            className="velocity-title mt-5 max-w-[14ch] font-heading text-[clamp(2.1rem,8.6vw,2.3rem)] font-bold uppercase leading-[0.95] tracking-[-0.055em] sm:text-[clamp(2.75rem,5.3vw,5.8rem)]"
           >
             {content.heroTitle.split(" ").map((word, index) => (
               <span
@@ -142,7 +142,7 @@ export function Hero({ content }: { content: HomepageContent }) {
                 key={signal.label}
                 className="border-r border-white/20 px-4 last:border-r-0 sm:px-6"
               >
-                <strong className="block font-heading text-2xl font-black text-white sm:text-3xl">
+                <strong className="block font-heading text-2xl font-bold text-white sm:text-3xl">
                   {signal.value}
                 </strong>
                 <span className="mt-1 block text-[0.6rem] font-bold uppercase leading-4 tracking-[0.14em] text-white/52 sm:text-[0.65rem]">

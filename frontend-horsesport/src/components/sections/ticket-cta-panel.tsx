@@ -39,7 +39,7 @@ export function TicketCtaPanel({
       className="relative overflow-hidden rounded-[1.75rem] border border-hs-cream/12 shadow-[var(--shadow-hs-card)] sm:rounded-full"
       style={{
         background:
-          "linear-gradient(100deg, #17120d 0%, #1b130f 60%, #251410 100%)",
+          "linear-gradient(100deg, #ffffff 0%, #fffdf7 55%, #fbf1dd 100%)",
       }}
     >
       {/* warm glow toward the action side — one restrained accent */}
@@ -48,7 +48,7 @@ export function TicketCtaPanel({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(42% 130% at 100% 50%, rgb(237 27 47 / 0.16), transparent 62%)",
+            "radial-gradient(42% 130% at 100% 50%, rgb(255 107 0 / 0.12), transparent 62%)",
         }}
       />
 

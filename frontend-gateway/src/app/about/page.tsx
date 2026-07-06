@@ -125,10 +125,10 @@ export default async function AboutPage() {
                 key={index}
                 className="grid gap-5 border-b border-sarga-black/20 py-8 sm:grid-cols-[5rem_0.8fr_1.2fr] sm:items-start lg:py-10"
               >
-                <span className="font-heading text-2xl font-black text-sarga-red">
+                <span className="font-heading text-2xl font-bold text-sarga-red">
                   {index}
                 </span>
-                <h3 className="font-heading text-2xl font-black uppercase leading-none tracking-[-0.035em] sm:text-3xl">
+                <h3 className="font-heading text-2xl font-bold uppercase leading-none tracking-[-0.035em] sm:text-3xl">
                   {title}
                 </h3>
                 <p className="max-w-xl text-sm leading-7 text-sarga-text-muted sm:justify-self-end sm:text-base">
@@ -146,7 +146,7 @@ export default async function AboutPage() {
                 className="group flex min-h-72 flex-col justify-between bg-white p-8 transition-colors duration-300 hover:bg-sarga-black hover:text-white focus-visible:bg-sarga-black focus-visible:text-white focus-visible:outline-none sm:p-10"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-heading text-3xl font-black text-sarga-red">
+                  <span className="font-heading text-3xl font-bold text-sarga-red">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <ArrowRightIcon className="h-6 w-6 transition-transform duration-300 group-hover:translate-x-2" />
@@ -155,7 +155,7 @@ export default async function AboutPage() {
                   <p className="text-[0.62rem] font-extrabold uppercase tracking-[0.18em] text-sarga-red">
                     {highlight.label}
                   </p>
-                  <h3 className="mt-3 font-heading text-3xl font-black uppercase leading-[1.02] tracking-[-0.03em]">
+                  <h3 className="mt-3 font-heading text-3xl font-bold uppercase leading-[1.02] tracking-[-0.03em]">
                     {highlight.title}
                   </h3>
                   <p className="mt-5 max-w-xl text-sm leading-7 opacity-60">

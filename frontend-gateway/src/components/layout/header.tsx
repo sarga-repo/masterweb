@@ -19,7 +19,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-sarga-black/88 text-white backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-sarga-black text-white">
       <div className="site-container flex min-h-20 items-center justify-between gap-6 py-3">
         <div className="flex items-center gap-5">
           <Logo variant="reverse" />

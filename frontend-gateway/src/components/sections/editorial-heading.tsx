@@ -30,7 +30,7 @@ export function EditorialHeading({
           <span>{eyebrow}</span>
         </div>
         <h2
-          className={`mt-8 max-w-full break-words font-heading text-[clamp(2.35rem,10.5vw,2.8rem)] font-black uppercase leading-[0.88] tracking-[-0.045em] sm:max-w-[13ch] sm:break-normal sm:text-[clamp(2.5rem,3.75vw,4.2rem)] ${
+          className={`mt-8 max-w-full break-words font-heading text-[clamp(2.35rem,10.5vw,2.8rem)] font-bold uppercase leading-[0.88] tracking-[-0.045em] sm:max-w-[13ch] sm:break-normal sm:text-[clamp(2.5rem,3.75vw,4.2rem)] ${
             light ? "text-white" : "text-sarga-black"
           }`}
         >

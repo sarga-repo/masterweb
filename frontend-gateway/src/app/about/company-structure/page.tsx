@@ -60,7 +60,7 @@ export default async function CompanyStructurePage() {
               <p className="text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-sarga-red">
                 Corporate root
               </p>
-              <h2 className="mt-4 font-heading text-4xl font-black uppercase leading-[1.04] tracking-[-0.03em] sm:text-[2.25rem]">
+              <h2 className="mt-4 font-heading text-4xl font-bold uppercase leading-[1.04] tracking-[-0.03em] sm:text-[2.25rem]">
                 PT Sarga Multi Ekosistem
               </h2>
               <p className="mt-5 max-w-xl text-sm leading-7 text-white/58">
@@ -79,7 +79,7 @@ export default async function CompanyStructurePage() {
                 <p className="text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-sarga-red">
                   01 / Governance
                 </p>
-                <h3 className="mt-4 font-heading text-3xl font-black uppercase tracking-[-0.035em]">
+                <h3 className="mt-4 font-heading text-3xl font-bold uppercase tracking-[-0.035em]">
                   Board oversight
                 </h3>
                 <ul className="mt-8 divide-y divide-sarga-black/15 border-t border-sarga-black/15">
@@ -99,7 +99,7 @@ export default async function CompanyStructurePage() {
                 <p className="text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-sarga-red">
                   02 / Management
                 </p>
-                <h3 className="mt-4 font-heading text-3xl font-black uppercase tracking-[-0.035em]">
+                <h3 className="mt-4 font-heading text-3xl font-bold uppercase tracking-[-0.035em]">
                   Executive council
                 </h3>
                 <ul className="mt-8 divide-y divide-sarga-black/15 border-t border-sarga-black/15 sm:grid sm:grid-cols-2 sm:divide-y-0">
@@ -161,10 +161,10 @@ export default async function CompanyStructurePage() {
                     key={pillar.id}
                     className="border border-sarga-black/20 bg-white p-6"
                   >
-                    <span className="font-heading text-2xl font-black text-sarga-red">
+                    <span className="font-heading text-2xl font-bold text-sarga-red">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <h3 className="mt-8 font-heading text-3xl font-black uppercase leading-none tracking-[-0.04em]">
+                    <h3 className="mt-8 font-heading text-3xl font-bold uppercase leading-none tracking-[-0.04em]">
                       {pillar.label}
                     </h3>
                     <ul className="mt-6 space-y-3 border-t border-sarga-black/15 pt-5 text-xs font-bold uppercase tracking-[0.08em] text-sarga-text-muted">
@@ -189,7 +189,7 @@ export default async function CompanyStructurePage() {
             <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-white/45">
               People behind the structure
             </p>
-            <h2 className="mt-4 max-w-[14ch] font-heading text-4xl font-black uppercase leading-[0.92] tracking-[-0.04em] sm:text-[2.5rem]">
+            <h2 className="mt-4 max-w-[14ch] font-heading text-4xl font-bold uppercase leading-[0.92] tracking-[-0.04em] sm:text-[2.5rem]">
               Meet the leadership council.
             </h2>
           </div>

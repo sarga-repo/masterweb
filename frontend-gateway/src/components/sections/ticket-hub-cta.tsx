@@ -26,7 +26,7 @@ export function TicketHubCta() {
 
         <div className="mt-12 grid min-w-0 gap-12 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="min-w-0">
-            <h2 className="max-w-full break-words font-heading text-[clamp(2.4rem,12vw,3.5rem)] font-black uppercase leading-[0.86] tracking-[-0.05em] sm:max-w-[14ch] sm:text-[clamp(3rem,4.8vw,5rem)]">
+            <h2 className="max-w-full break-words font-heading text-[clamp(2.4rem,12vw,3.5rem)] font-bold uppercase leading-[0.86] tracking-[-0.05em] sm:max-w-[14ch] sm:text-[clamp(3rem,4.8vw,5rem)]">
               Move from spectator to the centre of it.
             </h2>
             <p className="mt-9 max-w-2xl text-base leading-7 text-white/78 sm:text-lg sm:leading-8">

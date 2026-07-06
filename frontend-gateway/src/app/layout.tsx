@@ -13,12 +13,20 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   weight: "variable",
 });
 
-const zalandoSansExpanded = localFont({
-  src: "./fonts/zalando-sans-expanded-latin.woff2",
+// Brand display face (preview PDF p.7): Zalando Sans Expanded.
+// The SemiBold cut is mapped to the bold (700) slot so the `font-bold` headings
+// read as SemiBold — the approved weight, lighter than the Bold cut.
+const zalandoSans = localFont({
+  src: [
+    { path: "./fonts/zalando-expanded-400.ttf", weight: "400", style: "normal" },
+    {
+      path: "./fonts/zalando-expanded-semibold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   display: "swap",
-  variable: "--font-zalando-sans-expanded",
-  weight: "200 900",
-  style: "normal",
+  variable: "--font-zalando-sans",
   adjustFontFallback: false,
 });
 
@@ -68,7 +76,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`h-full antialiased ${plusJakartaSans.variable} ${zalandoSansExpanded.variable}`}
+      className={`h-full antialiased ${plusJakartaSans.variable} ${zalandoSans.variable}`}
     >
       <body className="flex min-h-full flex-col bg-sarga-white text-sarga-text">
         <a

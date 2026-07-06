@@ -89,7 +89,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </p>
           </aside>
           <div className="max-w-3xl">
-            <p className="font-heading text-3xl font-black leading-[1.02] tracking-[-0.035em] sm:text-5xl">
+            <p className="font-heading text-3xl font-bold leading-[1.02] tracking-[-0.035em] sm:text-5xl">
               {article.excerpt}
             </p>
             <SafeRichText
@@ -130,7 +130,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <section className="gateway-surface-light-signature gateway-surface-light-signature--left bg-sarga-light py-20 sm:py-28 lg:py-36">
         <div className="site-container">
           <div className="flex items-end justify-between gap-8 border-b border-sarga-black pb-6">
-            <h2 className="font-heading text-3xl font-black uppercase tracking-[-0.03em] sm:text-[2.4rem]">
+            <h2 className="font-heading text-3xl font-bold uppercase tracking-[-0.03em] sm:text-[2.4rem]">
               Continue reading
             </h2>
             <span className="hidden text-xs font-bold uppercase tracking-[0.16em] text-sarga-text/45 sm:block">
@@ -159,7 +159,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   <p className="text-[0.62rem] font-extrabold uppercase tracking-[0.16em] text-sarga-red">
                     {item.category.replace("-", " ")}
                   </p>
-                  <h3 className="mt-3 font-heading text-2xl font-black uppercase leading-[0.95] tracking-[-0.035em]">
+                  <h3 className="mt-3 font-heading text-2xl font-bold uppercase leading-[0.95] tracking-[-0.035em]">
                     {item.title}
                   </h3>
                   <p className="mt-4 text-sm leading-6 text-sarga-text-muted">

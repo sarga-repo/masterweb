@@ -8,7 +8,7 @@ import { createMetadata } from "@/lib/seo/metadata";
 export const metadata: Metadata = createMetadata({
   title: "Tickets",
   description:
-    "Secure Sarga Horse Sport race-day tickets through approved partner platforms. No internal checkout — official partner redirect only.",
+    "Secure Sarga Horse Sport race-day tickets through approved partner platforms. No internal checkout - official partner redirect only.",
   path: "/tickets",
 });
 
@@ -21,7 +21,7 @@ export default async function TicketsPage() {
       <PageHero
         eyebrow="Tickets"
         title="Witness it live."
-        description="Race-day tickets are handled by our approved partner platforms — secure, guaranteed entry, zero markup."
+        description="Race-day tickets are handled by our approved partner platforms - secure, guaranteed entry, zero markup."
         backgroundImage="/media/news-merdeka.png"
         backgroundAlt="Grandstand crowd watching a derby on race day"
         accent="orange"
@@ -54,7 +54,7 @@ export default async function TicketsPage() {
           <div className="hs-card-glass mt-12 p-12 text-center">
             <p className="hs-display text-2xl text-hs-cream">No tickets on sale right now.</p>
             <p className="mt-3 text-sm text-hs-cream/55">
-              New race days are announced regularly — explore what&apos;s coming up.
+              New race days are announced regularly - explore what&apos;s coming up.
             </p>
             <Link
               href="/events"

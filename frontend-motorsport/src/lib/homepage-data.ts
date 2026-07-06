@@ -1,5 +1,5 @@
 /**
- * Homepage data layer — CMS-first with curated placeholder fallbacks.
+ * Homepage data layer - CMS-first with curated placeholder fallbacks.
  *
  * `fetchHomepageData()` attempts to load live content from the shared Strapi
  * CMS (siteScope = motorsport | shared).  When the API is unreachable or
@@ -137,7 +137,7 @@ function mapEvent(
     venue: entry.venue ?? "TBA",
     image: mediaUrl(img?.url) || "/media/motorsport-design-hero.png",
     imageAlt:
-      img?.alternativeText ?? `${entry.title} — Sarga Motorsport event`,
+      img?.alternativeText ?? `${entry.title} - Sarga Motorsport event`,
     status: statusMap(entry.eventStatus),
     category: entry.racingCategory ?? undefined,
     seriesName: entry.seriesName ?? undefined,
@@ -156,7 +156,7 @@ function mapArticle(
     href: `/news/${entry.slug ?? entry.documentId}`,
     image: mediaUrl(img?.url) || "/media/motorcycle-racing-dusk.png",
     imageAlt:
-      img?.alternativeText ?? `${entry.title} — Sarga Motorsport news`,
+      img?.alternativeText ?? `${entry.title} - Sarga Motorsport news`,
     category: entry.category ?? "Motorsport",
     publishedLabel: formatDate(entry.publishedAt),
     excerpt: entry.excerpt ?? undefined,
@@ -242,7 +242,7 @@ const PLACEHOLDER_ARTICLES: MotorsportArticle[] = [
     category: "Race Report",
     publishedLabel: "02 Jul 2026",
     excerpt:
-      "Inside the cockpit of Sarga's opening race weekend — a masterclass in pressure, precision, and the fine art of going fast.",
+      "Inside the cockpit of Sarga's opening race weekend - a masterclass in pressure, precision, and the fine art of going fast.",
   },
   {
     title: "Riders rewrite the racing line",
@@ -252,7 +252,7 @@ const PLACEHOLDER_ARTICLES: MotorsportArticle[] = [
     category: "Motorcycle Racing",
     publishedLabel: "28 Jun 2026",
     excerpt:
-      "How Indonesia's fastest riders are reshaping the sport — one apex at a time.",
+      "How Indonesia's fastest riders are reshaping the sport - one apex at a time.",
   },
   {
     title: "Building the 360° racing ecosystem",
@@ -263,7 +263,7 @@ const PLACEHOLDER_ARTICLES: MotorsportArticle[] = [
     category: "Feature",
     publishedLabel: "15 Jun 2026",
     excerpt:
-      "From track to grandstand to livestream — how Sarga is engineering an entire motorsport experience.",
+      "From track to grandstand to livestream - how Sarga is engineering an entire motorsport experience.",
   },
 ];
 
@@ -304,7 +304,7 @@ const PLACEHOLDER_PARTNERS: PartnerItem[] = [
     logo: "/brand/logo-sarga-motorsport-symbol-sport.png",
   },
   {
-    name: "Sarga — parent group",
+    name: "Sarga - parent group",
     logo: "/brand/logo-sarga-motorsport-part-of-sarga.png",
     href: "https://sarga.co",
   },
@@ -405,7 +405,7 @@ export async function fetchHomepageData(): Promise<HomepageData> {
         image: mediaUrl(img.url),
         imageAlt:
           img.alternativeText ??
-          `${entry.title} — Sarga Motorsport`,
+          `${entry.title} - Sarga Motorsport`,
         eyebrow: entry.title,
       })),
   );

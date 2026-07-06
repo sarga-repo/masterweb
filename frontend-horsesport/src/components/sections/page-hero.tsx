@@ -12,7 +12,7 @@ type PageHeroProps = {
   children?: ReactNode;
 };
 
-/** Premium interior-page hero — cinematic scrim, dot texture, zigzag band detail, editorial side panel. */
+/** Premium interior-page hero - cinematic scrim, dot texture, zigzag band detail, editorial side panel. */
 export function PageHero({
   eyebrow,
   title,
@@ -39,7 +39,7 @@ export function PageHero({
           ? "linear-gradient(0deg, rgba(20,15,10,0.86) 0%, rgba(20,15,10,0.42) 48%, rgba(20,15,10,0.12) 100%)"
           : `radial-gradient(60% 70% at 16% 0%, ${accentHex}1f, transparent 58%), radial-gradient(55% 60% at 92% 100%, #87B2A529, transparent 58%), linear-gradient(180deg, #fbf6e9, #f7eed0)`,
       }} />
-      {/* Brand marker — full-height staircase stripes down the left edge */}
+      {/* Brand marker - full-height staircase stripes down the left edge */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-y-0 left-0 z-0 hidden select-none pl-2 lg:flex lg:gap-8"

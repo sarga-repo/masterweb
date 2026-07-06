@@ -96,8 +96,8 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
         image={business.heroImage ?? business.cardImage}
         brandLogo={business.brandLogo}
         meta={[
-          `Pillar — ${pillar?.label ?? business.pillar}`,
-          `Status — ${business.status === "active" ? "Active" : "Coming soon"}`,
+          `Pillar - ${pillar?.label ?? business.pillar}`,
+          `Status - ${business.status === "active" ? "Active" : "Coming soon"}`,
         ]}
       />
 

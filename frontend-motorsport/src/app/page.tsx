@@ -41,28 +41,28 @@ const ECOSYSTEM_PILLARS = [
     index: "01",
     title: "Professional car racing",
     description:
-      "Touring, GT, and formula disciplines — elite drivers, world-class machinery, and international competition standards.",
+      "Touring, GT, and formula disciplines - elite drivers, world-class machinery, and international competition standards.",
     accent: "crimson" as const,
   },
   {
     index: "02",
     title: "Professional motorcycle racing",
     description:
-      "Superbike, Moto2, and grassroots two-wheel programs — precision, bravery, and the purest form of racing.",
+      "Superbike, Moto2, and grassroots two-wheel programs - precision, bravery, and the purest form of racing.",
     accent: "orange" as const,
   },
   {
     index: "03",
     title: "Lifestyle festival",
     description:
-      "Music, culture, food, and community — the race weekend extends far beyond the pit wall into a full sensory event.",
+      "Music, culture, food, and community - the race weekend extends far beyond the pit wall into a full sensory event.",
     accent: "yellow" as const,
   },
   {
     index: "04",
     title: "Fan & community experience",
     description:
-      "Pit walks, meet-and-greets, simulators, and fan zones — every supporter gets closer to the action.",
+      "Pit walks, meet-and-greets, simulators, and fan zones - every supporter gets closer to the action.",
     accent: "teal" as const,
   },
   {
@@ -76,13 +76,13 @@ const ECOSYSTEM_PILLARS = [
     index: "06",
     title: "Venue & circuit experience",
     description:
-      "Track days, corporate events, and driving experiences — the circuit as a premium destination beyond race weekends.",
+      "Track days, corporate events, and driving experiences - the circuit as a premium destination beyond race weekends.",
     accent: "crimson" as const,
   },
 ];
 
 /* -------------------------------------------------------------------------- */
-/*  Experience pillars (homepage section — shorter cards)                     */
+/*  Experience pillars (homepage section - shorter cards)                     */
 /* -------------------------------------------------------------------------- */
 
 const EXPERIENCE_CARDS = [
@@ -98,7 +98,7 @@ const EXPERIENCE_CARDS = [
     index: "02",
     title: "Beyond the grid",
     description:
-      "Festival stages, street food, fan zones, and community — the weekend is bigger than any single race.",
+      "Festival stages, street food, fan zones, and community - the weekend is bigger than any single race.",
     href: "/experience",
     accent: "orange" as const,
   },
@@ -106,7 +106,7 @@ const EXPERIENCE_CARDS = [
     index: "03",
     title: "Always-on coverage",
     description:
-      "Livestream, race reports, photography, and paddock stories — the feed never stops.",
+      "Livestream, race reports, photography, and paddock stories - the feed never stops.",
     href: "/experience",
     accent: "teal" as const,
   },
@@ -148,7 +148,7 @@ export default async function HomePage() {
           }}
           endorsement={{
             src: "/brand/logo-part-of-sarga-endorsement-white.png",
-            alt: "Sarga Motorsport — part of Sarga.co",
+            alt: "Sarga Motorsport - part of Sarga.co",
           }}
           primaryCta={{ label: "View events", href: "/events" }}
           secondaryCta={{ label: "Get tickets", href: "/tickets" }}
@@ -203,7 +203,7 @@ export default async function HomePage() {
         <BrandStorySection
           eyebrow="The 360° racing ecosystem"
           title="More than a race."
-          body="Sarga Motorsport is Indonesia's most ambitious motorsport platform — a convergence of professional racing, lifestyle culture, broadcast media, and community experience. From four-wheel touring and GT to two-wheel superbike and Moto2, every discipline gets the stage it deserves."
+          body="Sarga Motorsport is Indonesia's most ambitious motorsport platform - a convergence of professional racing, lifestyle culture, broadcast media, and community experience. From four-wheel touring and GT to two-wheel superbike and Moto2, every discipline gets the stage it deserves."
           image="/media/motorcycle-racing-dusk.png"
           imageAlt="Superbike riders leaning through a sweeping corner under dusk circuit lights"
           cta={{ label: "Explore the ecosystem", href: "/about" }}
@@ -280,7 +280,7 @@ export default async function HomePage() {
             index="MEDIA"
             eyebrow="Latest from the paddock"
             title="Every frame carries velocity."
-            description="Race reports, rider profiles, technical deep-dives, and lifestyle features — curated by the Sarga Motorsport editorial team."
+            description="Race reports, rider profiles, technical deep-dives, and lifestyle features - curated by the Sarga Motorsport editorial team."
           />
           <div className="mt-14 grid gap-10 lg:grid-cols-[1.6fr_0.8fr]">
             {data.featuredArticle ? (
@@ -338,7 +338,7 @@ export default async function HomePage() {
         <NewsletterCtaSection
           eyebrow="Stay in the race"
           title="Never miss lights-out."
-          description="Get race weekend alerts, ticket drops, and exclusive paddock stories delivered to your inbox. No spam — just velocity."
+          description="Get race weekend alerts, ticket drops, and exclusive paddock stories delivered to your inbox. No spam - just velocity."
           actionLabel="Subscribe to updates"
           cta={{ label: "contact us directly", href: "/contact" }}
         />

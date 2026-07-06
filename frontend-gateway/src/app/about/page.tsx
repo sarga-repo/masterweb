@@ -45,7 +45,7 @@ function buildTabs(
   const historyItems: AboutTabItem[] =
     timelineItems.length > 0
       ? timelineItems.map((item) => ({
-          meta: `${item.year} — ${item.label}`,
+          meta: `${item.year} - ${item.label}`,
           title: item.title,
           description: item.description,
           image: item.image,

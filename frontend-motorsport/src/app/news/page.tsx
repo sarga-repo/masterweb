@@ -25,7 +25,7 @@ const PLACEHOLDER: MotorsportArticle[] = [
     category: "Race Report",
     publishedLabel: "02 Jul 2026",
     excerpt:
-      "Inside the cockpit of Sarga's opening race weekend — a masterclass in pressure, precision, and the fine art of going fast.",
+      "Inside the cockpit of Sarga's opening race weekend - a masterclass in pressure, precision, and the fine art of going fast.",
   },
   {
     title: "Riders rewrite the racing line",
@@ -35,7 +35,7 @@ const PLACEHOLDER: MotorsportArticle[] = [
     category: "Motorcycle Racing",
     publishedLabel: "28 Jun 2026",
     excerpt:
-      "How Indonesia's fastest riders are reshaping the sport — one apex at a time.",
+      "How Indonesia's fastest riders are reshaping the sport - one apex at a time.",
   },
   {
     title: "Building the 360° racing ecosystem",
@@ -45,7 +45,7 @@ const PLACEHOLDER: MotorsportArticle[] = [
     category: "Feature",
     publishedLabel: "15 Jun 2026",
     excerpt:
-      "From track to grandstand to livestream — how Sarga is engineering an entire motorsport experience.",
+      "From track to grandstand to livestream - how Sarga is engineering an entire motorsport experience.",
   },
   {
     title: "Paddock pass: behind the pit wall",
@@ -75,7 +75,7 @@ export default async function NewsPage() {
         accentPosition="top-left"
         speedLines
         grain
-        description="Race reports, rider profiles, technical deep-dives, and lifestyle features — curated by the Sarga Motorsport editorial team. Car and motorcycle racing, always in frame."
+        description="Race reports, rider profiles, technical deep-dives, and lifestyle features - curated by the Sarga Motorsport editorial team. Car and motorcycle racing, always in frame."
       />
 
       <GradientRule />

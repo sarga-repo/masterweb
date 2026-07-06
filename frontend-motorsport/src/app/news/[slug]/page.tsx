@@ -21,8 +21,8 @@ const PLACEHOLDER_MAP: Record<string, MotorsportArticle & { body?: string }> = {
     category: "Race Report",
     publishedLabel: "02 Jul 2026",
     excerpt:
-      "Inside the cockpit of Sarga's opening race weekend — a masterclass in pressure, precision, and the fine art of going fast.",
-    body: `The 2026 Sarga Motorsport season opened with a weekend that will be remembered as a masterclass in controlled aggression. From the first rolling start to the final checkered flag, the line between brilliance and disaster was razor-thin — and every driver on the grid knew it.\n\nThe touring car field delivered a spectacle of close-quarters racing that left fans breathless. Door-to-door battles through the mid-pack, strategic pit windows, and a late-race safety car that reshuffled the order entirely. The winner, emerging from the chaos with a margin of just 1.2 seconds, called it "the most intense forty minutes of my career."\n\nOff the track, the fan zones buzzed with energy. Meet-and-greets with riders, simulator challenges, and the first unveiling of the Sarga lifestyle village set the tone for a season that promises to be unlike anything Indonesian motorsport has seen before. This is not just racing — it is a cultural moment.`,
+      "Inside the cockpit of Sarga's opening race weekend - a masterclass in pressure, precision, and the fine art of going fast.",
+    body: `The 2026 Sarga Motorsport season opened with a weekend that will be remembered as a masterclass in controlled aggression. From the first rolling start to the final checkered flag, the line between brilliance and disaster was razor-thin - and every driver on the grid knew it.\n\nThe touring car field delivered a spectacle of close-quarters racing that left fans breathless. Door-to-door battles through the mid-pack, strategic pit windows, and a late-race safety car that reshuffled the order entirely. The winner, emerging from the chaos with a margin of just 1.2 seconds, called it "the most intense forty minutes of my career."\n\nOff the track, the fan zones buzzed with energy. Meet-and-greets with riders, simulator challenges, and the first unveiling of the Sarga lifestyle village set the tone for a season that promises to be unlike anything Indonesian motorsport has seen before. This is not just racing - it is a cultural moment.`,
   },
   "riders-rewrite-the-racing-line": {
     title: "Riders rewrite the racing line",
@@ -32,7 +32,7 @@ const PLACEHOLDER_MAP: Record<string, MotorsportArticle & { body?: string }> = {
     category: "Motorcycle Racing",
     publishedLabel: "28 Jun 2026",
     excerpt:
-      "How Indonesia's fastest riders are reshaping the sport — one apex at a time.",
+      "How Indonesia's fastest riders are reshaping the sport - one apex at a time.",
     body: `There is a quiet revolution happening in Indonesian motorcycle racing, and it is being led by a generation of riders who refuse to accept the old limits. At Mandalika and Sentul alike, superbike and Moto2 competitors are rewriting the racing line itself.\n\nWhat was once considered the optimal braking point is now where the overtakes begin. What was once a safe margin is now the gap riders attempt to close. The result: racing that is closer, faster, and more unpredictable than at any point in the sport's history in this region.\n\nThe Sarga Motorcycle Series has become the proving ground for this new philosophy. Riders are arriving better prepared, with deeper technical understanding and a willingness to push beyond convention. For fans, it means every race weekend brings something unprecedented. For the sport, it signals that Indonesian motorcycle racing has entered a new era.`,
   },
   "building-the-360-racing-ecosystem": {
@@ -43,8 +43,8 @@ const PLACEHOLDER_MAP: Record<string, MotorsportArticle & { body?: string }> = {
     category: "Feature",
     publishedLabel: "15 Jun 2026",
     excerpt:
-      "From track to grandstand to livestream — how Sarga is engineering an entire motorsport experience.",
-    body: `Sarga Motorsport was never conceived as just a racing team. From the earliest planning stages, the vision was broader: a 360-degree motorsport ecosystem that encompasses competition, community, culture, and commerce.\n\nThe track experience is the core. Professional-grade events across touring car, GT, superbike, and Moto2 disciplines — run to international standards with local soul. But surrounding that core is a layered experience: festival weekends with live music and food villages, fan zones with pit walks and simulators, and a broadcast operation that delivers every session to screens across the archipelago.\n\nThe partnership programme completes the circle. Brands that share Sarga's commitment to excellence gain access to a premium platform for activation, hospitality, and storytelling. Every touchpoint — from the paddock to the pixel — is designed to be world-class. This is motorsport as a total experience, and it is being built right here in Indonesia.`,
+      "From track to grandstand to livestream - how Sarga is engineering an entire motorsport experience.",
+    body: `Sarga Motorsport was never conceived as just a racing team. From the earliest planning stages, the vision was broader: a 360-degree motorsport ecosystem that encompasses competition, community, culture, and commerce.\n\nThe track experience is the core. Professional-grade events across touring car, GT, superbike, and Moto2 disciplines - run to international standards with local soul. But surrounding that core is a layered experience: festival weekends with live music and food villages, fan zones with pit walks and simulators, and a broadcast operation that delivers every session to screens across the archipelago.\n\nThe partnership programme completes the circle. Brands that share Sarga's commitment to excellence gain access to a premium platform for activation, hospitality, and storytelling. Every touchpoint - from the paddock to the pixel - is designed to be world-class. This is motorsport as a total experience, and it is being built right here in Indonesia.`,
   },
   "paddock-pass-behind-the-pit-wall": {
     title: "Paddock pass: behind the pit wall",
@@ -55,7 +55,7 @@ const PLACEHOLDER_MAP: Record<string, MotorsportArticle & { body?: string }> = {
     publishedLabel: "10 Jun 2026",
     excerpt:
       "A rare look at the mechanics, engineers, and unsung heroes who make every race weekend possible.",
-    body: `For every moment of on-track glory, there are hundreds of unseen hours behind the pit wall. The mechanics who rebuild gearboxes at 2am. The data engineers who analyse telemetry through the night. The logistics teams who move tonnes of equipment across islands between rounds.\n\nThis is the story of the paddock's unsung heroes — the people who make professional motorsport possible in Indonesia. Without them, the drivers and riders could not compete. Without their precision, their dedication, and their quiet expertise, the spectacle simply does not happen.\n\nSarga Motorsport is committed to celebrating this side of the sport. From paddock tours and behind-the-scenes content to technical features that demystify the engineering, the goal is to bring fans closer to every layer of the operation. Because the real story of racing is never just what happens on the track.`,
+    body: `For every moment of on-track glory, there are hundreds of unseen hours behind the pit wall. The mechanics who rebuild gearboxes at 2am. The data engineers who analyse telemetry through the night. The logistics teams who move tonnes of equipment across islands between rounds.\n\nThis is the story of the paddock's unsung heroes - the people who make professional motorsport possible in Indonesia. Without them, the drivers and riders could not compete. Without their precision, their dedication, and their quiet expertise, the spectacle simply does not happen.\n\nSarga Motorsport is committed to celebrating this side of the sport. From paddock tours and behind-the-scenes content to technical features that demystify the engineering, the goal is to bring fans closer to every layer of the operation. Because the real story of racing is never just what happens on the track.`,
   },
 };
 
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!resolved) return { title: "Article not found" };
   const desc =
     resolved.excerpt ??
-    `${resolved.title} — Sarga Motorsport news and editorial.`;
+    `${resolved.title} - Sarga Motorsport news and editorial.`;
   const canonical = resolveSiteUrl(`/news/${slug}`);
   const socialImage = resolveSocialImageUrl(resolved.image);
   return {

@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!article) notFound();
   return createMetadata({
     title: article.title,
-    description: article.excerpt ?? `${article.title} — Sarga Horse Sport.`,
+    description: article.excerpt ?? `${article.title} - Sarga Horse Sport.`,
     path: `/news/${slug}`,
     image: article.image,
     type: "article",

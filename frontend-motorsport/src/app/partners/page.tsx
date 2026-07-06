@@ -10,7 +10,7 @@ import type { PartnerItem } from "@/types/design-system";
 export const metadata: Metadata = {
   title: "Partners",
   description:
-    "Official partners and sponsors of Sarga Motorsport — the brands fuelling Indonesia's premier racing ecosystem.",
+    "Official partners and sponsors of Sarga Motorsport - the brands fuelling Indonesia's premier racing ecosystem.",
 };
 
 const PLACEHOLDER: PartnerItem[] = [
@@ -19,7 +19,7 @@ const PLACEHOLDER: PartnerItem[] = [
     logo: "/brand/logo-sarga-motorsport-symbol-sport.png",
   },
   {
-    name: "Sarga — parent group",
+    name: "Sarga - parent group",
     logo: "/brand/logo-sarga-motorsport-part-of-sarga.png",
     href: "https://sarga.co",
   },

@@ -9,7 +9,7 @@ import { fetchEvents } from "@/lib/cms-data";
 import { siteConfig } from "@/lib/site-config";
 
 /* -------------------------------------------------------------------------- */
-/*  CMS campaign type (future-proofed — campaigns will be a Strapi collection) */
+/*  CMS campaign type (future-proofed - campaigns will be a Strapi collection) */
 /* -------------------------------------------------------------------------- */
 
 type CampaignSection = {
@@ -35,7 +35,7 @@ type Campaign = {
 };
 
 /* -------------------------------------------------------------------------- */
-/*  Fetcher — attempts CMS first, falls back to placeholder campaigns          */
+/*  Fetcher - attempts CMS first, falls back to placeholder campaigns          */
 /* -------------------------------------------------------------------------- */
 
 async function fetchCampaignBySlug(slug: string): Promise<Campaign | null> {
@@ -50,7 +50,7 @@ async function fetchCampaignBySlug(slug: string): Promise<Campaign | null> {
         "The 2026 Sarga Motorsport season kicks off with a double-header weekend of touring car and superbike action. Two disciplines. One circuit. Zero compromise.",
       heroImage: "/media/motorsport-design-hero.png",
       heroImageAlt:
-        "Touring race car throwing sparks on a dusk circuit — Season Opener 2026",
+        "Touring race car throwing sparks on a dusk circuit - Season Opener 2026",
       accentColor: "#E8192C",
       sections: [
         {
@@ -67,7 +67,7 @@ async function fetchCampaignBySlug(slug: string): Promise<Campaign | null> {
         {
           type: "body",
           headline: "Beyond the track.",
-          body: "The Season Opener is more than just racing. Fan zones, pit walks, live music, and food villages turn the circuit into a full motorsport festival. Arrive early, stay late — this is where the season begins.",
+          body: "The Season Opener is more than just racing. Fan zones, pit walks, live music, and food villages turn the circuit into a full motorsport festival. Arrive early, stay late - this is where the season begins.",
         },
       ],
     },
@@ -87,7 +87,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const campaign = await fetchCampaignBySlug(slug);
   if (!campaign) return { title: "Campaign not found" };
   return {
-    title: `${campaign.title} — ${siteConfig.name}`,
+    title: `${campaign.title} - ${siteConfig.name}`,
     description: campaign.description,
     openGraph: {
       title: campaign.title,

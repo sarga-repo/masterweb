@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
- * Sarga Horse Sport — Premium Editorial-Luxury Design System
+ * Sarga Horse Sport - Premium Editorial-Luxury Design System
  * Recalibrated for international investor-facing quality.
  *
  * Design Direction: Editorial Luxury (warm creams × deep warm darks ×
@@ -19,7 +19,7 @@
 
 @theme {
   /*
-   * ── Brand palette — LIGHT / CHEERFUL theme (approved 2026-07) ──
+   * ── Brand palette - LIGHT / CHEERFUL theme (approved 2026-07) ──
    * Mapping: Horse Sport Red #ED1C24 · Ignition Orange #FF6B00 ·
    * Pure Black #010101 · Deep Maroon #9F1C20 · Saddle Brown #763627 ·
    * Warm Cream #F7EED0 · Cool Gray #6E6F72 · Muted Equestrian Green #87B2A5.
@@ -40,13 +40,13 @@
   --color-hs-saddle: #763627; /* Saddle Brown */
   --color-hs-green: #87b2a5; /* Muted Equestrian Green */
 
-  /* Surfaces — White canvas + light-grey bands (2026-07) */
+  /* Surfaces - White canvas + light-grey bands (2026-07) */
   --color-hs-black: #ffffff; /* primary white surface */
   --color-hs-night: #aaacb0; /* grey band (slightly darker) */
   --color-hs-ink: #ffffff; /* clean paper surface */
   --color-hs-espresso: #ffffff; /* card paper surface */
 
-  /* Foreground (formerly cream) — now warm dark ink */
+  /* Foreground (formerly cream) - now warm dark ink */
   --color-hs-cream: #211a12; /* primary text / hairlines */
   --color-hs-cream-warm: #2c231a;
   --color-hs-paper: #fffdf7; /* explicit light for overlays */
@@ -93,7 +93,7 @@
 :root {
   color-scheme: light;
 
-  /* Surfaces — White canvas + light-grey bands */
+  /* Surfaces - White canvas + light-grey bands */
   --hs-surface-base: #ffffff;
   --hs-surface-page: #ffffff;
   --hs-surface-panel: #ffffff;
@@ -102,13 +102,13 @@
   --hs-surface-cream: #f6f6f7;
   --hs-surface-cream-soft: #fafafb;
 
-  /* Text — warm dark ink */
+  /* Text - warm dark ink */
   --hs-text-primary: #211a12;
   --hs-text-secondary: rgb(33 26 18 / 0.72);
   --hs-text-quiet: rgb(33 26 18 / 0.5);
   --hs-text-inverse: #fffdf7;
 
-  /* Lines — dark hairlines on light */
+  /* Lines - dark hairlines on light */
   --hs-line-dim: rgb(33 26 18 / 0.12);
   --hs-line-bright: rgb(33 26 18 / 0.24);
   --hs-line-soft: rgb(33 26 18 / 0.08);
@@ -133,13 +133,13 @@
     rgb(247 238 208 / 0.98)
   );
 
-  /* Layout rhythm — generous breathing room */
+  /* Layout rhythm - generous breathing room */
   --hs-page-gutter: clamp(1.5rem, 5vw, 5rem);
   --hs-section-gap: clamp(4.5rem, 8vw, 8.5rem);
   --hs-section-gap-tight: clamp(3rem, 5.5vw, 5.5rem);
   --hs-header-height: 5.5rem;
 
-  /* Radius — sharp, modern, architectural */
+  /* Radius - sharp, modern, architectural */
   --radius-hs-xs: 0.25rem;
   --radius-hs-sm: 0.375rem;
   --radius-hs-md: 0.5rem;
@@ -187,7 +187,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Global film grain overlay — editorial luxury texture */
+/* Global film grain overlay - editorial luxury texture */
 body::after {
   content: "";
   position: fixed;
@@ -316,7 +316,7 @@ body::after {
 
 /*
  * Outer shell: subtle gradient border ring + ambient shadow.
- * Inner core: distinct surface with inner highlight — like a glass plate
+ * Inner core: distinct surface with inner highlight - like a glass plate
  * seated in a machined aluminium tray.
  */
 
@@ -406,7 +406,7 @@ body::after {
   box-shadow: var(--shadow-hs-subtle);
 }
 
-/* ── Card surface — clean warm paper on the light theme ── */
+/* ── Card surface - clean warm paper on the light theme ── */
 .hs-card-glass {
   /* White cards keep dark text even inside a dark band (reset the flipped
      tokens so text-hs-cream/* stay dark on the paper surface). */
@@ -463,7 +463,7 @@ body::after {
   border-radius: var(--radius-hs-pill);
 }
 
-/* Primary CTA — "Button-in-Button" trailing icon pattern */
+/* Primary CTA - "Button-in-Button" trailing icon pattern */
 .hs-cta-primary {
   display: inline-flex;
   align-items: center;
@@ -512,7 +512,7 @@ body::after {
   background: rgb(255 255 255 / 0.2);
 }
 
-/* Secondary CTA — outline pill */
+/* Secondary CTA - outline pill */
 .hs-cta-secondary {
   display: inline-flex;
   align-items: center;
@@ -593,7 +593,7 @@ body::after {
     var(--shadow-hs-ambient);
 }
 
-/* ── Luxe rule — brand-colored horizontal divider ── */
+/* ── Luxe rule - brand-colored horizontal divider ── */
 .hs-luxe-rule {
   height: 1px;
   background: linear-gradient(
@@ -608,7 +608,7 @@ body::after {
   opacity: 0.7;
 }
 
-/* ── Full-width section divider — solid brand gradient, edge-to-edge ── */
+/* ── Full-width section divider - solid brand gradient, edge-to-edge ── */
 .hs-divider-full {
   height: 1px;
   width: 100%;
@@ -621,7 +621,7 @@ body::after {
   opacity: 0.7;
 }
 
-/* ── Clean section divider — simple gradient line with breathing room ── */
+/* ── Clean section divider - simple gradient line with breathing room ── */
 .hs-section-divider {
   padding-block: clamp(2rem, 5vw, 4rem);
 }
@@ -673,7 +673,7 @@ body::after {
   );
 }
 
-/* ── Stat callout — oversized number for credibility blocks ── */
+/* ── Stat callout - oversized number for credibility blocks ── */
 .hs-stat-number {
   font-family: var(--font-display);
   font-weight: 800;
@@ -768,8 +768,8 @@ body::after {
 }
 
 /* ── Charcoal section (lifted warm-grey band; subtle tonal shift from the
-   near-black page — used for editorial rhythm instead of high-contrast cream) ── */
-/* Dark editorial band — warm charcoal with a clear dotted grid (matches the
+   near-black page - used for editorial rhythm instead of high-contrast cream) ── */
+/* Dark editorial band - warm charcoal with a clear dotted grid (matches the
    footer / Motorsport). Text tokens flip to light within this scope; white
    cards reset them back to dark (see .hs-card-glass below). */
 .hs-charcoal-section {
@@ -806,14 +806,14 @@ body::after {
   );
 }
 
-/* ── Brand zigzag/staircase pattern (page-7 motif) — orange stepped squares
+/* ── Brand zigzag/staircase pattern (page-7 motif) - orange stepped squares
    tiling into a continuous diagonal staircase. Used as a decorative marker. ── */
 .hs-zigzag-pattern {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Crect x='0' y='20' width='10' height='10' fill='%23FF6B00'/%3E%3Crect x='10' y='10' width='10' height='10' fill='%23FF6B00'/%3E%3Crect x='20' y='0' width='10' height='10' fill='%23FF6B00'/%3E%3C/svg%3E");
   background-size: 1.35rem 1.35rem;
 }
 
-/* ── Dark footer panel — warm charcoal with a clear dotted grid (matches the
+/* ── Dark footer panel - warm charcoal with a clear dotted grid (matches the
    Motorsport footer). Text tokens are flipped to light within this scope. ── */
 .hs-dark-panel-glow {
   position: relative;

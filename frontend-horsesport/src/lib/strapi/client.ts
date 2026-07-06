@@ -2,7 +2,7 @@
  * Lightweight Strapi REST client for the Sarga Horse Sport frontend.
  *
  * Queries the shared CMS (siteScope = "horsesport" | "shared") and returns
- * typed results. Every call is wrapped in a try/catch so pages always render —
+ * typed results. Every call is wrapped in a try/catch so pages always render -
  * falling back to curated placeholder content when the API is unreachable
  * (local dev without Strapi, CI, etc.).
  */

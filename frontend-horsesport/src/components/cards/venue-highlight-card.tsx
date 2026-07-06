@@ -4,7 +4,7 @@ import { ArrowRightIcon } from "@/components/ui/icons";
 import { PinIcon } from "@/components/ui/hs-icons";
 import type { VenueCardData } from "@/types/design-system";
 
-/** Tall cinematic venue card — immersive 3:4 crop with warm gradient overlay. Double-Bezel architecture. */
+/** Tall cinematic venue card - immersive 3:4 crop with warm gradient overlay. Double-Bezel architecture. */
 export function VenueHighlightCard({ venue }: { venue: VenueCardData }) {
   const Wrapper = venue.href ? Link : "div";
   const wrapperProps = venue.href ? { href: venue.href } : {};

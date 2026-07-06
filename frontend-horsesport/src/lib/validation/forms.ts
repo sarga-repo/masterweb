@@ -19,7 +19,7 @@ const antiSpamFields = {
   recaptchaToken: optionalText(4096),
 };
 
-/** Horse Sport inquiry desks (docs/horsesport/05 — contact / inquiry forms). */
+/** Horse Sport inquiry desks (docs/horsesport/05 - contact / inquiry forms). */
 export const inquiryTypes = [
   "ticketing",
   "partnership",

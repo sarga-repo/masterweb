@@ -42,21 +42,27 @@ export default async function Homepage() {
   return (
     <>
       {/* ================================================================ */}
-      {/*  HERO — Full-bleed cinematic race-day opener                       */}
+      {/*  HERO - Full-bleed cinematic race-day opener                       */}
       {/* ================================================================ */}
       <HeroRaceSection
         eyebrow="Sarga Horse Sport"
         title={data.featuredEvent?.title ?? "Where champions are made."}
         description={
           data.featuredEvent
-            ? `${data.featuredEvent.venue ?? ""} — ${data.featuredEvent.dateLabel ?? ""}`.replace(
-                /^ — /,
+            ? `${data.featuredEvent.venue ?? ""} - ${data.featuredEvent.dateLabel ?? ""}`.replace(
+                /^ - /,
                 "",
               )
             : "Championship equestrian sport, premium hospitality, and race-day experiences at international standard."
         }
         image="/media/horse-sport-hero.png"
         imageAlt="Jockeys racing thoroughbreds across a championship turf track at golden hour"
+        video={{
+          webm: "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.webm",
+          mp4: "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.mp4",
+          poster: "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.png",
+          objectClassName: "object-cover object-center",
+        }}
         primaryCta={
           data.featuredEvent
             ? { label: "View race day", href: data.featuredEvent.href }
@@ -73,7 +79,7 @@ export default async function Homepage() {
       />
 
       {/* ================================================================ */}
-      {/*  ABOUT — Editorial brand statement with warm scrim                */}
+      {/*  ABOUT - Editorial brand statement with warm scrim                */}
       {/* ================================================================ */}
       <section className="hs-section relative overflow-hidden">
         <div
@@ -138,7 +144,7 @@ export default async function Homepage() {
                   </div>
                 ) : null}
 
-                {/* Simple line-divided points — consistent with the hero stat rail */}
+                {/* Simple line-divided points - consistent with the hero stat rail */}
                 <div className="mt-8 border-t border-hs-cream/14">
                   {[
                     "National-scale race calendar",
@@ -165,7 +171,7 @@ export default async function Homepage() {
       </section>
 
       {/* ================================================================ */}
-      {/*  MANIFESTO — Spacious editorial statement (investor tone)         */}
+      {/*  MANIFESTO - Spacious editorial statement (investor tone)         */}
       {/* ================================================================ */}
       <section className="hs-section-tight relative overflow-hidden">
         <div className="hs-shell relative">
@@ -189,7 +195,7 @@ export default async function Homepage() {
       </section>
 
       {/* ================================================================ */}
-      {/*  SEASON EVENTS — Premium race-day card grid                       */}
+      {/*  SEASON EVENTS - Premium race-day card grid                       */}
       {/* ================================================================ */}
       <section className="hs-section relative overflow-hidden">
         <div
@@ -206,7 +212,7 @@ export default async function Homepage() {
                 index="02"
                 eyebrow="Season calendar"
                 title="Championship race days."
-                description="Curated events across derby, turf, and exhibition disciplines — each a destination for discerning spectators and stakeholders."
+                description="Curated events across derby, turf, and exhibition disciplines - each a destination for discerning spectators and stakeholders."
               />
               <div className="hidden border-l border-hs-orange/40 pl-5 xl:block">
                 <p className="hs-kicker text-hs-orange">2026 outlook</p>
@@ -242,7 +248,7 @@ export default async function Homepage() {
       </section>
 
       {/* ================================================================ */}
-      {/*  TICKET CTA — Ticket-stub capsule (sits close to the events grid) */}
+      {/*  TICKET CTA - Ticket-stub capsule (sits close to the events grid) */}
       {/* ================================================================ */}
       {data.ticketCta ? (
         <section className="hs-shell pb-(--hs-section-gap)">
@@ -260,7 +266,7 @@ export default async function Homepage() {
       ) : null}
 
       {/* ================================================================ */}
-      {/*  NEWS — Warm charcoal editorial band (subtle tonal rhythm)        */}
+      {/*  NEWS - Warm charcoal editorial band (subtle tonal rhythm)        */}
       {/* ================================================================ */}
       <section className="hs-charcoal-section hs-section relative overflow-hidden">
         <div aria-hidden className="hs-luxe-rule absolute inset-x-0 top-0 opacity-50" />
@@ -303,7 +309,7 @@ export default async function Homepage() {
       </section>
 
       {/* ================================================================ */}
-      {/*  GALLERY — Asymmetrical Bento mosaic                              */}
+      {/*  GALLERY - Asymmetrical Bento mosaic                              */}
       {/* ================================================================ */}
       {data.gallery.length > 0 ? (
         <section className="hs-section relative overflow-hidden">
@@ -314,7 +320,7 @@ export default async function Homepage() {
                   index="04"
                   eyebrow="Gallery"
                   title="Moments from the turf."
-                  description="A curated visual journey through race days, venues, and stable life — captured with an editorial lens."
+                  description="A curated visual journey through race days, venues, and stable life - captured with an editorial lens."
                 />
                 <div className="hidden border-l border-hs-orange/40 pl-5 xl:block">
                   <p className="hs-kicker text-hs-orange">Visual archive</p>
@@ -346,7 +352,7 @@ export default async function Homepage() {
       ) : null}
 
       {/* ================================================================ */}
-      {/*  NEWSLETTER + PARTNERS + ECOSYSTEM — one warm charcoal band       */}
+      {/*  NEWSLETTER + PARTNERS + ECOSYSTEM - one warm charcoal band       */}
       {/* ================================================================ */}
       <section className="hs-charcoal-section hs-section-tight relative overflow-hidden">
         <div aria-hidden className="hs-luxe-rule absolute inset-x-0 top-0 opacity-50" />
@@ -370,7 +376,7 @@ export default async function Homepage() {
                   {
                     ...GATEWAY_LINK,
                     label: "Sarga.co",
-                    description: "The group gateway — corporate & investor portal.",
+                    description: "The group gateway - corporate & investor portal.",
                     logo: "/media/logo-sarga-gateway-light.png",
                   },
                   {

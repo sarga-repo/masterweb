@@ -58,7 +58,7 @@ export function DottedMark({ className, ...props }: MarkProps) {
 }
 
 /**
- * Descending staircase of rounded orange steps — the page-7 staircase motif as
+ * Descending staircase of rounded orange steps - the page-7 staircase motif as
  * a discrete accent (dividers, corners, eyebrows). Tune count via `steps`.
  */
 export function StaircaseMark({

@@ -1,5 +1,5 @@
 /**
- * Horse Sport homepage data — CMS-first with curated placeholder fallbacks.
+ * Horse Sport homepage data - CMS-first with curated placeholder fallbacks.
  *
  * Loads live content from the shared Strapi CMS scoped to Horse Sport
  * (siteScope = horsesport | shared, primary business = sarga-horse-sport). When
@@ -137,7 +137,7 @@ function mapEvent(
     discipline: titleCase(entry.eventDiscipline),
     status: statusLabel(entry.eventStatus),
     image: mediaUrl(img?.url) || undefined,
-    imageAlt: img?.alternativeText ?? `${entry.title} — Sarga Horse Sport`,
+    imageAlt: img?.alternativeText ?? `${entry.title} - Sarga Horse Sport`,
   };
 }
 
@@ -152,7 +152,7 @@ function mapArticle(
     dateLabel: formatDate(entry.publishedDate),
     excerpt: entry.excerpt ?? undefined,
     image: mediaUrl(img?.url) || undefined,
-    imageAlt: img?.alternativeText ?? `${entry.title} — Sarga Horse Sport`,
+    imageAlt: img?.alternativeText ?? `${entry.title} - Sarga Horse Sport`,
   };
 }
 
@@ -172,7 +172,7 @@ function mapPartner(
 
 const PLACEHOLDER_EVENTS: EventCardData[] = [
   {
-    title: "Sarga National Derby — Merdeka Cup",
+    title: "Sarga National Derby - Merdeka Cup",
     href: "/events/sarga-national-derby-merdeka-cup",
     dateLabel: "17 Aug 2026",
     venue: "Sarga Turf Park",
@@ -321,13 +321,13 @@ const PLACEHOLDER_TICKET = {
   provider: "Partner Ticketing",
   href: "/tickets",
   label: "Get tickets",
-  eventName: "Sarga National Derby — Merdeka Cup",
+  eventName: "Sarga National Derby - Merdeka Cup",
   external: false,
 };
 
 const DEFAULT_ABOUT = {
   title: "A dedicated home for Indonesian horse sport.",
-  body: "Sarga Horse Sport brings championship racing, disciplined equestrian standards, and race-day hospitality into one premium sports ecosystem — an investable, international-class platform for the sport's next chapter.",
+  body: "Sarga Horse Sport brings championship racing, disciplined equestrian standards, and race-day hospitality into one premium sports ecosystem - an investable, international-class platform for the sport's next chapter.",
 };
 
 /* -------------------------------------------------------------------------- */
@@ -415,13 +415,13 @@ export async function fetchHomepageData(): Promise<HomepageData> {
   const cmsPartners = (partnersRes?.data ?? []).map(mapPartner);
   const partners = cmsPartners.length > 0 ? cmsPartners : PLACEHOLDER_PARTNERS;
 
-  /* Gallery — flatten media items across galleries */
+  /* Gallery - flatten media items across galleries */
   const cmsGallery: GalleryItemData[] = (galleriesRes?.data ?? []).flatMap(
     (entry) =>
       (entry.mediaItems ?? []).map((img, i) => ({
         id: `cms-${entry.id}-${i}`,
         image: mediaUrl(img.url),
-        imageAlt: img.alternativeText ?? `${entry.title} — Sarga Horse Sport`,
+        imageAlt: img.alternativeText ?? `${entry.title} - Sarga Horse Sport`,
         category: titleCase(entry.category?.replace(/-/g, " ")),
       })),
   );

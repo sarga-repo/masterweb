@@ -40,14 +40,14 @@ export default async function AboutPage() {
   const business = await fetchHorseSportBusiness();
   const overview =
     business?.overview ??
-    "Sarga Horse Sport formulates premium national race classifications, elite jockey programs, and strict veterinary compliance protocols across Indonesian horse sport. It is built as a complete, investable championship ecosystem — from the turf to the stable to the grandstand.";
+    "Sarga Horse Sport formulates premium national race classifications, elite jockey programs, and strict veterinary compliance protocols across Indonesian horse sport. It is built as a complete, investable championship ecosystem - from the turf to the stable to the grandstand.";
 
   return (
     <>
       <PageHero
         eyebrow="About"
         title="The standard for elite horse sport."
-        description="Premium championship racing, disciplined equestrian standards, and a hospitality-forward experience — positioned for a national and international audience."
+        description="Premium championship racing, disciplined equestrian standards, and a hospitality-forward experience - positioned for a national and international audience."
         backgroundImage="/media/sarga-horse-sport-concept.png"
         backgroundAlt="Cinematic concept image of a jockey and thoroughbred in motion"
         accent="brown"
@@ -83,7 +83,7 @@ export default async function AboutPage() {
               index="02"
               eyebrow="What we do"
               title="A complete championship capability."
-              description="Everything required to run elite horse sport to international standard — under one disciplined organisation."
+              description="Everything required to run elite horse sport to international standard - under one disciplined organisation."
             />
           </ScrollReveal>
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRightIcon } from "@/components/ui/icons";
 
 /**
- * 404 — "Off Track"
+ * 404 - "Off Track"
  * Premium not-found page for Sarga Motorsport.
  * Uses brand colours, dot-pattern texture, grain, speed lines, and cinematic
  * typography to deliver a motorsport-flavoured dead-end that still feels
@@ -20,7 +20,7 @@ export default function NotFound() {
         className="ms-track-grid absolute inset-0 opacity-20"
       />
 
-      {/* Crimson radial bloom — top-right */}
+      {/* Crimson radial bloom - top-right */}
       <div
         aria-hidden="true"
         className="absolute inset-0"
@@ -30,7 +30,7 @@ export default function NotFound() {
         }}
       />
 
-      {/* Teal counter-glow — bottom-left */}
+      {/* Teal counter-glow - bottom-left */}
       <div
         aria-hidden="true"
         className="absolute inset-0"
@@ -59,7 +59,7 @@ export default function NotFound() {
       {/* ── Content ──────────────────────────────────────────────────── */}
       <div className="ms-shell relative z-10 py-24 sm:py-32">
         {/* Error code */}
-        <p className="ms-kicker text-ms-apex-crimson">404 — Off track</p>
+        <p className="ms-kicker text-ms-apex-crimson">404 - Off track</p>
 
         {/* Giant number */}
         <h1

@@ -10,7 +10,7 @@ type CtaBandProps = {
 };
 
 /**
- * Full-width closing CTA band — warm charcoal surface + brand rule + capsule
+ * Full-width closing CTA band - warm charcoal surface + brand rule + capsule
  * CTAs. Replaces the old cream CTA panels for consistency with the homepage.
  */
 export function CtaBand({

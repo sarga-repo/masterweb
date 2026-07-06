@@ -5,7 +5,7 @@ import { ArrowRightIcon } from "@/components/ui/icons";
 import type { ArticleCardData } from "@/types/design-system";
 
 /**
- * Editorial stable-life card on a warm cream surface — the light/heritage
+ * Editorial stable-life card on a warm cream surface - the light/heritage
  * counterpoint to the dark cinematic cards.
  */
 export function StableLifeCard({ item }: { item: ArticleCardData }) {

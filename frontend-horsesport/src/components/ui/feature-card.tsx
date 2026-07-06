@@ -7,7 +7,7 @@ type FeatureCardProps = {
 };
 
 /**
- * Clean feature/capability card — a single glass surface with an inline brand
+ * Clean feature/capability card - a single glass surface with an inline brand
  * icon (no nested icon box), title, and body. Consistent with the refined
  * "no box-in-box" homepage language.
  */

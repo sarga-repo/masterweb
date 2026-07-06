@@ -42,7 +42,7 @@ type PageShellProps = {
 };
 
 /**
- * Shared page wrapper — provides consistent header, footer, and metadata
+ * Shared page wrapper - provides consistent header, footer, and metadata
  * chrome across all Motorsport routes.
  */
 export function PageShell({ children }: PageShellProps) {

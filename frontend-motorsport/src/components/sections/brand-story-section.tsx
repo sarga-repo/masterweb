@@ -85,7 +85,7 @@ export function BrandStorySection({
             ) : null}
           </div>
 
-          {/* Image column — slanted premium crop */}
+          {/* Image column - slanted premium crop */}
           <div className="relative hidden lg:block">
             <div className="ms-slant relative aspect-[3/4] w-full overflow-hidden">
               <Image

@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     title: event.title,
     description:
       event.description?.slice(0, 155) ??
-      `${event.title} — Sarga Horse Sport event.`,
+      `${event.title} - Sarga Horse Sport event.`,
     path: `/events/${slug}`,
     image: event.image,
     type: "article",

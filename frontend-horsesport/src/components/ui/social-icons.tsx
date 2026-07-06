@@ -2,7 +2,7 @@ import type { SVGProps } from "react";
 
 type IconProps = SVGProps<SVGSVGElement>;
 
-/** Monochrome social brand marks (currentColor). Decorative — pair with an
+/** Monochrome social brand marks (currentColor). Decorative - pair with an
  *  aria-label on the wrapping link. */
 
 export function InstagramIcon(props: IconProps) {

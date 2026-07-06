@@ -38,7 +38,7 @@ function scopeFilters(): Record<string, string> {
 /**
  * Restrict to content whose primary business is Sarga Horse Sport.
  * Events use the single `business` relation; news uses the many-to-many
- * `relatedBusinesses` relation — hence the field argument.
+ * `relatedBusinesses` relation - hence the field argument.
  */
 function businessFilter(
   relation: "business" | "relatedBusinesses" = "business",

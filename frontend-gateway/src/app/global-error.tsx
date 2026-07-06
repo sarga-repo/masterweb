@@ -5,7 +5,7 @@
  * Catches errors that bubble up from the root `layout.tsx` itself.
  * Must include its own <html>/<body> and be a Client Component.
  *
- * Design: minimal dark screen — the global-error page should never
+ * Design: minimal dark screen - the global-error page should never
  * compete with the main site visually but should still feel on-brand.
  */
 export default function GlobalError({

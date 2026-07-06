@@ -15,7 +15,7 @@ type HorseSportHeaderProps = {
 };
 
 /**
- * Premium floating glass island header — Editorial Luxury direction.
+ * Premium floating glass island header - Editorial Luxury direction.
  *
  * Detached pill-shaped container with heavy backdrop-blur, suspended from the
  * top of the viewport. Desktop: logo left, nav center, CTA right.
@@ -63,7 +63,7 @@ export function HorseSportHeader({
           aria-label="Primary navigation"
         >
           {/* Logo */}
-          <Link href="/" className="shrink-0" aria-label="Sarga Horse Sport — Home">
+          <Link href="/" className="shrink-0" aria-label="Sarga Horse Sport - Home">
             <HorseSportLogo variant="black" className="w-[clamp(8rem,13vw,11rem)]" priority />
           </Link>
 
@@ -106,7 +106,7 @@ export function HorseSportHeader({
               </span>
             </Link>
 
-            {/* Hamburger — morphs to X */}
+            {/* Hamburger - morphs to X */}
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
@@ -152,7 +152,7 @@ export function HorseSportHeader({
         {/* Spacer for the floating header height */}
         <div className="h-24 shrink-0" />
 
-        {/* Nav links — staggered reveal */}
+        {/* Nav links - staggered reveal */}
         <nav className="flex flex-1 flex-col items-center justify-center gap-1 px-6" aria-label="Mobile navigation">
           {navigation.map((link, i) => (
             <Link

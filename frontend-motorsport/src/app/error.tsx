@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRightIcon } from "@/components/ui/icons";
 
 /**
- * 500 — "Mechanical Failure"
+ * 500 - "Mechanical Failure"
  * Premium error boundary for Sarga Motorsport.
  * Next.js requires `error.tsx` to be a Client Component.
  * Shows a "try again" button that calls `reset()` to re-render the route.
@@ -27,7 +27,7 @@ export default function Error({
         className="ms-track-grid absolute inset-0 opacity-20"
       />
 
-      {/* Orange radial bloom — top-left */}
+      {/* Orange radial bloom - top-left */}
       <div
         aria-hidden="true"
         className="absolute inset-0"
@@ -37,7 +37,7 @@ export default function Error({
         }}
       />
 
-      {/* Crimson counter-glow — bottom-right */}
+      {/* Crimson counter-glow - bottom-right */}
       <div
         aria-hidden="true"
         className="absolute inset-0"
@@ -67,7 +67,7 @@ export default function Error({
       <div className="ms-shell relative z-10 py-24 sm:py-32">
         {/* Error code */}
         <p className="ms-kicker text-ms-ignition-orange">
-          500 — Mechanical failure
+          500 - Mechanical failure
         </p>
 
         {/* Giant number */}
@@ -88,7 +88,7 @@ export default function Error({
         <p className="mt-8 max-w-xl text-base leading-8 text-ms-warm-white/55">
           Something unexpected happened in the pit lane. Our engineers have been
           alerted and are working to get things back on the grid. This is a
-          temporary setback — the race goes on.
+          temporary setback - the race goes on.
         </p>
 
         {/* Error digest (dev aid) */}

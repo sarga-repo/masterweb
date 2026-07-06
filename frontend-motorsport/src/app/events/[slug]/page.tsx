@@ -32,7 +32,7 @@ const PLACEHOLDER_MAP: Record<string, MotorsportEvent & { description?: string }
     seriesName: "Sarga Motorsport Series",
     ticketHref: "/tickets",
     description:
-      "The flagship Sarga Motorsport weekend — touring cars, GT machinery, and a full festival programme across three days at Sentul International Circuit. Expect world-class racing, immersive fan zones, and the debut of Sarga’s signature race-weekend experience.",
+      "The flagship Sarga Motorsport weekend - touring cars, GT machinery, and a full festival programme across three days at Sentul International Circuit. Expect world-class racing, immersive fan zones, and the debut of Sarga’s signature race-weekend experience.",
   },
   "superbike-night-sessions": {
     title: "Superbike Night Sessions",
@@ -45,7 +45,7 @@ const PLACEHOLDER_MAP: Record<string, MotorsportEvent & { description?: string }
     category: "Superbike",
     seriesName: "Sarga Motorcycle Series",
     description:
-      "Under the floodlights at Mandalika, Indonesia’s fastest superbike riders push machinery to the limit. A one-day, high-intensity programme of qualifying, sprint, and feature races — all under the night sky.",
+      "Under the floodlights at Mandalika, Indonesia’s fastest superbike riders push machinery to the limit. A one-day, high-intensity programme of qualifying, sprint, and feature races - all under the night sky.",
   },
   "gt-endurance-challenge": {
     title: "GT Endurance Challenge",
@@ -72,7 +72,7 @@ const PLACEHOLDER_MAP: Record<string, MotorsportEvent & { description?: string }
     seriesName: "Sarga Motorcycle Series",
     ticketHref: "/tickets",
     description:
-      "The season finale doubles as a full festival weekend — Moto2 racing, live music, food villages, and a celebration of the entire Sarga community. Two-wheeled action meets lifestyle culture at Mandalika.",
+      "The season finale doubles as a full festival weekend - Moto2 racing, live music, food villages, and a celebration of the entire Sarga community. Two-wheeled action meets lifestyle culture at Mandalika.",
   },
 };
 
@@ -82,7 +82,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fallback = PLACEHOLDER_MAP[slug];
   const resolved = event ?? fallback;
   if (!resolved) return { title: "Event not found" };
-  const desc = `${resolved.title} — ${resolved.dateLabel} at ${resolved.venue}. Sarga Motorsport event.`;
+  const desc = `${resolved.title} - ${resolved.dateLabel} at ${resolved.venue}. Sarga Motorsport event.`;
   const canonical = resolveSiteUrl(`/events/${slug}`);
   const socialImage = resolveSocialImageUrl(resolved.image);
   return {

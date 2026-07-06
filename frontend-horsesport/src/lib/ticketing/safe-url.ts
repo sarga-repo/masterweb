@@ -1,5 +1,5 @@
 /**
- * Ticket URL safety. Sarga never runs an internal checkout — every ticket link
+ * Ticket URL safety. Sarga never runs an internal checkout - every ticket link
  * is a partner redirect, an approved deep link, or (only when explicitly
  * allowlisted) an embed. These helpers gate each mode so a compromised or
  * mistyped CMS value can't produce a `javascript:` link or an untrusted iframe.

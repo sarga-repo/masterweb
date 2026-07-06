@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { ArrowRightIcon } from "@/components/ui/icons";
 
-/** 404 — off the pace. Nested within the shared header/footer chrome. */
+/** 404 - off the pace. Nested within the shared header/footer chrome. */
 export default function NotFound() {
   return (
     <section className="hs-grain relative isolate flex min-h-[70vh] items-center overflow-hidden bg-hs-black">
@@ -17,7 +17,7 @@ export default function NotFound() {
       <div aria-hidden className="hs-shimmer absolute inset-x-0 bottom-0 h-px" />
 
       <div className="hs-shell relative z-10 py-24 sm:py-32">
-        <p className="hs-kicker text-hs-red">404 — Off the pace</p>
+        <p className="hs-kicker text-hs-red">404 - Off the pace</p>
         <h1
           aria-hidden
           className="hs-display mt-6 select-none text-[clamp(7rem,20vw,16rem)] leading-[0.82]"

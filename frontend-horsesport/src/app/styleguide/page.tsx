@@ -51,7 +51,7 @@ export const metadata: Metadata = {
 
 const EVENTS: EventCardData[] = [
   {
-    title: "Sarga National Derby — Merdeka Cup",
+    title: "Sarga National Derby - Merdeka Cup",
     href: "/events/sarga-national-derby-merdeka-cup",
     dateLabel: "17 Aug 2026",
     venue: "Sarga Turf Park",
@@ -205,7 +205,7 @@ export default function StyleguidePage() {
       <HeroRaceSection
         eyebrow="Design system · HS-4"
         title="The Horse Sport component library."
-        description="Premium, cinematic, equestrian — a rounded 'strong but flexible' system distinct from gateway and motorsport, with a custom icon pack and the page-7 staircase motif."
+        description="Premium, cinematic, equestrian - a rounded 'strong but flexible' system distinct from gateway and motorsport, with a custom icon pack and the page-7 staircase motif."
         image="/media/horse-sport-hero.png"
         imageAlt="Jockeys racing across a championship turf track"
         primaryCta={{ label: "View components", href: "#components" }}
@@ -322,7 +322,7 @@ export default function StyleguidePage() {
 
       <NewsletterBand
         title="Never miss a race day."
-        description="Race weekend alerts, ticket drops, and stable-side stories — straight to your inbox."
+        description="Race weekend alerts, ticket drops, and stable-side stories - straight to your inbox."
       />
 
       <CrossSiteEcosystemLinks

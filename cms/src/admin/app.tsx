@@ -130,14 +130,14 @@ export default {
 
       dark: {
         colors: {
-          // Primary: Sarga Red / Orange — glow brighter on dark
+          // Primary: Sarga Red / Orange - glow brighter on dark
           primary100: "#2a1513",
           primary200: "#3d1a16",
           primary500: "#e2321e",
           primary600: "#ff5032",
           primary700: "#f4c3bd",
 
-          // Secondary: Sarga Gold — warmer on dark
+          // Secondary: Sarga Gold - warmer on dark
           secondary100: "#2a2415",
           secondary200: "#3d3318",
           secondary500: "#d9a441",
@@ -158,7 +158,7 @@ export default {
           neutral900: "#000b1d",
           neutral1000: "#000000",
 
-          // Semantic colors — dark variants
+          // Semantic colors - dark variants
           success100: "#1a2e1a",
           success200: "#234623",
           success500: "#3da63d",

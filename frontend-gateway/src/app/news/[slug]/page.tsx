@@ -75,8 +75,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         description={article.excerpt}
         image={article.coverImage}
         meta={[
-          `Published — ${article.publishedDate}`,
-          article.author ? `By — ${article.author}` : "Sarga editorial desk",
+          `Published - ${article.publishedDate}`,
+          article.author ? `By - ${article.author}` : "Sarga editorial desk",
         ]}
       />
 

@@ -7,7 +7,7 @@ type PartnerLogoStripProps = {
 };
 
 /**
- * Simple partner strip — a small label + a clean row of partner logos/names,
+ * Simple partner strip - a small label + a clean row of partner logos/names,
  * no cards or monogram boxes (motorsport-style). Renders bare content so it can
  * sit inside any section band.
  */

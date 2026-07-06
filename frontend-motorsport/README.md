@@ -24,8 +24,8 @@ pnpm dev                          # → http://localhost:3001
 
 Environment (`.env.local`, gitignored):
 
-- `STRAPI_API_URL` / `NEXT_PUBLIC_STRAPI_API_URL` — shared CMS base URLs
-- `STRAPI_API_TOKEN` — server-only read token (blank locally; seed grants public read)
+- `STRAPI_API_URL` / `NEXT_PUBLIC_STRAPI_API_URL` - shared CMS base URLs
+- `STRAPI_API_TOKEN` - server-only read token (blank locally; seed grants public read)
 - `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GATEWAY_SITE_URL`, `NEXT_PUBLIC_SITE_KEY`
 
 For production sharing previews (WhatsApp, LinkedIn, X, etc.), set
@@ -40,6 +40,6 @@ canonical URLs resolve correctly.
 
 ## Brand
 
-Follows the Sarga Motorsport brand playbook — a distinct premium, dark, kinetic
+Follows the Sarga Motorsport brand playbook - a distinct premium, dark, kinetic
 visual system, **not** the Sarga.co gateway design. See `docs/motorsport/` and
 `.agents/skills/`. Logos live in `public/brand/`.

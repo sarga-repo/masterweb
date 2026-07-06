@@ -1,14 +1,14 @@
-# Sarga Website — Multisite Gateway, Motorsport, and Horse Sport
+# Sarga Website - Multisite Gateway, Motorsport, and Horse Sport
 
-Single-repository multisite web platform for the **Sarga** ecosystem — a group gateway, dedicated motorsport site, and dedicated horse sport site, powered by one shared Strapi CMS.
+Single-repository multisite web platform for the **Sarga** ecosystem - a group gateway, dedicated motorsport site, and dedicated horse sport site, powered by one shared Strapi CMS.
 
 ## Architecture
 
 ```text
 sarga-website/
-├── frontend-gateway/       # Sarga.co — group gateway (Next.js, port 3000)
-├── frontend-motorsport/    # motorsport.sarga.co — dedicated motorsport site (Next.js, port 3001)
-├── frontend-horsesport/    # horsesport.sarga.co — dedicated horse sport site (Next.js, port 3002)
+├── frontend-gateway/       # Sarga.co - group gateway (Next.js, port 3000)
+├── frontend-motorsport/    # motorsport.sarga.co - dedicated motorsport site (Next.js, port 3001)
+├── frontend-horsesport/    # horsesport.sarga.co - dedicated horse sport site (Next.js, port 3002)
 ├── cms/                    # Shared Strapi CMS (port 1337)
 ├── docker-compose.yml      # PostgreSQL + optional containerized apps
 ├── docker/                 # Dockerfiles for each service
@@ -160,7 +160,7 @@ NEXT_PUBLIC_GATEWAY_SITE_URL=http://localhost:3000
 NEXT_PUBLIC_MOTORSPORT_SITE_URL=http://localhost:3001
 NEXT_PUBLIC_SITE_KEY=horsesport
 
-# Optional (safe defaults if unset) — see docs/horsesport/08 for production values
+# Optional (safe defaults if unset) - see docs/horsesport/08 for production values
 FORM_SUBMISSION_MODE=placeholder   # non-placeholder value persists inquiries to Strapi
 RECAPTCHA_SITE_KEY=                 # enables reCAPTCHA when paired with the secret
 RECAPTCHA_SECRET_KEY=              # server-side reCAPTCHA verification (secret)

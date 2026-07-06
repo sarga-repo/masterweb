@@ -48,7 +48,7 @@ const SITES = [
     name: 'Sarga Gateway',
     slug: 'sarga-gateway',
     baseUrl: 'http://localhost:3000',
-    description: 'Sarga.co group gateway — the corporate ecosystem entry point.',
+    description: 'Sarga.co group gateway - the corporate ecosystem entry point.',
     themeKey: 'gateway',
     isActive: true,
   },
@@ -313,7 +313,7 @@ const MOTORSPORT_PARTNERS = [
 
 const MOTORSPORT_EVENTS = [
   {
-    title: 'Sarga Grand Prix — Night Race',
+    title: 'Sarga Grand Prix - Night Race',
     slug: 'sarga-grand-prix-night-race',
     description:
       'The headline round of the Sarga Touring Cup under floodlights: qualifying heat, support races, and a full night-race spectacle.',
@@ -375,7 +375,7 @@ const MOTORSPORT_EVENTS = [
     title: 'Moto Festival Weekend',
     slug: 'moto-festival-weekend',
     description:
-      'A full weekend of motorcycle racing culture — Moto2 support races, stunt shows, paddock access, and live music stages.',
+      'A full weekend of motorcycle racing culture - Moto2 support races, stunt shows, paddock access, and live music stages.',
     eventDate: '2026-12-13T08:00:00.000Z',
     endDate: '2026-12-14T22:00:00.000Z',
     venue: 'Mandalika International Street Circuit',
@@ -394,7 +394,7 @@ const MOTORSPORT_EVENTS = [
 
 const MOTORSPORT_TICKET_CTAS = [
   {
-    title: 'Sarga Grand Prix — Night Race Tickets',
+    title: 'Sarga Grand Prix - Night Race Tickets',
     label: 'Buy Tickets',
     provider: 'Partner Ticketing',
     ctaType: 'redirect',
@@ -432,8 +432,8 @@ const MOTORSPORT_NEWS = [
     title: 'The Line Between Control and Chaos',
     slug: 'the-line-between-control-and-chaos',
     excerpt:
-      "Inside the cockpit of Sarga's opening race weekend — a masterclass in pressure, precision, and the fine art of going fast.",
-    body: "Inside the cockpit of Sarga's opening race weekend. A masterclass in pressure, precision, and the fine art of going fast — told through the voices of the drivers who lived it.",
+      "Inside the cockpit of Sarga's opening race weekend - a masterclass in pressure, precision, and the fine art of going fast.",
+    body: "Inside the cockpit of Sarga's opening race weekend. A masterclass in pressure, precision, and the fine art of going fast - told through the voices of the drivers who lived it.",
     category: 'race-report',
     publishedDate: '2026-07-02',
     isHotTopic: false,
@@ -445,8 +445,8 @@ const MOTORSPORT_NEWS = [
     title: 'Riders Rewrite the Racing Line',
     slug: 'riders-rewrite-the-racing-line',
     excerpt:
-      "How Indonesia's fastest riders are reshaping the sport — one apex at a time.",
-    body: "How Indonesia's fastest riders are reshaping the sport — one apex at a time. From junior categories to the international stage, a new generation is redefining what it means to race.",
+      "How Indonesia's fastest riders are reshaping the sport - one apex at a time.",
+    body: "How Indonesia's fastest riders are reshaping the sport - one apex at a time. From junior categories to the international stage, a new generation is redefining what it means to race.",
     category: 'magazine',
     publishedDate: '2026-06-28',
     isHotTopic: false,
@@ -458,8 +458,8 @@ const MOTORSPORT_NEWS = [
     title: 'Building the 360° Racing Ecosystem',
     slug: 'building-the-360-racing-ecosystem',
     excerpt:
-      'From track to grandstand to livestream — how Sarga is engineering an entire motorsport experience.',
-    body: 'From track to grandstand to livestream — how Sarga is engineering an entire motorsport experience. Infrastructure, broadcast, hospitality, and fan engagement, all under one roof.',
+      'From track to grandstand to livestream - how Sarga is engineering an entire motorsport experience.',
+    body: 'From track to grandstand to livestream - how Sarga is engineering an entire motorsport experience. Infrastructure, broadcast, hospitality, and fan engagement, all under one roof.',
     category: 'magazine',
     publishedDate: '2026-06-15',
     isHotTopic: false,
@@ -516,7 +516,7 @@ const HORSESPORT_PARTNERS = [
 
 const HORSESPORT_EVENTS = [
   {
-    title: 'Sarga National Derby — Merdeka Cup',
+    title: 'Sarga National Derby - Merdeka Cup',
     slug: 'sarga-national-derby-merdeka-cup',
     description:
       'The flagship national derby under golden-hour turf conditions: elite jockeys, championship classification, and full race-day hospitality.',
@@ -526,7 +526,7 @@ const HORSESPORT_EVENTS = [
     venueAddress: 'Bogor, West Java, Indonesia',
     eventStatus: 'ticketsOpen',
     eventDiscipline: 'derby',
-    raceClass: 'Group 1 — National Championship',
+    raceClass: 'Group 1 - National Championship',
     trackType: 'turf',
     hospitalityInfo:
       'Grandstand lounge, paddock club, and family zone with trackside dining.',
@@ -550,7 +550,7 @@ const HORSESPORT_EVENTS = [
     venueAddress: 'Bogor, West Java, Indonesia',
     eventStatus: 'announced',
     eventDiscipline: 'turf',
-    raceClass: 'Listed — Sprint',
+    raceClass: 'Listed - Sprint',
     trackType: 'turf',
     hospitalityInfo: 'Twilight terrace and premium turf-side seating.',
     ticketCtaLabel: 'Register Interest',
@@ -564,14 +564,14 @@ const HORSESPORT_EVENTS = [
     title: 'Sarga Champions Sprint',
     slug: 'sarga-champions-sprint',
     description:
-      'A championship sprint spectacle decided in the first furlongs — the fastest field of the season breaks from the gates in a high-stakes dash to the line.',
+      'A championship sprint spectacle decided in the first furlongs - the fastest field of the season breaks from the gates in a high-stakes dash to the line.',
     eventDate: '2026-10-04T09:00:00.000Z',
     endDate: '2026-10-04T17:00:00.000Z',
     venue: 'Grand Paddock Arena',
     venueAddress: 'Bogor, West Java, Indonesia',
     eventStatus: 'announced',
     eventDiscipline: 'championship',
-    raceClass: 'Group 2 — Sprint Championship',
+    raceClass: 'Group 2 - Sprint Championship',
     trackType: 'turf',
     hospitalityInfo:
       'Trackside champions lounge with a direct view of the starting gates.',
@@ -586,7 +586,7 @@ const HORSESPORT_EVENTS = [
 
 const HORSESPORT_TICKET_CTAS = [
   {
-    title: 'Sarga National Derby — Merdeka Cup Tickets',
+    title: 'Sarga National Derby - Merdeka Cup Tickets',
     label: 'Buy Tickets',
     provider: 'Partner Ticketing',
     ctaType: 'redirect',
@@ -644,8 +644,8 @@ const HORSESPORT_NEWS = [
     title: 'The Making of a Champion Jockey',
     slug: 'the-making-of-a-champion-jockey',
     excerpt:
-      'Discipline, weight management, and split-second race-craft — an intimate profile of the riders behind Sarga Horse Sport victories.',
-    body: 'Behind every championship result is a rider whose craft is honed over years. This profile follows the discipline, weight management, and split-second decision-making that define an elite Sarga Horse Sport jockey — from dawn track work to the roar of the home straight.',
+      'Discipline, weight management, and split-second race-craft - an intimate profile of the riders behind Sarga Horse Sport victories.',
+    body: 'Behind every championship result is a rider whose craft is honed over years. This profile follows the discipline, weight management, and split-second decision-making that define an elite Sarga Horse Sport jockey - from dawn track work to the roar of the home straight.',
     category: 'jockey-story',
     publishedDate: '2026-07-28',
     isHotTopic: true,
@@ -659,7 +659,7 @@ const HORSESPORT_NEWS = [
     title: 'Photo Finish Decides the Turf Classic',
     slug: 'photo-finish-decides-turf-classic',
     excerpt:
-      'A blanket finish separated by inches — the Turf Classic delivered one of the closest results in Sarga Horse Sport history.',
+      'A blanket finish separated by inches - the Turf Classic delivered one of the closest results in Sarga Horse Sport history.',
     body: 'Inches decided the Turf Classic as the leading contenders flashed across the line together, sending the result to a photo finish. This race report breaks down the closing sectionals, the winning ride, and what the result means for the championship standings.',
     category: 'race-results',
     publishedDate: '2026-07-15',
@@ -830,7 +830,7 @@ const SEED_MEDIA: Array<{
     slug: 'turf-track-development-championship-grade',
     field: 'coverImage',
   },
-  // Horse Sport — new high-res posts (HS-media refresh)
+  // Horse Sport - new high-res posts (HS-media refresh)
   {
     file: 'hs-starting-gates.png',
     alt: 'A field of racehorses bursting from the starting gates, turf flying',
@@ -936,7 +936,7 @@ async function seedMedia(
       | null;
 
     if (!doc) continue;
-    if (doc[item.field]) continue; // already has media — never overwrite
+    if (doc[item.field]) continue; // already has media - never overwrite
 
     const file = await uploadIfMissing(strapi, item.file, item.alt);
     if (!file) continue;
@@ -955,7 +955,7 @@ async function seedMedia(
 /**
  * Horse Sport cover refresh: swaps the earlier low-resolution placeholder
  * covers for the curated high-resolution art. Unlike `seedMedia`, this DOES
- * replace an existing image — but only when the current cover isn't already the
+ * replace an existing image - but only when the current cover isn't already the
  * target file, so it stays idempotent across re-seeds.
  */
 const HORSESPORT_COVER_REFRESH: Array<{
@@ -1047,7 +1047,7 @@ async function refreshHorseSportMedia(
     );
   }
 
-  // Gallery mediaItems — replace the low-res set with the curated high-res set.
+  // Gallery mediaItems - replace the low-res set with the curated high-res set.
   const gallery = (await documents('api::media-gallery.media-gallery').findFirst(
     {
       filters: { slug: { $eq: 'horse-sport-race-day' } },
@@ -1113,7 +1113,7 @@ async function grantPublicReadPermissions(strapi: Core.Strapi) {
 export default async function seedDemoContent(strapi: Core.Strapi) {
   if (process.env.SEED_DEMO_CONTENT !== 'true') return;
 
-  strapi.log.info('[seed] SEED_DEMO_CONTENT=true — checking demo content…');
+  strapi.log.info('[seed] SEED_DEMO_CONTENT=true - checking demo content…');
 
   // Loosely typed accessor: seed data is validated by Strapi at write time.
   const documents = strapi.documents as unknown as (uid: string) => {

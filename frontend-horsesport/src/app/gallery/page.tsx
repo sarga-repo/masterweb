@@ -7,7 +7,7 @@ import { fetchGalleryPage } from "@/lib/cms-content";
 export const metadata: Metadata = createMetadata({
   title: "Gallery",
   description:
-    "Visual storytelling from Sarga Horse Sport — race day, stable life, venues, jockeys, and hospitality.",
+    "Visual storytelling from Sarga Horse Sport - race day, stable life, venues, jockeys, and hospitality.",
   path: "/gallery",
 });
 
@@ -19,7 +19,7 @@ export default async function GalleryPage() {
       <PageHero
         eyebrow="Gallery"
         title="Motion, recorded."
-        description="Race-day drama, stable-life intimacy, turf aerials, and hospitality — captured in a cinematic editorial grid."
+        description="Race-day drama, stable-life intimacy, turf aerials, and hospitality - captured in a cinematic editorial grid."
         backgroundImage="/media/Home-straight-finish.png"
         backgroundAlt="Two jockeys racing side by side past a blurred grandstand"
         accent="orange"

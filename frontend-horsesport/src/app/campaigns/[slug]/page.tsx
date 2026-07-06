@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const title = humanizeSlug(slug);
   return {
     title,
-    description: `${title} — a Sarga Horse Sport campaign.`,
+    description: `${title} - a Sarga Horse Sport campaign.`,
   };
 }
 
@@ -31,7 +31,7 @@ export default async function CampaignDetailPage({ params }: Params) {
       <PagePlaceholder
         eyebrow="Campaign"
         title="A focused campaign landing page."
-        description="This route will render CMS-managed campaign landing pages — hero, narrative sections, and conversion CTAs — reused across the Sarga ecosystem and branded for Horse Sport."
+        description="This route will render CMS-managed campaign landing pages - hero, narrative sections, and conversion CTAs - reused across the Sarga ecosystem and branded for Horse Sport."
         sections={[
           "Campaign hero and narrative",
           "Feature and highlight sections",

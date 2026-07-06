@@ -4,7 +4,7 @@ import localFont from "next/font/local";
 import { resolveSiteUrl, siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
-/** Sarga Motorsport display face (brand target: Owners Wide — Black cut). */
+/** Sarga Motorsport display face (brand target: Owners Wide - Black cut). */
 const ownersWide = localFont({
   src: "./fonts/owners-wide-black.ttf",
   display: "swap",
@@ -13,7 +13,7 @@ const ownersWide = localFont({
   style: "normal",
 });
 
-/** Sarga Motorsport body face (brand target: Noto Sans — Display Light). */
+/** Sarga Motorsport body face (brand target: Noto Sans - Display Light). */
 const notoSans = localFont({
   src: "./fonts/noto-sans-display-light.ttf",
   display: "swap",
@@ -27,7 +27,7 @@ const defaultSocialImage = resolveSiteUrl("/media/motorsport-design-hero.png");
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: {
-    default: `${siteConfig.name} — ${siteConfig.tagline}`,
+    default: `${siteConfig.name} - ${siteConfig.tagline}`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
@@ -40,20 +40,20 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     locale: "en_US",
     url: siteConfig.siteUrl,
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
+    title: `${siteConfig.name} - ${siteConfig.tagline}`,
     description: siteConfig.description,
     images: [
       {
         url: defaultSocialImage,
         width: 1200,
         height: 630,
-        alt: `${siteConfig.name} — ${siteConfig.tagline}`,
+        alt: `${siteConfig.name} - ${siteConfig.tagline}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
+    title: `${siteConfig.name} - ${siteConfig.tagline}`,
     description: siteConfig.description,
     images: [defaultSocialImage],
   },

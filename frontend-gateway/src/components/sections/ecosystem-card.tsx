@@ -15,7 +15,7 @@ const businessNumbers: Record<string, string> = {
 
 export function EcosystemCard({ business }: { business: EcosystemBusiness }) {
   const isActive = business.status === "active";
-  /* Motorsport / Horse Sport have dedicated frontends — link externally when
+  /* Motorsport / Horse Sport have dedicated frontends - link externally when
      configured, otherwise fall back to the gateway detail page. */
   const externalHref = businessSiteUrl(business.slug);
   const href = isActive

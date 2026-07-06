@@ -153,7 +153,7 @@ export default async function CampaignPage(props: Props) {
           >
             {campaign.tagline}
           </span>
-          <h1 className="ms-display ms-animate-stagger-2 mt-6 text-[clamp(4rem,12vw,11rem)] leading-[0.88]">
+          <h1 className="ms-display ms-animate-stagger-2 mt-6 text-[clamp(3rem,9vw,8.25rem)] leading-[0.88]">
             {campaign.title}
           </h1>
           <p className="ms-animate-stagger-3 mt-6 max-w-2xl text-lg leading-8 text-ms-warm-white/70">
@@ -223,7 +223,7 @@ export default async function CampaignPage(props: Props) {
             <span className="ms-data-label text-ms-slipstream-teal">
               Don&apos;t miss it
             </span>
-            <h2 className="ms-display mt-6 max-w-[12ch] text-[clamp(2.5rem,5vw,5rem)]">
+            <h2 className="ms-display mt-6 max-w-[12ch] text-[clamp(1.88rem,3.75vw,3.75rem)]">
               {campaign.sections.find((s) => s.type === "cta")?.headline ??
                 "Be there."}
             </h2>

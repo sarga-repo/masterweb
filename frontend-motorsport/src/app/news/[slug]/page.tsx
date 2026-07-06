@@ -156,7 +156,7 @@ export default async function ArticleDetailPage({ params }: Props) {
             </time>
           </div>
 
-          <h1 className="ms-display mt-8 text-[clamp(3rem,7vw,6rem)]">
+          <h1 className="ms-display mt-8 text-[clamp(2.25rem,5.25vw,4.5rem)]">
             {article.title}
           </h1>
 

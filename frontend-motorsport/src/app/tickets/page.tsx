@@ -121,7 +121,7 @@ export default async function TicketsPage() {
       <section className="ms-shell border-t border-ms-warm-white/12 py-16">
         <div className="grid gap-10 lg:grid-cols-2">
           <div>
-            <h2 className="ms-display text-[clamp(2rem,4vw,4rem)]">
+            <h2 className="ms-display text-[clamp(1.5rem,3vw,3rem)]">
               How it works.
             </h2>
             <ul className="mt-8 space-y-5 text-base leading-7 text-ms-warm-white/60">

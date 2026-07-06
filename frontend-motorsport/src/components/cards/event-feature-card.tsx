@@ -41,7 +41,7 @@ export function EventFeatureCard({
             <span className="ms-data-label text-ms-ignition-orange">
               Featured transmission
             </span>
-            <h3 className="ms-display mt-3 max-w-[11ch] text-[clamp(2.7rem,5vw,5.5rem)]">
+            <h3 className="ms-display mt-3 max-w-[11ch] text-[clamp(2.03rem,3.75vw,4.13rem)]">
               {event.title}
             </h3>
           </div>

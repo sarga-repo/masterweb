@@ -39,7 +39,7 @@ export function MotorsportFooter({
         <div className="grid gap-14 border-b border-ms-warm-white/12 pb-14 lg:grid-cols-[1.1fr_1.9fr]">
           <div>
             <MotorsportLogo variant="part-of-sarga" className="w-52" />
-            <p className="ms-display mt-10 max-w-xl text-[clamp(3rem,7vw,6.5rem)] text-ms-warm-white">
+            <p className="ms-display mt-10 max-w-xl text-[clamp(2.25rem,5.25vw,4.88rem)] text-ms-warm-white">
               {statement}
             </p>
           </div>

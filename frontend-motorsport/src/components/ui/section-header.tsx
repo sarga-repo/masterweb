@@ -37,7 +37,7 @@ export function SectionHeader({
             <i className="size-1.5 bg-ms-electric-yellow" />
           </span>
         </div>
-        <h2 className="ms-display max-w-[12ch] text-[clamp(3rem,7vw,6.5rem)] text-ms-warm-white">
+        <h2 className="ms-display max-w-[12ch] text-[clamp(2.25rem,5.25vw,4.88rem)] text-ms-warm-white">
           {title}
         </h2>
       </div>

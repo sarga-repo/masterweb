@@ -72,7 +72,7 @@ export default function Error({
 
         {/* Giant number */}
         <h1
-          className="ms-display mt-6 select-none text-[clamp(8rem,22vw,18rem)] font-black leading-[0.82] tracking-[-0.04em]"
+          className="ms-display mt-6 select-none text-[clamp(6rem,16.5vw,13.5rem)] font-black leading-[0.82] tracking-[-0.04em]"
           aria-hidden="true"
         >
           <span className="bg-gradient-to-br from-ms-ignition-orange/90 via-ms-apex-crimson/60 to-ms-warm-white/10 bg-clip-text text-transparent">
@@ -81,7 +81,7 @@ export default function Error({
         </h1>
 
         {/* Headline */}
-        <h2 className="ms-display mt-4 max-w-[14ch] text-[clamp(2.4rem,6vw,5rem)] leading-[0.88]">
+        <h2 className="ms-display mt-4 max-w-[14ch] text-[clamp(1.8rem,4.5vw,3.75rem)] leading-[0.88]">
           The engine stalled.
         </h2>
 

@@ -124,7 +124,7 @@ export function MotorsportHero({
 
         <div className="grid flex-1 items-end gap-10 pb-8 pt-24 lg:grid-cols-[minmax(0,1fr)_17rem] lg:pt-16">
           <div>
-            <h1 className="ms-display max-w-[10ch] text-[clamp(4.25rem,11vw,10.5rem)]">
+            <h1 className="ms-display max-w-[10ch] text-[clamp(3.19rem,8.25vw,7.88rem)]">
               <span className="block text-ms-warm-white">{lead}</span>
               {rest.length ? (
                 <span className="ms-outline-type block">{rest.join(" ")}</span>

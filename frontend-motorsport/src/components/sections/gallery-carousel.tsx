@@ -103,7 +103,7 @@ export function GalleryCarousel({ items }: GalleryCarouselProps) {
                 </span>
               ) : null}
               {active.caption ? (
-                <p className="ms-display mt-2 text-[clamp(1.5rem,4vw,3.5rem)]">
+                <p className="ms-display mt-2 text-[clamp(1.13rem,3vw,2.63rem)]">
                   {active.caption}
                 </p>
               ) : null}

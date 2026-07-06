@@ -171,7 +171,7 @@ export default async function EventDetailPage({ params }: Props) {
               </span>
             ) : null}
           </div>
-          <h1 className="ms-display ms-animate-stagger-2 mt-8 max-w-[14ch] text-[clamp(4rem,10vw,9rem)]">
+          <h1 className="ms-display ms-animate-stagger-2 mt-8 max-w-[14ch] text-[clamp(3rem,7.5vw,6.75rem)]">
             {event.title}
           </h1>
           <div className="ms-animate-stagger-3 mt-8 flex flex-wrap gap-x-10 gap-y-4 border-t border-ms-warm-white/16 pt-6">

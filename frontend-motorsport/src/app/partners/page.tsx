@@ -91,7 +91,7 @@ export default async function PartnersPage() {
           <span className="ms-data-label text-ms-slipstream-teal">
             Partnership inquiries
           </span>
-          <h2 className="ms-display mt-6 max-w-[12ch] text-[clamp(2.5rem,5vw,5rem)]">
+          <h2 className="ms-display mt-6 max-w-[12ch] text-[clamp(1.88rem,3.75vw,3.75rem)]">
             Join the grid.
           </h2>
           <p className="mt-6 max-w-xl text-base leading-7 text-ms-warm-white/60">

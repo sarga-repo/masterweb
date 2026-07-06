@@ -28,7 +28,7 @@ export function resolveSocialImageUrl(image?: SocialImageInput) {
 
 /**
  * Static brand/site configuration for the Sarga Horse Sport frontend.
- * Content that belongs in the CMS is intentionally NOT hardcoded here — this is
+ * Content that belongs in the CMS is intentionally NOT hardcoded here - this is
  * bootstrap-level metadata only (see docs/horsesport for the full model).
  */
 export const siteConfig = {
@@ -37,7 +37,7 @@ export const siteConfig = {
   /** Elite equestrian brand voice (docs/horsesport/02). */
   tagline: "Where elite horse sport meets modern spectacle.",
   description:
-    "Indonesia's premium equestrian sports ecosystem — championship racing, national derbies, race-day hospitality, media, and ticketing.",
+    "Indonesia's premium equestrian sports ecosystem - championship racing, national derbies, race-day hospitality, media, and ticketing.",
   siteKey: process.env.NEXT_PUBLIC_SITE_KEY ?? "sarga-horse-sport",
   siteUrl:
     normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL) ??

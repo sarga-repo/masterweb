@@ -49,7 +49,7 @@ export default async function NewsPage({ searchParams }: Params) {
       <PageHero
         eyebrow="News & publications"
         title="Every story from the turf."
-        description="Race results, jockey stories, turf and venue development, and stable-life editorial — curated by the Sarga Horse Sport team."
+        description="Race results, jockey stories, turf and venue development, and stable-life editorial - curated by the Sarga Horse Sport team."
         backgroundImage="/media/news-turf-track.png"
         backgroundAlt="Aerial view of a curved championship turf track"
         accent="turf"

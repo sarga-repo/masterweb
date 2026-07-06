@@ -360,7 +360,7 @@ export const ecosystemIntro = {
   eyebrow: "The Sarga Framework",
   title: "360° Ecosystem",
   description:
-    "The foundational framework of Sarga's commercial operations is structured around interconnected core pillars spanning Sports, Venue, Media, and Technology — explored through a single, unified gateway.",
+    "The foundational framework of Sarga's commercial operations is structured around interconnected core pillars spanning Sports, Venue, Media, and Technology - explored through a single, unified gateway.",
 } as const;
 
 export type EcosystemPillar = {
@@ -658,7 +658,7 @@ export const ticketHubCta = {
   eyebrow: "Ticket Hub",
   title: "Your Gateway to Live Sarga Experiences",
   description:
-    "Discover championship derbies, motorsport cups, and live festivals. Seats are secured through trusted partner ticketing platforms — never internal payment.",
+    "Discover championship derbies, motorsport cups, and live festivals. Seats are secured through trusted partner ticketing platforms - never internal payment.",
   ctaLabel: "Explore Ticket Hub",
   ctaUrl: "/ticket-hub",
 } as const;

@@ -81,9 +81,9 @@ export default async function EventPage({ params }: EventPageProps) {
         image={event.coverImage}
         meta={[
           event.eventDate
-            ? `Starts — ${event.eventDate}`
+            ? `Starts - ${event.eventDate}`
             : "Date to be announced",
-          event.endDate ? `Ends — ${event.endDate}` : "Single-day experience",
+          event.endDate ? `Ends - ${event.endDate}` : "Single-day experience",
           event.venue ?? "Venue to be announced",
           "Tickets via approved partner",
         ]}

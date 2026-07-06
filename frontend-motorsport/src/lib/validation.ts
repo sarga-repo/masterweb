@@ -26,7 +26,7 @@ export const contactFormSchema = z.object({
     .trim()
     .min(20, "Please provide at least 20 characters of context.")
     .max(5000),
-  /* Honeypot — must remain empty. */
+  /* Honeypot - must remain empty. */
   website: z.string().max(0, "Spam check failed.").optional().default(""),
   /* Timestamp of when the form was first rendered (anti-bot timing). */
   formStartedAt: z.number().int().positive(),

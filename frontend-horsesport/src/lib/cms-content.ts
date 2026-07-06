@@ -1,5 +1,5 @@
 /**
- * Page-level Horse Sport content layer — CMS-first with graceful fallback.
+ * Page-level Horse Sport content layer - CMS-first with graceful fallback.
  *
  * Provides list + detail view-models for the core pages (events, news, tickets,
  * gallery). All queries are scoped to Horse Sport
@@ -43,7 +43,7 @@ export type TicketAction = {
   provider?: string;
   external: boolean;
   ctaType: TicketCtaType;
-  /** Allowlisted iframe src — only set when ctaType is "embed" and permitted. */
+  /** Allowlisted iframe src - only set when ctaType is "embed" and permitted. */
   embedHref?: string;
 };
 
@@ -77,7 +77,7 @@ export type TicketCtaData = {
   href: string;
   external: boolean;
   ctaType: TicketCtaType;
-  /** Allowlisted iframe src — only set when ctaType is "embed" and permitted. */
+  /** Allowlisted iframe src - only set when ctaType is "embed" and permitted. */
   embedHref?: string;
   isActive: boolean;
 };
@@ -266,7 +266,7 @@ function mapEventCard(
     discipline: titleCase(entry.eventDiscipline),
     status: statusLabel(entry.eventStatus),
     image: mediaUrl(img?.url) || undefined,
-    imageAlt: img?.alternativeText ?? `${entry.title} — Sarga Horse Sport`,
+    imageAlt: img?.alternativeText ?? `${entry.title} - Sarga Horse Sport`,
   };
 }
 
@@ -308,7 +308,7 @@ function mapArticleCard(
     dateLabel: formatDate(entry.publishedDate),
     excerpt: entry.excerpt ?? undefined,
     image: mediaUrl(img?.url) || undefined,
-    imageAlt: img?.alternativeText ?? `${entry.title} — Sarga Horse Sport`,
+    imageAlt: img?.alternativeText ?? `${entry.title} - Sarga Horse Sport`,
   };
 }
 
@@ -318,7 +318,7 @@ function mapArticleCard(
 
 const PH_EVENTS: EventCardData[] = [
   {
-    title: "Sarga National Derby — Merdeka Cup",
+    title: "Sarga National Derby - Merdeka Cup",
     href: "/events/sarga-national-derby-merdeka-cup",
     dateLabel: "17 Aug 2026",
     venue: "Sarga Turf Park",
@@ -385,7 +385,7 @@ const PH_ARTICLES: ArticleCardData[] = [
 const PH_TICKETS: TicketCtaData[] = [
   {
     id: "ph-1",
-    title: "Sarga National Derby — Merdeka Cup Tickets",
+    title: "Sarga National Derby - Merdeka Cup Tickets",
     label: "Get tickets",
     provider: "Partner Ticketing",
     href: "https://example.com/tickets/sarga-national-derby",
@@ -537,7 +537,7 @@ export async function fetchGalleryPage(): Promise<GalleryGroup[]> {
       items: (entry.mediaItems ?? []).map((img, i) => ({
         id: `${entry.documentId ?? entry.title}-${i}`,
         image: mediaUrl(img.url),
-        imageAlt: img.alternativeText ?? `${entry.title} — Sarga Horse Sport`,
+        imageAlt: img.alternativeText ?? `${entry.title} - Sarga Horse Sport`,
         category: titleCase(entry.category),
       })),
     }))

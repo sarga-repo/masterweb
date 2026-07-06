@@ -5,7 +5,7 @@ import { ArrowRightIcon } from "@/components/ui/icons";
 import { RacingGraphic } from "@/components/ui/racing-graphic";
 
 /**
- * 500 — "Signal Lost"
+ * 500 - "Signal Lost"
  * Premium error boundary for Sarga.co gateway.
  * Next.js requires `error.tsx` to be a Client Component.
  * Shows a "try again" button that calls `reset()` to re-render the route.
@@ -64,7 +64,7 @@ export default function Error({
       <div className="site-container relative z-10 py-24 sm:py-32">
         {/* Error code */}
         <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-sarga-red">
-          500 — Signal lost
+          500 - Signal lost
         </p>
 
         {/* Giant number */}
@@ -85,7 +85,7 @@ export default function Error({
         <p className="mt-8 max-w-xl text-base leading-8 text-white/55">
           Something unexpected happened in the signal chain. Our engineers have
           been alerted and are working to restore full connectivity. This is a
-          temporary disruption — the network remains online.
+          temporary disruption - the network remains online.
         </p>
 
         {/* Error digest (dev aid) */}

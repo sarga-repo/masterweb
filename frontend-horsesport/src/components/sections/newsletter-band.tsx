@@ -9,13 +9,13 @@ type NewsletterBandProps = {
 };
 
 /**
- * Newsletter invite — bare content (no card/icon boxes). Left: editorial copy.
+ * Newsletter invite - bare content (no card/icon boxes). Left: editorial copy.
  * Right: a single ticket-capsule form (rounded input + red pill, joined).
  * Renders inside a section band supplied by the parent.
  */
 export function NewsletterBand({
   title = "The Paddock Report",
-  description = "Race calendars, stable stories, and hospitality invitations — delivered with editorial restraint.",
+  description = "Race calendars, stable stories, and hospitality invitations - delivered with editorial restraint.",
 }: NewsletterBandProps) {
   const [status, setStatus] = useState<"idle" | "success">("idle");
 
@@ -41,7 +41,7 @@ export function NewsletterBand({
         {status === "success" ? (
           <div className="flex items-center gap-3 rounded-full border border-hs-cream/15 bg-hs-black/40 px-6 py-4 text-sm text-hs-cream/75">
             <span className="text-hs-orange">✓</span>
-            Welcome to the paddock — first edition soon.
+            Welcome to the paddock - first edition soon.
           </div>
         ) : (
           <form

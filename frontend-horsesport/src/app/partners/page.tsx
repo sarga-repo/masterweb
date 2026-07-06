@@ -46,7 +46,7 @@ export default async function PartnersPage() {
             index="01"
             eyebrow="The proposition"
             title="A platform built for ambitious brands."
-            description="Sarga Horse Sport pairs championship prestige with premium hospitality and a cinematic content ecosystem — an investable audience for partners who want to be part of the sport's next chapter."
+            description="Sarga Horse Sport pairs championship prestige with premium hospitality and a cinematic content ecosystem - an investable audience for partners who want to be part of the sport's next chapter."
           />
         </ScrollReveal>
 
@@ -71,7 +71,7 @@ export default async function PartnersPage() {
 
       <CtaBand
         title="Let's build something enduring."
-        description="Tell us about your brand and objectives — our partnerships team will craft a tailored proposal."
+        description="Tell us about your brand and objectives - our partnerships team will craft a tailored proposal."
         primaryCta={{ label: "Start a conversation", href: "/contact" }}
       />
     </>

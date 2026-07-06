@@ -1,5 +1,5 @@
 /**
- * Shared CMS data layer — reusable fetch + mapping for every route.
+ * Shared CMS data layer - reusable fetch + mapping for every route.
  *
  * Generalises the mapping logic from `homepage-data.ts` so that events,
  * articles, partners, galleries, and ticket CTAs can be fetched by any page
@@ -48,7 +48,7 @@ export type CmsTicketCta = {
   label: string;
   provider: string;
   redirectUrl: string;
-  /** Optional iframe / embed URL — only used when explicitly configured in CMS. */
+  /** Optional iframe / embed URL - only used when explicitly configured in CMS. */
   embedCode?: string;
 };
 
@@ -128,7 +128,7 @@ export function mapEvent(
       mediaUrl(img?.url) || "/media/motorsport-design-hero.png",
     imageAlt:
       img?.alternativeText ??
-      `${entry.title} — Sarga Motorsport event`,
+      `${entry.title} - Sarga Motorsport event`,
     status: statusMap(entry.eventStatus),
     category: entry.racingCategory ?? undefined,
     seriesName: entry.seriesName ?? undefined,
@@ -147,7 +147,7 @@ export function mapArticle(
       mediaUrl(img?.url) || "/media/motorcycle-racing-dusk.png",
     imageAlt:
       img?.alternativeText ??
-      `${entry.title} — Sarga Motorsport news`,
+      `${entry.title} - Sarga Motorsport news`,
     category: entry.category ?? "Motorsport",
     publishedLabel: formatDate(entry.publishedAt),
     excerpt: entry.excerpt ?? undefined,
@@ -175,7 +175,7 @@ export function mapGalleryItems(
       image: mediaUrl(img.url),
       imageAlt:
         img.alternativeText ??
-        `${entry.title} — Sarga Motorsport`,
+        `${entry.title} - Sarga Motorsport`,
       eyebrow: entry.title,
     })),
   );

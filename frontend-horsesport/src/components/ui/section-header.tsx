@@ -11,7 +11,7 @@ type SectionHeaderProps = {
   children?: ReactNode;
 };
 
-/** Refined section header — editorial-luxury typography with a numbered gradient eyebrow. */
+/** Refined section header - editorial-luxury typography with a numbered gradient eyebrow. */
 export function SectionHeader({
   eyebrow,
   index,

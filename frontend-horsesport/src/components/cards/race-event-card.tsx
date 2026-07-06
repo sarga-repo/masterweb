@@ -11,7 +11,7 @@ type RaceEventCardProps = {
   className?: string;
 };
 
-/** Premium race event card — Double-Bezel with cinematic image, discipline chips, hover kinetic tension. */
+/** Premium race event card - Double-Bezel with cinematic image, discipline chips, hover kinetic tension. */
 export function RaceEventCard({
   event,
   priority = false,

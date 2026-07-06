@@ -4,7 +4,7 @@ import type { SVGProps } from "react";
  * Sarga Horse Sport custom icon pack.
  *
  * A cohesive, equestrian-flavoured stroke set (24×24, 1.6 stroke, rounded
- * caps/joins, currentColor) — including sport-specific marks (horseshoe, jockey
+ * caps/joins, currentColor) - including sport-specific marks (horseshoe, jockey
  * helmet, horse, rosette, turf track, stable) that set the site apart from
  * generic icon libraries. Decorative by default; pass a `title` for standalone
  * meaningful icons.

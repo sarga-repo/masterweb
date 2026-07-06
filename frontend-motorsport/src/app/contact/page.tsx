@@ -104,7 +104,7 @@ export default function ContactPage() {
                 onSubmit={handleSubmit}
                 noValidate
               >
-                {/* Honeypot — invisible to real users */}
+                {/* Honeypot - invisible to real users */}
                 <input
                   type="text"
                   name="website"

@@ -15,7 +15,7 @@ import { fetchEvents, fetchTicketCtas } from "@/lib/cms-data";
 export const metadata: Metadata = {
   title: "Tickets",
   description:
-    "Secure your seat at Sarga Motorsport events. Curated ticket journey with partner redirects — no internal payment processing.",
+    "Secure your seat at Sarga Motorsport events. Curated ticket journey with partner redirects - no internal payment processing.",
 };
 
 const PLACEHOLDER_CTAS: Array<{
@@ -48,7 +48,7 @@ export default async function TicketsPage() {
         accent="orange"
         accentPosition="bottom-left"
         grain
-        description="Sarga Motorsport partners with approved ticketing platforms. Every CTA below redirects to a secure partner checkout — we never process payment directly."
+        description="Sarga Motorsport partners with approved ticketing platforms. Every CTA below redirects to a secure partner checkout - we never process payment directly."
       />
 
       <GradientRule />
@@ -75,7 +75,7 @@ export default async function TicketsPage() {
                   external: cta.href.startsWith("http"),
                 }}
               />
-              {/* Optional CMS-driven embed — only rendered when explicitly configured */}
+              {/* Optional CMS-driven embed - only rendered when explicitly configured */}
               {cta.embedCode ? (
                 <div className="mt-4 border border-ms-warm-white/12 bg-ms-black p-4">
                   <p className="ms-data-label mb-3 text-ms-warm-white/42">
@@ -83,7 +83,7 @@ export default async function TicketsPage() {
                   </p>
                   <iframe
                     src={cta.embedCode}
-                    title={`Ticket checkout — ${cta.eventName ?? "event"}`}
+                    title={`Ticket checkout - ${cta.eventName ?? "event"}`}
                     className="h-[32rem] w-full border-0"
                     sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                     referrerPolicy="no-referrer"

@@ -13,7 +13,7 @@ import type { MotorsportEvent } from "@/types/design-system";
 export const metadata: Metadata = {
   title: "Events",
   description:
-    "Upcoming and past motorsport events — car racing, motorcycle racing, and festival weekends across Indonesia.",
+    "Upcoming and past motorsport events - car racing, motorcycle racing, and festival weekends across Indonesia.",
 };
 
 /* Placeholder events shown when CMS is unreachable. */

@@ -28,7 +28,7 @@ type HorseSportFooterProps = {
 };
 
 /**
- * Premium editorial footer — dark panel with cream dot texture, zigzag band
+ * Premium editorial footer - dark panel with cream dot texture, zigzag band
  * top edge, and generous spatial rhythm. Uses the Horse Sport brand logo and
  * warm accent touches. Designed as a destination, not an afterthought.
  */
@@ -53,7 +53,7 @@ export function HorseSportFooter({
         }}
       />
 
-      {/* Brand marker — three full-height staircase stripes down the RIGHT edge,
+      {/* Brand marker - three full-height staircase stripes down the RIGHT edge,
           faded top + bottom (mirrors the hero's left marker) */}
       <div
         aria-hidden
@@ -85,7 +85,7 @@ export function HorseSportFooter({
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
           {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" aria-label="Sarga Horse Sport — Home">
+            <Link href="/" aria-label="Sarga Horse Sport - Home">
               <HorseSportLogo
                 variant="white"
                 className="w-[clamp(9rem,14vw,12rem)]"

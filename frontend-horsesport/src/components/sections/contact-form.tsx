@@ -188,7 +188,7 @@ export function ContactForm() {
         ) : null}
       </label>
 
-      {/* Honeypot — must stay empty; hidden from users and assistive tech. */}
+      {/* Honeypot - must stay empty; hidden from users and assistive tech. */}
       <input
         name="website"
         type="text"

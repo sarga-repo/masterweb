@@ -14,7 +14,7 @@ import type { GalleryItem } from "@/types/design-system";
 export const metadata: Metadata = {
   title: "Gallery",
   description:
-    "Trackside photography from Sarga Motorsport — car racing, motorcycle racing, paddock life, and festival energy captured in motion.",
+    "Trackside photography from Sarga Motorsport - car racing, motorcycle racing, paddock life, and festival energy captured in motion.",
 };
 
 const PLACEHOLDER: GalleryItem[] = [
@@ -76,7 +76,7 @@ export default async function GalleryPage() {
         accentPosition="bottom-right"
         speedLines
         grain
-        description="Motion, recorded. Circuit photography from every discipline — four-wheel touring and GT, two-wheel superbike and Moto2, paddock life, and festival energy."
+        description="Motion, recorded. Circuit photography from every discipline - four-wheel touring and GT, two-wheel superbike and Moto2, paddock life, and festival energy."
       />
 
       <GradientRule />

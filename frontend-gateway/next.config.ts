@@ -25,12 +25,12 @@ function strapiImagePattern() {
 const nextConfig: NextConfig = {
   images: {
     // Only the configured Strapi host is allowed. Add the specific S3/cloud
-    // media hostname (docs/06) here once the storage provider is chosen — do not
+    // media hostname (docs/06) here once the storage provider is chosen - do not
     // use a wildcard host.
     remotePatterns: [...strapiImagePattern()],
     // Next 16 blocks image optimization from private/loopback IPs (SSRF
     // protection). Local development fetches Strapi media from localhost, so
-    // allow it in development only — never in production.
+    // allow it in development only - never in production.
     dangerouslyAllowLocalIP: process.env.NODE_ENV === "development",
   },
 };

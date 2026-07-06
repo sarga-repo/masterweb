@@ -64,7 +64,7 @@ export function Header() {
           </ul>
         </nav>
 
-        {/* Mobile navigation — no-JS disclosure drawer */}
+        {/* Mobile navigation - no-JS disclosure drawer */}
         <details className="group lg:hidden">
           <summary
             aria-label="Open menu"

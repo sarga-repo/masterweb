@@ -8,12 +8,12 @@ type NewsArticleCardProps = {
   feature?: boolean;
   compact?: boolean;
   priority?: boolean;
-  /** Surface tone — "cream" for warm editorial (light) sections. */
+  /** Surface tone - "cream" for warm editorial (light) sections. */
   tone?: "dark" | "cream";
   className?: string;
 };
 
-/** Editorial news card — premium layout with gradient category chip and hover image scale. */
+/** Editorial news card - premium layout with gradient category chip and hover image scale. */
 export function NewsArticleCard({
   article,
   feature = false,

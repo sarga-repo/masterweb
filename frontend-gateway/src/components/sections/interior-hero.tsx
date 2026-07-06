@@ -54,7 +54,7 @@ export function InteriorHero({
         className="velocity-grain absolute inset-0 -z-[5]"
       />
 
-      {/* Brand logo — top-right */}
+      {/* Brand logo - top-right */}
       {brandLogo ? (
         <div className="absolute right-6 top-6 z-10 w-[8rem] sm:right-10 sm:top-10 sm:w-[10rem] lg:right-14 lg:top-14 lg:w-[12rem]">
           <Image

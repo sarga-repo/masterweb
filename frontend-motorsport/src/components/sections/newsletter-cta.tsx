@@ -32,7 +32,7 @@ export function NewsletterCtaSection({
       />
 
       <div className="ms-shell relative grid gap-12 py-20 sm:py-28 lg:grid-cols-[minmax(0,1.3fr)_minmax(18rem,0.7fr)] lg:items-center">
-        {/* Left — copy */}
+        {/* Left - copy */}
         <div>
           <span className="ms-kicker text-ms-ignition-orange">{eyebrow}</span>
           <h2 className="ms-display mt-6 max-w-[12ch] text-[clamp(2.25rem,5.25vw,5.25rem)]">
@@ -43,7 +43,7 @@ export function NewsletterCtaSection({
           </p>
         </div>
 
-        {/* Right — action panel */}
+        {/* Right - action panel */}
         <div className="ms-panel bg-ms-graphite p-8 sm:p-10">
           <form
             action="#"

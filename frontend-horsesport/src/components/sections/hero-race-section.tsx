@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/ui/icons";
+import { HeroVideo, type HeroVideoSource } from "@/components/ui/hero-video";
 import type { LinkItem, StatItem } from "@/types/design-system";
 
 type HeroRaceSectionProps = {
@@ -9,6 +10,8 @@ type HeroRaceSectionProps = {
   description?: string;
   image: string;
   imageAlt: string;
+  /** Optional cinematic background loop; the image stays as poster/fallback. */
+  video?: HeroVideoSource;
   primaryCta?: LinkItem;
   secondaryCta?: LinkItem;
   stats?: StatItem[];
@@ -16,7 +19,7 @@ type HeroRaceSectionProps = {
 };
 
 /**
- * Cinematic hero — editorial "cinematic pacing" in the manner of the gateway /
+ * Cinematic hero - editorial "cinematic pacing" in the manner of the gateway /
  * motorsport heroes: full-bleed photography, a strong directional scrim, a top
  * data rail, an oversized title, and a single bottom stat band (no duplicate
  * stat panels). Warm Horse Sport brand treatment throughout.
@@ -27,6 +30,7 @@ export function HeroRaceSection({
   description,
   image,
   imageAlt,
+  video,
   primaryCta,
   secondaryCta,
   stats = [],
@@ -42,8 +46,9 @@ export function HeroRaceSection({
         sizes="100vw"
         className="hs-animate-zoom absolute inset-0 -z-10 object-cover object-center"
       />
+      {video ? <HeroVideo {...video} /> : null}
 
-      {/* Directional cinematic scrim — darker at top (nav legibility), heavy at
+      {/* Directional cinematic scrim - darker at top (nav legibility), heavy at
           bottom, weighted to the left where the copy sits. */}
       <div
         aria-hidden
@@ -53,7 +58,7 @@ export function HeroRaceSection({
             "linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 24%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.95) 100%), linear-gradient(90deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 48%, transparent 78%)",
         }}
       />
-      {/* Single warm brand bloom — one restrained accent */}
+      {/* Single warm brand bloom - one restrained accent */}
       <div
         aria-hidden
         className="absolute inset-0 -z-10"
@@ -63,7 +68,7 @@ export function HeroRaceSection({
         }}
       />
 
-      {/* Brand marker — three full-height staircase stripes down the LEFT edge,
+      {/* Brand marker - three full-height staircase stripes down the LEFT edge,
           faded top + bottom. Sits over the darkest part of the scrim. */}
       <div
         aria-hidden
@@ -103,7 +108,10 @@ export function HeroRaceSection({
             {title}
           </h1>
           {description ? (
-            <p className="hs-body-lg mt-6 max-w-[34rem] border-l-2 border-hs-red pl-5 text-hs-white/72">
+            <p
+              className="hs-body-lg mt-6 max-w-[34rem] border-l-2 border-hs-red pl-5 text-hs-white/72"
+              style={{ color: "rgb(255 249 238 / 0.72)" }}
+            >
               {description}
             </p>
           ) : null}
@@ -119,7 +127,11 @@ export function HeroRaceSection({
                 </Link>
               ) : null}
               {secondaryCta ? (
-                <Link href={secondaryCta.href} className="hs-cta-secondary">
+                <Link
+                  href={secondaryCta.href}
+                  className="hs-cta-secondary"
+                  style={{ color: "#FFF9EE" }}
+                >
                   <span className="px-3">{secondaryCta.label}</span>
                   <span className="hs-cta-icon-circle">
                     <ArrowUpRightIcon className="size-4" />

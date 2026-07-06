@@ -15,7 +15,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 // Brand display face (preview PDF p.7): Zalando Sans Expanded.
 // The SemiBold cut is mapped to the bold (700) slot so the `font-bold` headings
-// read as SemiBold — the approved weight, lighter than the Bold cut.
+// read as SemiBold - the approved weight, lighter than the Bold cut.
 const zalandoSans = localFont({
   src: [
     { path: "./fonts/zalando-expanded-400.ttf", weight: "400", style: "normal" },

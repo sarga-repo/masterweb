@@ -1,6 +1,6 @@
 /**
  * Minimal rich-text renderer for CMS `richtext` (markdown-ish) strings.
- * Splits on blank lines into paragraphs — enough for the seeded plain-text
+ * Splits on blank lines into paragraphs - enough for the seeded plain-text
  * content. A full markdown/blocks renderer can replace this later without
  * changing call sites.
  */

@@ -3,7 +3,7 @@
  *
  * Queries the shared CMS (siteScope = "motorsport" | "shared") and returns
  * typed results.  Every call is wrapped in a try/catch so the homepage always
- * renders — falling back to curated placeholder content when the API is
+ * renders - falling back to curated placeholder content when the API is
  * unreachable (local dev without Strapi, CI, etc.).
  */
 

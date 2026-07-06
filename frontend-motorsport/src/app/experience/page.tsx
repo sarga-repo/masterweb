@@ -12,7 +12,7 @@ import {
 export const metadata: Metadata = {
   title: "Experience",
   description:
-    "Sarga Motorsport is more than racing — it's a 360° experience of professional competition, lifestyle culture, media coverage, and community energy.",
+    "Sarga Motorsport is more than racing - it's a 360° experience of professional competition, lifestyle culture, media coverage, and community energy.",
 };
 
 const PILLARS = [
@@ -48,7 +48,7 @@ const PILLARS = [
     index: "05",
     title: "Media & broadcast",
     description:
-      "Livestream, race reports, photography, rider profiles, and behind-the-scenes storytelling. The feed never stops — 365 days of motorsport coverage.",
+      "Livestream, race reports, photography, rider profiles, and behind-the-scenes storytelling. The feed never stops - 365 days of motorsport coverage.",
     accent: "blue" as const,
   },
   {
@@ -71,7 +71,7 @@ export default function ExperiencePage() {
         accentPosition="center"
         speedLines
         grain
-        description="Sarga Motorsport is more than what happens on track. It's a festival, a broadcast, a fan community, and a premium venue experience — all converging into Indonesia's most ambitious motorsport platform."
+        description="Sarga Motorsport is more than what happens on track. It's a festival, a broadcast, a fan community, and a premium venue experience - all converging into Indonesia's most ambitious motorsport platform."
       />
 
       <GradientRule />
@@ -97,7 +97,7 @@ export default function ExperiencePage() {
         </div>
       </section>
 
-      {/* Visual break — dual imagery */}
+      {/* Visual break - dual imagery */}
       <section className="ms-shell pb-(--ms-section-space)">
         <div className="grid gap-4 md:grid-cols-2">
           <div className="ms-slant relative aspect-[16/10] overflow-hidden">

@@ -15,7 +15,7 @@ type CrossSiteEcosystemLinksProps = {
 };
 
 /**
- * Cross-links into the wider Sarga ecosystem — simple capsule links (logo +
+ * Cross-links into the wider Sarga ecosystem - simple capsule links (logo +
  * short description + arrow), consistent with the site's pill language. Renders
  * bare content so it can sit inside a shared section band.
  */

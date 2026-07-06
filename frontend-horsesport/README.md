@@ -26,8 +26,8 @@ pnpm dev                          # → http://localhost:3002
 
 Environment (`.env.local`, gitignored):
 
-- `STRAPI_API_URL` / `NEXT_PUBLIC_STRAPI_API_URL` — shared CMS base URLs
-- `STRAPI_API_TOKEN` — server-only read token (blank locally; seed grants public read)
+- `STRAPI_API_URL` / `NEXT_PUBLIC_STRAPI_API_URL` - shared CMS base URLs
+- `STRAPI_API_TOKEN` - server-only read token (blank locally; seed grants public read)
 - `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GATEWAY_SITE_URL`,
   `NEXT_PUBLIC_MOTORSPORT_SITE_URL`, `NEXT_PUBLIC_SITE_KEY`
 
@@ -43,7 +43,7 @@ canonical URLs resolve correctly.
 
 ## Brand
 
-Follows the Sarga Horse Sport brand — a premium, cinematic, equestrian visual
+Follows the Sarga Horse Sport brand - a premium, cinematic, equestrian visual
 system distinct from both the Sarga.co gateway and the Motorsport site. Primary
 reference is page 7 of `reference/source-pdfs/sarga_website_preview.pdf`. See
 `docs/horsesport/` and `.agents/skills/`. Logos live in `public/brand/`.

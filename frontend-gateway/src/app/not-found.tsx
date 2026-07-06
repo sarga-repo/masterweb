@@ -40,7 +40,7 @@ export default function NotFound() {
 
       <div className="site-container">
         <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-sarga-red">
-          404 — Off circuit
+          404 - Off circuit
         </p>
         <h1 className="mt-8 max-w-[12ch] font-heading text-[clamp(3.5rem,12vw,4.5rem)] font-bold uppercase leading-[0.84] tracking-[-0.055em] sm:text-[clamp(3.5rem,6.4vw,6rem)]">
           This route left the track.

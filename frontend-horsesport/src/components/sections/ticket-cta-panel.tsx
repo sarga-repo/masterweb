@@ -14,10 +14,10 @@ type TicketCtaPanelProps = {
 };
 
 /**
- * Ticket-stub CTA — a thin capsule split by a dashed perforation line (with
+ * Ticket-stub CTA - a thin capsule split by a dashed perforation line (with
  * punched notches), echoing a physical race-day ticket. Left stub carries the
  * event + provider; the right stub is the partner-redirect action. No nested
- * boxes, no split grey gradient — one clean, distinctive shape.
+ * boxes, no split grey gradient - one clean, distinctive shape.
  */
 export function TicketCtaPanel({
   label,
@@ -42,7 +42,7 @@ export function TicketCtaPanel({
           "linear-gradient(100deg, #ffffff 0%, #fffdf7 55%, #fbf1dd 100%)",
       }}
     >
-      {/* warm glow toward the action side — one restrained accent */}
+      {/* warm glow toward the action side - one restrained accent */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -114,7 +114,7 @@ export function TicketCtaPanel({
         <div className="overflow-hidden rounded-[1.75rem] border border-hs-cream/12">
           <iframe
             src={embedHref}
-            title={`${eventName ?? "Ticket"} — partner ticketing`}
+            title={`${eventName ?? "Ticket"} - partner ticketing`}
             loading="lazy"
             sandbox="allow-scripts allow-forms allow-same-origin allow-popups"
             referrerPolicy="no-referrer"

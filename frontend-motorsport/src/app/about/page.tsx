@@ -15,7 +15,7 @@ import { siteConfig } from "@/lib/site-config";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Sarga Motorsport is Indonesia's most ambitious motorsport platform — a 360° racing ecosystem of professional competition, lifestyle culture, media, and community.",
+    "Sarga Motorsport is Indonesia's most ambitious motorsport platform - a 360° racing ecosystem of professional competition, lifestyle culture, media, and community.",
 };
 
 const ECOSYSTEM = [
@@ -23,7 +23,7 @@ const ECOSYSTEM = [
     index: "01",
     title: "Professional car racing",
     accent: "crimson" as const,
-    desc: "Touring, GT, and formula — international standards on Indonesian circuits.",
+    desc: "Touring, GT, and formula - international standards on Indonesian circuits.",
   },
   {
     index: "02",
@@ -41,7 +41,7 @@ const ECOSYSTEM = [
     index: "04",
     title: "Media & broadcast",
     accent: "teal" as const,
-    desc: "Livestream, editorial, galleries — always-on motorsport coverage.",
+    desc: "Livestream, editorial, galleries - always-on motorsport coverage.",
   },
   {
     index: "05",
@@ -53,7 +53,7 @@ const ECOSYSTEM = [
     index: "06",
     title: "Community & fans",
     accent: "crimson" as const,
-    desc: "Pit walks, simulators, fan zones — every supporter closer to the action.",
+    desc: "Pit walks, simulators, fan zones - every supporter closer to the action.",
   },
 ];
 
@@ -77,7 +77,7 @@ export default function AboutPage() {
       <BrandStorySection
         eyebrow="Our story"
         title="Dynamic. Captivating. Intense."
-        body="Sarga Motorsport is the powerhouse of Indonesian motorsport. We don't just organise races — we engineer experiences. Every event is a convergence of elite competition, cultural energy, and broadcast-grade storytelling. From the roar of a touring car engine to the lean angle of a superbike through a midnight corner, we exist to amplify the friction that creates fire."
+        body="Sarga Motorsport is the powerhouse of Indonesian motorsport. We don't just organise races - we engineer experiences. Every event is a convergence of elite competition, cultural energy, and broadcast-grade storytelling. From the roar of a touring car engine to the lean angle of a superbike through a midnight corner, we exist to amplify the friction that creates fire."
         image="/media/motorsport-design-hero.png"
         imageAlt="Touring race car throwing sparks on a dusk circuit"
       />
@@ -124,7 +124,7 @@ export default function AboutPage() {
             </h2>
             <p className="mt-6 max-w-xl text-base leading-8 text-ms-warm-white/60">
               We believe motorsport in Indonesia deserves a world-class stage.
-              Sarga Motorsport exists to build that stage — circuit by circuit,
+              Sarga Motorsport exists to build that stage - circuit by circuit,
               race by race, story by story. Our brand persona is the &ldquo;Adrenaline
               Alchemist&rdquo;: we transform raw speed into cultural energy.
             </p>
@@ -157,7 +157,7 @@ export default function AboutPage() {
             {[
               {
                 trait: "Dynamic",
-                desc: "Always in motion. Every touchpoint carries velocity — from typography to ticket CTAs.",
+                desc: "Always in motion. Every touchpoint carries velocity - from typography to ticket CTAs.",
               },
               {
                 trait: "Captivating",

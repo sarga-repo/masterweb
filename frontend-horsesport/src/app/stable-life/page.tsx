@@ -7,7 +7,7 @@ import { fetchNewsPage } from "@/lib/cms-content";
 export const metadata: Metadata = createMetadata({
   title: "Stable Life",
   description:
-    "The discipline behind the sport — horses, jockeys, training, veterinary care, and race-day preparation.",
+    "The discipline behind the sport - horses, jockeys, training, veterinary care, and race-day preparation.",
   path: "/stable-life",
 });
 
@@ -25,7 +25,7 @@ export default async function StableLifePage() {
       <PageHero
         eyebrow="Stable Life"
         title="The discipline behind the sport."
-        description="Inside the stable — training, veterinary care, jockey routines, and the craft that shapes a champion."
+        description="Inside the stable - training, veterinary care, jockey routines, and the craft that shapes a champion."
         backgroundImage="/media/news-stable.png"
         backgroundAlt="Elite race horse inside a premium stable interior"
         accent="brown"
@@ -37,7 +37,7 @@ export default async function StableLifePage() {
             index="01"
             eyebrow="Editorial hub"
             title="Where champions are made."
-            description="Nutrition, veterinary care, and the daily routines that shape a championship contender — plus the jockeys and equine athletes at the heart of the sport."
+            description="Nutrition, veterinary care, and the daily routines that shape a championship contender - plus the jockeys and equine athletes at the heart of the sport."
           />
         </ScrollReveal>
 

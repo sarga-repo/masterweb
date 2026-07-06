@@ -79,11 +79,11 @@ export function TicketCtaPanel({
         >
           <span
             className="absolute -top-[7px] left-1/2 size-3.5 -translate-x-1/2 rounded-full border border-hs-cream/12"
-            style={{ background: "var(--hs-surface-page)" }}
+            style={{ background: "var(--hs-surface-deep)" }}
           />
           <span
             className="absolute -bottom-[7px] left-1/2 size-3.5 -translate-x-1/2 rounded-full border border-hs-cream/12"
-            style={{ background: "var(--hs-surface-page)" }}
+            style={{ background: "var(--hs-surface-deep)" }}
           />
           <div className="mx-2 h-[56%] w-px border-l border-dashed border-hs-cream/30" />
         </div>

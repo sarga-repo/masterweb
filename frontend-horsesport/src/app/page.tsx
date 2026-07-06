@@ -100,7 +100,7 @@ export default async function Homepage() {
                       <ArrowRightIcon className="size-4" />
                     </span>
                   </Link>
-                  <div className="hidden items-center gap-3 text-[0.64rem] font-semibold uppercase tracking-[0.14em] text-hs-cream/30 sm:inline-flex">
+                  <div className="hidden items-center gap-3 text-[0.64rem] font-semibold uppercase tracking-[0.14em] text-hs-cream/55 sm:inline-flex">
                     <span className="inline-flex size-2 rounded-full bg-hs-orange/60" />
                     premium hospitality
                     <span className="inline-flex size-2 rounded-full bg-hs-red/60" />
@@ -123,14 +123,14 @@ export default async function Homepage() {
                     />
                     <div
                       aria-hidden
-                      className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/8"
+                      className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/5"
                     />
                     <span className="hs-kicker absolute right-4 top-4 text-hs-cream/55">
                       Since 2023
                     </span>
                     <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
                       <p className="hs-kicker text-hs-orange">Race-day culture</p>
-                      <p className="mt-2 max-w-[24rem] text-sm leading-6 text-hs-cream/72">
+                      <p className="mt-2 max-w-[24rem] text-sm leading-6 text-hs-white">
                         An elite sporting platform with venue craft, paddock
                         theatre, and long-view stewardship.
                       </p>
@@ -179,7 +179,7 @@ export default async function Homepage() {
                 <span className="hs-text-gradient">invested in.</span>
               </p>
               <div className="hs-rule-dot mx-auto mt-10 max-w-md">
-                <span className="hs-kicker whitespace-nowrap text-hs-cream/40">
+                <span className="hs-kicker whitespace-nowrap text-hs-cream/55">
                   Est. 2023 · Indonesia
                 </span>
               </div>

@@ -135,7 +135,7 @@ export function HorseSportFooter({
           {/* Link columns */}
           {columns.map((col) => (
             <div key={col.title}>
-              <h4 className="text-[0.66rem] font-extrabold uppercase tracking-[0.18em] text-gray-300">
+              <h4 className="text-[0.66rem] font-extrabold uppercase tracking-[0.18em] text-hs-orange">
                 {col.title}
               </h4>
               <ul className="mt-5 space-y-3.5" role="list">
@@ -155,7 +155,7 @@ export function HorseSportFooter({
 
           {/* Contact column */}
           <div>
-            <h4 className="text-[0.66rem] font-extrabold uppercase tracking-[0.18em] text-gray-300">
+            <h4 className="text-[0.66rem] font-extrabold uppercase tracking-[0.18em] text-hs-orange">
               Connect
             </h4>
             <ul className="mt-5 space-y-3.5" role="list">

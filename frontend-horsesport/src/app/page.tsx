@@ -119,7 +119,7 @@ export default async function Homepage() {
             <ScrollReveal delay={120}>
               <div>
                 {aboutImage?.image ? (
-                  <div className="hs-frame-cinematic relative aspect-[5/4] overflow-hidden">
+                  <div className="hs-card-glass relative aspect-[5/4] overflow-hidden">
                     <Image
                       src={aboutImage.image}
                       alt={aboutImage.imageAlt}
@@ -177,6 +177,20 @@ export default async function Homepage() {
         <div className="hs-shell relative">
           <ScrollReveal>
             <div className="mx-auto max-w-4xl text-center">
+              {/* Top zigzag - left-aligned, fades out to the right */}
+              <div
+                aria-hidden
+                className="mb-8 h-12 w-full max-w-2xl opacity-[0.58]"
+                style={{
+                  WebkitMaskImage:
+                    "linear-gradient(90deg, black 0%, transparent 100%)",
+                  maskImage:
+                    "linear-gradient(90deg, black 0%, transparent 100%)",
+                }}
+              >
+                <div className="hs-zigzag-pattern h-full w-full" />
+              </div>
+
               <span className="hs-glass-chip mx-auto text-hs-orange">
                 The Sarga standard
               </span>
@@ -188,6 +202,20 @@ export default async function Homepage() {
                 <span className="hs-kicker whitespace-nowrap text-hs-cream/55">
                   Est. 2023 · Indonesia
                 </span>
+              </div>
+
+              {/* Bottom zigzag - right-aligned, mirrored shape, fades out to the left */}
+              <div
+                aria-hidden
+                className="ml-auto mt-8 h-12 w-full max-w-2xl opacity-[0.58]"
+                style={{
+                  WebkitMaskImage:
+                    "linear-gradient(90deg, transparent 0%, black 100%)",
+                  maskImage:
+                    "linear-gradient(90deg, transparent 0%, black 100%)",
+                }}
+              >
+                <div className="hs-zigzag-pattern h-full w-full" style={{ transform: "scaleX(-1)" }} />
               </div>
             </div>
           </ScrollReveal>

@@ -23,21 +23,22 @@ cms/public/uploads/*
 *.log
 *.tsbuildinfo
 
-docs/
-prompts/
+# docs/
+# prompts/
 reference/
 assets/
 !frontend-gateway/public/assets/
 !frontend-gateway/public/assets/**
 !frontend-motorsport/public/assets/
 !frontend-motorsport/public/assets/**
-checklists/
+# checklists/
 sarga_multisite_codex_ready_package/
-.rtk/
+# .rtk/
 .claude/
 .agents/
+.serena/
 sarga_multisite_horsesport_codex_ready_package/
 supporting-docs/
 CLAUDE.md
-skills-lock.json
-AGENTS.md
+# skills-lock.json
+# AGENTS.md

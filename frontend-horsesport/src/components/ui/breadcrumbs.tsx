@@ -14,15 +14,25 @@ export function Breadcrumbs({ items }: { items: CrumbItem[] }) {
           return (
             <li key={`${item.label}-${i}`} className="flex items-center gap-2">
               {item.href && !last ? (
-                <Link href={item.href} className="transition-colors hover:text-hs-cream">
+                <Link
+                  href={item.href}
+                  className="transition-colors hover:text-hs-cream"
+                >
                   {item.label}
                 </Link>
               ) : (
-                <span className={last ? "text-hs-orange" : undefined} aria-current={last ? "page" : undefined}>
+                <span
+                  className={last ? "text-hs-orange" : undefined}
+                  aria-current={last ? "page" : undefined}
+                >
                   {item.label}
                 </span>
               )}
-              {!last ? <span aria-hidden className="text-hs-cream/25">/</span> : null}
+              {!last ? (
+                <span aria-hidden className="text-hs-cream/25">
+                  /
+                </span>
+              ) : null}
             </li>
           );
         })}

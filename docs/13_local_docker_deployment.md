@@ -6,13 +6,13 @@ stack remains available on demand via the Compose `apps` profile (see below).
 
 ## Local services
 
-| Service               | Purpose               | Runs in       | Container port | Host port |
-| --------------------- | --------------------- | ------------- | -------------: | --------: |
-| `postgres`            | Strapi database       | Docker        |         `5432` |    `5435` |
-| `strapi`              | CMS/admin/API         | Host (pnpm)   |         `1337` |    `1337` |
-| `frontend-gateway`    | Sarga.co gateway      | Host (pnpm)   |         `3000` |    `3000` |
-| `frontend-motorsport` | Sarga Motorsport site | Host (pnpm)   |         `3001` |    `3001` |
-| `frontend-horsesport` | Sarga Horse Sport site| Host (pnpm)   |         `3002` |    `3002` |
+| Service               | Purpose                | Runs in     | Container port | Host port |
+| --------------------- | ---------------------- | ----------- | -------------: | --------: |
+| `postgres`            | Strapi database        | Docker      |         `5432` |    `5435` |
+| `strapi`              | CMS/admin/API          | Host (pnpm) |         `1337` |    `1337` |
+| `frontend-gateway`    | Sarga.co gateway       | Host (pnpm) |         `3000` |    `3000` |
+| `frontend-motorsport` | Sarga Motorsport site  | Host (pnpm) |         `3001` |    `3001` |
+| `frontend-horsesport` | Sarga Horse Sport site | Host (pnpm) |         `3002` |    `3002` |
 
 PostgreSQL must be exposed on host port `5435` to avoid conflict with an existing local PostgreSQL instance on `5432`.
 
@@ -152,12 +152,17 @@ With `SEED_DEMO_CONTENT=true` (the local default), Strapi's bootstrap
   to those content endpoints so the frontend can fetch without an API token
   during local development.
 - Records are created only when the target content type is empty, so restarts
-  never duplicate data. Media is not seeded; upload official assets through
-  the admin panel.
+  never duplicate data. Committed files in `cms/data/seed-media/` are uploaded
+  and attached idempotently where the seed manifest defines a relation.
 
 Set `SEED_DEMO_CONTENT=false` for any shared, staging, or production
 environment, and use a read-only API token for the frontend instead of public
 permissions.
+
+To copy the exact current local content and Media Library to staging, including
+editorial changes made after the seed, follow
+[`docs/15_strapi_content_media_promotion.md`](15_strapi_content_media_promotion.md).
+Do not enable the demo seed on staging as a substitute for the transfer archive.
 
 ## Data persistence
 

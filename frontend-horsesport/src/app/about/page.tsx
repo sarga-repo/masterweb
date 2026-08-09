@@ -28,12 +28,36 @@ export const metadata: Metadata = createMetadata({
 });
 
 const CAPABILITIES = [
-  { title: "Championship standards", body: "Group-class race classification and international sporting standards.", Icon: TrophyIcon },
-  { title: "Sport & veterinary compliance", body: "Rigorous welfare, integrity, and veterinary compliance protocols.", Icon: RosetteIcon },
-  { title: "Race organisation", body: "End-to-end event production, officiating, and broadcast capability.", Icon: UsersIcon },
-  { title: "Venue & turf development", body: "Championship-grade turf, tracks, and spectator infrastructure.", Icon: TrackIcon },
-  { title: "Stable & equine care", body: "Elite stabling, conditioning, and equine performance programs.", Icon: StableIcon },
-  { title: "Hospitality & lifestyle", body: "Premium race-day hospitality, lounges, and derby-day experiences.", Icon: HorseshoeIcon },
+  {
+    title: "Championship standards",
+    body: "Group-class race classification and international sporting standards.",
+    Icon: TrophyIcon,
+  },
+  {
+    title: "Sport & veterinary compliance",
+    body: "Rigorous welfare, integrity, and veterinary compliance protocols.",
+    Icon: RosetteIcon,
+  },
+  {
+    title: "Race organisation",
+    body: "End-to-end event production, officiating, and broadcast capability.",
+    Icon: UsersIcon,
+  },
+  {
+    title: "Venue & turf development",
+    body: "Championship-grade turf, tracks, and spectator infrastructure.",
+    Icon: TrackIcon,
+  },
+  {
+    title: "Stable & equine care",
+    body: "Elite stabling, conditioning, and equine performance programs.",
+    Icon: StableIcon,
+  },
+  {
+    title: "Hospitality & lifestyle",
+    body: "Premium race-day hospitality, lounges, and derby-day experiences.",
+    Icon: HorseshoeIcon,
+  },
 ];
 
 export default async function AboutPage() {
@@ -57,7 +81,11 @@ export default async function AboutPage() {
       <section className="hs-section hs-shell">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_0.9fr] lg:items-center">
           <ScrollReveal>
-            <SectionHeader index="01" eyebrow="The Sarga Horse Sport story" title="Heritage, engineered for the modern spectacle." />
+            <SectionHeader
+              index="01"
+              eyebrow="The Sarga Horse Sport story"
+              title="Heritage, engineered for the modern spectacle."
+            />
             <RichText value={overview} className="mt-6" />
           </ScrollReveal>
           <ScrollReveal delay={120}>
@@ -69,7 +97,10 @@ export default async function AboutPage() {
                 sizes="(max-width: 1024px) 100vw, 40vw"
                 className="object-cover"
               />
-              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/5" />
+              <div
+                aria-hidden
+                className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/5"
+              />
             </div>
           </ScrollReveal>
         </div>
@@ -89,7 +120,11 @@ export default async function AboutPage() {
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {CAPABILITIES.map((cap, i) => (
               <ScrollReveal key={cap.title} delay={(i % 3) * 90}>
-                <FeatureCard icon={cap.Icon} title={cap.title} body={cap.body} />
+                <FeatureCard
+                  icon={cap.Icon}
+                  title={cap.title}
+                  body={cap.body}
+                />
               </ScrollReveal>
             ))}
           </div>

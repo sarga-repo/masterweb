@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import {
-  GradientRule,
+  InformationBand,
+  PageHero,
   PageShell,
   PartnerLogoStrip,
   SectionHeader,
@@ -13,13 +13,20 @@ import {
 } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { fetchEventBySlug, fetchPartners } from "@/lib/cms-data";
-import { resolveSiteUrl, resolveSocialImageUrl, siteConfig } from "@/lib/site-config";
+import {
+  resolveSiteUrl,
+  resolveSocialImageUrl,
+  siteConfig,
+} from "@/lib/site-config";
 import type { MotorsportEvent } from "@/types/design-system";
 
 type Props = { params: Promise<{ slug: string }> };
 
 /* Placeholder events shown when CMS is unreachable. */
-const PLACEHOLDER_MAP: Record<string, MotorsportEvent & { description?: string }> = {
+const PLACEHOLDER_MAP: Record<
+  string,
+  MotorsportEvent & { description?: string }
+> = {
   "race-weekend-indonesia": {
     title: "Race Weekend Indonesia",
     href: "/events/race-weekend-indonesia",
@@ -124,87 +131,62 @@ export default async function EventDetailPage({ params }: Props) {
   const partners = await fetchPartners(5);
 
   return (
-    <PageShell>
-      {/* Hero */}
-      <section className="ms-grain relative isolate overflow-hidden bg-ms-black">
-        <Image
-          src={event.image}
-          alt={event.imageAlt}
-          fill
-          priority
-          className="object-cover object-center ms-animate-zoom"
-          sizes="100vw"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,5,5,.95)_0%,rgba(5,5,5,.5)_40%,rgba(5,5,5,.2)_70%)]"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-r from-ms-black/70 via-transparent to-transparent"
-        />
-        {/* Dot pattern (track grid) */}
-        <div aria-hidden="true" className="ms-track-grid absolute inset-0 opacity-25" />
-        {/* Speed lines */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 overflow-hidden pointer-events-none"
-        >
-          <div className="ms-speed-line absolute top-[25%] left-0 h-px w-[40%] bg-gradient-to-r from-transparent via-ms-apex-crimson/25 to-transparent" />
-          <div className="ms-speed-line-delay-1 absolute top-[60%] left-0 h-px w-[55%] bg-gradient-to-r from-transparent via-ms-ignition-orange/18 to-transparent" />
-        </div>
-        <div
-          aria-hidden="true"
-          className="absolute inset-x-0 bottom-0 h-px ms-shimmer"
-        />
-        <div className="ms-shell relative z-10 flex min-h-[65vh] flex-col justify-end py-16 sm:py-24">
-          <div className="flex flex-wrap items-center gap-4 ms-animate-stagger-1">
-            <StatusChip status={event.status} />
-            {event.category ? (
-              <span className="ms-kicker text-ms-ignition-orange">
-                {event.category}
-              </span>
-            ) : null}
-            {event.seriesName ? (
-              <span className="ms-data-label text-ms-slipstream-teal">
-                {event.seriesName}
-              </span>
-            ) : null}
-          </div>
-          <h1 className="ms-display ms-animate-stagger-2 mt-8 max-w-[14ch] text-[clamp(3rem,7.5vw,6.75rem)]">
-            {event.title}
-          </h1>
-          <div className="ms-animate-stagger-3 mt-8 flex flex-wrap gap-x-10 gap-y-4 border-t border-ms-warm-white/16 pt-6">
-            <div>
-              <span className="ms-data-label text-ms-warm-white/38">Date</span>
-              <p className="mt-1 text-sm font-bold uppercase tracking-wide">
+    <PageShell spectrumSeparators>
+      <PageHero
+        kicker={`${event.category ?? "Motorsport event"}${event.seriesName ? ` / ${event.seriesName}` : ""}`}
+        kickerColor="yellow"
+        title={event.title}
+        backgroundImage={event.image}
+        backgroundAlt={event.imageAlt}
+        accent="orange"
+        accentPosition="bottom-left"
+        surface="heat"
+        speedLines
+        grain
+      >
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <StatusChip status={event.status} />
+          <dl className="grid flex-1 grid-cols-2 border-l border-ms-warm-white/20 sm:max-w-2xl">
+            <div className="border-r border-ms-warm-white/20 px-4 py-1">
+              <dt className="ms-data-label text-ms-warm-white/48">Date</dt>
+              <dd className="ms-tabular mt-2 text-sm font-bold uppercase">
                 {event.dateLabel}
-              </p>
+              </dd>
             </div>
-            <div>
-              <span className="ms-data-label text-ms-warm-white/38">
-                Circuit
-              </span>
-              <p className="mt-1 text-sm font-bold uppercase tracking-wide">
+            <div className="border-r border-ms-warm-white/20 px-4 py-1">
+              <dt className="ms-data-label text-ms-warm-white/48">Circuit</dt>
+              <dd className="mt-2 text-sm font-bold uppercase">
                 {event.venue}
-              </p>
+              </dd>
             </div>
-          </div>
+          </dl>
         </div>
-      </section>
+      </PageHero>
 
-      <GradientRule />
+      <InformationBand
+        eyebrow="Event control / Published briefing"
+        title="One event. Every essential signal."
+        description="The published event file keeps date, venue, sporting class, status, and approved ticket routing in one place."
+        items={[
+          { label: "Status", value: event.status.replaceAll("-", " ") },
+          { label: "Class", value: event.category ?? "Motorsport" },
+          {
+            label: "Tickets",
+            value: event.ticketHref ? "Available" : "Pending",
+          },
+        ]}
+      />
 
-      {/* Event body */}
-      <section className="ms-section ms-shell">
-        <div className="grid gap-16 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,0.6fr)]">
-          <div>
+      <section className="ms-blue-heat-surface ms-section">
+        <div className="ms-shell grid gap-14 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,.65fr)] lg:gap-20">
+          <article>
             <SectionHeader
+              index="BRIEFING"
               eyebrow="Event overview"
               title="Race briefing."
               align="left"
             />
-            <div className="mt-10 max-w-3xl space-y-6 text-base leading-8 text-ms-warm-white/65">
+            <div className="mt-10 max-w-3xl space-y-6 text-lg leading-8 text-ms-warm-white/72">
               {event.description ? (
                 <p>{event.description}</p>
               ) : (
@@ -215,12 +197,13 @@ export default async function EventDetailPage({ params }: Props) {
                 </p>
               )}
             </div>
-          </div>
-          <aside className="ms-panel bg-ms-black p-6">
-            <span className="ms-data-label text-ms-warm-white/42">
-              Session data
+          </article>
+
+          <aside className="ms-blue-panel self-start p-7 sm:p-8">
+            <span className="ms-data-label text-ms-slipstream-teal">
+              Event file
             </span>
-            <dl className="mt-6 space-y-5">
+            <dl className="mt-7 divide-y divide-ms-warm-white/14 border-y border-ms-warm-white/14">
               {[
                 ["Series", event.seriesName],
                 ["Class", event.category],
@@ -228,11 +211,11 @@ export default async function EventDetailPage({ params }: Props) {
                 ["Circuit", event.venue],
               ].map(([label, value]) =>
                 value ? (
-                  <div key={label}>
-                    <dt className="ms-data-label text-ms-warm-white/34">
+                  <div key={label} className="py-5">
+                    <dt className="ms-data-label text-ms-warm-white/42">
                       {label}
                     </dt>
-                    <dd className="mt-1 text-sm font-bold uppercase tracking-wide">
+                    <dd className="mt-2 text-sm font-bold uppercase tracking-wide">
                       {value}
                     </dd>
                   </div>
@@ -243,45 +226,61 @@ export default async function EventDetailPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Ticket CTA */}
       {event.ticketHref ? (
-        <section className="ms-shell pb-(--ms-section-space)">
-          <TicketCtaPanel
-            eyebrow="Official ticketing"
-            title="Secure your seat."
-            description="Tickets redirect to our approved partner platform. Secure checkout, guaranteed entry."
-            eventMeta={event.title}
-            provider="Official partner"
-            cta={{
-              label: "Get tickets",
-              href: event.ticketHref,
-              external: event.ticketHref.startsWith("http"),
-            }}
-          />
+        <section className="ms-reflected-light-surface ms-section">
+          <div className="ms-shell">
+            <TicketCtaPanel
+              eyebrow="Official ticketing"
+              title="Secure your seat."
+              description="Tickets redirect to our approved partner platform. Secure checkout, guaranteed entry, and no internal payment processing."
+              eventMeta={event.title}
+              provider="Official partner"
+              surface="reflected"
+              cta={{
+                label: event.ticketLabel ?? "Get tickets",
+                href: event.ticketHref,
+                external: event.ticketHref.startsWith("http"),
+              }}
+            />
+          </div>
         </section>
       ) : null}
 
-      <GradientRule />
-
-      {/* Sponsors */}
       {partners.length > 0 ? (
-        <div className="mt-0">
-          <PartnerLogoStrip
-            label="Event sponsors"
-            partners={partners.slice(0, 5)}
-          />
-        </div>
+        <PartnerLogoStrip
+          label="Event sponsors"
+          partners={partners.slice(0, 5)}
+          className="ms-blue-heat-surface"
+        />
       ) : null}
 
-      {/* Back link */}
-      <section className="ms-shell py-12">
-        <Link
-          href="/events"
-          className="group inline-flex items-center gap-3 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white/58 transition-colors hover:text-ms-warm-white"
-        >
-          <ArrowRightIcon className="size-4 rotate-180 transition-transform group-hover:-translate-x-1" />
-          All events
-        </Link>
+      <section className="ms-blue-heat-surface py-12">
+        <div className="ms-shell flex flex-wrap items-center justify-between gap-5">
+          <Link
+            href="/events"
+            className="group inline-flex items-center gap-3 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white/68 transition-colors hover:text-ms-electric-yellow"
+          >
+            <ArrowRightIcon className="size-4 rotate-180 transition-transform group-hover:-translate-x-1" />
+            All events
+          </Link>
+          {event.ticketHref ? (
+            <Link
+              href={event.ticketHref}
+              target={
+                event.ticketHref.startsWith("http") ? "_blank" : undefined
+              }
+              rel={
+                event.ticketHref.startsWith("http")
+                  ? "noopener noreferrer"
+                  : undefined
+              }
+              className="group inline-flex items-center gap-3 border-b border-ms-electric-yellow/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-electric-yellow"
+            >
+              {event.ticketLabel ?? "Ticket information"}
+              <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          ) : null}
+        </div>
       </section>
     </PageShell>
   );

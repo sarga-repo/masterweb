@@ -179,7 +179,11 @@ body {
   background-image:
     radial-gradient(circle, rgb(33 26 18 / 0.06) 1px, transparent 1.6px),
     radial-gradient(60% 55% at 12% 0%, rgb(255 107 0 / 0.05), transparent 58%),
-    radial-gradient(55% 55% at 94% 98%, rgb(135 178 165 / 0.08), transparent 60%);
+    radial-gradient(
+      55% 55% at 94% 98%,
+      rgb(135 178 165 / 0.08),
+      transparent 60%
+    );
   background-size:
     22px 22px,
     auto,

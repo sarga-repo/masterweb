@@ -1,209 +1,330 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
-import {
-  BrandStorySection,
-  GradientRule,
-  PageHero,
-  PageShell,
-  SectionHeader,
-} from "@/components";
+import { InformationBand, PageShell, SectionHeader } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
+import { ResilientImage } from "@/components/ui/resilient-image";
+import {
+  fetchLeadership,
+  fetchSitePage,
+  type SitePageContent,
+} from "@/lib/cms-data";
 import { siteConfig } from "@/lib/site-config";
+import type { TeamMember } from "@/types/design-system";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Sarga Motorsport is Indonesia's most ambitious motorsport platform - a 360° racing ecosystem of professional competition, lifestyle culture, media, and community.",
+    "Sarga Motorsport is Indonesia's premium racing platform—professional competition, talent development, event experience, and media.",
 };
 
-const ECOSYSTEM = [
+const FALLBACK_TEAM: TeamMember[] = [
   {
-    index: "01",
-    title: "Professional car racing",
-    accent: "crimson" as const,
-    desc: "Touring, GT, and formula - international standards on Indonesian circuits.",
+    name: "Farry Ongko Widjaja",
+    role: "President Director",
+    group: "board",
+    portrait: "/media/sarga-motorsport-race-nascar-1.png",
+    portraitAlt: "Sarga leadership portrait placeholder",
   },
   {
-    index: "02",
-    title: "Professional motorcycle racing",
-    accent: "orange" as const,
-    desc: "Superbike, Moto2, and grassroots two-wheel competition.",
+    name: "Diana Airin",
+    role: "Chief Operating Officer",
+    group: "executive",
+    portrait: "/media/motorcycle-racing-dusk.png",
+    portraitAlt: "Sarga leadership portrait placeholder",
   },
   {
-    index: "03",
-    title: "Lifestyle & festival culture",
-    accent: "yellow" as const,
-    desc: "Music, food, art, and community woven into every race weekend.",
-  },
-  {
-    index: "04",
-    title: "Media & broadcast",
-    accent: "teal" as const,
-    desc: "Livestream, editorial, galleries - always-on motorsport coverage.",
-  },
-  {
-    index: "05",
-    title: "Venue & circuit",
-    accent: "blue" as const,
-    desc: "Track days, corporate events, and the circuit as a premium destination.",
-  },
-  {
-    index: "06",
-    title: "Community & fans",
-    accent: "crimson" as const,
-    desc: "Pit walks, simulators, fan zones - every supporter closer to the action.",
+    name: "Zaki Maulani",
+    role: "Head of Partnerships",
+    group: "executive",
+    portrait: "/media/sarga-motorsport-bike-and-rally.png",
+    portraitAlt: "Sarga leadership portrait placeholder",
   },
 ];
 
-export default function AboutPage() {
+const CAPABILITIES = [
+  [
+    "01",
+    "Professional competition",
+    "Touring, GT, rallycross, and motorcycle racing delivered to international sporting standards.",
+  ],
+  [
+    "02",
+    "Talent development",
+    "Clear pathways that help Indonesia's next generation of riders and racing professionals progress.",
+  ],
+  [
+    "03",
+    "Event experience",
+    "Race weekends shaped through fan access, hospitality, culture, and high-energy live programming.",
+  ],
+  [
+    "04",
+    "Media & partnerships",
+    "Broadcast-ready stories and commercial platforms that extend beyond the chequered flag.",
+  ],
+];
+
+function sectionBody(
+  sections: SitePageContent["sections"] | undefined,
+  key: string,
+  fallback: string,
+) {
   return (
-    <PageShell>
-      <PageHero
-        kicker="The Adrenaline Alchemist"
-        kickerColor="orange"
-        title="About"
-        accent="crimson"
-        accentPosition="top-right"
-        speedLines
-        grain
-        description={`${siteConfig.description} Born from a vision to unite professional racing, lifestyle culture, and media storytelling under one electrifying brand.`}
-      />
+    sections?.find((section) => section.sectionKey === key)?.body || fallback
+  );
+}
 
-      <GradientRule />
+export default async function AboutPage() {
+  const [page, cmsTeam] = await Promise.all([
+    fetchSitePage("about"),
+    fetchLeadership(),
+  ]);
+  const team = cmsTeam.length > 0 ? cmsTeam.slice(0, 6) : FALLBACK_TEAM;
 
-      {/* Brand story */}
-      <BrandStorySection
-        eyebrow="Our story"
-        title="Dynamic. Captivating. Intense."
-        body="Sarga Motorsport is the powerhouse of Indonesian motorsport. We don't just organise races - we engineer experiences. Every event is a convergence of elite competition, cultural energy, and broadcast-grade storytelling. From the roar of a touring car engine to the lean angle of a superbike through a midnight corner, we exist to amplify the friction that creates fire."
-        image="/media/motorsport-design-hero.png"
-        imageAlt="Touring race car throwing sparks on a dusk circuit"
-      />
-
-      <GradientRule />
-
-      {/* 360° ecosystem */}
-      <section className="ms-section ms-shell">
-        <SectionHeader
-          index="ECOSYSTEM"
-          eyebrow="The 360° racing platform"
-          title="More than a race."
-          description="Six pillars. One mission. Sarga Motorsport converges professional competition, cultural programming, and media production into a single, always-on motorsport experience."
-        />
-        <div className="mt-16 grid gap-px bg-ms-warm-white/10 sm:grid-cols-2 lg:grid-cols-3">
-          {ECOSYSTEM.map((item) => (
-            <div
-              key={item.title}
-              className="bg-ms-black p-8 transition-colors hover:bg-ms-graphite"
-            >
-              <span className="ms-data-label text-ms-warm-white/38">
-                {item.index}
-              </span>
-              <h3 className="ms-display mt-3 text-[clamp(1.13rem,2.25vw,1.88rem)]">
-                {item.title}
-              </h3>
-              <p className="mt-3 text-sm leading-6 text-ms-warm-white/52">
-                {item.desc}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Mission */}
-      <section className="ms-shell border-t border-ms-warm-white/12 py-16">
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+  return (
+    <PageShell spectrumSeparators>
+      <section className="ms-about-intro">
+        <div className="ms-shell grid gap-12 py-20 sm:py-28 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,.65fr)] lg:items-end">
           <div>
-            <span className="ms-kicker text-ms-slipstream-teal">
-              Mission & positioning
-            </span>
-            <h2 className="ms-display mt-6 text-[clamp(1.88rem,3.75vw,3.75rem)]">
-              Racing, amplified.
-            </h2>
-            <p className="mt-6 max-w-xl text-base leading-8 text-ms-warm-white/60">
-              We believe motorsport in Indonesia deserves a world-class stage.
-              Sarga Motorsport exists to build that stage - circuit by circuit,
-              race by race, story by story. Our brand persona is the &ldquo;Adrenaline
-              Alchemist&rdquo;: we transform raw speed into cultural energy.
+            <p className="ms-kicker text-ms-electric-yellow">
+              The Adrenaline Alchemist
+            </p>
+            <h1 className="ms-heading-page mt-6 max-w-[13ch] text-ms-warm-white">
+              {page?.heroTitle || "About Sarga Motorsport"}
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-ms-warm-white/72">
+              {page?.heroDescription ||
+                "We transform raw speed into cultural energy through professional competition, talent development, premium events, and media."}
             </p>
           </div>
-          <div className="ms-slant relative aspect-[4/3] overflow-hidden">
-            <Image
-              src="/media/motorcycle-racing-dusk.png"
-              alt="Superbike riders leaning through a circuit corner at dusk"
+          <dl className="grid grid-cols-3 border-l border-ms-warm-white/20">
+            {[
+              ["Property", "Motorsport"],
+              ["Region", "Indonesia"],
+              ["Standard", "International"],
+            ].map(([label, value]) => (
+              <div
+                key={label}
+                className="border-r border-ms-warm-white/20 px-4 py-2"
+              >
+                <dt className="ms-data-label text-ms-slipstream-teal">
+                  {label}
+                </dt>
+                <dd className="mt-3 text-xs font-extrabold uppercase tracking-[0.08em] text-ms-warm-white sm:text-sm">
+                  {value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      <section className="ms-about-story-surface pb-20 sm:pb-28">
+        <div className="ms-shell">
+          <figure className="relative aspect-[16/9] overflow-hidden bg-ms-cream-200 sm:aspect-[16/7]">
+            <ResilientImage
+              src={
+                page?.heroImage ||
+                "/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
+              }
+              alt={
+                page?.heroImageAlt ||
+                "Driver and pit crew preparing a touring car in a warm daylight paddock"
+              }
+              fallbackSrc="/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
+              fallbackAlt="Driver and pit crew preparing a touring car in a warm daylight paddock"
               fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              priority
+              sizes="100vw"
               className="object-cover"
             />
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-t from-ms-black/60 to-transparent"
-            />
+            <figcaption className="absolute bottom-0 left-0 max-w-xs bg-ms-apex-crimson px-6 py-4 text-ms-warm-white sm:px-8">
+              <span className="ms-data-label text-ms-electric-yellow">
+                Profile / Indonesia
+              </span>
+            </figcaption>
+          </figure>
+
+          <div className="grid gap-12 pt-14 lg:grid-cols-[minmax(0,1.35fr)_minmax(17rem,.65fr)] lg:gap-20 lg:pt-20">
+            <article>
+              <p className="ms-kicker text-ms-electric-yellow">
+                01 / Who we are
+              </p>
+              <h2 className="ms-heading-section mt-6 max-w-[13ch] text-ms-warm-white">
+                A stage built for velocity.
+              </h2>
+              <p className="mt-8 max-w-3xl text-lg leading-8 text-ms-warm-white/72">
+                {sectionBody(
+                  page?.sections,
+                  "profile",
+                  "Sarga Motorsport is the dedicated racing property within the Sarga ecosystem. We unite professional racing, live-event production, community, hospitality, and editorial storytelling in one focused platform.",
+                )}
+              </p>
+            </article>
+
+            <aside className="border-t border-ms-warm-white/18 pt-6 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0">
+              <p className="ms-data-label text-ms-slipstream-teal">
+                Operating idea
+              </p>
+              <p className="mt-5 text-base leading-7 text-ms-warm-white/68">
+                Competition creates the moment. People, media, hospitality, and
+                development turn it into a lasting Motorsport culture.
+              </p>
+              <Link
+                href="#team"
+                className="group mt-8 inline-flex items-center gap-3 border-b border-ms-electric-yellow/45 pb-3 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-electric-yellow"
+              >
+                Meet the leadership
+                <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </aside>
           </div>
         </div>
       </section>
 
-      {/* Brand personality */}
-      <section className="ms-heat-field ms-section">
+      <InformationBand
+        eyebrow="Vision / Long-range signal"
+        title="Build a world-class stage for Indonesian motorsport."
+        description={sectionBody(
+          page?.sections,
+          "vision",
+          "Our vision is to connect elite competition with accessible pathways, credible event delivery, and a fan culture that can travel beyond Indonesia.",
+        )}
+        items={[
+          { label: "Persona", value: "Dynamic" },
+          { label: "Standard", value: "International" },
+          { label: "Purpose", value: "Progress" },
+        ]}
+      />
+
+      <section className="ms-about-capabilities ms-reflected-light-surface ms-section">
         <div className="ms-shell">
           <SectionHeader
-            eyebrow="Brand personality"
-            title="The Adrenaline Alchemist."
-            align="left"
+            index="CAPABILITY"
+            eyebrow="What we do"
+            title="Competition is the core. Experience completes it."
+            description={sectionBody(
+              page?.sections,
+              "what-we-do",
+              "Professional competition, event experiences, media, partnerships, and talent development—designed as one connected Motorsport system.",
+            )}
           />
-          <div className="mt-10 grid gap-8 border-t border-ms-warm-white/12 pt-10 md:grid-cols-3">
-            {[
-              {
-                trait: "Dynamic",
-                desc: "Always in motion. Every touchpoint carries velocity - from typography to ticket CTAs.",
-              },
-              {
-                trait: "Captivating",
-                desc: "Impossible to look away. Cinematic imagery, bold headlines, and editorial precision.",
-              },
-              {
-                trait: "Intense",
-                desc: "High contrast, high stakes. The brand mirrors the tension of a race weekend at full throttle.",
-              },
-            ].map((item) => (
-              <div key={item.trait}>
-                <h3 className="ms-display text-[clamp(1.5rem,3vw,2.63rem)]">
-                  {item.trait}
+          <div className="mt-14 border-y border-ms-warm-white/18 md:grid md:grid-cols-2">
+            {CAPABILITIES.map(([index, title, description]) => (
+              <article
+                key={index}
+                className="border-b border-ms-warm-white/14 px-0 py-9 md:px-8 md:odd:border-r md:first:pl-0"
+              >
+                <span className="ms-data-label text-ms-electric-yellow">
+                  {index}
+                </span>
+                <h3 className="ms-heading-card mt-7 max-w-[16ch] text-ms-warm-white">
+                  {title}
                 </h3>
-                <p className="mt-4 text-sm leading-6 text-ms-warm-white/55">
-                  {item.desc}
+                <p className="mt-5 max-w-xl text-sm leading-7 text-ms-warm-white/68">
+                  {description}
                 </p>
-              </div>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Relationship to Sarga.co */}
-      <section className="ms-shell py-16">
-        <div className="ms-panel bg-ms-black p-10 sm:p-14">
-          <span className="ms-data-label text-ms-warm-white/42">
-            Part of the Sarga group
-          </span>
-          <h2 className="ms-display mt-6 max-w-[12ch] text-[clamp(1.88rem,3.75vw,3.75rem)]">
-            One ecosystem. Two front doors.
-          </h2>
-          <p className="mt-6 max-w-xl text-base leading-7 text-ms-warm-white/60">
-            Sarga Motorsport is a dedicated property within the Sarga group
-            ecosystem. The gateway at Sarga.co serves as the group&apos;s corporate
-            entry point; this site is the home of racing.
-          </p>
-          <Link
-            href={siteConfig.gatewayUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="group mt-8 inline-flex items-center gap-3 border-b border-ms-apex-crimson pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] transition-colors hover:text-ms-ignition-orange"
-          >
-            Visit Sarga.co
-            <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+      <section id="team" className="ms-about-team-surface ms-section">
+        <div className="ms-shell">
+          <SectionHeader
+            index="TEAM"
+            eyebrow="Meet the team"
+            title="The people behind the programme."
+            description="Group leadership and operators building the sporting, commercial, and live-event platform."
+          />
+          <div className="mt-14 grid grid-cols-2 gap-5 sm:gap-7 lg:grid-cols-4">
+            {team.map((member, index) => (
+              <article key={`${member.name}-${member.role}`}>
+                <div className="relative aspect-[4/5] overflow-hidden bg-ms-charcoal">
+                  <ResilientImage
+                    src={member.portrait}
+                    alt={member.portraitAlt}
+                    fallbackSrc={
+                      index % 2 === 0
+                        ? "/media/sarga-motorsport-race-nascar-1.png"
+                        : "/media/motorcycle-racing-dusk.png"
+                    }
+                    fallbackAlt="Sarga Motorsport team"
+                    fill
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    className="object-cover transition duration-500 hover:scale-[1.015]"
+                  />
+                </div>
+                <div className="border-b border-ms-warm-white/18 py-5">
+                  <p className="ms-data-label text-ms-slipstream-teal">
+                    {member.group || "team"}
+                  </p>
+                  <h3 className="mt-3 font-display text-2xl uppercase leading-none text-ms-warm-white">
+                    {member.name}
+                  </h3>
+                  {member.role ? (
+                    <p className="mt-2 text-sm text-ms-warm-white/68">
+                      {member.role}
+                    </p>
+                  ) : null}
+                  {member.summary ? (
+                    <p className="mt-4 text-sm leading-6 text-ms-warm-white/58">
+                      {member.summary}
+                    </p>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="part-of-sarga"
+        className="ms-reflected-light-surface ms-section"
+      >
+        <div className="ms-shell grid gap-12 lg:grid-cols-2 lg:gap-20">
+          <article>
+            <p className="ms-kicker text-ms-ignition-orange">Contact us</p>
+            <h2 className="ms-heading-section mt-6 max-w-[11ch]">
+              Start a conversation with race control.
+            </h2>
+            <p className="mt-6 max-w-xl leading-7 text-ms-warm-white/72">
+              Partnerships, media, event support, talent pathways, and general
+              Motorsport inquiries are routed through the contact desk.
+            </p>
+            <Link
+              href="/contact"
+              className="group mt-8 inline-flex items-center gap-4 border-b border-ms-warm-white/55 pb-3 text-[0.65rem] font-black uppercase tracking-[0.16em]"
+            >
+              Contact Sarga Motorsport
+              <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </article>
+          <article className="border-t border-ms-warm-white/18 pt-10 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
+            <p className="ms-kicker text-ms-slipstream-teal">
+              Part of Sarga.co
+            </p>
+            <h2 className="ms-heading-section mt-6 max-w-[11ch]">
+              One ecosystem. A dedicated racing home.
+            </h2>
+            <p className="mt-6 max-w-xl leading-7 text-ms-warm-white/72">
+              Sarga.co remains the group gateway. This dedicated site is where
+              Motorsport programmes, events, stories, tickets, and fan culture
+              live in full.
+            </p>
+            <a
+              href={siteConfig.gatewayUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="group mt-8 inline-flex items-center gap-4 border-b border-ms-slipstream-teal/55 pb-3 text-[0.65rem] font-black uppercase tracking-[0.16em]"
+            >
+              Visit Sarga.co
+              <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+            </a>
+          </article>
         </div>
       </section>
     </PageShell>

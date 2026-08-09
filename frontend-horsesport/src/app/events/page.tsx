@@ -64,14 +64,20 @@ export default async function EventsPage({ searchParams }: Params) {
         {filtered.length > 0 ? (
           <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {filtered.map((event, i) => (
-              <ScrollReveal key={event.href} delay={(i % 3) * 90} className="flex">
+              <ScrollReveal
+                key={event.href}
+                delay={(i % 3) * 90}
+                className="flex"
+              >
                 <RaceEventCard event={event} priority={i < 3} />
               </ScrollReveal>
             ))}
           </div>
         ) : (
           <div className="hs-card-glass mt-12 p-12 text-center">
-            <p className="hs-display text-2xl text-hs-cream">No events in this category yet.</p>
+            <p className="hs-display text-2xl text-hs-cream">
+              No events in this category yet.
+            </p>
             <p className="mt-3 text-sm text-hs-cream/55">
               Check back soon or view the full calendar.
             </p>

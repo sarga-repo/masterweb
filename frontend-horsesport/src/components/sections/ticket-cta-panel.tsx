@@ -35,78 +35,78 @@ export function TicketCtaPanel({
 
   return (
     <div className="flex flex-col gap-4">
-    <div
-      className="relative overflow-hidden rounded-[1.75rem] border border-hs-cream/12 shadow-[var(--shadow-hs-card)] sm:rounded-full"
-      style={{
-        background:
-          "linear-gradient(100deg, #ffffff 0%, #fffdf7 55%, #fbf1dd 100%)",
-      }}
-    >
-      {/* warm glow toward the action side - one restrained accent */}
       <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="relative overflow-hidden rounded-[1.75rem] border border-hs-cream/12 shadow-[var(--shadow-hs-card)] sm:rounded-full"
         style={{
           background:
-            "radial-gradient(42% 130% at 100% 50%, rgb(255 107 0 / 0.12), transparent 62%)",
+            "linear-gradient(100deg, #ffffff 0%, #fffdf7 55%, #fbf1dd 100%)",
         }}
-      />
-
-      <div className="relative flex flex-col sm:flex-row sm:items-center">
-        {/* ── Left stub: event + provider ── */}
-        <div className="flex-1 px-8 py-6 sm:py-7 sm:pl-14 sm:pr-9">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
-            <span className="hs-kicker inline-flex items-center gap-2 text-hs-orange">
-              <TicketIcon className="size-3.5" />
-              {provider ?? "Partner Ticketing"}
-            </span>
-            {eventDate ? (
-              <span className="hs-kicker text-hs-cream/40">{eventDate}</span>
-            ) : null}
-          </div>
-          <h3 className="hs-display mt-3 max-w-[24ch] text-[clamp(1.25rem,2.4vw,1.9rem)] leading-[1] text-hs-cream">
-            {eventName ?? "Secure your race-day seats."}
-          </h3>
-          <p className="mt-2.5 text-[0.78rem] text-hs-cream/45">
-            Verified partner redirect · no internal checkout
-          </p>
-        </div>
-
-        {/* ── Perforation divider (vertical on sm+) ── */}
+      >
+        {/* warm glow toward the action side - one restrained accent */}
         <div
           aria-hidden
-          className="relative hidden shrink-0 self-stretch sm:flex sm:items-center"
-        >
-          <span
-            className="absolute -top-[7px] left-1/2 size-3.5 -translate-x-1/2 rounded-full border border-hs-cream/12"
-            style={{ background: "var(--hs-surface-deep)" }}
-          />
-          <span
-            className="absolute -bottom-[7px] left-1/2 size-3.5 -translate-x-1/2 rounded-full border border-hs-cream/12"
-            style={{ background: "var(--hs-surface-deep)" }}
-          />
-          <div className="mx-2 h-[56%] w-px border-l border-dashed border-hs-cream/30" />
-        </div>
-        {/* mobile horizontal perforation */}
-        <div
-          aria-hidden
-          className="mx-8 border-t border-dashed border-hs-cream/25 sm:hidden"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(42% 130% at 100% 50%, rgb(255 107 0 / 0.12), transparent 62%)",
+          }}
         />
 
-        {/* ── Right stub: action ── */}
-        <div className="flex shrink-0 flex-col items-start gap-2.5 px-8 py-6 sm:items-end sm:py-7 sm:pl-9 sm:pr-14">
-          <CtaTag {...ctaProps} className="hs-cta-primary">
-            <span className="px-3">{label}</span>
-            <span className="hs-cta-icon-circle">
-              <ArrowUpRightIcon className="size-4" />
-            </span>
-          </CtaTag>
-          <p className="text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-hs-cream/38">
-            Guaranteed entry · Zero markup
-          </p>
+        <div className="relative flex flex-col sm:flex-row sm:items-center">
+          {/* ── Left stub: event + provider ── */}
+          <div className="flex-1 px-8 py-6 sm:py-7 sm:pl-14 sm:pr-9">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+              <span className="hs-kicker inline-flex items-center gap-2 text-hs-orange">
+                <TicketIcon className="size-3.5" />
+                {provider ?? "Partner Ticketing"}
+              </span>
+              {eventDate ? (
+                <span className="hs-kicker text-hs-cream/40">{eventDate}</span>
+              ) : null}
+            </div>
+            <h3 className="hs-display mt-3 max-w-[24ch] text-[clamp(1.25rem,2.4vw,1.9rem)] leading-[1] text-hs-cream">
+              {eventName ?? "Secure your race-day seats."}
+            </h3>
+            <p className="mt-2.5 text-[0.78rem] text-hs-cream/45">
+              Verified partner redirect · no internal checkout
+            </p>
+          </div>
+
+          {/* ── Perforation divider (vertical on sm+) ── */}
+          <div
+            aria-hidden
+            className="relative hidden shrink-0 self-stretch sm:flex sm:items-center"
+          >
+            <span
+              className="absolute -top-[7px] left-1/2 size-3.5 -translate-x-1/2 rounded-full border border-hs-cream/12"
+              style={{ background: "var(--hs-surface-deep)" }}
+            />
+            <span
+              className="absolute -bottom-[7px] left-1/2 size-3.5 -translate-x-1/2 rounded-full border border-hs-cream/12"
+              style={{ background: "var(--hs-surface-deep)" }}
+            />
+            <div className="mx-2 h-[56%] w-px border-l border-dashed border-hs-cream/30" />
+          </div>
+          {/* mobile horizontal perforation */}
+          <div
+            aria-hidden
+            className="mx-8 border-t border-dashed border-hs-cream/25 sm:hidden"
+          />
+
+          {/* ── Right stub: action ── */}
+          <div className="flex shrink-0 flex-col items-start gap-2.5 px-8 py-6 sm:items-end sm:py-7 sm:pl-9 sm:pr-14">
+            <CtaTag {...ctaProps} className="hs-cta-primary">
+              <span className="px-3">{label}</span>
+              <span className="hs-cta-icon-circle">
+                <ArrowUpRightIcon className="size-4" />
+              </span>
+            </CtaTag>
+            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-hs-cream/38">
+              Guaranteed entry · Zero markup
+            </p>
+          </div>
         </div>
       </div>
-    </div>
 
       {/* Allowlisted partner embed (CMS-configured). The redirect CTA above
           remains the primary, accessible path. */}

@@ -1,0 +1,21 @@
+[Unit]
+Description=Sarga Motorsport frontend
+After=network-online.target sarga-cms.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=sarga
+Group=sarga
+WorkingDirectory=/srv/sarga-website/frontend-motorsport
+EnvironmentFile=/etc/sarga/motorsport.env
+ExecStart=/usr/local/bin/pnpm exec next start --hostname 127.0.0.1 --port 3001
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+KillSignal=SIGINT
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

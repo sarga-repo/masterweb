@@ -21,7 +21,10 @@ export function CtaBand({
 }: CtaBandProps) {
   return (
     <section className="hs-charcoal-section hs-section-tight relative overflow-hidden">
-      <div aria-hidden className="hs-luxe-rule absolute inset-x-0 top-0 opacity-50" />
+      <div
+        aria-hidden
+        className="hs-luxe-rule absolute inset-x-0 top-0 opacity-50"
+      />
       <div className="hs-shell relative">
         <div className="max-w-2xl">
           <h2 className="hs-display text-[clamp(1.9rem,4vw,3.2rem)] text-hs-cream">

@@ -93,7 +93,10 @@ export function HeroRaceSection({
         {/* ── Top data rail ── */}
         <div className="flex items-center justify-between gap-4 border-b border-hs-white/16 pb-5">
           <span className="hs-kicker inline-flex items-center gap-3 text-hs-orange">
-            <span aria-hidden className="hs-rule inline-block h-px w-10 align-middle" />
+            <span
+              aria-hidden
+              className="hs-rule inline-block h-px w-10 align-middle"
+            />
             {eyebrow}
           </span>
           <span className="hs-kicker hidden text-hs-white/45 sm:inline">

@@ -33,7 +33,8 @@ const VENUES: VenueCardData[] = [
     name: "Grand Paddock Arena",
     href: "/events",
     location: "Jakarta",
-    description: "An intimate exhibition venue for gala meetings and hospitality.",
+    description:
+      "An intimate exhibition venue for gala meetings and hospitality.",
     image: "/media/horse-sport-card.png",
     imageAlt: "Premium Sarga Horse Sport venue",
   },
@@ -48,9 +49,21 @@ const VENUES: VenueCardData[] = [
 ];
 
 const FACILITIES = [
-  { title: "Championship turf", body: "International-grade turf with advanced drainage and track management.", Icon: TrackIcon },
-  { title: "Grandstand & hospitality", body: "Premium lounges, paddock clubs, and family zones.", Icon: RosetteIcon },
-  { title: "Elite stabling", body: "Modern stables engineered for equine welfare and performance.", Icon: StableIcon },
+  {
+    title: "Championship turf",
+    body: "International-grade turf with advanced drainage and track management.",
+    Icon: TrackIcon,
+  },
+  {
+    title: "Grandstand & hospitality",
+    body: "Premium lounges, paddock clubs, and family zones.",
+    Icon: RosetteIcon,
+  },
+  {
+    title: "Elite stabling",
+    body: "Modern stables engineered for equine welfare and performance.",
+    Icon: StableIcon,
+  },
 ];
 
 export default function VenuesPage() {

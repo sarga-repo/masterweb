@@ -1,5 +1,16 @@
 import type { StrapiApp } from "@strapi/strapi/admin";
 
+function WorkspaceIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M4 5.5h6.5V12H4V5.5Zm9.5 0H20V9h-6.5V5.5ZM4 15h6.5v3.5H4V15Zm9.5-3H20v6.5h-6.5V12Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 export default {
   config: {
     // ── Brand logos ──────────────────────────────────────────────
@@ -206,6 +217,52 @@ export default {
     },
   },
 
+  register(app: StrapiApp) {
+    const workspaces = [
+      {
+        slug: "gateway",
+        label: "Sarga Gateway",
+        position: 1,
+        action: "admin::sarga-workspaces.access-gateway",
+      },
+      {
+        slug: "motorsport",
+        label: "Sarga Motorsport",
+        position: 2,
+        action: "admin::sarga-workspaces.access-motorsport",
+      },
+      {
+        slug: "horsesport",
+        label: "Sarga Horse Sport",
+        position: 3,
+        action: "admin::sarga-workspaces.access-horsesport",
+      },
+      {
+        slug: "shared",
+        label: "Shared Library",
+        position: 4,
+        action: "admin::sarga-workspaces.access-shared",
+      },
+    ];
+
+    for (const workspace of workspaces) {
+      app.addMenuLink({
+        to: `/sarga-workspaces/${workspace.slug}`,
+        icon: WorkspaceIcon,
+        intlLabel: {
+          id: `sarga-workspaces.${workspace.slug}.label`,
+          defaultMessage: workspace.label,
+        },
+        Component: () =>
+          import("./extensions/sarga-workspaces/WorkspacePage").then(
+            (module) => ({ default: module.default }),
+          ),
+        permissions: [{ action: workspace.action, subject: null }],
+        position: workspace.position,
+      });
+    }
+  },
+
   bootstrap(app: StrapiApp) {
     // ── Rebrand the browser-tab title ────────────────────────────
     // Strapi hardcodes the document title as `${page} | Strapi` (and the
@@ -315,6 +372,16 @@ export default {
       [data-strapi-card] {
         border-radius: 12px !important;
         border: 1px solid rgba(255, 255, 255, 0.06) !important;
+      }
+
+      /* ── Workspace nested navigation responsiveness ───────── */
+      @media (max-width: 860px) {
+        .sarga-workspace-layout {
+          grid-template-columns: 1fr !important;
+        }
+        .sarga-workspace-layout > nav {
+          position: static !important;
+        }
       }
     `;
     document.head.appendChild(style);

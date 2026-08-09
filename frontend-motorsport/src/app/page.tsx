@@ -1,130 +1,135 @@
 import Link from "next/link";
 
 import {
-  BrandStorySection,
-  CountdownBadge,
   EventFeatureCard,
   EventListCard,
-  ExperiencePillarCard,
-  GalleryRail,
-  GradientRule,
+  GalleryMosaic,
+  InformationBand,
   MotorsportFooter,
   MotorsportHeader,
   MotorsportHero,
-  NewsletterCtaSection,
   NewsCard,
+  NewsletterCtaSection,
   PartnerLogoStrip,
+  SargaTimeline,
   SectionHeader,
   TicketCtaPanel,
+  WorldOfMotorsport,
 } from "@/components";
 import { fetchHomepageData } from "@/lib/homepage-data";
+import { fetchEcosystemSites, fetchLeadership } from "@/lib/cms-data";
+import {
+  MOTORSPORT_NAVIGATION,
+  MOTORSPORT_TICKET_LINK,
+} from "@/lib/navigation";
 import { siteConfig } from "@/lib/site-config";
+import type { DisciplineItem } from "@/types/design-system";
 
-/* -------------------------------------------------------------------------- */
-/*  Navigation                                                                */
-/* -------------------------------------------------------------------------- */
-
-const NAVIGATION = [
-  { label: "Events", href: "/events" },
-  { label: "Experience", href: "/experience" },
-  { label: "News", href: "/news" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "About", href: "/about" },
-];
-
-/* -------------------------------------------------------------------------- */
-/*  Brand story / ecosystem pillars                                           */
-/* -------------------------------------------------------------------------- */
-
-const ECOSYSTEM_PILLARS = [
+const DISCIPLINES: DisciplineItem[] = [
   {
-    index: "01",
-    title: "Professional car racing",
-    description:
-      "Touring, GT, and formula disciplines - elite drivers, world-class machinery, and international competition standards.",
-    accent: "crimson" as const,
+    title: "Circuit racing",
+    shortLabel: "Open wheel / Sprint",
+    href: "/events",
+    image: "/media/hero/sarga-motorsport-hero-circuit-golden-hour.jpg",
+    imageAlt:
+      "Red touring race car accelerating through a tropical circuit at golden hour",
+    accent: "crimson",
   },
   {
-    index: "02",
-    title: "Professional motorcycle racing",
-    description:
-      "Superbike, Moto2, and grassroots two-wheel programs - precision, bravery, and the purest form of racing.",
-    accent: "orange" as const,
+    title: "Endurance",
+    shortLabel: "GT / Long distance",
+    href: "/events",
+    image: "/media/sarga-motorsport-discipline-endurance-daylight.jpg",
+    imageAlt:
+      "Red endurance prototype racing through a tropical circuit in warm daylight",
+    accent: "blue",
   },
   {
-    index: "03",
-    title: "Lifestyle festival",
-    description:
-      "Music, culture, food, and community - the race weekend extends far beyond the pit wall into a full sensory event.",
-    accent: "yellow" as const,
+    title: "Rally",
+    shortLabel: "Mixed surface / Stage",
+    href: "/events",
+    image: "/media/hero/sarga-motorsport-hero-rally-highlands.jpg",
+    imageAlt:
+      "Red rally car racing across a sunlit gravel road in tropical highlands",
+    accent: "teal",
   },
   {
-    index: "04",
-    title: "Fan & community experience",
-    description:
-      "Pit walks, meet-and-greets, simulators, and fan zones - every supporter gets closer to the action.",
-    accent: "teal" as const,
+    title: "Rallycross",
+    shortLabel: "FIA / World Cup",
+    href: "/campaign/fia-rallycross-world-cup-indonesia-2026",
+    image: "/media/sarga-motorsport-discipline-rallycross-daylight.jpg",
+    imageAlt:
+      "Red and warm-white rallycross cars racing side by side on a tropical dirt circuit",
+    accent: "orange",
   },
   {
-    index: "05",
-    title: "Media & broadcast",
-    description:
-      "Livestream, editorial storytelling, galleries, and behind-the-scenes access that keeps the energy alive 365 days a year.",
-    accent: "blue" as const,
+    title: "Touring",
+    shortLabel: "Tin top / Sprint",
+    href: "/events",
+    image: "/media/sarga-motorsport-discipline-touring-daylight.jpg",
+    imageAlt:
+      "Three touring cars sweeping through a tropical circuit in warm daylight",
+    accent: "blue",
   },
   {
-    index: "06",
-    title: "Venue & circuit experience",
-    description:
-      "Track days, corporate events, and driving experiences - the circuit as a premium destination beyond race weekends.",
-    accent: "crimson" as const,
+    title: "Motorcycle",
+    shortLabel: "Superbike / Road racing",
+    href: "/events",
+    image: "/media/sarga-motorsport-discipline-motorcycle-daylight.jpg",
+    imageAlt:
+      "Two superbike racers leaning through a tropical circuit corner in warm daylight",
+    accent: "yellow",
   },
 ];
 
-/* -------------------------------------------------------------------------- */
-/*  Experience pillars (homepage section - shorter cards)                     */
-/* -------------------------------------------------------------------------- */
+function SectionLink({
+  href,
+  label,
+  tone = "dark",
+}: {
+  href: string;
+  label: string;
+  tone?: "light" | "dark";
+}) {
+  const light = tone === "light";
 
-const EXPERIENCE_CARDS = [
-  {
-    index: "01",
-    title: "Race day energy",
-    description:
-      "The roar of engines, the smell of rubber, and the tension before lights-out. Nothing replaces being there.",
-    href: "/experience",
-    accent: "crimson" as const,
-  },
-  {
-    index: "02",
-    title: "Beyond the grid",
-    description:
-      "Festival stages, street food, fan zones, and community - the weekend is bigger than any single race.",
-    href: "/experience",
-    accent: "orange" as const,
-  },
-  {
-    index: "03",
-    title: "Always-on coverage",
-    description:
-      "Livestream, race reports, photography, and paddock stories - the feed never stops.",
-    href: "/experience",
-    accent: "teal" as const,
-  },
-];
-
-/* -------------------------------------------------------------------------- */
-/*  Page                                                                      */
-/* -------------------------------------------------------------------------- */
+  return (
+    <Link
+      href={href}
+      className={`group inline-flex min-h-12 items-center gap-4 border-b py-3 text-[0.66rem] font-black uppercase tracking-[0.16em] transition-colors hover:border-ms-apex-crimson ${light ? "border-ms-draftline-blue/25 text-ms-draftline-blue hover:text-ms-crimson-700" : "border-ms-warm-white/20 text-ms-warm-white/58 hover:text-ms-warm-white"}`}
+    >
+      <span className="size-1.5 bg-ms-apex-crimson" aria-hidden="true" />
+      {label}
+      <span
+        className="text-base transition-transform group-hover:translate-x-1"
+        aria-hidden="true"
+      >
+        →
+      </span>
+    </Link>
+  );
+}
 
 export default async function HomePage() {
-  const data = await fetchHomepageData();
+  const [data, leadership, ecosystemSites] = await Promise.all([
+    fetchHomepageData(),
+    fetchLeadership(),
+    fetchEcosystemSites(),
+  ]);
+  const publications = Array.from(
+    new Map(
+      [
+        ...(data.featuredArticle ? [data.featuredArticle] : []),
+        ...data.articles,
+      ].map((article) => [article.href, article]),
+    ).values(),
+  );
 
   return (
     <>
-      {/* 1. Header / navigation */}
       <MotorsportHeader
-        navigation={NAVIGATION}
-        ticketLink={{ label: "Tickets", href: "/tickets" }}
+        navigation={MOTORSPORT_NAVIGATION}
+        ticketLink={MOTORSPORT_TICKET_LINK}
         gatewayLink={{
           label: "Sarga.co",
           href: siteConfig.gatewayUrl,
@@ -133,241 +138,188 @@ export default async function HomePage() {
       />
 
       <main>
-        {/* 2. Cinematic hero */}
-        <MotorsportHero
-          eyebrow="Sarga Motorsport / Season 2026"
-          title="Feel the friction."
-          description="Indonesia's premier motorsport ecosystem. Elite racing, unfiltered energy, and a 360° experience built for those who live for the apex."
-          image="/media/sarga-motorsport-hero-poster.jpg"
-          imageAlt="Formula car powering away from behind on a floodlit night circuit, throwing sparks"
-          video={{
-            webm: "/media/sarga-motorsport-hero.webm",
-            mp4: "/media/sarga-motorsport-hero.mp4",
-            poster: "/media/sarga-motorsport-hero-poster.jpg",
-            objectClassName: "object-cover object-[64%_center]",
-          }}
-          endorsement={{
-            src: "/brand/logo-part-of-sarga-endorsement-white.png",
-            alt: "Sarga Motorsport - part of Sarga.co",
-          }}
-          primaryCta={{ label: "View events", href: "/events" }}
-          secondaryCta={{ label: "Get tickets", href: "/tickets" }}
-          meta={[
+        <MotorsportHero slides={data.page.heroSlides} />
+
+        <InformationBand
+          eyebrow="Race control / 2026 calendar"
+          title="Closer to the machines. Closer to the moment."
+          description="Professional racing, talent development, and international event campaigns-presented through one focused Motorsport calendar."
+          items={[
             {
-              label: "Next race",
+              label: "Next event",
               value: data.featuredEvent?.dateLabel ?? "TBA",
             },
-            { label: "Circuit", value: data.featuredEvent?.venue ?? "TBA" },
-            { label: "Status", value: data.featuredEvent?.status ?? "TBA" },
-            { label: "Discipline", value: "Car + Motorcycle" },
+            {
+              label: "Ticket status",
+              value: data.featuredEvent?.status ?? "Announced",
+            },
+            { label: "Region", value: "Indonesia" },
           ]}
-          priority
         />
 
-        <GradientRule />
+        <WorldOfMotorsport items={DISCIPLINES} />
 
-        {/* 3. Featured event / ticket CTA */}
-        <section className="ms-section ms-shell">
-          <SectionHeader
-            index="EVENT"
-            eyebrow="Featured race weekend"
-            title="Next on the grid."
-            description="The upcoming headline event in the Sarga Motorsport calendar. Secure your seat before the grid fills up."
-          />
-          <div className="mt-14">
-            {data.featuredEvent ? (
-              <EventFeatureCard event={data.featuredEvent} priority />
-            ) : null}
-          </div>
-          {data.ticketCta ? (
-            <div className="mt-12">
-              <TicketCtaPanel
-                eyebrow="Official ticketing"
-                title="Witness it live."
-                description="Tickets redirect to our approved partner platform. Secure checkout, guaranteed entry, zero markup."
-                eventMeta={
-                  data.ticketCta.eventName ?? data.featuredEvent?.title
-                }
-                provider={data.ticketCta.provider}
-                cta={{
-                  label: data.ticketCta.label,
-                  href: data.ticketCta.href,
-                  external: data.ticketCta.href.startsWith("http"),
-                }}
-              />
-            </div>
-          ) : null}
-        </section>
-
-        {/* 4. Brand story / 360° racing ecosystem */}
-        <BrandStorySection
-          eyebrow="The 360° racing ecosystem"
-          title="More than a race."
-          body="Sarga Motorsport is Indonesia's most ambitious motorsport platform - a convergence of professional racing, lifestyle culture, broadcast media, and community experience. From four-wheel touring and GT to two-wheel superbike and Moto2, every discipline gets the stage it deserves."
-          image="/media/motorcycle-racing-dusk.png"
-          imageAlt="Superbike riders leaning through a sweeping corner under dusk circuit lights"
-          cta={{ label: "Explore the ecosystem", href: "/about" }}
-          pillars={ECOSYSTEM_PILLARS}
-        />
-
-        <GradientRule />
-
-        {/* 5. Upcoming events */}
-        <section className="ms-section ms-shell">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHeader
-              index="CALENDAR"
-              eyebrow="Upcoming race weekends"
-              title="The season ahead."
-              description="Car and motorcycle racing across Indonesia's premier circuits. Filter by discipline, category, or ticket availability."
-            />
-            <CountdownBadge
-              targetDate="2026-09-18T09:00:00+07:00"
-              className="shrink-0"
-            />
-          </div>
-          <div className="mt-14">
-            {data.upcomingEvents.map((event, i) => (
-              <EventListCard
-                key={event.href}
-                event={event}
-                index={String(i + 1).padStart(2, "0")}
-              />
-            ))}
-          </div>
-          <div className="mt-10 border-t border-ms-warm-white/12 pt-6">
-            <Link
-              href="/events"
-              className="group inline-flex items-center gap-3 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white/58 transition-colors hover:text-ms-warm-white"
-            >
-              View full calendar
-              <span className="transition-transform group-hover:translate-x-1">
-                →
-              </span>
-            </Link>
-          </div>
-        </section>
-
-        {/* 6. Experience pillars */}
-        <section className="ms-heat-field ms-section">
+        <section
+          id="upcoming-events"
+          className="ms-home-events-surface ms-reflected-light-surface ms-section"
+        >
           <div className="ms-shell">
             <SectionHeader
-              index="EXPERIENCE"
-              eyebrow="Beyond the finish line"
-              title="Racing is the core. The rest is the culture."
-              description="Sarga Motorsport is more than what happens on track. It's a festival, a broadcast, a fan community, and a premium venue experience."
+              index="EVENTS"
+              eyebrow={data.page.sections.events.eyebrow}
+              title={data.page.sections.events.title}
+              description={data.page.sections.events.description}
+              tone="dark"
             />
-            <div className="mt-16 grid gap-4 md:grid-cols-3">
-              {EXPERIENCE_CARDS.map((card) => (
-                <ExperiencePillarCard
-                  key={card.index}
-                  index={card.index}
-                  title={card.title}
-                  description={card.description}
-                  href={card.href}
-                  accent={card.accent}
+
+            <div className="mt-12 sm:mt-16">
+              {data.featuredEvent ? (
+                <EventFeatureCard
+                  event={data.featuredEvent}
+                  priority
+                  tone="dark"
                 />
-              ))}
+              ) : null}
             </div>
-          </div>
-        </section>
 
-        <GradientRule />
-
-        {/* 7. News / media highlights */}
-        <section className="ms-section ms-shell">
-          <SectionHeader
-            index="MEDIA"
-            eyebrow="Latest from the paddock"
-            title="Every frame carries velocity."
-            description="Race reports, rider profiles, technical deep-dives, and lifestyle features - curated by the Sarga Motorsport editorial team."
-          />
-          <div className="mt-14 grid gap-10 lg:grid-cols-[1.6fr_0.8fr]">
-            {data.featuredArticle ? (
-              <NewsCard article={data.featuredArticle} feature />
+            {data.upcomingEvents.length > 0 ? (
+              <div className="mt-12 border-b border-ms-warm-white/15">
+                <div className="mb-5 flex items-center justify-between gap-6">
+                  <p className="ms-kicker text-ms-ignition-orange">
+                    Also on the calendar
+                  </p>
+                  <span className="ms-data-label text-ms-warm-white/52">
+                    {String(data.upcomingEvents.length).padStart(2, "0")}{" "}
+                    entries
+                  </span>
+                </div>
+                {data.upcomingEvents.slice(0, 3).map((event, index) => (
+                  <EventListCard
+                    key={event.href}
+                    event={event}
+                    index={String(index + 1).padStart(2, "0")}
+                    tone="dark"
+                  />
+                ))}
+              </div>
             ) : null}
-            <div className="flex flex-col gap-10">
-              {data.articles.slice(0, 2).map((article) => (
-                <NewsCard key={article.href} article={article} />
-              ))}
+
+            <div className="mt-8 flex justify-end">
+              <SectionLink href="/events" label="View all events" tone="dark" />
+            </div>
+
+            {data.ticketCta ? (
+              <div className="mt-16">
+                <TicketCtaPanel
+                  eyebrow="Official ticketing"
+                  title="Be there when the grid goes live."
+                  description="Choose an event and continue to its approved ticketing destination. Sarga Motorsport does not process checkout directly."
+                  eventMeta={
+                    data.ticketCta.eventName ?? data.featuredEvent?.title
+                  }
+                  provider={data.ticketCta.provider}
+                  cta={{
+                    label: data.ticketCta.label,
+                    href: data.ticketCta.href,
+                    external: data.ticketCta.href.startsWith("http"),
+                  }}
+                />
+              </div>
+            ) : null}
+          </div>
+        </section>
+
+        <section className="ms-home-news-surface ms-reflected-light-surface ms-section">
+          <div className="ms-shell">
+            <SectionHeader
+              index="NEWS"
+              eyebrow={data.page.sections.news.eyebrow}
+              title={data.page.sections.news.title}
+              description={data.page.sections.news.description}
+              tone="dark"
+            />
+
+            <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.45fr)_minmax(18rem,.55fr)] lg:gap-6">
+              {data.featuredArticle ? (
+                <NewsCard article={data.featuredArticle} feature tone="dark" />
+              ) : null}
+              <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-1">
+                {data.articles.slice(0, 2).map((article) => (
+                  <NewsCard key={article.href} article={article} tone="dark" />
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-10 flex justify-end">
+              <SectionLink href="/news" label="Read all stories" tone="dark" />
             </div>
           </div>
-          <div className="mt-10 border-t border-ms-warm-white/12 pt-6">
-            <Link
-              href="/news"
-              className="group inline-flex items-center gap-3 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white/58 transition-colors hover:text-ms-warm-white"
-            >
-              All news & stories
-              <span className="transition-transform group-hover:translate-x-1">
-                →
-              </span>
-            </Link>
-          </div>
         </section>
 
-        {/* 8. Gallery strip */}
-        <section className="pb-(--ms-section-space)">
-          <div className="ms-shell mb-12">
+        <SargaTimeline
+          publications={publications}
+          leadership={leadership}
+          ecosystemSites={ecosystemSites}
+        />
+
+        <section className="ms-section border-y border-ms-warm-white/12 bg-ms-charcoal/45">
+          <div className="ms-shell">
             <SectionHeader
-              eyebrow="Trackside capture feed"
-              title="Motion, recorded."
-              align="left"
+              index="GALLERY"
+              eyebrow={data.page.sections.gallery.eyebrow}
+              title={data.page.sections.gallery.title}
+              description={data.page.sections.gallery.description}
             />
-          </div>
-          <GalleryRail items={data.gallery} />
-          <div className="ms-shell mt-8">
-            <Link
-              href="/gallery"
-              className="group inline-flex items-center gap-3 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white/58 transition-colors hover:text-ms-warm-white"
-            >
-              Full gallery
-              <span className="transition-transform group-hover:translate-x-1">
-                →
-              </span>
-            </Link>
+            <div className="mt-12 sm:mt-16">
+              <GalleryMosaic items={data.gallery.slice(0, 6)} />
+            </div>
+            <div className="mt-8 flex justify-end">
+              <SectionLink href="/gallery" label="Open full gallery" />
+            </div>
           </div>
         </section>
 
-        {/* 9. Partner / sponsor strip */}
-        <PartnerLogoStrip
-          label="Official partners & sponsors"
-          partners={data.partners}
-        />
+        <div className="bg-ms-black">
+          {data.partners.length > 0 ? (
+            <PartnerLogoStrip
+              partners={data.partners.slice(0, 5)}
+              label="Official partners & sponsors"
+            />
+          ) : null}
 
-        {/* 10. Newsletter / contact CTA */}
-        <NewsletterCtaSection
-          eyebrow="Stay in the race"
-          title="Never miss lights-out."
-          description="Get race weekend alerts, ticket drops, and exclusive paddock stories delivered to your inbox. No spam - just velocity."
-          actionLabel="Subscribe to updates"
-          cta={{ label: "contact us directly", href: "/contact" }}
-        />
+          <NewsletterCtaSection
+            title="Never miss lights-out."
+            description="Get race weekend alerts, ticket drops, and exclusive paddock stories delivered to your inbox. No spam—just velocity."
+            actionLabel="Subscribe to updates"
+            cta={{ label: "contact us directly", href: "/contact" }}
+          />
+        </div>
       </main>
 
-      {/* 11. Footer */}
       <MotorsportFooter
+        statement="Racing, amplified."
         columns={[
           {
-            title: "Race",
+            title: "Discover",
             links: [
+              { label: "Home", href: "/" },
+              { label: "About", href: "/about" },
               { label: "Events", href: "/events" },
-              { label: "Tickets", href: "/tickets" },
-              { label: "Experience", href: "/experience" },
             ],
           },
           {
-            title: "Stories",
+            title: "Follow",
             links: [
               { label: "News", href: "/news" },
               { label: "Gallery", href: "/gallery" },
-              { label: "Partners", href: "/partners" },
+              { label: "Contact", href: "/contact" },
             ],
           },
           {
-            title: "Sarga",
+            title: "Race day",
             links: [
-              { label: "About", href: "/about" },
-              { label: "Contact", href: "/contact" },
+              { label: "Tickets", href: "/tickets" },
+              { label: "Merchandise", href: "/merchandise" },
             ],
           },
         ]}
@@ -376,9 +328,12 @@ export default async function HomePage() {
           href: siteConfig.gatewayUrl,
           external: true,
         }}
-        legalLinks={[
-          { label: "Privacy", href: "/privacy" },
-          { label: "Terms", href: "/terms" },
+        crossSiteLinks={[
+          {
+            label: "Sarga Horse Sport",
+            href: siteConfig.horsesportUrl,
+            external: true,
+          },
         ]}
         copyright="© 2026 Sarga Motorsport"
       />

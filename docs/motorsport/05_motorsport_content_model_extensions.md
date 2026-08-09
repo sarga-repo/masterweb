@@ -4,6 +4,8 @@
 
 Keep one Strapi CMS and extend content models to support multisite and motorsport-specific data.
 
+For the major Motorsport revamp, also follow `docs/motorsport/revamp/04_cms_architecture_admin_ux.md`. Gateway, Motorsport, and Horse Sport need dedicated CMS workspace/menu entry points for editors, but they should continue sharing the same Strapi instance, database, and shared content models where appropriate.
+
 ## New collection: Site
 
 Fields:
@@ -143,6 +145,8 @@ Frontend-motorsport should fetch:
 
 Do not delete existing CMS content types. Extend them carefully and create migrations/schema changes through Strapi's normal content-type builder or code-based schema files.
 
+Do not duplicate `event`, `news-article`, `partner`, `ticket-cta`, or `media-gallery` just to create separate CMS menus. Prefer a Strapi admin workspace/plugin layer with filtered links, then add site-scoped page/program models only where the data shape requires them.
+
 ## Implementation status (Phase 2)
 
 Implemented via code-based schema files under `cms/src` (mirrored in
@@ -179,3 +183,68 @@ Migration caveat for existing databases: records created before the `siteScope`
 field existed will have a `null` scope (Strapi applies enum defaults on create,
 not retroactively). Frontends should treat a missing `siteScope` as
 gateway/shared. A fresh seed (empty DB) assigns explicit scopes.
+
+## Major revamp implementation status (MSR-2)
+
+MSR-2 adds the site workspace and program-shaped content that did not belong in
+the original shared Event/News schema phase:
+
+- Admin menu/dashboard workspaces for Gateway, Motorsport, Horse Sport, and
+  Shared Library, using permission-gated links and grouped dashboard
+  sub-navigation into the same shared collections.
+- Managed Gateway, Motorsport, Horse Sport, and Shared admin roles with
+  conditional `siteScope` record access and a forced-scope admin write guard.
+- Optional environment-based dedicated admin account provisioning without
+  repository-stored credentials.
+- `site-page` for site-scoped static/campaign page ownership.
+- `motorsport-program`, `motorsport-rider`, `motorsport-standing`, and
+  `motorsport-regulation` for IJTC and FIA campaign/program data.
+- `merchandise-item` for external/inquiry/coming-soon teasers only.
+- Shared page-section plus Motorsport campaign-slide, rundown-item, and rule-item
+  components.
+- Idempotent demo records for IJTC, FIA Rallycross World Cup Indonesia 2026,
+  and Merchandise.
+
+### MSR-6 rider and schedule refinement
+
+- IJTC demo content now includes 20 fictional `motorsport-rider` records, 20
+  related `motorsport-standing` rows, eight programme rundown entries, and 20
+  individually sliced rider portraits supplied as one 5×4 grid. Stable rider
+  slugs make restarts
+  idempotent and drive the public shared profile template.
+- `motorsport.rundown-item` adds optional `dateLabel`, `venue`, and controlled
+  `status` fields so schedule cards no longer rely on programme-level dates.
+- Portrait relations remain optional; the frontend derives accessible rider
+  labels and renders a numbered silhouette when media is absent or unavailable.
+
+### MSR-7 FIA Rallycross campaign refinement
+
+- The existing `motorsport-program` record is the campaign source of truth; its
+  hero media, `bannerSlides`, `rundown`, `eventRules`, related Ticket CTA, and SEO
+  component supply the dedicated campaign template without a new collection.
+- The demo completion seed adds three locally approved campaign slide images,
+  five ordered session entries, six ordered spectator rules, and share metadata
+  only while that stable FIA record is incomplete.
+- Ticket destinations are normalized by the frontend safety adapter. HTTPS
+  redirects are permitted, deep links require an allowed scheme, and embeds
+  require an allowed host; unsupported destinations fall back to `/tickets`.
+
+The real schemas remain under `cms/src/api/**/schema.json` and
+`cms/src/components/**`; `strapi/content-types.json` is updated as their
+documentation mirror. Public access is read-only (`find`/`findOne`) for the six
+new collections. Existing Event, News, Partner, Ticket CTA, and Gallery
+collections were reused rather than duplicated.
+
+## MSR-RD3 additive extension
+
+MSR-RD3 adds the `motorsport.hero-slide` repeatable component to the Motorsport
+`site-page` Home record. It carries responsive image media, alt
+text, a controlled subject anchor, concise copy, one optional CTA, active state,
+and deterministic order. Existing single-hero fields remain required as a
+migration/failure fallback until the new carousel has passed UAT.
+
+The live Strapi schema, generated types, `strapi/content-types.json` mirror,
+and idempotent seed are updated. The seed supplies three ordered warm scenes
+with desktop and mobile media and does not overwrite an existing editor-managed
+carousel. The one-CMS architecture, `siteScope` enforcement, Motorsport
+workspace visibility, and Super Admin access rules remain unchanged.

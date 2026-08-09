@@ -9,7 +9,12 @@ import {
   FeatureCard,
   CtaBand,
 } from "@/components";
-import { RosetteIcon, UsersIcon, PlayIcon, TrophyIcon } from "@/components/ui/hs-icons";
+import {
+  RosetteIcon,
+  UsersIcon,
+  PlayIcon,
+  TrophyIcon,
+} from "@/components/ui/hs-icons";
 import { fetchPartners } from "@/lib/cms-content";
 
 export const metadata: Metadata = createMetadata({
@@ -20,10 +25,26 @@ export const metadata: Metadata = createMetadata({
 });
 
 const TIERS = [
-  { title: "Principal partner", body: "Category-exclusive naming, headline race-day presence, and brand integration.", Icon: TrophyIcon },
-  { title: "Official partner", body: "Trackside branding, hospitality allocations, and content collaboration.", Icon: RosetteIcon },
-  { title: "Media & broadcast", body: "Broadcast integration, editorial features, and digital reach.", Icon: PlayIcon },
-  { title: "Community partner", body: "Grassroots programs, education, and community activation.", Icon: UsersIcon },
+  {
+    title: "Principal partner",
+    body: "Category-exclusive naming, headline race-day presence, and brand integration.",
+    Icon: TrophyIcon,
+  },
+  {
+    title: "Official partner",
+    body: "Trackside branding, hospitality allocations, and content collaboration.",
+    Icon: RosetteIcon,
+  },
+  {
+    title: "Media & broadcast",
+    body: "Broadcast integration, editorial features, and digital reach.",
+    Icon: PlayIcon,
+  },
+  {
+    title: "Community partner",
+    body: "Grassroots programs, education, and community activation.",
+    Icon: UsersIcon,
+  },
 ];
 
 export default async function PartnersPage() {
@@ -53,14 +74,21 @@ export default async function PartnersPage() {
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {TIERS.map((tier, i) => (
             <ScrollReveal key={tier.title} delay={(i % 4) * 80}>
-              <FeatureCard icon={tier.Icon} title={tier.title} body={tier.body} />
+              <FeatureCard
+                icon={tier.Icon}
+                title={tier.title}
+                body={tier.body}
+              />
             </ScrollReveal>
           ))}
         </div>
       </section>
 
       <section className="hs-charcoal-section hs-section-tight relative overflow-hidden">
-        <div aria-hidden className="hs-luxe-rule absolute inset-x-0 top-0 opacity-50" />
+        <div
+          aria-hidden
+          className="hs-luxe-rule absolute inset-x-0 top-0 opacity-50"
+        />
         <div className="hs-shell relative">
           <PartnerLogoStrip
             label="Current partners & sponsors"

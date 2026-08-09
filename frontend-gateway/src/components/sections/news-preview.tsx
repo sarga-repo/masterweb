@@ -67,30 +67,30 @@ export function NewsPreview({ articles }: { articles: NewsArticle[] }) {
               {(() => {
                 const featuredLink = articleLink(featured);
                 return (
-              <Link
-                href={featuredLink.href}
-                className="group relative isolate flex min-h-[34rem] overflow-hidden bg-sarga-black text-white shadow-[0_24px_70px_rgb(16_20_27_/_14%)] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-4 focus-visible:outline-sarga-orange sm:min-h-[42rem]"
-                {...(featuredLink.isExternal
-                  ? { target: "_blank", rel: "noopener noreferrer" }
-                  : {})}
-              >
-                <StoryMedia article={featured} />
-                <span className="absolute inset-0 bg-gradient-to-t from-sarga-black via-sarga-black/20 to-transparent" />
-                <div className="relative mt-auto grid w-full gap-6 p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-end">
-                  <div>
-                    <p className="text-[0.62rem] font-bold uppercase tracking-[0.18em] text-sarga-orange">
-                      {featured.isHotTopic ? "Featured / " : ""}
-                      {formatDisplayDate(featured.publishedDate)}
-                    </p>
-                    <h3 className="mt-4 max-w-[16ch] font-heading text-3xl font-bold uppercase leading-[0.92] tracking-[-0.03em] sm:text-[2.4rem]">
-                      {featured.title}
-                    </h3>
-                  </div>
-                  <span className="flex h-12 w-12 items-center justify-center bg-sarga-red transition-transform duration-300 group-hover:translate-x-1.5 sm:h-14 sm:w-14">
-                    <ArrowRightIcon className="h-5 w-5" />
-                  </span>
-                </div>
-              </Link>
+                  <Link
+                    href={featuredLink.href}
+                    className="group relative isolate flex min-h-[34rem] overflow-hidden bg-sarga-black text-white shadow-[0_24px_70px_rgb(16_20_27_/_14%)] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-4 focus-visible:outline-sarga-orange sm:min-h-[42rem]"
+                    {...(featuredLink.isExternal
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                  >
+                    <StoryMedia article={featured} />
+                    <span className="absolute inset-0 bg-gradient-to-t from-sarga-black via-sarga-black/20 to-transparent" />
+                    <div className="relative mt-auto grid w-full gap-6 p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-end">
+                      <div>
+                        <p className="text-[0.62rem] font-bold uppercase tracking-[0.18em] text-sarga-orange">
+                          {featured.isHotTopic ? "Featured / " : ""}
+                          {formatDisplayDate(featured.publishedDate)}
+                        </p>
+                        <h3 className="mt-4 max-w-[16ch] font-heading text-3xl font-bold uppercase leading-[0.92] tracking-[-0.03em] sm:text-[2.4rem]">
+                          {featured.title}
+                        </h3>
+                      </div>
+                      <span className="flex h-12 w-12 items-center justify-center bg-sarga-red transition-transform duration-300 group-hover:translate-x-1.5 sm:h-14 sm:w-14">
+                        <ArrowRightIcon className="h-5 w-5" />
+                      </span>
+                    </div>
+                  </Link>
                 );
               })()}
             </div>

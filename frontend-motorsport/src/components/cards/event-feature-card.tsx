@@ -1,32 +1,38 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { ArrowRightIcon } from "@/components/ui/icons";
+import { ResilientImage } from "@/components/ui/resilient-image";
 import { StatusChip } from "@/components/ui/status-chip";
 import type { MotorsportEvent } from "@/types/design-system";
 
 type EventFeatureCardProps = {
   event: MotorsportEvent;
   priority?: boolean;
+  tone?: "light" | "dark";
   className?: string;
 };
 
 export function EventFeatureCard({
   event,
   priority = false,
+  tone = "dark",
   className = "",
 }: EventFeatureCardProps) {
+  const light = tone === "light";
+
   return (
     <article
-      className={`ms-panel group grid overflow-hidden lg:grid-cols-[minmax(0,1.65fr)_minmax(18rem,0.75fr)] ${className}`}
+      className={`ms-panel group grid overflow-hidden lg:grid-cols-[minmax(0,1.65fr)_minmax(18rem,0.75fr)] ${light ? "ms-panel--light" : ""} ${className}`}
     >
       <Link
         href={event.href}
-        className="relative min-h-[28rem] overflow-hidden lg:min-h-[38rem]"
+        className="relative min-h-[28rem] overflow-hidden text-ms-warm-white lg:min-h-[38rem]"
       >
-        <Image
+        <ResilientImage
           src={event.image}
           alt={event.imageAlt}
+          fallbackSrc="/media/motorsport-design-hero.png"
+          fallbackAlt="Race car throwing sparks at speed on a dusk circuit"
           fill
           priority={priority}
           sizes="(max-width: 1024px) 100vw, 68vw"
@@ -41,17 +47,19 @@ export function EventFeatureCard({
             <span className="ms-data-label text-ms-ignition-orange">
               Featured transmission
             </span>
-            <h3 className="ms-display mt-3 max-w-[11ch] text-[clamp(2.03rem,3.75vw,4.13rem)]">
+            <h3 className="ms-heading-feature mt-3 max-w-[11ch] text-ms-warm-white">
               {event.title}
             </h3>
           </div>
-          <span className="hidden size-14 place-items-center border border-ms-warm-white/35 bg-ms-black/50 sm:grid">
+          <span className="hidden size-14 place-items-center border border-ms-warm-white/50 bg-ms-black/60 text-ms-warm-white sm:grid">
             <ArrowRightIcon className="size-5" />
           </span>
         </div>
       </Link>
 
-      <div className="flex flex-col bg-ms-black">
+      <div
+        className={`flex flex-col ${light ? "bg-ms-draftline-blue text-ms-warm-white" : "bg-ms-black"}`}
+      >
         <div className="flex items-center justify-between border-b border-ms-warm-white/12 p-5">
           <span className="ms-data-label text-ms-warm-white/42">
             Event control
@@ -66,21 +74,21 @@ export function EventFeatureCard({
             ["Circuit", event.venue],
           ].map(([label, value], index) =>
             value ? (
-              <div
-                key={label}
-                className="grid grid-cols-[2rem_1fr] border-b border-ms-warm-white/10 p-5"
-              >
-                <span className="font-mono text-[0.58rem] text-ms-warm-white/24">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <dt className="ms-data-label text-ms-warm-white/34">
+              <div key={label} className="border-b border-ms-warm-white/10 p-5">
+                <dt className="grid grid-cols-[2rem_1fr]">
+                  <span
+                    aria-hidden="true"
+                    className="font-mono text-[0.58rem] text-ms-warm-white/48"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="ms-data-label text-ms-warm-white/58">
                     {label}
-                  </dt>
-                  <dd className="mt-2 text-sm font-bold uppercase tracking-[0.06em]">
-                    {value}
-                  </dd>
-                </div>
+                  </span>
+                </dt>
+                <dd className="mt-2 pl-8 text-sm font-bold uppercase tracking-[0.06em]">
+                  {value}
+                </dd>
               </div>
             ) : null,
           )}

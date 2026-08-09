@@ -9,7 +9,12 @@ import {
   TicketCtaPanel,
   SeoJsonLd,
 } from "@/components";
-import { CalendarIcon, PinIcon, TrackIcon, ClockIcon } from "@/components/ui/hs-icons";
+import {
+  CalendarIcon,
+  PinIcon,
+  TrackIcon,
+  ClockIcon,
+} from "@/components/ui/hs-icons";
 import { fetchEventDetail, fetchEventsPage } from "@/lib/cms-content";
 import { createMetadata } from "@/lib/seo/metadata";
 import { resolveSiteUrl, siteConfig } from "@/lib/site-config";
@@ -114,7 +119,11 @@ export default async function EventDetailPage({ params }: Params) {
       <PageHero
         eyebrow={event.discipline ?? "Event"}
         title={event.title}
-        description={dateRange ? `${dateRange}${event.venue ? ` · ${event.venue}` : ""}` : undefined}
+        description={
+          dateRange
+            ? `${dateRange}${event.venue ? ` · ${event.venue}` : ""}`
+            : undefined
+        }
         backgroundImage={event.image}
         backgroundAlt={event.imageAlt ?? event.title}
         accent="red"
@@ -133,7 +142,10 @@ export default async function EventDetailPage({ params }: Params) {
           <div>
             {event.description ? (
               <>
-                <SectionHeader eyebrow="About the event" title="Race-day briefing." />
+                <SectionHeader
+                  eyebrow="About the event"
+                  title="Race-day briefing."
+                />
                 <RichText value={event.description} className="mt-6" />
               </>
             ) : null}
@@ -143,14 +155,21 @@ export default async function EventDetailPage({ params }: Params) {
                 <SectionHeader eyebrow="Programme" title="Race schedule." />
                 <ul className="mt-6 divide-y divide-hs-cream/10 overflow-hidden rounded-[var(--radius-hs-lg)] border border-hs-cream/12">
                   {event.schedule.map((row, i) => (
-                    <li key={i} className="flex flex-wrap items-baseline gap-x-6 gap-y-1 bg-hs-surface-panel p-5">
+                    <li
+                      key={i}
+                      className="flex flex-wrap items-baseline gap-x-6 gap-y-1 bg-hs-surface-panel p-5"
+                    >
                       <span className="inline-flex items-center gap-2 text-sm font-bold text-hs-orange">
                         <ClockIcon className="size-4" />
                         {row.time ?? row.day ?? "TBA"}
                       </span>
-                      <span className="hs-display text-base text-hs-cream">{row.label}</span>
+                      <span className="hs-display text-base text-hs-cream">
+                        {row.label}
+                      </span>
                       {row.description ? (
-                        <span className="w-full text-sm text-hs-cream/55">{row.description}</span>
+                        <span className="w-full text-sm text-hs-cream/55">
+                          {row.description}
+                        </span>
                       ) : null}
                     </li>
                   ))}
@@ -160,14 +179,20 @@ export default async function EventDetailPage({ params }: Params) {
 
             {event.hospitalityInfo ? (
               <div className="mt-14">
-                <SectionHeader eyebrow="Hospitality" title="Race-day experience." />
+                <SectionHeader
+                  eyebrow="Hospitality"
+                  title="Race-day experience."
+                />
                 <RichText value={event.hospitalityInfo} className="mt-6" />
               </div>
             ) : null}
 
             {event.stableAccessInfo ? (
               <div className="mt-14">
-                <SectionHeader eyebrow="Stable access" title="Behind the scenes." />
+                <SectionHeader
+                  eyebrow="Stable access"
+                  title="Behind the scenes."
+                />
                 <RichText value={event.stableAccessInfo} className="mt-6" />
               </div>
             ) : null}
@@ -177,12 +202,36 @@ export default async function EventDetailPage({ params }: Params) {
             <div className="hs-card-glass p-7">
               <h2 className="hs-kicker hs-eyebrow-gradient">Event details</h2>
               <dl className="mt-6 space-y-5">
-                <Meta icon={<CalendarIcon className="size-4" />} label="Date" value={dateRange} />
-                <Meta icon={<PinIcon className="size-4" />} label="Venue" value={event.venue} />
-                <Meta icon={<PinIcon className="size-4" />} label="Address" value={event.venueAddress} />
-                <Meta icon={<TrackIcon className="size-4" />} label="Track" value={event.trackType} />
-                <Meta icon={<TrackIcon className="size-4" />} label="Class" value={event.raceClass} />
-                <Meta icon={<TrackIcon className="size-4" />} label="Status" value={event.status} />
+                <Meta
+                  icon={<CalendarIcon className="size-4" />}
+                  label="Date"
+                  value={dateRange}
+                />
+                <Meta
+                  icon={<PinIcon className="size-4" />}
+                  label="Venue"
+                  value={event.venue}
+                />
+                <Meta
+                  icon={<PinIcon className="size-4" />}
+                  label="Address"
+                  value={event.venueAddress}
+                />
+                <Meta
+                  icon={<TrackIcon className="size-4" />}
+                  label="Track"
+                  value={event.trackType}
+                />
+                <Meta
+                  icon={<TrackIcon className="size-4" />}
+                  label="Class"
+                  value={event.raceClass}
+                />
+                <Meta
+                  icon={<TrackIcon className="size-4" />}
+                  label="Status"
+                  value={event.status}
+                />
               </dl>
             </div>
           </aside>

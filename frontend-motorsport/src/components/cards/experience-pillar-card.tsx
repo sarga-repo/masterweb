@@ -8,6 +8,7 @@ type ExperiencePillarCardProps = {
   description: string;
   href?: string;
   accent?: "crimson" | "orange" | "yellow" | "teal" | "blue";
+  className?: string;
 };
 
 const ACCENTS = {
@@ -24,6 +25,7 @@ export function ExperiencePillarCard({
   description,
   href,
   accent = "crimson",
+  className: additionalClassName = "",
 }: ExperiencePillarCardProps) {
   const content = (
     <>
@@ -32,10 +34,8 @@ export function ExperiencePillarCard({
       >
         {index}
       </span>
-      <div className="mt-24 sm:mt-36">
-        <h3 className="font-display text-[clamp(2rem,3vw,3.5rem)] uppercase leading-[0.92]">
-          {title}
-        </h3>
+      <div className="mt-20 sm:mt-28">
+        <h3 className="ms-heading-feature">{title}</h3>
         <p className="mt-5 max-w-sm text-sm leading-6 text-ms-warm-white/55">
           {description}
         </p>
@@ -46,8 +46,7 @@ export function ExperiencePillarCard({
     </>
   );
 
-  const className =
-    "group relative block min-h-[24rem] overflow-hidden border border-ms-warm-white/14 bg-ms-graphite p-6 transition-colors hover:border-ms-warm-white/35 before:absolute before:inset-x-0 before:bottom-0 before:h-1 before:bg-current before:transition-[height] before:duration-500 before:ease-(--ease-ms-out) hover:before:h-3";
+  const className = `group relative block min-h-[22rem] overflow-hidden border border-ms-warm-white/14 bg-[linear-gradient(135deg,rgba(7,26,61,.92),rgba(30,38,74,.88))] p-6 transition-colors hover:border-ms-warm-white/35 before:absolute before:inset-x-0 before:bottom-0 before:h-1 before:bg-current before:transition-[height] before:duration-500 before:ease-(--ease-ms-out) hover:before:h-3 ${additionalClassName}`;
 
   return href ? (
     <Link href={href} className={className}>

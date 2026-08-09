@@ -4,6 +4,7 @@ type SectionHeaderProps = {
   description?: string;
   index?: string;
   align?: "left" | "split";
+  tone?: "light" | "warm" | "dark";
   className?: string;
 };
 
@@ -13,11 +14,15 @@ export function SectionHeader({
   description,
   index,
   align = "split",
+  tone = "dark",
   className = "",
 }: SectionHeaderProps) {
+  const light = tone === "light" || tone === "warm";
+  const warm = tone === "warm";
+
   return (
     <header
-      className={`grid gap-8 border-t border-ms-warm-white/16 pt-5 ${
+      className={`grid gap-8 border-t pt-5 ${light ? "border-ms-charcoal/18" : "border-ms-warm-white/16"} ${
         align === "split"
           ? "lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,0.6fr)]"
           : "max-w-4xl"
@@ -26,27 +31,41 @@ export function SectionHeader({
       <div>
         <div className="mb-10 grid grid-cols-[auto_1fr_auto] items-center gap-4">
           {index ? (
-            <span className="ms-data-label text-ms-apex-crimson">
+            <span
+              className={`ms-data-label ${warm ? "text-[#7f0b19]" : light ? "text-ms-crimson-700" : "text-ms-ignition-orange"}`}
+            >
               SYS / {index}
             </span>
           ) : null}
-          <span className="ms-data-label text-ms-warm-white/48">{eyebrow}</span>
+          <span
+            className={`ms-data-label ${warm ? "text-ms-ink-700" : light ? "text-ms-ink-500" : "text-ms-warm-white/48"}`}
+          >
+            {eyebrow}
+          </span>
           <span className="flex gap-1" aria-hidden="true">
             <i className="size-1.5 bg-ms-apex-crimson" />
             <i className="size-1.5 bg-ms-ignition-orange" />
             <i className="size-1.5 bg-ms-electric-yellow" />
           </span>
         </div>
-        <h2 className="ms-display max-w-[12ch] text-[clamp(2.25rem,5.25vw,4.88rem)] text-ms-warm-white">
+        <h2
+          className={`ms-heading-section max-w-[12ch] ${light ? "text-ms-draftline-blue" : "text-ms-warm-white"}`}
+        >
           {title}
         </h2>
       </div>
       {description ? (
-        <div className="self-end border-l border-ms-slipstream-teal/50 pl-5">
-          <span className="ms-data-label text-ms-slipstream-teal">
-            System note
+        <div
+          className={`self-end border-l pl-5 ${light ? "border-ms-apex-crimson/45" : "border-ms-slipstream-teal/50"}`}
+        >
+          <span
+            className={`ms-data-label ${warm ? "text-[#712600]" : light ? "text-ms-orange-800" : "text-ms-slipstream-teal"}`}
+          >
+            Overview
           </span>
-          <p className="mt-4 text-base leading-7 text-ms-warm-white/62 sm:text-lg">
+          <p
+            className={`mt-4 text-base leading-7 sm:text-lg ${warm ? "text-ms-charcoal" : light ? "text-ms-ink-700" : "text-ms-warm-white/62"}`}
+          >
             {description}
           </p>
         </div>

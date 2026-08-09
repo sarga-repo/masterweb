@@ -1,205 +1,272 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
+import {
+  type PointerEvent as ReactPointerEvent,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
-import { HeroVideo, type HeroVideoSource } from "@/components/ui/hero-video";
 import { ArrowRightIcon } from "@/components/ui/icons";
-import type { LinkItem, MediaSource } from "@/types/design-system";
+import { ResilientImage } from "@/components/ui/resilient-image";
+import type { HomepageHeroSlide, LinkItem } from "@/types/design-system";
 
-type HeroMeta = { label: string; value: string };
-
-type MotorsportHeroProps = {
-  eyebrow: string;
-  title: string;
-  description?: string;
-  image: MediaSource;
-  imageAlt: string;
-  /** Optional cinematic background loop; the image stays as poster/fallback. */
-  video?: HeroVideoSource;
-  /**
-   * Optional "Part of Sarga.co" endorsement mark pinned bottom-right on wide
-   * screens. Backed by a dark corner scrim that also masks the small residual
-   * from watermark removal on the background video.
-   */
-  endorsement?: { src: MediaSource; alt: string };
-  primaryCta?: LinkItem;
-  secondaryCta?: LinkItem;
-  meta?: HeroMeta[];
-  priority?: boolean;
-  height?: "screen" | "compact";
+const FALLBACK_SLIDE: HomepageHeroSlide = {
+  id: "fallback-circuit",
+  eyebrow: "Sarga Motorsport / Season 2026",
+  title: "Feel the friction.",
+  description:
+    "World-class competition, human precision, and race weekends built to bring Indonesia closer to the action.",
+  image: "/media/hero/sarga-motorsport-hero-circuit-golden-hour.jpg",
+  imageAlt:
+    "Red and orange touring race car accelerating through a tropical circuit at golden hour",
+  subjectAnchor: "right",
+  cta: { label: "Explore events", href: "/events" },
 };
 
-function HeroLink({
-  item,
-  primary = false,
-}: {
-  item: LinkItem;
-  primary?: boolean;
-}) {
+const ANCHOR_CLASS: Record<HomepageHeroSlide["subjectAnchor"], string> = {
+  left: "object-left",
+  center: "object-center",
+  right: "object-right",
+};
+
+type MotorsportHeroProps = {
+  slides: HomepageHeroSlide[];
+};
+
+function subscribeToReducedMotion(callback: () => void) {
+  const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+  media.addEventListener("change", callback);
+  return () => media.removeEventListener("change", callback);
+}
+
+function reducedMotionSnapshot() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function HeroCta({ item }: { item: LinkItem }) {
   return (
     <Link
       href={item.href}
       target={item.external ? "_blank" : undefined}
       rel={item.external ? "noreferrer" : undefined}
-      className={`group inline-flex min-h-12 items-center gap-5 border-b py-3 text-[0.66rem] font-black uppercase tracking-[0.16em] transition-colors ${
-        primary
-          ? "border-ms-apex-crimson text-ms-warm-white hover:text-ms-ignition-orange"
-          : "border-ms-warm-white/24 text-ms-warm-white/62 hover:border-ms-warm-white hover:text-ms-warm-white"
-      }`}
+      className="group inline-flex min-h-12 items-center gap-5 border-b-2 border-ms-crimson-700 py-3 text-[0.6875rem] font-extrabold uppercase tracking-[0.12em] text-ms-warm-white transition-colors hover:border-ms-ignition-orange hover:text-ms-ignition-orange"
     >
-      <span
-        className={
-          primary ? "size-2 bg-ms-apex-crimson" : "size-2 border border-current"
-        }
-        aria-hidden="true"
-      />
       {item.label}
       <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
     </Link>
   );
 }
 
-export function MotorsportHero({
-  eyebrow,
-  title,
-  description,
-  image,
-  imageAlt,
-  video,
-  endorsement,
-  primaryCta,
-  secondaryCta,
-  meta = [],
-  priority = false,
-  height = "screen",
-}: MotorsportHeroProps) {
-  const [lead, ...rest] = title.split(" ");
+export function MotorsportHero({ slides }: MotorsportHeroProps) {
+  const items = slides.length > 0 ? slides : [FALLBACK_SLIDE];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [userPaused, setUserPaused] = useState(false);
+  const [interactionPaused, setInteractionPaused] = useState(false);
+  const [announcement, setAnnouncement] = useState("");
+  const reducedMotion = useSyncExternalStore(
+    subscribeToReducedMotion,
+    reducedMotionSnapshot,
+    () => false,
+  );
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+  const activeSlide = items[activeIndex] ?? items[0];
+
+  useEffect(() => {
+    if (items.length < 2 || userPaused || interactionPaused || reducedMotion)
+      return;
+
+    const timer = window.setInterval(() => {
+      if (document.visibilityState !== "visible") return;
+      setActiveIndex((current) => (current + 1) % items.length);
+    }, 8_000);
+
+    return () => window.clearInterval(timer);
+  }, [interactionPaused, items.length, reducedMotion, userPaused]);
+
+  const selectSlide = (nextIndex: number) => {
+    const normalized = (nextIndex + items.length) % items.length;
+    setActiveIndex(normalized);
+    setUserPaused(true);
+    setAnnouncement(
+      `Showing slide ${normalized + 1} of ${items.length}: ${items[normalized]?.title}`,
+    );
+  };
+
+  const handlePointerUp = (event: ReactPointerEvent<HTMLElement>) => {
+    const start = pointerStart.current;
+    pointerStart.current = null;
+    if (!start) return;
+
+    const deltaX = event.clientX - start.x;
+    const deltaY = event.clientY - start.y;
+    if (Math.abs(deltaX) < 50 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+    selectSlide(activeIndex + (deltaX < 0 ? 1 : -1));
+  };
 
   return (
     <section
-      className={`ms-grain relative isolate overflow-hidden bg-ms-black ${height === "screen" ? "min-h-[calc(100svh-var(--ms-header-height))]" : "min-h-[42rem]"}`}
+      className="ms-home-hero relative isolate overflow-hidden bg-ms-charcoal text-ms-warm-white [touch-action:pan-y]"
+      aria-label="Featured Sarga Motorsport stories"
+      aria-roledescription="carousel"
+      onMouseEnter={() => setInteractionPaused(true)}
+      onMouseLeave={() => setInteractionPaused(false)}
+      onFocusCapture={() => setInteractionPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          setInteractionPaused(false);
+        }
+      }}
+      onPointerDown={(event) => {
+        pointerStart.current = { x: event.clientX, y: event.clientY };
+      }}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={() => {
+        pointerStart.current = null;
+      }}
     >
-      <Image
-        src={image}
-        alt={imageAlt}
-        fill
-        priority={priority}
-        className="object-cover object-[64%_center]"
-        sizes="100vw"
-      />
-      {video ? <HeroVideo {...video} /> : null}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.98)_0%,rgba(5,5,5,.7)_38%,rgba(5,5,5,.08)_72%),linear-gradient(0deg,rgba(5,5,5,.96)_0%,transparent_52%,rgba(5,5,5,.44)_100%)]"
-      />
-      <div
-        aria-hidden="true"
-        className="ms-track-grid absolute inset-0 opacity-18"
-      />
-      {endorsement ? (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute bottom-0 right-0 hidden h-[56%] w-1/2 lg:block"
-          style={{
-            background:
-              "radial-gradient(125% 120% at 100% 100%, rgba(5,5,5,.92) 0%, rgba(5,5,5,.55) 42%, transparent 72%)",
-          }}
-        />
-      ) : null}
+      {items.map((slide, index) => {
+        const active = index === activeIndex;
+        const anchorClass = ANCHOR_CLASS[slide.subjectAnchor];
 
-      <div className="ms-shell relative z-10 flex min-h-[inherit] flex-col py-8 sm:py-10">
-        <div className="grid grid-cols-2 gap-4 border-b border-ms-warm-white/18 pb-4 md:grid-cols-4">
-          <span className="ms-data-label text-ms-ignition-orange">
-            {eyebrow}
-          </span>
-          <span className="ms-data-label hidden text-ms-warm-white/38 md:block">
-            Feed / Motorsport_01
-          </span>
-          <span className="ms-data-label hidden text-ms-slipstream-teal md:block">
-            Signal / Live
-          </span>
-          <span className="ms-data-label text-right text-ms-warm-white/38">
-            IDN / GMT+7
-          </span>
+        return (
+          <div
+            key={slide.id}
+            className={`absolute inset-0 transition-opacity duration-[600ms] ease-(--ease-ms-out) motion-reduce:transition-none ${
+              active ? "opacity-100" : "pointer-events-none opacity-0"
+            }`}
+            aria-hidden={!active}
+            aria-label={`${index + 1} of ${items.length}`}
+            aria-roledescription="slide"
+            role="group"
+          >
+            <ResilientImage
+              src={slide.image}
+              alt={active ? slide.imageAlt : ""}
+              fallbackSrc={FALLBACK_SLIDE.image}
+              fallbackAlt={FALLBACK_SLIDE.imageAlt}
+              fill
+              priority={index === 0}
+              sizes="100vw"
+              className={`object-cover ${anchorClass} ${slide.mobileImage ? "hidden sm:block" : ""}`}
+            />
+            {slide.mobileImage ? (
+              <ResilientImage
+                src={slide.mobileImage}
+                alt={active ? slide.imageAlt : ""}
+                fallbackSrc={slide.image}
+                fallbackAlt={slide.imageAlt}
+                fill
+                sizes="100vw"
+                className={`object-cover sm:hidden ${anchorClass}`}
+              />
+            ) : null}
+          </div>
+        );
+      })}
+
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,.24)_0%,rgba(5,5,5,.08)_38%,rgba(5,5,5,.62)_100%),linear-gradient(90deg,rgba(5,5,5,.34)_0%,transparent_45%,rgba(5,5,5,.1)_100%)]"
+      />
+      <div aria-hidden="true" className="ms-hero-copy-scrim absolute" />
+      <div aria-hidden="true" className="ms-apex-horizon absolute" />
+
+      <div className="ms-shell relative z-10 flex min-h-[inherit] flex-col pb-8 pt-10 sm:pb-10 sm:pt-12">
+        <div className="flex flex-1 items-center justify-center py-16 text-center sm:py-20">
+          <div className="ms-hero-copy max-w-5xl">
+            {activeSlide.eyebrow ? (
+              <p className="ms-kicker text-ms-electric-yellow">
+                {activeSlide.eyebrow}
+              </p>
+            ) : null}
+            <h1 className="ms-heading-hero mx-auto mt-5 max-w-[11ch] text-ms-warm-white">
+              {activeSlide.title}
+            </h1>
+            {activeSlide.description ? (
+              <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-ms-warm-white/95 sm:text-lg sm:leading-8">
+                {activeSlide.description}
+              </p>
+            ) : null}
+          </div>
         </div>
 
-        <div className="grid flex-1 items-end gap-10 pb-8 pt-24 lg:grid-cols-[minmax(0,1fr)_17rem] lg:pt-16">
-          <div>
-            <h1 className="ms-display max-w-[10ch] text-[clamp(3.19rem,8.25vw,7.88rem)]">
-              <span className="block text-ms-warm-white">{lead}</span>
-              {rest.length ? (
-                <span className="ms-outline-type block">{rest.join(" ")}</span>
-              ) : null}
-            </h1>
-            <div className="mt-8 grid max-w-4xl gap-7 border-l-2 border-ms-apex-crimson pl-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-              {description ? (
-                <p className="max-w-2xl text-base leading-7 text-ms-warm-white/68 sm:text-lg">
-                  {description}
-                </p>
-              ) : (
-                <span />
-              )}
-              {primaryCta || secondaryCta ? (
-                <div className="flex flex-col gap-1 sm:flex-row sm:gap-6">
-                  {primaryCta ? <HeroLink item={primaryCta} primary /> : null}
-                  {secondaryCta ? <HeroLink item={secondaryCta} /> : null}
+        <div className="flex flex-col gap-7 border-t border-ms-warm-white/24 pt-5 sm:flex-row sm:items-end sm:justify-between">
+          <div
+            className="flex flex-wrap items-center gap-2"
+            aria-label="Carousel controls"
+          >
+            {items.length > 1 ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => selectSlide(activeIndex - 1)}
+                  className="grid size-10 place-items-center border border-ms-warm-white/30 text-sm transition-colors hover:border-ms-electric-yellow hover:text-ms-electric-yellow"
+                  aria-label="Show previous slide"
+                >
+                  ←
+                </button>
+                <div className="flex items-center gap-2 px-1">
+                  {items.map((slide, index) => (
+                    <button
+                      key={slide.id}
+                      type="button"
+                      onClick={() => selectSlide(index)}
+                      className={`h-1.5 transition-[width,background-color] duration-300 ${
+                        index === activeIndex
+                          ? "w-8 bg-ms-electric-yellow"
+                          : "w-4 bg-ms-warm-white/42 hover:bg-ms-warm-white"
+                      }`}
+                      aria-label={`Show slide ${index + 1}: ${slide.title}`}
+                      aria-current={index === activeIndex ? "true" : undefined}
+                    />
+                  ))}
                 </div>
-              ) : null}
-            </div>
+                <button
+                  type="button"
+                  onClick={() => selectSlide(activeIndex + 1)}
+                  className="grid size-10 place-items-center border border-ms-warm-white/30 text-sm transition-colors hover:border-ms-electric-yellow hover:text-ms-electric-yellow"
+                  aria-label="Show next slide"
+                >
+                  →
+                </button>
+                {reducedMotion ? (
+                  <span className="ms-data-label min-h-10 border-l border-ms-warm-white/24 px-4 py-3 text-ms-warm-white/60">
+                    Reduced motion
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUserPaused((paused) => !paused);
+                      setAnnouncement(
+                        userPaused
+                          ? "Carousel automatic rotation resumed"
+                          : "Carousel automatic rotation paused",
+                      );
+                    }}
+                    className="ms-data-label min-h-10 border-l border-ms-warm-white/24 px-4 text-ms-warm-white/70 transition-colors hover:text-ms-warm-white"
+                  >
+                    {userPaused ? "Play" : "Pause"}
+                  </button>
+                )}
+              </>
+            ) : (
+              <span className="ms-data-label text-ms-warm-white/55">
+                Featured story
+              </span>
+            )}
           </div>
 
-          {meta.length ? (
-            <aside
-              className="ms-panel hidden bg-ms-black/76 backdrop-blur-md lg:block"
-              aria-label="Session data"
-            >
-              <div className="flex items-center justify-between border-b border-ms-warm-white/14 px-4 py-3">
-                <span className="ms-data-label text-ms-warm-white/42">
-                  Session data
-                </span>
-                <span
-                  className="size-2 bg-ms-electric-yellow"
-                  aria-hidden="true"
-                />
-              </div>
-              <dl>
-                {meta.map((item, index) => (
-                  <div
-                    key={item.label}
-                    className="grid grid-cols-[2rem_1fr] border-b border-ms-warm-white/10 p-4 last:border-b-0"
-                  >
-                    <span className="font-mono text-[0.6rem] text-ms-warm-white/24">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <div>
-                      <dt className="ms-data-label text-ms-warm-white/34">
-                        {item.label}
-                      </dt>
-                      <dd className="mt-2 text-sm font-bold uppercase tracking-[0.08em] text-ms-warm-white">
-                        {item.value}
-                      </dd>
-                    </div>
-                  </div>
-                ))}
-              </dl>
-            </aside>
-          ) : null}
+          {activeSlide.cta ? <HeroCta item={activeSlide.cta} /> : null}
         </div>
       </div>
 
-      {endorsement ? (
-        <Image
-          src={endorsement.src}
-          alt={endorsement.alt}
-          width={590}
-          height={112}
-          className="pointer-events-none absolute bottom-6 right-[var(--ms-page-gutter)] z-20 hidden h-auto w-40 opacity-85 lg:block xl:w-48"
-        />
-      ) : null}
-
-      <div
-        aria-hidden="true"
-        className="absolute bottom-0 right-0 hidden h-1 w-[32%] bg-[linear-gradient(90deg,#E8192C,#FF6B00,#F5C800,#00C4CC)] lg:block"
-      />
+      <p className="sr-only" aria-live="polite" aria-atomic="true">
+        {announcement}
+      </p>
     </section>
   );
 }

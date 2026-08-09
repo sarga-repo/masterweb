@@ -128,7 +128,9 @@ export function ContactForm() {
             className={`mt-2 ${fieldClass}`}
           />
           {errors.name ? (
-            <span className="mt-1.5 block text-xs text-hs-red">{errors.name}</span>
+            <span className="mt-1.5 block text-xs text-hs-red">
+              {errors.name}
+            </span>
           ) : null}
         </label>
         <label className="block">
@@ -158,7 +160,11 @@ export function ContactForm() {
           className={`mt-2 ${fieldClass}`}
         >
           {INQUIRY_OPTIONS.map((t) => (
-            <option key={t.value} value={t.value} className="bg-hs-night text-hs-cream">
+            <option
+              key={t.value}
+              value={t.value}
+              className="bg-hs-night text-hs-cream"
+            >
               {t.label}
             </option>
           ))}
@@ -208,7 +214,10 @@ export function ContactForm() {
       </button>
 
       {state.status === "error" && state.message ? (
-        <p aria-live="polite" className="mt-4 text-sm font-semibold text-hs-red">
+        <p
+          aria-live="polite"
+          className="mt-4 text-sm font-semibold text-hs-red"
+        >
           {state.message}
         </p>
       ) : (

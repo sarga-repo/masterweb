@@ -60,7 +60,8 @@ export default async function Homepage() {
         video={{
           webm: "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.webm",
           mp4: "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.mp4",
-          poster: "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.png",
+          poster:
+            "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.png",
           objectClassName: "object-cover object-center",
         }}
         primaryCta={
@@ -86,7 +87,8 @@ export default async function Homepage() {
           aria-hidden
           className="pointer-events-none absolute -right-32 -top-16 -z-0 size-[28rem] rounded-full opacity-[0.05] blur-3xl"
           style={{
-            background: "radial-gradient(circle, rgb(255 107 0 / 0.6), transparent 70%)",
+            background:
+              "radial-gradient(circle, rgb(255 107 0 / 0.6), transparent 70%)",
           }}
         />
         <div className="hs-shell relative">
@@ -135,7 +137,9 @@ export default async function Homepage() {
                       Since 2023
                     </span>
                     <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-                      <p className="hs-kicker text-hs-orange">Race-day culture</p>
+                      <p className="hs-kicker text-hs-orange">
+                        Race-day culture
+                      </p>
                       <p className="mt-2 max-w-[24rem] text-sm leading-6 text-hs-white">
                         An elite sporting platform with venue craft, paddock
                         theatre, and long-view stewardship.
@@ -215,7 +219,10 @@ export default async function Homepage() {
                     "linear-gradient(90deg, transparent 0%, black 100%)",
                 }}
               >
-                <div className="hs-zigzag-pattern h-full w-full" style={{ transform: "scaleX(-1)" }} />
+                <div
+                  className="hs-zigzag-pattern h-full w-full"
+                  style={{ transform: "scaleX(-1)" }}
+                />
               </div>
             </div>
           </ScrollReveal>
@@ -230,7 +237,8 @@ export default async function Homepage() {
           aria-hidden
           className="pointer-events-none absolute -left-32 top-24 -z-0 size-[28rem] rounded-full opacity-[0.05] blur-3xl"
           style={{
-            background: "radial-gradient(circle, rgb(237 27 47 / 0.6), transparent 70%)",
+            background:
+              "radial-gradient(circle, rgb(237 27 47 / 0.6), transparent 70%)",
           }}
         />
         <div className="hs-shell relative">
@@ -297,7 +305,10 @@ export default async function Homepage() {
       {/*  NEWS - Warm charcoal editorial band (subtle tonal rhythm)        */}
       {/* ================================================================ */}
       <section className="hs-charcoal-section hs-section relative overflow-hidden">
-        <div aria-hidden className="hs-luxe-rule absolute inset-x-0 top-0 opacity-50" />
+        <div
+          aria-hidden
+          className="hs-luxe-rule absolute inset-x-0 top-0 opacity-50"
+        />
         <div className="hs-shell relative">
           <ScrollReveal>
             <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_18rem] xl:items-end">
@@ -383,7 +394,10 @@ export default async function Homepage() {
       {/*  NEWSLETTER + PARTNERS + ECOSYSTEM - one warm charcoal band       */}
       {/* ================================================================ */}
       <section className="hs-charcoal-section hs-section-tight relative overflow-hidden">
-        <div aria-hidden className="hs-luxe-rule absolute inset-x-0 top-0 opacity-50" />
+        <div
+          aria-hidden
+          className="hs-luxe-rule absolute inset-x-0 top-0 opacity-50"
+        />
         <div className="hs-shell relative">
           <ScrollReveal>
             <NewsletterBand />
@@ -404,13 +418,15 @@ export default async function Homepage() {
                   {
                     ...GATEWAY_LINK,
                     label: "Sarga.co",
-                    description: "The group gateway - corporate & investor portal.",
+                    description:
+                      "The group gateway - corporate & investor portal.",
                     logo: "/media/logo-sarga-gateway-light.png",
                   },
                   {
                     ...MOTORSPORT_LINK,
                     label: "Sarga Motorsport",
-                    description: "Adrenaline-fuelled racing, track days & lifestyle.",
+                    description:
+                      "Adrenaline-fuelled racing, track days & lifestyle.",
                     logo: "/media/logo-sarga-motorsport.png",
                   },
                 ]}

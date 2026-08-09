@@ -32,7 +32,9 @@ export function SectionHeader({
     >
       {eyebrow ? (
         <span className="hs-kicker inline-flex items-center gap-2.5 text-hs-orange">
-          {index ? <span className="tabular-nums text-hs-orange/70">{index}</span> : null}
+          {index ? (
+            <span className="tabular-nums text-hs-orange/70">{index}</span>
+          ) : null}
           <span
             aria-hidden
             className="hs-rule inline-block h-px w-10 align-middle"

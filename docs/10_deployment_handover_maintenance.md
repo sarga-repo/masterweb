@@ -23,6 +23,17 @@ sarga-website/
 > lives in [`docs/horsesport/08_horsesport_deployment_handover.md`](horsesport/08_horsesport_deployment_handover.md).
 > This document is the group-wide reference.
 
+> The approved initial staging/production baseline for one Ubuntu 22.04.5 LTS
+> VM is [`docs/14_ubuntu_single_vm_production_deployment.md`](14_ubuntu_single_vm_production_deployment.md).
+> It supersedes hosted-service examples where they conflict with the selected
+> topology and includes Node, PostgreSQL, four systemd services, four Nginx
+> server blocks, Let's Encrypt issuance/renewal, backup, rollback, and UAT.
+
+> Exact CMS content and Media Library promotion is documented in
+> [`docs/15_strapi_content_media_promotion.md`](15_strapi_content_media_promotion.md).
+> It is the required initial local-to-staging and approved staging-to-production
+> procedure; it removes the need to recreate content or upload assets manually.
+
 ## Deployment environments
 
 ### Development
@@ -42,75 +53,93 @@ sarga-website/
 - sarga.co
 - Production Strapi admin
 - Production PostgreSQL
-- Production object storage
+- Local Strapi uploads on the initial single VM, backed up together with the
+  database; approved object storage can be introduced later as a migration
 - CDN and SSL
+
+### CMS data promotion policy
+
+- Local startup seed (`SEED_DEMO_CONTENT=true`) is limited to disposable
+  development databases.
+- Initial staging is populated from an encrypted full Strapi archive created
+  from the reviewed local CMS snapshot. The archive includes content,
+  relations, configuration, schemas, and uploaded media.
+- Initial production is populated from the frozen, stakeholder-approved
+  staging snapshot, never directly from a developer laptop.
+- Every import is a full replacement and requires a target PostgreSQL/uploads
+  backup, matching CMS schema commit, checksum verification, a maintenance
+  window, and post-import UAT.
+- Admin accounts and API tokens are environment-specific and are recreated or
+  verified after import. They are not assumed to be present in the archive.
+- After go-live, production is authoritative; never overwrite it with an older
+  full snapshot containing stale content or missing form submissions.
 
 ## Environment variable inventory
 
 ### Root `.env` (Docker Compose + shared)
 
-| Variable | Purpose | Local default | Production |
-|---|---|---|---|
-| `POSTGRES_DB` | PostgreSQL database name | `sarga_strapi` | Managed DB name |
-| `POSTGRES_USER` | PostgreSQL user | `sarga` | Managed DB user |
-| `POSTGRES_PASSWORD` | PostgreSQL password | `sarga_local_password` | Strong secret |
-| `SEED_DEMO_CONTENT` | Seed demo data on Strapi boot | `true` | `false` |
-| `STRAPI_APP_KEYS` | Strapi encryption keys | `change_me_*` | Unique secrets |
-| `STRAPI_API_TOKEN_SALT` | API token salt | `change_me_*` | Unique secret |
-| `STRAPI_ADMIN_JWT_SECRET` | Admin JWT secret | `change_me_*` | Unique secret |
-| `STRAPI_TRANSFER_TOKEN_SALT` | Transfer token salt | `change_me_*` | Unique secret |
-| `STRAPI_JWT_SECRET` | JWT secret | `change_me_*` | Unique secret |
-| `STRAPI_ENCRYPTION_KEY` | Encryption key | `change_me_*` | Unique secret |
-| `NEXT_PUBLIC_SITE_URL` | Gateway public URL | `http://localhost:3000` | `https://sarga.co` |
-| `NEXT_PUBLIC_MOTORSPORT_SITE_URL` | Motorsport public URL | `http://localhost:3001` | `https://motorsport.sarga.co` |
-| `NEXT_PUBLIC_HORSESPORT_SITE_URL` | Horse Sport public URL | `http://localhost:3002` | `https://horsesport.sarga.co` |
-| `NEXT_PUBLIC_GATEWAY_SITE_URL` | Gateway URL (for cross-links) | `http://localhost:3000` | `https://sarga.co` |
-| `NEXT_PUBLIC_STRAPI_API_URL` | Browser-reachable Strapi URL | `http://localhost:1337` | `https://cms.sarga.co` |
-| `STRAPI_API_URL` | Server-side Strapi URL | `http://localhost:1337` | `https://cms.sarga.co` |
-| `STRAPI_API_TOKEN` | Read-only frontend token | (blank) | Least-privilege token |
-| `FORM_SUBMISSION_MODE` | Form backend mode | `placeholder` | `strapi` |
-| `RECAPTCHA_SITE_KEY` | reCAPTCHA client key | (blank) | If approved |
-| `RECAPTCHA_SECRET_KEY` | reCAPTCHA server key | (blank) | If approved |
-| `TICKETING_DEEP_LINK_SCHEMES` | Allowed app schemes | (blank) | If needed |
-| `TICKETING_EMBED_ALLOWLIST` | Allowed iframe hosts | (blank) | If needed |
+| Variable                          | Purpose                       | Local default           | Production                    |
+| --------------------------------- | ----------------------------- | ----------------------- | ----------------------------- |
+| `POSTGRES_DB`                     | PostgreSQL database name      | `sarga_strapi`          | Managed DB name               |
+| `POSTGRES_USER`                   | PostgreSQL user               | `sarga`                 | Managed DB user               |
+| `POSTGRES_PASSWORD`               | PostgreSQL password           | `sarga_local_password`  | Strong secret                 |
+| `SEED_DEMO_CONTENT`               | Seed demo data on Strapi boot | `true`                  | `false`                       |
+| `STRAPI_APP_KEYS`                 | Strapi encryption keys        | `change_me_*`           | Unique secrets                |
+| `STRAPI_API_TOKEN_SALT`           | API token salt                | `change_me_*`           | Unique secret                 |
+| `STRAPI_ADMIN_JWT_SECRET`         | Admin JWT secret              | `change_me_*`           | Unique secret                 |
+| `STRAPI_TRANSFER_TOKEN_SALT`      | Transfer token salt           | `change_me_*`           | Unique secret                 |
+| `STRAPI_JWT_SECRET`               | JWT secret                    | `change_me_*`           | Unique secret                 |
+| `STRAPI_ENCRYPTION_KEY`           | Encryption key                | `change_me_*`           | Unique secret                 |
+| `NEXT_PUBLIC_SITE_URL`            | Gateway public URL            | `http://localhost:3000` | `https://sarga.co`            |
+| `NEXT_PUBLIC_MOTORSPORT_SITE_URL` | Motorsport public URL         | `http://localhost:3001` | `https://motorsport.sarga.co` |
+| `NEXT_PUBLIC_HORSESPORT_SITE_URL` | Horse Sport public URL        | `http://localhost:3002` | `https://horsesport.sarga.co` |
+| `NEXT_PUBLIC_GATEWAY_SITE_URL`    | Gateway URL (for cross-links) | `http://localhost:3000` | `https://sarga.co`            |
+| `NEXT_PUBLIC_STRAPI_API_URL`      | Browser-reachable Strapi URL  | `http://localhost:1337` | `https://cms.sarga.co`        |
+| `STRAPI_API_URL`                  | Server-side Strapi URL        | `http://localhost:1337` | `https://cms.sarga.co`        |
+| `STRAPI_API_TOKEN`                | Read-only frontend token      | (blank)                 | Least-privilege token         |
+| `FORM_SUBMISSION_MODE`            | Form backend mode             | `placeholder`           | `strapi`                      |
+| `RECAPTCHA_SITE_KEY`              | reCAPTCHA client key          | (blank)                 | If approved                   |
+| `RECAPTCHA_SECRET_KEY`            | reCAPTCHA server key          | (blank)                 | If approved                   |
+| `TICKETING_DEEP_LINK_SCHEMES`     | Allowed app schemes           | (blank)                 | If needed                     |
+| `TICKETING_EMBED_ALLOWLIST`       | Allowed iframe hosts          | (blank)                 | If needed                     |
 
 ### Gateway `frontend-gateway/.env.local`
 
-| Variable | Purpose | Local default |
-|---|---|---|
-| `STRAPI_API_URL` | Server-side content fetch | `http://localhost:1337` |
-| `NEXT_PUBLIC_STRAPI_API_URL` | Browser media URLs | `http://localhost:1337` |
-| `STRAPI_API_TOKEN` | Read-only token | (blank) |
-| `NEXT_PUBLIC_MOTORSPORT_SITE_URL` | Link to motorsport site | `http://localhost:3001` |
-| `NEXT_PUBLIC_HORSESPORT_SITE_URL` | Link to horse sport site | `http://localhost:3002` |
+| Variable                          | Purpose                   | Local default           |
+| --------------------------------- | ------------------------- | ----------------------- |
+| `STRAPI_API_URL`                  | Server-side content fetch | `http://localhost:1337` |
+| `NEXT_PUBLIC_STRAPI_API_URL`      | Browser media URLs        | `http://localhost:1337` |
+| `STRAPI_API_TOKEN`                | Read-only token           | (blank)                 |
+| `NEXT_PUBLIC_MOTORSPORT_SITE_URL` | Link to motorsport site   | `http://localhost:3001` |
+| `NEXT_PUBLIC_HORSESPORT_SITE_URL` | Link to horse sport site  | `http://localhost:3002` |
 
 ### Motorsport `frontend-motorsport/.env.local`
 
-| Variable | Purpose | Local default |
-|---|---|---|
-| `STRAPI_API_URL` | Server-side content fetch | `http://localhost:1337` |
-| `NEXT_PUBLIC_STRAPI_API_URL` | Browser media URLs | `http://localhost:1337` |
-| `STRAPI_API_TOKEN` | Read-only token | (blank) |
-| `NEXT_PUBLIC_SITE_URL` | This site's URL | `http://localhost:3001` |
-| `NEXT_PUBLIC_GATEWAY_SITE_URL` | Link back to gateway | `http://localhost:3000` |
-| `NEXT_PUBLIC_HORSESPORT_SITE_URL` | Link to horse sport site | `http://localhost:3002` |
-| `NEXT_PUBLIC_SITE_KEY` | CMS site scope identifier | `sarga-motorsport` |
+| Variable                          | Purpose                   | Local default           |
+| --------------------------------- | ------------------------- | ----------------------- |
+| `STRAPI_API_URL`                  | Server-side content fetch | `http://localhost:1337` |
+| `NEXT_PUBLIC_STRAPI_API_URL`      | Browser media URLs        | `http://localhost:1337` |
+| `STRAPI_API_TOKEN`                | Read-only token           | (blank)                 |
+| `NEXT_PUBLIC_SITE_URL`            | This site's URL           | `http://localhost:3001` |
+| `NEXT_PUBLIC_GATEWAY_SITE_URL`    | Link back to gateway      | `http://localhost:3000` |
+| `NEXT_PUBLIC_HORSESPORT_SITE_URL` | Link to horse sport site  | `http://localhost:3002` |
+| `NEXT_PUBLIC_SITE_KEY`            | CMS site scope identifier | `sarga-motorsport`      |
 
 ### Horse Sport `frontend-horsesport/.env.local`
 
-| Variable | Purpose | Local default |
-|---|---|---|
-| `STRAPI_API_URL` | Server-side content fetch | `http://localhost:1337` |
-| `NEXT_PUBLIC_STRAPI_API_URL` | Browser media URLs | `http://localhost:1337` |
-| `STRAPI_API_TOKEN` | Read token; **create** on `inquiry-submissions` in prod | (blank) |
-| `NEXT_PUBLIC_SITE_URL` | This site's URL | `http://localhost:3002` |
-| `NEXT_PUBLIC_GATEWAY_SITE_URL` | Link back to gateway | `http://localhost:3000` |
-| `NEXT_PUBLIC_MOTORSPORT_SITE_URL` | Link to motorsport site | `http://localhost:3001` |
-| `NEXT_PUBLIC_SITE_KEY` | CMS site scope identifier | `sarga-horse-sport` |
-| `FORM_SUBMISSION_MODE` | Contact form backend mode | `placeholder` |
-| `RECAPTCHA_SITE_KEY` / `RECAPTCHA_SECRET_KEY` | reCAPTCHA (optional) | (blank) |
-| `TICKETING_DEEP_LINK_SCHEMES` | Allowed ticket deep-link schemes | (blank) |
-| `TICKETING_EMBED_ALLOWLIST` | Allowed ticket iframe hosts | (blank) |
+| Variable                                      | Purpose                                                 | Local default           |
+| --------------------------------------------- | ------------------------------------------------------- | ----------------------- |
+| `STRAPI_API_URL`                              | Server-side content fetch                               | `http://localhost:1337` |
+| `NEXT_PUBLIC_STRAPI_API_URL`                  | Browser media URLs                                      | `http://localhost:1337` |
+| `STRAPI_API_TOKEN`                            | Read token; **create** on `inquiry-submissions` in prod | (blank)                 |
+| `NEXT_PUBLIC_SITE_URL`                        | This site's URL                                         | `http://localhost:3002` |
+| `NEXT_PUBLIC_GATEWAY_SITE_URL`                | Link back to gateway                                    | `http://localhost:3000` |
+| `NEXT_PUBLIC_MOTORSPORT_SITE_URL`             | Link to motorsport site                                 | `http://localhost:3001` |
+| `NEXT_PUBLIC_SITE_KEY`                        | CMS site scope identifier                               | `sarga-horse-sport`     |
+| `FORM_SUBMISSION_MODE`                        | Contact form backend mode                               | `placeholder`           |
+| `RECAPTCHA_SITE_KEY` / `RECAPTCHA_SECRET_KEY` | reCAPTCHA (optional)                                    | (blank)                 |
+| `TICKETING_DEEP_LINK_SCHEMES`                 | Allowed ticket deep-link schemes                        | (blank)                 |
+| `TICKETING_EMBED_ALLOWLIST`                   | Allowed ticket iframe hosts                             | (blank)                 |
 
 > Form/ticketing toggles apply to any frontend that ships those features; Horse
 > Sport uses all of them (see docs/horsesport/08). Gateway/Motorsport read the
@@ -118,33 +147,33 @@ sarga-website/
 
 ### CMS `cms/.env`
 
-| Variable | Purpose | Local default |
-|---|---|---|
-| `HOST` | Bind address | `0.0.0.0` |
-| `PORT` | Strapi port | `1337` |
-| `DATABASE_HOST` | PostgreSQL host | `localhost` |
-| `DATABASE_PORT` | PostgreSQL port | `5435` |
-| `DATABASE_NAME` | Database name | `sarga_strapi` |
-| `DATABASE_USERNAME` | Database user | `sarga` |
-| `DATABASE_PASSWORD` | Database password | `sarga_local_password` |
-| `DATABASE_SSL` | SSL for DB connection | `false` |
-| `APP_KEYS` | Encryption keys | `change_me_*` |
-| `API_TOKEN_SALT` | API token salt | `change_me_*` |
-| `ADMIN_JWT_SECRET` | Admin JWT secret | `change_me_*` |
-| `TRANSFER_TOKEN_SALT` | Transfer token salt | `change_me_*` |
-| `JWT_SECRET` | JWT secret | `change_me_*` |
-| `ENCRYPTION_KEY` | Encryption key | `change_me_*` |
-| `SEED_DEMO_CONTENT` | Seed demo data | `true` |
+| Variable              | Purpose               | Local default          |
+| --------------------- | --------------------- | ---------------------- |
+| `HOST`                | Bind address          | `0.0.0.0`              |
+| `PORT`                | Strapi port           | `1337`                 |
+| `DATABASE_HOST`       | PostgreSQL host       | `localhost`            |
+| `DATABASE_PORT`       | PostgreSQL port       | `5435`                 |
+| `DATABASE_NAME`       | Database name         | `sarga_strapi`         |
+| `DATABASE_USERNAME`   | Database user         | `sarga`                |
+| `DATABASE_PASSWORD`   | Database password     | `sarga_local_password` |
+| `DATABASE_SSL`        | SSL for DB connection | `false`                |
+| `APP_KEYS`            | Encryption keys       | `change_me_*`          |
+| `API_TOKEN_SALT`      | API token salt        | `change_me_*`          |
+| `ADMIN_JWT_SECRET`    | Admin JWT secret      | `change_me_*`          |
+| `TRANSFER_TOKEN_SALT` | Transfer token salt   | `change_me_*`          |
+| `JWT_SECRET`          | JWT secret            | `change_me_*`          |
+| `ENCRYPTION_KEY`      | Encryption key        | `change_me_*`          |
+| `SEED_DEMO_CONTENT`   | Seed demo data        | `true`                 |
 
 ### PostgreSQL
 
-| Parameter | Value |
-|---|---|
-| Host port | `5435` |
-| Container port | `5432` |
-| Database | `sarga_strapi` |
-| User | `sarga` |
-| Password | `sarga_local_password` |
+| Parameter      | Value                  |
+| -------------- | ---------------------- |
+| Host port      | `5435`                 |
+| Container port | `5432`                 |
+| Database       | `sarga_strapi`         |
+| User           | `sarga`                |
+| Password       | `sarga_local_password` |
 
 ## Local development setup
 
@@ -152,12 +181,12 @@ sarga-website/
 
 Before starting, make sure you have these installed:
 
-| Tool | Minimum version | Purpose |
-|---|---|---|
-| [Node.js](https://nodejs.org) | 22 LTS | Runtime for Strapi and Next.js |
-| [pnpm](https://pnpm.io) | 9+ | Package manager for all three apps |
-| [Docker Desktop](https://www.docker.com/products/docker-desktop) | Latest | Runs PostgreSQL in a container |
-| [Git](https://git-scm.com) | Latest | Clone the repository |
+| Tool                                                             | Minimum version | Purpose                            |
+| ---------------------------------------------------------------- | --------------- | ---------------------------------- |
+| [Node.js](https://nodejs.org)                                    | 22 LTS          | Runtime for Strapi and Next.js     |
+| [pnpm](https://pnpm.io)                                          | 9+              | Package manager for all three apps |
+| [Docker Desktop](https://www.docker.com/products/docker-desktop) | Latest          | Runs PostgreSQL in a container     |
+| [Git](https://git-scm.com)                                       | Latest          | Clone the repository               |
 
 Verify your installation:
 
@@ -325,6 +354,7 @@ pnpm develop
 ```
 
 **First boot** takes 1–3 minutes as Strapi:
+
 1. Compiles TypeScript source
 2. Runs database migrations against PostgreSQL
 3. Creates content types from the schema
@@ -342,6 +372,7 @@ You'll see output like:
 ```
 
 **Verify:**
+
 - Strapi admin: [http://localhost:1337/admin](http://localhost:1337/admin)
 - First visit: create your admin account (email + password)
 - API: [http://localhost:1337/api/ecosystem-businesses](http://localhost:1337/api/ecosystem-businesses) should return JSON
@@ -364,6 +395,7 @@ pnpm dev
 The gateway starts at [http://localhost:3000](http://localhost:3000).
 
 **Verify:**
+
 - Homepage: [http://localhost:3000](http://localhost:3000)
 - About page: [http://localhost:3000/about](http://localhost:3000/about)
 - Ecosystem: [http://localhost:3000/ecosystem](http://localhost:3000/ecosystem)
@@ -387,6 +419,7 @@ pnpm dev --port 3001
 The motorsport site starts at [http://localhost:3001](http://localhost:3001).
 
 **Verify:**
+
 - Homepage: [http://localhost:3001](http://localhost:3001)
 
 ### Step 7: Start Horse Sport frontend
@@ -407,20 +440,21 @@ pnpm dev
 The horse sport site starts at [http://localhost:3002](http://localhost:3002).
 
 **Verify:**
+
 - Homepage: [http://localhost:3002](http://localhost:3002)
 - Events: [http://localhost:3002/events](http://localhost:3002/events)
 - Contact: [http://localhost:3002/contact](http://localhost:3002/contact)
 
 ### Summary of local URLs
 
-| Service | URL | Terminal |
-|---|---|---|
-| PostgreSQL (host) | `localhost:5435` | Terminal 1 (Docker) |
-| Strapi admin | [http://localhost:1337/admin](http://localhost:1337/admin) | Terminal 2 |
-| Strapi API | [http://localhost:1337/api](http://localhost:1337/api) | Terminal 2 |
-| Gateway frontend | [http://localhost:3000](http://localhost:3000) | Terminal 3 |
-| Motorsport frontend | [http://localhost:3001](http://localhost:3001) | Terminal 4 |
-| Horse Sport frontend | [http://localhost:3002](http://localhost:3002) | Terminal 5 |
+| Service              | URL                                                        | Terminal            |
+| -------------------- | ---------------------------------------------------------- | ------------------- |
+| PostgreSQL (host)    | `localhost:5435`                                           | Terminal 1 (Docker) |
+| Strapi admin         | [http://localhost:1337/admin](http://localhost:1337/admin) | Terminal 2          |
+| Strapi API           | [http://localhost:1337/api](http://localhost:1337/api)     | Terminal 2          |
+| Gateway frontend     | [http://localhost:3000](http://localhost:3000)             | Terminal 3          |
+| Motorsport frontend  | [http://localhost:3001](http://localhost:3001)             | Terminal 4          |
+| Horse Sport frontend | [http://localhost:3002](http://localhost:3002)             | Terminal 5          |
 
 ### Quick-start cheat sheet
 
@@ -447,16 +481,16 @@ cd frontend-horsesport && pnpm dev
 
 ### Troubleshooting
 
-| Issue | Solution |
-|---|---|
-| `Port 5435 already in use` | Another service uses port 5435. Stop it or change `ports` in `docker-compose.yml`. |
-| `Port 3000 already in use` | Run gateway on a different port: `pnpm dev --port 3002` |
-| `ECONNREFUSED localhost:1337` | Strapi isn't running yet. Start it first (`cd cms && pnpm develop`). |
-| Strapi shows `relation "X" does not exist` | Database migration failed. Delete the DB volume and restart: `docker compose down -v && docker compose up -d postgres`, then restart Strapi. |
-| Frontend shows mock data instead of CMS content | `STRAPI_API_TOKEN` is blank and public permissions weren't granted. Re-seed by restarting Strapi with `SEED_DEMO_CONTENT=true`. |
-| `pnpm: command not found` | Install pnpm: `npm install -g pnpm` or `corepack enable` (Node 22+). |
-| Docker not running | Start Docker Desktop and wait for it to show "running". |
-| Turbopack crash or panic | Delete the `.next` cache: `rm -rf frontend-gateway/.next` and restart. |
+| Issue                                           | Solution                                                                                                                                     |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Port 5435 already in use`                      | Another service uses port 5435. Stop it or change `ports` in `docker-compose.yml`.                                                           |
+| `Port 3000 already in use`                      | Run gateway on a different port: `pnpm dev --port 3002`                                                                                      |
+| `ECONNREFUSED localhost:1337`                   | Strapi isn't running yet. Start it first (`cd cms && pnpm develop`).                                                                         |
+| Strapi shows `relation "X" does not exist`      | Database migration failed. Delete the DB volume and restart: `docker compose down -v && docker compose up -d postgres`, then restart Strapi. |
+| Frontend shows mock data instead of CMS content | `STRAPI_API_TOKEN` is blank and public permissions weren't granted. Re-seed by restarting Strapi with `SEED_DEMO_CONTENT=true`.              |
+| `pnpm: command not found`                       | Install pnpm: `npm install -g pnpm` or `corepack enable` (Node 22+).                                                                         |
+| Docker not running                              | Start Docker Desktop and wait for it to show "running".                                                                                      |
+| Turbopack crash or panic                        | Delete the `.next` cache: `rm -rf frontend-gateway/.next` and restart.                                                                       |
 
 ### Reset everything (fresh start)
 
@@ -487,6 +521,7 @@ docker compose --profile apps up --build
 ```
 
 This runs all 5 services in Docker. Access:
+
 - Gateway: `http://localhost:3000`
 - Motorsport: `http://localhost:3001`
 - Horse Sport: `http://localhost:3002`
@@ -535,14 +570,14 @@ This runs all 5 services in Docker. Access:
      ```ts
      export default ({ env }) => ({
        connection: {
-         client: 'postgres',
+         client: "postgres",
          connection: {
-           host: env('DATABASE_HOST'),
-           port: env.int('DATABASE_PORT', 5432),
-           database: env('DATABASE_NAME', 'postgres'),
-           user: env('DATABASE_USERNAME'),
-           password: env('DATABASE_PASSWORD'),
-           ssl: env.bool('DATABASE_SSL', false)
+           host: env("DATABASE_HOST"),
+           port: env.int("DATABASE_PORT", 5432),
+           database: env("DATABASE_NAME", "postgres"),
+           user: env("DATABASE_USERNAME"),
+           password: env("DATABASE_PASSWORD"),
+           ssl: env.bool("DATABASE_SSL", false)
              ? { rejectUnauthorized: false }
              : false,
          },
@@ -773,6 +808,7 @@ If using Supabase Storage instead of local uploads:
    - Add a policy allowing authenticated `INSERT` (upload) from Strapi.
 
 3. **Install Strapi upload provider**
+
    ```bash
    cd cms && pnpm add @strapi/provider-upload-aws-s3
    ```
@@ -782,17 +818,17 @@ If using Supabase Storage instead of local uploads:
      export default ({ env }) => ({
        upload: {
          config: {
-           provider: 'aws-s3',
+           provider: "aws-s3",
            providerOptions: {
              s3Options: {
                credentials: {
-                 accessKeyId: env('SUPABASE_S3_ACCESS_KEY'),
-                 secretAccessKey: env('SUPABASE_S3_SECRET_KEY'),
+                 accessKeyId: env("SUPABASE_S3_ACCESS_KEY"),
+                 secretAccessKey: env("SUPABASE_S3_SECRET_KEY"),
                },
-               endpoint: env('SUPABASE_S3_ENDPOINT'),
-               region: env('SUPABASE_REGION', 'ap-southeast-1'),
+               endpoint: env("SUPABASE_S3_ENDPOINT"),
+               region: env("SUPABASE_REGION", "ap-southeast-1"),
                params: {
-                 Bucket: env('SUPABASE_S3_BUCKET', 'strapi-uploads'),
+                 Bucket: env("SUPABASE_S3_BUCKET", "strapi-uploads"),
                },
                forcePathStyle: true,
              },
@@ -821,22 +857,22 @@ If using Supabase Storage instead of local uploads:
 
 After deploying all four services (Strapi + 3 frontends), verify:
 
-| Check | Gateway (`sarga.co`) | Motorsport (`motorsport.sarga.co`) | Horse Sport (`horsesport.sarga.co`) |
-|---|---|---|---|
-| Homepage loads | ☐ | ☐ | ☐ |
-| About page | ☐ | - | ☐ |
-| Ecosystem / listing pages | ☐ | ☐ | ☐ (events/news/gallery) |
-| News page | ☐ | ☐ | ☐ |
-| CMS content fetches | ☐ | ☐ | ☐ |
-| Images render (next/image) | ☐ | ☐ | ☐ |
-| Cross-site links work | ☐ → MS/HS | ☐ → GW/HS | ☐ → GW/MS |
-| Forms submit | ☐ | ☐ | ☐ (inquiry `sourceSite=horsesport`) |
-| Ticket CTA → partner URL | - | ☐ | ☐ |
-| SSL/HTTPS active | ☐ | ☐ | ☐ |
-| Lighthouse score ≥ 85 | ☐ | ☐ | ☐ |
-| Strapi admin accessible | ☐ (`cms.sarga.co/admin`) | - | - |
-| API tokens working | ☐ | ☐ | ☐ |
-| Media uploads work in CMS | ☐ | - | - |
+| Check                      | Gateway (`sarga.co`)     | Motorsport (`motorsport.sarga.co`) | Horse Sport (`horsesport.sarga.co`) |
+| -------------------------- | ------------------------ | ---------------------------------- | ----------------------------------- |
+| Homepage loads             | ☐                        | ☐                                  | ☐                                   |
+| About page                 | ☐                        | -                                  | ☐                                   |
+| Ecosystem / listing pages  | ☐                        | ☐                                  | ☐ (events/news/gallery)             |
+| News page                  | ☐                        | ☐                                  | ☐                                   |
+| CMS content fetches        | ☐                        | ☐                                  | ☐                                   |
+| Images render (next/image) | ☐                        | ☐                                  | ☐                                   |
+| Cross-site links work      | ☐ → MS/HS                | ☐ → GW/HS                          | ☐ → GW/MS                           |
+| Forms submit               | ☐                        | ☐                                  | ☐ (inquiry `sourceSite=horsesport`) |
+| Ticket CTA → partner URL   | -                        | ☐                                  | ☐                                   |
+| SSL/HTTPS active           | ☐                        | ☐                                  | ☐                                   |
+| Lighthouse score ≥ 85      | ☐                        | ☐                                  | ☐                                   |
+| Strapi admin accessible    | ☐ (`cms.sarga.co/admin`) | -                                  | -                                   |
+| API tokens working         | ☐                        | ☐                                  | ☐                                   |
+| Media uploads work in CMS  | ☐                        | -                                  | -                                   |
 
 ### Option B: Docker Compose on VPS
 
@@ -852,28 +888,32 @@ After deploying all four services (Strapi + 3 frontends), verify:
 
 ### Domain routing
 
-| Domain | Target |
-|---|---|
-| `sarga.co` | Gateway frontend |
-| `motorsport.sarga.co` or `ms.sarga.co` | Motorsport frontend |
-| `horsesport.sarga.co` | Horse Sport frontend |
-| `cms.sarga.co` or `admin.sarga.co` | Strapi admin |
-| `api.sarga.co` | Strapi API (optional, if separated) |
+| Domain                                 | Target                              |
+| -------------------------------------- | ----------------------------------- |
+| `sarga.co`                             | Gateway frontend                    |
+| `motorsport.sarga.co` or `ms.sarga.co` | Motorsport frontend                 |
+| `horsesport.sarga.co`                  | Horse Sport frontend                |
+| `cms.sarga.co` or `admin.sarga.co`     | Strapi admin                        |
+| `api.sarga.co`                         | Strapi API (optional, if separated) |
 
 ### Production checklist
 
 1. Replace all `change_me_*` secrets with strong, unique values.
 2. Set `SEED_DEMO_CONTENT=false`.
-3. Create Strapi admin account and set strong password.
-4. Create least-privilege API tokens for each frontend.
-5. Configure S3-compatible media storage for Strapi uploads.
-6. Enable HTTPS on all domains.
-7. Set up PostgreSQL backups (daily minimum).
-8. Configure CDN for frontend static assets and media.
-9. Set `FORM_SUBMISSION_MODE=strapi` with a create-permission token (Horse Sport
-   contact form persists to `inquiry-submissions`).
-10. Test all cross-site links (gateway ↔ motorsport ↔ horse sport).
-11. Configure `TICKETING_EMBED_ALLOWLIST` / `TICKETING_DEEP_LINK_SCHEMES` only if
+3. Import the approved encrypted CMS snapshot using
+   `docs/15_strapi_content_media_promotion.md`; verify checksum, source commit,
+   collection counts, relations, and all uploaded media.
+4. Create or verify Strapi admin accounts and strong passwords.
+5. Create least-privilege API tokens for each frontend.
+6. Confirm local uploads are included in the paired backup policy; migrate to
+   S3-compatible storage only after separate approval.
+7. Enable HTTPS on all domains.
+8. Set up PostgreSQL and uploads backups (daily minimum).
+9. Configure a CDN only if approved for frontend static assets and media.
+10. Set `FORM_SUBMISSION_MODE=strapi` with a create-permission token (Horse Sport
+    contact form persists to `inquiry-submissions`).
+11. Test all cross-site links (gateway ↔ motorsport ↔ horse sport).
+12. Configure `TICKETING_EMBED_ALLOWLIST` / `TICKETING_DEEP_LINK_SCHEMES` only if
     partner embeds/deep links are used (empty = redirect-only).
 
 ## CMS maintenance notes
@@ -887,18 +927,34 @@ After deploying all four services (Strapi + 3 frontends), verify:
 - **Cross-site teasers:** events/news can have `showOnGateway` / `showOnMotorsport` / `showOnHorseSport` flags for teaser appearances on other sites.
 - Horse Sport editorial detail: [`docs/horsesport/08`](horsesport/08_horsesport_deployment_handover.md) §3.
 
+### Admin roles and account provisioning
+
+- Managed role codes are `sarga-gateway-admin`, `sarga-motorsport-admin`,
+  `sarga-horsesport-admin`, and `sarga-shared-admin`. Each sees one custom
+  workspace and records matching only its assigned `siteScope`.
+- Super Admin sees all four workspaces and remains the only supported cross-site
+  administrator. Do not assign more than one managed site role to an account.
+- Roles and their managed permissions synchronize at every Strapi startup.
+- To create a dedicated user, temporarily provide the matching
+  `CMS_<SITE>_ADMIN_EMAIL/PASSWORD` pair from the secret store, start Strapi,
+  confirm login/access, then remove the pair. Never commit credentials. Existing
+  users are not reassigned or password-reset automatically.
+- The Media Library remains a shared asset pool. Managed site roles can
+  view/upload/download/copy assets but do not receive the combined asset
+  update/delete permission; use site-named folders.
+
 ### Content types
 
-| Content type | Scope field | Key fields |
-|---|---|---|
-| News Article | `siteScope` | title, slug, excerpt, body, category, heroImage |
-| Event | `siteScope` | title, slug, date, venue, status, racingCategory, ticketCtas |
-| Ticket CTA | `siteScope` | label, provider, ctaType (redirect/deepLink/embed), url, embedUrl, relatedEvent |
-| Inquiry Submission | - | name, email, inquiryType, message, `sourceSite`, submittedAt, status |
-| Partner | `siteScope` | name, logo, website, partnershipType |
-| Media Gallery | `siteScope` | title, images |
-| Ecosystem Business | `siteScope` | name, slug, description, logo, website |
-| Site | - | name, slug, url (for cross-site configuration) |
+| Content type       | Scope field | Key fields                                                                      |
+| ------------------ | ----------- | ------------------------------------------------------------------------------- |
+| News Article       | `siteScope` | title, slug, excerpt, body, category, heroImage                                 |
+| Event              | `siteScope` | title, slug, date, venue, status, racingCategory, ticketCtas                    |
+| Ticket CTA         | `siteScope` | label, provider, ctaType (redirect/deepLink/embed), url, embedUrl, relatedEvent |
+| Inquiry Submission | -           | name, email, inquiryType, message, `sourceSite`, submittedAt, status            |
+| Partner            | `siteScope` | name, logo, website, partnershipType                                            |
+| Media Gallery      | `siteScope` | title, images                                                                   |
+| Ecosystem Business | `siteScope` | name, slug, description, logo, website                                          |
+| Site               | -           | name, slug, url (for cross-site configuration)                                  |
 
 ### Content sync rules
 
@@ -987,12 +1043,12 @@ Vendor/developer must hand over:
 
 ### Suggested SLA
 
-| Severity | Example | Response | Resolution target |
-|---|---|---:|---:|
-| Critical | Website down, major page unavailable | 2 hours | 1 business day |
-| High | Contact/ticket CTA broken | 4 hours | 1–2 business days |
-| Medium | Layout/content issue | 1 business day | 3 business days |
-| Low | Minor visual issue | 2 business days | Next planned release |
+| Severity | Example                              |        Response |    Resolution target |
+| -------- | ------------------------------------ | --------------: | -------------------: |
+| Critical | Website down, major page unavailable |         2 hours |       1 business day |
+| High     | Contact/ticket CTA broken            |         4 hours |    1–2 business days |
+| Medium   | Layout/content issue                 |  1 business day |      3 business days |
+| Low      | Minor visual issue                   | 2 business days | Next planned release |
 
 ## Maintenance
 

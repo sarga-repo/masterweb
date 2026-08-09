@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "motorsport_regulations",
+  "info": {
+    "singularName": "motorsport-regulation",
+    "pluralName": "motorsport-regulations",
+    "displayName": "Motorsport Regulation",
+    "description": "Versioned program regulation documents"
+  },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": {},
+  "attributes": {
+    "program": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::motorsport-program.motorsport-program",
+      "inversedBy": "regulations",
+      "required": true
+    },
+    "title": { "type": "string", "required": true },
+    "version": { "type": "string", "required": true },
+    "effectiveDate": { "type": "date", "required": true },
+    "pdfFile": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["files"]
+    },
+    "summary": { "type": "text" },
+    "isActive": { "type": "boolean", "default": true },
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+      "default": "motorsport",
+      "required": true
+    },
+    "sites": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::site.site"
+    }
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "meta": {
+    "name": "Sarga Motorsport Warm Editorial Foundations",
+    "phase": "MSR-RD2",
+    "status": "approved specification; not yet wired to frontend code",
+    "source": "look_and_feel_website_sarga_co.pdf pages 8-12"
+  },
+  "primitive": {
+    "color": {
+      "apexCrimson": "#E8192C",
+      "ignitionOrange": "#FF6B00",
+      "electricYellow": "#F5C800",
+      "slipstreamTeal": "#00C4CC",
+      "draftlineBlue": "#0033A0",
+      "charcoal": "#1B1B1B",
+      "warmWhite": "#FFF9EE",
+      "black": "#050505",
+      "graphite": "#111113",
+      "cream100": "#F6EFE3",
+      "cream200": "#E8DECF",
+      "ink700": "#47433D",
+      "ink600": "#625E56",
+      "ink500": "#716C64",
+      "crimson700": "#C41427",
+      "crimson800": "#A81022",
+      "orange800": "#B94700",
+      "white": "#FFFFFF"
+    },
+    "space": {
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.5rem",
+      "6": "2rem",
+      "7": "3rem",
+      "8": "4.5rem",
+      "9": "6rem",
+      "10": "8rem"
+    },
+    "motion": {
+      "fast": "160ms",
+      "base": "280ms",
+      "slow": "600ms",
+      "carouselInterval": "8000ms",
+      "easeOut": "cubic-bezier(0.16, 1, 0.3, 1)"
+    }
+  },
+  "semantic": {
+    "surface": {
+      "canvas": "{primitive.color.warmWhite}",
+      "subtle": "{primitive.color.cream100}",
+      "raised": "{primitive.color.white}",
+      "inverse": "{primitive.color.charcoal}",
+      "inverseStrong": "{primitive.color.black}",
+      "blue": "{primitive.color.draftlineBlue}",
+      "action": "{primitive.color.crimson700}",
+      "actionHover": "{primitive.color.crimson800}",
+      "secondaryAction": "{primitive.color.ignitionOrange}"
+    },
+    "text": {
+      "primary": "{primitive.color.charcoal}",
+      "secondary": "{primitive.color.ink700}",
+      "muted": "{primitive.color.ink600}",
+      "quiet": "{primitive.color.ink500}",
+      "inverse": "{primitive.color.warmWhite}",
+      "link": "{primitive.color.draftlineBlue}",
+      "actionOnLight": "{primitive.color.crimson700}",
+      "orangeOnLight": "{primitive.color.orange800}",
+      "onAction": "{primitive.color.warmWhite}",
+      "onSecondaryAction": "{primitive.color.charcoal}"
+    },
+    "border": {
+      "light": "{primitive.color.cream200}",
+      "strongLight": "{primitive.color.ink500}",
+      "dark": "rgba(255, 249, 238, 0.16)",
+      "strongDark": "rgba(255, 249, 238, 0.34)",
+      "focus": "{primitive.color.electricYellow}"
+    },
+    "accent": {
+      "heat": "{primitive.color.apexCrimson}",
+      "energy": "{primitive.color.ignitionOrange}",
+      "status": "{primitive.color.electricYellow}",
+      "data": "{primitive.color.slipstreamTeal}",
+      "structure": "{primitive.color.draftlineBlue}"
+    }
+  },
+  "typography": {
+    "family": {
+      "display": "var(--font-owners-wide), 'Owners Wide', 'Arial Black', sans-serif",
+      "body": "var(--font-noto-sans), 'Noto Sans', Arial, system-ui, sans-serif"
+    },
+    "weight": {
+      "display": 900,
+      "bodyRegular": 400,
+      "bodyMedium": 500,
+      "bodyBold": 700,
+      "bodyExtraBold": 800
+    },
+    "scale": {
+      "hero": "clamp(3rem, 5.8vw, 5.75rem)",
+      "page": "clamp(2.5rem, 3.8vw, 4rem)",
+      "article": "clamp(2.5rem, 4.4vw, 4.75rem)",
+      "section": "clamp(2rem, 2.9vw, 3rem)",
+      "feature": "clamp(1.75rem, 2.5vw, 2.75rem)",
+      "card": "clamp(1.25rem, 1.8vw, 2rem)",
+      "lead": "clamp(1.125rem, 1.5vw, 1.375rem)",
+      "body": "1rem",
+      "small": "0.875rem",
+      "label": "0.6875rem"
+    },
+    "lineHeight": {
+      "hero": 0.95,
+      "page": 0.98,
+      "article": 1,
+      "section": 1,
+      "feature": 1.02,
+      "card": 1.04,
+      "body": 1.7,
+      "label": 1.3
+    }
+  },
+  "layout": {
+    "contentMax": "90rem",
+    "readingMax": "45rem",
+    "pageGutter": "clamp(1.25rem, 4vw, 4.5rem)",
+    "sectionSpace": "clamp(4.5rem, 7vw, 7rem)",
+    "gridGap": "clamp(1rem, 1.8vw, 2rem)",
+    "headerHeight": "5.5rem",
+    "desktopNavigationMinWidth": "80rem"
+  },
+  "component": {
+    "header": {
+      "surface": "rgba(5, 5, 5, 0.96)",
+      "text": "{semantic.text.inverse}",
+      "labelSize": "{typography.scale.label}",
+      "active": "{primitive.color.electricYellow}"
+    },
+    "hero": {
+      "minHeightDesktop": "min(50rem, calc(100svh - var(--ms-header-height)))",
+      "minHeightMobile": "calc(100svh - var(--ms-header-height))",
+      "transition": "{primitive.motion.slow}",
+      "interval": "{primitive.motion.carouselInterval}"
+    },
+    "buttonPrimary": {
+      "surface": "{semantic.surface.action}",
+      "surfaceHover": "{semantic.surface.actionHover}",
+      "text": "{semantic.text.onAction}",
+      "focus": "{semantic.border.focus}"
+    },
+    "buttonSecondary": {
+      "surface": "{semantic.surface.secondaryAction}",
+      "text": "{semantic.text.onSecondaryAction}",
+      "focus": "{semantic.border.focus}"
+    },
+    "cardLight": {
+      "surface": "{semantic.surface.raised}",
+      "text": "{semantic.text.primary}",
+      "border": "{semantic.border.light}"
+    },
+    "cardDark": {
+      "surface": "{semantic.surface.inverse}",
+      "text": "{semantic.text.inverse}",
+      "border": "{semantic.border.dark}"
+    }
+  }
+}

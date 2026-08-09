@@ -43,6 +43,7 @@
         "logo": "media",
         "favicon": "media",
         "themeKey": "string",
+        "order": "integer",
         "isActive": "boolean"
       }
     },
@@ -50,7 +51,14 @@
       "fields": {
         "name": "string",
         "slug": "uid",
-        "pillar": ["sports", "venue", "media", "technology", "festival", "other"],
+        "pillar": [
+          "sports",
+          "venue",
+          "media",
+          "technology",
+          "festival",
+          "other"
+        ],
         "shortDescription": "text",
         "overview": "richtext",
         "heroImage": "media",
@@ -61,7 +69,13 @@
         "businessStatus": ["active", "comingSoon", "hidden"],
         "launchTarget": "string",
         "order": "integer",
-        "siteScope": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
         "dedicatedSiteKey": ["none", "motorsport", "horsesport"],
         "dedicatedSiteUrl": "string",
         "relatedArticles": "relation:newsArticle",
@@ -101,7 +115,13 @@
         "relatedBusinesses": "relation:ecosystemBusiness",
         "relatedEvent": "relation:event",
         "relatedGallery": "relation:mediaGallery",
-        "siteScope": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
         "sites": "relation:site",
         "showOnGateway": "boolean",
         "showOnMotorsport": "boolean",
@@ -139,7 +159,13 @@
           "completed",
           "cancelled"
         ],
-        "siteScope": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
         "sites": "relation:site",
         "showOnGateway": "boolean",
         "showOnMotorsport": "boolean",
@@ -183,7 +209,13 @@
         "activeFrom": "datetime",
         "activeUntil": "datetime",
         "isActive": "boolean",
-        "siteScope": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
         "sites": "relation:site",
         "relatedEvent": "relation:event"
       }
@@ -203,7 +235,13 @@
           "community",
           "other"
         ],
-        "siteScope": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
         "sites": "relation:site",
         "sortOrder": "integer",
         "isActive": "boolean"
@@ -226,7 +264,13 @@
         "coverImage": "media",
         "mediaItems": "media",
         "relatedEvent": "relation:event",
-        "siteScope": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
         "sites": "relation:site"
       }
     },
@@ -244,6 +288,7 @@
       "fields": {
         "name": "string",
         "role": "string",
+        "summary": "text",
         "group": ["board", "executive"],
         "portrait": "media",
         "biography": "richtext",
@@ -272,6 +317,174 @@
         "consent": "boolean",
         "subscribedAt": "datetime",
         "status": "enum"
+      }
+    },
+    "sitePage": {
+      "fields": {
+        "title": "string",
+        "slug": "string",
+        "routePath": "string",
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
+        "site": "relation:site",
+        "pageKind": [
+          "home",
+          "about",
+          "eventHub",
+          "campaign",
+          "merchandise",
+          "legal",
+          "custom"
+        ],
+        "navigationLabel": "string",
+        "heroTitle": "string",
+        "heroDescription": "richtext",
+        "heroMedia": "media",
+        "heroSlides": "repeatableComponent:heroSlide",
+        "sections": "dynamicZone:pageSection",
+        "seo": "component:seo"
+      }
+    },
+    "motorsportProgram": {
+      "fields": {
+        "title": "string",
+        "slug": "uid",
+        "programType": [
+          "juniorTalentCup",
+          "rallycross",
+          "raceWeekend",
+          "other"
+        ],
+        "programStatus": [
+          "announced",
+          "registrationOpen",
+          "ticketsOpen",
+          "live",
+          "completed",
+          "hidden"
+        ],
+        "seasonLabel": "string",
+        "summary": "richtext",
+        "mainHeadline": "string",
+        "eventStartDate": "datetime",
+        "eventEndDate": "datetime",
+        "venue": "string",
+        "heroMedia": "media",
+        "bannerSlides": "repeatableComponent:campaignSlide",
+        "rundown": "repeatableComponent:rundownItem",
+        "eventRules": "repeatableComponent:ruleItem",
+        "primaryCtaLabel": "string",
+        "primaryCtaUrl": "string",
+        "becomeRidersLabel": "string",
+        "becomeRidersUrl": "string",
+        "relatedEvents": "relation:event",
+        "relatedTicketCtas": "relation:ticketCta",
+        "riders": "relation:motorsportRider",
+        "standings": "relation:motorsportStanding",
+        "regulations": "relation:motorsportRegulation",
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
+        "sites": "relation:site",
+        "seo": "component:seo"
+      }
+    },
+    "motorsportRider": {
+      "fields": {
+        "name": "string",
+        "slug": "uid",
+        "program": "relation:motorsportProgram",
+        "number": "string",
+        "team": "string",
+        "region": "string",
+        "nationality": "string",
+        "portrait": "media",
+        "bio": "richtext",
+        "isActive": "boolean",
+        "sortOrder": "integer",
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
+        "sites": "relation:site",
+        "seo": "component:seo"
+      }
+    },
+    "motorsportStanding": {
+      "fields": {
+        "program": "relation:motorsportProgram",
+        "seasonLabel": "string",
+        "roundLabel": "string",
+        "rider": "relation:motorsportRider",
+        "position": "integer",
+        "points": "decimal",
+        "resultSummary": "text",
+        "resultDate": "date",
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
+        "sites": "relation:site"
+      }
+    },
+    "motorsportRegulation": {
+      "fields": {
+        "program": "relation:motorsportProgram",
+        "title": "string",
+        "version": "string",
+        "effectiveDate": "date",
+        "pdfFile": "media:file",
+        "summary": "text",
+        "isActive": "boolean",
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
+        "sites": "relation:site"
+      }
+    },
+    "merchandiseItem": {
+      "fields": {
+        "title": "string",
+        "slug": "uid",
+        "description": "richtext",
+        "image": "media",
+        "priceLabel": "string",
+        "availabilityStatus": [
+          "comingSoon",
+          "availableExternal",
+          "inquiryOnly",
+          "hidden"
+        ],
+        "externalUrl": "string",
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
+        "sites": "relation:site",
+        "sortOrder": "integer",
+        "seo": "component:seo"
       }
     }
   },
@@ -302,6 +515,63 @@
         "endTime": "datetime",
         "description": "text"
       }
+    },
+    "pageSection": {
+      "fields": {
+        "sectionKey": "string",
+        "eyebrow": "string",
+        "title": "string",
+        "body": "richtext",
+        "media": "media",
+        "ctaLabel": "string",
+        "ctaUrl": "string",
+        "ctaTarget": ["sameWindow", "newWindow"],
+        "theme": ["default", "dark", "light", "accent"]
+      }
+    },
+    "campaignSlide": {
+      "fields": {
+        "title": "string",
+        "description": "text",
+        "image": "media",
+        "ctaLabel": "string",
+        "ctaUrl": "string",
+        "sortOrder": "integer"
+      }
+    },
+    "heroSlide": {
+      "fields": {
+        "internalName": "string",
+        "eyebrow": "string",
+        "title": "string",
+        "description": "text",
+        "image": "media",
+        "mobileImage": "media",
+        "imageAlt": "string",
+        "subjectAnchor": ["left", "center", "right"],
+        "ctaLabel": "string",
+        "ctaUrl": "string",
+        "isActive": "boolean",
+        "sortOrder": "integer"
+      }
+    },
+    "rundownItem": {
+      "fields": {
+        "dayLabel": "string",
+        "startTime": "time",
+        "endTime": "time",
+        "title": "string",
+        "description": "text",
+        "sortOrder": "integer"
+      }
+    },
+    "ruleItem": {
+      "fields": {
+        "ruleType": ["do", "dont"],
+        "title": "string",
+        "description": "text",
+        "sortOrder": "integer"
+      }
     }
   },
   "_notes": [
@@ -310,6 +580,7 @@
     "eventStatus and newsArticle.category enums were extended (not replaced) with motorsport values to preserve backward compatibility with existing gateway content.",
     "Horse Sport Phase 2: 'horsesport' added to every siteScope enum; showOnHorseSport (event, news) and featuredOnHorseSport (news) flags added; event gained eventDiscipline/raceClass/trackType/hospitalityInfo/stableAccessInfo; newsArticle.category extended with horse-sport values (race-results, event-announcement, turf-venue, stable-life, jockey-story, equine-performance, partnership) and a relatedGallery relation; ecosystemBusiness gained dedicatedSiteKey; mediaGallery gained category + coverImage. Horse Sport filtering uses siteScope IN [horsesport, shared] AND business.slug == 'sarga-horse-sport'.",
     "event.ticketCtas <-> ticketCta.relatedEvent is a single bidirectional one-to-many relation (one event, many ticket CTAs), replacing the singular 'ticketCta' field named in the spec to avoid a duplicate relation.",
+    "Motorsport revamp MSR-2 adds shared sitePage records plus Motorsport program, rider, standing, regulation, and merchandise teaser collections. These reuse the existing siteScope enum and one shared Strapi instance/database.",
     "This file mirrors the Strapi schemas under cms/src/api and cms/src/components; it is documentation, not the source of truth."
   ]
 }

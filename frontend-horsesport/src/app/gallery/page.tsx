@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/metadata";
 
-import { PageHero, GalleryMosaic, ScrollReveal, SectionHeader } from "@/components";
+import {
+  PageHero,
+  GalleryMosaic,
+  ScrollReveal,
+  SectionHeader,
+} from "@/components";
 import { fetchGalleryPage } from "@/lib/cms-content";
 
 export const metadata: Metadata = createMetadata({
@@ -45,8 +50,12 @@ export default async function GalleryPage() {
           </div>
         ) : (
           <div className="hs-card-glass p-12 text-center">
-            <p className="hs-display text-2xl text-hs-cream">The gallery is being curated.</p>
-            <p className="mt-3 text-sm text-hs-cream/55">Check back soon for race-day imagery.</p>
+            <p className="hs-display text-2xl text-hs-cream">
+              The gallery is being curated.
+            </p>
+            <p className="mt-3 text-sm text-hs-cream/55">
+              Check back soon for race-day imagery.
+            </p>
           </div>
         )}
       </section>

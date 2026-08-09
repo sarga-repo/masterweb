@@ -33,6 +33,7 @@
       "allowedTypes": ["images"]
     },
     "themeKey": { "type": "string" },
+    "order": { "type": "integer", "default": 0 },
     "isActive": { "type": "boolean", "default": true }
   }
 }

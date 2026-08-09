@@ -64,9 +64,7 @@ export function BrandStorySection({
           {/* Text column */}
           <div>
             <span className="ms-kicker text-ms-ignition-orange">{eyebrow}</span>
-            <h2 className="ms-display mt-8 text-[clamp(2.63rem,6vw,6rem)]">
-              {title}
-            </h2>
+            <h2 className="ms-heading-section mt-8">{title}</h2>
             <p className="mt-8 max-w-2xl text-lg leading-8 text-ms-warm-white/65">
               {body}
             </p>
@@ -124,9 +122,7 @@ export function BrandStorySection({
                     <span className="ms-data-label text-ms-warm-white/38">
                       {p.index}
                     </span>
-                    <h3 className="ms-display mt-3 text-[clamp(1.13rem,2.25vw,1.88rem)]">
-                      {p.title}
-                    </h3>
+                    <h3 className="ms-heading-card mt-3">{p.title}</h3>
                     <p className="mt-3 text-sm leading-6 text-ms-warm-white/52">
                       {p.description}
                     </p>

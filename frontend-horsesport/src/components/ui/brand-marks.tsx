@@ -10,10 +10,7 @@ type MarkProps = SVGProps<SVGSVGElement>;
  */
 
 /** Orange zig-zag / staircase rhythm line. */
-export function ZigZagMark({
-  className,
-  ...props
-}: MarkProps) {
+export function ZigZagMark({ className, ...props }: MarkProps) {
   return (
     <svg
       viewBox="0 0 120 24"

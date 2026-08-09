@@ -9,6 +9,7 @@
 
 import type {
   GalleryItem,
+  HomepageHeroSlide,
   MotorsportArticle,
   MotorsportEvent,
   PartnerItem,
@@ -26,6 +27,18 @@ import {
 /* -------------------------------------------------------------------------- */
 
 export type HomepageData = {
+  page: {
+    heroTitle: string;
+    heroDescription: string;
+    heroImage?: string;
+    heroImageAlt?: string;
+    heroSlides: HomepageHeroSlide[];
+    sections: {
+      events: HomepageSectionCopy;
+      news: HomepageSectionCopy;
+      gallery: HomepageSectionCopy;
+    };
+  };
   featuredEvent: MotorsportEvent | null;
   upcomingEvents: MotorsportEvent[];
   featuredArticle: MotorsportArticle | null;
@@ -40,6 +53,12 @@ export type HomepageData = {
   } | null;
 };
 
+type HomepageSectionCopy = {
+  eyebrow: string;
+  title: string;
+  description: string;
+};
+
 /* -------------------------------------------------------------------------- */
 /*  Strapi CMS shapes (mirrors cms/src/api schemas)                           */
 /* -------------------------------------------------------------------------- */
@@ -47,7 +66,7 @@ export type HomepageData = {
 type CmsEvent = {
   title: string;
   slug: string;
-  date: string;
+  eventDate?: string;
   endDate?: string;
   venue: string;
   venueAddress?: string;
@@ -57,19 +76,22 @@ type CmsEvent = {
   siteScope?: string;
   coverImage?: StrapiMedia | null;
   heroMedia?: StrapiMedia | null;
+  ticketUrl?: string;
+  ticketCtaLabel?: string;
   ticketCtas?: Array<CmsTicketCta & { id: number; documentId: string }>;
 };
 
 type CmsTicketCta = {
   label: string;
   provider: string;
-  redirectUrl: string;
+  url?: string;
 };
 
 type CmsArticle = {
   title: string;
   slug: string;
-  publishedAt: string;
+  publishedDate?: string;
+  publishedAt?: string;
   excerpt?: string;
   category?: string;
   siteScope?: string;
@@ -78,7 +100,7 @@ type CmsArticle = {
 
 type CmsPartner = {
   name: string;
-  website?: string;
+  websiteUrl?: string;
   logo?: StrapiMedia | null;
 };
 
@@ -86,6 +108,37 @@ type CmsGallery = {
   title: string;
   siteScope?: string;
   mediaItems?: StrapiMedia[];
+};
+
+type CmsPageSection = {
+  sectionKey: string;
+  eyebrow?: string;
+  title?: string;
+  body?: string;
+};
+
+type CmsSitePage = {
+  heroTitle?: string;
+  heroDescription?: string;
+  heroMedia?: StrapiMedia | null;
+  heroSlides?: CmsHeroSlide[];
+  sections?: CmsPageSection[];
+};
+
+type CmsHeroSlide = {
+  id?: number;
+  internalName?: string;
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  image?: StrapiMedia | null;
+  mobileImage?: StrapiMedia | null;
+  imageAlt?: string;
+  subjectAnchor?: HomepageHeroSlide["subjectAnchor"];
+  ctaLabel?: string;
+  ctaUrl?: string;
+  isActive?: boolean;
+  sortOrder?: number;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -96,13 +149,16 @@ function statusMap(raw?: string): MotorsportEvent["status"] {
   switch (raw) {
     case "tickets_open":
     case "tickets-open":
+    case "ticketsOpen":
       return "tickets-open";
     case "live":
     case "live_now":
       return "live";
     case "sold_out":
     case "sold-out":
+    case "soldOut":
       return "sold-out";
+    case "past":
     case "completed":
       return "completed";
     case "cancelled":
@@ -110,6 +166,34 @@ function statusMap(raw?: string): MotorsportEvent["status"] {
     default:
       return "announced";
   }
+}
+
+function formatDateRange(start?: string, end?: string): string {
+  if (!start) return "TBA";
+  if (!end) return formatDate(start);
+
+  try {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const sameMonth =
+      startDate.getMonth() === endDate.getMonth() &&
+      startDate.getFullYear() === endDate.getFullYear();
+
+    if (sameMonth) {
+      return `${startDate.toLocaleDateString("en-GB", { day: "2-digit" })}–${endDate.toLocaleDateString(
+        "en-GB",
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        },
+      )}`;
+    }
+  } catch {
+    return formatDate(start);
+  }
+
+  return `${formatDate(start)} – ${formatDate(end)}`;
 }
 
 function formatDate(iso?: string): string {
@@ -133,17 +217,16 @@ function mapEvent(
     title: entry.title ?? "Untitled event",
     slug: entry.slug,
     href: `/events/${entry.slug ?? entry.documentId}`,
-    dateLabel: formatDate(entry.date),
+    dateLabel: formatDateRange(entry.eventDate, entry.endDate),
     venue: entry.venue ?? "TBA",
     image: mediaUrl(img?.url) || "/media/motorsport-design-hero.png",
-    imageAlt:
-      img?.alternativeText ?? `${entry.title} - Sarga Motorsport event`,
+    imageAlt: img?.alternativeText ?? `${entry.title} - Sarga Motorsport event`,
     status: statusMap(entry.eventStatus),
     category: entry.racingCategory ?? undefined,
     seriesName: entry.seriesName ?? undefined,
-    ticketHref: entry.ticketCtas?.[0]?.redirectUrl
-      ? `/tickets`
-      : undefined,
+    ticketHref:
+      entry.ticketUrl || entry.ticketCtas?.[0]?.url ? "/tickets" : undefined,
+    ticketLabel: entry.ticketCtaLabel ?? entry.ticketCtas?.[0]?.label,
   };
 }
 
@@ -155,10 +238,9 @@ function mapArticle(
     title: entry.title ?? "Untitled article",
     href: `/news/${entry.slug ?? entry.documentId}`,
     image: mediaUrl(img?.url) || "/media/motorcycle-racing-dusk.png",
-    imageAlt:
-      img?.alternativeText ?? `${entry.title} - Sarga Motorsport news`,
+    imageAlt: img?.alternativeText ?? `${entry.title} - Sarga Motorsport news`,
     category: entry.category ?? "Motorsport",
-    publishedLabel: formatDate(entry.publishedAt),
+    publishedLabel: formatDate(entry.publishedDate ?? entry.publishedAt),
     excerpt: entry.excerpt ?? undefined,
   };
 }
@@ -171,8 +253,79 @@ function mapPartner(
     logo:
       mediaUrl(entry.logo?.url) ||
       "/brand/logo-sarga-motorsport-symbol-sport.png",
-    href: entry.website ?? undefined,
+    href: entry.websiteUrl ?? undefined,
   };
+}
+
+function sectionCopy(
+  sections: CmsPageSection[] | undefined,
+  key: string,
+  fallback: HomepageSectionCopy,
+): HomepageSectionCopy {
+  const section = sections?.find((item) => item.sectionKey === key);
+  return {
+    eyebrow: section?.eyebrow || fallback.eyebrow,
+    title: section?.title || fallback.title,
+    description: section?.body || fallback.description,
+  };
+}
+
+function safeHeroCtaUrl(value?: string): string | undefined {
+  const candidate = value?.trim();
+  if (!candidate) return undefined;
+  if (candidate.startsWith("/") && !candidate.startsWith("//")) {
+    return candidate;
+  }
+
+  try {
+    const url = new URL(candidate);
+    return url.protocol === "https:" ? url.toString() : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function mapHeroSlides(slides?: CmsHeroSlide[]): HomepageHeroSlide[] {
+  return (slides ?? [])
+    .filter(
+      (slide) =>
+        slide.isActive !== false &&
+        slide.image?.url &&
+        (!slide.image.mime || slide.image.mime.startsWith("image/")),
+    )
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+    .slice(0, 5)
+    .map((slide, index) => {
+      const mobileImage =
+        slide.mobileImage?.url &&
+        (!slide.mobileImage.mime || slide.mobileImage.mime.startsWith("image/"))
+          ? mediaUrl(slide.mobileImage.url)
+          : undefined;
+      const safeCtaUrl = safeHeroCtaUrl(slide.ctaUrl);
+      const cta =
+        slide.ctaLabel && safeCtaUrl
+          ? {
+              label: slide.ctaLabel,
+              href: safeCtaUrl,
+              external: safeCtaUrl.startsWith("https://"),
+            }
+          : undefined;
+
+      return {
+        id: `cms-hero-${slide.id ?? index}`,
+        eyebrow: slide.eyebrow,
+        title: slide.title,
+        description: slide.description,
+        image: mediaUrl(slide.image?.url),
+        mobileImage,
+        imageAlt:
+          slide.imageAlt ||
+          slide.image?.alternativeText ||
+          `${slide.title} - Sarga Motorsport`,
+        subjectAnchor: slide.subjectAnchor ?? "center",
+        cta,
+      };
+    });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -284,19 +437,102 @@ const PLACEHOLDER_GALLERY: GalleryItem[] = [
   },
   {
     id: "g3",
-    image: "/media/motorsport-design-card.png",
-    imageAlt: "GT race car under night circuit floodlights",
-    eyebrow: "Four wheels / GT",
-    caption: "Built for intensity",
+    image: "/media/sarga-motorsport-bike-and-rally.png",
+    imageAlt: "Rally car and motorcycle racers in a kinetic split composition",
+    eyebrow: "Mixed discipline / Rally",
+    caption: "Every surface is a stage",
   },
   {
     id: "g4",
-    image: "/media/motorcycle-racing-dusk.png",
-    imageAlt: "Close-up of a motorcycle racer in full leathers mid-corner",
+    image: "/media/sarga-motorsport-motorbike-race.png",
+    imageAlt: "Motorcycle racers accelerating through a packed circuit",
     eyebrow: "Two wheels / Moto2",
     caption: "Apex precision",
   },
+  {
+    id: "g5",
+    image: "/media/sarga-motorsport-race-nascar-1.png",
+    imageAlt: "Touring cars racing side by side under circuit lights",
+    eyebrow: "Four wheels / Touring",
+    caption: "Closer at every corner",
+  },
+  {
+    id: "g6",
+    image: "/media/sarga-motorsport-race-nascar-2.png",
+    imageAlt: "Race cars fighting for position in a high-speed pack",
+    eyebrow: "Race weekend / Grid",
+    caption: "Pressure in formation",
+  },
 ];
+
+const PLACEHOLDER_PAGE: HomepageData["page"] = {
+  heroTitle: "Feel the friction.",
+  heroDescription:
+    "Indonesia's premier motorsport ecosystem: elite racing, unfiltered energy, and an event experience built for those who live for the apex.",
+  heroSlides: [
+    {
+      id: "circuit-golden-hour",
+      eyebrow: "Sarga Motorsport / Season 2026",
+      title: "Feel the friction.",
+      description:
+        "World-class competition, human precision, and race weekends built to bring Indonesia closer to the action.",
+      image: "/media/hero/sarga-motorsport-hero-circuit-golden-hour.jpg",
+      mobileImage:
+        "/media/hero/sarga-motorsport-hero-circuit-golden-hour-mobile.jpg",
+      imageAlt:
+        "Red and orange touring race car accelerating through a tropical circuit at golden hour",
+      subjectAnchor: "right",
+      cta: { label: "Explore events", href: "/events" },
+    },
+    {
+      id: "rally-highlands",
+      eyebrow: "Rally / Beyond the circuit",
+      title: "Every surface is a stage.",
+      description:
+        "From highland gravel to the racing line, Sarga Motorsport follows competition wherever it comes alive.",
+      image: "/media/hero/sarga-motorsport-hero-rally-highlands.jpg",
+      mobileImage:
+        "/media/hero/sarga-motorsport-hero-rally-highlands-mobile.jpg",
+      imageAlt:
+        "Red rally car racing across a sunlit gravel road in tropical highlands",
+      subjectAnchor: "left",
+      cta: { label: "See the programmes", href: "/events" },
+    },
+    {
+      id: "paddock-ready",
+      eyebrow: "Paddock / People and precision",
+      title: "Built before the lights go out.",
+      description:
+        "Drivers, crews, and disciplined preparation turn a race weekend into a world-class stage.",
+      image: "/media/hero/sarga-motorsport-hero-paddock-ready.jpg",
+      mobileImage: "/media/hero/sarga-motorsport-hero-paddock-ready-mobile.jpg",
+      imageAlt:
+        "Helmeted racing driver and pit crew preparing a red touring car in a warm daylight paddock",
+      subjectAnchor: "right",
+      cta: { label: "Meet Sarga Motorsport", href: "/about" },
+    },
+  ],
+  sections: {
+    events: {
+      eyebrow: "Upcoming events",
+      title: "The next grid is forming.",
+      description:
+        "Race weekends, talent programs, and international campaigns-built to put fans closer to the action.",
+    },
+    news: {
+      eyebrow: "Latest news",
+      title: "From the paddock.",
+      description:
+        "Race reports, rider stories, technical detail, and the culture moving Indonesian motorsport forward.",
+    },
+    gallery: {
+      eyebrow: "Gallery",
+      title: "Motion, recorded.",
+      description:
+        "A trackside capture feed from the circuit, paddock, crowd, and machines at full commitment.",
+    },
+  },
+};
 
 const PLACEHOLDER_PARTNERS: PartnerItem[] = [
   {
@@ -326,56 +562,127 @@ const PLACEHOLDER_TICKET_CTA = {
 /* -------------------------------------------------------------------------- */
 
 export async function fetchHomepageData(): Promise<HomepageData> {
-  const [eventsRes, articlesRes, partnersRes, galleriesRes, ticketRes] =
-    await Promise.all([
-      fetchStrapiList<CmsEvent>("events", {
-        populate: ["coverImage", "heroMedia"],
-        filters: {
-          "filters[siteScope][$in][0]": "motorsport",
-          "filters[siteScope][$in][1]": "shared",
+  const [
+    pageRes,
+    eventsRes,
+    articlesRes,
+    partnersRes,
+    galleriesRes,
+    ticketRes,
+  ] = await Promise.all([
+    fetchStrapiList<CmsSitePage>("site-pages", {
+      populate: [
+        "heroMedia",
+        "heroSlides.image",
+        "heroSlides.mobileImage",
+        "sections",
+      ],
+      filters: {
+        "filters[siteScope][$eq]": "motorsport",
+        "filters[pageKind][$eq]": "home",
+      },
+      limit: 1,
+      revalidate: 60,
+    }),
+    fetchStrapiList<CmsEvent>("events", {
+      populate: ["coverImage", "heroMedia", "ticketCtas"],
+      filters: {
+        "filters[siteScope][$in][0]": "motorsport",
+        "filters[siteScope][$in][1]": "shared",
+      },
+      sort: "eventDate:asc",
+      limit: 8,
+      revalidate: 60,
+    }),
+    fetchStrapiList<CmsArticle>("news-articles", {
+      populate: "coverImage",
+      filters: {
+        "filters[siteScope][$in][0]": "motorsport",
+        "filters[siteScope][$in][1]": "shared",
+      },
+      sort: "publishedDate:desc",
+      limit: 6,
+      revalidate: 60,
+    }),
+    fetchStrapiList<CmsPartner>("partners", {
+      populate: "logo",
+      filters: {
+        "filters[siteScope][$in][0]": "motorsport",
+        "filters[siteScope][$in][1]": "shared",
+      },
+      limit: 10,
+      revalidate: 600,
+    }),
+    fetchStrapiList<CmsGallery>("media-galleries", {
+      populate: "mediaItems",
+      filters: {
+        "filters[siteScope][$in][0]": "motorsport",
+        "filters[siteScope][$in][1]": "shared",
+      },
+      limit: 4,
+      revalidate: 600,
+    }),
+    fetchStrapiList<CmsTicketCta>("ticket-ctas", {
+      filters: {
+        "filters[siteScope][$in][0]": "motorsport",
+        "filters[siteScope][$in][1]": "shared",
+        "filters[isActive][$eq]": "true",
+      },
+      sort: "createdAt:desc",
+      limit: 1,
+      revalidate: 60,
+    }),
+  ]);
+
+  /* ---- Page copy ---- */
+  const cmsPage = pageRes?.data?.[0];
+  const cmsHeroImage =
+    cmsPage?.heroMedia &&
+    (!cmsPage.heroMedia.mime || cmsPage.heroMedia.mime.startsWith("image/"))
+      ? mediaUrl(cmsPage.heroMedia.url)
+      : undefined;
+  const cmsHeroSlides = mapHeroSlides(cmsPage?.heroSlides);
+  const legacyHeroSlide: HomepageHeroSlide = {
+    ...PLACEHOLDER_PAGE.heroSlides[0],
+    id: "legacy-home-hero",
+    title: cmsPage?.heroTitle || PLACEHOLDER_PAGE.heroTitle,
+    description: cmsPage?.heroDescription || PLACEHOLDER_PAGE.heroDescription,
+    image: cmsHeroImage || PLACEHOLDER_PAGE.heroSlides[0].image,
+    mobileImage: cmsHeroImage
+      ? undefined
+      : PLACEHOLDER_PAGE.heroSlides[0].mobileImage,
+    imageAlt:
+      cmsPage?.heroMedia?.alternativeText ||
+      PLACEHOLDER_PAGE.heroSlides[0].imageAlt,
+  };
+  const page: HomepageData["page"] = cmsPage
+    ? {
+        heroTitle: cmsPage.heroTitle || PLACEHOLDER_PAGE.heroTitle,
+        heroDescription:
+          cmsPage.heroDescription || PLACEHOLDER_PAGE.heroDescription,
+        heroImage: cmsHeroImage || undefined,
+        heroImageAlt: cmsPage.heroMedia?.alternativeText || undefined,
+        heroSlides:
+          cmsHeroSlides.length > 0 ? cmsHeroSlides : [legacyHeroSlide],
+        sections: {
+          events: sectionCopy(
+            cmsPage.sections,
+            "upcoming-events",
+            PLACEHOLDER_PAGE.sections.events,
+          ),
+          news: sectionCopy(
+            cmsPage.sections,
+            "latest-news",
+            PLACEHOLDER_PAGE.sections.news,
+          ),
+          gallery: sectionCopy(
+            cmsPage.sections,
+            "gallery",
+            PLACEHOLDER_PAGE.sections.gallery,
+          ),
         },
-        sort: "eventDate:asc",
-        limit: 8,
-        revalidate: 60,
-      }),
-      fetchStrapiList<CmsArticle>("news-articles", {
-        populate: "coverImage",
-        filters: {
-          "filters[siteScope][$in][0]": "motorsport",
-          "filters[siteScope][$in][1]": "shared",
-        },
-        sort: "publishedAt:desc",
-        limit: 6,
-        revalidate: 60,
-      }),
-      fetchStrapiList<CmsPartner>("partners", {
-        populate: "logo",
-        filters: {
-          "filters[siteScope][$in][0]": "motorsport",
-          "filters[siteScope][$in][1]": "shared",
-        },
-        limit: 10,
-        revalidate: 600,
-      }),
-      fetchStrapiList<CmsGallery>("media-galleries", {
-        populate: "mediaItems",
-        filters: {
-          "filters[siteScope][$in][0]": "motorsport",
-          "filters[siteScope][$in][1]": "shared",
-        },
-        limit: 4,
-        revalidate: 600,
-      }),
-      fetchStrapiList<CmsTicketCta>("ticket-ctas", {
-        filters: {
-          "filters[siteScope][$in][0]": "motorsport",
-          "filters[siteScope][$in][1]": "shared",
-        },
-        sort: "createdAt:desc",
-        limit: 1,
-        revalidate: 60,
-      }),
-    ]);
+      }
+    : PLACEHOLDER_PAGE;
 
   /* ---- Events ---- */
   const cmsEvents = (eventsRes?.data ?? []).map(mapEvent);
@@ -403,9 +710,7 @@ export async function fetchHomepageData(): Promise<HomepageData> {
       (entry.mediaItems ?? []).map((img, i) => ({
         id: `cms-${entry.id}-${i}`,
         image: mediaUrl(img.url),
-        imageAlt:
-          img.alternativeText ??
-          `${entry.title} - Sarga Motorsport`,
+        imageAlt: img.alternativeText ?? `${entry.title} - Sarga Motorsport`,
         eyebrow: entry.title,
       })),
   );
@@ -417,13 +722,14 @@ export async function fetchHomepageData(): Promise<HomepageData> {
   const ticketCta = cmsTicket
     ? {
         provider: cmsTicket.provider ?? "Official ticketing partner",
-        href: cmsTicket.redirectUrl ?? "/tickets",
+        href: cmsTicket.url ?? "/tickets",
         label: cmsTicket.label ?? "Get tickets",
         eventName: featuredEvent.title,
       }
     : PLACEHOLDER_TICKET_CTA;
 
   return {
+    page,
     featuredEvent,
     upcomingEvents,
     featuredArticle: featuredArticle ?? null,

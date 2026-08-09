@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import {
   EventListCard,
-  GradientRule,
+  InformationBand,
   PageHero,
   PageShell,
   SectionHeader,
@@ -23,13 +23,13 @@ const PLACEHOLDER_CTAS: Array<{
   provider: string;
   href: string;
   eventName: string;
-  embedCode?: string;
+  embedHref?: string;
 }> = [
   {
-    label: "Get tickets",
-    provider: "Official ticketing partner",
-    href: "#",
-    eventName: "Race Weekend Indonesia",
+    label: "Contact ticket desk",
+    provider: "Ticketing information",
+    href: "/contact",
+    eventName: "2026 event availability",
   },
 ];
 
@@ -40,90 +40,106 @@ export default async function TicketsPage() {
   const displayCtas = ctas.length > 0 ? ctas : PLACEHOLDER_CTAS;
 
   return (
-    <PageShell>
+    <PageShell spectrumSeparators>
       <PageHero
         kicker="Curated ticket journey"
         kickerColor="orange"
         title="Tickets"
+        backgroundImage="/media/motorsport-design-hero.png"
+        backgroundAlt="Race car throwing sparks under circuit lights"
         accent="orange"
         accentPosition="bottom-left"
         grain
+        speedLines
+        surface="heat"
         description="Sarga Motorsport partners with approved ticketing platforms. Every CTA below redirects to a secure partner checkout - we never process payment directly."
       />
 
-      <GradientRule />
+      <InformationBand
+        eyebrow="Ticket control / Partner routing"
+        title="Your seat. Their secure checkout."
+        description="Sarga Motorsport publishes approved destinations but never stores payment details or runs an internal ticket engine."
+        items={[
+          { label: "Checkout", value: "Partner" },
+          { label: "Payment", value: "External" },
+          { label: "Support", value: "Available" },
+        ]}
+      />
 
       {/* Featured ticket CTA */}
-      <section className="ms-section ms-shell">
-        <SectionHeader
-          eyebrow="Featured ticket"
-          title="Secure your seat."
-          align="left"
-        />
-        <div className="mt-12 space-y-8">
-          {displayCtas.map((cta) => (
-            <div key={cta.href + cta.eventName}>
-              <TicketCtaPanel
-                eyebrow="Official partner redirect"
-                title={cta.eventName ?? "Upcoming event"}
-                description="Checkout is handled by our approved ticketing partner. Secure payment, guaranteed entry, zero markup."
-                eventMeta={cta.eventName}
-                provider={cta.provider}
-                cta={{
-                  label: cta.label,
-                  href: cta.href,
-                  external: cta.href.startsWith("http"),
-                }}
-              />
-              {/* Optional CMS-driven embed - only rendered when explicitly configured */}
-              {cta.embedCode ? (
-                <div className="mt-4 border border-ms-warm-white/12 bg-ms-black p-4">
-                  <p className="ms-data-label mb-3 text-ms-warm-white/42">
-                    Embedded checkout
-                  </p>
-                  <iframe
-                    src={cta.embedCode}
-                    title={`Ticket checkout - ${cta.eventName ?? "event"}`}
-                    className="h-[32rem] w-full border-0"
-                    sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                    referrerPolicy="no-referrer"
-                    loading="lazy"
-                  />
-                </div>
-              ) : null}
-            </div>
-          ))}
+      <section className="ms-reflected-light-surface ms-section">
+        <div className="ms-shell">
+          <SectionHeader
+            eyebrow="Featured ticket"
+            title="Secure your seat."
+            align="left"
+          />
+          <div className="mt-12 space-y-8">
+            {displayCtas.map((cta, index) => (
+              <div key={`${cta.href}-${cta.eventName}-${index}`}>
+                <TicketCtaPanel
+                  eyebrow="Official partner redirect"
+                  title={cta.eventName ?? "Upcoming event"}
+                  description="Checkout is handled by our approved ticketing partner. Secure payment, guaranteed entry, zero markup."
+                  eventMeta={cta.eventName}
+                  provider={cta.provider}
+                  surface="reflected"
+                  cta={{
+                    label: cta.label,
+                    href: cta.href,
+                    external: cta.href.startsWith("http"),
+                  }}
+                />
+                {/* Optional CMS-driven embed - only rendered when explicitly configured */}
+                {cta.embedHref ? (
+                  <div className="ms-blue-panel mt-4 p-4">
+                    <p className="ms-data-label mb-3 text-ms-warm-white/52">
+                      Embedded checkout
+                    </p>
+                    <iframe
+                      src={cta.embedHref}
+                      title={`Ticket checkout - ${cta.eventName ?? "event"}`}
+                      className="h-[32rem] w-full border-0"
+                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                      referrerPolicy="no-referrer"
+                      loading="lazy"
+                    />
+                  </div>
+                ) : null}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Ticketed events */}
       {ticketedEvents.length > 0 ? (
-        <section className="ms-section ms-shell border-t border-ms-warm-white/12">
-          <SectionHeader
-            index="TICKETS"
-            eyebrow="Events with tickets available"
-            title="On sale now."
-            align="left"
-          />
-          <div className="mt-12">
-            {ticketedEvents.map((event, i) => (
-              <EventListCard
-                key={event.href}
-                event={event}
-                index={String(i + 1).padStart(2, "0")}
-              />
-            ))}
+        <section className="ms-reflected-light-surface ms-section">
+          <div className="ms-shell">
+            <SectionHeader
+              index="TICKETS"
+              eyebrow="Events with tickets available"
+              title="On sale now."
+              align="left"
+            />
+            <div className="mt-12">
+              {ticketedEvents.map((event, i) => (
+                <EventListCard
+                  key={event.href}
+                  event={event}
+                  index={String(i + 1).padStart(2, "0")}
+                />
+              ))}
+            </div>
           </div>
         </section>
       ) : null}
 
       {/* Info section */}
-      <section className="ms-shell border-t border-ms-warm-white/12 py-16">
-        <div className="grid gap-10 lg:grid-cols-2">
+      <section className="ms-blue-heat-surface py-16">
+        <div className="ms-shell grid gap-10 lg:grid-cols-2">
           <div>
-            <h2 className="ms-display text-[clamp(1.5rem,3vw,3rem)]">
-              How it works.
-            </h2>
+            <h2 className="ms-heading-feature">How it works.</h2>
             <ul className="mt-8 space-y-5 text-base leading-7 text-ms-warm-white/60">
               <li className="flex gap-4">
                 <span className="mt-1 block h-6 w-1 bg-ms-apex-crimson" />
@@ -143,7 +159,7 @@ export default async function TicketsPage() {
               </li>
             </ul>
           </div>
-          <div className="ms-panel bg-ms-black p-8">
+          <div className="ms-blue-panel ms-panel p-8">
             <span className="ms-data-label text-ms-warm-white/42">
               Ticket support
             </span>

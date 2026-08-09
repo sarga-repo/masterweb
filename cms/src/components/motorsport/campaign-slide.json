@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_motorsport_campaign_slides",
+  "info": {
+    "displayName": "Campaign Slide",
+    "description": "Campaign banner slide with optional call to action"
+  },
+  "options": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "description": { "type": "text" },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "ctaLabel": { "type": "string" },
+    "ctaUrl": { "type": "string" },
+    "sortOrder": { "type": "integer", "default": 0 }
+  }
+}

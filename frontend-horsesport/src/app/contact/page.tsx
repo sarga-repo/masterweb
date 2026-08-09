@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/metadata";
 
 import { PageHero, SectionHeader, ContactForm } from "@/components";
-import { MailIcon, PinIcon, TicketIcon, RosetteIcon } from "@/components/ui/hs-icons";
+import {
+  MailIcon,
+  PinIcon,
+  TicketIcon,
+  RosetteIcon,
+} from "@/components/ui/hs-icons";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = createMetadata({
@@ -13,9 +18,21 @@ export const metadata: Metadata = createMetadata({
 });
 
 const CHANNELS = [
-  { label: "General & media", value: "Use the form - select your inquiry type", Icon: MailIcon },
-  { label: "Ticketing", value: "Tickets are sold via approved partners", Icon: TicketIcon },
-  { label: "Partnerships", value: "Tailored proposals for brands & sponsors", Icon: RosetteIcon },
+  {
+    label: "General & media",
+    value: "Use the form - select your inquiry type",
+    Icon: MailIcon,
+  },
+  {
+    label: "Ticketing",
+    value: "Tickets are sold via approved partners",
+    Icon: TicketIcon,
+  },
+  {
+    label: "Partnerships",
+    value: "Tailored proposals for brands & sponsors",
+    Icon: RosetteIcon,
+  },
   { label: "Based in", value: "Indonesia", Icon: PinIcon },
 ];
 
@@ -56,7 +73,10 @@ export default function ContactPage() {
             </dl>
             <p className="mt-8 text-sm text-hs-cream/50">
               Part of the Sarga ecosystem -{" "}
-              <a href={siteConfig.gatewayUrl} className="text-hs-orange hover:underline">
+              <a
+                href={siteConfig.gatewayUrl}
+                className="text-hs-orange hover:underline"
+              >
                 Sarga.co
               </a>
               .

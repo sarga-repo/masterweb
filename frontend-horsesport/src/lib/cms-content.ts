@@ -156,7 +156,11 @@ type CmsGallery = {
   mediaItems?: StrapiMedia[];
 };
 
-type CmsPartner = { name: string; websiteUrl?: string; logo?: StrapiMedia | null };
+type CmsPartner = {
+  name: string;
+  websiteUrl?: string;
+  logo?: StrapiMedia | null;
+};
 
 /* -------------------------------------------------------------------------- */
 /*  Formatting                                                                */
@@ -199,7 +203,7 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 function statusLabel(raw?: string): string | undefined {
-  return raw ? STATUS_LABELS[raw] ?? raw : undefined;
+  return raw ? (STATUS_LABELS[raw] ?? raw) : undefined;
 }
 
 function titleCase(raw?: string): string | undefined {
@@ -288,9 +292,10 @@ function mapEventDetail(
     schedule: (entry.schedule ?? []).map((row) => ({
       label: row.label ?? "Session",
       day: row.day ?? undefined,
-      time: [formatTime(row.startTime), formatTime(row.endTime)]
-        .filter(Boolean)
-        .join(" – ") || undefined,
+      time:
+        [formatTime(row.startTime), formatTime(row.endTime)]
+          .filter(Boolean)
+          .join(" – ") || undefined,
       description: row.description ?? undefined,
     })),
     ticket: cta ? resolveTicketAction(cta) : undefined,
@@ -403,12 +408,42 @@ const PH_PARTNERS: PartnerItemData[] = [
 ];
 
 const PH_GALLERY_ITEMS: GalleryItemData[] = [
-  { id: "g1", image: "/media/news-merdeka.png", imageAlt: "Race-day grandstand crowd", category: "Race day" },
-  { id: "g2", image: "/media/news-turf-track.png", imageAlt: "Championship turf track", category: "Venue" },
-  { id: "g3", image: "/media/Champion-horse-studio-portrait.png", imageAlt: "Premium stable interior", category: "Stable life" },
-  { id: "g4", image: "/media/Home-straight-finish.png", imageAlt: "Jockeys racing side by side", category: "Race day" },
-  { id: "g5", image: "/media/Racecourse-aerial.png", imageAlt: "Aerial view of the turf track", category: "Venue" },
-  { id: "g6", image: "/media/sarga-horse-race-event.png", imageAlt: "Race day at the starting gate", category: "Race day" },
+  {
+    id: "g1",
+    image: "/media/news-merdeka.png",
+    imageAlt: "Race-day grandstand crowd",
+    category: "Race day",
+  },
+  {
+    id: "g2",
+    image: "/media/news-turf-track.png",
+    imageAlt: "Championship turf track",
+    category: "Venue",
+  },
+  {
+    id: "g3",
+    image: "/media/Champion-horse-studio-portrait.png",
+    imageAlt: "Premium stable interior",
+    category: "Stable life",
+  },
+  {
+    id: "g4",
+    image: "/media/Home-straight-finish.png",
+    imageAlt: "Jockeys racing side by side",
+    category: "Race day",
+  },
+  {
+    id: "g5",
+    image: "/media/Racecourse-aerial.png",
+    imageAlt: "Aerial view of the turf track",
+    category: "Venue",
+  },
+  {
+    id: "g6",
+    image: "/media/sarga-horse-race-event.png",
+    imageAlt: "Race day at the starting gate",
+    category: "Race day",
+  },
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -420,7 +455,9 @@ const HS_SCOPE = {
   "filters[siteScope][$in][1]": "shared",
 };
 const EVENT_BIZ = { "filters[business][slug][$eq]": "sarga-horse-sport" };
-const NEWS_BIZ = { "filters[relatedBusinesses][slug][$eq]": "sarga-horse-sport" };
+const NEWS_BIZ = {
+  "filters[relatedBusinesses][slug][$eq]": "sarga-horse-sport",
+};
 
 /* -------------------------------------------------------------------------- */
 /*  Fetchers                                                                  */
@@ -438,7 +475,9 @@ export async function fetchEventsPage(): Promise<EventCardData[]> {
   return events.length > 0 ? events : PH_EVENTS;
 }
 
-export async function fetchEventDetail(slug: string): Promise<EventDetail | null> {
+export async function fetchEventDetail(
+  slug: string,
+): Promise<EventDetail | null> {
   const res = await fetchStrapiList<CmsEvent>("events", {
     populate: ["coverImage", "heroMedia", "schedule", "ticketCtas"],
     filters: { ...HS_SCOPE, ...EVENT_BIZ, "filters[slug][$eq]": slug },
@@ -461,7 +500,9 @@ export async function fetchNewsPage(): Promise<ArticleCardData[]> {
   return articles.length > 0 ? articles : PH_ARTICLES;
 }
 
-export async function fetchArticleDetail(slug: string): Promise<ArticleDetail | null> {
+export async function fetchArticleDetail(
+  slug: string,
+): Promise<ArticleDetail | null> {
   const res = await fetchStrapiList<CmsArticle>("news-articles", {
     populate: "coverImage",
     filters: { ...HS_SCOPE, ...NEWS_BIZ, "filters[slug][$eq]": slug },
@@ -548,7 +589,8 @@ export async function fetchGalleryPage(): Promise<GalleryGroup[]> {
     {
       id: "ph-gallery",
       title: "Race Day Gallery",
-      description: "Race-day, turf, and stable photography from Sarga Horse Sport events.",
+      description:
+        "Race-day, turf, and stable photography from Sarga Horse Sport events.",
       category: "Race day",
       items: PH_GALLERY_ITEMS,
     },

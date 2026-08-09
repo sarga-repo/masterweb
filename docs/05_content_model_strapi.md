@@ -86,6 +86,31 @@ The agreed CMS is **Strapi**. Strapi is recommended because it supports headless
 | relatedEvents    | Relation    | Event                                                                                    |
 | seo              | Component   | SEO                                                                                      |
 
+## Collection type: Site
+
+| Field       | Type    | Notes                                               |
+| ----------- | ------- | --------------------------------------------------- |
+| name        | Text    | Public site name                                    |
+| slug        | UID     | Stable site identifier                              |
+| baseUrl     | Text    | Public/local destination                            |
+| description | Text    | Ecosystem-list summary                              |
+| logo        | Media   | Optional site identity                              |
+| favicon     | Media   | Optional browser icon                               |
+| themeKey    | Text    | gateway, motorsport, or horsesport routing key      |
+| order       | Number  | Ecosystem-list display order                        |
+| isActive    | Boolean | Controls whether the site is exposed in public hubs |
+
+## Collection type: Leadership Person
+
+| Field    | Type        | Notes                              |
+| -------- | ----------- | ---------------------------------- |
+| name     | Text        | Required                           |
+| role     | Text        | Public role title                  |
+| summary  | Text        | Short homepage/content-hub profile |
+| group    | Enumeration | board, executive, advisor          |
+| order    | Number      | Display order                      |
+| portrait | Media       | About and content-hub portrait     |
+
 ## Collection type: News Article
 
 | Field             | Type             | Notes                                              |
@@ -160,6 +185,18 @@ The agreed CMS is **Strapi**. Strapi is recommended because it supports headless
 | canonicalUrl    | Text    | Optional      |
 | noIndex         | Boolean | Default false |
 
+## Motorsport homepage carousel (implemented in MSR-RD3)
+
+The approved MSR-RD2 design contract is implemented as the repeatable
+`motorsport.hero-slide` component to the Motorsport-scoped `site-page` Home
+record. The parent record retains
+`siteScope`, site relation, draft/publish, and role segregation; existing
+single-hero fields remain the migration/runtime fallback. The component
+supports one to five ordered active slides, desktop and optional mobile media,
+required alt text, crop anchor, concise copy, and one optional CTA. See
+`docs/motorsport/revamp/11_redesign_foundations_page_templates.md` for the
+field, media, order, accessibility, and migration contract.
+
 ## API requirements
 
 Frontend should use Strapi API through typed service functions. Do not call Strapi directly from random components.
@@ -180,7 +217,15 @@ src/lib/strapi/
 ## Content governance
 
 - All public content should use Strapi draft/publish workflow.
-- Only approved admin roles can publish.
+- Managed Gateway, Motorsport, Horse Sport, and Shared admin roles can publish
+  only records matching their assigned `siteScope`; Super Admin can publish all.
+- Global Site, Leadership Person, and Timeline Item records have no `siteScope`
+  and are editable only by Shared Library Admin and Super Admin.
+- Assign exactly one managed Sarga site role per dedicated admin account.
+- Admin creates/updates/clones are forced to the managed account's scope by the
+  server write guard; UI filters alone are not the security boundary.
 - Media assets must include alt text.
+- Media Library assets are shared because upload files have no `siteScope`; use
+  site-named folders and do not store confidential assets there.
 - Slugs must be reviewed before publishing.
 - Broken external ticket links must be checked before go-live.

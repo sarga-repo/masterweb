@@ -88,6 +88,13 @@ The compose file overrides site URLs per service and reads shared values
 
 ## 3. CMS editorial guide (Horse Sport)
 
+Use a dedicated account with the managed `sarga-horsesport-admin` role. It sees
+only the Sarga Horse Sport custom workspace and Horse Sport-scoped records;
+Super Admin remains the only cross-site administrator. Do not add a second
+managed Sarga site role to the account. The shared Media Library is not
+site-scoped, so use a Horse Sport-named folder and do not store confidential
+assets there.
+
 All Horse Sport content lives in the **shared Strapi** and is surfaced by
 `siteScope` + business relation. The frontend fetches
 `siteScope ∈ {horsesport, shared}` **and** the Horse Sport business relation, so

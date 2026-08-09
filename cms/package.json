@@ -7,6 +7,8 @@
   "scripts": {
     "build": "strapi build",
     "console": "strapi console",
+    "data:export": "strapi export",
+    "data:import": "strapi import",
     "deploy": "strapi deploy",
     "dev": "strapi develop",
     "develop": "strapi develop",

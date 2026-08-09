@@ -38,16 +38,27 @@ Before coding, read:
 22. `docs/motorsport/04_motorsport_design_system.md`
 23. `docs/motorsport/05_motorsport_content_model_extensions.md`
 24. `docs/motorsport/06_motorsport_implementation_plan.md`
-25. `docs/horsesport/01_horsesport_project_brief.md`
-26. `docs/horsesport/02_horsesport_brand_translation.md`
-27. `docs/horsesport/03_horsesport_sitemap_page_specs.md`
-28. `docs/horsesport/04_horsesport_design_system.md`
-29. `docs/horsesport/05_horsesport_content_model_extensions.md`
-30. `docs/horsesport/06_horsesport_implementation_plan.md`
-31. `docs/horsesport/07_horsesport_asset_usage_guideline.md`
-32. `reference/source-pdfs/sarga_website_preview.pdf`
-33. `reference/source-pdfs/sarga_motorsport_brand_playbook.pdf` if present
-34. `strapi/content-types.json`
+25. `docs/motorsport/revamp/README.md`
+26. `docs/motorsport/revamp/01_source_findings.md`
+27. `docs/motorsport/revamp/02_brand_layout_direction.md`
+28. `docs/motorsport/revamp/03_sitemap_page_specs.md`
+29. `docs/motorsport/revamp/04_cms_architecture_admin_ux.md`
+30. `docs/motorsport/revamp/05_migration_plan.md`
+31. `docs/motorsport/revamp/06_implementation_phases.md`
+32. `docs/motorsport/revamp/07_testing_uat.md`
+33. `docs/motorsport/revamp/08_deployment_handover.md`
+34. `docs/horsesport/01_horsesport_project_brief.md`
+35. `docs/horsesport/02_horsesport_brand_translation.md`
+36. `docs/horsesport/03_horsesport_sitemap_page_specs.md`
+37. `docs/horsesport/04_horsesport_design_system.md`
+38. `docs/horsesport/05_horsesport_content_model_extensions.md`
+39. `docs/horsesport/06_horsesport_implementation_plan.md`
+40. `docs/horsesport/07_horsesport_asset_usage_guideline.md`
+41. `reference/source-pdfs/sarga_website_preview.pdf`
+42. `reference/source-pdfs/look_and_feel_website_sarga_co.pdf` if present
+43. `reference/source-pdfs/sarga_motorsport_2.pdf` if present
+44. `reference/source-pdfs/sarga_motorsport_brand_playbook.pdf` if present
+45. `strapi/content-types.json`
 
 ## Workspace skill usage
 
@@ -85,7 +96,14 @@ For dedicated frontends, use the premium/frontend UI skill to produce internatio
 
 ## Sarga Motorsport design rules
 
-Use the motorsport brand playbook as the primary design source where available.
+Use the Motorsport revamp docs as the current implementation source when working on the major revamp. The Look & Feel PDF and `Sarga Motorsport 2.pdf` supersede the older broad Motorsport sitemap, while the existing approved dark premium theme remains valid.
+
+Primary current sources:
+
+- `docs/motorsport/revamp/`
+- `reference/source-pdfs/look_and_feel_website_sarga_co.pdf`
+- `reference/source-pdfs/sarga_motorsport_2.pdf`
+- `reference/source-pdfs/sarga_motorsport_brand_playbook.pdf`
 
 Brand persona: dynamic, captivating, intense - the “Adrenaline Alchemist”.
 
@@ -122,6 +140,7 @@ Brand direction:
 ## Shared CMS rules
 
 - Content must support `siteScope`: `gateway`, `motorsport`, `horsesport`, `shared`, or `hidden`.
+- Editors should have dedicated CMS workspace/menu entry points for Gateway, Motorsport, Horse Sport, and Shared Library while keeping one shared Strapi instance and shared content models where appropriate.
 - News, events, ticket CTAs, media, campaigns, sponsors, and forms can be shared across sites but rendered differently per frontend.
 - Horse Sport-specific content should live in CMS once and be consumed by `frontend-horsesport/` and optionally previewed on `frontend-gateway/` and `frontend-motorsport/` if editorial rules allow.
 - Ticketing CTA data should be centralized in CMS and include provider, redirect URL, optional embed code/config, display rules, and target site scope.

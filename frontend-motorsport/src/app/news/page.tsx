@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
-import {
-  GradientRule,
-  NewsCard,
-  PageHero,
-  PageShell,
-  SectionHeader,
-} from "@/components";
+import { InformationBand, LightLineField, PageShell } from "@/components";
+import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/ui/icons";
+import { ResilientImage } from "@/components/ui/resilient-image";
 import { fetchArticles } from "@/lib/cms-data";
 import type { MotorsportArticle } from "@/types/design-system";
 
@@ -20,95 +17,227 @@ const PLACEHOLDER: MotorsportArticle[] = [
   {
     title: "The line between control and chaos",
     href: "/news/the-line-between-control-and-chaos",
-    image: "/media/motorsport-design-hero.png",
-    imageAlt: "Race car throwing sparks at high speed",
+    image: "/media/hero/sarga-motorsport-hero-circuit-golden-hour.jpg",
+    imageAlt: "Red touring race car accelerating through a tropical circuit",
     category: "Race Report",
     publishedLabel: "02 Jul 2026",
     excerpt:
-      "Inside the cockpit of Sarga's opening race weekend - a masterclass in pressure, precision, and the fine art of going fast.",
+      "Inside the cockpit of Sarga's opening race weekend—a masterclass in pressure, precision, and the fine art of going fast.",
   },
   {
     title: "Riders rewrite the racing line",
     href: "/news/riders-rewrite-the-racing-line",
-    image: "/media/motorcycle-racing-dusk.png",
-    imageAlt: "Superbike race pack cornering under circuit lights",
+    image: "/media/sarga-motorsport-discipline-motorcycle-daylight.jpg",
+    imageAlt: "Superbike race pack leaning through a tropical circuit corner",
     category: "Motorcycle Racing",
     publishedLabel: "28 Jun 2026",
     excerpt:
-      "How Indonesia's fastest riders are reshaping the sport - one apex at a time.",
+      "How Indonesia's fastest riders are reshaping the sport—one apex at a time.",
   },
   {
     title: "Building the 360° racing ecosystem",
     href: "/news/building-the-360-racing-ecosystem",
-    image: "/media/motorsport-design-card.png",
-    imageAlt: "Aerial view of a motorsport circuit and festival grounds",
+    image: "/media/hero/sarga-motorsport-hero-paddock-ready.jpg",
+    imageAlt: "Driver and race crew preparing in a warm daylight paddock",
     category: "Feature",
     publishedLabel: "15 Jun 2026",
     excerpt:
-      "From track to grandstand to livestream - how Sarga is engineering an entire motorsport experience.",
+      "From track to grandstand to livestream—how Sarga is engineering an entire motorsport experience.",
   },
   {
     title: "Paddock pass: behind the pit wall",
     href: "/news/paddock-pass-behind-the-pit-wall",
-    image: "/media/motorcycle-racing-dusk.png",
-    imageAlt: "Pit crew preparing a motorcycle under paddock lights",
+    image: "/media/sarga-motorsport-discipline-endurance-daylight.jpg",
+    imageAlt: "Endurance prototype racing through a tropical circuit",
     category: "Lifestyle",
     publishedLabel: "10 Jun 2026",
     excerpt:
-      "A rare look at the mechanics, engineers, and unsung heroes who make every race weekend possible.",
+      "A rare look at the mechanics, engineers, and people who make every race weekend possible.",
   },
 ];
 
 export default async function NewsPage() {
   const cmsArticles = await fetchArticles();
   const articles = cmsArticles.length > 0 ? cmsArticles : PLACEHOLDER;
-
   const [featured, ...rest] = articles;
 
   return (
-    <PageShell>
-      <PageHero
-        kicker="Editorial feed"
-        kickerColor="orange"
-        title="News"
-        accent="yellow"
-        accentPosition="top-left"
-        speedLines
-        grain
-        description="Race reports, rider profiles, technical deep-dives, and lifestyle features - curated by the Sarga Motorsport editorial team. Car and motorcycle racing, always in frame."
-      />
-
-      <GradientRule />
-
-      {/* Featured + grid */}
-      <section className="ms-section ms-shell">
-        {featured ? (
-          <div className="grid gap-10 lg:grid-cols-[1.6fr_0.8fr]">
-            <NewsCard article={featured} feature />
-            <div className="flex flex-col gap-10">
-              {rest.slice(0, 2).map((a) => (
-                <NewsCard key={a.href} article={a} />
-              ))}
-            </div>
+    <PageShell spectrumSeparators>
+      <section className="ms-blue-heat-surface">
+        <LightLineField />
+        <div className="ms-shell relative z-10 grid gap-10 py-18 sm:py-24 lg:grid-cols-[minmax(0,1.3fr)_minmax(14rem,.7fr)] lg:items-end">
+          <div>
+            <p className="ms-kicker text-ms-electric-yellow">
+              Editorial / From the paddock
+            </p>
+            <h1 className="ms-heading-page mt-6 text-ms-warm-white">News</h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-ms-warm-white/72">
+              Race reports, rider profiles, technical detail, and the culture
+              moving Indonesian motorsport forward—across four wheels and two.
+            </p>
           </div>
-        ) : null}
+          <div className="border-t border-ms-warm-white/20 pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+            <p className="ms-data-label text-ms-slipstream-teal">
+              Published archive
+            </p>
+            <p className="ms-tabular mt-4 font-display text-6xl leading-none text-ms-warm-white sm:text-7xl">
+              {String(articles.length).padStart(2, "0")}
+            </p>
+            <p className="mt-3 text-sm text-ms-warm-white/58">
+              Motorsport stories
+            </p>
+          </div>
+        </div>
       </section>
 
-      {/* Remaining articles */}
-      {rest.length > 2 ? (
-        <section className="ms-section ms-shell border-t border-ms-warm-white/12">
-          <SectionHeader
-            eyebrow="More stories"
-            title="The archive."
-            align="left"
-          />
-          <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            {rest.slice(2).map((a) => (
-              <NewsCard key={a.href} article={a} />
-            ))}
+      <InformationBand
+        eyebrow="Editorial control / Motorsport"
+        title="Stories at race pace."
+        description="Reports, announcements, people, technology, and culture—published from the Motorsport-scoped editorial feed."
+        items={[
+          { label: "Stories", value: String(articles.length).padStart(2, "0") },
+          { label: "Lead", value: featured?.category ?? "News" },
+          { label: "Feed", value: "Active" },
+        ]}
+      />
+
+      <section className="ms-blue-heat-surface ms-section">
+        <div className="ms-shell">
+          {featured ? (
+            <article className="grid gap-0 border-y border-ms-warm-white/18 lg:grid-cols-[minmax(0,1.35fr)_minmax(20rem,.65fr)]">
+              <Link
+                href={featured.href}
+                className="group relative aspect-[16/10] overflow-hidden bg-ms-cream-200 lg:aspect-auto lg:min-h-[38rem]"
+              >
+                <ResilientImage
+                  src={featured.image}
+                  alt={featured.imageAlt}
+                  fallbackSrc="/media/hero/sarga-motorsport-hero-circuit-golden-hour.jpg"
+                  fallbackAlt="Red touring race car on a warm daylight circuit"
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 68vw"
+                  className="object-cover transition-transform duration-700 ease-(--ease-ms-out) group-hover:scale-[1.02]"
+                />
+              </Link>
+              <div className="ms-blue-panel flex flex-col justify-between p-7 sm:p-10 lg:p-12">
+                <div>
+                  <div className="flex flex-wrap gap-4">
+                    <span className="ms-data-label text-ms-electric-yellow">
+                      {featured.category}
+                    </span>
+                    <time className="ms-data-label text-ms-warm-white/52">
+                      {featured.publishedLabel}
+                    </time>
+                  </div>
+                  <h2 className="ms-heading-feature mt-8 text-ms-warm-white">
+                    <Link href={featured.href}>{featured.title}</Link>
+                  </h2>
+                  {featured.excerpt ? (
+                    <p className="mt-7 text-base leading-7 text-ms-warm-white/68">
+                      {featured.excerpt}
+                    </p>
+                  ) : null}
+                </div>
+                <Link
+                  href={featured.href}
+                  className="group mt-12 flex items-center justify-between border-t border-ms-warm-white/18 pt-5 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
+                >
+                  Read lead story
+                  <ArrowUpRightIcon className="size-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
+              </div>
+            </article>
+          ) : null}
+
+          {rest.length > 0 ? (
+            <div className="ms-news-latest-surface mt-20 p-5 sm:p-8 lg:p-10">
+              <div className="grid gap-5 border-t border-ms-warm-white/18 pt-5 sm:grid-cols-[1fr_auto] sm:items-end">
+                <div>
+                  <p className="ms-kicker text-ms-electric-yellow">
+                    Latest dispatches
+                  </p>
+                  <h2 className="ms-heading-section mt-5 text-ms-warm-white">
+                    The archive.
+                  </h2>
+                </div>
+                <p className="ms-data-label text-ms-slipstream-teal">
+                  Ordered by publication date
+                </p>
+              </div>
+
+              <ol className="mt-10 border-b border-ms-warm-white/18">
+                {rest.map((article, index) => (
+                  <li key={article.href}>
+                    <article className="group grid gap-6 border-t border-ms-warm-white/18 py-7 sm:grid-cols-[4rem_13rem_minmax(0,1fr)_auto] sm:items-center">
+                      <span className="ms-tabular hidden font-display text-2xl text-ms-warm-white/42 sm:block">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <Link
+                        href={article.href}
+                        className="relative aspect-[16/10] overflow-hidden bg-ms-cream-200"
+                      >
+                        <ResilientImage
+                          src={article.image}
+                          alt={article.imageAlt}
+                          fallbackSrc="/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
+                          fallbackAlt="Sarga Motorsport paddock in warm daylight"
+                          fill
+                          sizes="13rem"
+                          className="object-cover transition-transform duration-500 group-hover:scale-[1.025]"
+                        />
+                      </Link>
+                      <div>
+                        <div className="flex flex-wrap gap-3">
+                          <span className="ms-data-label text-ms-electric-yellow">
+                            {article.category}
+                          </span>
+                          <time className="ms-data-label text-ms-warm-white/48">
+                            {article.publishedLabel}
+                          </time>
+                        </div>
+                        <h3 className="ms-heading-card mt-4 text-ms-warm-white">
+                          <Link href={article.href}>{article.title}</Link>
+                        </h3>
+                        {article.excerpt ? (
+                          <p className="mt-3 max-w-2xl text-sm leading-6 text-ms-warm-white/64">
+                            {article.excerpt}
+                          </p>
+                        ) : null}
+                      </div>
+                      <Link
+                        href={article.href}
+                        aria-label={`Read ${article.title}`}
+                        className="grid size-12 place-items-center border border-ms-warm-white/20 text-ms-slipstream-teal transition-colors hover:border-ms-apex-crimson hover:bg-ms-apex-crimson hover:text-ms-warm-white"
+                      >
+                        <ArrowUpRightIcon className="size-5" />
+                      </Link>
+                    </article>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      <section className="ms-reflected-light-surface py-16 sm:py-20">
+        <div className="ms-shell flex flex-col gap-7 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="ms-kicker text-ms-slipstream-teal">Visual archive</p>
+            <h2 className="ms-heading-feature mt-5 max-w-[14ch]">
+              See the machines behind the stories.
+            </h2>
           </div>
-        </section>
-      ) : null}
+          <Link
+            href="/gallery"
+            className="group inline-flex items-center gap-4 border-b border-ms-warm-white/35 pb-3 text-[0.66rem] font-black uppercase tracking-[0.16em]"
+          >
+            Open gallery
+            <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
+      </section>
     </PageShell>
   );
 }

@@ -5,17 +5,22 @@ import type { PartnerItem } from "@/types/design-system";
 type PartnerLogoStripProps = {
   partners: PartnerItem[];
   label?: string;
+  className?: string;
 };
 
 export function PartnerLogoStrip({
   partners,
   label = "Official partners",
+  className = "",
 }: PartnerLogoStripProps) {
   return (
-    <section aria-label={label} className="border-y border-ms-warm-white/12">
+    <section
+      aria-label={label}
+      className={`border-y border-ms-warm-white/12 ${className}`}
+    >
       <div className="ms-shell grid lg:grid-cols-[13rem_minmax(0,1fr)]">
         <div className="flex items-center border-b border-ms-warm-white/12 py-6 lg:border-b-0 lg:border-r lg:pr-8">
-          <h2 className="ms-kicker text-ms-warm-white/42">{label}</h2>
+          <h2 className="ms-kicker text-ms-warm-white/60">{label}</h2>
         </div>
         <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
           {partners.map((partner) => {
@@ -25,7 +30,7 @@ export function PartnerLogoStrip({
                 alt={partner.name}
                 width={180}
                 height={80}
-                className="max-h-10 w-auto max-w-[8rem] object-contain opacity-55 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                className="max-h-10 w-auto max-w-[8rem] object-contain brightness-0 invert opacity-45 transition duration-300 group-hover:opacity-90"
               />
             );
             return (

@@ -1,5 +1,9 @@
 import type { Core } from '@strapi/strapi';
 
+import {
+  bootstrapWorkspaceAccessControl,
+  registerWorkspaceAccessControl,
+} from './access-control/sarga-workspaces';
 import seedDemoContent from './seed';
 
 export default {
@@ -9,7 +13,9 @@ export default {
    *
    * This gives you an opportunity to extend code.
    */
-  register(/* { strapi }: { strapi: Core.Strapi } */) {},
+  async register({ strapi }: { strapi: Core.Strapi }) {
+    await registerWorkspaceAccessControl(strapi);
+  },
 
   /**
    * An asynchronous bootstrap function that runs before
@@ -19,6 +25,7 @@ export default {
    * SEED_DEMO_CONTENT=true (see src/seed.ts). No-op otherwise.
    */
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
+    await bootstrapWorkspaceAccessControl(strapi);
     await seedDemoContent(strapi);
   },
 };

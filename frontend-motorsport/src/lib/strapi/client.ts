@@ -40,6 +40,7 @@ export type StrapiMediaFormat = {
 export type StrapiMedia = {
   id: number;
   url: string;
+  mime?: string;
   alternativeText?: string;
   width?: number;
   height?: number;
@@ -62,7 +63,14 @@ export function mediaUrl(url?: string): string {
 function populateParam(populate: string | string[]): string {
   if (Array.isArray(populate)) {
     // Strapi v5 expects bracket notation: populate[field]=true
-    return populate.map((f) => `populate[${f}]=true`).join("&");
+    return populate
+      .map((field) => {
+        const [root, child] = field.split(".");
+        return child
+          ? `populate[${root}][populate][${child}]=true`
+          : `populate[${root}]=true`;
+      })
+      .join("&");
   }
   return `populate[${populate}]=true`;
 }

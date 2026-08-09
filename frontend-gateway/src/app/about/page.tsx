@@ -59,7 +59,9 @@ function buildTabs(
       ? leadershipPeople.map((person) => ({
           meta: person.role,
           title: person.name,
-          description: person.biography ?? `Member of the ${person.group === "board" ? "Board of Directors" : "Executive Council"}.`,
+          description:
+            person.biography ??
+            `Member of the ${person.group === "board" ? "Board of Directors" : "Executive Council"}.`,
           image: person.portrait,
         }))
       : (leadershipTab?.items ?? []);

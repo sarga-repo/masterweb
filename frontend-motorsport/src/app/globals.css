@@ -1,10 +1,8 @@
 @import "tailwindcss";
 
 /*
- * Sarga Motorsport - Phase 4 design system.
- * Source: brand playbook + docs/motorsport/04_motorsport_design_system.md.
- * Owners Wide remains a licensed-font target; the stack is ready for the
- * approved webfont without silently substituting an unrelated downloaded face.
+ * Sarga Motorsport - MSR-3 design system recalibration.
+ * Source: Motorsport Look & Feel pages, brand playbook, and revamp direction.
  */
 @theme {
   --color-ms-apex-crimson: #e8192c;
@@ -17,6 +15,14 @@
   --color-ms-black: #050505;
   --color-ms-graphite: #111113;
   --color-ms-steel: #85858b;
+  --color-ms-cream-100: #f6efe3;
+  --color-ms-cream-200: #e8decf;
+  --color-ms-ink-700: #47433d;
+  --color-ms-ink-600: #625e56;
+  --color-ms-ink-500: #716c64;
+  --color-ms-crimson-700: #c41427;
+  --color-ms-crimson-800: #a81022;
+  --color-ms-orange-800: #b94700;
 
   --font-display:
     var(--font-owners-wide), "Owners Wide", var(--font-noto-sans),
@@ -38,21 +44,52 @@
 :root {
   color-scheme: dark;
 
+  --font-noto-sans: "Noto Sans Variable";
+
   /* Primitive */
   --ms-ink-950: #050505;
   --ms-ink-900: #0b0b0c;
   --ms-ink-850: #111113;
   --ms-line-dim: rgb(255 249 238 / 0.12);
   --ms-line-bright: rgb(255 249 238 / 0.3);
+  --ms-cream-100: #f6efe3;
+  --ms-cream-200: #e8decf;
+  --ms-ink-700: #47433d;
+  --ms-ink-600: #625e56;
+  --ms-ink-500: #716c64;
+  --ms-crimson-700: #c41427;
+  --ms-crimson-800: #a81022;
+  --ms-orange-800: #b94700;
 
   /* Semantic */
-  --ms-surface-page: var(--ms-ink-950);
+  --ms-surface-canvas: var(--color-ms-warm-white);
+  --ms-surface-subtle: var(--ms-cream-100);
+  --ms-surface-raised-light: #fff;
+  --ms-surface-inverse: var(--color-ms-charcoal);
+  --ms-surface-inverse-strong: var(--ms-ink-950);
+  --ms-surface-blue: var(--color-ms-draftline-blue);
+  --ms-text-on-light-primary: var(--color-ms-charcoal);
+  --ms-text-on-light-secondary: var(--ms-ink-700);
+  --ms-text-on-light-muted: var(--ms-ink-600);
+  --ms-text-on-light-quiet: var(--ms-ink-500);
+  --ms-text-on-dark-primary: var(--color-ms-warm-white);
+  --ms-text-on-dark-secondary: rgb(255 249 238 / 0.72);
+  --ms-text-on-dark-quiet: rgb(255 249 238 / 0.5);
+  --ms-link-on-light: var(--color-ms-draftline-blue);
+  --ms-action: var(--ms-crimson-700);
+  --ms-action-hover: var(--ms-crimson-800);
+  --ms-orange-on-light: var(--ms-orange-800);
+  --ms-focus: var(--color-ms-electric-yellow);
+  --ms-border-light: var(--ms-cream-200);
+  --ms-border-dark: rgb(255 249 238 / 0.16);
+
+  /* Legacy dark aliases retained until the MSR-RD4/RD5 surface migration. */
+  --ms-surface-page: var(--ms-surface-inverse-strong);
   --ms-surface-panel: var(--ms-ink-900);
   --ms-surface-raised: var(--ms-ink-850);
-  --ms-text-primary: var(--color-ms-warm-white);
-  --ms-text-secondary: rgb(255 249 238 / 0.68);
-  --ms-text-quiet: rgb(255 249 238 / 0.42);
-  --ms-action: var(--color-ms-apex-crimson);
+  --ms-text-primary: var(--ms-text-on-dark-primary);
+  --ms-text-secondary: var(--ms-text-on-dark-secondary);
+  --ms-text-quiet: var(--ms-text-on-dark-quiet);
   --ms-data-hot: var(--color-ms-ignition-orange);
   --ms-data-live: var(--color-ms-electric-yellow);
   --ms-data-cool: var(--color-ms-slipstream-teal);
@@ -63,8 +100,16 @@
   --ms-panel-cut: 0.875rem;
   --ms-control-height: 3.25rem;
   --ms-page-gutter: clamp(1.25rem, 4vw, 4.5rem);
-  --ms-section-space: clamp(5rem, 10vw, 10rem);
+  --ms-section-space: clamp(4.5rem, 8vw, 8rem);
   --ms-header-height: 5.5rem;
+  --ms-copy-measure: 42rem;
+  --ms-grid-gap: clamp(0.75rem, 1.4vw, 1.5rem);
+  --ms-type-hero: clamp(3rem, 5.8vw, 5.75rem);
+  --ms-type-page: clamp(2.5rem, 3.8vw, 4rem);
+  --ms-type-section: clamp(2rem, 2.9vw, 3rem);
+  --ms-type-article: clamp(2.5rem, 4.4vw, 4.75rem);
+  --ms-type-feature: clamp(1.75rem, 2.5vw, 2.75rem);
+  --ms-type-card: clamp(1.25rem, 1.8vw, 2rem);
   --ms-gradient-heat: linear-gradient(
     110deg,
     #e8192c 0%,
@@ -85,6 +130,7 @@
 }
 
 html {
+  overflow-x: clip;
   background: var(--color-ms-black);
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
@@ -100,6 +146,17 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+p,
+li {
+  text-wrap: pretty;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
 ::selection {
   background: var(--color-ms-apex-crimson);
   color: var(--color-ms-warm-white);
@@ -111,7 +168,6 @@ body {
 }
 
 a {
-  color: inherit;
   text-decoration: none;
 }
 
@@ -128,6 +184,51 @@ select {
   padding-inline: var(--ms-page-gutter);
 }
 
+.ms-home-hero {
+  min-height: min(50rem, calc(100svh - var(--ms-header-height)));
+}
+
+.ms-hero-copy-scrim {
+  top: 48%;
+  left: 50%;
+  width: min(94vw, 68rem);
+  height: min(58%, 30rem);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgb(5 5 5 / 0.72) 0%,
+    rgb(5 5 5 / 0.52) 42%,
+    rgb(5 5 5 / 0.18) 62%,
+    transparent 78%
+  );
+}
+
+.ms-hero-copy {
+  text-shadow: 0 0.2rem 1.25rem rgb(5 5 5 / 0.78);
+}
+
+.ms-apex-horizon {
+  top: 38%;
+  left: 44%;
+  width: 34%;
+  height: 30%;
+  opacity: 0.34;
+  transform: skewX(-8deg);
+  background: linear-gradient(
+    100deg,
+    rgb(232 25 44 / 0.88),
+    rgb(255 107 0 / 0.72)
+  );
+  mix-blend-mode: multiply;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+}
+
 .ms-section {
   padding-block: var(--ms-section-space);
 }
@@ -138,6 +239,86 @@ select {
   letter-spacing: 0;
   line-height: 0.98;
   text-transform: uppercase;
+}
+
+.ms-heading-hero {
+  font-family: var(--font-display);
+  font-size: var(--ms-type-hero);
+  font-weight: 900;
+  overflow: visible;
+  padding-block: 0.08em;
+  letter-spacing: -0.025em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.ms-heading-page {
+  font-family: var(--font-display);
+  font-size: var(--ms-type-page);
+  font-weight: 900;
+  overflow: visible;
+  padding-block: 0.08em;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+  text-transform: uppercase;
+}
+
+.ms-heading-section {
+  font-family: var(--font-display);
+  font-size: var(--ms-type-section);
+  font-weight: 900;
+  overflow: visible;
+  padding-block: 0.08em;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.ms-heading-article {
+  font-family: var(--font-display);
+  font-size: var(--ms-type-article);
+  font-weight: 900;
+  overflow: visible;
+  padding-block: 0.08em;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.ms-heading-feature {
+  font-family: var(--font-display);
+  font-size: var(--ms-type-feature);
+  font-weight: 900;
+  letter-spacing: -0.015em;
+  overflow: visible;
+  padding-block: 0.08em;
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+
+.ms-heading-card {
+  font-family: var(--font-display);
+  font-size: var(--ms-type-card);
+  font-weight: 900;
+  overflow: visible;
+  padding-block: 0.08em;
+  line-height: 1.04;
+  text-transform: uppercase;
+}
+
+.ms-heading-discipline {
+  font-size: clamp(1.05rem, 9cqw, 1.4rem);
+}
+
+.ms-heading-discipline--compact {
+  font-size: clamp(0.95rem, 7cqw, 1.2rem);
+}
+
+.ms-copy-lg {
+  max-width: var(--ms-copy-measure);
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  line-height: 1.75;
+  color: var(--ms-text-secondary);
 }
 
 .ms-kicker {
@@ -211,6 +392,422 @@ select {
     calc(100% - var(--ms-panel-cut)) 100%,
     0 100%
   );
+}
+
+.ms-panel--light {
+  --ms-panel-border: var(--ms-border-light);
+  background: var(--ms-surface-raised-light);
+  box-shadow: 0 2rem 5rem rgb(27 27 27 / 0.1);
+}
+
+.ms-editorial-intro {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color-scheme: light;
+  color: var(--ms-text-on-light-primary);
+  background:
+    radial-gradient(circle at 8% 20%, rgb(232 25 44 / 0.08), transparent 28%),
+    radial-gradient(circle at 84% 12%, rgb(245 200 0 / 0.13), transparent 24%),
+    radial-gradient(circle at 94% 88%, rgb(0 196 204 / 0.1), transparent 28%),
+    linear-gradient(120deg, #fff9ee 0%, #f6efe3 58%, #f0e6d8 100%);
+}
+
+.ms-editorial-intro::before,
+.ms-editorial-dot-field {
+  background-image: radial-gradient(
+    circle,
+    rgb(27 27 27 / 0.1) 1px,
+    transparent 1px
+  );
+  background-size: 1rem 1rem;
+}
+
+.ms-editorial-intro::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.7), transparent 88%);
+}
+
+.ms-editorial-canvas {
+  color-scheme: light;
+  color: var(--ms-text-on-light-primary);
+  background: var(--ms-surface-canvas);
+}
+
+.ms-editorial-muted {
+  color-scheme: light;
+  color: var(--ms-text-on-light-primary);
+  background:
+    radial-gradient(circle at 88% 8%, rgb(255 107 0 / 0.08), transparent 24%),
+    var(--ms-surface-subtle);
+}
+
+.ms-gallery-intro,
+.ms-about-intro,
+.ms-about-story-surface,
+.ms-about-team-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.ms-gallery-intro,
+.ms-about-intro,
+.ms-about-team-surface {
+  color-scheme: dark;
+  color: var(--ms-text-on-dark-primary);
+}
+
+.ms-gallery-intro {
+  background:
+    radial-gradient(circle at 10% 16%, rgb(0 196 204 / 0.3), transparent 27%),
+    radial-gradient(circle at 92% 84%, rgb(232 25 44 / 0.34), transparent 32%),
+    linear-gradient(118deg, #061a42 0%, #0033a0 48%, #181d56 74%, #36182d 100%);
+}
+
+.ms-about-intro {
+  background:
+    radial-gradient(circle at 12% 78%, rgb(232 25 44 / 0.34), transparent 32%),
+    radial-gradient(circle at 86% 12%, rgb(0 196 204 / 0.24), transparent 28%),
+    linear-gradient(118deg, #071a3d 0%, #162b61 50%, #44202f 100%);
+}
+
+.ms-gallery-intro::before,
+.ms-about-intro::before,
+.ms-about-story-surface::before,
+.ms-about-team-surface::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgb(255 249 238 / 0.13) 1px,
+    transparent 1px
+  );
+  background-size: 1rem 1rem;
+  content: "";
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.7), transparent 88%);
+  pointer-events: none;
+}
+
+.ms-about-story-surface {
+  color-scheme: dark;
+  color: var(--ms-text-on-dark-primary);
+  background:
+    radial-gradient(circle at 88% 6%, rgb(255 107 0 / 0.46), transparent 27%),
+    radial-gradient(circle at 5% 92%, rgb(232 25 44 / 0.38), transparent 30%),
+    radial-gradient(circle at 96% 92%, rgb(0 196 204 / 0.18), transparent 28%),
+    linear-gradient(122deg, #061a42 0%, #10285a 52%, #401f32 100%);
+}
+
+.ms-about-team-surface {
+  background:
+    radial-gradient(circle at 6% 92%, rgb(255 107 0 / 0.3), transparent 27%),
+    radial-gradient(circle at 92% 8%, rgb(0 196 204 / 0.2), transparent 25%),
+    linear-gradient(118deg, #102844 0%, #213d58 54%, #442c39 100%);
+}
+
+.ms-about-capabilities {
+  --ms-reflection-red-x: 0%;
+  --ms-reflection-amber-x: 60%;
+  --ms-reflection-teal-x: 102%;
+}
+
+.ms-merchandise-catalog-surface {
+  --ms-reflection-red-x: -2%;
+  --ms-reflection-amber-x: 52%;
+  --ms-reflection-teal-x: 101%;
+}
+
+.ms-events-programmes-surface {
+  --ms-reflection-red-x: -5%;
+  --ms-reflection-amber-x: 64%;
+  --ms-reflection-teal-x: 104%;
+}
+
+.ms-events-calendar-surface {
+  --ms-reflection-red-x: 8%;
+  --ms-reflection-amber-x: 42%;
+  --ms-reflection-teal-x: 94%;
+}
+
+.ms-gallery-caption {
+  background:
+    linear-gradient(90deg, rgb(0 196 204 / 0.08), transparent 35%),
+    linear-gradient(118deg, #071a3d 0%, #102855 66%, #34172e 100%);
+}
+
+.ms-spectrum-sections > section {
+  position: relative;
+}
+
+.ms-spectrum-sections > section::after {
+  position: absolute;
+  z-index: 20;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--color-ms-apex-crimson) 0%,
+    var(--color-ms-ignition-orange) 24%,
+    var(--color-ms-electric-yellow) 44%,
+    var(--color-ms-slipstream-teal) 68%,
+    var(--color-ms-draftline-blue) 100%
+  );
+  content: "";
+  pointer-events: none;
+}
+
+.ms-gallery-wall {
+  color-scheme: dark;
+  color: var(--ms-text-on-dark-primary);
+  background:
+    radial-gradient(circle at 10% 18%, rgb(232 25 44 / 0.28), transparent 30%),
+    radial-gradient(circle at 92% 82%, rgb(0 196 204 / 0.22), transparent 32%),
+    linear-gradient(124deg, #071a3d 0%, #10274e 52%, #342032 100%);
+}
+
+.ms-page-hero-heat {
+  background:
+    radial-gradient(circle at 82% 12%, rgb(255 107 0 / 0.48), transparent 28%),
+    radial-gradient(circle at 8% 88%, rgb(232 25 44 / 0.46), transparent 34%),
+    radial-gradient(circle at 96% 86%, rgb(0 196 204 / 0.2), transparent 26%),
+    linear-gradient(118deg, #071a3d 0%, #173064 50%, #4a2131 100%);
+}
+
+.ms-blue-heat-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color-scheme: dark;
+  color: var(--ms-text-on-dark-primary);
+  background:
+    radial-gradient(circle at 0% 100%, rgb(255 107 0 / 0.46), transparent 34%),
+    radial-gradient(circle at 54% 110%, rgb(232 25 44 / 0.58), transparent 40%),
+    radial-gradient(
+      circle at 100% 100%,
+      rgb(0 196 204 / 0.22),
+      transparent 31%
+    ),
+    linear-gradient(118deg, #061a42 0%, #102654 58%, #311d31 100%);
+}
+
+.ms-blue-heat-surface::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgb(255 249 238 / 0.11) 1px,
+    transparent 1px
+  );
+  background-size: 1rem 1rem;
+  content: "";
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.65), transparent 82%);
+  pointer-events: none;
+}
+
+.ms-gallery-control-reflection {
+  padding: 1.25rem;
+  background:
+    radial-gradient(circle at 4% 100%, rgb(232 25 44 / 0.62), transparent 34%),
+    radial-gradient(circle at 58% 0%, rgb(255 107 0 / 0.44), transparent 38%),
+    radial-gradient(
+      circle at 100% 100%,
+      rgb(0 196 204 / 0.38),
+      transparent 34%
+    ),
+    linear-gradient(110deg, #17253f 0%, #42292e 52%, #123c43 100%);
+}
+
+.ms-ticket-panel-reflected {
+  background:
+    radial-gradient(circle at 4% 90%, rgb(232 25 44 / 0.5), transparent 30%),
+    radial-gradient(circle at 70% 0%, rgb(255 107 0 / 0.36), transparent 34%),
+    linear-gradient(115deg, #071a3d 0%, #21304a 54%, #4a2630 100%);
+}
+
+.ms-blue-panel {
+  border: 1px solid rgb(255 249 238 / 0.16);
+  background:
+    radial-gradient(circle at 100% 0%, rgb(0 196 204 / 0.14), transparent 36%),
+    linear-gradient(125deg, rgb(7 26 61 / 0.94), rgb(30 38 74 / 0.92));
+}
+
+.ms-news-latest-surface {
+  background:
+    radial-gradient(circle at 0% 100%, rgb(255 107 0 / 0.3), transparent 31%),
+    radial-gradient(circle at 62% 112%, rgb(232 25 44 / 0.48), transparent 38%),
+    radial-gradient(circle at 100% 100%, rgb(0 51 160 / 0.5), transparent 32%),
+    linear-gradient(122deg, rgb(5 19 44 / 0.94), rgb(14 38 82 / 0.94));
+}
+
+.ms-reflected-light-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color-scheme: dark;
+  color: var(--ms-text-on-dark-primary);
+  background:
+    radial-gradient(
+      ellipse 62% 86% at var(--ms-reflection-red-x, 2%) 92%,
+      rgb(232 25 44 / 0.72) 0%,
+      rgb(175 20 45 / 0.38) 37%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 72% 115% at var(--ms-reflection-amber-x, 54%) -10%,
+      rgb(255 107 0 / 0.54) 0%,
+      rgb(141 59 22 / 0.33) 42%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 58% 96% at var(--ms-reflection-teal-x, 100%) 82%,
+      rgb(0 196 204 / 0.46) 0%,
+      rgb(0 85 92 / 0.34) 43%,
+      transparent 72%
+    ),
+    linear-gradient(112deg, #32282a 0%, #3a2b26 46%, #193438 100%);
+}
+
+.ms-reflected-light-surface::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgb(255 249 238 / 0.12) 1px,
+    transparent 1px
+  );
+  background-size: 1rem 1rem;
+  content: "";
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.56), transparent 76%);
+  pointer-events: none;
+}
+
+.ms-reflected-light-surface::after {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--color-ms-apex-crimson) 0%,
+    var(--color-ms-ignition-orange) 32%,
+    var(--color-ms-electric-yellow) 54%,
+    var(--color-ms-slipstream-teal) 76%,
+    var(--color-ms-draftline-blue) 100%
+  );
+  content: "";
+  pointer-events: none;
+}
+
+.ms-reflected-light-surface > .ms-shell {
+  position: relative;
+  z-index: 1;
+}
+
+.ms-home-events-surface {
+  --ms-reflection-red-x: -4%;
+  --ms-reflection-amber-x: 57%;
+  --ms-reflection-teal-x: 105%;
+}
+
+.ms-home-news-surface {
+  --ms-reflection-red-x: 7%;
+  --ms-reflection-amber-x: 46%;
+  --ms-reflection-teal-x: 96%;
+}
+
+.ms-surface-light,
+.ms-tone-light {
+  color-scheme: light;
+  color: var(--ms-text-on-light-primary);
+  background: var(--ms-surface-canvas);
+}
+
+.ms-surface-subtle,
+.ms-tone-subtle {
+  color-scheme: light;
+  color: var(--ms-text-on-light-primary);
+  background: var(--ms-surface-subtle);
+}
+
+.ms-surface-dark,
+.ms-tone-dark {
+  color-scheme: dark;
+  color: var(--ms-text-on-dark-primary);
+  background: var(--ms-surface-inverse);
+}
+
+.ms-surface-blue,
+.ms-tone-blue {
+  color-scheme: dark;
+  color: var(--ms-text-on-dark-primary);
+  background: var(--ms-surface-blue);
+}
+
+.ms-blue-band {
+  color: var(--color-ms-warm-white);
+  background:
+    linear-gradient(90deg, rgb(0 51 160 / 0.98), rgb(0 33 108 / 0.98)),
+    var(--color-ms-draftline-blue);
+}
+
+.ms-blue-band-grid {
+  background-image: radial-gradient(
+    circle,
+    rgb(255 249 238 / 0.18) 1px,
+    transparent 1px
+  );
+  background-size: 1rem 1rem;
+}
+
+.ms-tabular {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.ms-scrollbar {
+  scrollbar-color: var(--color-ms-apex-crimson) rgb(255 249 238 / 0.08);
+  scrollbar-width: thin;
+}
+
+.ms-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.ms-table th {
+  color: rgb(255 249 238 / 0.55);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.ms-table th,
+.ms-table td {
+  padding: 1rem clamp(0.75rem, 2vw, 1.5rem);
+  border-bottom: 1px solid var(--ms-line-dim);
+}
+
+.ms-table tbody tr {
+  transition: background-color 200ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ms-table tbody tr:hover {
+    background: rgb(255 249 238 / 0.035);
+  }
 }
 
 .ms-heat-field {
@@ -413,5 +1010,16 @@ select {
 
   .ms-slant {
     --ms-panel-cut: 0.65rem;
+  }
+
+  .ms-home-hero {
+    min-height: calc(100svh - var(--ms-header-height));
+  }
+
+  .ms-apex-horizon {
+    top: 42%;
+    left: 32%;
+    width: 58%;
+    height: 25%;
   }
 }

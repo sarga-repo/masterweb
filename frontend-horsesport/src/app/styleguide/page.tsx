@@ -98,7 +98,8 @@ const ARTICLES: ArticleCardData[] = [
     href: "/news/inside-the-stable-conditioning-derby-contender",
     category: "Stable life",
     dateLabel: "05 Jul 2026",
-    excerpt: "Nutrition, veterinary care, and the daily routines that shape a champion.",
+    excerpt:
+      "Nutrition, veterinary care, and the daily routines that shape a champion.",
     image: "/media/Champion-horse-studio-portrait.png",
     imageAlt: "Race horse in a premium stable",
   },
@@ -128,18 +129,45 @@ const STABLE: ArticleCardData[] = [
     title: "The Craft of the Morning Gallop",
     href: "/stable-life",
     category: "Training",
-    excerpt: "Dawn conditioning sessions that build champions, one furlong at a time.",
+    excerpt:
+      "Dawn conditioning sessions that build champions, one furlong at a time.",
     image: "/media/news-stable.png",
     imageAlt: "Stable at dawn",
   },
 ];
 
 const GALLERY: GalleryItemData[] = [
-  { id: "g1", image: "/media/news-merdeka.png", imageAlt: "Race day crowd", category: "Race day", caption: "Merdeka Cup grandstand" },
-  { id: "g2", image: "/media/news-turf-track.png", imageAlt: "Turf track", category: "Venue" },
-  { id: "g3", image: "/media/Champion-horse-studio-portrait.png", imageAlt: "Stable", category: "Stable life" },
-  { id: "g4", image: "/media/Home-straight-finish.png", imageAlt: "Jockeys", category: "Race day" },
-  { id: "g5", image: "/media/Racecourse-aerial.png", imageAlt: "Aerial turf", category: "Venue" },
+  {
+    id: "g1",
+    image: "/media/news-merdeka.png",
+    imageAlt: "Race day crowd",
+    category: "Race day",
+    caption: "Merdeka Cup grandstand",
+  },
+  {
+    id: "g2",
+    image: "/media/news-turf-track.png",
+    imageAlt: "Turf track",
+    category: "Venue",
+  },
+  {
+    id: "g3",
+    image: "/media/Champion-horse-studio-portrait.png",
+    imageAlt: "Stable",
+    category: "Stable life",
+  },
+  {
+    id: "g4",
+    image: "/media/Home-straight-finish.png",
+    imageAlt: "Jockeys",
+    category: "Race day",
+  },
+  {
+    id: "g5",
+    image: "/media/Racecourse-aerial.png",
+    imageAlt: "Aerial turf",
+    category: "Venue",
+  },
 ];
 
 const PARTNERS: PartnerItemData[] = [
@@ -224,8 +252,12 @@ export default function StyleguidePage() {
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-7">
           {SWATCHES.map((s) => (
             <div key={s.name} className="hs-card-glass p-3">
-              <div className={`${s.var} h-16 w-full rounded-[var(--radius-hs-md)] border border-hs-cream/10`} />
-              <p className="mt-3 text-sm font-semibold text-hs-cream">{s.name}</p>
+              <div
+                className={`${s.var} h-16 w-full rounded-[var(--radius-hs-md)] border border-hs-cream/10`}
+              />
+              <p className="mt-3 text-sm font-semibold text-hs-cream">
+                {s.name}
+              </p>
               <p className="text-xs text-hs-cream/45">{s.hex}</p>
             </div>
           ))}

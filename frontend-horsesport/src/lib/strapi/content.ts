@@ -26,13 +26,10 @@ export const HORSESPORT_SCOPES = ["horsesport", "shared"] as const;
  * Returned as flat query keys consumed by the client's `filters` option.
  */
 function scopeFilters(): Record<string, string> {
-  return HORSESPORT_SCOPES.reduce<Record<string, string>>(
-    (acc, scope, i) => {
-      acc[`filters[siteScope][$in][${i}]`] = scope;
-      return acc;
-    },
-    {},
-  );
+  return HORSESPORT_SCOPES.reduce<Record<string, string>>((acc, scope, i) => {
+    acc[`filters[siteScope][$in][${i}]`] = scope;
+    return acc;
+  }, {});
 }
 
 /**
@@ -200,9 +197,7 @@ export async function fetchHorseSportTicketCtas(): Promise<
 }
 
 /** Horse Sport media galleries. */
-export async function fetchHorseSportGalleries(): Promise<
-  HorseSportGallery[]
-> {
+export async function fetchHorseSportGalleries(): Promise<HorseSportGallery[]> {
   const res = await fetchStrapiList<HorseSportGallery>("media-galleries", {
     filters: scopeFilters(),
     populate: ["coverImage", "mediaItems"],

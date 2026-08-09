@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { PageHero, TicketCtaPanel, ScrollReveal, SectionHeader } from "@/components";
+import {
+  PageHero,
+  TicketCtaPanel,
+  ScrollReveal,
+  SectionHeader,
+} from "@/components";
 import { fetchTicketsPage } from "@/lib/cms-content";
 import { createMetadata } from "@/lib/seo/metadata";
 
@@ -52,9 +57,12 @@ export default async function TicketsPage() {
           </div>
         ) : (
           <div className="hs-card-glass mt-12 p-12 text-center">
-            <p className="hs-display text-2xl text-hs-cream">No tickets on sale right now.</p>
+            <p className="hs-display text-2xl text-hs-cream">
+              No tickets on sale right now.
+            </p>
             <p className="mt-3 text-sm text-hs-cream/55">
-              New race days are announced regularly - explore what&apos;s coming up.
+              New race days are announced regularly - explore what&apos;s coming
+              up.
             </p>
             <Link
               href="/events"

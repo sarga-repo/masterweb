@@ -2,7 +2,14 @@
 
 ## Source
 
-Primary source: `reference/source-pdfs/sarga_motorsport_brand_playbook.pdf`.
+Primary sources:
+
+- `reference/source-pdfs/look_and_feel_website_sarga_co.pdf`
+- `reference/source-pdfs/sarga_motorsport_2.pdf`
+- `reference/source-pdfs/sarga_motorsport_brand_playbook.pdf`
+- `docs/motorsport/revamp/02_brand_layout_direction.md`
+
+For the major revamp, the Look & Feel PDF is the layout and visual-reference source, while the Motorsport brand playbook remains the brand-token and persona source.
 
 ## Brand story
 
@@ -47,14 +54,23 @@ Charcoal Black     #1B1B1B
 Warm White         #FFF9EE
 ```
 
-Use dark backgrounds as the default canvas, especially charcoal/black and draftline blue gradients. Use crimson and orange for energy, CTAs, hover states, active tabs, accent lines, and motion-inspired treatments. Use teal/yellow sparingly for category labels, status chips, or data highlights.
+Use Warm White as the primary editorial canvas and reserve charcoal/black for
+the header, footer, gallery, timeline, and selected immersive moments.
+Draftline Blue is a structural band/surface, not only a gradient. Use crimson
+and orange for energy, CTAs, hover states, active tabs, accent lines, and
+motion-inspired treatments. Use teal/yellow sparingly for category labels,
+status chips, or data highlights. The page-accurate rationale is recorded in
+`docs/motorsport/revamp/10_warm_visual_redesign_audit.md`.
 
 ### Typography
 
 - Display: Owners Wide, with fallbacks to wide/extended sans-serif families.
 - Body: Noto Sans.
 
-Implementation note: do not include licensed font files unless the team owns webfont rights. Configure CSS variables and fallback stacks so fonts can be added later.
+Implementation note: the Motorsport frontend currently includes local Owners
+Wide Black and Noto Sans assets and loads them through `next/font/local`.
+Retain evidence of webfont rights and do not add additional font files without
+license approval.
 
 ### Photography style
 
@@ -65,7 +81,10 @@ Use motorsport imagery with:
 - track/circuit atmosphere;
 - cockpit/driver closeups;
 - crowd and lifestyle event energy;
-- night lights, smoke, friction, asphalt, heat;
+- warm daylight and golden-hour track environments;
+- natural skin, asphalt, grass, and sky tones with lifted shadow detail;
+- selected night lights, smoke, friction, asphalt, and heat where the page
+  benefits from a darker immersive moment;
 - professional racing/event photography.
 - a deliberate balance of car and motorcycle racing subjects across heroes,
   event cards, editorial modules, and gallery rails;

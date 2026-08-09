@@ -104,7 +104,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
       <section className="gateway-surface-light-signature bg-sarga-light py-20 sm:py-28 lg:py-36">
         <div className="site-container grid gap-12 lg:grid-cols-[0.65fr_1.35fr]">
           <div className="flex flex-col items-start gap-6">
-            {business.brandLogoDark ?? business.brandLogo ? (
+            {(business.brandLogoDark ?? business.brandLogo) ? (
               <div className="w-[8rem] sm:w-[10rem]">
                 <Image
                   src={(business.brandLogoDark ?? business.brandLogo)!.url}

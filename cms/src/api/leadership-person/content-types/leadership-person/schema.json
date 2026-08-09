@@ -14,6 +14,7 @@
   "attributes": {
     "name": { "type": "string", "required": true },
     "role": { "type": "string" },
+    "summary": { "type": "text" },
     "group": {
       "type": "enumeration",
       "enum": ["board", "executive", "advisor"],

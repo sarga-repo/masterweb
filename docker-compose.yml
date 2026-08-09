@@ -39,6 +39,8 @@ services:
       NODE_ENV: development
       HOST: 0.0.0.0
       PORT: 1337
+      PUBLIC_URL: ${STRAPI_PUBLIC_URL:-http://localhost:1337}
+      PROXY_KOA: ${STRAPI_PROXY_KOA:-false}
       DATABASE_CLIENT: postgres
       DATABASE_HOST: postgres
       DATABASE_PORT: 5432

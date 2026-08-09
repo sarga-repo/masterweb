@@ -19,7 +19,7 @@ export function EcosystemCard({ business }: { business: EcosystemBusiness }) {
      configured, otherwise fall back to the gateway detail page. */
   const externalHref = businessSiteUrl(business.slug);
   const href = isActive
-    ? externalHref ?? `/ecosystem/${business.slug}`
+    ? (externalHref ?? `/ecosystem/${business.slug}`)
     : undefined;
   const isExternal = Boolean(externalHref);
   const number = businessNumbers[business.slug] ?? "00";
@@ -107,9 +107,7 @@ export function EcosystemCard({ business }: { business: EcosystemBusiness }) {
     <Link
       href={href}
       className={classes}
-      {...(isExternal
-        ? { target: "_blank", rel: "noopener noreferrer" }
-        : {})}
+      {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     >
       {inner}
     </Link>

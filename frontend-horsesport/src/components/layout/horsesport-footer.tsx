@@ -39,10 +39,7 @@ export function HorseSportFooter({
   copyright,
 }: HorseSportFooterProps) {
   return (
-    <footer
-      className="bg-black relative overflow-hidden"
-      role="contentinfo"
-    >
+    <footer className="bg-black relative overflow-hidden" role="contentinfo">
       {/* Top ember glow */}
       <div
         aria-hidden

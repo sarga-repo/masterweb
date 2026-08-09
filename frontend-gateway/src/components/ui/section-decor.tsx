@@ -133,7 +133,10 @@ export function SectionDecor({
 
       {/* Custom className slot */}
       {className ? (
-        <span aria-hidden="true" className={cn("absolute inset-0 z-0 pointer-events-none", className)} />
+        <span
+          aria-hidden="true"
+          className={cn("absolute inset-0 z-0 pointer-events-none", className)}
+        />
       ) : null}
     </>
   );
@@ -144,8 +147,5 @@ export function SectionDecor({
  * Place between adjacent <section> elements on the homepage.
  */
 export function SectionDivider() {
-  return (
-    <div aria-hidden="true" className="gateway-section-divider" />
-  );
+  return <div aria-hidden="true" className="gateway-section-divider" />;
 }
-

@@ -1,9 +1,6 @@
 export * from "@/lib/strapi/types";
 export { getHomepage } from "@/lib/strapi/homepage";
-export {
-  getTimelineItems,
-  getLeadershipPeople,
-} from "@/lib/strapi/about";
+export { getTimelineItems, getLeadershipPeople } from "@/lib/strapi/about";
 export {
   getEcosystemBusinesses,
   getEcosystemBusinessBySlug,

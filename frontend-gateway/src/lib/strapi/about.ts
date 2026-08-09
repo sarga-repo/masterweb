@@ -39,11 +39,10 @@ function mapLeadership(raw: RawLeadershipPerson): LeadershipPerson {
 
 /** Fetch all published timeline items from CMS, sorted by order. */
 export async function getTimelineItems(): Promise<TimelineItem[]> {
-  const res =
-    await strapiFetch<StrapiCollectionResponse<RawTimelineItem>>(
-      "timeline-items",
-      { query: TIMELINE_QUERY, revalidate: 120 },
-    );
+  const res = await strapiFetch<StrapiCollectionResponse<RawTimelineItem>>(
+    "timeline-items",
+    { query: TIMELINE_QUERY, revalidate: 120 },
+  );
 
   if (!res?.data?.length) return [];
 
@@ -52,11 +51,10 @@ export async function getTimelineItems(): Promise<TimelineItem[]> {
 
 /** Fetch all published leadership people from CMS, sorted by order. */
 export async function getLeadershipPeople(): Promise<LeadershipPerson[]> {
-  const res =
-    await strapiFetch<StrapiCollectionResponse<RawLeadershipPerson>>(
-      "leadership-people",
-      { query: LEADERSHIP_QUERY, revalidate: 120 },
-    );
+  const res = await strapiFetch<StrapiCollectionResponse<RawLeadershipPerson>>(
+    "leadership-people",
+    { query: LEADERSHIP_QUERY, revalidate: 120 },
+  );
 
   if (!res?.data?.length) return [];
 

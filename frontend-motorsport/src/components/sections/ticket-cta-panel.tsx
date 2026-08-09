@@ -10,6 +10,7 @@ type TicketCtaPanelProps = {
   cta: LinkItem;
   provider?: string;
   eventMeta?: string;
+  surface?: "dark" | "reflected";
 };
 
 export function TicketCtaPanel({
@@ -19,9 +20,12 @@ export function TicketCtaPanel({
   cta,
   provider,
   eventMeta,
+  surface = "dark",
 }: TicketCtaPanelProps) {
   return (
-    <aside className="ms-panel relative overflow-hidden bg-ms-black">
+    <aside
+      className={`ms-panel relative overflow-hidden text-ms-warm-white ${surface === "reflected" ? "ms-ticket-panel-reflected" : "bg-ms-black"}`}
+    >
       <div className="grid lg:grid-cols-[10rem_minmax(0,1fr)_18rem]">
         <div
           className="ms-heat-field hidden min-h-full border-r border-ms-warm-white/14 lg:block"
@@ -31,9 +35,7 @@ export function TicketCtaPanel({
         </div>
         <div className="p-7 sm:p-12 lg:p-14">
           <p className="ms-data-label text-ms-ignition-orange">{eyebrow}</p>
-          <h2 className="ms-display mt-6 max-w-5xl text-[clamp(2.25rem,5.25vw,5.25rem)]">
-            {title}
-          </h2>
+          <h2 className="ms-heading-section mt-6 max-w-5xl">{title}</h2>
           {description ? (
             <p className="mt-6 max-w-2xl text-base leading-7 text-ms-warm-white/64">
               {description}
@@ -58,9 +60,9 @@ export function TicketCtaPanel({
           href={cta.href}
           target={cta.external ? "_blank" : undefined}
           rel={cta.external ? "noopener noreferrer" : undefined}
-          className="group flex min-h-44 flex-col justify-between border-t border-ms-warm-white/14 bg-ms-apex-crimson p-7 transition-colors hover:bg-ms-ignition-orange lg:min-h-full lg:border-l lg:border-t-0"
+          className="group flex min-h-44 flex-col justify-between border-t border-ms-warm-white/14 bg-ms-apex-crimson p-7 text-ms-black transition-colors hover:bg-ms-ignition-orange lg:min-h-full lg:border-l lg:border-t-0"
         >
-          <span className="ms-data-label text-ms-warm-white/64">
+          <span className="ms-data-label text-ms-black/70">
             Partner redirect / Secure
           </span>
           <span className="font-display text-2xl uppercase leading-none">

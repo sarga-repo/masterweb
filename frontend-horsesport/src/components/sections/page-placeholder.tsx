@@ -32,7 +32,11 @@ export function PagePlaceholder({
     <section className="hs-section hs-shell">
       <div className="grid gap-14 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
         <div>
-          <SectionHeader eyebrow={eyebrow} title={title} description={description} />
+          <SectionHeader
+            eyebrow={eyebrow}
+            title={title}
+            description={description}
+          />
 
           {(primaryCta || secondaryCta) && (
             <div className="mt-10 flex flex-wrap gap-4">
@@ -60,7 +64,10 @@ export function PagePlaceholder({
 
         {sections.length > 0 ? (
           <aside className="hs-card-glass relative p-8 sm:p-10">
-            <div aria-hidden className="absolute -right-4 -top-4 size-28 rounded-bl-[var(--radius-hs-lg)] bg-hs-espresso/40" />
+            <div
+              aria-hidden
+              className="absolute -right-4 -top-4 size-28 rounded-bl-[var(--radius-hs-lg)] bg-hs-espresso/40"
+            />
             <div className="relative flex items-center gap-3">
               <StaircaseMark steps={5} className="w-16 text-hs-orange" />
               <span className="hs-kicker text-hs-cream/50">On this page</span>
@@ -74,7 +81,9 @@ export function PagePlaceholder({
                   <span className="hs-display text-sm text-hs-orange">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="text-sm leading-6 text-hs-cream/72">{item}</span>
+                  <span className="text-sm leading-6 text-hs-cream/72">
+                    {item}
+                  </span>
                 </li>
               ))}
             </ul>

@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
-import Image from "next/image";
+
+import { ResilientImage } from "@/components/ui/resilient-image";
+import type { MediaSource } from "@/types/design-system";
 
 type AccentColor = "crimson" | "orange" | "yellow" | "teal" | "blue";
 
@@ -17,7 +19,7 @@ type PageHeroProps = {
   title: string;
   description?: string;
   /** Optional background image path */
-  backgroundImage?: string;
+  backgroundImage?: MediaSource;
   backgroundAlt?: string;
   /** Accent color for radial gradient bloom */
   accent?: AccentColor;
@@ -32,6 +34,8 @@ type PageHeroProps = {
   speedLines?: boolean;
   /** Grain overlay */
   grain?: boolean;
+  /** Branded blue/heat canvas instead of the legacy black hero canvas */
+  surface?: "default" | "heat";
 };
 
 const POSITION_MAP: Record<string, string> = {
@@ -55,6 +59,7 @@ export function PageHero({
   compact = false,
   speedLines = false,
   grain = false,
+  surface = "default",
 }: PageHeroProps) {
   const accentHex = ACCENT_MAP[accent] ?? accent;
   const kickerStyle = kickerColor
@@ -68,13 +73,15 @@ export function PageHero({
         compact
           ? "py-20 sm:py-28"
           : "min-h-[60vh] flex items-end py-20 sm:py-28"
-      } ${grain ? "ms-grain" : ""}`}
+      } ${grain ? "ms-grain" : ""} ${surface === "heat" ? "ms-page-hero-heat" : ""}`}
     >
       {/* Background image (optional cinematic layer) */}
       {backgroundImage ? (
-        <Image
+        <ResilientImage
           src={backgroundImage}
           alt={backgroundAlt}
+          fallbackSrc="/media/motorsport-design-hero.png"
+          fallbackAlt="Sarga Motorsport race action"
           fill
           sizes="100vw"
           priority
@@ -88,7 +95,9 @@ export function PageHero({
         className="absolute inset-0"
         style={{
           background: backgroundImage
-            ? `linear-gradient(0deg, rgba(5,5,5,0.92) 0%, rgba(5,5,5,0.55) 40%, rgba(5,5,5,0.25) 70%)`
+            ? surface === "heat"
+              ? "linear-gradient(0deg, rgba(7,26,61,.94) 0%, rgba(68,32,47,.72) 44%, rgba(123,47,28,.30) 76%, rgba(7,26,61,.18) 100%)"
+              : `linear-gradient(0deg, rgba(5,5,5,0.92) 0%, rgba(5,5,5,0.55) 40%, rgba(5,5,5,0.25) 70%)`
             : `radial-gradient(${gradientPos.replace(/_/g, " ")}, ${accentHex}18, transparent 60%)`,
         }}
       />
@@ -137,9 +146,7 @@ export function PageHero({
         <span className="ms-kicker ms-animate-stagger-1" style={kickerStyle}>
           {kicker}
         </span>
-        <h1 className="ms-display ms-animate-stagger-2 mt-6 text-[clamp(3rem,7.5vw,6.75rem)]">
-          {title}
-        </h1>
+        <h1 className="ms-heading-page ms-animate-stagger-2 mt-6">{title}</h1>
         {description ? (
           <p className="ms-animate-stagger-3 mt-6 max-w-2xl text-lg leading-8 text-ms-warm-white/60">
             {description}

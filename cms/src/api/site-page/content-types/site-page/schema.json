@@ -1,0 +1,66 @@
+{
+  "kind": "collectionType",
+  "collectionName": "site_pages",
+  "info": {
+    "singularName": "site-page",
+    "pluralName": "site-pages",
+    "displayName": "Site Page",
+    "description": "Site-scoped static and campaign page content"
+  },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "slug": { "type": "string", "required": true },
+    "routePath": { "type": "string", "required": true },
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+      "default": "gateway",
+      "required": true
+    },
+    "site": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::site.site"
+    },
+    "pageKind": {
+      "type": "enumeration",
+      "enum": [
+        "home",
+        "about",
+        "eventHub",
+        "campaign",
+        "merchandise",
+        "legal",
+        "custom"
+      ],
+      "default": "custom",
+      "required": true
+    },
+    "navigationLabel": { "type": "string" },
+    "heroTitle": { "type": "string" },
+    "heroDescription": { "type": "richtext" },
+    "heroMedia": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "videos"]
+    },
+    "heroSlides": {
+      "type": "component",
+      "repeatable": true,
+      "component": "motorsport.hero-slide",
+      "max": 5
+    },
+    "sections": {
+      "type": "dynamiczone",
+      "components": ["shared.page-section"]
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    }
+  }
+}

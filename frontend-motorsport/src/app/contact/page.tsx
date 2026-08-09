@@ -1,8 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useState } from "react";
 
-import { PageHero, PageShell, SectionHeader } from "@/components";
+import {
+  InformationBand,
+  PageHero,
+  PageShell,
+  SectionHeader,
+} from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import type { FormFieldErrors } from "@/lib/validation";
 
@@ -11,6 +17,8 @@ const CATEGORIES: { value: string; label: string }[] = [
   { value: "partnership", label: "Partnership / sponsorship" },
   { value: "media", label: "Media inquiry" },
   { value: "event-ticket", label: "Event / ticket support" },
+  { value: "talent-program", label: "IJTC / Become Riders" },
+  { value: "merchandise", label: "Merchandise inquiry" },
   { value: "vendor", label: "Vendor inquiry" },
 ];
 
@@ -36,6 +44,7 @@ export default function ContactPage() {
         message: fd.get("message") as string,
         website: (fd.get("website") as string) ?? "",
         formStartedAt: startedAt,
+        sourcePage: window.location.pathname,
       };
 
       try {
@@ -67,192 +76,299 @@ export default function ContactPage() {
   );
 
   return (
-    <PageShell>
+    <PageShell spectrumSeparators>
       <PageHero
         kicker="Get in touch"
         kickerColor="orange"
         title="Contact"
+        backgroundImage="/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
+        backgroundAlt="Sarga Motorsport driver and paddock team preparing in warm daylight"
         accent="teal"
         accentPosition="bottom-left"
         grain
+        speedLines
+        surface="heat"
         description="Partnership proposals, media requests, ticket support, or just a question about Sarga Motorsport. We read every message."
       />
 
-      <section className="ms-section ms-shell">
-        <div className="grid gap-16 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)]">
-          {/* Form */}
-          <div>
-            <SectionHeader
-              eyebrow="Inquiry form"
-              title="Send a signal."
-              align="left"
-            />
+      <InformationBand
+        eyebrow="Inquiry control / Direct routing"
+        title="One form. The right team."
+        description="Choose the closest inquiry type and the message is routed to the Motorsport team responsible for it."
+        items={[
+          { label: "Channels", value: "07" },
+          { label: "Accounts", value: "None" },
+          { label: "Reply", value: "Email" },
+        ]}
+      />
 
-            {submitted ? (
-              <div className="ms-panel mt-12 bg-ms-black p-10">
-                <span className="ms-kicker text-ms-electric-yellow">
-                  Message received
-                </span>
-                <p className="mt-4 text-lg text-ms-warm-white/70">
-                  {serverMessage ??
-                    "Thank you for reaching out. Our team will respond within 2 business days."}
-                </p>
-              </div>
-            ) : (
-              <form
-                className="mt-12 space-y-6"
-                onSubmit={handleSubmit}
-                noValidate
-              >
-                {/* Honeypot - invisible to real users */}
-                <input
-                  type="text"
-                  name="website"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  className="absolute -left-[9999px] opacity-0"
-                  aria-hidden="true"
-                />
+      <section className="ms-reflected-light-surface ms-section">
+        <div className="ms-shell">
+          <div className="grid gap-16 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)]">
+            {/* Form */}
+            <div>
+              <SectionHeader
+                eyebrow="Inquiry form"
+                title="Send a signal."
+                align="left"
+              />
 
-                {/* Server error banner */}
-                {serverMessage && !submitted ? (
-                  <div className="border border-ms-apex-crimson/40 bg-ms-apex-crimson/10 px-5 py-4 text-sm text-ms-apex-crimson">
-                    {serverMessage}
-                  </div>
-                ) : null}
-
-                <div className="grid gap-6 sm:grid-cols-2">
-                  <label className="block">
-                    <span className="ms-data-label text-ms-warm-white/42">
-                      Name
-                    </span>
-                    <input
-                      name="name"
-                      required
-                      className="mt-2 h-(--ms-control-height) w-full border border-ms-warm-white/18 bg-ms-black px-4 text-sm text-ms-warm-white placeholder:text-ms-warm-white/30 focus:border-ms-apex-crimson focus:outline-none"
-                      placeholder="Your name"
-                    />
-                    {errors.name ? (
-                      <span className="mt-1 block text-xs text-ms-apex-crimson">
-                        {errors.name}
-                      </span>
-                    ) : null}
-                  </label>
-                  <label className="block">
-                    <span className="ms-data-label text-ms-warm-white/42">
-                      Email
-                    </span>
-                    <input
-                      name="email"
-                      type="email"
-                      required
-                      autoComplete="email"
-                      className="mt-2 h-(--ms-control-height) w-full border border-ms-warm-white/18 bg-ms-black px-4 text-sm text-ms-warm-white placeholder:text-ms-warm-white/30 focus:border-ms-apex-crimson focus:outline-none"
-                      placeholder="you@example.com"
-                    />
-                    {errors.email ? (
-                      <span className="mt-1 block text-xs text-ms-apex-crimson">
-                        {errors.email}
-                      </span>
-                    ) : null}
-                  </label>
+              {submitted ? (
+                <div className="ms-blue-panel ms-panel mt-12 p-10">
+                  <span className="ms-kicker text-ms-electric-yellow">
+                    Message received
+                  </span>
+                  <p className="mt-4 text-lg text-ms-warm-white/70">
+                    {serverMessage ??
+                      "Thank you for reaching out. Our team will respond within 2 business days."}
+                  </p>
                 </div>
-
-                <label className="block">
-                  <span className="ms-data-label text-ms-warm-white/42">
-                    Inquiry category
-                  </span>
-                  <select
-                    name="category"
-                    className="mt-2 h-(--ms-control-height) w-full border border-ms-warm-white/18 bg-ms-black px-4 text-sm text-ms-warm-white focus:border-ms-apex-crimson focus:outline-none"
-                  >
-                    {CATEGORIES.map((cat) => (
-                      <option key={cat.value} value={cat.value}>
-                        {cat.label}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.category ? (
-                    <span className="mt-1 block text-xs text-ms-apex-crimson">
-                      {errors.category}
-                    </span>
-                  ) : null}
-                </label>
-
-                <label className="block">
-                  <span className="ms-data-label text-ms-warm-white/42">
-                    Message
-                  </span>
-                  <textarea
-                    name="message"
-                    required
-                    rows={6}
-                    className="mt-2 w-full border border-ms-warm-white/18 bg-ms-black px-4 py-3 text-sm text-ms-warm-white placeholder:text-ms-warm-white/30 focus:border-ms-apex-crimson focus:outline-none"
-                    placeholder="Tell us what you need (at least 20 characters)..."
-                  />
-                  {errors.message ? (
-                    <span className="mt-1 block text-xs text-ms-apex-crimson">
-                      {errors.message}
-                    </span>
-                  ) : null}
-                </label>
-
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="group flex h-(--ms-control-height) items-center gap-4 bg-ms-apex-crimson px-8 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white transition-colors hover:bg-ms-ignition-orange disabled:opacity-50 disabled:hover:bg-ms-apex-crimson"
+              ) : (
+                <form
+                  className="mt-12 space-y-6"
+                  onSubmit={handleSubmit}
+                  noValidate
                 >
-                  {submitting ? "Sending…" : "Send message"}
-                  {!submitting ? (
-                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-                  ) : null}
-                </button>
-              </form>
-            )}
-          </div>
+                  {/* Honeypot - invisible to real users */}
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    className="absolute -left-[9999px] opacity-0"
+                    aria-hidden="true"
+                  />
 
-          {/* Sidebar info */}
-          <aside className="ms-panel bg-ms-black p-8 self-start">
-            <span className="ms-data-label text-ms-warm-white/42">
-              Race control
-            </span>
-            <div className="mt-8 space-y-6">
-              <div>
-                <h3 className="ms-kicker text-ms-ignition-orange">General</h3>
-                <p className="mt-2 text-sm text-ms-warm-white/60">
-                  hello@sarga.co
-                </p>
-              </div>
-              <div>
-                <h3 className="ms-kicker text-ms-ignition-orange">
-                  Partnerships
-                </h3>
-                <p className="mt-2 text-sm text-ms-warm-white/60">
-                  partners@sarga.co
-                </p>
-              </div>
-              <div>
-                <h3 className="ms-kicker text-ms-ignition-orange">Media</h3>
-                <p className="mt-2 text-sm text-ms-warm-white/60">
-                  media@sarga.co
-                </p>
-              </div>
-              <div>
-                <h3 className="ms-kicker text-ms-ignition-orange">
-                  Ticket support
-                </h3>
-                <p className="mt-2 text-sm text-ms-warm-white/60">
-                  tickets@sarga.co
-                </p>
-              </div>
+                  {/* Server error banner */}
+                  {serverMessage && !submitted ? (
+                    <div
+                      role="alert"
+                      className="border border-ms-apex-crimson/40 bg-ms-apex-crimson/10 px-5 py-4 text-sm text-ms-warm-white"
+                    >
+                      {serverMessage}
+                    </div>
+                  ) : null}
+
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <label className="block">
+                      <span className="ms-data-label text-ms-warm-white/42">
+                        Name
+                      </span>
+                      <input
+                        id="contact-name"
+                        name="name"
+                        required
+                        aria-invalid={Boolean(errors.name)}
+                        aria-describedby={
+                          errors.name ? "contact-name-error" : undefined
+                        }
+                        className="mt-2 h-(--ms-control-height) w-full border border-ms-warm-white/22 bg-[#071a3d]/85 px-4 text-sm text-ms-warm-white placeholder:text-ms-warm-white/38 focus:border-ms-electric-yellow focus:outline-none"
+                        placeholder="Your name"
+                      />
+                      {errors.name ? (
+                        <span
+                          id="contact-name-error"
+                          className="mt-1 block text-xs text-ms-warm-white"
+                        >
+                          {errors.name}
+                        </span>
+                      ) : null}
+                    </label>
+                    <label className="block">
+                      <span className="ms-data-label text-ms-warm-white/42">
+                        Email
+                      </span>
+                      <input
+                        id="contact-email"
+                        name="email"
+                        type="email"
+                        required
+                        autoComplete="email"
+                        aria-invalid={Boolean(errors.email)}
+                        aria-describedby={
+                          errors.email ? "contact-email-error" : undefined
+                        }
+                        className="mt-2 h-(--ms-control-height) w-full border border-ms-warm-white/22 bg-[#071a3d]/85 px-4 text-sm text-ms-warm-white placeholder:text-ms-warm-white/38 focus:border-ms-electric-yellow focus:outline-none"
+                        placeholder="you@example.com"
+                      />
+                      {errors.email ? (
+                        <span
+                          id="contact-email-error"
+                          className="mt-1 block text-xs text-ms-warm-white"
+                        >
+                          {errors.email}
+                        </span>
+                      ) : null}
+                    </label>
+                  </div>
+
+                  <label className="block">
+                    <span className="ms-data-label text-ms-warm-white/42">
+                      Inquiry category
+                    </span>
+                    <select
+                      id="contact-category"
+                      name="category"
+                      aria-invalid={Boolean(errors.category)}
+                      aria-describedby={
+                        errors.category ? "contact-category-error" : undefined
+                      }
+                      className="mt-2 h-(--ms-control-height) w-full border border-ms-warm-white/22 bg-[#071a3d]/85 px-4 text-sm text-ms-warm-white focus:border-ms-electric-yellow focus:outline-none"
+                    >
+                      {CATEGORIES.map((cat) => (
+                        <option key={cat.value} value={cat.value}>
+                          {cat.label}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.category ? (
+                      <span
+                        id="contact-category-error"
+                        className="mt-1 block text-xs text-ms-warm-white"
+                      >
+                        {errors.category}
+                      </span>
+                    ) : null}
+                  </label>
+
+                  <label className="block">
+                    <span className="ms-data-label text-ms-warm-white/42">
+                      Message
+                    </span>
+                    <textarea
+                      id="contact-message"
+                      name="message"
+                      required
+                      rows={6}
+                      aria-invalid={Boolean(errors.message)}
+                      aria-describedby={
+                        errors.message ? "contact-message-error" : undefined
+                      }
+                      className="mt-2 w-full border border-ms-warm-white/22 bg-[#071a3d]/85 px-4 py-3 text-sm text-ms-warm-white placeholder:text-ms-warm-white/38 focus:border-ms-electric-yellow focus:outline-none"
+                      placeholder="Tell us what you need (at least 20 characters)..."
+                    />
+                    {errors.message ? (
+                      <span
+                        id="contact-message-error"
+                        className="mt-1 block text-xs text-ms-warm-white"
+                      >
+                        {errors.message}
+                      </span>
+                    ) : null}
+                  </label>
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="group flex h-(--ms-control-height) items-center gap-4 bg-ms-apex-crimson px-8 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white transition-colors hover:bg-ms-ignition-orange disabled:opacity-50 disabled:hover:bg-ms-apex-crimson"
+                  >
+                    {submitting ? "Sending…" : "Send message"}
+                    {!submitting ? (
+                      <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+                    ) : null}
+                  </button>
+                </form>
+              )}
             </div>
-            <div className="mt-10 border-t border-ms-warm-white/12 pt-6">
-              <p className="text-[0.65rem] leading-5 text-ms-warm-white/30">
-                Sarga Motorsport does not operate public user accounts. All
-                inquiries are handled via email.
-              </p>
-            </div>
-          </aside>
+
+            {/* Sidebar info */}
+            <aside className="ms-blue-panel ms-panel self-start p-8">
+              <span className="ms-data-label text-ms-warm-white/42">
+                Race control
+              </span>
+              <div className="mt-8 space-y-6">
+                <div>
+                  <h3 className="ms-kicker text-ms-ignition-orange">General</h3>
+                  <p className="mt-2 text-sm text-ms-warm-white/60">
+                    <a
+                      className="hover:text-ms-electric-yellow"
+                      href="mailto:hello@sarga.co"
+                    >
+                      hello@sarga.co
+                    </a>
+                  </p>
+                </div>
+                <div>
+                  <h3 className="ms-kicker text-ms-ignition-orange">
+                    Partnerships
+                  </h3>
+                  <p className="mt-2 text-sm text-ms-warm-white/60">
+                    <a
+                      className="hover:text-ms-electric-yellow"
+                      href="mailto:partners@sarga.co"
+                    >
+                      partners@sarga.co
+                    </a>
+                  </p>
+                </div>
+                <div>
+                  <h3 className="ms-kicker text-ms-ignition-orange">Media</h3>
+                  <p className="mt-2 text-sm text-ms-warm-white/60">
+                    <a
+                      className="hover:text-ms-electric-yellow"
+                      href="mailto:media@sarga.co"
+                    >
+                      media@sarga.co
+                    </a>
+                  </p>
+                </div>
+                <div>
+                  <h3 className="ms-kicker text-ms-ignition-orange">
+                    Ticket support
+                  </h3>
+                  <p className="mt-2 text-sm text-ms-warm-white/60">
+                    <a
+                      className="hover:text-ms-electric-yellow"
+                      href="mailto:tickets@sarga.co"
+                    >
+                      tickets@sarga.co
+                    </a>
+                  </p>
+                </div>
+                <div>
+                  <h3 className="ms-kicker text-ms-ignition-orange">
+                    Talent programme
+                  </h3>
+                  <p className="mt-2 text-sm text-ms-warm-white/60">
+                    Select IJTC / Become Riders in the form
+                  </p>
+                </div>
+              </div>
+              <div className="mt-10 border-t border-ms-warm-white/12 pt-6">
+                <p className="text-[0.65rem] leading-5 text-ms-warm-white/30">
+                  Sarga Motorsport does not operate public user accounts. All
+                  inquiries are handled via email.
+                </p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section className="ms-blue-heat-surface py-12 sm:py-16">
+        <div className="ms-shell grid gap-8 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
+          <div>
+            <p className="ms-data-label text-ms-slipstream-teal">
+              Race-day route
+            </p>
+            <h2 className="ms-heading-feature mt-4 max-w-[18ch]">
+              Looking for an event or ticket answer?
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-6">
+            <Link
+              href="/events"
+              className="border-b border-ms-electric-yellow/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-electric-yellow"
+            >
+              Browse events
+            </Link>
+            <Link
+              href="/tickets"
+              className="border-b border-ms-slipstream-teal/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
+            >
+              Ticket support
+            </Link>
+          </div>
         </div>
       </section>
     </PageShell>

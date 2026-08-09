@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "motorsport_standings",
+  "info": {
+    "singularName": "motorsport-standing",
+    "pluralName": "motorsport-standings",
+    "displayName": "Motorsport Standing",
+    "description": "Program standings, points, and result summaries"
+  },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": {},
+  "attributes": {
+    "program": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::motorsport-program.motorsport-program",
+      "inversedBy": "standings",
+      "required": true
+    },
+    "seasonLabel": { "type": "string", "required": true },
+    "roundLabel": { "type": "string", "required": true },
+    "rider": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::motorsport-rider.motorsport-rider",
+      "required": true
+    },
+    "position": { "type": "integer", "required": true, "min": 1 },
+    "points": { "type": "decimal", "required": true, "min": 0 },
+    "resultSummary": { "type": "text" },
+    "resultDate": { "type": "date" },
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+      "default": "motorsport",
+      "required": true
+    },
+    "sites": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::site.site"
+    }
+  }
+}

@@ -36,19 +36,23 @@ export function Header() {
             {mainNav.map((item) => {
               const active = isActive(item.href);
               return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={`group relative py-3 transition-colors ${
-                    active ? "text-white" : "text-white/72 hover:text-white"
-                  }`}
-                >
-                  {item.label}
-                  <span className={`absolute inset-x-0 bottom-1 h-px origin-left bg-sarga-red transition-transform duration-300 ${
-                    active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                  }`} />
-                </Link>
-              </li>
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`group relative py-3 transition-colors ${
+                      active ? "text-white" : "text-white/72 hover:text-white"
+                    }`}
+                  >
+                    {item.label}
+                    <span
+                      className={`absolute inset-x-0 bottom-1 h-px origin-left bg-sarga-red transition-transform duration-300 ${
+                        active
+                          ? "scale-x-100"
+                          : "scale-x-0 group-hover:scale-x-100"
+                      }`}
+                    />
+                  </Link>
+                </li>
               );
             })}
             {ticketItem ? (
@@ -87,18 +91,18 @@ export function Header() {
               {mainNav.map((item) => {
                 const active = isActive(item.href);
                 return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`block rounded-sarga-sm px-4 py-3.5 transition-colors ${
-                      active
-                        ? "bg-white/10 text-sarga-red"
-                        : "text-white/90 hover:bg-white/10 hover:text-sarga-red"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={`block rounded-sarga-sm px-4 py-3.5 transition-colors ${
+                        active
+                          ? "bg-white/10 text-sarga-red"
+                          : "text-white/90 hover:bg-white/10 hover:text-sarga-red"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
                 );
               })}
             </ul>

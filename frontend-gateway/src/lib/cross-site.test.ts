@@ -64,14 +64,23 @@ describe("resolveContentUrl", () => {
   it("keeps gateway/shared/unscoped content on the gateway", async () => {
     const { resolveContentUrl } = await loadCrossSite(CONFIGURED);
     expect(
-      resolveContentUrl({ slug: "a", contentType: "news", siteScope: "gateway" }),
+      resolveContentUrl({
+        slug: "a",
+        contentType: "news",
+        siteScope: "gateway",
+      }),
     ).toEqual({ href: "/news/a", isExternal: false });
     expect(
-      resolveContentUrl({ slug: "b", contentType: "events", siteScope: "shared" }),
+      resolveContentUrl({
+        slug: "b",
+        contentType: "events",
+        siteScope: "shared",
+      }),
     ).toEqual({ href: "/ticket-hub/b", isExternal: false });
-    expect(
-      resolveContentUrl({ slug: "c", contentType: "news" }),
-    ).toEqual({ href: "/news/c", isExternal: false });
+    expect(resolveContentUrl({ slug: "c", contentType: "news" })).toEqual({
+      href: "/news/c",
+      isExternal: false,
+    });
   });
 
   it("falls back to the gateway when the dedicated site is not configured", async () => {

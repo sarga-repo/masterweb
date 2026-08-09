@@ -1,0 +1,21 @@
+[Unit]
+Description=Sarga shared Strapi CMS
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=sarga
+Group=sarga
+WorkingDirectory=/srv/sarga-website/cms
+EnvironmentFile=/etc/sarga/cms.env
+ExecStart=/usr/local/bin/pnpm start
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+KillSignal=SIGINT
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

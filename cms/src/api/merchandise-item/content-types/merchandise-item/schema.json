@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "merchandise_items",
+  "info": {
+    "singularName": "merchandise-item",
+    "pluralName": "merchandise-items",
+    "displayName": "Merchandise Item",
+    "description": "Merchandise showcase teasers without internal commerce"
+  },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": {},
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "slug": { "type": "uid", "targetField": "title", "required": true },
+    "description": { "type": "richtext" },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "priceLabel": { "type": "string" },
+    "availabilityStatus": {
+      "type": "enumeration",
+      "enum": ["comingSoon", "availableExternal", "inquiryOnly", "hidden"],
+      "default": "comingSoon",
+      "required": true
+    },
+    "externalUrl": { "type": "string" },
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+      "default": "motorsport",
+      "required": true
+    },
+    "sites": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::site.site"
+    },
+    "sortOrder": { "type": "integer", "default": 0 },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    }
+  }
+}

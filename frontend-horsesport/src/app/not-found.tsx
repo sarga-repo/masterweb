@@ -14,7 +14,10 @@ export default function NotFound() {
             "radial-gradient(ellipse at top right, #ED1B2F14, transparent 55%), radial-gradient(ellipse at bottom left, #FF6B000A, transparent 50%)",
         }}
       />
-      <div aria-hidden className="hs-shimmer absolute inset-x-0 bottom-0 h-px" />
+      <div
+        aria-hidden
+        className="hs-shimmer absolute inset-x-0 bottom-0 h-px"
+      />
 
       <div className="hs-shell relative z-10 py-24 sm:py-32">
         <p className="hs-kicker text-hs-red">404 - Off the pace</p>

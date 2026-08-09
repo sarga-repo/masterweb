@@ -2,7 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { Breadcrumbs, PageHero, RichText, SeoJsonLd, ArrowRightIcon } from "@/components";
+import {
+  Breadcrumbs,
+  PageHero,
+  RichText,
+  SeoJsonLd,
+  ArrowRightIcon,
+} from "@/components";
 import { fetchArticleDetail, fetchNewsPage } from "@/lib/cms-content";
 import { createMetadata } from "@/lib/seo/metadata";
 import { resolveSiteUrl, siteConfig } from "@/lib/site-config";

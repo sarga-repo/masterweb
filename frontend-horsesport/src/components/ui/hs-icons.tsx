@@ -12,7 +12,11 @@ import type { SVGProps } from "react";
 
 type HsIconProps = SVGProps<SVGSVGElement> & { title?: string };
 
-function Base({ title, children, ...props }: HsIconProps & { children: React.ReactNode }) {
+function Base({
+  title,
+  children,
+  ...props
+}: HsIconProps & { children: React.ReactNode }) {
   return (
     <svg
       viewBox="0 0 24 24"

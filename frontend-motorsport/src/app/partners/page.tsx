@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
-import { GradientRule, PageHero, PageShell, SectionHeader } from "@/components";
+import {
+  InformationBand,
+  PageHero,
+  PageShell,
+  SectionHeader,
+} from "@/components";
 import { ArrowUpRightIcon } from "@/components/ui/icons";
+import { ResilientImage } from "@/components/ui/resilient-image";
 import { fetchPartners } from "@/lib/cms-data";
 import type { PartnerItem } from "@/types/design-system";
 
@@ -34,75 +39,113 @@ export default async function PartnersPage() {
   const partners = cmsPartners.length > 0 ? cmsPartners : PLACEHOLDER;
 
   return (
-    <PageShell>
+    <PageShell spectrumSeparators>
       <PageHero
         kicker="Official partners & sponsors"
         kickerColor="orange"
         title="Partners"
+        backgroundImage="/media/hero/sarga-motorsport-hero-circuit-golden-hour.jpg"
+        backgroundAlt="Sarga Motorsport circuit and grandstand in warm golden-hour light"
         accent="blue"
         accentPosition="bottom-right"
         grain
+        speedLines
+        surface="heat"
         description="The brands and organisations fuelling the Sarga Motorsport ecosystem. Together we build the stage for Indonesia's most ambitious racing platform."
       />
 
-      <GradientRule />
+      <InformationBand
+        eyebrow="Partner control / Shared platform"
+        title="One grid. Shared ambition."
+        description="The partner network supports competition, event delivery, audience experience, and long-term talent development."
+        items={[
+          { label: "Network", value: String(partners.length).padStart(2, "0") },
+          { label: "Scope", value: "Motorsport" },
+          { label: "Inquiries", value: "Open" },
+        ]}
+      />
 
-      {/* Partners grid */}
-      <section className="ms-section ms-shell">
-        <SectionHeader
-          eyebrow="Partner network"
-          title="The grid."
-          align="left"
-        />
-        <div className="mt-14 grid gap-px bg-ms-warm-white/10 sm:grid-cols-2 lg:grid-cols-3">
-          {partners.map((partner) => (
-            <div
-              key={partner.name}
-              className="group flex min-h-[16rem] flex-col items-center justify-center gap-6 bg-ms-black p-10 transition-colors hover:bg-ms-graphite"
-            >
-              <Image
-                src={partner.logo}
-                alt={partner.name}
-                width={200}
-                height={90}
-                className="max-h-14 w-auto max-w-[10rem] object-contain opacity-60 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
-              />
-              <span className="ms-data-label text-ms-warm-white/42 text-center">
-                {partner.name}
-              </span>
-              {partner.href ? (
+      <section className="ms-reflected-light-surface ms-section">
+        <div className="ms-shell">
+          <SectionHeader
+            index="NETWORK"
+            eyebrow="Official partners"
+            title="The grid."
+            description="Published partner records come from the shared CMS and remain scoped to the Motorsport site."
+          />
+          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {partners.map((partner, index) => {
+              const content = (
+                <>
+                  <span className="absolute left-6 top-6 font-display text-lg text-ms-warm-white/24">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <ResilientImage
+                    src={partner.logo}
+                    alt={partner.name}
+                    fallbackSrc="/brand/logo-sarga-motorsport-symbol-sport.png"
+                    fallbackAlt="Sarga Motorsport"
+                    width={220}
+                    height={100}
+                    className="max-h-16 w-auto max-w-[11rem] object-contain brightness-0 invert opacity-70 transition duration-300 group-hover:opacity-100"
+                  />
+                  <span className="ms-data-label text-center text-ms-warm-white/56">
+                    {partner.name}
+                  </span>
+                  {partner.href ? (
+                    <span className="inline-flex items-center gap-2 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-ms-slipstream-teal">
+                      Visit <ArrowUpRightIcon className="size-3.5" />
+                    </span>
+                  ) : (
+                    <span className="ms-data-label text-ms-electric-yellow">
+                      Official network
+                    </span>
+                  )}
+                </>
+              );
+
+              const className =
+                "group relative flex min-h-[18rem] flex-col items-center justify-center gap-7 border border-ms-warm-white/14 bg-[linear-gradient(135deg,rgba(7,26,61,.94),rgba(30,38,74,.9))] p-10 transition-colors hover:border-ms-slipstream-teal/55";
+
+              return partner.href ? (
                 <a
+                  key={partner.name}
                   href={partner.href}
                   target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-ms-slipstream-teal transition-colors hover:text-ms-warm-white"
+                  rel="noopener noreferrer"
+                  className={className}
                 >
-                  Visit <ArrowUpRightIcon className="size-3.5" />
+                  {content}
                 </a>
-              ) : null}
-            </div>
-          ))}
+              ) : (
+                <article key={partner.name} className={className}>
+                  {content}
+                </article>
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      {/* Partnership CTA */}
-      <section className="ms-shell border-t border-ms-warm-white/12 py-16">
-        <div className="ms-panel bg-ms-black p-10 sm:p-14">
-          <span className="ms-data-label text-ms-slipstream-teal">
-            Partnership inquiries
-          </span>
-          <h2 className="ms-display mt-6 max-w-[12ch] text-[clamp(1.88rem,3.75vw,3.75rem)]">
-            Join the grid.
-          </h2>
-          <p className="mt-6 max-w-xl text-base leading-7 text-ms-warm-white/60">
-            Interested in partnering with Sarga Motorsport? We work with brands
-            that share our commitment to excellence, performance, and community.
-          </p>
+      <section className="ms-blue-heat-surface py-16 sm:py-20">
+        <div className="ms-shell grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+          <div>
+            <span className="ms-data-label text-ms-slipstream-teal">
+              Partnership inquiries
+            </span>
+            <h2 className="ms-heading-section mt-6 max-w-[12ch]">
+              Join the grid.
+            </h2>
+            <p className="mt-6 max-w-xl text-base leading-7 text-ms-warm-white/64">
+              We work with brands that share our commitment to performance,
+              responsible event delivery, and meaningful community access.
+            </p>
+          </div>
           <Link
             href="/contact"
-            className="group mt-8 inline-flex items-center gap-3 border-b border-ms-apex-crimson pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] transition-colors hover:text-ms-ignition-orange"
+            className="group inline-flex h-(--ms-control-height) items-center gap-3 bg-ms-apex-crimson px-8 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white transition-colors hover:bg-ms-ignition-orange"
           >
-            Get in touch
+            Partnership inquiry
             <ArrowUpRightIcon className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         </div>

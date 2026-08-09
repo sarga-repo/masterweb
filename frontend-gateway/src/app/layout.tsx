@@ -18,7 +18,11 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 // read as SemiBold - the approved weight, lighter than the Bold cut.
 const zalandoSans = localFont({
   src: [
-    { path: "./fonts/zalando-expanded-400.ttf", weight: "400", style: "normal" },
+    {
+      path: "./fonts/zalando-expanded-400.ttf",
+      weight: "400",
+      style: "normal",
+    },
     {
       path: "./fonts/zalando-expanded-semibold.ttf",
       weight: "700",

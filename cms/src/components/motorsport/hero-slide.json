@@ -1,0 +1,68 @@
+{
+  "collectionName": "components_motorsport_hero_slides",
+  "info": {
+    "displayName": "Hero Slide",
+    "description": "Site-scoped Motorsport homepage carousel slide"
+  },
+  "options": {},
+  "attributes": {
+    "internalName": {
+      "type": "string",
+      "required": true
+    },
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 80
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 160
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["images"]
+    },
+    "mobileImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "imageAlt": {
+      "type": "string",
+      "required": true,
+      "maxLength": 180
+    },
+    "subjectAnchor": {
+      "type": "enumeration",
+      "enum": ["left", "center", "right"],
+      "default": "center",
+      "required": true
+    },
+    "ctaLabel": {
+      "type": "string",
+      "maxLength": 28
+    },
+    "ctaUrl": {
+      "type": "string"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "required": true
+    }
+  }
+}

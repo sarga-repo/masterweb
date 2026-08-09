@@ -17,6 +17,26 @@ phase (see AGENTS.md → "Phase progress tracking").
 | 9     | Quality & UAT                 | ✅ Done | 2026-07-04 |
 | 10    | Deployment & handover         | ✅ Done | 2026-07-04 |
 
+## Motorsport revamp track (`prompts/motorsport/revamp/`)
+
+| Phase   | Title                               | Status  | Date       |
+| ------- | ----------------------------------- | ------- | ---------- |
+| MSR-0   | Documentation and source alignment  | ✅ Done | 2026-08-08 |
+| MSR-1   | Discovery and inventory             | ✅ Done | 2026-08-08 |
+| MSR-2   | CMS workspace and content model     | ✅ Done | 2026-08-08 |
+| MSR-3   | Design system recalibration         | ✅ Done | 2026-08-08 |
+| MSR-4   | Homepage revamp                     | ✅ Done | 2026-08-08 |
+| MSR-5   | Core pages                          | ✅ Done | 2026-08-09 |
+| MSR-6   | IJTC program pages                  | ✅ Done | 2026-08-09 |
+| MSR-7   | FIA Rallycross campaign page        | ✅ Done | 2026-08-09 |
+| MSR-8   | Migration, QA, and launch readiness | ✅ Done | 2026-08-10 |
+| MSR-RD1 | Warm visual redesign audit          | ✅ Done | 2026-08-09 |
+| MSR-RD2 | Redesign foundations and templates  | ✅ Done | 2026-08-09 |
+| MSR-RD3 | Global shell and homepage hero      | ✅ Done | 2026-08-09 |
+| MSR-RD4 | Homepage editorial rebuild          | ✅ Done | 2026-08-09 |
+| MSR-RD5 | Dedicated page redesign groups      | ✅ Done | 2026-08-09 |
+| MSR-RD6 | Media, CMS, QA, and handover        | ✅ Done | 2026-08-10 |
+
 ## Horse Sport track (`prompts/horsesport/`)
 
 | Phase | Title                          | Status  | Date       |
@@ -41,6 +61,1274 @@ phase (see AGENTS.md → "Phase progress tracking").
 - Start: `docker compose up -d postgres` → `cd cms && pnpm develop` →
   `cd frontend-gateway && pnpm dev` → `cd frontend-motorsport && pnpm dev` →
   `cd frontend-horsesport && pnpm dev`.
+
+---
+
+## MSR-0 — Motorsport revamp documentation and source alignment
+
+**Prompt:** User-requested documentation package for the major Motorsport revamp.
+
+### What was done
+
+- Created branch `feature/sarga-motorsport-major-revamp-specs`.
+- Copied source PDFs into `reference/source-pdfs/`:
+  `look_and_feel_website_sarga_co.pdf` and `sarga_motorsport_2.pdf`.
+- Extracted and reviewed the Look & Feel Motorsport pages and the Motorsport sitemap PDF.
+- Added the revamp spec package under `docs/motorsport/revamp/`.
+- Added phase prompts under `prompts/motorsport/revamp/`.
+- Replaced the Motorsport sitemap summary with the new target sitemap.
+- Added a Motorsport revamp phase checklist.
+- Updated README, AGENTS, and existing Motorsport docs to point to the revamp source of truth.
+
+### Files changed
+
+- Added: `docs/motorsport/revamp/**`, `prompts/motorsport/revamp/**`,
+  `checklists/motorsport/motorsport_revamp_phase_checklist.md`,
+  `reference/source-pdfs/look_and_feel_website_sarga_co.pdf`,
+  `reference/source-pdfs/sarga_motorsport_2.pdf`
+- Modified: `AGENTS.md`, `README.md`, `docs/PHASE_PROGRESS.md`,
+  `docs/motorsport/02_motorsport_brand_translation.md`,
+  `docs/motorsport/03_motorsport_sitemap_page_specs.md`,
+  `docs/motorsport/05_motorsport_content_model_extensions.md`,
+  `docs/motorsport/06_motorsport_implementation_plan.md`
+
+### How verified
+
+- Verified PDF page counts and rendered the Look & Feel and Motorsport sitemap PDFs for visual inspection.
+- Reviewed existing Motorsport frontend routes and shared Strapi admin/CMS structure.
+- Confirmed no frontend implementation was performed.
+
+### Notes / caveats
+
+- CMS workspace/menu separation is specified as a future implementation phase. It should keep one shared Strapi instance and avoid duplicating shared content models.
+- FIA Rallycross can be implemented as either an event detail or campaign route after implementation discovery confirms the best fit.
+
+---
+
+## MSR-1 — Motorsport revamp discovery and inventory
+
+**Prompt:** `prompts/motorsport/revamp/01_discovery_inventory.md`
+
+### What was done
+
+- Audited every current Motorsport App Router route, shared layout component,
+  navigation/footer definition, CMS data adapter, and route fallback.
+- Inventoried shared Strapi schemas, admin customization, Motorsport seed
+  records by `siteScope`, approved/local assets, and reference PDFs.
+- Compared the implementation with the target sitemap and documented missing
+  IJTC, FIA Rallycross, Merchandise, CMS workspace, and content-model work.
+- Recorded current frontend-to-CMS field-contract mismatches and an exact
+  existing/planned file map for later implementation phases.
+
+### Files changed
+
+- Added: `docs/motorsport/revamp/09_discovery_inventory.md`
+- Modified: `docs/motorsport/revamp/README.md`,
+  `docs/PHASE_PROGRESS.md`,
+  `checklists/motorsport/motorsport_revamp_phase_checklist.md`
+
+### How verified
+
+- Confirmed the active branch and inspected the working-tree status before and
+  after the documentation update.
+- Enumerated routes/components/assets from the filesystem and compared live
+  CMS schema keys with frontend adapter expectations and seed definitions.
+- Ran documentation whitespace validation with `git diff --check`.
+- No build was run because MSR-1 changed documentation only.
+
+### Notes / caveats
+
+- No frontend behavior, CMS schema, seed data, asset, or deployment setting was
+  changed.
+- FIA canonical routing, ticket providers/allowlists, legal-page ownership, and
+  missing launch assets/content remain decisions for their assigned phases.
+
+---
+
+## MSR-2 — CMS workspace and content model
+
+**Prompt:** `prompts/motorsport/revamp/02_cms_workspace_content_model.md`
+
+### What was done
+
+- Added supported Strapi admin sidebar workspaces for Sarga Gateway, Sarga
+  Motorsport, Sarga Horse Sport, and Shared Library. Each dashboard links to
+  shared collections with `siteScope` filters, quick-create actions, and
+  publishing guardrails.
+- Added `site-page`, `motorsport-program`, `motorsport-rider`,
+  `motorsport-standing`, `motorsport-regulation`, and `merchandise-item`
+  collection types without duplicating Event, News, Partner, Ticket CTA, or
+  Gallery.
+- Added reusable page-section, campaign-slide, rundown-item, and event-rule
+  components for CMS-managed page/campaign content.
+- Extended the idempotent seed with five Motorsport pages, IJTC program/demo
+  rider/standing/regulation data, FIA Rallycross campaign/event/ticket data,
+  and two merchandise preview records.
+- Granted only public `find`/`findOne` permissions for the six new collections,
+  regenerated Strapi types, updated the schema mirror, and documented the
+  implemented editor/content architecture.
+
+### Files changed
+
+- Added: `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- Added: `cms/src/api/{site-page,motorsport-program,motorsport-rider,motorsport-standing,motorsport-regulation,merchandise-item}/**`
+- Added: `cms/src/components/shared/page-section.json`,
+  `cms/src/components/motorsport/{campaign-slide,rundown-item,rule-item}.json`
+- Modified: `cms/src/admin/app.tsx`, `cms/src/seed.ts`,
+  `cms/types/generated/{components,contentTypes}.d.ts`,
+  `strapi/content-types.json`,
+  `docs/motorsport/revamp/04_cms_architecture_admin_ux.md`,
+  `docs/motorsport/05_motorsport_content_model_extensions.md`,
+  `docs/PHASE_PROGRESS.md`, and the Motorsport revamp checklist.
+
+### How verified
+
+- `cd cms && pnpm tsc --noEmit` passed.
+- Focused strict TypeScript check for the admin app/workspace files passed.
+- `cd cms && pnpm build` passed, including the Strapi admin production build.
+- Started Strapi 5.49 against PostgreSQL on host port 5435; schema migration,
+  seed, admin HTML (`/admin` HTTP 200), and all six new public APIs succeeded.
+- Queried scoped FIA/IJTC/page/merchandise records and confirmed expected data.
+- Restarted Strapi and confirmed the seed was idempotent with unchanged counts.
+- `git diff --check` passed. No frontend build was required because no public
+  frontend files changed.
+
+### Notes / caveats
+
+- Workspace filters and warnings improve editor safety. The subsequent MSR-2
+  access-control follow-up adds custom RBAC conditions and a write guard for
+  enforced `siteScope` segregation in Strapi Community Edition.
+- Demo rider names, standings, regulation metadata, ticket destination,
+  campaign/product copy, and missing media/PDF must be replaced or approved
+  before launch.
+- The IJTC regulation seed is inactive and has no PDF by design. Merchandise
+  remains showcase/external/inquiry only with no cart, checkout, or payment.
+- Strapi emitted existing non-blocking sendmail and Vite CJS deprecation
+  warnings during local startup/build.
+
+### MSR-2 access-control follow-up — site admin segregation
+
+#### What was done
+
+- Registered four custom workspace access actions and four `siteScope` RBAC
+  conditions, then created/synchronized managed Gateway, Motorsport, Horse
+  Sport, and Shared Library roles at Strapi bootstrap.
+- Gated each custom admin sidebar entry by its workspace action. Super Admin is
+  refreshed with all four actions; each managed site role receives exactly one.
+- Applied conditional read/update/delete/publish permissions to site-relevant
+  Content Manager subjects and added an admin request-context write guard that
+  forces create/update/clone data to the account's assigned `siteScope`.
+- Added grouped nested dashboard navigation because Strapi 5.49's supported
+  main-sidebar menu-link API is flat.
+- Added optional environment-only dedicated-user provisioning. Existing users
+  are never silently reassigned or password-reset.
+
+#### Files changed
+
+- Added: `cms/src/access-control/sarga-workspaces.ts`.
+- Modified: `cms/src/index.ts`, `cms/src/admin/app.tsx`,
+  `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`,
+  `cms/.env.example`, `README.md`,
+  `docs/motorsport/revamp/{04_cms_architecture_admin_ux,08_deployment_handover}.md`,
+  `docs/motorsport/05_motorsport_content_model_extensions.md`,
+  `docs/{05_content_model_strapi,10_deployment_handover_maintenance}.md`,
+  `docs/multisite/03_shared_cms_content_sync_strategy.md`,
+  `docs/horsesport/08_horsesport_deployment_handover.md`,
+  `docs/PHASE_PROGRESS.md`, and the Motorsport revamp checklist.
+
+#### How verified
+
+- Server TypeScript and focused admin TypeScript checks passed.
+- Started Strapi 5.49 Community Edition against PostgreSQL on host port 5435;
+  all four roles were created with 46/61/36/41 managed permissions for Gateway,
+  Motorsport, Horse Sport, and Shared respectively.
+- Database inspection confirmed every managed role has exactly one custom
+  workspace action and Super Admin has all four.
+- Provisioned a temporary Motorsport admin through environment variables,
+  authenticated through `/admin/login`, and confirmed its permission response
+  contained only `admin::sarga-workspaces.access-motorsport`.
+- The same account's Site Page list returned only `motorsport` records. A create
+  request submitted with `siteScope=gateway` persisted as `motorsport`, proving
+  the server write guard. The test record and temporary user were deleted.
+
+#### Notes / caveats
+
+- Strapi's stock main sidebar does not support nested child menu items; nesting
+  is implemented inside each role-gated workspace dashboard.
+- Upload files have no `siteScope`. Site roles share media read/upload/download
+  access so media fields work, but do not receive asset update/delete. Use
+  site-named folders; true media row isolation requires a separately approved
+  extension.
+- Managed roles are synchronized on startup and should not be manually expanded.
+  Assign exactly one managed Sarga site role per dedicated account.
+
+---
+
+## MSR-3 — Motorsport design system recalibration
+
+**Prompt:** `prompts/motorsport/revamp/03_design_system_recalibration.md`
+
+### What was done
+
+- Recalibrated global typography, spacing, readable copy width, tabular data,
+  table, scroll, and Draftline Blue information-band utilities against the
+  Motorsport Look & Feel reference.
+- Centralized the target primary IA and updated the desktop/mobile header with
+  the ordered Ticket action and separate Sarga.co utility link.
+- Added reusable discipline tile/grid, campaign banner slider, gallery mosaic,
+  schedule card, standings table, regulation download, information band, and
+  sticky event-program subnavigation primitives.
+- Added shared types and chevron/download icons needed by those primitives.
+- Kept page assembly for MSR-4 through MSR-7 and added no paid, heavy 3D,
+  autoplay, checkout, or CMS duplication.
+
+### Files changed
+
+- Added: `frontend-motorsport/src/lib/navigation.ts`,
+  `frontend-motorsport/src/components/cards/{discipline-tile,schedule-card}.tsx`,
+  `frontend-motorsport/src/components/layout/event-program-subnav.tsx`, and
+  `frontend-motorsport/src/components/sections/{information-band,discipline-grid,campaign-banner-slider,gallery-mosaic,standings-table,regulation-download-panel}.tsx`.
+- Modified: `frontend-motorsport/src/app/{globals.css,page.tsx}`,
+  `frontend-motorsport/src/components/index.ts`,
+  `frontend-motorsport/src/components/layout/{motorsport-header,page-shell}.tsx`,
+  `frontend-motorsport/src/components/ui/icons.tsx`, and
+  `frontend-motorsport/src/types/design-system.ts`.
+- Updated: `docs/motorsport/04_motorsport_design_system.md`,
+  `docs/motorsport/revamp/{02_brand_layout_direction,06_implementation_phases}.md`,
+  `docs/PHASE_PROGRESS.md`, and the Motorsport revamp checklist.
+
+### How verified
+
+- `cd frontend-motorsport && pnpm lint` passed.
+- `cd frontend-motorsport && pnpm tsc --noEmit` passed.
+- `cd frontend-motorsport && pnpm build` passed with all 17 static pages
+  generated.
+- Browser smoke-tested the homepage at 1440 x 900 and 390 x 844. Desktop used
+  the full target nav, mobile used the menu control, both had zero horizontal
+  overflow, and browser console inspection reported no warnings or errors.
+- Corrected the mobile Merchandise label discovered during visual QA and
+  rechecked its bounds at 390 px.
+
+### Notes / caveats
+
+- The new primitives are intentionally unassembled until their assigned page
+  phases. The existing homepage remains otherwise unchanged in MSR-3.
+- `/merchandise` is present in the target navigation before its route is added
+  in MSR-5. Existing `/experience` and `/partners` routes remain directly
+  reachable but are no longer primary-nav items.
+- Strapi was not running during the browser smoke test, so the frontend used
+  its existing fallback content and the dev server logged expected CMS media
+  fetch failures; this did not affect compile gates or responsive UI checks.
+
+---
+
+## MSR-4 — Motorsport homepage revamp
+
+**Prompt:** `prompts/motorsport/revamp/04_homepage_revamp.md`
+
+### What was done
+
+- Rebuilt `/` around the source-sitemap sequence: Header, cinematic Hero,
+  Upcoming Events with ticket CTA, News, Gallery mosaic, and Footer.
+- Added a compact Draftline Blue calendar transition while removing the former
+  Brand Story, Experience, Partners, and Newsletter modules from the homepage
+  so event-program content remains dominant.
+- Connected the homepage hero and section headings to the Motorsport `site-page`
+  home record with curated copy/media fallbacks.
+- Corrected homepage CMS contracts for Event `eventDate`/camel-case statuses,
+  News `publishedDate`, Ticket CTA `url`, Partner `websiteUrl`, populated event
+  ticket relations, and date ranges.
+- Added reusable client-side image recovery for Hero, event, news, and gallery
+  surfaces so unavailable Strapi uploads degrade to approved local Motorsport
+  imagery instead of broken media.
+- Aligned footer navigation with the target IA and corrected external Gateway
+  link semantics; no unrelated route was implemented.
+
+### Files changed
+
+- Added: `frontend-motorsport/src/components/ui/resilient-image.tsx`.
+- Modified: `frontend-motorsport/src/app/page.tsx`,
+  `frontend-motorsport/src/lib/{homepage-data,strapi/client}.ts`,
+  `frontend-motorsport/src/components/cards/{event-feature-card,event-list-card,news-card}.tsx`,
+  `frontend-motorsport/src/components/sections/{motorsport-hero,gallery-mosaic}.tsx`,
+  and `frontend-motorsport/src/components/layout/motorsport-footer.tsx`.
+- Updated: `docs/motorsport/revamp/{03_sitemap_page_specs,06_implementation_phases}.md`,
+  `docs/PHASE_PROGRESS.md`, and the Motorsport revamp checklist.
+
+### How verified
+
+- `cd frontend-motorsport && pnpm lint` passed.
+- `cd frontend-motorsport && pnpm tsc --noEmit` passed.
+- `cd frontend-motorsport && pnpm build` passed with all 17 static pages
+  generated.
+- Browser QA at 1440 x 900 and 390 x 844 confirmed the required content order,
+  target navigation, prominent ticket paths, mobile menu, and zero horizontal
+  overflow.
+- Browser QA exposed unavailable CMS upload references; after the resilience
+  fix, the same event/gallery surfaces rendered local fallbacks with no broken
+  images or browser-console errors.
+
+### Notes / caveats
+
+- MSR-4 changes only the homepage and shared media/footer behavior. About,
+  Event hub, News/Gallery pages, Merchandise, Ticket, and Contact remain MSR-5.
+- `/merchandise` remains a target-navigation destination whose route is added
+  in MSR-5. Existing `/experience` and `/partners` routes were not deleted.
+- Seed ticket providers, destinations, dates, and content remain demonstration
+  data until editorial and ticketing owners approve production values.
+
+---
+
+## MSR-5 — Motorsport core pages
+
+**Prompt:** `prompts/motorsport/revamp/05_core_pages.md`
+
+### What was done
+
+- Rebuilt About, Event, News listing/detail, Gallery, Ticket, and Contact around
+  the recalibrated Motorsport system, and added the new Merchandise showcase.
+- Delivered every required About section and made the Event hub a programme
+  gateway led by FIA Rallycross 2026 and Indonesia Junior Talent Cup paths.
+- Connected core pages to site-scoped Site Page, Programme, Event, News,
+  Gallery, Merchandise, Ticket CTA, and shared Leadership content with local
+  content/media fallbacks.
+- Added safe ticket redirect/deep-link/embed URL handling, newest-CTA-per-event
+  presentation, and a production-aware inquiry submission contract.
+- Kept Merchandise as showcase, coming-soon, approved partner redirect, or
+  inquiry-only content; no cart, account, checkout, or payment path was added.
+
+### Files changed
+
+- Added: `frontend-motorsport/src/app/{merchandise/page,contact/layout}.tsx`,
+  `frontend-motorsport/src/components/cards/{program-card,merchandise-card}.tsx`,
+  and `frontend-motorsport/src/lib/ticketing/safe-url.ts`.
+- Modified: `frontend-motorsport/src/app/{about,events,gallery,news,tickets,contact}/**`,
+  `frontend-motorsport/src/app/{api/contact/route,sitemap,globals.css}`, shared
+  page shell/hero exports, `src/lib/{cms-data,validation}.ts`, and
+  `src/types/design-system.ts`.
+- Updated: `docs/motorsport/revamp/{03_sitemap_page_specs,06_implementation_phases}.md`,
+  `docs/PHASE_PROGRESS.md`, and the Motorsport revamp checklist.
+
+### How verified
+
+- `cd frontend-motorsport && pnpm lint` passed.
+- `cd frontend-motorsport && pnpm tsc --noEmit` passed.
+- `cd frontend-motorsport && pnpm build` passed with all 18 pages generated.
+- Browser QA covered all eight phase routes at 1440 x 900 and 390 x 844 with
+  zero horizontal overflow, no visible broken images, and no browser errors.
+- Submitted the Contact form in local placeholder mode and confirmed its
+  success state; confirmed ticket embeds remain absent without an allowlisted
+  host and that duplicate legacy ticket records do not duplicate public cards.
+
+### Notes / caveats
+
+- IJTC and FIA cards intentionally lead to the route families assigned to
+  MSR-6 and MSR-7; those dedicated pages are not implemented in this phase.
+- Leadership is currently a shared collection without `siteScope`, so About
+  presents the approved group leadership records rather than duplicating them.
+- Seed products, photography, event details, ticket destinations, and partner
+  data remain demonstrations pending production editorial approval.
+- Existing `/experience` and `/partners` routes were not removed or redesigned.
+
+---
+
+## MSR-6 — IJTC program hub and supporting pages
+
+**Prompt:** `prompts/motorsport/revamp/06_ijtc_program_pages.md`
+
+### What was done
+
+- Delivered the Indonesia Junior Talent Cup hub plus Race Schedule, Riders,
+  Standings, About IJTC, Regulation, and Become Riders routes under one
+  persistent, responsive programme navigation.
+- Added CMS-first programme, rundown, rider, standing, and active-regulation
+  adapters with resilient local fallback content and explicit demo labels.
+- Added responsive schedule cards, rider profiles, a mobile-accessible
+  standings table, and controlled regulation publication: no download appears
+  until an active CMS record has an approved PDF.
+- Refined the Rider directory into a maximum 4×3 catalogue with client-side
+  pagination at 12 records per page, and added one CMS-driven dynamic profile
+  template at `/riders/[riderSlug]` for every published rider.
+- Expanded the idempotent CMS demonstration set to 20 fictional riders, 20
+  related standing rows, eight programme rounds, and 20 individually sliced
+  rider portraits supplied as a 5×4 source grid. Standings now reuse rider
+  portraits and fall back to a
+  numbered code-native silhouette when photography is absent or fails.
+- Widened and constrained the schedule identity column so long date/season
+  labels wrap inside their panel without crossing the vertical separator.
+- Added a server-validated rider inquiry path through the existing Motorsport
+  contact endpoint. It creates no account and does not imply registration,
+  selection, sporting eligibility, or payment.
+- Added all seven canonical IJTC URLs plus the CMS-derived rider profile URL
+  family to the Motorsport sitemap.
+
+### Files changed
+
+- Added: `frontend-motorsport/src/app/events/indonesia-junior-talent-cup/**`,
+  `frontend-motorsport/src/lib/ijtc-data.ts`,
+  `frontend-motorsport/src/components/cards/rider-profile-card.tsx`,
+  `frontend-motorsport/src/components/sections/rider-catalog.tsx`,
+  `frontend-motorsport/src/components/ui/rider-portrait.tsx`, and
+  `frontend-motorsport/src/components/sections/become-riders-inquiry-form.tsx`.
+- Modified: shared programme subnav, schedule, standings, regulation, CMS data,
+  design-system types, component exports, `cms/src/seed.ts`,
+  `cms/src/components/motorsport/rundown-item.json`, generated component types,
+  and `frontend-motorsport/src/app/sitemap.ts`.
+- Added 20 row-major rider portrait crops to `cms/data/seed-media/` and
+  `frontend-motorsport/public/media/riders/`; the earlier four generated files
+  remain retained as unused backups.
+- Updated: the Motorsport implementation plan, sitemap/page specifications,
+  revamp checklist, and this progress record.
+
+### How verified
+
+- Motorsport Prettier, ESLint, TypeScript, and optimized Next.js production
+  build passed. Strapi TypeScript and production admin builds also passed.
+- Live Strapi API verification returned 20 IJTC riders with portraits, 20
+  program-linked standing rows, and eight CMS rundown entries after an
+  idempotent restart; an obsolete earlier demo standing set was safely removed.
+- Browser QA covered all seven routes at 1440×900 and 390×844. Every route had
+  one active programme destination, all seven subnav links, visible Become
+  Riders access, viewport-matched document width, and no browser warnings or
+  errors.
+- Confirmed the 390px standings panel scrolls internally (768px table within a
+  348px scroller) without causing document overflow.
+- Confirmed the rider directory renders 12 records on page one and eight on
+  page two at 1440px, profile 20 resolves through the shared template, schedule
+  and rider documents both match the 390px viewport, and all 20 standing rows
+  expose portrait-backed profile links.
+- Confirmed the pending regulation state exposes no PDF link and the empty
+  rider inquiry displays all four accessible field errors.
+
+### Notes / caveats
+
+- CMS seed riders, standings, schedule entries, and related copy remain
+  demonstrations pending approved 2026 programme data. Each of the 20 rider
+  records now has its own supplied grid portrait and can still be replaced
+  independently through Strapi.
+- The seeded regulation intentionally remains inactive without a PDF. Uploading
+  and activating an approved CMS file enables the public download automatically.
+- PostgreSQL was healthy on Docker port 5435 and the browser pass used live
+  Strapi content from port 1337; fallback data remains available for CMS outages.
+- MSR-7 was completed immediately after this phase; see the entry below.
+
+---
+
+## MSR-7 — FIA Rallycross campaign page
+
+**Status:** Complete
+**Date:** 2026-08-09
+
+### What was done
+
+- Replaced the unrelated placeholder campaign route with a dedicated,
+  CMS-first FIA Rallycross World Cup Indonesia 2026 landing page at
+  `/campaign/fia-rallycross-world-cup-indonesia-2026`.
+- Delivered the exact approved headline, event title, `5-6 December 2026` date,
+  Jakarta International E-Prix Circuit venue, and `Get Your Ticket Now` CTA.
+- Added the three-slide campaign banner, rallycross format story, five-session
+  rundown, six-item do/don't race-day guide, and final official-ticket panel.
+- Added a Strapi campaign adapter with safe media/CTA/SEO mapping and resilient
+  frontend fallback data. Ticket redirects remain HTTPS/deep-link/allowlisted
+  embed only; no checkout or payment processing was introduced.
+- Completed the existing FIA CMS record idempotently with hero/OG media, three
+  slide images, ordered rundown/rules, related event/ticket data, and SEO fields.
+- Added the campaign route to the public sitemap and supplied canonical,
+  robots, Open Graph title/description/image metadata.
+
+### Files changed
+
+- Added:
+  `frontend-motorsport/src/lib/rallycross-data.ts` and four FIA campaign media
+  files under `cms/data/seed-media/`.
+- Reworked:
+  `frontend-motorsport/src/app/campaign/[slug]/page.tsx`.
+- Modified:
+  `frontend-motorsport/src/lib/cms-data.ts`,
+  `frontend-motorsport/src/types/design-system.ts`,
+  `frontend-motorsport/src/components/sections/campaign-banner-slider.tsx`,
+  `frontend-motorsport/src/app/sitemap.ts`, and `cms/src/seed.ts`.
+- Updated the revamp checklist, sitemap/page specification, implementation
+  phases, CMS content-model extension notes, asset inventory, and this progress
+  record.
+
+### How verified
+
+- Motorsport ESLint, TypeScript, and optimized Next.js production build passed;
+  the build prerendered the FIA campaign path through `generateStaticParams`.
+- Strapi TypeScript and production admin builds passed.
+- A live Strapi API check returned one FIA campaign with hero media, three
+  image-backed slides, five rundown entries, six rules, an active HTTPS partner
+  ticket CTA, and populated SEO/OG data.
+- Browser QA at 1440×900 and 390×844 confirmed the exact H1 and event facts,
+  zero document overflow, five schedule cards, six rule cards, and no console
+  warnings or errors. The next-slide control changed `First Time` to
+  `Wild Action` and updated the counter to `02 / 03`.
+- The rendered canonical URL and Open Graph headline were confirmed, and the
+  live primary/final ticket CTAs resolved to the approved external partner URL
+  in a new tab.
+
+### Notes / caveats
+
+- Event timings, spectator guidance, and the `example.com` demo partner URL are
+  seed content pending approved FIA/promoter material and a production ticket
+  destination; each is editable in the single shared Strapi instance.
+- No new image generation was performed. Four existing approved Motorsport
+  images were copied into the CMS seed media set and remain independently
+  replaceable by editors.
+- MSR-8 and MSR-RD6 were not started.
+
+---
+
+## Motorsport visual-reference alignment — post MSR-5
+
+**Request:** Align the implemented revamp more directly with the supplied Look
+& Feel layout screenshots.
+
+### What was done
+
+- Added a full-width `WorldOfMotorsport` homepage section with the reference's
+  globe-and-title composition and five vertical discipline panels.
+- Restyled discipline panels with large photographic fields and category-color
+  title bands instead of the previous thin accent treatment.
+- Added a reference-aligned Sarga content rail with left navigation, vertical
+  progress treatment, and chronological row layout. It was subsequently made
+  fully interactive and CMS-backed in the functional content-hub adjustment
+  recorded below.
+- Reworked the shared Gallery mosaic into a tall four-column editorial wall on
+  desktop with a single-column mobile flow.
+
+### Files changed
+
+- Added: `frontend-motorsport/src/components/sections/{world-of-motorsport,sarga-timeline}.tsx`.
+- Modified: `frontend-motorsport/src/app/{page,about/page}.tsx`,
+  `frontend-motorsport/src/components/{index,cards/discipline-tile,sections/gallery-mosaic}.tsx`,
+  `frontend-motorsport/src/lib/homepage-data.ts`, and
+  `frontend-motorsport/src/types/design-system.ts`.
+- Updated: `docs/motorsport/revamp/03_sitemap_page_specs.md`,
+  `docs/PHASE_PROGRESS.md`, and the Motorsport revamp checklist.
+
+### How verified
+
+- `cd frontend-motorsport && pnpm lint` passed.
+- `cd frontend-motorsport && pnpm tsc --noEmit` passed.
+- `cd frontend-motorsport && pnpm build` passed with all 18 pages generated.
+- Browser QA at 1440 x 900 and 390 x 844 covered the homepage reference
+  sections and `/gallery`: zero horizontal overflow, no broken images, mobile
+  navigation present, and no browser-console errors.
+
+### Notes / caveats
+
+- The layouts are brand translations rather than literal copies: unapproved
+  FIA/F1/WRC/Le Mans logos and photography from the screenshots were not used.
+- Discipline content currently uses approved local media and route-level
+  destinations; future discipline-specific CMS records can replace it without
+  changing the layout.
+- The visual rail preserves the one-CMS/one-record content strategy; current
+  panel sources and access rules are documented in the following adjustment.
+
+---
+
+## Motorsport functional Sarga content hub — post MSR-5
+
+**Request:** Replace the decorative homepage trajectory rail with clickable,
+scrollable, CMS-managed publication, leadership, and ecosystem panels.
+
+### What was done
+
+- Converted the left rail into an accessible vertical tablist with active state,
+  click handling, and Arrow Up/Arrow Down keyboard navigation.
+- Made the right panel independently scrollable and connected the center rail's
+  marker to the panel's live scroll progress.
+- Sourced History Timeline rows from published Motorsport/shared News records in
+  descending date order, with every row linking to its News detail route.
+- Sourced Leadership Council rows from shared Leadership Person records and
+  linked each profile to `/about#team`.
+- Sourced Sarga Ecosystem rows from active Site records, ordered in CMS, with
+  environment-aware links to Sarga.co, Sarga Motorsport, and Sarga Horse Sport.
+- Added `summary` to Leadership Person and `order` to Site; updated demo seeding
+  to enrich existing records and create any missing ecosystem site.
+- Added Site, Leadership Person, and Timeline Item to the Shared Library CMS
+  dashboard and unscoped Shared Admin permissions. Dedicated site admins remain
+  unable to manage these global records; Super Admin retains full access.
+
+### Files changed
+
+- Frontend: `frontend-motorsport/src/app/page.tsx`,
+  `frontend-motorsport/src/components/sections/sarga-timeline.tsx`,
+  `frontend-motorsport/src/lib/{cms-data,homepage-data}.ts`, and
+  `frontend-motorsport/src/types/design-system.ts`.
+- CMS: Site and Leadership schemas, `cms/src/seed.ts`, generated Strapi types,
+  workspace RBAC/dashboard files, and `strapi/content-types.json`.
+- Docs: CMS model/admin UX, Motorsport sitemap/design-system docs, this phase
+  record, and the Motorsport revamp checklist.
+
+### How verified
+
+- `cd frontend-motorsport && pnpm lint && tsc --noEmit` passed.
+- `cd frontend-motorsport && pnpm build` passed with all 18 routes generated.
+- `cd cms && pnpm strapi ts:generate-types && tsc --noEmit` passed.
+- `cd cms && pnpm build` passed, including the Strapi admin panel.
+- Live Strapi REST checks confirmed ordered Site records for Gateway,
+  Motorsport, and Horse Sport and populated Leadership summaries.
+- Browser QA at 1440 x 900 and 390 x 844 confirmed tab clicks and keyboard
+  navigation, publication and leadership destinations, all three ecosystem
+  sites, the constrained scroll region, progress updates from 0 to 100, and no
+  horizontal mobile overflow. Browser console reported zero errors.
+
+### Notes / caveats
+
+- The History Timeline label is retained from the approved visual reference,
+  but its source is the News collection (`publishedDate` descending), as
+  requested; the separate Timeline Item collection remains available for
+  Gateway corporate-history content.
+- Public site destinations come from environment-aware frontend configuration
+  for the three known Sarga sites, so local CMS URLs do not leak into production.
+
+---
+
+## Motorsport merchandise catalog expansion — post MSR-5
+
+**Request:** Expand the Current Showcase section with real Sarga Motorsport
+merchandise imagery and a dynamic wide-screen grid.
+
+### What was done
+
+- Expanded the catalog from two placeholders to six CMS-managed products:
+  Team Tee, Track Cap, Apex Jacket, Garage Hoodie, Pit Lane Mug, and Paddock
+  Backpack.
+- Generated and integrated six consistent 4:5 studio product photographs using
+  the Sarga Motorsport palette and product branding; removed race-car imagery
+  from merchandise fallbacks.
+- Added the assets to both the public frontend and Strapi seed-media library.
+  Seed bootstrap creates missing products, safely refreshes the two original
+  demonstration records, and attaches images only when the CMS image field is
+  empty.
+- Changed the showcase to one column on narrow phones, two at the small/tablet
+  breakpoint, three at large, and a four-column maximum on wide screens.
+- Reduced merchandise API revalidation to 60 seconds so CMS catalog edits
+  appear promptly while retaining cached server rendering.
+
+### Files changed
+
+- Frontend: `frontend-motorsport/src/app/merchandise/page.tsx`,
+  `frontend-motorsport/src/components/cards/merchandise-card.tsx`,
+  `frontend-motorsport/src/lib/cms-data.ts`, and six files under
+  `frontend-motorsport/public/media/merchandise/`.
+- CMS: `cms/src/seed.ts` and six mirrored images under
+  `cms/data/seed-media/`.
+- Docs: Motorsport sitemap/design-system docs, this phase record, and the
+  Motorsport revamp checklist.
+
+### How verified
+
+- `cd frontend-motorsport && pnpm lint && tsc --noEmit && pnpm build` passed.
+- `cd cms && tsc --noEmit && pnpm build` passed, including the admin panel.
+- Live Strapi REST verification returned six ordered products with all six
+  image relationships populated.
+- Browser QA confirmed six rendered cards, four columns at 1440 px, two columns
+  at 768 px, no horizontal overflow, and zero console errors.
+
+### Notes / caveats
+
+- Catalog pricing, production availability, sizing, and external store URLs
+  remain editorial placeholders pending commercial approval.
+- The generated photography is concept catalog art and can be replaced from
+  the existing CMS image field without code changes.
+
+---
+
+## Motorsport typography normalization — post MSR-5
+
+**Request:** Reduce oversized desktop headings and align heading sizes across
+the Motorsport site.
+
+### What was done
+
+- Added shared semantic typography tokens for cinematic hero, interior page,
+  section, article, feature, and card headings.
+- Reduced the standard desktop page-title scale to 72 px at a 1440 px viewport
+  and the standard section scale to 53.28 px, while retaining fluid responsive
+  sizing and the wide Motorsport display face.
+- Removed component and route-level heading-size overrides from page heroes,
+  information bands, section headers, ticket/campaign panels, cards, footer,
+  and dynamic Event, Campaign, and News detail headings.
+
+### Files changed
+
+- Modified: `frontend-motorsport/src/app/globals.css`, shared heading-bearing
+  components under `frontend-motorsport/src/components/`, and custom heading
+  routes under `frontend-motorsport/src/app/{campaign,events,news}/[slug]` plus
+  Tickets, Partners, error, and not-found views.
+- Updated: `docs/motorsport/04_motorsport_design_system.md`,
+  `docs/motorsport/revamp/02_brand_layout_direction.md`,
+  `docs/PHASE_PROGRESS.md`, and the Motorsport revamp checklist.
+
+### How verified
+
+- `cd frontend-motorsport && pnpm lint` passed.
+- `cd frontend-motorsport && pnpm tsc --noEmit` passed.
+- `cd frontend-motorsport && pnpm build` passed with all 18 pages generated.
+- Desktop browser audit covered Home, About, Events, News, Gallery,
+  Merchandise, Tickets, Contact, and News detail at 1440 x 900. Standard page
+  H1s resolve to 72 px and standard section H2s to 53.28 px, with no overflow,
+  broken images, or browser errors.
+- Mobile About audit at 390 x 844 resolves the page H1 to 44 px and standard
+  H2s to 33.6 px with zero horizontal overflow.
+
+### Notes / caveats
+
+- Homepage and campaign heroes intentionally retain the larger cinematic hero
+  tier; article titles use a separate long-form tier. These are documented
+  semantic exceptions rather than route-local overrides.
+- Error-code numerals and the mobile navigation display label remain deliberate
+  utility exceptions and are not part of the content heading hierarchy.
+
+---
+
+## MSR-RD1 — Warm visual redesign audit
+
+**Request:** Revisit the complete Sarga Motorsport layout using the Motorsport
+Preview, How We Look, Page Visual Layouting Example, Brand Color, and
+Photography sections of the Look & Feel PDF; deliver the redesign carefully in
+approved sub-phases.
+
+### What was done
+
+- Rendered and visually inspected physical PDF pages 8 through 12 at high
+  resolution and extracted the official Owners and Noto Sans download links.
+- Confirmed that local Owners Wide Black and Noto Sans font assets are already
+  loaded by the Motorsport frontend.
+- Audited the semantic surface tokens, shared header, homepage hero, page hero,
+  heading scale, photography direction, route composition, and homepage CMS
+  hero model.
+- Captured read-only browser baselines for Home and About at 1440 x 900 and
+  Home at 390 x 844.
+- Documented the warmer light/dark/blue surface target, cleaner carousel hero,
+  centered navigation with Ticket last, safer type scale, photography brief,
+  route-specific layout targets, CMS impact, acceptance criteria, and six
+  controlled redesign sub-phases.
+- Made no public frontend or CMS schema changes in this audit sub-phase.
+
+### Files changed
+
+- Added: `docs/motorsport/revamp/10_warm_visual_redesign_audit.md`.
+- Updated: `docs/motorsport/02_motorsport_brand_translation.md`,
+  `docs/motorsport/03_motorsport_sitemap_page_specs.md`,
+  `docs/motorsport/04_motorsport_design_system.md`,
+  `docs/motorsport/revamp/README.md`,
+  `docs/motorsport/revamp/01_source_findings.md`,
+  `docs/motorsport/revamp/02_brand_layout_direction.md`,
+  `docs/motorsport/revamp/03_sitemap_page_specs.md`,
+  `docs/motorsport/revamp/06_implementation_phases.md`,
+  `docs/motorsport/revamp/07_testing_uat.md`,
+  `checklists/motorsport/motorsport_revamp_phase_checklist.md`, and
+  `docs/PHASE_PROGRESS.md`.
+
+### How verified
+
+- Used `pdfinfo`, `pdftotext`, Poppler rendering, and `pdftohtml` link
+  extraction against `look_and_feel_website_sarga_co.pdf`.
+- Inspected the rendered source pages and baseline screenshots at original
+  resolution.
+- Used Playwright to confirm the current route semantics and responsive
+  baseline without mutating the application.
+- Reviewed the new documentation for source coverage, phase boundaries, CMS
+  constraints, and consistency with the existing revamp plan.
+- No build or application test was required because MSR-RD1 changes
+  documentation only.
+
+### Notes / caveats
+
+- The source is not uniformly light; dark surfaces remain appropriate for the
+  header, footer, gallery, timeline, and selected campaign moments.
+- The homepage CMS currently supports a single hero image. The additive
+  repeatable carousel contract was approved in MSR-RD2 and remains pending
+  MSR-RD3 implementation.
+- Browser console errors observed in the standalone local session were caused
+  by unavailable CMS/media requests and are not changes introduced by this
+  audit.
+- MSR-6 and MSR-7 should not extend the older black-default semantic layer;
+  they must inherit the approved MSR-RD2 foundations.
+
+---
+
+## MSR-RD2 — Redesign foundations and page templates
+
+**Request:** Continue the warm visual redesign with light/dark tokens,
+typography, navigation, carousel contract, and dedicated page templates.
+
+### What was done
+
+- Defined a three-layer primitive → semantic → component token architecture
+  that retains the exact seven-color brand palette while adding AA-safe derived
+  colors for small text and controls on Warm White.
+- Recorded measured contrast ratios and specified light, subtle, raised, dark,
+  blue, action, text, border, and focus roles.
+- Reduced the approved Owners Wide hero/page/section scale, normalized the local
+  Owners Black cut to weight 900, specified real Noto Sans body/UI weights, and
+  added line-height, title-length, visible-overflow, and 200% zoom safeguards.
+- Specified a geometrically centered desktop navigation with larger labels,
+  Sarga.co as a separate utility, and the public order ending Contact, Ticket.
+- Specified an accessible homepage carousel with concise content, one CTA,
+  manual controls, Pause/Play, reduced-motion behavior, SSR fallback, responsive
+  crops, and an eight-second optional autoplay interval.
+- Defined an additive `motorsport.hero-slide` contract on the Motorsport-scoped
+  Home `site-page`; retained current single-hero fields as migration fallback
+  and left the live CMS schema unchanged.
+- Defined five route-template families—Campaign Home, Editorial Story,
+  Programme/Publication Index, Catalog/Conversion, and Immersive Media—and
+  mapped every current route to an implementation group.
+- Chose the restrained hero-only “Apex Horizon” heat plane as the signature
+  visual device to keep the warmer system recognizably Motorsport.
+
+### Files changed
+
+- Added:
+  `docs/motorsport/revamp/11_redesign_foundations_page_templates.md` and
+  `docs/motorsport/revamp/11_redesign_foundations.tokens.json`.
+- Updated: `docs/05_content_model_strapi.md`,
+  `docs/motorsport/{04_motorsport_design_system,05_motorsport_content_model_extensions}.md`,
+  `docs/motorsport/revamp/{README,04_cms_architecture_admin_ux,05_migration_plan,06_implementation_phases,07_testing_uat,08_deployment_handover,10_warm_visual_redesign_audit}.md`,
+  `checklists/motorsport/motorsport_revamp_phase_checklist.md`, and this
+  progress record.
+
+### How verified
+
+- Parsed the token handoff as JSON and checked source/reference paths.
+- Calculated contrast ratios for the approved light/dark text and action pairs;
+  all documented small-text pairs meet WCAG AA.
+- Compared the navigation, carousel, and surface choreography against rendered
+  Look & Feel pages 8 through 12 and the MSR-RD1 browser baseline.
+- Checked documentation diffs for whitespace errors and verified that no
+  frontend or CMS schema file changed in this sub-phase.
+- No application build was required because MSR-RD2 is a design and content
+  contract phase.
+
+### Notes / caveats
+
+- The token JSON is a handoff artifact and is not imported by the frontend yet.
+- `motorsport.hero-slide`, generated CMS types, seed slides, and frontend
+  mapping remain MSR-RD3 work.
+- Final hero photography is not generated in this phase. MSR-RD3 will create
+  and review the initial warm desktop/mobile set before wiring the carousel.
+- Homepage body composition remains MSR-RD4; dedicated routes remain MSR-RD5.
+
+---
+
+## MSR-RD3 — Global shell and homepage hero
+
+**Request:** Execute the approved shell, token, typography, navigation, CMS
+hero-slide, warm media, and homepage carousel implementation only.
+
+### What was done
+
+- Implemented the approved primitive/semantic/component surface foundation,
+  safer shared Owners Wide heading scale, real Noto Sans variable body weights,
+  and reusable light/dark tone utilities while retaining legacy aliases for the
+  RD4/RD5 migration.
+- Rebuilt the desktop header around a geometrically centered primary sequence,
+  larger labels, Contact followed by the final Ticket action, and a separate
+  Sarga.co utility link. The compact drawer now locks body scroll, traps focus,
+  returns focus on Escape, and preserves the same public order.
+- Added the additive repeatable `motorsport.hero-slide` component to the
+  Motorsport Home `site-page`, capped it at five entries, regenerated Strapi
+  types, updated the schema mirror, and added responsive idempotent seed data
+  without replacing existing editor-managed slides.
+- Added typed frontend mapping for active ordered slides, nested Strapi media,
+  safe CTA URLs, legacy single-hero fallback, and resilient local Strapi media
+  rendering.
+- Replaced the technical-panel hero with a clean warm carousel: three concise
+  stories, one CTA, 600ms crossfade, eight-second optional autoplay, manual
+  controls, Pause/Play, hover/focus/manual/visibility pauses, reduced-motion
+  handling, polite manual announcements, and horizontal swipe support.
+- Generated and reviewed three original unbranded daylight scenes—circuit,
+  rally, and paddock—with dedicated desktop and portrait mobile compositions;
+  recorded prompts, alt text, dimensions, usage, and replacement status in the
+  asset inventory.
+
+### Files changed
+
+- Frontend foundation and shell: `frontend-motorsport/src/app/{globals.css,layout.tsx,page.tsx}`,
+  `frontend-motorsport/src/components/layout/motorsport-header.tsx`,
+  `frontend-motorsport/src/components/sections/motorsport-hero.tsx`,
+  `frontend-motorsport/src/components/ui/resilient-image.tsx`,
+  `frontend-motorsport/src/lib/{homepage-data.ts,navigation.ts}`,
+  `frontend-motorsport/src/lib/strapi/client.ts`, and
+  `frontend-motorsport/src/types/design-system.ts`.
+- CMS: `cms/src/components/motorsport/hero-slide.json`, the `site-page` schema,
+  `cms/src/seed.ts`, generated Strapi types, and `strapi/content-types.json`.
+- Media: six homepage hero JPEGs in
+  `frontend-motorsport/public/media/hero/` with matching CMS seed copies.
+- Documentation: content-model, CMS UX, migration, implementation phase, asset
+  inventory, Motorsport checklist, and this progress record.
+
+### How verified
+
+- Passed Motorsport ESLint, TypeScript, and optimized Next.js production build;
+  passed CMS TypeScript, Strapi type generation, and the Strapi admin production
+  build; parsed the affected JSON schemas successfully.
+- Used Playwright against the production build at 1440×900, 1280×800, and
+  390×844 to review all three hero scenes, manual controls, centered navigation,
+  mobile drawer order/focus/scroll lock/Escape behavior, viewport overflow, and
+  route-level heading containment.
+- Emulated `prefers-reduced-motion: reduce` and confirmed the carousel stopped
+  advancing beyond the eight-second interval and exposed the reduced-motion
+  state instead of Pause/Play.
+
+### Notes / caveats
+
+- Homepage body recomposition remains MSR-RD4 and dedicated route templates
+  remain MSR-RD5; the legacy dark aliases intentionally remain until those
+  sections migrate.
+- Existing non-empty Home carousels are intentionally not overwritten by the
+  seed. Editors can add the new portrait media in Strapi, while fresh/empty
+  seeded records receive both desktop and mobile images automatically.
+- The initial desktop source images are 1672×941, below the future editorial
+  target of 2400×1350 but suitable for the current optimized web delivery;
+  replacement remains CMS-managed.
+
+---
+
+## MSR-RD4 — Homepage editorial and photography rebuild
+
+**Request:** Recompose the homepage body using the approved warm/light/dark
+rhythm, preserve all functional CMS-backed modules, and expand the photography
+mix to include both car and motorcycle racing.
+
+### What was done
+
+- Rebuilt the homepage body rhythm as hero → Draftline Blue facts → restored
+  dark gradient discipline world → reflected-light event programme →
+  reflected-light news → dark functional Sarga hub → dark gallery → footer.
+- Replaced the Events and News cream/clay surfaces with a brighter version of
+  the original race-light composition: crimson, amber, and teal ambient glows
+  over lifted charcoal, restrained dot texture, and a thin brand-spectrum
+  separator at each section edge. Matching headings, lists, cards, and links
+  use dark-surface contrast tokens for legibility.
+- Explicitly scoped Warm White foregrounds inside the dark featured-event and
+  ticket modules so their headings and arrow controls cannot inherit dark text
+  from the surrounding warm section.
+- Strengthened the carousel's centered copy-safe area with a localized radial
+  scrim, subtle text shadow, and more opaque description text so bright skies
+  remain legible without applying a full-image dark wash.
+- Kept the user-approved navy/heat-gradient discipline section and its
+  dot-field treatment, while replacing its legacy night imagery with brighter
+  tropical daylight photography.
+- Expanded the functional discipline rail from five to six entries with a
+  dedicated Motorcycle / Superbike chapter; every card remains clickable and
+  switches from a six-column desktop grid to a horizontal touch rail below the
+  wide breakpoint.
+- Preserved CMS-driven event/news/gallery data, ticket partner redirect,
+  interactive publication/leadership/ecosystem tabs, and ecosystem links.
+- Restored the pre-footer Official Partners & Sponsors rail using CMS-driven
+  partner records and the newsletter CTA. The newsletter form now posts through
+  a validated, rate-limited Motorsport API route, uses non-retaining placeholder
+  mode locally, and forwards to Strapi when production form delivery is enabled.
+- Generated four original unbranded 1536×1024 photographs for endurance,
+  rallycross, touring, and superbike racing; retained the approved RD3 circuit
+  and rally scenes for the remaining chapters.
+
+### Files changed
+
+- Homepage composition: `frontend-motorsport/src/app/page.tsx` and
+  `frontend-motorsport/src/app/globals.css`.
+- Tone-aware UI: `frontend-motorsport/src/components/{cards/event-feature-card.tsx,cards/event-list-card.tsx,cards/news-card.tsx,cards/discipline-tile.tsx,ui/section-header.tsx,ui/status-chip.tsx,sections/world-of-motorsport.tsx,sections/discipline-grid.tsx}`.
+- Media: four `frontend-motorsport/public/media/sarga-motorsport-discipline-*-daylight.jpg`
+  assets.
+- Documentation: asset inventory, revamp implementation/audit records,
+  Motorsport checklist, and this progress record.
+
+### How verified
+
+- Passed Motorsport ESLint, TypeScript, Prettier, and optimized Next.js
+  production build (18 routes generated; zero build errors).
+- Used Playwright against the production build at 1440×900 and 390×844;
+  confirmed six discipline headings/arrows are contained, mobile page width is
+  exactly 390px with no horizontal page overflow, and lazy media renders after
+  an intentional scroll pass.
+- Measured the darkest gradient stops against their scoped text colors: body
+  Ink 700, Draftline Blue headings/links, and deep warm metadata accents meet
+  WCAG AA at 4.51:1 or higher.
+- Switched the Leadership and Sarga Ecosystem tabs in the functional hub and
+  confirmed CMS/fallback content and `/about#team`/ecosystem destinations remain
+  exposed through accessible tab panels.
+- Captured final visual references at
+  `output/playwright/msr-rd4-home-1440-final.png`,
+  `output/playwright/msr-rd4-disciplines-1440-final.png`, and
+  `output/playwright/msr-rd4-home-mobile-390-final.png`.
+
+### Notes / caveats
+
+- The featured event can remain a night-race image when that is the actual CMS
+  story; RD4 changes the surrounding editorial balance rather than falsifying
+  event-specific photography.
+- The four new discipline files are frontend-owned launch assets. Moving them
+  into editor-managed CMS fields is optional follow-up work in MSR-RD6.
+- Dedicated route redesign remains MSR-RD5 and was not started.
+
+---
+
+## MSR-RD5.1 — About, News, News Detail, and Gallery
+
+**Request:** Apply the approved warm editorial page templates to the first
+dedicated-route group, complete responsive visual QA, and stop for approval
+before beginning Events, Tickets, or Merchandise.
+
+### What was done
+
+- Rebuilt About as a premium multi-surface editorial profile with a wide
+  daylight lead image, profile rail, Draftline Blue vision band, reflected-light
+  capability rows, blue-slate leadership grid, and reflected-light closing
+  actions. A review refinement replaced the remaining large white/cream
+  sections with deep blue, muted copper, and brand-reflection compositions.
+- Rebuilt News around one dominant lead story and an ordered archive, while
+  retaining CMS data, safe links, categories, dates, and fallbacks.
+- Rebuilt News Detail with an editorial title field, bright hero image,
+  readable article measure, sticky story metadata, fact band, related stories,
+  and existing SEO metadata behavior.
+- Rebuilt Gallery as a charcoal image wall framed by a compact Draftline Blue,
+  crimson, and teal gradient intro.
+  Added accessible discipline filters, a live visible-count announcement, an
+  asymmetric responsive grid, deep-blue caption drawers, and an in-page modal
+  viewer with close, previous/next, Escape, arrow-key, scroll-lock, focus-trap,
+  and focus-return behavior.
+- Added shared light editorial and dark gallery surface utilities plus a
+  full-spectrum separator aligned with the seven-color Motorsport system.
+- Refined the existing Merchandise catalogue on explicit request with the same
+  reflected race-light composition and a client-side 16-item page contract,
+  preserving the two-to-four-column grid and external-only commerce rules. This
+  early Group 2 refinement is included in the formal RD5.2 completion record
+  below.
+- Added an opt-in PageShell spectrum-separator treatment to About, Gallery, and
+  Merchandise so every direct section ends with one continuous crimson,
+  orange, yellow, teal, and blue rule. Removed redundant standalone rules on
+  About and Gallery to prevent doubled separators.
+
+### Files changed
+
+- Routes: `frontend-motorsport/src/app/{about/page.tsx,news/page.tsx,news/[slug]/page.tsx,gallery/page.tsx}`.
+- Components and styles: `frontend-motorsport/src/components/sections/gallery-archive.tsx`,
+  `frontend-motorsport/src/components/index.ts`,
+  `frontend-motorsport/src/components/ui/gradient-rule.tsx`, and
+  `frontend-motorsport/src/app/globals.css`.
+- Documentation: the Motorsport redesign audit, phase checklist, and this
+  progress record.
+
+### How verified
+
+- Passed Motorsport Prettier, ESLint, TypeScript, and optimized Next.js
+  production build (19 routes generated; zero build errors).
+- Used Playwright against the production build for all four routes at desktop,
+  1024px, and 390px widths; confirmed document width equals viewport width at
+  1024px and 390px with no page-level horizontal overflow.
+- Confirmed Gallery filtering reduces the live archive from nine frames to the
+  matching discipline set on both desktop and mobile; confirmed the modal
+  viewer and keyboard navigation at 1440px and 390px; and verified leadership
+  images after an intentional viewport scroll.
+- Captured desktop and mobile references under
+  `output/playwright/msr-rd5-1-*.png`.
+
+### Notes / caveats
+
+- MSR-RD5 remains in progress: Group 1 is complete, Group 2 completion is
+  recorded below, and the remaining RD5.3 routes are still gated.
+- Gallery category inference currently uses CMS captions, alternative text,
+  and media filenames because the shared gallery item does not yet expose a
+  dedicated discipline taxonomy; a CMS taxonomy remains an optional RD6
+  refinement.
+- Some CMS gallery captions are launch placeholders. The frontend now replaces
+  the repeated generic launch caption with a discipline-aware display label;
+  the source CMS copy should still receive an editorial pass before handover.
+
+---
+
+## MSR-RD5 review refinement — Six-route warm surface pass
+
+### What was done
+
+- Changed About's Who We Are surface to deep blue with branded red, orange,
+  and teal reflections; changed leadership to a two-column mobile/four-column
+  desktop grid and removed the default grayscale image treatment.
+- Changed the Events hero to a blue/heat canvas and migrated Programmes and
+  Calendar from black to independently positioned reflected-light gradients.
+  Programme panels now use deep blue rather than pure black.
+- Removed white section canvases from News. Added the reduced-motion-aware
+  animated light-line field to its blue/heat heading and rebuilt the lead story
+  and Latest Dispatches archive on deep-blue brand gradients.
+- Removed the black Gallery wall, added the animated light-line heading field,
+  and gave Archive Control its own car-light reflection rail while preserving
+  filters and the accessible modal viewer.
+- Moved Contact's inquiry form and race-control panel onto reflected-light and
+  deep-blue surfaces; retained validation and submission behavior.
+- Removed black section canvases from Tickets. The hero uses a warm blue-image
+  treatment, Featured Ticket and SYS / Tickets use reflected light, and the
+  support/how-it-works close uses a blue/heat canvas. Partner redirects and
+  external checkout rules are unchanged.
+- Enabled the full-spectrum section separator treatment on Events, News,
+  Contact, and Tickets in addition to About, Gallery, and Merchandise.
+
+### Files changed
+
+- Routes: `frontend-motorsport/src/app/{about,events,news,gallery,contact,tickets}/page.tsx`.
+- Shared UI: `frontend-motorsport/src/components/{cards/program-card.tsx,sections/page-hero.tsx,sections/ticket-cta-panel.tsx,sections/gallery-archive.tsx,ui/light-line-field.tsx,index.ts}`.
+- Shared surfaces: `frontend-motorsport/src/app/globals.css`.
+- Documentation: redesign templates, Motorsport checklist, and this progress
+  record.
+
+### How verified
+
+- Passed Prettier, ESLint, TypeScript, `git diff --check`, and optimized Next.js
+  production build (19 routes, zero build errors).
+- Visually reviewed all six routes at 1440×900 and checked all six at 390×844;
+  every document width matched its viewport with no horizontal page overflow.
+- Confirmed About resolves to four leadership columns at 1440px and two at
+  390px, with computed image filter `none` before hover.
+- Confirmed News and Gallery light lines run `ms-speed-lines` and inherit the
+  existing reduced-motion override; browser QA reported zero console errors.
+- Captured references under `output/playwright/msr-rd5-surface-*.png`.
+
+### Notes / caveats
+
+- Full-page screenshots can leave below-fold lazy images on their reserved dark
+  placeholders. Intentional viewport scrolling confirmed that published images
+  load and remain colored.
+- Event Detail is completed in MSR-RD5.2 below. Campaign Detail, Experience,
+  and Partners remain gated to MSR-RD5.3.
+
+---
+
+## MSR-RD5.2 — Events, Event Detail, Tickets, and Merchandise
+
+**Request:** Apply the approved Event, Event Detail, Ticket, and Merchandise
+templates, verify partner-routing and responsive behavior, and stop before
+MSR-RD5.3.
+
+### What was done
+
+- Completed the Events hub on a compact blue/heat hero, blue information band,
+  reflected-light Programme and Calendar sections, deep-blue programme panels,
+  and CMS/fallback event routing. Existing programme, status, date, venue, and
+  ticket signals remain functional.
+- Rebuilt Event Detail as a B/C hybrid: image-led heat hero, published-briefing
+  information band, reflected event overview, structured event-file rail,
+  conditional partner ticket panel, sponsor strip, and clear return/next-action
+  close. The legacy decorative `Session data` panel was removed.
+- Completed Tickets as an external-partner journey with the handoff explained
+  before every conversion action. HTTPS/allowlisted URL handling, new-tab
+  isolation, event links, support route, and the no-internal-payment boundary
+  remain intact.
+- Completed Merchandise as a CMS-managed showcase using purpose-made product
+  photography, two columns on small screens and four on wide screens, and a
+  sixteen-item client pagination threshold. Inquiry and approved-partner links
+  are retained without cart, account, checkout, or payment implementation.
+- Applied the shared full-spectrum separator and warm reflected-light surface
+  system across every direct section in the four-route group.
+
+### Files changed
+
+- Routes: `frontend-motorsport/src/app/events/page.tsx`,
+  `frontend-motorsport/src/app/events/[slug]/page.tsx`,
+  `frontend-motorsport/src/app/tickets/page.tsx`, and
+  `frontend-motorsport/src/app/merchandise/page.tsx`.
+- Shared UI and data: Event, programme, merchandise, page-hero, information,
+  ticket, partner, and page-shell components; Motorsport CMS mapping and safe
+  ticket URL utilities; `frontend-motorsport/src/app/globals.css`.
+- Content/assets: the six Motorsport merchandise launch images and their CMS
+  seed records.
+- Documentation: the redesign audit, page-template specification, Motorsport
+  phase checklist, and this progress record.
+
+### How verified
+
+- Passed Motorsport Prettier, ESLint, TypeScript, and optimized Next.js
+  production build (19 routes generated; zero build errors).
+- Used Playwright against the production build at 1440×900 and 390×844 for all
+  four routes. Every mobile document width matched the 390px viewport and every
+  H1 remained visible without clipping.
+- Confirmed ticketed Event Detail renders the secure partner panel while a
+  non-ticketed event omits it; confirmed external ticket actions use
+  `target="_blank"` with `rel="noopener noreferrer"`.
+- Confirmed six merchandise cards resolve their real product media after an
+  intentional scroll, render four columns on desktop/two on mobile, contain no
+  form/cart implementation, and do not show pagination below sixteen items.
+- Captured visual references under `output/playwright/msr-rd5-2-*.png`.
+
+### Notes / caveats
+
+- MSR-RD5 remains in progress. MSR-RD5.3 (Contact, Campaign Detail, Experience,
+  and Partners/compatibility routes) has not started and still requires user
+  approval.
+- Current seeded ticket destinations use HTTPS demonstration partner URLs and
+  must be replaced with approved production destinations in CMS before launch.
+- Merchandise remains a catalog preview by design; availability and purchase
+  completion belong to the approved partner or inquiry workflow.
+
+---
+
+## MSR-RD5.3 — Contact, Campaign Detail, Experience, and Partners
+
+**Request:** Complete the third controlled dedicated-route group, retain all
+existing route behavior, verify the compatibility routes, and stop before
+MSR-RD6.
+
+### What was done
+
+- Completed Contact as a Template D conversion route with a warm paddock hero,
+  direct-routing information band, reflected-light form, deep-blue service
+  rail, functional support email links, accessible field-error associations,
+  and a contextual Events/Tickets close. Existing categories, honeypot,
+  rate-limited API submission, and no-public-account boundary remain intact.
+- Rebuilt Campaign Detail as the approved A/B hybrid: warm campaign hero,
+  campaign facts band, alternating reflected-light and blue/heat story chapters,
+  internal ticket handoff, ordered upcoming-event rows, and campaign inquiry
+  close. Unknown slugs still return the branded 404 state.
+- Rebuilt the retained Experience route with an asymmetric six-pillar layout,
+  daylight car and motorcycle imagery, programme facts, and Events/Contact
+  actions instead of a universal black card grid.
+- Rebuilt the retained Partners route with a CMS/fallback network count,
+  reflected-light partner field, deep-blue logo panels, secure external links,
+  and a clear partnership inquiry close.
+- Applied full-spectrum separators to all four routes and corrected Campaign
+  metadata so the shared layout does not duplicate the site name.
+
+### Files changed
+
+- Routes: `frontend-motorsport/src/app/contact/page.tsx`,
+  `frontend-motorsport/src/app/campaign/[slug]/page.tsx`,
+  `frontend-motorsport/src/app/experience/page.tsx`, and
+  `frontend-motorsport/src/app/partners/page.tsx`.
+- Shared UI: `frontend-motorsport/src/components/cards/experience-pillar-card.tsx`.
+- Documentation: the redesign audit, template specification, implementation
+  plan, Motorsport checklist, and this progress record.
+
+### How verified
+
+- Passed Motorsport Prettier, ESLint, TypeScript, optimized Next.js production
+  build (19 routes; zero build errors), and `git diff --check`.
+- Used Playwright against the production build at 1440×900 and 390×844 for all
+  four routes; every mobile document width matched the viewport and all H1
+  elements remained visible without clipping.
+- Confirmed Contact exposes four functional `mailto:` routes and returns the
+  expected validation banner plus three invalid required fields for an empty
+  submission.
+- Confirmed both Campaign ticket actions resolve to `/tickets`, an unknown
+  campaign returns HTTP 404, all campaign media resolves after intentional
+  scrolling, and Campaign metadata contains the site name only once.
+- Confirmed CMS partner destinations use `target="_blank"` and
+  `rel="noopener noreferrer"`.
+- Captured visual references under `output/playwright/msr-rd5-3-*.png`.
+
+### Notes / caveats
+
+- Campaign Detail still uses the existing `season-opener-2026` local fallback;
+  a CMS campaign fetch and the FIA Rallycross campaign content remain assigned
+  to MSR-7/MSR-RD6 rather than being added implicitly in this visual phase.
+- Current CMS partner records use demonstration destinations and require an
+  editorial/production URL pass before launch.
+- Experience and Partners remain compatibility routes outside the primary
+  navigation. Their retain/redirect decision remains an MSR-8 launch task.
+- MSR-RD5 is complete. MSR-RD6 has not started.
 
 ---
 
@@ -1920,3 +3208,135 @@ Strapi CMS via the seed (not frontend fallbacks), per request.
 > `SEED_DEMO_CONTENT=true`. Cover refresh is idempotent (skips when already the
 > high-res file). A few generated images remain unused and are available for
 > future posts.
+
+## MSR-RD6 — Media, CMS, QA, and Handover
+
+### What was done
+
+- Audited all literal Motorsport brand/media references (27 references, zero
+  missing), the CMS content/role state, public CMS fallbacks, cross-route links,
+  responsive layouts, interactions, accessibility, performance, and Docker.
+- Added Strapi `PUBLIC_URL` plus trusted `PROXY_KOA` configuration for secure
+  reverse-proxy deployment.
+- Repaired event-feature description-list semantics and low-contrast labels;
+  removed the global anchor color rule that overrode declared link utilities.
+- Enforced strict frozen-lockfile frontend Docker installs and aligned package
+  overrides with all existing lockfiles.
+- Added copy-ready systemd and four-host Nginx production examples plus the
+  complete Ubuntu 22.04.5/Node/PostgreSQL/Nginx/Let's Encrypt handover.
+
+### Files changed
+
+- `cms/config/server.ts`, `cms/.env.example`, `.env.example`,
+  `docker-compose.yml`, `docker/frontend-*.Dockerfile`, frontend package files.
+- Motorsport feature/newsletter/partner/section-header styles and semantics.
+- `deploy/production/systemd/*.service`,
+  `deploy/production/nginx/sarga-stack.conf`.
+- `docs/14_ubuntu_single_vm_production_deployment.md` and revamp validation,
+  UAT, handover, README, checklist, and progress documents.
+
+### How verified
+
+- Strapi TypeScript + admin build passed. Gateway: format/lint/type, 21 tests,
+  build passed. Motorsport: format/lint/type/build passed. Horse Sport:
+  format/lint/type, 10 tests, build passed.
+- Docker Compose configs passed; Strapi and all three frontend images build;
+  all frontend images use successful strict frozen installs. Nginx config
+  passed `nginx -t` in a clean container.
+- Live CMS: 20 distinct IJTC riders, 20 standings, four programmes, ten site
+  pages; managed role permissions inspected for all four site/library roles.
+- A production Motorsport build completed with Strapi deliberately unreachable;
+  fallback content/media rendered and Lighthouse campaign audit scored
+  99/100/100/100 with no console errors.
+
+### Notes / caveats
+
+- Managed-role login acceptance still needs provisioned staging accounts; only
+  Super Admin currently exists locally. Permission/workspace implementation was
+  technically inspected but not misrepresented as human editor sign-off.
+- Real ticket URLs, regulation PDF, form token/routing, DNS, certificates, and
+  stakeholder content approval remain conditional launch prerequisites.
+
+## MSR-8 — Migration, QA, UAT, and Launch Readiness
+
+### What was done
+
+- Made the Rallycross campaign route canonical and added a permanent redirect
+  from the legacy event route; retained `/experience` and `/partners` as
+  unlisted compatibility pages because no approved one-to-one replacements
+  exist.
+- Removed the redirecting Rallycross alias and local `sample-event` from the
+  sitemap while retaining their CMS/editorial utility.
+- Completed the public route, internal-link, interaction, responsive,
+  accessibility, Lighthouse, CMS, Docker, and handover matrices.
+- Documented migration, backup, restore, release, rollback, monitoring, UAT,
+  four systemd services, four Nginx server blocks, and Let's Encrypt issuance,
+  redirect, renewal, and dry-run verification.
+
+### Files changed
+
+- `frontend-motorsport/next.config.ts`, `src/app/sitemap.ts`, final
+  accessibility/component styles.
+- `docs/motorsport/revamp/12_final_validation_launch_readiness.md`,
+  `docs/14_ubuntu_single_vm_production_deployment.md`, related handover/UAT
+  docs, README, checklist, and this progress log.
+
+### How verified
+
+- 20 routes × 4 viewports (375/768/1280/1440) plus a 720px 200%-reflow
+  equivalent: one H1/main, zero failed loaded images, no page overflow; all
+  route statuses correct and 51 internal links returned no errors.
+- Mobile menu/Ticket-last order, carousel Pause/Play + direct selection,
+  Gallery dialog navigation, IJTC 12+8 rider pagination, merchandise 4-column
+  catalog/no-checkout, and regulation pending state passed.
+- Lighthouse: homepage mobile 80/100/100/100; Events desktop 99/100/100/100;
+  FIA campaign desktop fallback 99/100/100/100.
+- Rallycross alias returned 308 to the exact campaign path; robots/sitemap
+  returned 200 and no longer advertise the alias or sample seed.
+
+### Notes / caveats
+
+- The repository is technically ready for staging UAT, not an unconditional
+  production go-live. External approvals and secrets are listed explicitly in
+  the final validation report.
+- Let's Encrypt commands are complete, but real certificates cannot be issued
+  until production DNS resolves to the public VM and ports 80/443 are open.
+
+## MSR-RD6 / MSR-8 — CMS Promotion Handover Addendum (2026-08-10)
+
+### What was done
+
+- Added a repeatable encrypted Strapi export/import workflow that moves all
+  shared CMS content, relations, configuration, schemas, and uploaded assets as
+  one snapshot from local to staging and from approved staging to production.
+- Added checksum/source-commit gates, destructive-import warnings, paired
+  PostgreSQL/uploads backups, credential recreation, verification, and rollback
+  instructions. Clarified that the local idempotent seed is not a staging or
+  production migration mechanism.
+- Added `pnpm data:export` and `pnpm data:import` CMS command aliases.
+
+### Files changed
+
+- `cms/package.json`.
+- `.gitignore` (CMS transfer artifacts are excluded).
+- `docs/15_strapi_content_media_promotion.md` (new).
+- Ubuntu, group, Motorsport, local Docker, final validation, README, and phase
+  progress handover documentation.
+
+### How verified
+
+- Confirmed the installed Strapi 5.49 CLI exposes export/import options for
+  content, files, and configuration; the CMS script aliases invoke those native
+  commands.
+- A disposable encrypted export successfully packaged 44 schemas, 340
+  entities, 393 asset files (158.4 MB), 856 links, and 54 configuration records.
+  The archive was removed after the smoke test; no import was run.
+- Documentation formatting, CMS package validation, and repository diff checks
+  passed.
+
+### Notes / caveats
+
+- Import is intentionally a full target replacement, not a content merge.
+  Staging/production imports require a maintenance window and explicit approval.
+- Strapi admin users and API tokens are not exported; they remain
+  environment-specific and must be recreated or verified after import.

@@ -1,175 +1,120 @@
 # Sarga Motorsport Sitemap and Page Specifications
 
-## Primary navigation
+## Current source of truth
 
-Recommended top navigation:
+For the major Motorsport revamp, use:
+
+- `docs/motorsport/revamp/03_sitemap_page_specs.md`
+- `reference/source-pdfs/sarga_motorsport_2.pdf`
+
+This document is kept as the short canonical sitemap summary for agents following the older mandatory reading list.
+
+## Primary navigation
 
 ```text
 Home
-Events
-Tickets
-Experience
+About
+Event
 News
 Gallery
-Partners
-About
+Merchandise
 Contact
+Ticket
 ```
 
-Alternative shorter nav:
+`Ticket` should be the final and prominent CTA. `Contact` sits immediately
+before it on desktop; both remain easy to find in the mobile menu.
 
-```text
-Events
-Experience
-News
-Tickets
-About
-```
-
-## Sitemap
+## Top-level sitemap
 
 ```text
 /
+/about
 /events
-/events/[slug]
-/tickets
-/experience
 /news
 /news/[slug]
 /gallery
-/partners
-/about
+/merchandise
+/tickets
 /contact
+/events/[slug]
 /campaign/[slug]
 ```
 
+## Event program sitemap
+
+```text
+/events/indonesia-junior-talent-cup
+/events/indonesia-junior-talent-cup/race-schedule
+/events/indonesia-junior-talent-cup/riders
+/events/indonesia-junior-talent-cup/standings
+/events/indonesia-junior-talent-cup/about
+/events/indonesia-junior-talent-cup/regulation
+/events/indonesia-junior-talent-cup/become-riders
+/events/fia-rallycross-world-cup-indonesia-2026
+```
+
+The FIA Rallycross page may alternatively use `/campaign/fia-rallycross-world-cup-indonesia-2026` if implementation decides it is campaign-shaped rather than event-detail-shaped.
+
 ## Homepage sections
 
-1. Header/navigation
-2. Cinematic hero
-3. Upcoming featured event / ticket CTA
-4. Brand statement / racing ecosystem overview
-5. Event cards
-6. Experience pillars
-7. News/media highlights
-8. Gallery strip
-9. Partner/sponsor section
-10. Newsletter/contact CTA
-11. Footer
+1. Header/navigation.
+2. Headline and description hero.
+3. Upcoming Events.
+4. News.
+5. Gallery.
+6. Footer.
 
-## Homepage hero specification
+Additional partner, newsletter, or brand-story modules may remain only if they support the new event-program focus.
 
-Purpose: immediately communicate high-performance motorsport and premium event energy.
+## About page sections
 
-Suggested composition:
+1. Profile.
+2. Vision.
+3. What We Do.
+4. Meet The Team.
+5. Contact Us.
+6. Part of Sarga.co.
 
-- Full viewport dark cinematic hero.
-- Large Owners Wide headline.
-- Motion/photo background with gradient overlay.
-- Primary CTA: View Events / Get Tickets.
-- Secondary CTA: Explore Experience.
-- Optional event countdown or next race metadata.
+## Event hub
 
-## Events listing page
+The Event page should highlight:
 
-Display all motorsport events from CMS.
+- Indonesia Junior Talent Cup.
+- FIA Rallycross World Cup Indonesia 2026.
+- Upcoming event cards.
+- Ticket status and CTA.
+- CMS-driven event filters where useful.
 
-Required filters:
+## Indonesia Junior Talent Cup
 
-- upcoming/past
-- discipline: car, motorcycle, or mixed
-- event type / racing category
-- venue/circuit
-- ticket availability
+Required subpages:
 
-Cards should include:
+- Race Schedule.
+- Profile Riders.
+- Standing Points & Results.
+- About IJTC.
+- Regulation with PDF download.
+- Become Riders inquiry flow.
 
-- event title
-- date/time
-- venue
-- hero image
-- status chip
-- ticket CTA
-- detail CTA
+## FIA Rallycross World Cup Indonesia 2026
 
-## Event detail page
+Required campaign content:
 
-Sections:
+- Banner.
+- `First Time, Wild Action, Closer Than Ever`.
+- `FIA Rallycross World Cup Indonesia 2026`.
+- `5-6 December 2026`.
+- `Jakarta International E-Prix Circuit`.
+- `Get Your Ticket Now`.
+- Banner slider.
+- Rundown.
+- Do and donts.
 
-- Hero with event image/video
-- Event title, date, venue, status
-- Ticket CTA from CMS
-- Schedule/session information
-- Event overview
-- Venue information
-- Gallery/media
-- Related news
-- Sponsor/partner logos
-- FAQ or visitor information
+## Merchandise
 
-## Tickets page
+Merchandise is a showcase, partner redirect, or inquiry page. Do not build cart, checkout, payment processing, or public accounts.
 
-This is not a checkout engine. It is a curated ticket journey.
+## Ticketing
 
-Sections:
-
-- Featured active ticket CTA
-- Upcoming ticketed events
-- Ticket provider information
-- Deep links/redirects to partner platforms
-- Optional embed if approved and configured
-
-## Experience page
-
-Purpose: show Sarga Motorsport as more than racing.
-
-Suggested pillars:
-
-- Professional car racing
-- Professional motorcycle racing
-- Lifestyle festival
-- Community and fan experience
-- Media and broadcast
-- Venue/circuit experience
-
-## News page
-
-CMS-driven listing with filters for:
-
-- latest
-- event news
-- press release
-- race report
-- lifestyle/community
-
-Editorial programming and featured imagery should maintain visible coverage of
-both car and motorcycle racing. Discipline/category filtering must remain
-CMS-driven rather than inferred from article titles.
-
-## About page
-
-Use brand story and persona from the brand playbook.
-
-Sections:
-
-- Brand story
-- 360° racing ecosystem
-- Mission/positioning
-- Brand personality
-- Relationship to Sarga.co
-
-## Contact page
-
-Simple inquiry/contact form. No public account required.
-
-Recommended inquiry categories:
-
-- General inquiry
-- Partnership/sponsorship
-- Media inquiry
-- Event/ticket support
-- Vendor inquiry
-
-## Campaign pages
-
-Dynamic CMS-driven landing pages for future event campaigns. These pages should use reusable sections and motorsport design tokens.
+Ticket pages and CTAs must redirect/deep-link to approved partner platforms or use an allowlisted embed. Do not build an internal ticketing engine.

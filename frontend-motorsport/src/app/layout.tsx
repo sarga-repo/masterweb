@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import "@fontsource-variable/noto-sans/wght.css";
 
 import { resolveSiteUrl, siteConfig } from "@/lib/site-config";
 import "./globals.css";
@@ -9,16 +10,7 @@ const ownersWide = localFont({
   src: "./fonts/owners-wide-black.ttf",
   display: "swap",
   variable: "--font-owners-wide",
-  weight: "400 900",
-  style: "normal",
-});
-
-/** Sarga Motorsport body face (brand target: Noto Sans - Display Light). */
-const notoSans = localFont({
-  src: "./fonts/noto-sans-display-light.ttf",
-  display: "swap",
-  variable: "--font-noto-sans",
-  weight: "300 700",
+  weight: "900",
   style: "normal",
 });
 
@@ -71,7 +63,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${ownersWide.variable} ${notoSans.variable}`}>
+    <html lang="en" className={ownersWide.variable}>
       <body>{children}</body>
     </html>
   );

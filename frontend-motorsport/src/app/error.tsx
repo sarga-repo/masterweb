@@ -81,7 +81,7 @@ export default function Error({
         </h1>
 
         {/* Headline */}
-        <h2 className="ms-display mt-4 max-w-[14ch] text-[clamp(1.8rem,4.5vw,3.75rem)] leading-[0.88]">
+        <h2 className="ms-heading-section mt-4 max-w-[14ch]">
           The engine stalled.
         </h2>
 

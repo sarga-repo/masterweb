@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_motorsport_rundown_items",
+  "info": {
+    "displayName": "Rundown Item",
+    "description": "Public campaign or program schedule item"
+  },
+  "options": {},
+  "attributes": {
+    "dayLabel": { "type": "string", "required": true },
+    "dateLabel": { "type": "string" },
+    "venue": { "type": "string" },
+    "status": {
+      "type": "enumeration",
+      "enum": ["upcoming", "live", "completed"],
+      "default": "upcoming"
+    },
+    "startTime": { "type": "time" },
+    "endTime": { "type": "time" },
+    "title": { "type": "string", "required": true },
+    "description": { "type": "text" },
+    "sortOrder": { "type": "integer", "default": 0 }
+  }
+}

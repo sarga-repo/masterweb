@@ -4,7 +4,12 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HorseSportLogo } from "@/components/ui/brand-logo";
-import { ArrowRightIcon, ArrowUpRightIcon, MenuIcon, CloseIcon } from "@/components/ui/icons";
+import {
+  ArrowRightIcon,
+  ArrowUpRightIcon,
+  MenuIcon,
+  CloseIcon,
+} from "@/components/ui/icons";
 import type { LinkItem } from "@/types/design-system";
 
 type HorseSportHeaderProps = {
@@ -34,7 +39,9 @@ export function HorseSportHeader({
   // Lock body scroll when menu is open
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
   // Close on Escape
@@ -63,8 +70,16 @@ export function HorseSportHeader({
           aria-label="Primary navigation"
         >
           {/* Logo */}
-          <Link href="/" className="shrink-0" aria-label="Sarga Horse Sport - Home">
-            <HorseSportLogo variant="black" className="w-[clamp(8rem,13vw,11rem)]" priority />
+          <Link
+            href="/"
+            className="shrink-0"
+            aria-label="Sarga Horse Sport - Home"
+          >
+            <HorseSportLogo
+              variant="black"
+              className="w-[clamp(8rem,13vw,11rem)]"
+              priority
+            />
           </Link>
 
           {/* Desktop nav links */}
@@ -146,25 +161,31 @@ export function HorseSportHeader({
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-1/3 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-8 blur-3xl"
-          style={{ background: "radial-gradient(circle, rgb(255 107 0 / 0.6), transparent 70%)" }}
+          style={{
+            background:
+              "radial-gradient(circle, rgb(255 107 0 / 0.6), transparent 70%)",
+          }}
         />
 
         {/* Spacer for the floating header height */}
         <div className="h-24 shrink-0" />
 
         {/* Nav links - staggered reveal */}
-        <nav className="flex flex-1 flex-col items-center justify-center gap-1 px-6" aria-label="Mobile navigation">
+        <nav
+          className="flex flex-1 flex-col items-center justify-center gap-1 px-6"
+          aria-label="Mobile navigation"
+        >
           {navigation.map((link, i) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
               className={`hs-display text-[clamp(2rem,6vw,3rem)] leading-[1.1] transition-all duration-500 ${
-                open
-                  ? "translate-y-0 opacity-100"
-                  : "translate-y-6 opacity-0"
+                open ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
               } ${
-                isActive(link.href) ? "text-hs-orange" : "text-hs-cream/72 hover:text-hs-cream"
+                isActive(link.href)
+                  ? "text-hs-orange"
+                  : "text-hs-cream/72 hover:text-hs-cream"
               }`}
               style={{ transitionDelay: open ? `${150 + i * 70}ms` : "0ms" }}
             >

@@ -63,8 +63,7 @@ export type EcosystemBusiness = {
 export type NewsCategory =
   "news" | "publication" | "press-release" | "report" | "magazine";
 
-export type SiteScope =
-  "gateway" | "motorsport" | "horsesport" | "shared";
+export type SiteScope = "gateway" | "motorsport" | "horsesport" | "shared";
 
 export type NewsArticle = {
   title: string;

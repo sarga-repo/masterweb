@@ -32,7 +32,11 @@ export default async function NewsPage({ searchParams }: Params) {
     return (
       <Link
         key={label}
-        href={value ? `/news?category=${encodeURIComponent(value.toLowerCase())}` : "/news"}
+        href={
+          value
+            ? `/news?category=${encodeURIComponent(value.toLowerCase())}`
+            : "/news"
+        }
         className={`hs-pill border px-5 py-2.5 text-[0.66rem] font-extrabold uppercase tracking-[0.12em] transition-colors ${
           isActive
             ? "border-hs-orange bg-hs-orange/15 text-hs-orange"
@@ -71,7 +75,9 @@ export default async function NewsPage({ searchParams }: Params) {
           </div>
         ) : (
           <div className="hs-card-glass mt-12 p-12 text-center">
-            <p className="hs-display text-2xl text-hs-cream">No stories in this category yet.</p>
+            <p className="hs-display text-2xl text-hs-cream">
+              No stories in this category yet.
+            </p>
             <Link
               href="/news"
               className="hs-pill mt-6 inline-flex bg-hs-red px-6 py-3 text-[0.68rem] font-extrabold uppercase tracking-[0.14em] text-hs-white hover:bg-hs-orange"

@@ -29,8 +29,8 @@ export default function Error({
           A false start.
         </h1>
         <p className="mt-7 max-w-xl text-base leading-8 text-hs-cream/55">
-          Something unexpected happened while loading this page. The team has been
-          alerted - this is a temporary setback.
+          Something unexpected happened while loading this page. The team has
+          been alerted - this is a temporary setback.
         </p>
         {error.digest ? (
           <p className="mt-4 font-mono text-xs text-hs-cream/25">

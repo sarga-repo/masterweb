@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/metadata";
 
-import { PageHero, SectionHeader, ScrollReveal, NewsArticleCard } from "@/components";
+import {
+  PageHero,
+  SectionHeader,
+  ScrollReveal,
+  NewsArticleCard,
+} from "@/components";
 import { fetchNewsPage } from "@/lib/cms-content";
 
 export const metadata: Metadata = createMetadata({
@@ -51,8 +56,12 @@ export default async function StableLifePage() {
           </div>
         ) : (
           <div className="hs-card-glass mt-12 p-12 text-center">
-            <p className="hs-display text-2xl text-hs-cream">Stable stories are on the way.</p>
-            <p className="mt-3 text-sm text-hs-cream/55">Check back soon for stable-life editorial.</p>
+            <p className="hs-display text-2xl text-hs-cream">
+              Stable stories are on the way.
+            </p>
+            <p className="mt-3 text-sm text-hs-cream/55">
+              Check back soon for stable-life editorial.
+            </p>
           </div>
         )}
       </section>

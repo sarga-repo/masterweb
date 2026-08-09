@@ -31,14 +31,24 @@ export function PageHero({
   return (
     <section className="relative isolate flex min-h-[55vh] items-end overflow-hidden pt-[calc(var(--hs-header-height)+2rem)]">
       {backgroundImage ? (
-        <Image src={backgroundImage} alt={backgroundAlt} fill sizes="100vw" priority
-          className="hs-animate-zoom absolute inset-0 -z-10 object-cover object-center" />
+        <Image
+          src={backgroundImage}
+          alt={backgroundAlt}
+          fill
+          sizes="100vw"
+          priority
+          className="hs-animate-zoom absolute inset-0 -z-10 object-cover object-center"
+        />
       ) : null}
-      <div aria-hidden className="absolute inset-0 -z-10" style={{
-        background: overImage
-          ? "linear-gradient(0deg, rgba(20,15,10,0.86) 0%, rgba(20,15,10,0.42) 48%, rgba(20,15,10,0.12) 100%)"
-          : `radial-gradient(60% 70% at 16% 0%, ${accentHex}1f, transparent 58%), radial-gradient(55% 60% at 92% 100%, #87B2A529, transparent 58%), linear-gradient(180deg, #fbf6e9, #f7eed0)`,
-      }} />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10"
+        style={{
+          background: overImage
+            ? "linear-gradient(0deg, rgba(20,15,10,0.86) 0%, rgba(20,15,10,0.42) 48%, rgba(20,15,10,0.12) 100%)"
+            : `radial-gradient(60% 70% at 16% 0%, ${accentHex}1f, transparent 58%), radial-gradient(55% 60% at 92% 100%, #87B2A529, transparent 58%), linear-gradient(180deg, #fbf6e9, #f7eed0)`,
+        }}
+      />
       {/* Brand marker - full-height staircase stripes down the left edge */}
       <div
         aria-hidden
@@ -59,21 +69,38 @@ export function PageHero({
         ))}
       </div>
 
-      <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-hs-cream/8" />
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-px bg-hs-cream/8"
+      />
 
       <div className="hs-shell relative z-10 py-14 sm:py-20">
         <div className="max-w-[52rem]">
-          <div className="hs-kicker hs-animate-1 inline-flex items-center gap-3" style={{ color: accentHex }}>
-            <span aria-hidden className="hs-rule inline-block h-px w-10 align-middle" />
+          <div
+            className="hs-kicker hs-animate-1 inline-flex items-center gap-3"
+            style={{ color: accentHex }}
+          >
+            <span
+              aria-hidden
+              className="hs-rule inline-block h-px w-10 align-middle"
+            />
             {eyebrow}
           </div>
-          <h1 className={`hs-display hs-animate-2 mt-6 max-w-[14ch] text-[clamp(2.6rem,7vw,6rem)] leading-[0.9] ${titleColor}`}>
+          <h1
+            className={`hs-display hs-animate-2 mt-6 max-w-[14ch] text-[clamp(2.6rem,7vw,6rem)] leading-[0.9] ${titleColor}`}
+          >
             {title}
           </h1>
           {description ? (
-            <p className={`hs-body-lg hs-animate-3 mt-6 max-w-[38rem] ${descColor}`}>{description}</p>
+            <p
+              className={`hs-body-lg hs-animate-3 mt-6 max-w-[38rem] ${descColor}`}
+            >
+              {description}
+            </p>
           ) : null}
-          {children ? <div className="hs-animate-4 mt-8">{children}</div> : null}
+          {children ? (
+            <div className="hs-animate-4 mt-8">{children}</div>
+          ) : null}
         </div>
       </div>
     </section>

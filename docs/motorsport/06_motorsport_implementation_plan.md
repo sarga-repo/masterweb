@@ -1,5 +1,11 @@
 # Sarga Motorsport Implementation Plan
 
+## Current revamp track
+
+The current major UI, sitemap, and CMS admin UX revamp is planned in `docs/motorsport/revamp/06_implementation_phases.md` and prompted from `prompts/motorsport/revamp/`.
+
+Use that track for new Motorsport revamp work. The phase list below remains historical context for the earlier dedicated Motorsport build.
+
 ## Phase 1 — Repository restructure
 
 - Rename `frontend/` to `frontend-gateway/`.

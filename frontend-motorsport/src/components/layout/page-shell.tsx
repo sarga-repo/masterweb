@@ -1,63 +1,65 @@
 import type { ReactNode } from "react";
 
 import { MotorsportFooter, MotorsportHeader } from "@/components";
+import {
+  MOTORSPORT_NAVIGATION,
+  MOTORSPORT_TICKET_LINK,
+} from "@/lib/navigation";
 import { siteConfig } from "@/lib/site-config";
-
-const NAVIGATION = [
-  { label: "Events", href: "/events" },
-  { label: "Experience", href: "/experience" },
-  { label: "News", href: "/news" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "About", href: "/about" },
-];
 
 const FOOTER_COLUMNS = [
   {
-    title: "Race",
+    title: "Discover",
     links: [
+      { label: "Home", href: "/" },
+      { label: "About", href: "/about" },
       { label: "Events", href: "/events" },
-      { label: "Tickets", href: "/tickets" },
-      { label: "Experience", href: "/experience" },
     ],
   },
   {
-    title: "Stories",
+    title: "Follow",
     links: [
       { label: "News", href: "/news" },
       { label: "Gallery", href: "/gallery" },
-      { label: "Partners", href: "/partners" },
+      { label: "Contact", href: "/contact" },
     ],
   },
   {
-    title: "Sarga",
+    title: "Race day",
     links: [
-      { label: "About", href: "/about" },
-      { label: "Contact", href: "/contact" },
+      { label: "Tickets", href: "/tickets" },
+      { label: "Merchandise", href: "/merchandise" },
     ],
   },
 ];
 
 type PageShellProps = {
   children: ReactNode;
+  spectrumSeparators?: boolean;
 };
 
 /**
  * Shared page wrapper - provides consistent header, footer, and metadata
  * chrome across all Motorsport routes.
  */
-export function PageShell({ children }: PageShellProps) {
+export function PageShell({
+  children,
+  spectrumSeparators = false,
+}: PageShellProps) {
   return (
     <>
       <MotorsportHeader
-        navigation={NAVIGATION}
-        ticketLink={{ label: "Tickets", href: "/tickets" }}
+        navigation={MOTORSPORT_NAVIGATION}
+        ticketLink={MOTORSPORT_TICKET_LINK}
         gatewayLink={{
           label: "Sarga.co",
           href: siteConfig.gatewayUrl,
           external: true,
         }}
       />
-      <main>{children}</main>
+      <main className={spectrumSeparators ? "ms-spectrum-sections" : undefined}>
+        {children}
+      </main>
       <MotorsportFooter
         columns={FOOTER_COLUMNS}
         crossSiteLinks={[
@@ -72,10 +74,6 @@ export function PageShell({ children }: PageShellProps) {
           href: siteConfig.gatewayUrl,
           external: true,
         }}
-        legalLinks={[
-          { label: "Privacy", href: "/privacy" },
-          { label: "Terms", href: "/terms" },
-        ]}
         copyright="© 2026 Sarga Motorsport"
       />
     </>

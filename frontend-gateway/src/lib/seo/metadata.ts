@@ -47,8 +47,7 @@ export function createMetadata({
   seo,
   type = "website",
 }: MetadataInput): Metadata {
-  const canonical =
-    seo?.canonicalUrl ?? resolveSiteUrl(path);
+  const canonical = seo?.canonicalUrl ?? resolveSiteUrl(path);
   const resolvedTitle = seo?.metaTitle ?? title;
   const resolvedDescription = seo?.metaDescription ?? description;
   const ogTitle = seo?.ogTitle ?? resolvedTitle;

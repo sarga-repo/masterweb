@@ -39,7 +39,7 @@ export function MotorsportFooter({
         <div className="grid gap-14 border-b border-ms-warm-white/12 pb-14 lg:grid-cols-[1.1fr_1.9fr]">
           <div>
             <MotorsportLogo variant="part-of-sarga" className="w-52" />
-            <p className="ms-display mt-10 max-w-xl text-[clamp(2.25rem,5.25vw,4.88rem)] text-ms-warm-white">
+            <p className="ms-heading-section mt-10 max-w-xl text-ms-warm-white">
               {statement}
             </p>
           </div>
@@ -95,6 +95,8 @@ export function MotorsportFooter({
             {gatewayLink ? (
               <a
                 href={gatewayLink.href}
+                target={gatewayLink.external ? "_blank" : undefined}
+                rel={gatewayLink.external ? "noreferrer" : undefined}
                 className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-ms-warm-white/65 hover:text-ms-electric-yellow"
               >
                 {gatewayLink.label} <ArrowUpRightIcon className="size-3.5" />

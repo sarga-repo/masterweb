@@ -739,6 +739,7 @@ export interface ApiLeadershipPersonLeadershipPerson
     portrait: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
     role: Schema.Attribute.String;
+    summary: Schema.Attribute.Text;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -791,6 +792,301 @@ export interface ApiMediaGalleryMediaGallery
       Schema.Attribute.DefaultTo<'shared'>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMerchandiseItemMerchandiseItem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'merchandise_items';
+  info: {
+    description: 'Merchandise showcase teasers without internal commerce';
+    displayName: 'Merchandise Item';
+    pluralName: 'merchandise-items';
+    singularName: 'merchandise-item';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    availabilityStatus: Schema.Attribute.Enumeration<
+      ['comingSoon', 'availableExternal', 'inquiryOnly', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'comingSoon'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.RichText;
+    externalUrl: Schema.Attribute.String;
+    image: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::merchandise-item.merchandise-item'
+    > &
+      Schema.Attribute.Private;
+    priceLabel: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportProgramMotorsportProgram
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'motorsport_programs';
+  info: {
+    description: 'Motorsport program and campaign hubs such as IJTC and FIA Rallycross';
+    displayName: 'Motorsport Program';
+    pluralName: 'motorsport-programs';
+    singularName: 'motorsport-program';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    bannerSlides: Schema.Attribute.Component<'motorsport.campaign-slide', true>;
+    becomeRidersLabel: Schema.Attribute.String;
+    becomeRidersUrl: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    eventEndDate: Schema.Attribute.DateTime;
+    eventRules: Schema.Attribute.Component<'motorsport.rule-item', true>;
+    eventStartDate: Schema.Attribute.DateTime;
+    heroMedia: Schema.Attribute.Media<'images' | 'videos'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-program.motorsport-program'
+    > &
+      Schema.Attribute.Private;
+    mainHeadline: Schema.Attribute.String;
+    primaryCtaLabel: Schema.Attribute.String;
+    primaryCtaUrl: Schema.Attribute.String;
+    programStatus: Schema.Attribute.Enumeration<
+      [
+        'announced',
+        'registrationOpen',
+        'ticketsOpen',
+        'live',
+        'completed',
+        'hidden',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'announced'>;
+    programType: Schema.Attribute.Enumeration<
+      ['juniorTalentCup', 'rallycross', 'raceWeekend', 'other']
+    > &
+      Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    regulations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-regulation.motorsport-regulation'
+    >;
+    relatedEvents: Schema.Attribute.Relation<'manyToMany', 'api::event.event'>;
+    relatedTicketCtas: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::ticket-cta.ticket-cta'
+    >;
+    riders: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-rider.motorsport-rider'
+    >;
+    rundown: Schema.Attribute.Component<'motorsport.rundown-item', true>;
+    seasonLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    standings: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-standing.motorsport-standing'
+    >;
+    summary: Schema.Attribute.RichText & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    venue: Schema.Attribute.String;
+  };
+}
+
+export interface ApiMotorsportRegulationMotorsportRegulation
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'motorsport_regulations';
+  info: {
+    description: 'Versioned program regulation documents';
+    displayName: 'Motorsport Regulation';
+    pluralName: 'motorsport-regulations';
+    singularName: 'motorsport-regulation';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    effectiveDate: Schema.Attribute.Date & Schema.Attribute.Required;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-regulation.motorsport-regulation'
+    > &
+      Schema.Attribute.Private;
+    pdfFile: Schema.Attribute.Media<'files'>;
+    program: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::motorsport-program.motorsport-program'
+    > &
+      Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    summary: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    version: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ApiMotorsportRiderMotorsportRider
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'motorsport_riders';
+  info: {
+    description: 'Program-linked rider profiles';
+    displayName: 'Motorsport Rider';
+    pluralName: 'motorsport-riders';
+    singularName: 'motorsport-rider';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    bio: Schema.Attribute.RichText;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-rider.motorsport-rider'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    nationality: Schema.Attribute.String;
+    number: Schema.Attribute.String;
+    portrait: Schema.Attribute.Media<'images'>;
+    program: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::motorsport-program.motorsport-program'
+    > &
+      Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    region: Schema.Attribute.String;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    team: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportStandingMotorsportStanding
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'motorsport_standings';
+  info: {
+    description: 'Program standings, points, and result summaries';
+    displayName: 'Motorsport Standing';
+    pluralName: 'motorsport-standings';
+    singularName: 'motorsport-standing';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-standing.motorsport-standing'
+    > &
+      Schema.Attribute.Private;
+    points: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    position: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
+    program: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::motorsport-program.motorsport-program'
+    > &
+      Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    resultDate: Schema.Attribute.Date;
+    resultSummary: Schema.Attribute.Text;
+    rider: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::motorsport-rider.motorsport-rider'
+    > &
+      Schema.Attribute.Required;
+    roundLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    seasonLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'motorsport'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -973,6 +1269,69 @@ export interface ApiPartnerPartner extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
+  collectionName: 'site_pages';
+  info: {
+    description: 'Site-scoped static and campaign page content';
+    displayName: 'Site Page';
+    pluralName: 'site-pages';
+    singularName: 'site-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    heroDescription: Schema.Attribute.RichText;
+    heroMedia: Schema.Attribute.Media<'images' | 'videos'>;
+    heroSlides: Schema.Attribute.Component<'motorsport.hero-slide', true> &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 5;
+        },
+        number
+      >;
+    heroTitle: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::site-page.site-page'
+    > &
+      Schema.Attribute.Private;
+    navigationLabel: Schema.Attribute.String;
+    pageKind: Schema.Attribute.Enumeration<
+      [
+        'home',
+        'about',
+        'eventHub',
+        'campaign',
+        'merchandise',
+        'legal',
+        'custom',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'custom'>;
+    publishedAt: Schema.Attribute.DateTime;
+    routePath: Schema.Attribute.String & Schema.Attribute.Required;
+    sections: Schema.Attribute.DynamicZone<['shared.page-section']>;
+    seo: Schema.Attribute.Component<'shared.seo', false>;
+    site: Schema.Attribute.Relation<'manyToOne', 'api::site.site'>;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'gateway'>;
+    slug: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiSiteSite extends Struct.CollectionTypeSchema {
   collectionName: 'sites';
   info: {
@@ -997,6 +1356,7 @@ export interface ApiSiteSite extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     logo: Schema.Attribute.Media<'images'>;
     name: Schema.Attribute.String & Schema.Attribute.Required;
+    order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     themeKey: Schema.Attribute.String;
@@ -1606,9 +1966,15 @@ declare module '@strapi/strapi' {
       'api::inquiry-submission.inquiry-submission': ApiInquirySubmissionInquirySubmission;
       'api::leadership-person.leadership-person': ApiLeadershipPersonLeadershipPerson;
       'api::media-gallery.media-gallery': ApiMediaGalleryMediaGallery;
+      'api::merchandise-item.merchandise-item': ApiMerchandiseItemMerchandiseItem;
+      'api::motorsport-program.motorsport-program': ApiMotorsportProgramMotorsportProgram;
+      'api::motorsport-regulation.motorsport-regulation': ApiMotorsportRegulationMotorsportRegulation;
+      'api::motorsport-rider.motorsport-rider': ApiMotorsportRiderMotorsportRider;
+      'api::motorsport-standing.motorsport-standing': ApiMotorsportStandingMotorsportStanding;
       'api::news-article.news-article': ApiNewsArticleNewsArticle;
       'api::newsletter-subscription.newsletter-subscription': ApiNewsletterSubscriptionNewsletterSubscription;
       'api::partner.partner': ApiPartnerPartner;
+      'api::site-page.site-page': ApiSitePageSitePage;
       'api::site.site': ApiSiteSite;
       'api::ticket-cta.ticket-cta': ApiTicketCtaTicketCta;
       'api::timeline-item.timeline-item': ApiTimelineItemTimelineItem;

@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "motorsport_riders",
+  "info": {
+    "singularName": "motorsport-rider",
+    "pluralName": "motorsport-riders",
+    "displayName": "Motorsport Rider",
+    "description": "Program-linked rider profiles"
+  },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": {},
+  "attributes": {
+    "name": { "type": "string", "required": true },
+    "slug": { "type": "uid", "targetField": "name", "required": true },
+    "program": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::motorsport-program.motorsport-program",
+      "inversedBy": "riders",
+      "required": true
+    },
+    "number": { "type": "string" },
+    "team": { "type": "string" },
+    "region": { "type": "string" },
+    "nationality": { "type": "string" },
+    "portrait": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "bio": { "type": "richtext" },
+    "isActive": { "type": "boolean", "default": true },
+    "sortOrder": { "type": "integer", "default": 0 },
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+      "default": "motorsport",
+      "required": true
+    },
+    "sites": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::site.site"
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false
+    }
+  }
+}

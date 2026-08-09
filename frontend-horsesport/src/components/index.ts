@@ -28,7 +28,12 @@ export { RichText } from "./ui/rich-text";
 export { FeatureCard } from "./ui/feature-card";
 export { HorseSportLogo } from "./ui/brand-logo";
 export { ScrollReveal } from "./ui/scroll-reveal";
-export { ZigZagMark, DottedMark, SlashMark, StaircaseMark } from "./ui/brand-marks";
+export {
+  ZigZagMark,
+  DottedMark,
+  SlashMark,
+  StaircaseMark,
+} from "./ui/brand-marks";
 export {
   ArrowRightIcon,
   ArrowUpRightIcon,

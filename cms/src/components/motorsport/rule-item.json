@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_motorsport_rule_items",
+  "info": {
+    "displayName": "Event Rule",
+    "description": "Campaign do or don't guidance"
+  },
+  "options": {},
+  "attributes": {
+    "ruleType": {
+      "type": "enumeration",
+      "enum": ["do", "dont"],
+      "required": true
+    },
+    "title": { "type": "string", "required": true },
+    "description": { "type": "text", "required": true },
+    "sortOrder": { "type": "integer", "default": 0 }
+  }
+}

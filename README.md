@@ -26,13 +26,13 @@ sarga-website/
 
 ## Local services
 
-| Site / service | URL | Purpose |
-|---|---:|---|
-| Sarga.co Gateway | `http://localhost:3000` | Group entry point and ecosystem overview |
-| Sarga Motorsport | `http://localhost:3001` | Dedicated motorsport content, events, news, tickets |
-| Sarga Horse Sport | `http://localhost:3002` | Dedicated horse sport content, events, derby/turf/stable stories, tickets |
-| Strapi CMS | `http://localhost:1337/admin` | Shared content management for all sites |
-| PostgreSQL | `localhost:5435` | Shared database, host port avoids local PostgreSQL conflict |
+| Site / service    |                           URL | Purpose                                                                   |
+| ----------------- | ----------------------------: | ------------------------------------------------------------------------- |
+| Sarga.co Gateway  |       `http://localhost:3000` | Group entry point and ecosystem overview                                  |
+| Sarga Motorsport  |       `http://localhost:3001` | Dedicated motorsport content, events, news, tickets                       |
+| Sarga Horse Sport |       `http://localhost:3002` | Dedicated horse sport content, events, derby/turf/stable stories, tickets |
+| Strapi CMS        | `http://localhost:1337/admin` | Shared content management for all sites                                   |
+| PostgreSQL        |              `localhost:5435` | Shared database, host port avoids local PostgreSQL conflict               |
 
 ## Tech stack
 
@@ -57,6 +57,32 @@ Recommended behavior:
 - Horse Sport content opens on the dedicated Horse Sport frontend.
 - Shared content can appear on multiple frontends with site-specific visual rendering.
 - Ticket CTAs are centralized in Strapi and filtered by site/business.
+
+## CMS admin access segregation
+
+The single Strapi instance creates four managed administration roles:
+
+| Role code                | Visible custom workspace | Editable `siteScope` |
+| ------------------------ | ------------------------ | -------------------- |
+| `sarga-gateway-admin`    | Sarga Gateway            | `gateway`            |
+| `sarga-motorsport-admin` | Sarga Motorsport         | `motorsport`         |
+| `sarga-horsesport-admin` | Sarga Horse Sport        | `horsesport`         |
+| `sarga-shared-admin`     | Shared Library           | `shared`             |
+
+Super Admin sees all four workspaces and retains unrestricted system access.
+Site admins receive only their workspace action and site-relevant content types;
+Content Manager reads/updates/deletes/publishes are filtered by `siteScope`, and
+admin creates/updates are forced to the account's assigned scope.
+
+Strapi's stock v5 main sidebar supports flat links, not nested child menu items.
+The four role-filtered workspace entries therefore open dashboards with grouped
+Pages, Programs, Editorial, Commerce, and Library sub-navigation.
+
+Optional dedicated admin accounts can be created on bootstrap with the
+`CMS_<SITE>_ADMIN_EMAIL` and `CMS_<SITE>_ADMIN_PASSWORD` variables documented in
+`cms/.env.example`. Credentials are one-time provisioning inputs: never commit
+them, and remove the email/password pair after the account exists. Existing
+users are not reassigned or password-reset automatically.
 
 ## Getting started
 
@@ -168,28 +194,44 @@ TICKETING_DEEP_LINK_SCHEMES=       # comma-separated allowed deep-link schemes
 TICKETING_EMBED_ALLOWLIST=         # comma-separated hosts allowed to iframe-embed (empty = off)
 ```
 
+### Strapi `cms/.env`
+
+Use `cms/.env.example` for database/secrets plus optional one-time site-admin
+provisioning. For example, setting the Motorsport email/password pair creates
+an active user with only the managed `sarga-motorsport-admin` role. Passwords
+must satisfy Strapi's 8-72 byte upper/lowercase/number policy.
+
 ## Documentation map
 
-| Document | Purpose |
-|---|---|
-| `docs/multisite/04_three_site_integration_strategy.md` | Gateway, Motorsport, and Horse Sport routing/content strategy |
-| `docs/horsesport/01_horsesport_project_brief.md` | Horse Sport product brief |
-| `docs/horsesport/02_horsesport_brand_translation.md` | Brand translation from preview PDF page 7 into web UI direction |
-| `docs/horsesport/03_horsesport_sitemap_page_specs.md` | Dedicated Horse Sport sitemap and page specs |
-| `docs/horsesport/04_horsesport_design_system.md` | Horse Sport visual system, tokens, components |
-| `docs/horsesport/05_horsesport_content_model_extensions.md` | Strapi additions for Horse Sport and three-site publishing |
-| `docs/horsesport/06_horsesport_implementation_plan.md` | Phased implementation plan |
-| `docs/horsesport/07_horsesport_asset_usage_guideline.md` | Approved logos, imagery, favicon, and asset usage |
-| `docs/horsesport/08_horsesport_deployment_handover.md` | Production env, deployment, CMS editorial guide, rollback, monitoring |
-| `checklists/horsesport/horsesport_uat_checklist.md` | UAT verification log and sign-off |
-| `prompts/horsesport/` | Codex-ready implementation prompts |
+| Document                                                         | Purpose                                                                                                        |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `docs/multisite/04_three_site_integration_strategy.md`           | Gateway, Motorsport, and Horse Sport routing/content strategy                                                  |
+| `docs/motorsport/revamp/README.md`                               | Current major Motorsport revamp package based on the Look & Feel and Motorsport sitemap PDFs                   |
+| `docs/motorsport/revamp/03_sitemap_page_specs.md`                | Current Motorsport sitemap and page specs                                                                      |
+| `docs/motorsport/revamp/04_cms_architecture_admin_ux.md`         | Dedicated CMS workspace/menu UX while keeping one shared Strapi instance                                       |
+| `docs/motorsport/revamp/12_final_validation_launch_readiness.md` | Final Motorsport route, browser, Lighthouse, CMS, Docker, redirect, and launch-readiness evidence              |
+| `docs/14_ubuntu_single_vm_production_deployment.md`              | Ubuntu 22.04.5 single-VM deployment for three frontends, Strapi, PostgreSQL, Nginx, systemd, and Let's Encrypt |
+| `docs/15_strapi_content_media_promotion.md`                      | Exact encrypted CMS content/media promotion from local to staging and approved staging to production           |
+| `checklists/motorsport/motorsport_revamp_phase_checklist.md`     | Phase checklist for the new Motorsport revamp track                                                            |
+| `prompts/motorsport/revamp/`                                     | Codex-ready implementation prompts for the Motorsport revamp                                                   |
+| `docs/horsesport/01_horsesport_project_brief.md`                 | Horse Sport product brief                                                                                      |
+| `docs/horsesport/02_horsesport_brand_translation.md`             | Brand translation from preview PDF page 7 into web UI direction                                                |
+| `docs/horsesport/03_horsesport_sitemap_page_specs.md`            | Dedicated Horse Sport sitemap and page specs                                                                   |
+| `docs/horsesport/04_horsesport_design_system.md`                 | Horse Sport visual system, tokens, components                                                                  |
+| `docs/horsesport/05_horsesport_content_model_extensions.md`      | Strapi additions for Horse Sport and three-site publishing                                                     |
+| `docs/horsesport/06_horsesport_implementation_plan.md`           | Phased implementation plan                                                                                     |
+| `docs/horsesport/07_horsesport_asset_usage_guideline.md`         | Approved logos, imagery, favicon, and asset usage                                                              |
+| `docs/horsesport/08_horsesport_deployment_handover.md`           | Production env, deployment, CMS editorial guide, rollback, monitoring                                          |
+| `checklists/horsesport/horsesport_uat_checklist.md`              | UAT verification log and sign-off                                                                              |
+| `prompts/horsesport/`                                            | Codex-ready implementation prompts                                                                             |
 
 ## Recommended Codex flow
 
-1. Read `AGENTS.md` and all documents in `docs/horsesport/`.
-2. Run `prompts/horsesport/01_repo_restructure.md` first.
-3. Run each prompt sequentially and stop after each phase for review.
-4. Do not paste all prompts at once.
+1. For the Motorsport revamp, read `AGENTS.md`, then `docs/motorsport/revamp/README.md`.
+2. Run `prompts/motorsport/revamp/00_master_instruction.md` first.
+3. Run each Motorsport revamp phase prompt sequentially and stop after each phase for review.
+4. For Horse Sport work, read `docs/horsesport/` and use `prompts/horsesport/`.
+5. Do not paste all prompts at once.
 
 ## Scope exclusions
 

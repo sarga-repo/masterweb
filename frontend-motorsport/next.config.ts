@@ -23,6 +23,15 @@ function strapiImagePattern() {
 }
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/events/fia-rallycross-world-cup-indonesia-2026",
+        destination: "/campaign/fia-rallycross-world-cup-indonesia-2026",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     // Only the configured Strapi host is allowed. Add the specific S3/cloud
     // media hostname (docs/06) here once the storage provider is chosen - do not

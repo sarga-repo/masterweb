@@ -12,6 +12,8 @@ export const inquiryCategories = [
   "partnership",
   "media",
   "event-ticket",
+  "talent-program",
+  "merchandise",
   "vendor",
 ] as const;
 
@@ -46,6 +48,17 @@ export const contactFormSchema = z.object({
 });
 
 export type ContactFormInput = z.input<typeof contactFormSchema>;
+
+export const newsletterSubscriptionSchema = z.object({
+  email: z.email("Please enter a valid email address.").max(254),
+  website: z.string().max(0, "Spam check failed.").optional().default(""),
+  sourcePage: z
+    .string()
+    .trim()
+    .max(500)
+    .optional()
+    .transform((value) => value || "/"),
+});
 
 export type FormFieldErrors = Record<string, string>;
 

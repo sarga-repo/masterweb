@@ -51,10 +51,10 @@ export function HeaderClient({
       className="sticky top-0 z-50 border-b border-white/10 bg-[var(--gateway-midnight)] text-white"
       data-navigation-source={navigationSource}
     >
-      <div className="site-container grid min-h-[var(--gateway-header-height)] grid-cols-[1fr_auto] items-center gap-5 py-3 xl:grid-cols-[minmax(10rem,1fr)_auto_minmax(10rem,1fr)]">
+      <div className="site-container grid min-h-[var(--gateway-header-height)] grid-cols-[1fr_auto] items-center gap-5 py-3 xl:grid-cols-[minmax(0,1fr)_auto] xl:gap-8">
         <div className="flex min-w-0 items-center gap-5 xl:col-start-1">
           <Logo variant="reverse" />
-          <span className="hidden border-l border-white/20 pl-5 text-[0.6rem] font-bold uppercase leading-4 tracking-[0.2em] text-white/45 2xl:block">
+          <span className="hidden shrink-0 border-l border-white/20 pl-5 text-[0.6rem] font-bold uppercase leading-4 tracking-[0.2em] text-white/45 2xl:block">
             {dictionary.shell.groupGateway.split(" ").map((part) => (
               <span key={part} className="block">
                 {part}
@@ -65,7 +65,7 @@ export function HeaderClient({
 
         <nav
           aria-label={dictionary.shell.primaryNavigation}
-          className="hidden justify-self-center xl:col-start-2 xl:block"
+          className="hidden xl:col-start-2 xl:block xl:justify-self-end"
         >
           <ul className="flex items-center gap-6 whitespace-nowrap text-[0.72rem] font-bold uppercase tracking-[0.085em] 2xl:gap-8">
             {mainNav.map((item) => {

@@ -30,6 +30,33 @@ must remain reachable for Let's Encrypt HTTP-01 validation and renewal.
 
 ## 2. Base operating system
 
+On a fresh Ubuntu host, the repository helper can install the base packages,
+Node.js 22, pnpm 10.22.0, PostgreSQL 16, and Nginx used by the sections below:
+
+```bash
+sudo deploy/production/install_dependencies.sh
+```
+
+The helper does not perform a full OS upgrade, create users/databases/secrets,
+change the firewall, add swap, import CMS data, or manage certificates. Keep
+those reviewed, environment-specific steps explicit. If using the helper, skip
+the duplicate package/runtime installation commands below after verifying its
+reported versions.
+
+After dependency installation, the repository provides separate, reviewable
+helpers for the predictable host initialization, optional swap, and UFW steps:
+
+```bash
+sudo deploy/production/initialize_server.sh
+sudo deploy/production/configure_swap.sh
+sudo deploy/production/configure_firewall.sh
+```
+
+The initializer prompts securely when creating a new PostgreSQL role. The UFW
+helper detects the current SSH port when possible and requires typing `ENABLE`
+before it changes the firewall. Provider firewall/security-group rules remain
+separate and must allow the SSH port before UFW is enabled.
+
 ```bash
 sudo apt update
 sudo apt full-upgrade -y
@@ -275,6 +302,18 @@ Restore the real database only inside an approved maintenance window.
 
 Load each environment file while building:
 
+The repository helper can perform the locked installs and selected builds
+sequentially while loading each protected environment in isolation:
+
+```bash
+sudo deploy/production/build_applications.sh --cms
+sudo deploy/production/build_applications.sh --motorsport
+```
+
+Use `--all` only when all four environment files and applications are intended
+for this host. The explicit equivalent commands remain below for audit and
+manual troubleshooting.
+
 ```bash
 cd /srv/sarga-website
 set -a; source /etc/sarga/cms.env; set +a
@@ -314,6 +353,14 @@ sudo ss -lntp
 Only Nginx, SSH, and the local loopback listeners should be reachable.
 
 ## 9. Configure four Nginx server blocks
+
+Use the parameterized installer documented in
+`deploy/production/nginx/README.md` when the host initially runs only Sarga
+Motorsport and the CMS. Gateway and Horse Sport hostname flags can be added
+later without changing installers. It supports an HTTP-only pre-DNS setup and
+can be re-run with client-supplied or Cloudflare origin certificate paths. It
+does not manage the certificate lifecycle or perform the destructive CMS
+content import.
 
 Copy and edit the included HTTP configuration:
 

@@ -76,6 +76,13 @@ promotion artifacts. Use a newly generated strong passphrase for every
 snapshot, store it in the approved secret manager, and send it separately from
 the archive. Never commit an export, checksum sidecar, or passphrase.
 
+The `.git-sha` sidecar is not a separate credential. It is the 40-character Git
+commit identifier produced by `git rev-parse HEAD` on the source checkout. It
+proves which exact CMS schemas and code created the archive. Before import, the
+target must check out that same commit and rebuild CMS; the guarded importer
+rejects a different target SHA rather than importing data into mismatched
+schemas.
+
 For local Docker development, keep the PostgreSQL service running while the
 host Strapi CLI exports through port 5435. If Strapi itself is containerized,
 run the same `pnpm data:export` command inside a one-off CMS container with the
@@ -142,6 +149,21 @@ Do not send the passphrase through the same channel as the archive.
 
 The import is destructive. Take a paired target backup even when staging is
 expected to be disposable.
+
+The repository provides a guarded wrapper for the target-side commands below.
+It verifies the archive checksum, exact Git SHA, Strapi version, PostgreSQL and
+CMS service state, creates paired rollback backups, and then runs the same
+interactive Strapi import without `--force`:
+
+```bash
+sudo deploy/production/import_cms_snapshot.sh \
+  --archive /var/backups/sarga/incoming/sarga-cms-YYYYMMDDTHHMMSSZ.tar.gz.enc
+```
+
+The archive, `.sha256`, and `.git-sha` files must share the same base path. The
+operator must still type the target database name and enter the separately
+stored archive passphrase. The explicit commands remain documented below for
+audit, troubleshooting, and manual operation.
 
 ```bash
 export ARCHIVE=/var/backups/sarga/incoming/sarga-cms-YYYYMMDDTHHMMSSZ.tar.gz.enc

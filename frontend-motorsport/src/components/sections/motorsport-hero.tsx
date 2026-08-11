@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import {
   type PointerEvent as ReactPointerEvent,
   useEffect,
@@ -11,6 +11,7 @@ import {
 
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
+import { HeroVideo } from "@/components/ui/hero-video";
 import type { HomepageHeroSlide, LinkItem } from "@/types/design-system";
 
 const FALLBACK_SLIDE: HomepageHeroSlide = {
@@ -39,6 +40,7 @@ type MotorsportHeroProps = {
 function subscribeToReducedMotion(callback: () => void) {
   const media = window.matchMedia("(prefers-reduced-motion: reduce)");
   media.addEventListener("change", callback);
+  queueMicrotask(callback);
   return () => media.removeEventListener("change", callback);
 }
 
@@ -130,6 +132,8 @@ export function MotorsportHero({ slides }: MotorsportHeroProps) {
       {items.map((slide, index) => {
         const active = index === activeIndex;
         const anchorClass = ANCHOR_CLASS[slide.subjectAnchor];
+        const poster = slide.video?.poster ?? slide.image;
+        const mobilePoster = slide.video?.mobilePoster ?? slide.mobileImage;
 
         return (
           <div
@@ -143,24 +147,33 @@ export function MotorsportHero({ slides }: MotorsportHeroProps) {
             role="group"
           >
             <ResilientImage
-              src={slide.image}
+              src={poster}
               alt={active ? slide.imageAlt : ""}
               fallbackSrc={FALLBACK_SLIDE.image}
               fallbackAlt={FALLBACK_SLIDE.imageAlt}
               fill
               priority={index === 0}
               sizes="100vw"
-              className={`object-cover ${anchorClass} ${slide.mobileImage ? "hidden sm:block" : ""}`}
+              className={`object-cover ${anchorClass} ${mobilePoster ? "hidden sm:block" : ""}`}
             />
-            {slide.mobileImage ? (
+            {mobilePoster ? (
               <ResilientImage
-                src={slide.mobileImage}
+                src={mobilePoster}
                 alt={active ? slide.imageAlt : ""}
                 fallbackSrc={slide.image}
                 fallbackAlt={slide.imageAlt}
                 fill
                 sizes="100vw"
                 className={`object-cover sm:hidden ${anchorClass}`}
+              />
+            ) : null}
+            {active && slide.video ? (
+              <HeroVideo
+                mp4={slide.video.mp4}
+                webm={slide.video.webm}
+                poster={typeof poster === "string" ? poster : undefined}
+                paused={userPaused}
+                objectClassName={`object-cover ${anchorClass}`}
               />
             ) : null}
           </div>

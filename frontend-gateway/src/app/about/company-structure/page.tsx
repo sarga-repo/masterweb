@@ -1,25 +1,35 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { EditorialHeading } from "@/components/sections/editorial-heading";
 import { InteriorHero } from "@/components/sections/interior-hero";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import {
-  ecosystemBusinesses,
   ecosystemPillars,
   leadershipPeople as mockLeadership,
 } from "@/lib/mock-data";
 import { getLeadershipPeople } from "@/lib/strapi/about";
+import { getEcosystemBusinesses } from "@/lib/strapi/ecosystem";
 import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "Company Structure",
-  description:
-    "Explore Sarga's holding governance, executive leadership, shared operating platform, and connected portfolio structure.",
-  path: "/about/company-structure",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "Company Structure",
+    description:
+      "Explore Sarga's holding governance, executive leadership, shared operating platform, and connected portfolio structure.",
+    path: "/about/company-structure",
+    locale,
+    isFallback: locale === "id",
+  });
+}
 
 export default async function CompanyStructurePage() {
-  const cmsPeople = await getLeadershipPeople();
+  const locale = await getRequestLocale();
+  const [cmsPeople, ecosystemBusinesses] = await Promise.all([
+    getLeadershipPeople(locale),
+    getEcosystemBusinesses(locale),
+  ]);
   const leadershipPeople = cmsPeople.length > 0 ? cmsPeople : mockLeadership;
 
   const board = leadershipPeople.filter((person) => person.group === "board");
@@ -44,9 +54,10 @@ export default async function CompanyStructurePage() {
           "Four operating pillars",
           "Expandable portfolio",
         ]}
+        tone="slate"
       />
 
-      <section className="gateway-surface-light-signature bg-sarga-light py-20 sm:py-28 lg:py-36">
+      <section className="gateway-warm-panel py-20 sm:py-28 lg:py-36">
         <div className="site-container">
           <EditorialHeading
             index="02"
@@ -56,7 +67,7 @@ export default async function CompanyStructurePage() {
           />
 
           <div className="mt-16 lg:mt-20">
-            <div className="mx-auto max-w-3xl border border-sarga-black bg-sarga-black p-8 text-white sm:p-10">
+            <div className="gateway-corporate-root mx-auto max-w-3xl border border-white/15 p-8 text-white shadow-[0_24px_70px_rgb(16_20_27_/_16%)] sm:p-10">
               <p className="text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-sarga-red">
                 Corporate root
               </p>
@@ -75,7 +86,7 @@ export default async function CompanyStructurePage() {
             />
 
             <div className="grid gap-px bg-sarga-black/20 lg:grid-cols-2">
-              <article className="bg-white p-8 sm:p-10">
+              <article className="bg-[#fbf8f3] p-8 sm:p-10">
                 <p className="text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-sarga-red">
                   01 / Governance
                 </p>
@@ -95,7 +106,7 @@ export default async function CompanyStructurePage() {
                   ))}
                 </ul>
               </article>
-              <article className="bg-white p-8 sm:p-10">
+              <article className="bg-[#fbf8f3] p-8 sm:p-10">
                 <p className="text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-sarga-red">
                   02 / Management
                 </p>
@@ -125,7 +136,7 @@ export default async function CompanyStructurePage() {
               className="mx-auto h-12 w-px bg-sarga-black/35"
             />
 
-            <div className="border border-sarga-black/20 bg-white p-6 sm:p-8">
+            <div className="border border-sarga-black/20 bg-[#fbf8f3] p-6 sm:p-8">
               <p className="text-center text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-sarga-red">
                 Shared operating platform
               </p>
@@ -159,7 +170,7 @@ export default async function CompanyStructurePage() {
                 return (
                   <article
                     key={pillar.id}
-                    className="border border-sarga-black/20 bg-white p-6"
+                    className="border border-sarga-black/20 bg-[#fbf8f3] p-6"
                   >
                     <span className="font-heading text-2xl font-bold text-sarga-red">
                       {String(index + 1).padStart(2, "0")}
@@ -183,7 +194,7 @@ export default async function CompanyStructurePage() {
         </div>
       </section>
 
-      <section className="bg-sarga-black py-16 text-white sm:py-20">
+      <section className="gateway-corporate-root py-16 text-white sm:py-20">
         <div className="site-container flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-white/45">

@@ -11,6 +11,7 @@ export type InquiryPayload = {
   inquiryType: InquiryType;
   message: string;
   sourcePage?: string;
+  sourceLocale: "en" | "id";
 };
 
 /**

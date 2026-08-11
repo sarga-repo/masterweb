@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { usePathname } from "next/navigation";
 import { HorseSportLogo } from "@/components/ui/brand-logo";
 import {
@@ -11,12 +11,20 @@ import {
   CloseIcon,
 } from "@/components/ui/icons";
 import type { LinkItem } from "@/types/design-system";
+import type { SiteNavigationItem } from "@/lib/navigation-cms";
+import type { Locale } from "@/lib/i18n/config";
+import { localizeExternalSiteHref, stripLocalePrefix } from "@/lib/i18n/config";
+import type { HorseSportDictionary } from "@/lib/i18n/dictionaries";
+import { HorseSportLanguageSelector } from "@/components/i18n/language-selector";
 
 type HorseSportHeaderProps = {
-  navigation: LinkItem[];
-  ticketLink: LinkItem;
+  navigation: SiteNavigationItem[];
+  ticketLink: SiteNavigationItem;
   gatewayLink: LinkItem;
   motorsportLink: LinkItem;
+  locale: Locale;
+  dictionary: HorseSportDictionary;
+  navigationSource: "cms" | "repository";
 };
 
 /**
@@ -32,9 +40,13 @@ export function HorseSportHeader({
   ticketLink,
   gatewayLink,
   motorsportLink,
+  locale,
+  dictionary,
+  navigationSource,
 }: HorseSportHeaderProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const normalizedPath = stripLocalePrefix(pathname);
 
   // Lock body scroll when menu is open
   useEffect(() => {
@@ -54,27 +66,24 @@ export function HorseSportHeader({
   }, [onKeyDown]);
 
   function isActive(href: string) {
-    if (href === "/") return pathname === "/";
-    return pathname.startsWith(href);
+    if (href === "/") return normalizedPath === "/";
+    return normalizedPath.startsWith(href);
   }
 
   return (
     <>
       {/* Floating island pill */}
       <header
+        data-navigation-source={navigationSource}
         className="fixed inset-x-0 top-4 z-50 flex justify-center px-4 sm:top-5 sm:px-6"
         role="banner"
       >
         <nav
           className="flex w-full max-w-[86rem] items-center justify-between rounded-full border border-hs-cream/10 bg-hs-white/85 px-5 py-3 shadow-[0_0.75rem_2.5rem_rgb(20_20_25_/_0.12)] backdrop-blur-2xl sm:px-7 sm:py-3.5"
-          aria-label="Primary navigation"
+          aria-label={dictionary.primaryNavigation}
         >
           {/* Logo */}
-          <Link
-            href="/"
-            className="shrink-0"
-            aria-label="Sarga Horse Sport - Home"
-          >
+          <Link href="/" className="shrink-0" aria-label={dictionary.home}>
             <HorseSportLogo
               variant="black"
               className="w-[clamp(8rem,13vw,11rem)]"
@@ -111,6 +120,12 @@ export function HorseSportHeader({
 
           {/* Desktop CTA + hamburger */}
           <div className="flex items-center gap-3">
+            <div className="hidden lg:block">
+              <HorseSportLanguageSelector
+                locale={locale}
+                dictionary={dictionary}
+              />
+            </div>
             <Link
               href={ticketLink.href}
               className="hs-cta-primary hidden sm:inline-flex"
@@ -126,7 +141,7 @@ export function HorseSportHeader({
               type="button"
               onClick={() => setOpen((v) => !v)}
               className="relative grid size-10 place-items-center rounded-full border border-hs-cream/10 bg-hs-cream/[0.04] text-hs-cream/75 backdrop-blur-sm transition-colors duration-300 hover:border-hs-cream/25 hover:text-hs-cream lg:hidden"
-              aria-label={open ? "Close menu" : "Open menu"}
+              aria-label={open ? dictionary.closeMenu : dictionary.openMenu}
               aria-expanded={open}
             >
               <span
@@ -173,7 +188,7 @@ export function HorseSportHeader({
         {/* Nav links - staggered reveal */}
         <nav
           className="flex flex-1 flex-col items-center justify-center gap-1 px-6"
-          aria-label="Mobile navigation"
+          aria-label={dictionary.mobileNavigation}
         >
           {navigation.map((link, i) => (
             <Link
@@ -200,6 +215,11 @@ export function HorseSportHeader({
             open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
           }`}
         >
+          <HorseSportLanguageSelector
+            locale={locale}
+            dictionary={dictionary}
+            mobile
+          />
           <Link
             href={ticketLink.href}
             onClick={() => setOpen(false)}
@@ -213,7 +233,7 @@ export function HorseSportHeader({
 
           <div className="flex items-center gap-6">
             <a
-              href={gatewayLink.href}
+              href={localizeExternalSiteHref(gatewayLink.href, locale)}
               target={gatewayLink.external ? "_blank" : undefined}
               rel={gatewayLink.external ? "noreferrer" : undefined}
               className="inline-flex items-center gap-1.5 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-hs-cream/38 transition-colors duration-300 hover:text-hs-cream/70"
@@ -222,7 +242,7 @@ export function HorseSportHeader({
               <ArrowUpRightIcon className="size-3" />
             </a>
             <a
-              href={motorsportLink.href}
+              href={localizeExternalSiteHref(motorsportLink.href, locale)}
               target={motorsportLink.external ? "_blank" : undefined}
               rel={motorsportLink.external ? "noreferrer" : undefined}
               className="inline-flex items-center gap-1.5 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-hs-cream/38 transition-colors duration-300 hover:text-hs-cream/70"

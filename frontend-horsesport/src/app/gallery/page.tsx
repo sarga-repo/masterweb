@@ -8,13 +8,18 @@ import {
   SectionHeader,
 } from "@/components";
 import { fetchGalleryPage } from "@/lib/cms-content";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "Gallery",
-  description:
-    "Visual storytelling from Sarga Horse Sport - race day, stable life, venues, jockeys, and hospitality.",
-  path: "/gallery",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "Gallery",
+    description:
+      "Visual storytelling from Sarga Horse Sport - race day, stable life, venues, jockeys, and hospitality.",
+    path: "/gallery",
+    locale,
+  });
+}
 
 export default async function GalleryPage() {
   const groups = await fetchGalleryPage();

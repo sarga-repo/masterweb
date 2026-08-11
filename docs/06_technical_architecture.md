@@ -139,15 +139,46 @@ STRAPI_API_URL=https://cms.sarga.co
 STRAPI_API_TOKEN=replace_me
 NEXT_REVALIDATE_SECRET=replace_me
 
-SMTP_HOST=replace_me
-SMTP_PORT=587
-SMTP_USER=replace_me
-SMTP_PASS=replace_me
-FORM_RECIPIENT_EMAIL=replace_me
+MAIL_ENABLED=false
+MAIL_AUTH_MODE=oauth
+MAIL_SMTP_HOST=smtp.office365.com
+MAIL_SMTP_PORT=587
+MAIL_SMTP_REQUIRE_TLS=true
+MAIL_SMTP_USER=replace_me
+MAIL_FROM_ADDRESS=replace_me
+MAIL_FROM_NAME=Sarga
+MAIL_DEFAULT_REPLY_TO=replace_me
+MICROSOFT_TENANT_ID=replace_me
+MICROSOFT_CLIENT_ID=replace_me
+MICROSOFT_CLIENT_SECRET=replace_me
+MICROSOFT_SMTP_SCOPE=https://outlook.office365.com/.default
+# Emergency existing-tenant compatibility mode only; leave blank for OAuth.
+MAIL_SMTP_PASSWORD=
+MAIL_BASIC_AUTH_ACKNOWLEDGED=
+MAIL_BASIC_AUTH_EXPIRES_AT=
+MAIL_RECIPIENT_GATEWAY=replace_me
+MAIL_RECIPIENT_MOTORSPORT=replace_me
+MAIL_RECIPIENT_HORSESPORT=replace_me
+MAIL_NOTIFICATIONS_ENABLED=false
+MAIL_MAX_ATTEMPTS=5
+MAIL_WORKER_BATCH_SIZE=10
+MAIL_WORKER_CRON="*/1 * * * *"
 
 RECAPTCHA_SITE_KEY=replace_me
 RECAPTCHA_SECRET_KEY=replace_me
 ```
+
+The OAuth transport variables above are implemented by GWR-CMS-MAIL-2 and
+remain inactive while `MAIL_ENABLED=false`; see
+`docs/strapi-admin-menu/12_gwr_cms_mail_2_oauth_transport_spec.md`. Recipient
+and notification variables are implemented by GWR-CMS-MAIL-3 but remain
+inactive while `MAIL_NOTIFICATIONS_ENABLED=false`. OAuth 2.0 remains the
+production target. The reviewed GWR-CMS-MAIL-4.1 launch contingency may use
+`MAIL_AUTH_MODE=basic` only for an eligible existing tenant, with an exact risk
+acknowledgement and a mandatory expiry no later than 2026-12-15; see
+`docs/strapi-admin-menu/15_gwr_cms_mail_4_1_temporary_basic_auth_fallback.md`.
+No other password SMTP path is approved. Strapi handles outbound mail only;
+POP/incoming mailbox processing is outside the current architecture.
 
 ## Security design
 
@@ -165,11 +196,18 @@ RECAPTCHA_SECRET_KEY=replace_me
 ## Performance design
 
 - Compress and resize media assets
+- Encode CMS hero video as short, muted, seamless MP4/WebM loops. Supply a
+  poster, keep each final file well below the 100 MB infrastructure ceiling,
+  and target roughly 5-8 MB per source for the initial single-VM deployment.
+- Load only the active carousel video with `preload="metadata"`; reduced-motion
+  visitors receive the poster without mounting a video element.
 - Use next/image
 - Lazy-load below-the-fold images
 - Avoid unnecessary client-side JavaScript
 - Use static generation and caching
-- Use CDN for media
+- Use CDN for media when traffic or video-transfer volume justifies the
+  separately approved object-storage/CDN migration; local Strapi uploads remain
+  the initial single-VM source of truth.
 - Keep third-party scripts minimal
 
 ## SEO design
@@ -217,3 +255,29 @@ docs/13_local_docker_deployment.md
 ```
 
 The local database host port must remain `5435` to avoid conflict with common local PostgreSQL installations on `5432`.
+
+## Locale and navigation delivery (GWR-CMS-6/7 multisite rollout)
+
+- Strapi remains the single content source and now uses built-in `en`/`id`
+  i18n with English as default.
+- English remains unprefixed. All three frontends resolve Indonesian under
+  `/id` through a Next.js 16 proxy rewrite while keeping the localized URL
+  visible.
+- Each frontend independently owns typed interface dictionaries for its
+  branded shell, form, accessibility, and error controls and passes the URL
+  locale to its Strapi adapters.
+- A shared data contract, not shared branded UI, resolves site-scoped Top
+  Navigation items. Each frontend retains its own header component and styling.
+- URL locale is authoritative; an optional cookie remembers only an explicit
+  user switch.
+- Repository navigation arrays remain outage/unconfigured fallbacks. A
+  successfully configured CMS menu is never merged with hidden fallback items.
+- Metadata, structured data, sitemap, caching, and revalidation are locale
+  aware on all three sites. Missing Indonesian records use a complete English response,
+  receive a localized canonical plus hreflang set, and are marked `noindex`.
+
+The CMS foundation and three-site rollout are active: localized schemas,
+stable-route/navigation parity middleware, site-scoped Top Navigation RBAC,
+source-locale capture, bilingual navigation seeds, public `/id` routing,
+language dropdowns, and CMS-navigation consumption are in place. Staging
+migration and launch UAT remain gated to GWR-CMS-8.

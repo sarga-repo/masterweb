@@ -13,7 +13,7 @@ build/
 .strapi-updater.json
 tmp/
 output/playwright
-output/cms-transfers/
+output/cms-transfers*
 .playwright-cli
 
 # Strapi media uploads are intentionally tracked in the repo.

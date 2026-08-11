@@ -4,6 +4,9 @@ import localFont from "next/font/local";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { resolveSiteUrl, siteUrl } from "@/lib/seo/metadata";
+import { createMetadata } from "@/lib/seo/metadata";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getRequestLocale, getRequestPathname } from "@/lib/i18n/request";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -13,81 +16,64 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   weight: "variable",
 });
 
-// Brand display face (preview PDF p.7): Zalando Sans Expanded.
-// The SemiBold cut is mapped to the bold (700) slot so the `font-bold` headings
-// read as SemiBold - the approved weight, lighter than the Bold cut.
+// Brand display face from the approved Sarga.co preview. The official Google
+// Fonts variable file includes the required ExtraBold (800) weight and is kept
+// locally so production rendering does not depend on a third-party request.
 const zalandoSans = localFont({
-  src: [
-    {
-      path: "./fonts/zalando-expanded-400.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "./fonts/zalando-expanded-semibold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-  ],
+  src: "./fonts/zalando-sans-expanded-variable.ttf",
+  weight: "100 900",
+  style: "normal",
   display: "swap",
   variable: "--font-zalando-sans",
   adjustFontFallback: false,
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: "Sarga.co | 360° Sport & Entertainment",
-    template: "%s | Sarga.co",
-  },
-  description:
-    "The group gateway for Sarga's integrated sport and entertainment ecosystem.",
-  applicationName: "Sarga.co",
-  alternates: {
-    canonical: siteUrl,
-  },
-  openGraph: {
-    type: "website",
-    siteName: "Sarga.co",
-    locale: "en_US",
-    url: siteUrl,
-    title: "Sarga.co | 360° Sport & Entertainment",
+export async function generateMetadata(): Promise<Metadata> {
+  const [locale, pathname] = await Promise.all([
+    getRequestLocale(),
+    getRequestPathname(),
+  ]);
+  const result = createMetadata({
+    title:
+      locale === "id"
+        ? "Sarga.co | Olahraga & Hiburan 360°"
+        : "Sarga.co | 360° Sport & Entertainment",
     description:
-      "The group gateway for Sarga's integrated sport and entertainment ecosystem.",
-    images: [
-      {
-        url: resolveSiteUrl("/assets/media/sarga-cinematic-hero-concept.png"),
-        width: 1200,
-        height: 630,
-        alt: "Sarga.co | 360° Sport & Entertainment",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Sarga.co | 360° Sport & Entertainment",
-    description:
-      "The group gateway for Sarga's integrated sport and entertainment ecosystem.",
-    images: [resolveSiteUrl("/assets/media/sarga-cinematic-hero-concept.png")],
-  },
-};
+      locale === "id"
+        ? "Gerbang grup untuk ekosistem olahraga dan hiburan terpadu Sarga."
+        : "The group gateway for Sarga's integrated sport and entertainment ecosystem.",
+    path: pathname,
+    locale,
+    image: resolveSiteUrl("/assets/media/sarga-cinematic-hero-concept.png"),
+  });
 
-export default function RootLayout({
+  return {
+    ...result,
+    metadataBase: new URL(siteUrl),
+    applicationName: "Sarga.co",
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getRequestLocale();
+  const dictionary = getDictionary(locale);
+
   return (
     <html
-      lang="en"
+      lang={locale}
+      data-scroll-behavior="smooth"
       className={`h-full antialiased ${plusJakartaSans.variable} ${zalandoSans.variable}`}
     >
-      <body className="flex min-h-full flex-col bg-sarga-white text-sarga-text">
+      <body className="flex min-h-full flex-col bg-sarga-light text-sarga-text">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-sarga-sm focus:bg-sarga-red focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:uppercase focus:text-white"
         >
-          Skip to content
+          {dictionary.shell.skipToContent}
         </a>
         <Header />
         <main id="main-content" className="flex flex-1 flex-col">

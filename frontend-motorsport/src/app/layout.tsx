@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@fontsource-variable/noto-sans/wght.css";
-
+import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale, getRequestPathname } from "@/lib/i18n/request";
 import { resolveSiteUrl, siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
-/** Sarga Motorsport display face (brand target: Owners Wide - Black cut). */
 const ownersWide = localFont({
   src: "./fonts/owners-wide-black.ttf",
   display: "swap",
@@ -13,58 +13,58 @@ const ownersWide = localFont({
   weight: "900",
   style: "normal",
 });
-
 const defaultSocialImage = resolveSiteUrl("/media/motorsport-design-hero.png");
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.siteUrl),
-  title: {
-    default: `${siteConfig.name} - ${siteConfig.tagline}`,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  applicationName: siteConfig.name,
-  alternates: {
-    canonical: siteConfig.siteUrl,
-  },
-  openGraph: {
-    type: "website",
-    siteName: siteConfig.name,
-    locale: "en_US",
-    url: siteConfig.siteUrl,
-    title: `${siteConfig.name} - ${siteConfig.tagline}`,
-    description: siteConfig.description,
-    images: [
-      {
-        url: defaultSocialImage,
-        width: 1200,
-        height: 630,
-        alt: `${siteConfig.name} - ${siteConfig.tagline}`,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${siteConfig.name} - ${siteConfig.tagline}`,
-    description: siteConfig.description,
-    images: [defaultSocialImage],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-    },
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const [locale, pathname] = await Promise.all([
+    getRequestLocale(),
+    getRequestPathname(),
+  ]);
+  return {
+    ...createMetadata({
+      title: `${siteConfig.name} - ${siteConfig.tagline}`,
+      description: siteConfig.description,
+      path: pathname,
+      image: defaultSocialImage,
+      locale,
+    }),
+    metadataBase: new URL(siteConfig.siteUrl),
+    applicationName: siteConfig.name,
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const locale = await getRequestLocale();
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: siteConfig.name,
+    description: siteConfig.description,
+    url: resolveSiteUrl(locale === "id" ? "/id" : "/"),
+    logo: defaultSocialImage,
+    inLanguage: locale === "id" ? "id-ID" : "en-US",
+  };
+
   return (
-    <html lang="en" className={ownersWide.variable}>
-      <body>{children}</body>
+    <html
+      lang={locale}
+      data-scroll-behavior="smooth"
+      className={ownersWide.variable}
+    >
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd).replaceAll(
+              "<",
+              "\\u003c",
+            ),
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

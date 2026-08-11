@@ -9,7 +9,7 @@ export function NewsletterSection() {
   return (
     <section
       id="newsletter"
-      className="relative isolate overflow-hidden bg-sarga-black py-16 text-white sm:py-20"
+      className="relative isolate overflow-hidden bg-sarga-soft py-16 text-white sm:py-20"
     >
       <span
         aria-hidden="true"

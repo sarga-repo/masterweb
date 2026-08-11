@@ -1,11 +1,17 @@
 import "server-only";
 
 import type {
+  PageAvailability,
+  HeroVideo,
+  RawHeroVideo,
+  RawPageAvailability,
   RawSeo,
   RawStrapiMedia,
   Seo,
   StrapiImage,
 } from "@/lib/strapi/types";
+import type { Locale } from "@/lib/i18n/config";
+import { getRequestLocale } from "@/lib/i18n/request";
 
 /**
  * Server-only Strapi client.
@@ -52,6 +58,25 @@ type StrapiFetchOptions = {
   query?: string;
 };
 
+export type LocalizedFetchResult<T> = {
+  response: T | null;
+  requestedLocale: Locale;
+  resolvedLocale: Locale;
+  isFallback: boolean;
+};
+
+function hasStrapiData(value: unknown): boolean {
+  if (!value || typeof value !== "object" || !("data" in value)) return false;
+  const data = (value as { data?: unknown }).data;
+  return Array.isArray(data)
+    ? data.length > 0
+    : data !== null && data !== undefined;
+}
+
+function queryWithLocale(query: string | undefined, locale: Locale): string {
+  return `locale=${locale}${query ? `&${query}` : ""}`;
+}
+
 /**
  * Fetch JSON from Strapi. Returns `null` on any failure (network error, missing
  * config, non-2xx) so services can fall back to mock data instead of throwing.
@@ -90,6 +115,42 @@ export async function strapiFetch<T>(
     }
     return null;
   }
+}
+
+/**
+ * Fetch a complete localized Strapi response. Missing Indonesian content falls
+ * back to the complete English response; fields are never merged across locales.
+ */
+export async function strapiFetchLocalized<T>(
+  path: string,
+  options: StrapiFetchOptions & { locale?: Locale } = {},
+): Promise<LocalizedFetchResult<T>> {
+  const requestedLocale = options.locale ?? (await getRequestLocale());
+  const localizedResponse = await strapiFetch<T>(path, {
+    ...options,
+    query: queryWithLocale(options.query, requestedLocale),
+  });
+
+  if (requestedLocale === "en" || hasStrapiData(localizedResponse)) {
+    return {
+      response: localizedResponse,
+      requestedLocale,
+      resolvedLocale: requestedLocale,
+      isFallback: false,
+    };
+  }
+
+  const englishResponse = await strapiFetch<T>(path, {
+    ...options,
+    query: queryWithLocale(options.query, "en"),
+  });
+
+  return {
+    response: englishResponse ?? localizedResponse,
+    requestedLocale,
+    resolvedLocale: "en",
+    isFallback: true,
+  };
 }
 
 export type StrapiMutationResult = {
@@ -160,6 +221,70 @@ export function mapMedia(
     alt: media.alternativeText ?? fallbackAlt,
     width: media.width ?? undefined,
     height: media.height ?? undefined,
+  };
+}
+
+function videoFormat(
+  media: RawStrapiMedia | undefined,
+): "mp4" | "webm" | undefined {
+  const mime = media?.mime?.toLowerCase();
+  const extension = media?.ext?.toLowerCase();
+  const url = media?.url?.toLowerCase();
+  if (mime === "video/mp4" || extension === ".mp4" || url?.endsWith(".mp4")) {
+    return "mp4";
+  }
+  if (
+    mime === "video/webm" ||
+    extension === ".webm" ||
+    url?.endsWith(".webm")
+  ) {
+    return "webm";
+  }
+  return undefined;
+}
+
+/** Map the optional CMS hero-video component and reject unsupported codecs. */
+export function mapHeroVideo(
+  video: RawHeroVideo | undefined,
+  fallbackAlt = "",
+): HeroVideo | undefined {
+  if (!video || video.enabled === false) return undefined;
+
+  const sources = [video.primaryVideo, video.alternateVideo].filter(
+    (item): item is Exclude<RawStrapiMedia, null> => Boolean(item?.url),
+  );
+  const mapped: HeroVideo = {
+    posterImage: mapMedia(video.posterImage, fallbackAlt),
+    mobilePosterImage: mapMedia(video.mobilePosterImage, fallbackAlt),
+  };
+
+  for (const source of sources) {
+    const format = videoFormat(source);
+    const url = absoluteMediaUrl(source.url);
+    if (format && url && !mapped[format]) mapped[format] = url;
+  }
+
+  return mapped.mp4 || mapped.webm ? mapped : undefined;
+}
+
+/** Map the shared CMS page toggle and Coming Soon copy into a stable view model. */
+export function mapPageAvailability(
+  availability: RawPageAvailability | undefined,
+  fallbackTitle?: string,
+): PageAvailability | undefined {
+  if (!availability) return undefined;
+  return {
+    pageEnabled: availability.pageEnabled ?? false,
+    comingSoonEyebrow: availability.comingSoonEyebrow,
+    comingSoonTitle: availability.comingSoonTitle ?? fallbackTitle,
+    comingSoonDescription: availability.comingSoonDescription,
+    comingSoonMedia: mapMedia(
+      availability.comingSoonMedia,
+      availability.comingSoonTitle ?? fallbackTitle ?? "Coming soon",
+    ),
+    launchTargetLabel: availability.launchTargetLabel,
+    showNotifyCta: availability.showNotifyCta ?? true,
+    noIndexWhileDisabled: availability.noIndexWhileDisabled ?? true,
   };
 }
 

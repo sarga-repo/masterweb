@@ -25,12 +25,26 @@
         "event",
         "venue",
         "career",
+        "ticketing",
+        "stable",
         "general"
       ],
       "required": true
     },
     "message": { "type": "text", "required": true },
     "sourcePage": { "type": "string" },
+    "sourceSite": {
+      "type": "enumeration",
+      "enum": ["gateway", "motorsport", "horsesport"],
+      "default": "gateway",
+      "required": true
+    },
+    "sourceLocale": {
+      "type": "enumeration",
+      "enum": ["en", "id"],
+      "default": "en",
+      "required": true
+    },
     "submittedAt": { "type": "datetime" },
     "status": {
       "type": "enumeration",
@@ -38,6 +52,23 @@
       "default": "new",
       "required": true
     },
+    "notificationStatus": {
+      "type": "enumeration",
+      "enum": ["disabled", "pending", "processing", "sent", "failed"],
+      "default": "disabled",
+      "required": true,
+      "private": true
+    },
+    "notificationAttempts": {
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "private": true
+    },
+    "notificationNextAttemptAt": { "type": "datetime", "private": true },
+    "notificationLastAttemptAt": { "type": "datetime", "private": true },
+    "notificationSentAt": { "type": "datetime", "private": true },
+    "notificationLastErrorCode": { "type": "string", "private": true },
     "internalNotes": { "type": "text", "private": true }
   }
 }

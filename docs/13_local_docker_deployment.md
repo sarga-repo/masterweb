@@ -63,6 +63,13 @@ Then open:
 - Strapi admin: `http://localhost:1337/admin`
 - PostgreSQL from host tools: `localhost:5435`
 
+For local hero-video authoring, upload a short MP4/WebM plus poster through the
+Strapi Media Library and attach the Hero Video component to the appropriate home
+record. These files live in `cms/public/uploads`; keep them with the database
+when backing up or moving the local content snapshot. Use the repository Horse
+Sport loop only as frontend fallback/test evidence, not as a production CMS
+asset.
+
 ## Optional: full containerized stack
 
 To run Strapi and all three frontends in Docker as well (e.g. for a clean-room
@@ -74,6 +81,48 @@ docker compose --profile apps up --build
 
 This starts `postgres`, `strapi`, `frontend-gateway` (3000),
 `frontend-motorsport` (3001), and `frontend-horsesport` (3002) as containers.
+
+The Strapi service keeps `/app/node_modules` in a named volume. After a CMS
+dependency/lockfile change, an image rebuild alone does not replace an existing
+dependency volume. Refresh it in place and restart Strapi:
+
+```bash
+docker compose --profile apps exec -T -e CI=true strapi pnpm install --frozen-lockfile
+docker compose --profile apps restart strapi
+```
+
+Do not remove database or uploads volumes just to refresh dependencies.
+
+## Local outbound email
+
+The Exchange Online transport is included in Strapi but
+`MAIL_ENABLED=false` by default in both host and Compose workflows. Normal
+local development must leave it disabled; form submissions continue to be
+stored according to their existing mode and this phase does not send
+notifications.
+
+`MAIL_NOTIFICATIONS_ENABLED` is a second, independent safety switch and also
+defaults to false. Enabling it requires all three fixed site recipient
+allowlists and a working MAIL-2 transport; incomplete configuration stops
+Strapi rather than silently routing to a fallback recipient. Local newsletter
+records never trigger Exchange email.
+
+`MAIL_AUTH_MODE=oauth` is the local default. Do not enable the MAIL-4.1 Basic
+compatibility mode locally or copy the production mailbox password, Entra
+client secret, or access token into the repository or a shared developer
+`.env`. If Sarga IT authorizes a temporary staging-only credential check, use
+the protected staging runtime environment and run:
+
+```bash
+pnpm --dir cms mail:verify
+```
+
+The command performs SMTP authentication for the selected mode without
+submitting an email. See
+[`docs/strapi-admin-menu/12_gwr_cms_mail_2_oauth_transport_spec.md`](strapi-admin-menu/12_gwr_cms_mail_2_oauth_transport_spec.md)
+for the target OAuth configuration, or
+[`docs/strapi-admin-menu/15_gwr_cms_mail_4_1_temporary_basic_auth_fallback.md`](strapi-admin-menu/15_gwr_cms_mail_4_1_temporary_basic_auth_fallback.md)
+for the time-boxed launch contingency.
 
 ## Database connection values for local tools
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { notFound } from "next/navigation";
 import { InteriorHero } from "@/components/sections/interior-hero";
 import { SafeRichText } from "@/components/content/safe-rich-text";
@@ -8,11 +8,13 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { getNewsArticleBySlug, getNewsArticles } from "@/lib/strapi/news";
 import { createMetadata, siteUrl } from "@/lib/seo/metadata";
+import { localizePath } from "@/lib/i18n/config";
+import { getRequestLocale } from "@/lib/i18n/request";
 
 type ArticlePageProps = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  const articles = await getNewsArticles();
+  const articles = await getNewsArticles({ locale: "en" });
   return articles.map(({ slug }) => ({ slug }));
 }
 
@@ -20,7 +22,8 @@ export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = await getNewsArticleBySlug(slug);
+  const locale = await getRequestLocale();
+  const article = await getNewsArticleBySlug(slug, locale);
   return createMetadata({
     title: article?.title ?? "Article not found",
     description: article?.excerpt ?? "Sarga news article.",
@@ -28,14 +31,17 @@ export async function generateMetadata({
     image: article?.coverImage?.url,
     seo: article?.seo,
     type: "article",
+    locale,
+    isFallback: article?.localization?.isFallback ?? locale === "id",
   });
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
+  const locale = await getRequestLocale();
   const [article, articles] = await Promise.all([
-    getNewsArticleBySlug(slug),
-    getNewsArticles(),
+    getNewsArticleBySlug(slug, locale),
+    getNewsArticles({ locale }),
   ]);
   if (!article) notFound();
   const related = articles
@@ -46,7 +52,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         Number(a.category === article.category),
     )
     .slice(0, 2);
-  const articleUrl = `${siteUrl}/news/${article.slug}`;
+  const articleUrl = `${siteUrl}${localizePath(`/news/${article.slug}`, locale)}`;
   const shareText = encodeURIComponent(article.title);
   const shareUrl = encodeURIComponent(articleUrl);
 
@@ -65,6 +71,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           },
           publisher: { "@type": "Organization", name: "Sarga.co" },
           mainEntityOfPage: `${siteUrl}/news/${article.slug}`,
+          inLanguage: locale === "id" ? "id-ID" : "en-US",
           image: article.coverImage?.url,
         }}
       />

@@ -1,5 +1,14 @@
 # 12 - Brand and Creative Reference Guideline
 
+> **Gateway revamp precedence (2026-08-10):** For current Sarga.co Gateway
+> implementation, use `docs/gateway/revamp/` and the Website Sarga.co Preview /
+> Brand Visual Preview sections of
+> `reference/source-pdfs/look_and_feel_website_sarga_co.pdf`. The approved brief
+> explicitly requires closer layout and brand-visual alignment while retaining
+> the current theme. The general originality guidance below still applies, but
+> statements treating all sample layouts as non-binding no longer override the
+> Gateway revamp specification.
+
 ## Purpose
 
 `reference/source-pdfs/sarga_website_preview.pdf` contains two different kinds of reference material that must not be conflated:
@@ -119,5 +128,7 @@ A design is ready for approval when:
 
 ```text
 reference/source-pdfs/sarga_website_preview.pdf
+reference/source-pdfs/look_and_feel_website_sarga_co.pdf
+reference/source-pdfs/sarga.co_sitemap.pdf
 reference/source-pdfs/requirements.pdf
 ```

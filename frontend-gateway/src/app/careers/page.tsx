@@ -1,41 +1,30 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { EditorialHeading } from "@/components/sections/editorial-heading";
 import { InteriorHero } from "@/components/sections/interior-hero";
-import { ArrowRightIcon } from "@/components/ui/icons";
+import { ArrowRightIcon, LinkedInIcon } from "@/components/ui/icons";
+import { careerDisciplines } from "@/lib/careers/disciplines";
 import { createMetadata } from "@/lib/seo/metadata";
+import { getJobVacancies } from "@/lib/strapi/jobs";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "Careers",
-  description:
-    "Build the next generation of sport and entertainment with Sarga.",
-  path: "/careers",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "Careers",
+    description:
+      "Explore open roles and build the next generation of sport and entertainment with Sarga.",
+    path: "/careers",
+    locale,
+    isFallback: locale === "id",
+  });
+}
 
-const disciplines = [
-  [
-    "01",
-    "Sport operations",
-    "Competition delivery, athlete services, sporting regulation, and performance programs.",
-  ],
-  [
-    "02",
-    "Venue & experience",
-    "Track operations, hospitality, guest experience, safety, and event production.",
-  ],
-  [
-    "03",
-    "Media & creative",
-    "Broadcast, editorial, brand systems, content production, and commercial storytelling.",
-  ],
-  [
-    "04",
-    "Technology & group",
-    "Product, data, partnerships, finance, governance, and shared corporate operations.",
-  ],
-] as const;
+export default async function CareersPage() {
+  const locale = await getRequestLocale();
+  const jobs = await getJobVacancies(locale);
+  const openJobs = jobs.filter((job) => job.vacancyStatus === "open");
 
-export default function CareersPage() {
   return (
     <>
       <InteriorHero
@@ -51,55 +40,85 @@ export default function CareersPage() {
           "Cross-disciplinary teams",
           "Indonesia",
           "Performance culture",
-          "Open roster in preparation",
+          `${openJobs.length} open ${openJobs.length === 1 ? "role" : "roles"}`,
         ]}
+        tone="slate"
       />
 
-      <section className="gateway-surface-light-signature bg-sarga-light py-20 sm:py-28 lg:py-36">
+      <section className="gateway-warm-panel py-20 sm:py-28 lg:py-36">
         <div className="site-container">
           <EditorialHeading
             index="01"
             eyebrow="Where you can move"
             title="Many disciplines. One standard."
-            description="We build teams around expertise, accountability, and the willingness to move across conventional category lines."
+            description="Choose a discipline to see its current opportunity roster, then review each role before continuing to its approved LinkedIn application."
           />
           <ol className="mt-16 grid border-l border-t border-sarga-black/20 sm:grid-cols-2">
-            {disciplines.map(([index, title, description]) => (
-              <li
-                key={index}
-                className="min-h-[20rem] border-b border-r border-sarga-black/20 p-7 sm:p-10"
-              >
-                <span className="font-heading text-2xl font-bold text-sarga-red">
-                  {index}
-                </span>
-                <h3 className="mt-16 font-heading text-3xl font-bold uppercase leading-[0.94] tracking-[-0.03em]">
-                  {title}
-                </h3>
-                <p className="mt-6 max-w-md text-sm leading-7 text-sarga-text-muted">
-                  {description}
-                </p>
-              </li>
-            ))}
+            {careerDisciplines.map((discipline) => {
+              const count = openJobs.filter(
+                (job) => job.discipline === discipline.id,
+              ).length;
+              return (
+                <li key={discipline.id} className="min-w-0">
+                  <Link
+                    href={`/careers/jobs?discipline=${discipline.id}`}
+                    className="group flex min-h-[20rem] flex-col border-b border-r border-sarga-black/20 p-7 transition-colors hover:bg-white/45 focus-visible:bg-white/45 sm:p-10"
+                  >
+                    <div className="flex items-start justify-between gap-6">
+                      <span className="font-heading text-2xl font-bold text-sarga-red">
+                        {discipline.index}
+                      </span>
+                      <span className="border border-sarga-black/20 px-3 py-2 text-[0.62rem] font-extrabold uppercase tracking-[0.14em] text-sarga-text-muted">
+                        {count} open
+                      </span>
+                    </div>
+                    <div className="mt-auto pt-16">
+                      <h2 className="gateway-card-title font-heading uppercase">
+                        {discipline.label}
+                      </h2>
+                      <p className="mt-6 max-w-md text-sm leading-7 text-sarga-text-muted">
+                        {discipline.description}
+                      </p>
+                      <span className="mt-7 inline-flex items-center gap-3 text-[0.65rem] font-extrabold uppercase tracking-[0.15em] text-sarga-red">
+                        View opportunities
+                        <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </span>
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
           </ol>
         </div>
       </section>
 
-      <section className="gateway-surface-accent-signature gateway-surface-accent-signature--left bg-sarga-red py-20 text-white sm:py-28 lg:py-36">
-        <div className="site-container grid gap-12 lg:grid-cols-[1.25fr_0.75fr] lg:items-end">
-          <h2 className="max-w-full break-words font-heading text-[clamp(2.1rem,9.5vw,3rem)] font-bold uppercase leading-[0.88] tracking-[-0.045em] sm:max-w-[14ch] sm:text-[clamp(3rem,4.4vw,4.8rem)]">
-            No generic applications. Make your intent count.
-          </h2>
+      <section
+        id="open-roster"
+        className="gateway-surface-accent-signature gateway-surface-accent-signature--left bg-sarga-red py-20 text-white sm:py-28 lg:py-36"
+      >
+        <div className="site-container grid min-w-0 gap-12 lg:grid-cols-[1.25fr_0.75fr] lg:items-end">
           <div>
-            <p className="text-base leading-8 text-white/72">
-              The official opportunity roster and approved recruitment links
-              will appear here when roles are opened. Until then, partnership
-              and talent inquiries can begin through the contact desk.
+            <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.18em] text-white/60">
+              Current opportunity roster
+            </p>
+            <h2 className="gateway-display-page mt-5 max-w-[12ch] font-heading uppercase">
+              {openJobs.length
+                ? `${openJobs.length} roles. Find your place.`
+                : "No open roles right now."}
+            </h2>
+          </div>
+          <div>
+            <p className="border-l border-white/35 pl-6 text-base leading-8 text-white/78">
+              {openJobs.length
+                ? "Search the live roster by discipline, employment type, work mode, or keyword. Every apply action continues to an approved LinkedIn vacancy."
+                : "The CMS-managed roster is currently empty. New roles will appear here only after the recruitment team publishes an approved vacancy and LinkedIn destination."}
             </p>
             <Link
-              href="/contact"
+              href="/careers/jobs"
               className="group mt-9 inline-flex items-center gap-4 border-b border-white pb-2 text-xs font-extrabold uppercase tracking-[0.16em]"
             >
-              Contact the group
+              <LinkedInIcon className="h-4 w-4" />
+              Browse job vacancies
               <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>

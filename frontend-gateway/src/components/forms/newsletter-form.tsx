@@ -1,8 +1,11 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
+import { usePathname } from "next/navigation";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
+import { localeFromPathname, type Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 type NewsletterFormProps = {
   id: string;
@@ -10,6 +13,7 @@ type NewsletterFormProps = {
   tone?: "dark" | "light";
   className?: string;
   showConsent?: boolean;
+  locale?: Locale;
 };
 
 export function NewsletterForm({
@@ -18,7 +22,11 @@ export function NewsletterForm({
   tone = "dark",
   className,
   showConsent = false,
+  locale: providedLocale,
 }: NewsletterFormProps) {
+  const pathname = usePathname();
+  const locale = providedLocale ?? localeFromPathname(pathname);
+  const dictionary = getDictionary(locale);
   const isDark = tone === "dark";
   const formRef = useRef<HTMLFormElement>(null);
   const startedAt = useRef<number | null>(null);
@@ -36,12 +44,16 @@ export function NewsletterForm({
     try {
       const response = await fetch("/api/newsletter", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Sarga-Locale": locale,
+        },
         body: JSON.stringify({
           email: form.get("email"),
           consent: form.get("consent") === "on",
           website: form.get("website"),
           sourcePage: window.location.pathname,
+          sourceLocale: locale,
           formStartedAt: startedAt.current ?? 0,
         }),
       });
@@ -51,16 +63,16 @@ export function NewsletterForm({
       };
       if (!response.ok || !result.ok) {
         setStatus("error");
-        setMessage(result.message ?? "Please enter a valid email address.");
+        setMessage(result.message ?? dictionary.form.invalidEmail);
         return;
       }
       formRef.current?.reset();
       startedAt.current = null;
       setStatus("success");
-      setMessage(result.message ?? "You are subscribed.");
+      setMessage(result.message ?? dictionary.form.subscribed);
     } catch {
       setStatus("error");
-      setMessage("Subscription is temporarily unavailable.");
+      setMessage(dictionary.form.unavailable);
     }
   }
 
@@ -75,7 +87,7 @@ export function NewsletterForm({
       className={cn("max-w-sm", className)}
     >
       <label htmlFor={id} className="sr-only">
-        Email address
+        {dictionary.form.emailAddress}
       </label>
       <div
         className={cn(
@@ -102,7 +114,7 @@ export function NewsletterForm({
         <button
           type="submit"
           disabled={status === "submitting"}
-          aria-label="Subscribe to the newsletter"
+          aria-label={dictionary.form.subscribe}
           className="flex h-10 w-10 shrink-0 items-center justify-center bg-sarga-red text-white transition-[background-color,transform] duration-300 hover:translate-x-0.5 hover:bg-sarga-red-dark focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-sarga-orange disabled:cursor-wait disabled:opacity-60"
         >
           <ArrowRightIcon className="h-4 w-4" />
@@ -120,8 +132,7 @@ export function NewsletterForm({
             type="checkbox"
             className="mt-0.5 h-4 w-4 accent-sarga-red"
           />
-          I agree to receive Sarga news and event updates. Optional; you can
-          unsubscribe at any time.
+          {dictionary.form.consent}
         </label>
       ) : null}
       <input
@@ -145,7 +156,7 @@ export function NewsletterForm({
               : "text-sarga-red",
         )}
       >
-        {status === "submitting" ? "Subscribing…" : message}
+        {status === "submitting" ? dictionary.form.subscribing : message}
       </p>
     </form>
   );

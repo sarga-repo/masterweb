@@ -1,0 +1,56 @@
+{
+  "collectionName": "components_motorsport_discipline_cards",
+  "info": {
+    "displayName": "Motorsport Discipline Card",
+    "description": "Ordered homepage racing-format card with managed media and destination"
+  },
+  "options": {},
+  "attributes": {
+    "internalName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 60
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 60
+    },
+    "shortLabel": {
+      "type": "string",
+      "maxLength": 60
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "imageAlt": {
+      "type": "string",
+      "maxLength": 180
+    },
+    "href": {
+      "type": "string",
+      "required": true,
+      "default": "/events"
+    },
+    "accent": {
+      "type": "enumeration",
+      "enum": ["crimson", "orange", "yellow", "teal", "blue"],
+      "default": "crimson",
+      "required": true
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "required": true
+    }
+  }
+}

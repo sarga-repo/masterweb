@@ -12,14 +12,17 @@ import { RaceEventCard } from "@/components/cards/race-event-card";
 import { NewsArticleCard } from "@/components/cards/news-article-card";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { GATEWAY_LINK, MOTORSPORT_LINK } from "@/lib/navigation";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import Image from "next/image";
 import { ArrowRightIcon } from "@/components/ui/icons";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { localizeExternalSiteHref } from "@/lib/i18n/config";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60;
 
 export default async function Homepage() {
+  const locale = await getRequestLocale();
   const data = await fetchHomepageData();
   const seasonEvents = data.seasonEvents.slice(0, 6);
   const aboutImage =
@@ -55,15 +58,17 @@ export default async function Homepage() {
               )
             : "Championship equestrian sport, premium hospitality, and race-day experiences at international standard."
         }
-        image="/media/horse-sport-hero.png"
-        imageAlt="Jockeys racing thoroughbreds across a championship turf track at golden hour"
-        video={{
-          webm: "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.webm",
-          mp4: "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.mp4",
-          poster:
-            "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.png",
-          objectClassName: "object-cover object-center",
-        }}
+        image={data.hero.image}
+        mobileImage={data.hero.mobileImage}
+        imageAlt={data.hero.imageAlt}
+        video={
+          data.hero.video
+            ? {
+                ...data.hero.video,
+                objectClassName: "object-cover object-center",
+              }
+            : undefined
+        }
         primaryCta={
           data.featuredEvent
             ? { label: "View race day", href: data.featuredEvent.href }
@@ -417,6 +422,7 @@ export default async function Homepage() {
                 links={[
                   {
                     ...GATEWAY_LINK,
+                    href: localizeExternalSiteHref(GATEWAY_LINK.href, locale),
                     label: "Sarga.co",
                     description:
                       "The group gateway - corporate & investor portal.",
@@ -424,6 +430,10 @@ export default async function Homepage() {
                   },
                   {
                     ...MOTORSPORT_LINK,
+                    href: localizeExternalSiteHref(
+                      MOTORSPORT_LINK.href,
+                      locale,
+                    ),
                     label: "Sarga Motorsport",
                     description:
                       "Adrenaline-fuelled racing, track days & lifestyle.",

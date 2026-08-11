@@ -8,13 +8,18 @@ import {
   NewsArticleCard,
 } from "@/components";
 import { fetchNewsPage } from "@/lib/cms-content";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "Stable Life",
-  description:
-    "The discipline behind the sport - horses, jockeys, training, veterinary care, and race-day preparation.",
-  path: "/stable-life",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "Stable Life",
+    description:
+      "The discipline behind the sport - horses, jockeys, training, veterinary care, and race-day preparation.",
+    path: "/stable-life",
+    locale,
+  });
+}
 
 const STABLE_CATEGORIES = ["stable", "jockey", "equine"];
 

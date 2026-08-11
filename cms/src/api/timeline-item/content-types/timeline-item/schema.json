@@ -10,12 +10,22 @@
   "options": {
     "draftAndPublish": true
   },
-  "pluginOptions": {},
+  "pluginOptions": { "i18n": { "localized": true } },
   "attributes": {
     "year": { "type": "string", "required": true },
-    "label": { "type": "string" },
-    "title": { "type": "string", "required": true },
-    "description": { "type": "text" },
+    "label": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "description": {
+      "type": "text",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "order": { "type": "integer", "default": 0 },
     "image": {
       "type": "media",

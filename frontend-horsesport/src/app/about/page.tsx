@@ -19,13 +19,18 @@ import {
   HorseshoeIcon,
 } from "@/components/ui/hs-icons";
 import { fetchHorseSportBusiness } from "@/lib/strapi/content";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "About",
-  description:
-    "Sarga Horse Sport positioning, championship standards, race organisation capability, venue development, and race-day hospitality.",
-  path: "/about",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "About",
+    description:
+      "Sarga Horse Sport positioning, championship standards, race organisation capability, venue development, and race-day hospitality.",
+    path: "/about",
+    locale,
+  });
+}
 
 const CAPABILITIES = [
   {

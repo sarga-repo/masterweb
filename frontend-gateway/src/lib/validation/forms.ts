@@ -14,6 +14,8 @@ const antiSpamFields = {
   recaptchaToken: optionalText(4096),
 };
 
+const sourceLocale = z.enum(["en", "id"]).default("en");
+
 export const inquiryTypes = [
   "partnership",
   "sponsorship",
@@ -38,6 +40,7 @@ export const contactFormSchema = z.object({
     .min(20, "Please provide at least 20 characters of context.")
     .max(5000),
   sourcePage: optionalText(500),
+  sourceLocale,
   ...antiSpamFields,
 });
 
@@ -45,6 +48,7 @@ export const newsletterFormSchema = z.object({
   email: z.email("Please enter a valid email address.").max(254),
   consent: z.boolean().optional().default(false),
   sourcePage: optionalText(500),
+  sourceLocale,
   ...antiSpamFields,
 });
 

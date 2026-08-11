@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { MotorsportLogo } from "@/components/ui/brand-logo";
 import { ArrowUpRightIcon } from "@/components/ui/icons";

@@ -36,7 +36,7 @@ viewports both items must remain easy to find in the mobile menu.
 | Become Riders                           | `/events/indonesia-junior-talent-cup/become-riders`                                                      | Delivered in MSR-6                          | Validated inquiry flow with no public account or implied selection.                                                                        |
 | FIA Rallycross World Cup Indonesia 2026 | `/events/fia-rallycross-world-cup-indonesia-2026` or `/campaign/fia-rallycross-world-cup-indonesia-2026` | Existing dynamic campaign route can support | Campaign landing page with ticket CTA.                                                                                                     |
 | News                                    | `/news`                                                                                                  | Revamped in MSR-5                           | CMS listing with recalibrated editorial hierarchy and media fallback.                                                                      |
-| News detail                             | `/news/[slug]`                                                                                           | Revamped in MSR-5                           | CMS detail retained with resilient hero media and article hierarchy.                                                                       |
+| News detail                             | `/news/[slug]`                                                                                           | Revamped in MSR-5 / refined in GWR-CMS-11   | CMS detail retained with resilient hero media, article hierarchy, and warm brand reflected-light surfaces instead of cream-dominated canvases. |
 | Contact                                 | `/contact`                                                                                               | Revamped in MSR-5                           | Motorsport inquiry routing, including talent and merchandise categories.                                                                   |
 | Gallery                                 | `/gallery`                                                                                               | Revamped in MSR-5                           | CMS-backed responsive mosaic with approved local media fallback.                                                                           |
 | Merchandise                             | `/merchandise`                                                                                           | Added in MSR-5                              | Six-item CMS catalog with purpose-made product imagery, responsive 2–4 column desktop/tablet grid, explicit availability, and no checkout. |
@@ -76,6 +76,13 @@ published News records ordered by date, shared Leadership records, and active
 Site directory records. These translate the supplied Look & Feel layouts into
 the Motorsport system without copying third-party series logos or changing the
 approved CMS/event/ticket contracts.
+
+GWR-CMS-11 adds a low-opacity two-row slanted race-flag field to the empty
+lower-left area of Homepage Latest News. It remains behind content, does not
+receive pointer events, and is removed on small screens. The same refinement
+moves News detail introduction, article, metadata, and related-story surfaces
+to deep blue, crimson, orange, and teal reflected-light gradients with
+Warm White copy and spectrum separators.
 
 The subsequent MSR-RD1 audit corrects the surface and hero balance: the
 homepage must no longer treat black as the universal canvas, and the hero must

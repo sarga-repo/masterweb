@@ -5,6 +5,7 @@ import {
   resolveSocialImageUrl,
   siteConfig,
 } from "@/lib/site-config";
+import { localeAlternates, localizePath, type Locale } from "@/lib/i18n/config";
 
 /** Optional CMS-driven SEO overrides (mirrors the shared Strapi `seo` shape). */
 export type SeoOverrides = {
@@ -26,6 +27,8 @@ type MetadataInput = {
   image?: string;
   seo?: SeoOverrides;
   type?: "website" | "article";
+  locale?: Locale;
+  isFallback?: boolean;
 };
 
 /**
@@ -40,8 +43,14 @@ export function createMetadata({
   image,
   seo,
   type = "website",
+  locale = "en",
+  isFallback = locale === "id",
 }: MetadataInput): Metadata {
-  const canonical = seo?.canonicalUrl ?? resolveSiteUrl(path);
+  const canonical =
+    locale === "en" && seo?.canonicalUrl
+      ? seo.canonicalUrl
+      : resolveSiteUrl(localizePath(path, locale));
+  const alternatePaths = localeAlternates(path);
   const resolvedTitle = seo?.metaTitle ?? title;
   const resolvedDescription = seo?.metaDescription ?? description;
   const ogTitle = seo?.ogTitle ?? resolvedTitle;
@@ -51,12 +60,25 @@ export function createMetadata({
   return {
     title: resolvedTitle,
     description: resolvedDescription,
-    alternates: { canonical },
-    robots: seo?.noIndex ? { index: false, follow: false } : undefined,
+    alternates: {
+      canonical,
+      languages: Object.fromEntries(
+        Object.entries(alternatePaths).map(([key, value]) => [
+          key,
+          resolveSiteUrl(value),
+        ]),
+      ),
+    },
+    robots:
+      seo?.noIndex || isFallback
+        ? { index: false, follow: isFallback }
+        : undefined,
     openGraph: {
       type,
       url: canonical,
       siteName: siteConfig.name,
+      locale: locale === "id" ? "id_ID" : "en_US",
+      alternateLocale: locale === "id" ? ["en_US"] : ["id_ID"],
       title: ogTitle,
       description: ogDescription,
       images: ogImage ? [{ url: ogImage }] : undefined,

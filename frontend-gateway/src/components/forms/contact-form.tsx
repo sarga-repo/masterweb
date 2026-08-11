@@ -1,11 +1,14 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
+import { usePathname } from "next/navigation";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import type { FormFieldErrors } from "@/lib/validation/forms";
+import { localeFromPathname } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 const inquiryOptions = [
   { value: "partnership", label: "Partnership" },
@@ -17,6 +20,16 @@ const inquiryOptions = [
   { value: "general", label: "General business" },
 ];
 
+const indonesianInquiryLabels: Record<string, string> = {
+  partnership: "Kemitraan",
+  sponsorship: "Sponsor",
+  media: "Media",
+  event: "Acara",
+  venue: "Venue",
+  career: "Karier",
+  general: "Bisnis umum",
+};
+
 type SubmissionState = {
   status: "idle" | "submitting" | "success" | "error";
   message?: string;
@@ -24,6 +37,14 @@ type SubmissionState = {
 };
 
 export function ContactForm() {
+  const pathname = usePathname();
+  const locale = localeFromPathname(pathname);
+  const dictionary = getDictionary(locale);
+  const localizedInquiryOptions = inquiryOptions.map((option) => ({
+    ...option,
+    label:
+      locale === "id" ? indonesianInquiryLabels[option.value] : option.label,
+  }));
   const formRef = useRef<HTMLFormElement>(null);
   const startedAt = useRef<number | null>(null);
   const [state, setState] = useState<SubmissionState>({ status: "idle" });
@@ -36,7 +57,10 @@ export function ContactForm() {
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Sarga-Locale": locale,
+        },
         body: JSON.stringify({
           name: form.get("name"),
           email: form.get("email"),
@@ -46,6 +70,7 @@ export function ContactForm() {
           message: form.get("message"),
           website: form.get("website"),
           sourcePage: window.location.pathname,
+          sourceLocale: locale,
           formStartedAt: startedAt.current ?? 0,
         }),
       });
@@ -57,7 +82,7 @@ export function ContactForm() {
       if (!response.ok || !result.ok) {
         setState({
           status: "error",
-          message: result.message ?? "Please try again.",
+          message: result.message ?? dictionary.form.retry,
           errors: result.errors,
         });
         return;
@@ -69,7 +94,7 @@ export function ContactForm() {
     } catch {
       setState({
         status: "error",
-        message: "The inquiry desk is temporarily unavailable.",
+        message: dictionary.form.inquiryUnavailable,
       });
     }
   }
@@ -89,14 +114,14 @@ export function ContactForm() {
       <div className="grid gap-6 sm:grid-cols-2">
         <Input
           name="name"
-          label="Name"
+          label={dictionary.form.name}
           autoComplete="name"
           required
           error={errors.name}
         />
         <Input
           name="email"
-          label="Email"
+          label={dictionary.form.email}
           type="email"
           autoComplete="email"
           required
@@ -104,34 +129,34 @@ export function ContactForm() {
         />
         <Input
           name="phone"
-          label="Phone"
+          label={dictionary.form.phone}
           type="tel"
           autoComplete="tel"
           error={errors.phone}
         />
         <Input
           name="company"
-          label="Company"
+          label={dictionary.form.company}
           autoComplete="organization"
           error={errors.company}
         />
       </div>
       <Select
         name="inquiryType"
-        label="Inquiry type"
-        options={inquiryOptions}
-        placeholder="Choose the most relevant desk"
+        label={dictionary.form.inquiryType}
+        options={localizedInquiryOptions}
+        placeholder={dictionary.form.chooseDesk}
         required
         error={errors.inquiryType}
       />
       <Textarea
         name="message"
-        label="Message"
+        label={dictionary.form.message}
         rows={7}
         required
         minLength={20}
         maxLength={5000}
-        hint="Share enough context for us to route your inquiry accurately."
+        hint={dictionary.form.messageHint}
         error={errors.message}
       />
       <input
@@ -144,16 +169,16 @@ export function ContactForm() {
       />
       <div className="flex flex-col gap-5 border-t border-sarga-black/20 pt-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-md text-xs leading-6 text-sarga-text-muted">
-          Protected by rate limiting, a timing check, and a honeypot. An
-          approved reCAPTCHA adapter can be enabled through server
-          configuration.
+          {dictionary.form.protection}
         </p>
         <button
           type="submit"
           disabled={state.status === "submitting"}
           className="group inline-flex min-h-14 items-center justify-center gap-4 bg-sarga-red px-7 text-xs font-extrabold uppercase tracking-[0.16em] text-white transition-colors hover:bg-sarga-red-dark disabled:cursor-wait disabled:opacity-60"
         >
-          {state.status === "submitting" ? "Routing inquiry…" : "Send inquiry"}
+          {state.status === "submitting"
+            ? dictionary.form.routing
+            : dictionary.form.send}
           <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </button>
       </div>

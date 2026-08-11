@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 
 import { newsletterSubscriptionSchema } from "@/lib/validation";
 
+function message(locale: "en" | "id", english: string, indonesian: string) {
+  return locale === "id" ? indonesian : english;
+}
+
 const attempts = new Map<string, number[]>();
 
 function fingerprint(request: Request): string {
@@ -30,9 +34,18 @@ function isPlaceholderMode(): boolean {
 }
 
 export async function POST(request: Request) {
+  const headerLocale =
+    request.headers.get("x-sarga-locale") === "id" ? "id" : "en";
   if (isRateLimited(`ms-newsletter:${fingerprint(request)}`)) {
     return NextResponse.json(
-      { ok: false, message: "Too many attempts. Please try again later." },
+      {
+        ok: false,
+        message: message(
+          headerLocale,
+          "Too many attempts. Please try again later.",
+          "Terlalu banyak percobaan. Silakan coba lagi nanti.",
+        ),
+      },
       { status: 429 },
     );
   }
@@ -48,9 +61,23 @@ export async function POST(request: Request) {
   }
 
   const parsed = newsletterSubscriptionSchema.safeParse(body);
+  const requestedLocale =
+    typeof body === "object" &&
+    body &&
+    "sourceLocale" in body &&
+    body.sourceLocale === "id"
+      ? "id"
+      : headerLocale;
   if (!parsed.success || parsed.data.website) {
     return NextResponse.json(
-      { ok: false, message: "Please enter a valid email address." },
+      {
+        ok: false,
+        message: message(
+          requestedLocale,
+          "Please enter a valid email address.",
+          "Masukkan alamat email yang valid.",
+        ),
+      },
       { status: 400 },
     );
   }
@@ -86,6 +113,7 @@ export async function POST(request: Request) {
           data: {
             email: parsed.data.email,
             sourcePage: parsed.data.sourcePage,
+            sourceLocale: parsed.data.sourceLocale,
             consent: true,
             subscribedAt: new Date().toISOString(),
             status: "active",
@@ -113,6 +141,10 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     ok: true,
-    message: "You're on the grid. Watch your inbox.",
+    message: message(
+      parsed.data.sourceLocale,
+      "You're on the grid. Watch your inbox.",
+      "Anda sudah terdaftar. Pantau kotak masuk Anda.",
+    ),
   });
 }

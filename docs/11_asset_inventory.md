@@ -9,6 +9,17 @@ This package includes the official Sarga logo files provided for the initial pla
 | Sarga logo         | `assets/brand/logos/logo-sarga.png`         | Use on light or neutral backgrounds when the original logo is required.             |
 | Sarga reverse logo | `assets/brand/logos/logo-sarga-reverse.png` | Use on dark backgrounds, including the main header, dark hero sections, and footer. |
 
+## Gateway typography assets
+
+| Asset                          | Frontend path                                                       | Source and usage                                                                                            |
+| ------------------------------ | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Zalando Sans Expanded variable | `frontend-gateway/src/app/fonts/zalando-sans-expanded-variable.ttf` | Official Google Fonts variable family, bundled locally and rendered at `800` for Gateway display typography |
+| Zalando Sans Expanded license  | `frontend-gateway/src/app/fonts/OFL-Zalando-Sans-Expanded.txt`      | SIL Open Font License distributed with the official Google Fonts asset                                      |
+
+The older local Regular and SemiBold files remain available for comparison but
+are no longer loaded by the Gateway. Production rendering does not request the
+display font from a third-party host.
+
 ## Leadership assets
 
 The leadership pages use six portraits already published by Sarga.co. Local copies live in `frontend/public/assets/media/leadership/` so the Next.js image pipeline can optimize them without relying on a third-party runtime host.
@@ -43,6 +54,22 @@ editors can upload the same files to the corresponding Strapi media fields.
 | File                                                          | Dimensions | Usage                                                                                                |
 | ------------------------------------------------------------- | ---------: | ---------------------------------------------------------------------------------------------------- |
 | `frontend-motorsport/public/media/motorcycle-racing-dusk.png` |   1774×887 | Motorcycle event, editorial, and gallery showcase fallback; generated without logos or sponsor marks |
+
+## Existing local hero-video fallbacks
+
+These repository assets prove the frontend behavior in local development. They
+are not a substitute for CMS-owned production media and are not automatically
+copied into the Strapi Media Library.
+
+| Site        | Local sources                                                                                    | Use                                                                                |
+| ----------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| Gateway     | `frontend-gateway/public/assets/media/hero/sarga-hero-loop.{mp4,webm}`                           | Existing local source; CMS Homepage video is authoritative when configured         |
+| Motorsport  | `frontend-motorsport/public/media/sarga-motorsport-hero.{mp4,webm}`                              | Existing local source; approved CMS clips must be assigned independently per slide |
+| Horse Sport | `frontend-horsesport/public/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.{mp4,webm}` | Active local fallback until the home Site Page supplies CMS hero video             |
+
+Production video must be short, muted, approved, and paired with a poster.
+Record its source/licensing and promote it with the encrypted CMS content/media
+archive rather than relying on a developer public folder.
 
 ### MSR-RD3 warm homepage hero set
 
@@ -129,12 +156,17 @@ variant: "default" | "reverse";
 
 ## Included source/reference documents
 
-| Asset               | Package path                                      | Recommended usage                                                                                                                               |
-| ------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| Website preview PDF | `reference/source-pdfs/sarga_website_preview.pdf` | Page 7 is the primary brand reference for colors, graphics, typefaces, and hero-image style. Pages 1-5 are non-binding implementation examples. |
-| Requirements PDF    | `reference/source-pdfs/requirements.pdf`          | Original vendor briefing and requirement source for scope, technical expectation, timeline, support, and handover.                              |
+| Asset                | Package path                                               | Recommended usage                                                                                                                                            |
+| -------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Website preview PDF  | `reference/source-pdfs/sarga_website_preview.pdf`          | Original group and dedicated-brand foundation reference.                                                                                                     |
+| Look & Feel PDF      | `reference/source-pdfs/look_and_feel_website_sarga_co.pdf` | Current Gateway Website Sarga.co Preview, Brand Visual Preview, typography, palette, and photography reference; also contains Motorsport reference material. |
+| Sarga.co sitemap PDF | `reference/source-pdfs/sarga.co_sitemap.pdf`               | Current Gateway information-architecture reference.                                                                                                          |
+| Requirements PDF     | `reference/source-pdfs/requirements.pdf`                   | Original vendor briefing and requirement source for scope, technical expectation, timeline, support, and handover.                                           |
 
-Codex should read the preview PDF before implementing visual components. It should translate the page-7 brand foundation into an original responsive design, not reproduce or embed the sample website pages.
+Codex should read the current Gateway revamp package and its reference PDFs
+before implementing visual components. It should follow the approved layout and
+brand direction while using production assets and responsive code, never
+reproducing or embedding PDF screenshots as website content.
 
 ## IJTC rider portrait grid crops
 

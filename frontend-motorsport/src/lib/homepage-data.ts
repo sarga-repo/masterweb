@@ -8,6 +8,7 @@
  */
 
 import type {
+  DisciplineItem,
   GalleryItem,
   HomepageHeroSlide,
   MotorsportArticle,
@@ -33,6 +34,8 @@ export type HomepageData = {
     heroImage?: string;
     heroImageAlt?: string;
     heroSlides: HomepageHeroSlide[];
+    informationBand: HomepageInformationBand;
+    worldOfMotorsport: HomepageWorldSection;
     sections: {
       events: HomepageSectionCopy;
       news: HomepageSectionCopy;
@@ -51,6 +54,28 @@ export type HomepageData = {
     label: string;
     eventName?: string;
   } | null;
+};
+
+export type HomepageInformationBand = {
+  enabled: boolean;
+  eyebrow: string;
+  title: string;
+  description: string;
+  nextEventLabel: string;
+  ticketStatusLabel: string;
+  regionLabel: string;
+  regionValue: string;
+};
+
+export type HomepageWorldSection = {
+  enabled: boolean;
+  eyebrow: string;
+  titlePrefix: string;
+  titleAccent: string;
+  description: string;
+  ctaLabel: string;
+  ctaUrl: string;
+  disciplines: DisciplineItem[];
 };
 
 type HomepageSectionCopy = {
@@ -122,7 +147,45 @@ type CmsSitePage = {
   heroDescription?: string;
   heroMedia?: StrapiMedia | null;
   heroSlides?: CmsHeroSlide[];
+  motorsportFeaturedEvent?: CmsEvent | null;
+  motorsportInformationBand?: CmsInformationBand | null;
+  motorsportWorldSection?: CmsWorldSection | null;
   sections?: CmsPageSection[];
+};
+
+type CmsInformationBand = {
+  enabled?: boolean;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  nextEventLabel?: string;
+  ticketStatusLabel?: string;
+  regionLabel?: string;
+  regionValue?: string;
+};
+
+type CmsDisciplineCard = {
+  id?: number;
+  internalName?: string;
+  enabled?: boolean;
+  title?: string;
+  shortLabel?: string;
+  image?: StrapiMedia | null;
+  imageAlt?: string;
+  href?: string;
+  accent?: DisciplineItem["accent"];
+  sortOrder?: number;
+};
+
+type CmsWorldSection = {
+  enabled?: boolean;
+  eyebrow?: string;
+  titlePrefix?: string;
+  titleAccent?: string;
+  description?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  disciplines?: CmsDisciplineCard[];
 };
 
 type CmsHeroSlide = {
@@ -133,12 +196,21 @@ type CmsHeroSlide = {
   description?: string;
   image?: StrapiMedia | null;
   mobileImage?: StrapiMedia | null;
+  video?: CmsHeroVideo | null;
   imageAlt?: string;
   subjectAnchor?: HomepageHeroSlide["subjectAnchor"];
   ctaLabel?: string;
   ctaUrl?: string;
   isActive?: boolean;
   sortOrder?: number;
+};
+
+type CmsHeroVideo = {
+  enabled?: boolean;
+  primaryVideo?: StrapiMedia | null;
+  alternateVideo?: StrapiMedia | null;
+  posterImage?: StrapiMedia | null;
+  mobilePosterImage?: StrapiMedia | null;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -285,6 +357,115 @@ function safeHeroCtaUrl(value?: string): string | undefined {
   }
 }
 
+function heroVideoFormat(
+  media?: StrapiMedia | null,
+): "mp4" | "webm" | undefined {
+  const mime = media?.mime?.toLowerCase();
+  const url = media?.url?.toLowerCase();
+  if (mime === "video/mp4" || url?.endsWith(".mp4")) return "mp4";
+  if (mime === "video/webm" || url?.endsWith(".webm")) return "webm";
+  return undefined;
+}
+
+function mapHeroVideo(video?: CmsHeroVideo | null) {
+  if (!video || video.enabled === false) return undefined;
+  const mapped: NonNullable<HomepageHeroSlide["video"]> = {
+    poster: mediaUrl(video.posterImage?.url) || undefined,
+    mobilePoster: mediaUrl(video.mobilePosterImage?.url) || undefined,
+  };
+  for (const media of [video.primaryVideo, video.alternateVideo]) {
+    const format = heroVideoFormat(media);
+    const url = mediaUrl(media?.url) || undefined;
+    if (format && url && !mapped[format]) mapped[format] = url;
+  }
+  return mapped.mp4 || mapped.webm ? mapped : undefined;
+}
+
+function safeHomepageHref(value: string | undefined, fallback: string) {
+  const candidate = value?.trim();
+  if (!candidate) return fallback;
+  if (candidate.startsWith("/") && !candidate.startsWith("//")) {
+    return candidate;
+  }
+  try {
+    const url = new URL(candidate);
+    return url.protocol === "https:" ? url.toString() : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function mapInformationBand(
+  band?: CmsInformationBand | null,
+): HomepageInformationBand {
+  if (!band) return PLACEHOLDER_INFORMATION_BAND;
+  return {
+    enabled: band.enabled !== false,
+    eyebrow: band.eyebrow?.trim() || PLACEHOLDER_INFORMATION_BAND.eyebrow,
+    title: band.title?.trim() || PLACEHOLDER_INFORMATION_BAND.title,
+    description:
+      band.description?.trim() || PLACEHOLDER_INFORMATION_BAND.description,
+    nextEventLabel:
+      band.nextEventLabel?.trim() ||
+      PLACEHOLDER_INFORMATION_BAND.nextEventLabel,
+    ticketStatusLabel:
+      band.ticketStatusLabel?.trim() ||
+      PLACEHOLDER_INFORMATION_BAND.ticketStatusLabel,
+    regionLabel:
+      band.regionLabel?.trim() || PLACEHOLDER_INFORMATION_BAND.regionLabel,
+    regionValue:
+      band.regionValue?.trim() || PLACEHOLDER_INFORMATION_BAND.regionValue,
+  };
+}
+
+function mapWorldSection(
+  section?: CmsWorldSection | null,
+): HomepageWorldSection {
+  if (!section) return PLACEHOLDER_WORLD_SECTION;
+
+  const fallbackByName = new Map(
+    PLACEHOLDER_DISCIPLINES.map((item) => [item.internalName, item]),
+  );
+  const disciplines = (section.disciplines ?? [])
+    .filter((item) => item.enabled !== false)
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+    .slice(0, 6)
+    .map((item, index): DisciplineItem => {
+      const fallback =
+        fallbackByName.get(item.internalName ?? "") ??
+        PLACEHOLDER_DISCIPLINES[index] ??
+        PLACEHOLDER_DISCIPLINES[0];
+      return {
+        title: item.title?.trim() || fallback.title,
+        shortLabel: item.shortLabel?.trim() || fallback.shortLabel,
+        href: safeHomepageHref(item.href, fallback.href),
+        image: mediaUrl(item.image?.url) || fallback.image,
+        imageAlt:
+          item.imageAlt?.trim() ||
+          item.image?.alternativeText ||
+          fallback.imageAlt,
+        accent: item.accent ?? fallback.accent,
+      };
+    });
+
+  return {
+    enabled: section.enabled !== false,
+    eyebrow: section.eyebrow?.trim() || PLACEHOLDER_WORLD_SECTION.eyebrow,
+    titlePrefix:
+      section.titlePrefix?.trim() || PLACEHOLDER_WORLD_SECTION.titlePrefix,
+    titleAccent:
+      section.titleAccent?.trim() || PLACEHOLDER_WORLD_SECTION.titleAccent,
+    description:
+      section.description?.trim() || PLACEHOLDER_WORLD_SECTION.description,
+    ctaLabel: section.ctaLabel?.trim() || PLACEHOLDER_WORLD_SECTION.ctaLabel,
+    ctaUrl: safeHomepageHref(section.ctaUrl, PLACEHOLDER_WORLD_SECTION.ctaUrl),
+    disciplines:
+      disciplines.length > 0
+        ? disciplines
+        : PLACEHOLDER_WORLD_SECTION.disciplines,
+  };
+}
+
 function mapHeroSlides(slides?: CmsHeroSlide[]): HomepageHeroSlide[] {
   return (slides ?? [])
     .filter(
@@ -294,7 +475,7 @@ function mapHeroSlides(slides?: CmsHeroSlide[]): HomepageHeroSlide[] {
         (!slide.image.mime || slide.image.mime.startsWith("image/")),
     )
     .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
-    .slice(0, 5)
+    .slice(0, 3)
     .map((slide, index) => {
       const mobileImage =
         slide.mobileImage?.url &&
@@ -318,6 +499,7 @@ function mapHeroSlides(slides?: CmsHeroSlide[]): HomepageHeroSlide[] {
         description: slide.description,
         image: mediaUrl(slide.image?.url),
         mobileImage,
+        video: mapHeroVideo(slide.video),
         imageAlt:
           slide.imageAlt ||
           slide.image?.alternativeText ||
@@ -465,10 +647,107 @@ const PLACEHOLDER_GALLERY: GalleryItem[] = [
   },
 ];
 
+const PLACEHOLDER_DISCIPLINES: Array<
+  DisciplineItem & { internalName: string; sortOrder: number }
+> = [
+  {
+    internalName: "circuit-racing",
+    title: "Circuit racing",
+    shortLabel: "Open wheel / Sprint",
+    href: "/events",
+    image: "/media/hero/sarga-motorsport-hero-circuit-golden-hour.jpg",
+    imageAlt:
+      "Red touring race car accelerating through a tropical circuit at golden hour",
+    accent: "crimson",
+    sortOrder: 10,
+  },
+  {
+    internalName: "endurance",
+    title: "Endurance",
+    shortLabel: "GT / Long distance",
+    href: "/events",
+    image: "/media/sarga-motorsport-discipline-endurance-daylight.jpg",
+    imageAlt:
+      "Red endurance prototype racing through a tropical circuit in warm daylight",
+    accent: "blue",
+    sortOrder: 20,
+  },
+  {
+    internalName: "rally",
+    title: "Rally",
+    shortLabel: "Mixed surface / Stage",
+    href: "/events",
+    image: "/media/hero/sarga-motorsport-hero-rally-highlands.jpg",
+    imageAlt:
+      "Red rally car racing across a sunlit gravel road in tropical highlands",
+    accent: "teal",
+    sortOrder: 30,
+  },
+  {
+    internalName: "rallycross",
+    title: "Rallycross",
+    shortLabel: "FIA / World Cup",
+    href: "/campaign/fia-rallycross-world-cup-indonesia-2026",
+    image: "/media/sarga-motorsport-discipline-rallycross-daylight.jpg",
+    imageAlt:
+      "Red and warm-white rallycross cars racing side by side on a tropical dirt circuit",
+    accent: "orange",
+    sortOrder: 40,
+  },
+  {
+    internalName: "touring",
+    title: "Touring",
+    shortLabel: "Tin top / Sprint",
+    href: "/events",
+    image: "/media/sarga-motorsport-discipline-touring-daylight.jpg",
+    imageAlt:
+      "Three touring cars sweeping through a tropical circuit in warm daylight",
+    accent: "blue",
+    sortOrder: 50,
+  },
+  {
+    internalName: "motorcycle",
+    title: "Motorcycle",
+    shortLabel: "Superbike / Road racing",
+    href: "/events",
+    image: "/media/sarga-motorsport-discipline-motorcycle-daylight.jpg",
+    imageAlt:
+      "Two superbike racers leaning through a tropical circuit corner in warm daylight",
+    accent: "yellow",
+    sortOrder: 60,
+  },
+];
+
+const PLACEHOLDER_INFORMATION_BAND: HomepageInformationBand = {
+  enabled: true,
+  eyebrow: "Race control / 2026 calendar",
+  title: "Closer to the machines. Closer to the moment.",
+  description:
+    "Professional racing, talent development, and international event campaigns-presented through one focused Motorsport calendar.",
+  nextEventLabel: "Next event",
+  ticketStatusLabel: "Ticket status",
+  regionLabel: "Region",
+  regionValue: "Indonesia",
+};
+
+const PLACEHOLDER_WORLD_SECTION: HomepageWorldSection = {
+  enabled: true,
+  eyebrow: "A global ecosystem of racing formats",
+  titlePrefix: "The world of",
+  titleAccent: "Motorsport",
+  description:
+    "From circuit precision to mixed-surface spectacle, every format is part of one international-standard racing programme.",
+  ctaLabel: "Explore the calendar",
+  ctaUrl: "/events",
+  disciplines: PLACEHOLDER_DISCIPLINES,
+};
+
 const PLACEHOLDER_PAGE: HomepageData["page"] = {
   heroTitle: "Feel the friction.",
   heroDescription:
     "Indonesia's premier motorsport ecosystem: elite racing, unfiltered energy, and an event experience built for those who live for the apex.",
+  informationBand: PLACEHOLDER_INFORMATION_BAND,
+  worldOfMotorsport: PLACEHOLDER_WORLD_SECTION,
   heroSlides: [
     {
       id: "circuit-golden-hour",
@@ -575,6 +854,15 @@ export async function fetchHomepageData(): Promise<HomepageData> {
         "heroMedia",
         "heroSlides.image",
         "heroSlides.mobileImage",
+        "heroSlides.video.primaryVideo",
+        "heroSlides.video.alternateVideo",
+        "heroSlides.video.posterImage",
+        "heroSlides.video.mobilePosterImage",
+        "motorsportFeaturedEvent.coverImage",
+        "motorsportFeaturedEvent.heroMedia",
+        "motorsportFeaturedEvent.ticketCtas",
+        "motorsportInformationBand",
+        "motorsportWorldSection.disciplines.image",
         "sections",
       ],
       filters: {
@@ -664,6 +952,8 @@ export async function fetchHomepageData(): Promise<HomepageData> {
         heroImageAlt: cmsPage.heroMedia?.alternativeText || undefined,
         heroSlides:
           cmsHeroSlides.length > 0 ? cmsHeroSlides : [legacyHeroSlide],
+        informationBand: mapInformationBand(cmsPage.motorsportInformationBand),
+        worldOfMotorsport: mapWorldSection(cmsPage.motorsportWorldSection),
         sections: {
           events: sectionCopy(
             cmsPage.sections,
@@ -686,7 +976,19 @@ export async function fetchHomepageData(): Promise<HomepageData> {
 
   /* ---- Events ---- */
   const cmsEvents = (eventsRes?.data ?? []).map(mapEvent);
+  const manuallyFeaturedEvent =
+    cmsPage?.motorsportFeaturedEvent &&
+    ["motorsport", "shared", undefined].includes(
+      cmsPage.motorsportFeaturedEvent.siteScope,
+    )
+      ? mapEvent({
+          ...cmsPage.motorsportFeaturedEvent,
+          id: 0,
+          documentId: "motorsport-home-featured-event",
+        })
+      : undefined;
   const featuredEvent =
+    manuallyFeaturedEvent ??
     cmsEvents.find((e) => e.status === "tickets-open") ??
     cmsEvents[0] ??
     PLACEHOLDER_EVENT;

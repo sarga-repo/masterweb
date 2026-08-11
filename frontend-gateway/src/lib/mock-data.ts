@@ -27,7 +27,7 @@ export type {
   NewsArticle,
 } from "@/lib/strapi/types";
 
-export type NavigationItem = {
+export type RepositoryNavigationItem = {
   href: string;
   label: string;
   highlight?: boolean;
@@ -39,7 +39,7 @@ export type ProjectPage = {
   description: string;
 };
 
-export const navigationItems: NavigationItem[] = [
+export const navigationItems: RepositoryNavigationItem[] = [
   { href: "/about", label: "About" },
   { href: "/ecosystem", label: "360° Ecosystem" },
   { href: "/news", label: "News & Publication" },
@@ -211,6 +211,7 @@ export type AboutTabItem = {
   description: string;
   image?: StrapiImage;
   imageClass?: string;
+  href?: string;
 };
 
 export type AboutTab = {
@@ -432,6 +433,7 @@ export const ecosystemBusinesses: EcosystemBusiness[] = [
     ],
     ctaLabel: "Find Out More",
     status: "active",
+    dedicatedSiteKey: "horsesport",
     order: 1,
     cardImage: {
       url: "/assets/media/generated/horse-sport-card.png",
@@ -502,6 +504,7 @@ export const ecosystemBusinesses: EcosystemBusiness[] = [
     ],
     ctaLabel: "Find Out More",
     status: "active",
+    dedicatedSiteKey: "motorsport",
     order: 2,
     cardImage: {
       url: "/assets/media/generated/motorsport-card.png",
@@ -542,8 +545,40 @@ export const ecosystemBusinesses: EcosystemBusiness[] = [
     pillar: "venue",
     shortDescription:
       "Developing and restoring championship-grade tracks, stables, and spectator venues for world-class events.",
+    overview:
+      "Sarga Venues develops, restores, and operates sporting destinations where technical performance, audience movement, hospitality, safety, and long-term community value are planned as one experience.",
+    highlights: [
+      {
+        label: "Development",
+        title: "Championship-ready infrastructure",
+        description:
+          "Track, turf, stable, paddock, and spectator systems are planned against demanding sporting and safety requirements.",
+      },
+      {
+        label: "Operations",
+        title: "One venue command layer",
+        description:
+          "Event control, guest movement, hospitality, maintenance, and partner delivery are coordinated through one operating standard.",
+      },
+      {
+        label: "Legacy",
+        title: "Places designed to endure",
+        description:
+          "Commercial utility, local participation, and responsible development extend venue value beyond a single event calendar.",
+      },
+    ],
     ctaLabel: "Coming Soon",
     status: "comingSoon",
+    pageAvailability: {
+      pageEnabled: false,
+      comingSoonEyebrow: "Sarga Venues / In development",
+      comingSoonTitle: "A new stage is taking shape.",
+      comingSoonDescription:
+        "Sarga Venues is preparing a dedicated home for its venue, track, stable, and spectator-infrastructure portfolio.",
+      launchTargetLabel: "Launch timing to be announced",
+      showNotifyCta: true,
+      noIndexWhileDisabled: true,
+    },
     order: 3,
   },
   {
@@ -552,8 +587,40 @@ export const ecosystemBusinesses: EcosystemBusiness[] = [
     pillar: "media",
     shortDescription:
       "Broadcast, editorial, and media-rights operations amplifying every Sarga property across channels.",
+    overview:
+      "Sarga Media turns live sport, entertainment, and ecosystem intelligence into editorial products, broadcast coverage, rights packages, and brand stories designed for audiences across channels.",
+    highlights: [
+      {
+        label: "Broadcast",
+        title: "Live coverage built around the moment",
+        description:
+          "Production planning, race-day and event feeds, and distribution workflows carry the atmosphere beyond the venue.",
+      },
+      {
+        label: "Editorial",
+        title: "One network of credible stories",
+        description:
+          "Newsroom, documentary, social, and partner formats give every Sarga property a consistent but distinctive voice.",
+      },
+      {
+        label: "Rights",
+        title: "Media value made legible",
+        description:
+          "Structured inventory and audience insight support responsible rights, sponsorship, and commercial partnerships.",
+      },
+    ],
     ctaLabel: "Coming Soon",
     status: "comingSoon",
+    pageAvailability: {
+      pageEnabled: false,
+      comingSoonEyebrow: "Sarga Media / In development",
+      comingSoonTitle: "The network is preparing to broadcast.",
+      comingSoonDescription:
+        "Sarga Media is building its dedicated editorial, broadcast, production, and media-rights destination.",
+      launchTargetLabel: "Launch timing to be announced",
+      showNotifyCta: true,
+      noIndexWhileDisabled: true,
+    },
     order: 4,
   },
   {
@@ -562,8 +629,40 @@ export const ecosystemBusinesses: EcosystemBusiness[] = [
     pillar: "technology",
     shortDescription:
       "Ticketing platforms and live data technology powering seamless fan experiences across the ecosystem.",
+    overview:
+      "Sarga Tech connects ticket discovery, venue access, live information, audience services, and operational data so each Sarga experience can feel simple to enter and dependable to operate.",
+    highlights: [
+      {
+        label: "Access",
+        title: "A clearer path from interest to entry",
+        description:
+          "Connected discovery and approved partner-ticketing journeys reduce friction without creating an internal checkout engine.",
+      },
+      {
+        label: "Operations",
+        title: "Live information where teams need it",
+        description:
+          "Shared operational signals support venue teams, event control, content workflows, and audience communication.",
+      },
+      {
+        label: "Intelligence",
+        title: "Responsible audience understanding",
+        description:
+          "Consent-aware data practices help teams improve programming, service quality, and partner reporting across the group.",
+      },
+    ],
     ctaLabel: "Coming Soon",
     status: "comingSoon",
+    pageAvailability: {
+      pageEnabled: false,
+      comingSoonEyebrow: "Sarga Tech / In development",
+      comingSoonTitle: "The connected layer is coming online.",
+      comingSoonDescription:
+        "Sarga Tech is preparing a dedicated view of the ticketing, audience, and live-data systems supporting the ecosystem.",
+      launchTargetLabel: "Launch timing to be announced",
+      showNotifyCta: true,
+      noIndexWhileDisabled: true,
+    },
     order: 5,
   },
 ];
@@ -682,10 +781,13 @@ export const footerGroups = [
     title: "Publications",
     items: [
       { href: "/news", label: "Sarga News Syndicate" },
-      { href: "/news", label: "Official Press Releases" },
+      { href: "/news/press-releases", label: "Official Press Releases" },
       { href: "/news", label: "Sarga Magazine" },
-      { href: "/news", label: "Fiscal Balance Report 2025" },
-      { href: "/news", label: "Equine Sustainability Charters" },
+      { href: "/about/annual-report", label: "Fiscal Balance Report 2025" },
+      {
+        href: "/about/sustainability-report",
+        label: "Equine Sustainability Charters",
+      },
     ],
   },
 ] as const;

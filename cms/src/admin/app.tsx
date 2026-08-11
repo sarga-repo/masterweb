@@ -253,10 +253,7 @@ export default {
           id: `sarga-workspaces.${workspace.slug}.label`,
           defaultMessage: workspace.label,
         },
-        Component: () =>
-          import("./extensions/sarga-workspaces/WorkspacePage").then(
-            (module) => ({ default: module.default }),
-          ),
+        Component: () => import("./extensions/sarga-workspaces/WorkspacePage"),
         permissions: [{ action: workspace.action, subject: null }],
         position: workspace.position,
       });
@@ -285,6 +282,50 @@ export default {
       // the title inside the observer can't loop.
       new MutationObserver(rebrandTitle).observe(titleEl, { childList: true });
     }
+
+    // Strapi opens an asset's details when its preview is clicked, while the
+    // small checkbox is the control that actually selects an existing asset.
+    // Keep the shared Media Library least-privilege and make that distinction
+    // explicit inside every Content Manager media picker.
+    const addMediaPickerGuidance = () => {
+      document.querySelectorAll<HTMLElement>('[role="dialog"]').forEach(
+        (dialog) => {
+          if (
+            !dialog.textContent?.includes("Add new assets") ||
+            dialog.querySelector('[data-sarga-media-picker-help="true"]')
+          ) {
+            return;
+          }
+
+          const tabList = dialog.querySelector('[role="tablist"]');
+          const anchor = tabList?.parentElement;
+          if (!anchor) return;
+
+          const guidance = document.createElement("div");
+          guidance.dataset.sargaMediaPickerHelp = "true";
+          guidance.setAttribute("role", "note");
+          guidance.innerHTML =
+            '<strong>Selecting an existing asset:</strong> use the checkbox at the upper-left of its card, then choose <strong>Finish</strong>. Clicking the preview opens asset details only.';
+          guidance.style.cssText = [
+            "margin: 0 2rem",
+            "padding: 0.85rem 1rem",
+            "border: 1px solid #f4c3bd",
+            "border-left: 4px solid #e2321e",
+            "border-radius: 0.5rem",
+            "background: #fff7f5",
+            "color: #32324d",
+            "font-size: 0.875rem",
+            "line-height: 1.5",
+          ].join(";");
+          anchor.after(guidance);
+        },
+      );
+    };
+    addMediaPickerGuidance();
+    new MutationObserver(addMediaPickerGuidance).observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
 
     // Inject brand CSS for surfaces theme tokens can't reach
     // (login page background, scrollbars, typography refinements).

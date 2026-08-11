@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
+import { useState } from "react";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/ui/icons";
 import { HeroVideo, type HeroVideoSource } from "@/components/ui/hero-video";
 import type { LinkItem, StatItem } from "@/types/design-system";
@@ -9,6 +12,7 @@ type HeroRaceSectionProps = {
   title: string;
   description?: string;
   image: string;
+  mobileImage?: string;
   imageAlt: string;
   /** Optional cinematic background loop; the image stays as poster/fallback. */
   video?: HeroVideoSource;
@@ -29,6 +33,7 @@ export function HeroRaceSection({
   title,
   description,
   image,
+  mobileImage,
   imageAlt,
   video,
   primaryCta,
@@ -36,6 +41,7 @@ export function HeroRaceSection({
   stats = [],
   priority = true,
 }: HeroRaceSectionProps) {
+  const [videoPaused, setVideoPaused] = useState(false);
   return (
     <section className="relative isolate flex min-h-[100dvh] flex-col overflow-hidden">
       <Image
@@ -44,9 +50,19 @@ export function HeroRaceSection({
         fill
         priority={priority}
         sizes="100vw"
-        className="hs-animate-zoom absolute inset-0 -z-10 object-cover object-center"
+        className={`hs-animate-zoom absolute inset-0 -z-10 object-cover object-center ${mobileImage ? "hidden sm:block" : ""}`}
       />
-      {video ? <HeroVideo {...video} /> : null}
+      {mobileImage ? (
+        <Image
+          src={mobileImage}
+          alt={imageAlt}
+          fill
+          priority={priority}
+          sizes="100vw"
+          className="hs-animate-zoom absolute inset-0 -z-10 object-cover object-center sm:hidden"
+        />
+      ) : null}
+      {video ? <HeroVideo {...video} paused={videoPaused} /> : null}
 
       {/* Directional cinematic scrim - darker at top (nav legibility), heavy at
           bottom, weighted to the left where the copy sits. */}
@@ -168,6 +184,16 @@ export function HeroRaceSection({
         aria-hidden
         className="absolute inset-x-0 bottom-0 z-10 h-1 bg-[linear-gradient(90deg,#ED1B2F,#FF6B00,#D4A843)]"
       />
+      {video ? (
+        <button
+          type="button"
+          aria-pressed={videoPaused}
+          onClick={() => setVideoPaused((paused) => !paused)}
+          className="absolute bottom-7 right-5 z-20 min-h-11 border border-hs-white/40 bg-hs-black/55 px-4 text-xs font-bold uppercase tracking-[0.12em] text-hs-white backdrop-blur-sm transition-colors hover:border-hs-orange hover:text-hs-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hs-white motion-reduce:hidden sm:right-8"
+        >
+          {videoPaused ? "Play background video" : "Pause background video"}
+        </button>
+      ) : null}
     </section>
   );
 }

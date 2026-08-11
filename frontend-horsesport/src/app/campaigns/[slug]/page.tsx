@@ -2,16 +2,21 @@ import type { Metadata } from "next";
 
 import { PageHero, PagePlaceholder } from "@/components";
 import { humanizeSlug } from "@/lib/format";
+import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/lib/i18n/request";
 
 type Params = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getRequestLocale();
   const title = humanizeSlug(slug);
-  return {
+  return createMetadata({
     title,
     description: `${title} - a Sarga Horse Sport campaign.`,
-  };
+    path: `/campaigns/${slug}`,
+    locale,
+  });
 }
 
 export default async function CampaignDetailPage({ params }: Params) {

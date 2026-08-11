@@ -1,6 +1,9 @@
-import Link from "next/link";
+"use client";
+
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { ArrowRightIcon } from "@/components/ui/icons";
+import { usePathname } from "next/navigation";
 
 /**
  * 404 - "Off Track"
@@ -10,6 +13,8 @@ import { ArrowRightIcon } from "@/components/ui/icons";
  * intentional and on-brand.
  */
 export default function NotFound() {
+  const pathname = usePathname();
+  const isIndonesian = pathname === "/id" || pathname.startsWith("/id/");
   return (
     <main className="ms-grain relative isolate flex min-h-svh items-center overflow-hidden bg-ms-black text-ms-warm-white">
       {/* ── Background layers ────────────────────────────────────────── */}
@@ -73,7 +78,9 @@ export default function NotFound() {
 
         {/* Headline */}
         <h2 className="ms-heading-section mt-4 max-w-[14ch]">
-          This route left the circuit.
+          {isIndonesian
+            ? "Rute ini keluar dari lintasan."
+            : "This route left the circuit."}
         </h2>
 
         <p className="mt-8 max-w-xl text-base leading-8 text-ms-warm-white/55">
@@ -88,14 +95,14 @@ export default function NotFound() {
             href="/"
             className="group inline-flex items-center gap-4 bg-ms-apex-crimson px-7 py-4 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white transition-colors hover:bg-ms-ignition-orange"
           >
-            Return to pit lane
+            {isIndonesian ? "Kembali ke beranda" : "Return to pit lane"}
             <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
           <Link
             href="/events"
             className="group inline-flex items-center gap-4 border border-ms-warm-white/16 px-7 py-4 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white/70 transition-colors hover:border-ms-warm-white/40 hover:text-ms-warm-white"
           >
-            Browse events
+            {isIndonesian ? "Lihat acara" : "Browse events"}
             <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>

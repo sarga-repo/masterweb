@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { ArrowRightIcon } from "@/components/ui/icons";
+import { usePathname } from "next/navigation";
 
 /**
  * 500 - "Mechanical Failure"
@@ -17,6 +18,8 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const pathname = usePathname();
+  const isIndonesian = pathname === "/id" || pathname.startsWith("/id/");
   return (
     <main className="ms-grain relative isolate flex min-h-svh items-center overflow-hidden bg-ms-black text-ms-warm-white">
       {/* ── Background layers ────────────────────────────────────────── */}
@@ -82,7 +85,7 @@ export default function Error({
 
         {/* Headline */}
         <h2 className="ms-heading-section mt-4 max-w-[14ch]">
-          The engine stalled.
+          {isIndonesian ? "Mesin terhenti." : "The engine stalled."}
         </h2>
 
         <p className="mt-8 max-w-xl text-base leading-8 text-ms-warm-white/55">
@@ -105,14 +108,14 @@ export default function Error({
             onClick={reset}
             className="group inline-flex items-center gap-4 bg-ms-ignition-orange px-7 py-4 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-black transition-colors hover:bg-ms-electric-yellow"
           >
-            Try again
+            {isIndonesian ? "Coba lagi" : "Try again"}
             <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
           </button>
           <Link
             href="/"
             className="group inline-flex items-center gap-4 border border-ms-warm-white/16 px-7 py-4 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white/70 transition-colors hover:border-ms-warm-white/40 hover:text-ms-warm-white"
           >
-            Return to pit lane
+            {isIndonesian ? "Kembali ke beranda" : "Return to pit lane"}
             <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>

@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_shared_hero_videos",
+  "info": {
+    "displayName": "Hero Video",
+    "description": "Optional muted hero video with a required primary source, optional alternate codec, and poster overrides"
+  },
+  "options": {},
+  "attributes": {
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "primaryVideo": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["videos"]
+    },
+    "alternateVideo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["videos"]
+    },
+    "posterImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "mobilePosterImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

@@ -10,7 +10,7 @@
   "options": {
     "draftAndPublish": true
   },
-  "pluginOptions": {},
+  "pluginOptions": { "i18n": { "localized": true } },
   "attributes": {
     "name": { "type": "string", "required": true },
     "slug": {
@@ -23,12 +23,20 @@
       "enum": ["sports", "venue", "media", "technology", "festival", "other"],
       "required": true
     },
-    "shortDescription": { "type": "text", "required": true },
-    "overview": { "type": "richtext" },
+    "shortDescription": {
+      "type": "text",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "overview": {
+      "type": "richtext",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "highlights": {
       "type": "component",
       "component": "shared.key-highlight",
-      "repeatable": true
+      "repeatable": true,
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "gallery": {
       "type": "media",
@@ -54,7 +62,11 @@
       "required": false,
       "allowedTypes": ["images"]
     },
-    "ctaLabel": { "type": "string", "default": "Find Out More" },
+    "ctaLabel": {
+      "type": "string",
+      "default": "Find Out More",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "ctaUrl": { "type": "string" },
     "businessStatus": {
       "type": "enumeration",
@@ -62,7 +74,16 @@
       "default": "active",
       "required": true
     },
-    "launchTarget": { "type": "string" },
+    "launchTarget": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "pageAvailability": {
+      "type": "component",
+      "component": "shared.page-availability",
+      "repeatable": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "order": { "type": "integer", "default": 0 },
     "siteScope": {
       "type": "enumeration",
@@ -91,7 +112,8 @@
     "seo": {
       "type": "component",
       "component": "shared.seo",
-      "repeatable": false
+      "repeatable": false,
+      "pluginOptions": { "i18n": { "localized": true } }
     }
   }
 }

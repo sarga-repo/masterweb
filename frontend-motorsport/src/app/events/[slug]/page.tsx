@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { notFound } from "next/navigation";
 
 import {
@@ -13,11 +13,8 @@ import {
 } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { fetchEventBySlug, fetchPartners } from "@/lib/cms-data";
-import {
-  resolveSiteUrl,
-  resolveSocialImageUrl,
-  siteConfig,
-} from "@/lib/site-config";
+import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/lib/i18n/request";
 import type { MotorsportEvent } from "@/types/design-system";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -84,42 +81,19 @@ const PLACEHOLDER_MAP: Record<
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const [{ slug }, locale] = await Promise.all([params, getRequestLocale()]);
   const event = await fetchEventBySlug(slug);
   const fallback = PLACEHOLDER_MAP[slug];
   const resolved = event ?? fallback;
   if (!resolved) return { title: "Event not found" };
   const desc = `${resolved.title} - ${resolved.dateLabel} at ${resolved.venue}. Sarga Motorsport event.`;
-  const canonical = resolveSiteUrl(`/events/${slug}`);
-  const socialImage = resolveSocialImageUrl(resolved.image);
-  return {
+  return createMetadata({
     title: resolved.title,
     description: desc,
-    alternates: {
-      canonical,
-    },
-    openGraph: {
-      type: "website",
-      url: canonical,
-      siteName: siteConfig.name,
-      title: resolved.title,
-      description: desc,
-      images: socialImage
-        ? [
-            {
-              url: socialImage,
-              alt: resolved.imageAlt,
-            },
-          ]
-        : undefined,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: resolved.title,
-      description: desc,
-      images: socialImage ? [socialImage] : undefined,
-    },
-  };
+    path: `/events/${slug}`,
+    image: resolved.image,
+    locale,
+  });
 }
 
 export default async function EventDetailPage({ params }: Props) {

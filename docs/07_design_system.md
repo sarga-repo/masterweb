@@ -1,5 +1,10 @@
 # 07 — Design System
 
+> For the current Sarga.co Gateway revamp, use
+> `docs/gateway/revamp/03_visual_typography_layout_spec.md` and the Website
+> Sarga.co Preview / Brand Visual Preview sections of the Look & Feel PDF. The
+> material below remains general background where it does not conflict.
+
 ## Design direction
 
 Page 7 of the preview PDF defines the Sarga brand foundation. The production website should use this foundation to create its own premium digital design rather than reconstruct the page examples elsewhere in the PDF.
@@ -45,15 +50,15 @@ Every major creative decision should improve at least one of these outcomes:
 These tokens follow the Sarga.co column in page 7 of the visual reference PDF.
 
 ```css
---color-black: #000b1d;
---color-dark: #07111f;
---color-dark-soft: #434343;
+--color-black: #12141b;
+--color-dark: #1a1f29;
+--color-dark-soft: #4b525b;
 --color-white: #ffffff;
---color-light: #f3f3f3;
---color-muted: #cccccc;
---color-text: #000b1d;
---color-text-muted: #434343;
---color-red: #e2321e;
+--color-light: #f7f3ed;
+--color-muted: #c5c7ca;
+--color-text: #12141b;
+--color-text-muted: #4b525b;
+--color-red: #e4301c;
 --color-orange: #ff5032;
 --color-pink: #f4c3bd;
 --color-gold: #d9a441;
@@ -68,6 +73,8 @@ Brand typefaces from visual reference page 7:
 - Body and interface: Plus Jakarta Sans
 - Use uppercase headings for hero and major section titles
 - Use generous letter spacing for labels/eyebrows
+- Use the bundled official variable file at weight `800` for display roles;
+  Plus Jakarta Sans remains the body and interface family.
 
 Suggested CSS tokens:
 

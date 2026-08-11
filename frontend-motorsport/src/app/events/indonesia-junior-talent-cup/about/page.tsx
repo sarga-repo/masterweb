@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { InformationBand, PageHero, SectionHeader } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";

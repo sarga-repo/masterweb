@@ -22,6 +22,16 @@ import type {
 } from "@/types/design-system";
 
 export type HomepageData = {
+  hero: {
+    image: string;
+    mobileImage?: string;
+    imageAlt: string;
+    video?: {
+      mp4?: string;
+      webm?: string;
+      poster?: string;
+    };
+  };
   featuredEvent: EventCardData | null;
   upcomingEvents: EventCardData[];
   seasonEvents: EventCardData[];
@@ -82,6 +92,17 @@ type CmsTicketCta = {
   ctaType?: string;
 };
 type CmsBusiness = { overview?: string; shortDescription?: string };
+type CmsHeroVideo = {
+  enabled?: boolean;
+  primaryVideo?: StrapiMedia | null;
+  alternateVideo?: StrapiMedia | null;
+  posterImage?: StrapiMedia | null;
+  mobilePosterImage?: StrapiMedia | null;
+};
+type CmsSitePage = {
+  heroMedia?: StrapiMedia | null;
+  heroVideo?: CmsHeroVideo | null;
+};
 
 /* -------------------------------------------------------------------------- */
 /*  Formatting                                                                */
@@ -119,6 +140,29 @@ function statusLabel(raw?: string): string | undefined {
 function titleCase(raw?: string): string | undefined {
   if (!raw) return undefined;
   return raw.charAt(0).toUpperCase() + raw.slice(1);
+}
+
+function heroVideoFormat(
+  media?: StrapiMedia | null,
+): "mp4" | "webm" | undefined {
+  const mime = media?.mime?.toLowerCase();
+  const url = media?.url?.toLowerCase();
+  if (mime === "video/mp4" || url?.endsWith(".mp4")) return "mp4";
+  if (mime === "video/webm" || url?.endsWith(".webm")) return "webm";
+  return undefined;
+}
+
+function mapHeroVideo(video?: CmsHeroVideo | null) {
+  if (!video || video.enabled === false) return undefined;
+  const mapped: NonNullable<HomepageData["hero"]["video"]> = {
+    poster: mediaUrl(video.posterImage?.url) || undefined,
+  };
+  for (const media of [video.primaryVideo, video.alternateVideo]) {
+    const format = heroVideoFormat(media);
+    const url = mediaUrl(media?.url) || undefined;
+    if (format && url && !mapped[format]) mapped[format] = url;
+  }
+  return mapped.mp4 || mapped.webm ? mapped : undefined;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -330,6 +374,17 @@ const DEFAULT_ABOUT = {
   body: "Sarga Horse Sport brings championship racing, disciplined equestrian standards, and race-day hospitality into one premium sports ecosystem - an investable, international-class platform for the sport's next chapter.",
 };
 
+const DEFAULT_HERO: HomepageData["hero"] = {
+  image: "/media/horse-sport-hero.png",
+  imageAlt:
+    "Jockeys racing thoroughbreds across a championship turf track at golden hour",
+  video: {
+    webm: "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.webm",
+    mp4: "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.mp4",
+    poster: "/media/a_dynamic_action_sports_scene_at_a_horse_racetrack.png",
+  },
+};
+
 /* -------------------------------------------------------------------------- */
 /*  Aggregate fetch                                                           */
 /* -------------------------------------------------------------------------- */
@@ -341,6 +396,7 @@ const HS_SCOPE = {
 
 export async function fetchHomepageData(): Promise<HomepageData> {
   const [
+    pageRes,
     eventsRes,
     articlesRes,
     partnersRes,
@@ -348,6 +404,21 @@ export async function fetchHomepageData(): Promise<HomepageData> {
     ticketRes,
     businessRes,
   ] = await Promise.all([
+    fetchStrapiList<CmsSitePage>("site-pages", {
+      populate: [
+        "heroMedia",
+        "heroVideo.primaryVideo",
+        "heroVideo.alternateVideo",
+        "heroVideo.posterImage",
+        "heroVideo.mobilePosterImage",
+      ],
+      filters: {
+        "filters[siteScope][$eq]": "horsesport",
+        "filters[pageKind][$eq]": "home",
+      },
+      limit: 1,
+      revalidate: 60,
+    }),
     fetchStrapiList<CmsEvent>("events", {
       populate: ["coverImage", "heroMedia"],
       filters: {
@@ -392,6 +463,28 @@ export async function fetchHomepageData(): Promise<HomepageData> {
       revalidate: 600,
     }),
   ]);
+
+  const cmsPage = pageRes?.data?.[0];
+  const cmsVideo = mapHeroVideo(cmsPage?.heroVideo);
+  const resolvedVideo = cmsPage?.heroVideo
+    ? cmsPage.heroVideo.enabled === false
+      ? undefined
+      : (cmsVideo ?? DEFAULT_HERO.video)
+    : DEFAULT_HERO.video;
+  const cmsHeroImage =
+    cmsPage?.heroMedia &&
+    (!cmsPage.heroMedia.mime || cmsPage.heroMedia.mime.startsWith("image/"))
+      ? mediaUrl(cmsPage.heroMedia.url)
+      : undefined;
+  const hero: HomepageData["hero"] = cmsPage
+    ? {
+        image: cmsVideo?.poster || cmsHeroImage || DEFAULT_HERO.image,
+        mobileImage:
+          mediaUrl(cmsPage.heroVideo?.mobilePosterImage?.url) || undefined,
+        imageAlt: cmsPage.heroMedia?.alternativeText || DEFAULT_HERO.imageAlt,
+        video: resolvedVideo,
+      }
+    : DEFAULT_HERO;
 
   /* Events */
   const cmsEvents = (eventsRes?.data ?? []).map(mapEvent);
@@ -447,6 +540,7 @@ export async function fetchHomepageData(): Promise<HomepageData> {
     : DEFAULT_ABOUT;
 
   return {
+    hero,
     featuredEvent,
     upcomingEvents:
       upcomingEvents.length > 0 ? upcomingEvents : PLACEHOLDER_EVENTS.slice(1),

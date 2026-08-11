@@ -55,10 +55,45 @@ export function resolveContentUrl(content: {
  * frontend. Returns `undefined` for businesses that live on the gateway detail
  * page (so callers fall back to `/ecosystem/[slug]`).
  */
-export function businessSiteUrl(slug: string): string | undefined {
-  if (slug === "sarga-motorsport") return motorsportUrl("/");
-  if (slug === "sarga-horse-sport") return horsesportUrl("/");
+function safeCmsDestination(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  try {
+    const url = new URL(value);
+    if (url.username || url.password) return undefined;
+    if (url.protocol === "https:") return url.toString();
+    if (
+      process.env.NODE_ENV !== "production" &&
+      url.protocol === "http:" &&
+      ["localhost", "127.0.0.1"].includes(url.hostname)
+    ) {
+      return url.toString();
+    }
+  } catch {
+    return undefined;
+  }
   return undefined;
+}
+
+export function businessSiteUrl(
+  slug: string,
+  cmsUrl?: string,
+): string | undefined {
+  if (slug === "sarga-motorsport") {
+    return motorsportUrl("/") ?? safeCmsDestination(cmsUrl);
+  }
+  if (slug === "sarga-horse-sport") {
+    return horsesportUrl("/") ?? safeCmsDestination(cmsUrl);
+  }
+  return undefined;
+}
+
+/** Internal path or approved absolute destination for a Gateway venture CTA. */
+export function safeBusinessCtaUrl(
+  value: string | undefined,
+): string | undefined {
+  if (!value) return undefined;
+  if (value.startsWith("/") && !value.startsWith("//")) return value;
+  return safeCmsDestination(value);
 }
 
 /** Human-friendly label for a dedicated site, used on cross-site CTAs. */

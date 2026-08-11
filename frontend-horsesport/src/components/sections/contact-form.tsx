@@ -45,11 +45,19 @@ export function ContactForm() {
     event.preventDefault();
     setState({ status: "submitting" });
     const form = new FormData(event.currentTarget);
+    const sourceLocale =
+      window.location.pathname === "/id" ||
+      window.location.pathname.startsWith("/id/")
+        ? "id"
+        : "en";
 
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Sarga-Locale": sourceLocale,
+        },
         body: JSON.stringify({
           name: form.get("name"),
           email: form.get("email"),
@@ -57,6 +65,7 @@ export function ContactForm() {
           message: form.get("message"),
           website: form.get("website") ?? "",
           sourcePage: window.location.pathname,
+          sourceLocale,
           formStartedAt: startedAt.current ?? Date.now(),
         }),
       });

@@ -35,6 +35,12 @@
       "required": false,
       "allowedTypes": ["images"]
     },
+    "video": {
+      "type": "component",
+      "component": "shared.hero-video",
+      "repeatable": false,
+      "required": false
+    },
     "imageAlt": {
       "type": "string",
       "required": true,

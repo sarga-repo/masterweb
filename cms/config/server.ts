@@ -1,5 +1,7 @@
 import type { Core } from "@strapi/strapi";
 
+import { processPendingInquiryNotifications } from "../src/email/inquiry-notification-worker";
+
 const config = ({
   env,
 }: Core.Config.Shared.ConfigParams): Core.Config.Server => ({
@@ -11,6 +13,20 @@ const config = ({
   },
   app: {
     keys: env.array("APP_KEYS"),
+  },
+  cron: {
+    enabled: env.bool("MAIL_NOTIFICATIONS_ENABLED", false),
+    tasks: {
+      sargaInquiryNotifications: {
+        task: async ({ strapi }) => {
+          await processPendingInquiryNotifications(strapi);
+        },
+        options: {
+          rule: env("MAIL_WORKER_CRON", "*/1 * * * *"),
+          tz: "Asia/Jakarta",
+        },
+      },
+    },
   },
 });
 

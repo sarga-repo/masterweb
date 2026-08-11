@@ -8,11 +8,24 @@ import {
 import { deliverInquiry } from "@/lib/forms/submit";
 import { contactFormSchema, flattenFormErrors } from "@/lib/validation/forms";
 
+function message(locale: "en" | "id", english: string, indonesian: string) {
+  return locale === "id" ? indonesian : english;
+}
+
 export async function POST(request: Request) {
+  const headerLocale =
+    request.headers.get("x-sarga-locale") === "id" ? "id" : "en";
   const fingerprint = requestFingerprint(request);
   if (isRateLimited(`contact:${fingerprint}`, 5, 10 * 60 * 1000)) {
     return NextResponse.json(
-      { ok: false, message: "Too many attempts. Please try again later." },
+      {
+        ok: false,
+        message: message(
+          headerLocale,
+          "Too many attempts. Please try again later.",
+          "Terlalu banyak percobaan. Silakan coba lagi nanti.",
+        ),
+      },
       { status: 429 },
     );
   }
@@ -28,11 +41,22 @@ export async function POST(request: Request) {
   }
 
   const parsed = contactFormSchema.safeParse(body);
+  const requestedLocale =
+    typeof body === "object" &&
+    body &&
+    "sourceLocale" in body &&
+    body.sourceLocale === "id"
+      ? "id"
+      : headerLocale;
   if (!parsed.success) {
     return NextResponse.json(
       {
         ok: false,
-        message: "Please review the highlighted fields.",
+        message: message(
+          requestedLocale,
+          "Please review the highlighted fields.",
+          "Periksa kembali kolom yang ditandai.",
+        ),
         errors: flattenFormErrors(parsed.error),
       },
       { status: 400 },
@@ -63,8 +87,10 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     ok: true,
-    message: result.placeholder
-      ? "Thank you. Your inquiry has been received."
-      : "Thank you. Your inquiry has been received.",
+    message: message(
+      parsed.data.sourceLocale,
+      "Thank you. Your inquiry has been received.",
+      "Terima kasih. Pertanyaan Anda telah kami terima.",
+    ),
   });
 }

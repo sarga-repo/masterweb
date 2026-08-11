@@ -110,9 +110,43 @@ describe("businessSiteUrl", () => {
     expect(businessSiteUrl("sarga-venues")).toBeUndefined();
   });
 
+  it("uses a valid CMS destination only when environment configuration is absent", async () => {
+    const { businessSiteUrl } = await loadCrossSite({
+      motorsport: "",
+      horsesport: "",
+    });
+    expect(
+      businessSiteUrl(
+        "sarga-motorsport",
+        "https://motorsport.sarga.co/programmes",
+      ),
+    ).toBe("https://motorsport.sarga.co/programmes");
+    expect(
+      businessSiteUrl("sarga-motorsport", "javascript:alert(1)"),
+    ).toBeUndefined();
+  });
+
   it("returns undefined when the dedicated site is not configured", async () => {
     const { businessSiteUrl } = await loadCrossSite({ horsesport: "" });
     expect(businessSiteUrl("sarga-horse-sport")).toBeUndefined();
+  });
+});
+
+describe("safeBusinessCtaUrl", () => {
+  it("accepts local paths and HTTPS destinations", async () => {
+    const { safeBusinessCtaUrl } = await loadCrossSite(CONFIGURED);
+    expect(safeBusinessCtaUrl("/contact?subject=venue")).toBe(
+      "/contact?subject=venue",
+    );
+    expect(safeBusinessCtaUrl("https://partners.example.com/brief")).toBe(
+      "https://partners.example.com/brief",
+    );
+  });
+
+  it("rejects protocol-relative and executable destinations", async () => {
+    const { safeBusinessCtaUrl } = await loadCrossSite(CONFIGURED);
+    expect(safeBusinessCtaUrl("//attacker.example")).toBeUndefined();
+    expect(safeBusinessCtaUrl("javascript:alert(1)")).toBeUndefined();
   });
 });
 

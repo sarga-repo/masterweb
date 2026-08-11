@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/metadata";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { PageHero, RaceEventCard, ScrollReveal } from "@/components";
 import { fetchEventsPage } from "@/lib/cms-content";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "Events",
-  description:
-    "Upcoming Sarga Horse Sport derbies, turf classics, exhibitions, and hospitality race days.",
-  path: "/events",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "Events",
+    description:
+      "Upcoming Sarga Horse Sport derbies, turf classics, exhibitions, and hospitality race days.",
+    path: "/events",
+    locale,
+  });
+}
 
 type Params = { searchParams: Promise<{ discipline?: string }> };
 

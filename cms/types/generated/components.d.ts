@@ -16,6 +16,55 @@ export interface MotorsportCampaignSlide extends Struct.ComponentSchema {
   };
 }
 
+export interface MotorsportDisciplineCard extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_discipline_cards';
+  info: {
+    description: 'Ordered homepage racing-format card with managed media and destination';
+    displayName: 'Motorsport Discipline Card';
+  };
+  attributes: {
+    accent: Schema.Attribute.Enumeration<
+      ['crimson', 'orange', 'yellow', 'teal', 'blue']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'crimson'>;
+    enabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    href: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'/events'>;
+    image: Schema.Attribute.Media<'images'>;
+    imageAlt: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+    internalName: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
+    shortLabel: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
+    sortOrder: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
+  };
+}
+
 export interface MotorsportHeroSlide extends Struct.ComponentSchema {
   collectionName: 'components_motorsport_hero_slides';
   info: {
@@ -64,6 +113,53 @@ export interface MotorsportHeroSlide extends Struct.ComponentSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 80;
       }>;
+    video: Schema.Attribute.Component<'shared.hero-video', false>;
+  };
+}
+
+export interface MotorsportHomeInformationBand extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_home_information_bands';
+  info: {
+    description: 'CMS-managed Motorsport homepage information band with live featured-event values';
+    displayName: 'Homepage Race Control Band';
+  };
+  attributes: {
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 320;
+      }>;
+    enabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    eyebrow: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    nextEventLabel: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+      }> &
+      Schema.Attribute.DefaultTo<'Next event'>;
+    regionLabel: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+      }> &
+      Schema.Attribute.DefaultTo<'Region'>;
+    regionValue: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }> &
+      Schema.Attribute.DefaultTo<'Indonesia'>;
+    ticketStatusLabel: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+      }> &
+      Schema.Attribute.DefaultTo<'Ticket status'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 160;
+      }>;
   };
 }
 
@@ -102,6 +198,55 @@ export interface MotorsportRundownItem extends Struct.ComponentSchema {
   };
 }
 
+export interface MotorsportWorldOfMotorsport extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_world_of_motorsports';
+  info: {
+    description: 'CMS-managed homepage racing-format heading, CTA, and discipline cards';
+    displayName: 'World of Motorsport Section';
+  };
+  attributes: {
+    ctaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }> &
+      Schema.Attribute.DefaultTo<'Explore the calendar'>;
+    ctaUrl: Schema.Attribute.String & Schema.Attribute.DefaultTo<'/events'>;
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 320;
+      }>;
+    disciplines: Schema.Attribute.Component<
+      'motorsport.discipline-card',
+      true
+    > &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 6;
+        },
+        number
+      >;
+    enabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    eyebrow: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    titleAccent: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }> &
+      Schema.Attribute.DefaultTo<'Motorsport'>;
+    titlePrefix: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }> &
+      Schema.Attribute.DefaultTo<'The world of'>;
+  };
+}
+
 export interface SharedEventSession extends Struct.ComponentSchema {
   collectionName: 'components_shared_event_sessions';
   info: {
@@ -117,6 +262,23 @@ export interface SharedEventSession extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedHeroVideo extends Struct.ComponentSchema {
+  collectionName: 'components_shared_hero_videos';
+  info: {
+    description: 'Optional muted hero video with a required primary source, optional alternate codec, and poster overrides';
+    displayName: 'Hero Video';
+  };
+  attributes: {
+    alternateVideo: Schema.Attribute.Media<'videos'>;
+    enabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    mobilePosterImage: Schema.Attribute.Media<'images'>;
+    posterImage: Schema.Attribute.Media<'images'>;
+    primaryVideo: Schema.Attribute.Media<'videos'> & Schema.Attribute.Required;
+  };
+}
+
 export interface SharedKeyHighlight extends Struct.ComponentSchema {
   collectionName: 'components_shared_key_highlights';
   info: {
@@ -127,6 +289,31 @@ export interface SharedKeyHighlight extends Struct.ComponentSchema {
     description: Schema.Attribute.Text & Schema.Attribute.Required;
     label: Schema.Attribute.String;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface SharedPageAvailability extends Struct.ComponentSchema {
+  collectionName: 'components_shared_page_availabilities';
+  info: {
+    description: 'Dedicated Page control: enable only after required page content is complete; disabled pages show the branded Coming Soon state';
+    displayName: 'Page Availability';
+  };
+  attributes: {
+    comingSoonDescription: Schema.Attribute.Text;
+    comingSoonEyebrow: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'Part of the Sarga ecosystem'>;
+    comingSoonMedia: Schema.Attribute.Media<'images'>;
+    comingSoonTitle: Schema.Attribute.String;
+    launchTargetLabel: Schema.Attribute.String;
+    noIndexWhileDisabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    pageEnabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    showNotifyCta: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
   };
 }
 
@@ -180,11 +367,16 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'motorsport.campaign-slide': MotorsportCampaignSlide;
+      'motorsport.discipline-card': MotorsportDisciplineCard;
       'motorsport.hero-slide': MotorsportHeroSlide;
+      'motorsport.home-information-band': MotorsportHomeInformationBand;
       'motorsport.rule-item': MotorsportRuleItem;
       'motorsport.rundown-item': MotorsportRundownItem;
+      'motorsport.world-of-motorsport': MotorsportWorldOfMotorsport;
       'shared.event-session': SharedEventSession;
+      'shared.hero-video': SharedHeroVideo;
       'shared.key-highlight': SharedKeyHighlight;
+      'shared.page-availability': SharedPageAvailability;
       'shared.page-section': SharedPageSection;
       'shared.seo': SharedSeo;
     }

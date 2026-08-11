@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { RacingGraphic } from "@/components/ui/racing-graphic";
 import { ticketHubCta } from "@/lib/mock-data";
@@ -7,7 +7,7 @@ export function TicketHubCta() {
   return (
     <section
       id="ticket-hub"
-      className="relative isolate overflow-hidden bg-sarga-red-dark text-white"
+      className="gateway-ticket-field relative isolate overflow-hidden text-white"
     >
       <span
         aria-hidden="true"
@@ -36,10 +36,12 @@ export function TicketHubCta() {
 
           <Link
             href={ticketHubCta.ctaUrl}
-            className="group flex h-40 w-40 shrink-0 flex-col items-center justify-center gap-4 rounded-full border border-white/65 text-center text-[0.65rem] font-extrabold uppercase tracking-[0.15em] transition-[background-color,color,transform] duration-300 hover:-translate-y-2 hover:bg-white hover:text-sarga-red sm:h-48 sm:w-48"
+            className="group flex min-h-28 min-w-[15rem] shrink-0 items-center justify-between gap-8 border border-white/45 bg-white px-7 text-[0.68rem] font-extrabold uppercase tracking-[0.14em] text-sarga-text transition-transform duration-300 hover:-translate-y-1 sm:min-h-32 sm:px-9"
           >
             {ticketHubCta.ctaLabel}
-            <ArrowRightIcon className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-2" />
+            <span className="flex h-11 w-11 items-center justify-center bg-sarga-red text-white">
+              <ArrowRightIcon className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
           </Link>
         </div>
       </div>

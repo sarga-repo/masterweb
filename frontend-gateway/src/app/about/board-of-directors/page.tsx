@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { EditorialHeading } from "@/components/sections/editorial-heading";
 import { InteriorHero } from "@/components/sections/interior-hero";
 import { ArrowRightIcon } from "@/components/ui/icons";
@@ -8,13 +8,19 @@ import { leadershipPeople as mockLeadership } from "@/lib/mock-data";
 import { getLeadershipPeople } from "@/lib/strapi/about";
 import type { LeadershipPerson } from "@/lib/strapi/types";
 import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "Board of Directors",
-  description:
-    "Meet the board and executive leadership guiding Sarga's integrated sports and entertainment ecosystem.",
-  path: "/about/board-of-directors",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "Board of Directors",
+    description:
+      "Meet the board and executive leadership guiding Sarga's integrated sports and entertainment ecosystem.",
+    path: "/about/board-of-directors",
+    locale,
+    isFallback: locale === "id",
+  });
+}
 
 function LeadershipCard({
   person,
@@ -24,7 +30,7 @@ function LeadershipCard({
   index: number;
 }) {
   return (
-    <article className="group border-t border-sarga-black/20 pt-4">
+    <article className="group flex h-full flex-col border border-sarga-text/15 bg-[#fbf8f3] p-4 shadow-[0_18px_50px_rgb(16_20_27_/_6%)]">
       <div className="relative aspect-square overflow-hidden bg-sarga-black">
         {person.portrait ? (
           <Image
@@ -43,23 +49,31 @@ function LeadershipCard({
           {String(index + 1).padStart(2, "0")}
         </span>
       </div>
-      <p className="mt-5 text-[0.62rem] font-extrabold uppercase tracking-[0.18em] text-sarga-red">
+      <p className="mt-5 text-[0.62rem] font-extrabold uppercase tracking-[0.16em] text-sarga-red-dark">
         {person.role}
       </p>
-      <h3 className="mt-2 max-w-[14ch] font-heading text-2xl font-bold uppercase leading-[0.92] tracking-[-0.035em] sm:text-3xl">
+      <h3 className="gateway-card-title mt-2 max-w-[14ch] font-heading uppercase">
         {person.name}
       </h3>
+      <p className="mt-5 border-t border-sarga-text/15 pt-4 text-sm leading-6 text-sarga-text-muted">
+        {person.biography ??
+          `Member of Sarga's ${person.group === "board" ? "Board of Directors" : person.group === "advisor" ? "Advisory Council" : "Executive Council"}.`}
+      </p>
     </article>
   );
 }
 
 export default async function BoardOfDirectorsPage() {
-  const cmsPeople = await getLeadershipPeople();
+  const locale = await getRequestLocale();
+  const cmsPeople = await getLeadershipPeople(locale);
   const leadershipPeople = cmsPeople.length > 0 ? cmsPeople : mockLeadership;
 
   const board = leadershipPeople.filter((person) => person.group === "board");
   const executive = leadershipPeople.filter(
     (person) => person.group === "executive",
+  );
+  const advisors = leadershipPeople.filter(
+    (person) => person.group === "advisor",
   );
 
   return (
@@ -79,9 +93,10 @@ export default async function BoardOfDirectorsPage() {
           "Indonesia",
           "One operating standard",
         ]}
+        tone="slate"
       />
 
-      <section className="gateway-surface-light-signature bg-sarga-light py-20 sm:py-28 lg:py-36">
+      <section className="gateway-warm-panel py-20 sm:py-28 lg:py-36">
         <div className="site-container">
           <EditorialHeading
             index="02"
@@ -89,7 +104,7 @@ export default async function BoardOfDirectorsPage() {
             title="Built for the long run."
             description="The board protects Sarga's mandate, governance discipline, and long-term value as the group expands its sporting and entertainment portfolio."
           />
-          <div className="mt-16 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:mt-20 lg:max-w-[70%]">
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
             {board.map((person, index) => (
               <LeadershipCard key={person.name} person={person} index={index} />
             ))}
@@ -97,7 +112,7 @@ export default async function BoardOfDirectorsPage() {
         </div>
       </section>
 
-      <section className="gateway-surface-light-signature gateway-surface-light-signature--left bg-white py-20 sm:py-28 lg:py-36">
+      <section className="gateway-surface-light-signature gateway-surface-light-signature--left bg-sarga-light py-20 sm:py-28 lg:py-36">
         <div className="site-container">
           <EditorialHeading
             index="03"
@@ -105,7 +120,7 @@ export default async function BoardOfDirectorsPage() {
             title="Accountability moves close to the work."
             description="The executive council translates group direction into commercial, financial, and operating momentum across every Sarga property."
           />
-          <div className="mt-16 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
             {executive.map((person, index) => (
               <LeadershipCard
                 key={person.name}
@@ -114,6 +129,25 @@ export default async function BoardOfDirectorsPage() {
               />
             ))}
           </div>
+          {advisors.length > 0 ? (
+            <div className="mt-24">
+              <EditorialHeading
+                index="04"
+                eyebrow="Advisory council"
+                title="Experience around the table."
+                description="Advisors contribute specialist and independent perspective without obscuring the group's governance and operating lines."
+              />
+              <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {advisors.map((person, index) => (
+                  <LeadershipCard
+                    key={person.name}
+                    person={person}
+                    index={index + board.length + executive.length}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
       </section>
 

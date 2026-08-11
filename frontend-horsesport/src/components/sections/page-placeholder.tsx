@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { SectionHeader } from "@/components/ui/section-header";
 import { ArrowRightIcon } from "@/components/ui/icons";

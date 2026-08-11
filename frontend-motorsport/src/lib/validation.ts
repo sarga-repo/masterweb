@@ -45,6 +45,7 @@ export const contactFormSchema = z.object({
     .max(500)
     .optional()
     .transform((value) => value || undefined),
+  sourceLocale: z.enum(["en", "id"]).default("en"),
 });
 
 export type ContactFormInput = z.input<typeof contactFormSchema>;
@@ -58,6 +59,7 @@ export const newsletterSubscriptionSchema = z.object({
     .max(500)
     .optional()
     .transform((value) => value || "/"),
+  sourceLocale: z.enum(["en", "id"]).default("en"),
 });
 
 export type FormFieldErrors = Record<string, string>;

@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 
 import { contactFormSchema, flattenFormErrors } from "@/lib/validation";
 
+function message(locale: "en" | "id", english: string, indonesian: string) {
+  return locale === "id" ? indonesian : english;
+}
+
 /* ── Rate limiting (in-memory, per-process) ──────────────────────────────── */
 const attempts = new Map<string, number[]>();
 
@@ -49,11 +53,20 @@ const INQUIRY_TYPE_MAP: Record<
 
 /* ── POST /api/contact ───────────────────────────────────────────────────── */
 export async function POST(request: Request) {
+  const headerLocale =
+    request.headers.get("x-sarga-locale") === "id" ? "id" : "en";
   const fp = fingerprint(request);
 
   if (isRateLimited(`ms-contact:${fp}`, 5, 10 * 60 * 1000)) {
     return NextResponse.json(
-      { ok: false, message: "Too many attempts. Please try again later." },
+      {
+        ok: false,
+        message: message(
+          headerLocale,
+          "Too many attempts. Please try again later.",
+          "Terlalu banyak percobaan. Silakan coba lagi nanti.",
+        ),
+      },
       { status: 429 },
     );
   }
@@ -69,11 +82,22 @@ export async function POST(request: Request) {
   }
 
   const parsed = contactFormSchema.safeParse(body);
+  const requestedLocale =
+    typeof body === "object" &&
+    body &&
+    "sourceLocale" in body &&
+    body.sourceLocale === "id"
+      ? "id"
+      : headerLocale;
   if (!parsed.success) {
     return NextResponse.json(
       {
         ok: false,
-        message: "Please review the highlighted fields.",
+        message: message(
+          requestedLocale,
+          "Please review the highlighted fields.",
+          "Periksa kembali kolom yang ditandai.",
+        ),
         errors: flattenFormErrors(parsed.error),
       },
       { status: 400 },
@@ -124,7 +148,9 @@ export async function POST(request: Request) {
             email: payload.email,
             inquiryType: INQUIRY_TYPE_MAP[payload.category] ?? "general",
             message: payload.message,
+            sourceSite: "motorsport",
             sourcePage: payload.sourcePage ?? "/contact",
+            sourceLocale: payload.sourceLocale,
             submittedAt: new Date().toISOString(),
           },
         }),
@@ -146,6 +172,10 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     ok: true,
-    message: "Thank you. Your inquiry has been received.",
+    message: message(
+      payload.sourceLocale,
+      "Thank you. Your inquiry has been received.",
+      "Terima kasih. Pertanyaan Anda telah kami terima.",
+    ),
   });
 }

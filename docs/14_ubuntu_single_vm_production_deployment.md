@@ -166,6 +166,11 @@ delete `cms/public/uploads`; it is production data and must be included in
 backups. A remote object-storage provider may replace local uploads later after
 separate approval and migration planning.
 
+Short hero MP4/WebM files are served from the same uploads directory. The
+Nginx/Strapi ceiling is 100 MB per upload, not an editorial target: encode each
+source to roughly 5-8 MB where practical and always provide a poster. Watch VM
+disk usage and egress before enabling video on several slides.
+
 ## 6. Configure secrets and runtime environment
 
 Create four files owned by `root:sarga`, mode 640. Values below are examples;
@@ -193,7 +198,42 @@ TRANSFER_TOKEN_SALT=<LONG_RANDOM_VALUE>
 JWT_SECRET=<LONG_RANDOM_VALUE>
 ENCRYPTION_KEY=<LONG_RANDOM_VALUE>
 SEED_DEMO_CONTENT=false
+MAIL_ENABLED=false
+MAIL_AUTH_MODE=oauth
+MAIL_SMTP_HOST=smtp.office365.com
+MAIL_SMTP_PORT=587
+MAIL_SMTP_REQUIRE_TLS=true
+MAIL_SMTP_USER=noreply@sargamotorsport.co
+MAIL_FROM_ADDRESS=noreply@sargamotorsport.co
+MAIL_FROM_NAME="Sarga Motorsport"
+MAIL_DEFAULT_REPLY_TO=noreply@sargamotorsport.co
+MICROSOFT_TENANT_ID=<MICROSOFT_TENANT_GUID>
+MICROSOFT_CLIENT_ID=<ENTRA_APPLICATION_GUID>
+MICROSOFT_CLIENT_SECRET=<SECRET_STORE_VALUE>
+MICROSOFT_SMTP_SCOPE=https://outlook.office365.com/.default
+# Emergency existing-tenant fallback only; leave blank for OAuth.
+MAIL_SMTP_PASSWORD=
+MAIL_BASIC_AUTH_ACKNOWLEDGED=
+MAIL_BASIC_AUTH_EXPIRES_AT=
+MAIL_NOTIFICATIONS_ENABLED=false
+MAIL_RECIPIENT_GATEWAY=<APPROVED_INTERNAL_RECIPIENTS>
+MAIL_RECIPIENT_MOTORSPORT=<APPROVED_INTERNAL_RECIPIENTS>
+MAIL_RECIPIENT_HORSESPORT=<APPROVED_INTERNAL_RECIPIENTS>
+MAIL_MAX_ATTEMPTS=5
+MAIL_WORKER_BATCH_SIZE=10
+MAIL_WORKER_CRON="*/1 * * * *"
 ```
+
+The GWR-CMS-MAIL-2 Exchange Online OAuth transport is implemented but remains
+disabled until its Microsoft 365 prerequisites and credentialed staging check
+pass. OAuth is the target; follow
+`docs/strapi-admin-menu/12_gwr_cms_mail_2_oauth_transport_spec.md`. For the
+approved 2026-08-14 launch contingency, an eligible existing tenant may instead
+use the explicitly selected, expiring configuration in
+`docs/strapi-admin-menu/15_gwr_cms_mail_4_1_temporary_basic_auth_fallback.md`.
+Keep this file `root:sarga` mode 640. Never commit or echo either the client
+secret or mailbox password. Both modes require STARTTLS on port 587 and an
+approved sender; OAuth additionally uses mailbox-scoped Exchange RBAC.
 
 Generate independent secrets, for example with `openssl rand -base64 48`. Do
 not reuse keys between staging and production.
@@ -252,6 +292,73 @@ sudo chown root:sarga /etc/sarga/*.env
 sudo chmod 640 /etc/sarga/*.env
 ```
 
+### Exchange Online preflight and no-send verification
+
+The VM must have outbound TCP access to Microsoft identity on 443 and Exchange
+Online SMTP on 587. UFW's default outbound policy normally permits this; confirm
+the cloud firewall/security group does as well. Test TLS negotiation without
+credentials:
+
+```bash
+openssl s_client -starttls smtp -connect smtp.office365.com:587 \
+  -servername smtp.office365.com -tls1_2 </dev/null
+```
+
+After Sarga IT has installed the dedicated Entra application credential and
+mailbox-scoped `Application SMTP.SendAsApp` authorization, enable OAuth mail on
+**staging first**, restart Strapi, and run the no-send verifier. Run it through
+a transient systemd unit so `/etc/sarga/cms.env` is not sourced by the operator
+shell:
+
+```bash
+sudo systemd-run --wait --pipe --collect --uid=sarga \
+  --property=WorkingDirectory=/srv/sarga-website \
+  --property=EnvironmentFile=/etc/sarga/cms.env \
+  /usr/bin/pnpm --dir cms mail:verify
+```
+
+Confirm the pnpm executable with `command -v pnpm` and substitute its absolute
+path if it is not `/usr/bin/pnpm`. The verifier authenticates using the selected
+mode, negotiates SMTP, then closes the connection without submitting a message.
+Do not echo `/etc/sarga/cms.env` or enable shell tracing. If verification fails,
+set `MAIL_ENABLED=false`, restart `sarga-cms`, and keep public notification
+wiring disabled. Credentialed delivery and domain-alignment UAT are deferred to
+GWR-CMS-MAIL-4.
+
+### Urgent existing-tenant Basic SMTP contingency
+
+Use this only if Sarga IT confirms that Authenticated SMTP and Basic SMTP are
+still permitted for `noreply@sargamotorsport.co`. In `/etc/sarga/cms.env`, keep
+the endpoint/TLS/sender values above and replace the authentication block with:
+
+```dotenv
+MAIL_AUTH_MODE=basic
+MAIL_SMTP_PASSWORD=<RUNTIME_SECRET_ONLY>
+MAIL_BASIC_AUTH_ACKNOWLEDGED=I_ACCEPT_TEMPORARY_BASIC_AUTH_RISK
+MAIL_BASIC_AUTH_EXPIRES_AT=<EARLIEST_PRACTICAL_ISO_8601_EXPIRY>
+
+# Not used in Basic mode; remove values if previously present.
+MICROSOFT_TENANT_ID=
+MICROSOFT_CLIENT_ID=
+MICROSOFT_CLIENT_SECRET=
+```
+
+The expiry must be future-dated and no later than
+`2026-12-15T23:59:59.999Z`. The CMS fails closed when the acknowledgement,
+password, or expiry is missing/invalid and the inquiry worker refuses delivery
+after expiry. Leave `MAIL_NOTIFICATIONS_ENABLED=false`, restart CMS, and run the
+same no-send verifier before the controlled staging send. If Microsoft rejects
+the login, do not weaken tenant-wide Security Defaults or Conditional Access;
+launch with stored inquiries and manual handling while OAuth is completed.
+
+After `mail:verify` passes, follow the controlled-send and six site/locale
+workflow matrix in
+`docs/strapi-admin-menu/14_gwr_cms_mail_4_staging_uat_handover.md`. Do not set
+`MAIL_NOTIFICATIONS_ENABLED=true` in production until every launch gate there
+is signed. When enabled, the CMS cron worker records pending/processing/sent/
+failed state on each inquiry and retries temporary failures without holding the
+public form request open.
+
 ## 7. Migrate the exact CMS content and assets
 
 Use
@@ -273,6 +380,15 @@ For the initial staging bootstrap:
    uploads.
 6. Restart Strapi, verify collection/media parity, and recreate target-specific
    admin accounts and API tokens because Strapi does not export them.
+7. Generate the target `i18n:inventory`, run `i18n:compare` against the frozen
+   source inventory, and block promotion on any drift. Generate
+   `i18n:completeness`, assign missing/draft Indonesian records to their site
+   owners, and preserve fallback `noindex` until each is reviewed/published.
+
+The exact commands and local GWR-CMS-8 rehearsal evidence are in
+`docs/strapi-admin-menu/16_gwr_cms_8_migration_uat_handover.md`. Store inventory,
+reconciliation, and completeness files in the restricted release-artifact
+directory with the archive checksum and Git SHA.
 
 For initial production launch, export the frozen, stakeholder-approved staging
 CMS and repeat the same controlled import. Do not promote production directly
@@ -377,6 +493,19 @@ The config preserves `Host` and `X-Forwarded-*` headers. Next.js response
 buffering is disabled for streaming; the CMS block permits 100 MB media uploads
 and a longer upstream timeout. Keep Strapi `PUBLIC_URL` equal to its final HTTPS
 origin and `PROXY_KOA=true` so secure admin cookies work behind Nginx.
+
+After enabling hero video, confirm the CMS media response supports byte ranges
+and the correct MIME type through the public HTTPS origin:
+
+```bash
+curl -I https://cms.example.com/uploads/<hero-file>.webm
+curl -sS -H 'Range: bytes=0-1023' -o /dev/null -w '%{http_code}\n' \
+  https://cms.example.com/uploads/<hero-file>.webm
+```
+
+Expect a valid video `Content-Type`; a range request should return `206` when
+supported by the deployed media path. Do not expose ports 1337 or 3000-3002 to
+serve media directly.
 
 Before issuing certificates, confirm every hostname returns the expected site
 over plain HTTP and no DNS proxy blocks the ACME challenge.
@@ -514,6 +643,14 @@ frozen lockfiles, rebuild all changed services, and restart them. Restore the
 database/uploads only when the release included a non-backward-compatible data
 migration, using the paired pre-deploy backup. Record the commit, migration,
 operator, start/end time, verification result, and rollback decision.
+
+To roll back only the Exchange Online transport, first set
+`MAIL_NOTIFICATIONS_ENABLED=false`, then `MAIL_ENABLED=false` in
+`/etc/sarga/cms.env`, and restart `sarga-cms`. Rotate a client secret by creating
+and installing the replacement first, running staging `mail:verify`, and only
+then revoking the old credential. If Basic contingency mode was used, remove
+its password/acknowledgement/expiry after OAuth cutover and rotate the mailbox
+password. Never log a secret, password, or access token.
 
 ## 14. Monitoring and operational ownership
 

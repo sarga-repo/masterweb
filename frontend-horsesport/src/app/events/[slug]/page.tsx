@@ -18,6 +18,8 @@ import {
 import { fetchEventDetail, fetchEventsPage } from "@/lib/cms-content";
 import { createMetadata } from "@/lib/seo/metadata";
 import { resolveSiteUrl, siteConfig } from "@/lib/site-config";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { localizePath } from "@/lib/i18n/config";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -32,6 +34,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getRequestLocale();
   const event = await fetchEventDetail(slug);
   if (!event) notFound();
   return createMetadata({
@@ -42,6 +45,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     path: `/events/${slug}`,
     image: event.image,
     type: "article",
+    locale,
   });
 }
 
@@ -69,7 +73,7 @@ function Meta({
 }
 
 export default async function EventDetailPage({ params }: Params) {
-  const { slug } = await params;
+  const [{ slug }, locale] = await Promise.all([params, getRequestLocale()]);
   const event = await fetchEventDetail(slug);
   if (!event) notFound();
 
@@ -81,7 +85,8 @@ export default async function EventDetailPage({ params }: Params) {
     "@context": "https://schema.org",
     "@type": "Event",
     name: event.title,
-    url: resolveSiteUrl(`/events/${slug}`),
+    url: resolveSiteUrl(localizePath(`/events/${slug}`, locale)),
+    inLanguage: locale === "id" ? "id-ID" : "en-US",
     ...(event.description ? { description: event.description } : {}),
     ...(event.startDateIso ? { startDate: event.startDateIso } : {}),
     ...(event.endDateIso ? { endDate: event.endDateIso } : {}),

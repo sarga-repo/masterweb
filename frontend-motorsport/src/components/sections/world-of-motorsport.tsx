@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { DisciplineGrid } from "@/components/sections/discipline-grid";
 import { ArrowUpRightIcon } from "@/components/ui/icons";
@@ -23,7 +23,25 @@ function GlobeMark() {
   );
 }
 
-export function WorldOfMotorsport({ items }: { items: DisciplineItem[] }) {
+type WorldOfMotorsportProps = {
+  eyebrow: string;
+  titlePrefix: string;
+  titleAccent: string;
+  description: string;
+  ctaLabel: string;
+  ctaUrl: string;
+  disciplines: DisciplineItem[];
+};
+
+export function WorldOfMotorsport({
+  eyebrow,
+  titlePrefix,
+  titleAccent,
+  description,
+  ctaLabel,
+  ctaUrl,
+  disciplines,
+}: WorldOfMotorsportProps) {
   return (
     <section className="relative isolate overflow-hidden border-y border-ms-warm-white/12 bg-[#05132c] py-20 text-ms-warm-white sm:py-24 lg:py-28">
       <div
@@ -40,29 +58,31 @@ export function WorldOfMotorsport({ items }: { items: DisciplineItem[] }) {
           <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-7">
             <GlobeMark />
             <div>
-              <p className="ms-kicker text-ms-slipstream-teal">
-                A global ecosystem of racing formats
-              </p>
+              <p className="ms-kicker text-ms-slipstream-teal">{eyebrow}</p>
               <h2 className="ms-heading-page mt-3 text-ms-warm-white">
-                The world of{" "}
-                <span className="block text-ms-apex-crimson">Motorsport</span>
+                {titlePrefix}{" "}
+                <span className="block text-ms-apex-crimson">
+                  {titleAccent}
+                </span>
               </h2>
               <p className="mt-5 max-w-xl text-base leading-7 text-ms-warm-white/68">
-                From circuit precision to mixed-surface spectacle, every format
-                is part of one international-standard racing programme.
+                {description}
               </p>
             </div>
           </div>
           <Link
-            href="/events"
+            href={ctaUrl}
             className="group inline-flex min-h-12 w-fit items-center gap-3 border-b border-ms-warm-white/30 text-[0.65rem] font-black uppercase tracking-[0.16em] transition-colors hover:border-ms-electric-yellow hover:text-ms-electric-yellow"
           >
-            Explore the calendar
+            {ctaLabel}
             <ArrowUpRightIcon className="size-4 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
           </Link>
         </div>
 
-        <DisciplineGrid items={items} label="Explore motorsport disciplines" />
+        <DisciplineGrid
+          items={disciplines}
+          label="Explore motorsport disciplines"
+        />
       </div>
     </section>
   );

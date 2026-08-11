@@ -10,11 +10,23 @@
   "options": {
     "draftAndPublish": true
   },
-  "pluginOptions": {},
+  "pluginOptions": { "i18n": { "localized": true } },
   "attributes": {
-    "heroEyebrow": { "type": "string", "required": true },
-    "heroTitle": { "type": "string", "required": true },
-    "heroDescription": { "type": "richtext", "required": true },
+    "heroEyebrow": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "heroTitle": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "heroDescription": {
+      "type": "richtext",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "heroImage": {
       "type": "media",
       "multiple": false,
@@ -27,12 +39,31 @@
       "required": false,
       "allowedTypes": ["images"]
     },
-    "primaryCtaLabel": { "type": "string", "required": true },
+    "heroVideo": {
+      "type": "component",
+      "component": "shared.hero-video",
+      "repeatable": false,
+      "required": false
+    },
+    "primaryCtaLabel": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "primaryCtaUrl": { "type": "string", "required": true },
-    "secondaryCtaLabel": { "type": "string" },
+    "secondaryCtaLabel": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "secondaryCtaUrl": { "type": "string" },
-    "aboutSummaryTitle": { "type": "string" },
-    "aboutSummaryBody": { "type": "richtext" },
+    "aboutSummaryTitle": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "aboutSummaryBody": {
+      "type": "richtext",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "featuredBusinesses": {
       "type": "relation",
       "relation": "oneToMany",
@@ -51,7 +82,8 @@
     "seo": {
       "type": "component",
       "component": "shared.seo",
-      "repeatable": false
+      "repeatable": false,
+      "pluginOptions": { "i18n": { "localized": true } }
     }
   }
 }

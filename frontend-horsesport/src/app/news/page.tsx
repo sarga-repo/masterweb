@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/metadata";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { PageHero, NewsArticleCard, ScrollReveal } from "@/components";
 import { fetchNewsPage } from "@/lib/cms-content";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "News",
-  description:
-    "Race results, event announcements, turf and venue stories, stable life, jockey features, and equine performance from Sarga Horse Sport.",
-  path: "/news",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "News",
+    description:
+      "Race results, event announcements, turf and venue stories, stable life, jockey features, and equine performance from Sarga Horse Sport.",
+    path: "/news",
+    locale,
+  });
+}
 
 type Params = { searchParams: Promise<{ category?: string }> };
 

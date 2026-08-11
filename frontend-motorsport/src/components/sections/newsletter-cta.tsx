@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { type FormEvent, useState } from "react";
 
 import { ArrowRightIcon } from "@/components/ui/icons";
@@ -30,17 +30,26 @@ export function NewsletterCtaSection({
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
+    const sourceLocale =
+      window.location.pathname === "/id" ||
+      window.location.pathname.startsWith("/id/")
+        ? "id"
+        : "en";
 
     setStatus({ type: "submitting" });
 
     try {
       const response = await fetch("/api/newsletter", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-Sarga-Locale": sourceLocale,
+        },
         body: JSON.stringify({
           email: formData.get("email"),
           website: formData.get("website"),
           sourcePage: window.location.pathname,
+          sourceLocale,
         }),
       });
       const result = (await response.json()) as {

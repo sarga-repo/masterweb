@@ -1,18 +1,26 @@
 "use client";
 
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { MotorsportLogo } from "@/components/ui/brand-logo";
 import { CloseIcon, MenuIcon } from "@/components/ui/icons";
 import type { LinkItem } from "@/types/design-system";
+import type { SiteNavigationItem } from "@/lib/navigation-cms";
+import type { Locale } from "@/lib/i18n/config";
+import type { MotorsportDictionary } from "@/lib/i18n/dictionaries";
+import { localizeExternalSiteHref, stripLocalePrefix } from "@/lib/i18n/config";
+import { MotorsportLanguageSelector } from "@/components/i18n/language-selector";
 
 type MotorsportHeaderProps = {
-  navigation: LinkItem[];
-  ticketLink?: LinkItem;
+  navigation: SiteNavigationItem[];
+  ticketLink?: SiteNavigationItem;
   gatewayLink?: LinkItem;
   logoHref?: string;
+  locale: Locale;
+  dictionary: MotorsportDictionary;
+  navigationSource: "cms" | "repository";
 };
 
 export function MotorsportHeader({
@@ -20,8 +28,12 @@ export function MotorsportHeader({
   ticketLink,
   gatewayLink,
   logoHref = "/",
+  locale,
+  dictionary,
+  navigationSource,
 }: MotorsportHeaderProps) {
   const pathname = usePathname();
+  const normalizedPath = stripLocalePrefix(pathname);
   const [open, setOpen] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuPanelRef = useRef<HTMLDivElement>(null);
@@ -70,25 +82,24 @@ export function MotorsportHeader({
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ms-warm-white/12 bg-(--ms-nav-surface) backdrop-blur-xl">
+    <header
+      data-navigation-source={navigationSource}
+      className="sticky top-0 z-50 border-b border-ms-warm-white/12 bg-(--ms-nav-surface) backdrop-blur-xl"
+    >
       <div className="absolute inset-x-0 top-0 h-0.5 bg-[linear-gradient(90deg,#E8192C_0_38%,#FF6B00_38%_60%,#F5C800_60%_72%,#00C4CC_72%_84%,#0033A0_84%)]" />
       <div className="ms-shell grid h-(--ms-header-height) grid-cols-[1fr_auto] items-center gap-4 xl:grid-cols-[minmax(11rem,1fr)_auto_minmax(11rem,1fr)]">
-        <Link
-          href={logoHref}
-          aria-label="Sarga Motorsport home"
-          className="shrink-0"
-        >
+        <Link href={logoHref} aria-label={dictionary.home} className="shrink-0">
           <MotorsportLogo variant="symbol-sport" priority />
         </Link>
 
         <nav
           className="hidden justify-self-center xl:flex xl:items-center xl:gap-0.5"
-          aria-label="Primary navigation"
+          aria-label={dictionary.primaryNavigation}
         >
           {navigation.map((item) => {
             const active =
-              pathname === item.href ||
-              (item.href !== "/" && pathname.startsWith(item.href));
+              normalizedPath === item.href ||
+              (item.href !== "/" && normalizedPath.startsWith(item.href));
             const isTicket = item.href === ticketLink?.href;
 
             return (
@@ -118,10 +129,11 @@ export function MotorsportHeader({
           })}
         </nav>
 
-        <div className="hidden justify-self-end xl:flex xl:items-center">
+        <div className="hidden justify-self-end gap-3 xl:flex xl:items-center">
+          <MotorsportLanguageSelector locale={locale} dictionary={dictionary} />
           {gatewayLink ? (
             <a
-              href={gatewayLink.href}
+              href={localizeExternalSiteHref(gatewayLink.href, locale)}
               target={gatewayLink.external ? "_blank" : undefined}
               rel={gatewayLink.external ? "noreferrer" : undefined}
               className="border-l border-ms-warm-white/14 pl-4 text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-ms-warm-white/55 transition-colors hover:text-ms-warm-white"
@@ -137,7 +149,9 @@ export function MotorsportHeader({
           className="col-start-2 grid size-11 place-items-center justify-self-end border border-ms-warm-white/20 text-ms-warm-white xl:col-start-3 xl:hidden"
           aria-expanded={open}
           aria-controls="motorsport-mobile-menu"
-          aria-label={open ? "Close navigation" : "Open navigation"}
+          aria-label={
+            open ? dictionary.closeNavigation : dictionary.openNavigation
+          }
           onClick={() => setOpen((value) => !value)}
         >
           {open ? (
@@ -160,14 +174,14 @@ export function MotorsportHeader({
       >
         <nav
           className="flex min-h-full flex-col"
-          aria-label="Mobile navigation"
+          aria-label={dictionary.mobileNavigation}
         >
           <div className="border-t border-ms-warm-white/12">
             {navigation.map((item) => {
               const isTicket = item.href === ticketLink?.href;
               const active =
-                pathname === item.href ||
-                (item.href !== "/" && pathname.startsWith(item.href));
+                normalizedPath === item.href ||
+                (item.href !== "/" && normalizedPath.startsWith(item.href));
 
               return (
                 <Link
@@ -189,16 +203,21 @@ export function MotorsportHeader({
                   <span
                     className={`ms-data-label ${isTicket ? "text-ms-warm-white/75" : "text-ms-warm-white/40"}`}
                   >
-                    {active ? "Current" : "Open"} ↗
+                    {active ? dictionary.current : dictionary.open} ↗
                   </span>
                 </Link>
               );
             })}
           </div>
           <div className="mt-auto flex flex-col gap-4 pt-8 sm:flex-row">
+            <MotorsportLanguageSelector
+              locale={locale}
+              dictionary={dictionary}
+              mobile
+            />
             {gatewayLink ? (
               <a
-                href={gatewayLink.href}
+                href={localizeExternalSiteHref(gatewayLink.href, locale)}
                 className="border border-ms-warm-white/20 px-6 py-4 text-center text-xs font-bold uppercase tracking-[0.16em]"
               >
                 {gatewayLink.label}

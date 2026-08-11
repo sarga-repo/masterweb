@@ -17,11 +17,11 @@ This keeps code ownership and deployment clear while allowing content to be mana
 
 ## Frontend ownership
 
-| Frontend | Site key | Local port | Production intent |
-|---|---|---:|---|
-| Gateway | `gateway` | 3000 | `sarga.co` |
-| Motorsport | `motorsport` | 3001 | `motorsport.sarga.co` |
-| Horse Sport | `horsesport` | 3002 | `horsesport.sarga.co` |
+| Frontend    | Site key     | Local port | Production intent     |
+| ----------- | ------------ | ---------: | --------------------- |
+| Gateway     | `gateway`    |       3000 | `sarga.co`            |
+| Motorsport  | `motorsport` |       3001 | `motorsport.sarga.co` |
+| Horse Sport | `horsesport` |       3002 | `horsesport.sarga.co` |
 
 ## Routing rules
 
@@ -37,26 +37,26 @@ News/events should include `canonicalSite` and `primaryBusiness`.
 
 Routing behavior:
 
-| Content | Canonical site | Gateway behavior |
-|---|---|---|
-| Gateway corporate news | gateway | Open on gateway |
-| Motorsport article/event | motorsport | Show teaser, open Motorsport |
-| Horse Sport article/event | horsesport | Show teaser, open Horse Sport |
-| Shared ecosystem item | shared or configured canonical | Use canonical site or gateway fallback |
+| Content                   | Canonical site                 | Gateway behavior                       |
+| ------------------------- | ------------------------------ | -------------------------------------- |
+| Gateway corporate news    | gateway                        | Open on gateway                        |
+| Motorsport article/event  | motorsport                     | Show teaser, open Motorsport           |
+| Horse Sport article/event | horsesport                     | Show teaser, open Horse Sport          |
+| Shared ecosystem item     | shared or configured canonical | Use canonical site or gateway fallback |
 
 ## URL builder utility
 
 Create a shared utility per frontend or package-level utility:
 
 ```ts
-type SiteKey = 'gateway' | 'motorsport' | 'horsesport';
+type SiteKey = "gateway" | "motorsport" | "horsesport";
 
 function resolveContentUrl(content: {
   slug: string;
-  contentType: 'news' | 'events' | 'tickets' | 'campaigns';
+  contentType: "news" | "events" | "tickets" | "campaigns";
   canonicalSite?: SiteKey;
   primaryBusiness?: { slug: string; dedicatedSiteKey?: SiteKey };
-}): string
+}): string;
 ```
 
 Rules:
@@ -106,3 +106,21 @@ Dedicated sites show only CTAs for their primary business or shared CTAs assigne
 ## Future scalability
 
 When more dedicated sites are added, replace enum-based `siteScope` with a `Site` collection relation.
+
+## Locale integration contract (GWR-CMS-6/7 active rollout)
+
+- All three domains support English at existing unprefixed paths and Indonesian
+  under `/id`.
+- The selected locale is preserved when a valid equivalent cross-site route is
+  known; otherwise the destination opens its locale home.
+- Editorial content is localized once in Strapi and rendered through each
+  site's own design system. Application-control dictionaries remain local to
+  each frontend.
+- Header components stay separate but consume the same Top Navigation data
+  contract filtered by site scope and locale.
+- Locale does not permit cross-site content leakage or duplicate records across
+  CMS collections.
+
+Strapi exposes the two-locale, site-scoped content and navigation contract. All
+three frontends implement it through separate brand shells, equivalent `/id`
+routes, scoped CMS menus, and locale-preserving ecosystem links.

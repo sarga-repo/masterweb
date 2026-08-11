@@ -8,6 +8,8 @@
  */
 
 import { strapiConfig } from "./config";
+import type { Locale } from "@/lib/i18n/config";
+import { getRequestLocaleSafe } from "@/lib/i18n/request";
 
 /* -------------------------------------------------------------------------- */
 /*  Generic helpers                                                           */
@@ -23,6 +25,11 @@ export type StrapiListResponse<T> = {
       pageCount: number;
       total: number;
     };
+  };
+  localization?: {
+    requestedLocale: Locale;
+    resolvedLocale: Locale;
+    isFallback: boolean;
   };
 };
 
@@ -62,13 +69,11 @@ export function mediaUrl(url?: string): string {
 /** Build the ?populate=… value for nested relations. */
 function populateParam(populate: string | string[]): string {
   if (Array.isArray(populate)) {
-    // Strapi v5 expects bracket notation: populate[field]=true
     return populate
       .map((field) => {
-        const [root, child] = field.split(".");
-        return child
-          ? `populate[${root}][populate][${child}]=true`
-          : `populate[${root}]=true`;
+        const [root, ...children] = field.split(".");
+        const nested = children.map((child) => `[populate][${child}]`).join("");
+        return `populate[${root}]${nested}=true`;
       })
       .join("&");
   }
@@ -86,6 +91,7 @@ type FetchOptions = {
   limit?: number;
   start?: number;
   revalidate?: number;
+  locale?: Locale;
 };
 
 function buildQs(opts: FetchOptions): string {
@@ -120,25 +126,41 @@ export async function fetchStrapiList<T>(
   collection: string,
   opts: FetchOptions = {},
 ): Promise<StrapiListResponse<T> | null> {
-  try {
+  const requestedLocale = opts.locale ?? (await getRequestLocaleSafe());
+  const requestLocale = async (locale: Locale) => {
+    const separator = buildQs(opts) ? "&" : "?";
+    const url = `${strapiConfig.apiUrl}/api/${collection}${buildQs(opts)}${separator}locale=${locale}`;
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 4_000);
-
-    const res = await fetch(
-      `${strapiConfig.apiUrl}/api/${collection}${buildQs(opts)}`,
-      {
-        signal: controller.signal,
-        next:
-          opts.revalidate != null ? { revalidate: opts.revalidate } : undefined,
-        headers: strapiConfig.apiToken
-          ? { Authorization: `Bearer ${strapiConfig.apiToken}` }
-          : undefined,
-      },
-    );
+    const res = await fetch(url, {
+      signal: controller.signal,
+      next:
+        opts.revalidate != null ? { revalidate: opts.revalidate } : undefined,
+      headers: strapiConfig.apiToken
+        ? { Authorization: `Bearer ${strapiConfig.apiToken}` }
+        : undefined,
+    });
     clearTimeout(timeout);
-
     if (!res.ok) return null;
     return (await res.json()) as StrapiListResponse<T>;
+  };
+  try {
+    let response = await requestLocale(requestedLocale);
+    let resolvedLocale = requestedLocale;
+    if (requestedLocale === "id" && (!response || response.data.length === 0)) {
+      response = await requestLocale("en");
+      resolvedLocale = "en";
+    }
+    return response
+      ? {
+          ...response,
+          localization: {
+            requestedLocale,
+            resolvedLocale,
+            isFallback: requestedLocale !== resolvedLocale,
+          },
+        }
+      : null;
   } catch {
     return null;
   }

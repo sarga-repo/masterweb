@@ -1,8 +1,11 @@
 "use client";
 
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { RacingGraphic } from "@/components/ui/racing-graphic";
+import { usePathname } from "next/navigation";
+import { localeFromPathname } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 /**
  * 500 - "Signal Lost"
@@ -17,6 +20,7 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const dictionary = getDictionary(localeFromPathname(usePathname()));
   return (
     <main className="relative isolate flex min-h-svh items-center overflow-hidden bg-sarga-black text-white">
       {/* Background decorative layers */}
@@ -64,7 +68,7 @@ export default function Error({
       <div className="site-container relative z-10 py-24 sm:py-32">
         {/* Error code */}
         <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-sarga-red">
-          500 - Signal lost
+          {dictionary.error.errorEyebrow}
         </p>
 
         {/* Giant number */}
@@ -79,13 +83,11 @@ export default function Error({
 
         {/* Headline */}
         <h1 className="mt-4 max-w-[14ch] font-heading text-[clamp(2.4rem,6vw,5rem)] font-bold uppercase leading-[0.88] tracking-[-0.04em]">
-          Connection interrupted.
+          {dictionary.error.errorTitle}
         </h1>
 
         <p className="mt-8 max-w-xl text-base leading-8 text-white/55">
-          Something unexpected happened in the signal chain. Our engineers have
-          been alerted and are working to restore full connectivity. This is a
-          temporary disruption - the network remains online.
+          {dictionary.error.errorDescription}
         </p>
 
         {/* Error digest (dev aid) */}
@@ -102,14 +104,14 @@ export default function Error({
             onClick={reset}
             className="group inline-flex items-center gap-4 bg-sarga-red px-7 py-4 text-[0.66rem] font-extrabold uppercase tracking-[0.16em] text-white transition-colors hover:bg-sarga-red-dark"
           >
-            Try again
+            {dictionary.error.retry}
             <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </button>
           <Link
             href="/"
             className="group inline-flex items-center gap-4 border border-white/16 px-7 py-4 text-[0.66rem] font-extrabold uppercase tracking-[0.16em] text-white/70 transition-colors hover:border-white/40 hover:text-white"
           >
-            Return to gateway
+            {dictionary.error.home}
             <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>

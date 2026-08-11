@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { notFound } from "next/navigation";
 import { InteriorHero } from "@/components/sections/interior-hero";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -8,11 +8,13 @@ import { getEventBySlug, getEvents } from "@/lib/strapi/events";
 import { motorsportUrl } from "@/lib/site-config";
 import { createMetadata, siteUrl } from "@/lib/seo/metadata";
 import { safeTicketEmbedUrl, safeTicketUrl } from "@/lib/ticketing/safe-url";
+import { localizePath } from "@/lib/i18n/config";
+import { getRequestLocale } from "@/lib/i18n/request";
 
 type EventPageProps = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  const events = await getEvents();
+  const events = await getEvents("en");
   return events.map(({ slug }) => ({ slug }));
 }
 
@@ -20,19 +22,23 @@ export async function generateMetadata({
   params,
 }: EventPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const event = await getEventBySlug(slug);
+  const locale = await getRequestLocale();
+  const event = await getEventBySlug(slug, locale);
   return createMetadata({
     title: event?.title ?? "Event not found",
     description: event?.description ?? "Sarga live event.",
     path: `/ticket-hub/${slug}`,
     image: event?.coverImage?.url,
     seo: event?.seo,
+    locale,
+    isFallback: event?.localization?.isFallback ?? locale === "id",
   });
 }
 
 export default async function EventPage({ params }: EventPageProps) {
   const { slug } = await params;
-  const event = await getEventBySlug(slug);
+  const locale = await getRequestLocale();
+  const event = await getEventBySlug(slug, locale);
   if (!event) notFound();
 
   /* Motorsport-scoped events: redirect visitors to the dedicated site. */
@@ -63,7 +69,8 @@ export default async function EventPage({ params }: EventPageProps) {
             ? { "@type": "Place", name: event.venue }
             : undefined,
           image: event.coverImage?.url,
-          url: `${siteUrl}/ticket-hub/${event.slug}`,
+          url: `${siteUrl}${localizePath(`/ticket-hub/${event.slug}`, locale)}`,
+          inLanguage: locale === "id" ? "id-ID" : "en-US",
           offers: ticketUrl
             ? {
                 "@type": "Offer",

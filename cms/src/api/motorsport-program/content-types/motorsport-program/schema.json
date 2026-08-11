@@ -8,9 +8,13 @@
     "description": "Motorsport program and campaign hubs such as IJTC and FIA Rallycross"
   },
   "options": { "draftAndPublish": true },
-  "pluginOptions": {},
+  "pluginOptions": { "i18n": { "localized": true } },
   "attributes": {
-    "title": { "type": "string", "required": true },
+    "title": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "slug": { "type": "uid", "targetField": "title", "required": true },
     "programType": {
       "type": "enumeration",
@@ -19,13 +23,27 @@
     },
     "programStatus": {
       "type": "enumeration",
-      "enum": ["announced", "registrationOpen", "ticketsOpen", "live", "completed", "hidden"],
+      "enum": [
+        "announced",
+        "registrationOpen",
+        "ticketsOpen",
+        "live",
+        "completed",
+        "hidden"
+      ],
       "default": "announced",
       "required": true
     },
     "seasonLabel": { "type": "string", "required": true },
-    "summary": { "type": "richtext", "required": true },
-    "mainHeadline": { "type": "string" },
+    "summary": {
+      "type": "richtext",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "mainHeadline": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "eventStartDate": { "type": "datetime" },
     "eventEndDate": { "type": "datetime" },
     "venue": { "type": "string" },
@@ -38,21 +56,30 @@
     "bannerSlides": {
       "type": "component",
       "component": "motorsport.campaign-slide",
-      "repeatable": true
+      "repeatable": true,
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "rundown": {
       "type": "component",
       "component": "motorsport.rundown-item",
-      "repeatable": true
+      "repeatable": true,
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "eventRules": {
       "type": "component",
       "component": "motorsport.rule-item",
-      "repeatable": true
+      "repeatable": true,
+      "pluginOptions": { "i18n": { "localized": true } }
     },
-    "primaryCtaLabel": { "type": "string" },
+    "primaryCtaLabel": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "primaryCtaUrl": { "type": "string" },
-    "becomeRidersLabel": { "type": "string" },
+    "becomeRidersLabel": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "becomeRidersUrl": { "type": "string" },
     "relatedEvents": {
       "type": "relation",
@@ -96,7 +123,8 @@
     "seo": {
       "type": "component",
       "component": "shared.seo",
-      "repeatable": false
+      "repeatable": false,
+      "pluginOptions": { "i18n": { "localized": true } }
     }
   }
 }

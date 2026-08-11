@@ -12,7 +12,7 @@ export type PillTab = {
 type PillTabsProps = {
   tabs: PillTab[];
   defaultTabId?: string;
-  tone?: "dark" | "light";
+  tone?: "dark" | "light" | "accent";
   className?: string;
   "aria-label"?: string;
 };
@@ -63,9 +63,9 @@ export function PillTabs({
         aria-label={ariaLabel}
         className={cn(
           "flex gap-1 overflow-x-auto rounded-sarga-pill border p-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-          tone === "dark"
-            ? "border-white/15 bg-white/5"
-            : "border-sarga-border bg-white",
+          tone === "light"
+            ? "border-sarga-border bg-white"
+            : "border-white/15 bg-white/5",
         )}
       >
         {tabs.map((tab, index) => {
@@ -91,10 +91,12 @@ export function PillTabs({
               className={cn(
                 "shrink-0 whitespace-nowrap rounded-sarga-pill px-6 py-2.5 text-xs font-extrabold uppercase tracking-[0.1em] transition-colors focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-sarga-orange sm:text-sm",
                 selected
-                  ? "bg-sarga-red text-white"
-                  : tone === "dark"
-                    ? "text-white/60 hover:text-white"
-                    : "text-sarga-text-muted hover:text-sarga-text",
+                  ? tone === "accent"
+                    ? "bg-white text-sarga-red-dark"
+                    : "bg-sarga-red text-white"
+                  : tone === "light"
+                    ? "text-sarga-text-muted hover:text-sarga-text"
+                    : "text-white/65 hover:text-white",
               )}
             >
               {tab.label}

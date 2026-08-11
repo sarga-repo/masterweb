@@ -1,8 +1,10 @@
 import "server-only";
 
-import { mapMedia, strapiFetch } from "@/lib/strapi/client";
+import { mapMedia, strapiFetchLocalized } from "@/lib/strapi/client";
+import type { Locale } from "@/lib/i18n/config";
 import type {
   LeadershipPerson,
+  LocalizationState,
   RawLeadershipPerson,
   RawTimelineItem,
   StrapiCollectionResponse,
@@ -15,8 +17,12 @@ const TIMELINE_QUERY =
 const LEADERSHIP_QUERY =
   "populate[portrait]=true&sort=order:asc&pagination[pageSize]=100";
 
-function mapTimelineItem(raw: RawTimelineItem): TimelineItem {
+function mapTimelineItem(
+  raw: RawTimelineItem,
+  localization: LocalizationState,
+): TimelineItem {
   return {
+    localization,
     year: raw.year ?? "",
     label: raw.label ?? "",
     title: raw.title ?? "",
@@ -26,37 +32,55 @@ function mapTimelineItem(raw: RawTimelineItem): TimelineItem {
   };
 }
 
-function mapLeadership(raw: RawLeadershipPerson): LeadershipPerson {
+function mapLeadership(
+  raw: RawLeadershipPerson,
+  localization: LocalizationState,
+): LeadershipPerson {
   return {
+    localization,
     name: raw.name ?? "",
     role: raw.role ?? "",
     group: raw.group ?? "board",
     order: raw.order ?? 0,
     portrait: mapMedia(raw.portrait, raw.name ?? "Leadership"),
-    biography: raw.biography,
+    biography: raw.summary,
   };
 }
 
 /** Fetch all published timeline items from CMS, sorted by order. */
-export async function getTimelineItems(): Promise<TimelineItem[]> {
-  const res = await strapiFetch<StrapiCollectionResponse<RawTimelineItem>>(
-    "timeline-items",
-    { query: TIMELINE_QUERY, revalidate: 120 },
-  );
+export async function getTimelineItems(
+  locale?: Locale,
+): Promise<TimelineItem[]> {
+  const result = await strapiFetchLocalized<
+    StrapiCollectionResponse<RawTimelineItem>
+  >("timeline-items", { query: TIMELINE_QUERY, revalidate: 120, locale });
+  const res = result.response;
 
   if (!res?.data?.length) return [];
 
-  return res.data.map((item) => mapTimelineItem(item));
+  const localization = {
+    requestedLocale: result.requestedLocale,
+    resolvedLocale: result.resolvedLocale,
+    isFallback: result.isFallback,
+  };
+  return res.data.map((item) => mapTimelineItem(item, localization));
 }
 
 /** Fetch all published leadership people from CMS, sorted by order. */
-export async function getLeadershipPeople(): Promise<LeadershipPerson[]> {
-  const res = await strapiFetch<StrapiCollectionResponse<RawLeadershipPerson>>(
-    "leadership-people",
-    { query: LEADERSHIP_QUERY, revalidate: 120 },
-  );
+export async function getLeadershipPeople(
+  locale?: Locale,
+): Promise<LeadershipPerson[]> {
+  const result = await strapiFetchLocalized<
+    StrapiCollectionResponse<RawLeadershipPerson>
+  >("leadership-people", { query: LEADERSHIP_QUERY, revalidate: 120, locale });
+  const res = result.response;
 
   if (!res?.data?.length) return [];
 
-  return res.data.map((item) => mapLeadership(item));
+  const localization = {
+    requestedLocale: result.requestedLocale,
+    resolvedLocale: result.resolvedLocale,
+    isFallback: result.isFallback,
+  };
+  return res.data.map((item) => mapLeadership(item, localization));
 }

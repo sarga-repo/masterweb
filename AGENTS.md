@@ -32,33 +32,41 @@ Before coding, read:
 16. `docs/multisite/02_repository_restructure_plan.md`
 17. `docs/multisite/03_shared_cms_content_sync_strategy.md`
 18. `docs/multisite/04_three_site_integration_strategy.md`
-19. `docs/motorsport/01_motorsport_project_brief.md`
-20. `docs/motorsport/02_motorsport_brand_translation.md`
-21. `docs/motorsport/03_motorsport_sitemap_page_specs.md`
-22. `docs/motorsport/04_motorsport_design_system.md`
-23. `docs/motorsport/05_motorsport_content_model_extensions.md`
-24. `docs/motorsport/06_motorsport_implementation_plan.md`
-25. `docs/motorsport/revamp/README.md`
-26. `docs/motorsport/revamp/01_source_findings.md`
-27. `docs/motorsport/revamp/02_brand_layout_direction.md`
-28. `docs/motorsport/revamp/03_sitemap_page_specs.md`
-29. `docs/motorsport/revamp/04_cms_architecture_admin_ux.md`
-30. `docs/motorsport/revamp/05_migration_plan.md`
-31. `docs/motorsport/revamp/06_implementation_phases.md`
-32. `docs/motorsport/revamp/07_testing_uat.md`
-33. `docs/motorsport/revamp/08_deployment_handover.md`
-34. `docs/horsesport/01_horsesport_project_brief.md`
-35. `docs/horsesport/02_horsesport_brand_translation.md`
-36. `docs/horsesport/03_horsesport_sitemap_page_specs.md`
-37. `docs/horsesport/04_horsesport_design_system.md`
-38. `docs/horsesport/05_horsesport_content_model_extensions.md`
-39. `docs/horsesport/06_horsesport_implementation_plan.md`
-40. `docs/horsesport/07_horsesport_asset_usage_guideline.md`
-41. `reference/source-pdfs/sarga_website_preview.pdf`
-42. `reference/source-pdfs/look_and_feel_website_sarga_co.pdf` if present
-43. `reference/source-pdfs/sarga_motorsport_2.pdf` if present
-44. `reference/source-pdfs/sarga_motorsport_brand_playbook.pdf` if present
-45. `strapi/content-types.json`
+19. `docs/gateway/revamp/README.md`
+20. `docs/gateway/revamp/01_reference_and_current_state_audit.md`
+21. `docs/gateway/revamp/02_information_architecture_and_page_specs.md`
+22. `docs/gateway/revamp/03_visual_typography_layout_spec.md`
+23. `docs/gateway/revamp/04_cms_page_activation_contract.md`
+24. `docs/gateway/revamp/05_implementation_phases.md`
+25. `docs/gateway/revamp/06_testing_uat.md`
+26. `docs/motorsport/01_motorsport_project_brief.md`
+27. `docs/motorsport/02_motorsport_brand_translation.md`
+28. `docs/motorsport/03_motorsport_sitemap_page_specs.md`
+29. `docs/motorsport/04_motorsport_design_system.md`
+30. `docs/motorsport/05_motorsport_content_model_extensions.md`
+31. `docs/motorsport/06_motorsport_implementation_plan.md`
+32. `docs/motorsport/revamp/README.md`
+33. `docs/motorsport/revamp/01_source_findings.md`
+34. `docs/motorsport/revamp/02_brand_layout_direction.md`
+35. `docs/motorsport/revamp/03_sitemap_page_specs.md`
+36. `docs/motorsport/revamp/04_cms_architecture_admin_ux.md`
+37. `docs/motorsport/revamp/05_migration_plan.md`
+38. `docs/motorsport/revamp/06_implementation_phases.md`
+39. `docs/motorsport/revamp/07_testing_uat.md`
+40. `docs/motorsport/revamp/08_deployment_handover.md`
+41. `docs/horsesport/01_horsesport_project_brief.md`
+42. `docs/horsesport/02_horsesport_brand_translation.md`
+43. `docs/horsesport/03_horsesport_sitemap_page_specs.md`
+44. `docs/horsesport/04_horsesport_design_system.md`
+45. `docs/horsesport/05_horsesport_content_model_extensions.md`
+46. `docs/horsesport/06_horsesport_implementation_plan.md`
+47. `docs/horsesport/07_horsesport_asset_usage_guideline.md`
+48. `reference/source-pdfs/sarga_website_preview.pdf`
+49. `reference/source-pdfs/look_and_feel_website_sarga_co.pdf` if present
+50. `reference/source-pdfs/sarga.co_sitemap.pdf` if present
+51. `reference/source-pdfs/sarga_motorsport_2.pdf` if present
+52. `reference/source-pdfs/sarga_motorsport_brand_playbook.pdf` if present
+53. `strapi/content-types.json`
 
 ## Workspace skill usage
 
@@ -88,7 +96,15 @@ For dedicated frontends, use the premium/frontend UI skill to produce internatio
 ## Sarga.co gateway design rules
 
 - Sarga.co remains the group gateway and corporate ecosystem entry point.
-- Use `reference/source-pdfs/sarga_website_preview.pdf` as the gateway visual reference.
+- Use `docs/gateway/revamp/` as the current Gateway implementation source.
+- Use the Website Sarga.co Preview and Brand Visual Preview sections of
+  `reference/source-pdfs/look_and_feel_website_sarga_co.pdf` as the primary
+  Gateway visual reference, while preserving the approved existing theme.
+- Use `reference/source-pdfs/sarga.co_sitemap.pdf` as the current Gateway
+  information-architecture reference.
+- Use Zalando Expanded for display text and Plus Jakarta Sans for body and UI.
+- Sarga Venues, Sarga Media, and Sarga Tech use CMS-controlled dedicated pages;
+  disabled pages show a branded Coming Soon experience at the canonical URL.
 - Gateway ecosystem cards must route to dedicated sites where available:
   - Sarga Horse Sport → `frontend-horsesport/` / horsesport domain
   - Sarga Motorsport → `frontend-motorsport/` / motorsport domain

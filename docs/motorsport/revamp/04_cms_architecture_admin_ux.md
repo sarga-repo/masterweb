@@ -86,7 +86,8 @@ Minimum feature set:
 - Sidebar entries for Gateway, Motorsport, Horse Sport, Shared Library.
 - Workspace dashboard cards for each collection.
 - Filtered links by `siteScope` and/or `sites`.
-- Quick-create guidance that tells editors which `siteScope` to use.
+- Quick-create context that identifies the immutable role-assigned workspace;
+  managed site editors do not choose `siteScope` manually.
 - Clear warnings when creating shared content.
 
 ### Phase 2: Site-scoped page model
@@ -218,9 +219,25 @@ Enforcement has three layers:
    conditions on `siteScope`; direct Content Manager URLs do not bypass the
    record filter.
 3. A request-context Document Service middleware forces `siteScope` to the
-   authenticated managed role on admin creates, updates, and clones. This closes
-   the create-action gap where a conditional permission has no existing entity
-   to evaluate.
+   authenticated managed role on admin creates, updates, clones, and publishes.
+   This closes the create-action gap where a conditional permission has no
+   existing entity to evaluate and prevents publish payloads from changing
+   ownership.
+
+GWR-CMS-2 hardens this model by protecting the custom
+workspace routes themselves, permission-filtering workspace actions, prefixing
+site-owned actions, and excluding `siteScope` from managed site-editor
+create/update fields. Managed read permissions include the stored `siteScope`
+only so Strapi can validate required fields before publishing Site Pages and
+other scoped content. `siteScope` remains non-editable for managed editors, is
+the internal ownership boundary, and Super Admin retains deliberate scope
+control.
+
+GWR-CMS-3 authenticated UAT verifies the five role sessions and direct-route,
+filter, scope-submission, clone, publish, relationship, and multi-role bypass
+boundaries. Managed writable-field generation expands nested components and
+dynamic zones, while dedicated roles receive narrowly conditioned read-only
+access only to their own Site/Ecosystem Business relationship references.
 
 Managed role permissions are synchronized at Strapi bootstrap. Do not manually
 add cross-site permissions to these roles; create a separately reviewed role if
@@ -337,8 +354,11 @@ fallbacks can be added without changing existing campaign banners.
 
 Fields are `internalName`, `eyebrow`, `title`, `description`, desktop
 `image`, optional `mobileImage`, required `imageAlt`, `subjectAnchor`, optional
-single CTA, `isActive`, and `sortOrder`. The supported range is one to five
-published slides, with three recommended.
+single CTA, optional `video`, `isActive`, and `sortOrder`. GWR-CMS-9 caps the
+supported range at one to three published slides. Each `video` uses the shared
+enabled/source/alternate-codec/poster component; only the active slide mounts
+its clip, and its required image remains the reduced-motion and failure
+fallback.
 
 The parent `site-page` continues to own `siteScope`, site relation,
 draft/publish, and role-gated workspace access. Existing single `heroTitle`,
@@ -347,6 +367,29 @@ fallback. Schema, generated types, and three desktop/mobile seed slide pairs are
 included. The seed populates an empty carousel but preserves existing
 editor-managed slides. The component remains inside the role-gated Motorsport
 Site Page rather than creating a second CMS collection or workspace.
+
+For production, attach a distinct approved short MP4/WebM and poster to each
+slide instead of duplicating one clip. Publishing fewer than three videos is
+valid; any slide without a valid enabled source continues to use its image.
+
+### GWR-CMS-10 managed homepage bands
+
+The Motorsport-scoped Home Site Page also owns the two sections immediately
+below the hero:
+
+- `motorsportFeaturedEvent` optionally selects the Event that supplies Race
+  Control date and ticket status. Without a valid Motorsport/shared relation,
+  the frontend selects the first tickets-open or earliest Event.
+- `motorsportInformationBand` manages its enabled state, eyebrow, title,
+  description, three stat labels, and region value.
+- `motorsportWorldSection` manages its enabled state, eyebrow, split heading,
+  description, CTA, and up to six ordered `motorsport.discipline-card` entries.
+
+Discipline entries expose their enabled state, title, short label, image, alt
+text, destination, brand accent, and order. The existing responsive rail and
+local launch images remain fallback behavior, so an incomplete CMS edit never
+breaks the homepage. These nested fields remain inside the same recursive
+Motorsport Admin permissions and immutable `siteScope` boundary.
 
 Every new public collection retains the shared
 `gateway|motorsport|horsesport|shared|hidden` scope contract. Only public
@@ -372,3 +415,14 @@ The idempotent seed now adds:
 
 All people, standings, product details, ticket destinations, and regulation
 metadata marked as demo must be replaced or approved before launch.
+
+## Planned bilingual/navigation continuation (GWR-CMS-4)
+
+Motorsport Admin will manage English and Indonesian localizations only for
+`siteScope: motorsport`, plus a prefixed Top Navigation collection with global
+enabled/order controls and localized labels. Motorsport standings and ticket
+destinations remain structural in the first release.
+
+The Motorsport header remains a dedicated brand component. It will consume the
+CMS data contract in GWR-CMS-7 rather than sharing Gateway or Horse Sport UI.
+Existing English URLs remain unprefixed and Indonesian routes use `/id`.

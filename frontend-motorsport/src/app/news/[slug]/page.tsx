@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { notFound } from "next/navigation";
 
-import { GradientRule, InformationBand, PageShell } from "@/components";
+import { InformationBand, PageShell } from "@/components";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
 import { fetchArticleBySlug, fetchArticles } from "@/lib/cms-data";
-import {
-  resolveSiteUrl,
-  resolveSocialImageUrl,
-  siteConfig,
-} from "@/lib/site-config";
+import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/lib/i18n/request";
 import type { MotorsportArticle } from "@/types/design-system";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -64,7 +61,7 @@ const PLACEHOLDER_MAP: Record<string, MotorsportArticle & { body?: string }> = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const [{ slug }, locale] = await Promise.all([params, getRequestLocale()]);
   const article = await fetchArticleBySlug(slug);
   const fallback = PLACEHOLDER_MAP[slug];
   const resolved = article ?? fallback;
@@ -72,36 +69,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const desc =
     resolved.excerpt ??
     `${resolved.title} - Sarga Motorsport news and editorial.`;
-  const canonical = resolveSiteUrl(`/news/${slug}`);
-  const socialImage = resolveSocialImageUrl(resolved.image);
-  return {
+  return createMetadata({
     title: resolved.title,
     description: desc,
-    alternates: {
-      canonical,
-    },
-    openGraph: {
-      type: "article",
-      url: canonical,
-      siteName: siteConfig.name,
-      title: resolved.title,
-      description: desc,
-      images: socialImage
-        ? [
-            {
-              url: socialImage,
-              alt: resolved.imageAlt,
-            },
-          ]
-        : undefined,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: resolved.title,
-      description: desc,
-      images: socialImage ? [socialImage] : undefined,
-    },
-  };
+    path: `/news/${slug}`,
+    image: resolved.image,
+    type: "article",
+    locale,
+  });
 }
 
 export default async function ArticleDetailPage({ params }: Props) {
@@ -124,31 +99,29 @@ export default async function ArticleDetailPage({ params }: Props) {
   );
 
   return (
-    <PageShell>
-      <section className="ms-editorial-intro">
+    <PageShell spectrumSeparators>
+      <section className="ms-news-detail-intro">
         <div className="ms-shell py-18 sm:py-24">
           <div className="flex flex-wrap gap-x-5 gap-y-3">
-            <span className="ms-data-label text-ms-crimson-700">
+            <span className="ms-data-label text-ms-electric-yellow">
               {article.category}
             </span>
-            <time className="ms-data-label text-ms-ink-500">
+            <time className="ms-data-label text-ms-warm-white/56">
               {article.publishedLabel}
             </time>
           </div>
-          <h1 className="ms-heading-article mt-8 max-w-[18ch] text-ms-draftline-blue">
+          <h1 className="ms-heading-article mt-8 max-w-[18ch] text-ms-warm-white">
             {article.title}
           </h1>
           {article.excerpt ? (
-            <p className="mt-8 max-w-3xl border-l-2 border-ms-apex-crimson pl-6 text-xl leading-8 text-ms-ink-700 sm:text-2xl sm:leading-9">
+            <p className="mt-8 max-w-3xl border-l-2 border-ms-ignition-orange pl-6 text-xl leading-8 text-ms-warm-white/76 sm:text-2xl sm:leading-9">
               {article.excerpt}
             </p>
           ) : null}
         </div>
       </section>
 
-      <GradientRule />
-
-      <section className="ms-editorial-canvas">
+      <section className="ms-news-detail-story">
         <div className="ms-shell py-10 sm:py-14">
           <figure className="relative aspect-[16/10] overflow-hidden bg-ms-cream-200 sm:aspect-[21/9]">
             <ResilientImage
@@ -161,58 +134,64 @@ export default async function ArticleDetailPage({ params }: Props) {
               className="object-cover object-center"
               sizes="100vw"
             />
-            <figcaption className="absolute bottom-0 left-0 bg-ms-warm-white px-5 py-3 text-ms-charcoal sm:px-7">
-              <span className="ms-data-label text-ms-orange-800">
+            <figcaption className="absolute bottom-0 left-0 border-r border-t border-ms-warm-white/15 bg-[#071a3d]/90 px-5 py-3 text-ms-warm-white backdrop-blur-sm sm:px-7">
+              <span className="ms-data-label text-ms-electric-yellow">
                 Sarga Motorsport editorial
               </span>
             </figcaption>
           </figure>
         </div>
-      </section>
 
-      <article className="ms-editorial-canvas pb-20 pt-8 sm:pb-28 sm:pt-12">
-        <div className="ms-shell grid gap-14 lg:grid-cols-[minmax(0,45rem)_minmax(15rem,1fr)] lg:justify-between lg:gap-24">
-          <div className="space-y-7 text-[1.05rem] leading-8 text-ms-ink-700">
-            {article.body ? (
-              article.body.split("\n\n").map((para, i) => <p key={i}>{para}</p>)
-            ) : (
-              <p>
-                Full editorial content will be published here once available
-                from the Sarga Motorsport editorial team. Check back soon for
-                the complete story.
+        <article className="pb-20 pt-8 sm:pb-28 sm:pt-12">
+          <div className="ms-shell grid gap-14 lg:grid-cols-[minmax(0,45rem)_minmax(15rem,1fr)] lg:justify-between lg:gap-24">
+            <div className="space-y-7 text-[1.05rem] leading-8 text-ms-warm-white/74">
+              {article.body ? (
+                article.body
+                  .split("\n\n")
+                  .map((para, i) => <p key={i}>{para}</p>)
+              ) : (
+                <p>
+                  Full editorial content will be published here once available
+                  from the Sarga Motorsport editorial team. Check back soon for
+                  the complete story.
+                </p>
+              )}
+            </div>
+
+            <aside className="ms-news-story-file self-start border-t border-ms-warm-white/18 p-6 lg:sticky lg:top-28">
+              <p className="ms-data-label text-ms-electric-yellow">
+                Story file
               </p>
-            )}
+              <dl className="mt-6 border-b border-ms-warm-white/18">
+                {[
+                  ["Published", article.publishedLabel],
+                  ["Category", article.category],
+                  ["Read time", `${readingMinutes} min`],
+                ].map(([label, value]) => (
+                  <div
+                    key={label}
+                    className="border-t border-ms-warm-white/18 py-4"
+                  >
+                    <dt className="ms-data-label text-ms-warm-white/48">
+                      {label}
+                    </dt>
+                    <dd className="mt-2 text-sm font-bold text-ms-warm-white">
+                      {value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              <Link
+                href="/news"
+                className="group mt-7 inline-flex items-center gap-3 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
+              >
+                <ArrowRightIcon className="size-4 rotate-180 transition-transform group-hover:-translate-x-1" />
+                All news
+              </Link>
+            </aside>
           </div>
-
-          <aside className="self-start border-t border-ms-charcoal/18 pt-6 lg:sticky lg:top-28">
-            <p className="ms-data-label text-ms-crimson-700">Story file</p>
-            <dl className="mt-6 border-b border-ms-charcoal/18">
-              {[
-                ["Published", article.publishedLabel],
-                ["Category", article.category],
-                ["Read time", `${readingMinutes} min`],
-              ].map(([label, value]) => (
-                <div
-                  key={label}
-                  className="border-t border-ms-charcoal/18 py-4"
-                >
-                  <dt className="ms-data-label text-ms-ink-500">{label}</dt>
-                  <dd className="mt-2 text-sm font-bold text-ms-charcoal">
-                    {value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-            <Link
-              href="/news"
-              className="group mt-7 inline-flex items-center gap-3 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-draftline-blue"
-            >
-              <ArrowRightIcon className="size-4 rotate-180 transition-transform group-hover:-translate-x-1" />
-              All news
-            </Link>
-          </aside>
-        </div>
-      </article>
+        </article>
+      </section>
 
       <InformationBand
         eyebrow="Editorial note / Sarga Motorsport"
@@ -226,29 +205,31 @@ export default async function ArticleDetailPage({ params }: Props) {
       />
 
       {relatedArticles.length > 0 ? (
-        <section className="ms-editorial-muted ms-section">
+        <section className="ms-news-detail-related ms-section">
           <div className="ms-shell">
-            <div className="flex flex-col gap-5 border-t border-ms-charcoal/18 pt-5 sm:flex-row sm:items-end sm:justify-between">
+            <div className="flex flex-col gap-5 border-t border-ms-warm-white/18 pt-5 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="ms-kicker text-ms-orange-800">Continue reading</p>
-                <h2 className="ms-heading-section mt-5 text-ms-charcoal">
+                <p className="ms-kicker text-ms-electric-yellow">
+                  Continue reading
+                </p>
+                <h2 className="ms-heading-section mt-5 text-ms-warm-white">
                   Related stories.
                 </h2>
               </div>
               <Link
                 href="/news"
-                className="text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-draftline-blue"
+                className="text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
               >
                 Full archive →
               </Link>
             </div>
-            <div className="mt-10 border-b border-ms-charcoal/18">
+            <div className="mt-10 border-b border-ms-warm-white/18">
               {relatedArticles.map((related, index) => (
                 <article
                   key={related.href}
-                  className="group grid gap-5 border-t border-ms-charcoal/18 py-6 sm:grid-cols-[3rem_10rem_minmax(0,1fr)_auto] sm:items-center"
+                  className="group grid gap-5 border-t border-ms-warm-white/18 py-6 sm:grid-cols-[3rem_10rem_minmax(0,1fr)_auto] sm:items-center"
                 >
-                  <span className="ms-tabular hidden font-display text-xl text-ms-ink-500 sm:block">
+                  <span className="ms-tabular hidden font-display text-xl text-ms-warm-white/40 sm:block">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <Link
@@ -266,17 +247,17 @@ export default async function ArticleDetailPage({ params }: Props) {
                     />
                   </Link>
                   <div>
-                    <p className="ms-data-label text-ms-crimson-700">
+                    <p className="ms-data-label text-ms-electric-yellow">
                       {related.category} / {related.publishedLabel}
                     </p>
-                    <h3 className="ms-heading-card mt-3 text-ms-charcoal">
+                    <h3 className="ms-heading-card mt-3 text-ms-warm-white">
                       <Link href={related.href}>{related.title}</Link>
                     </h3>
                   </div>
                   <Link
                     href={related.href}
                     aria-label={`Read ${related.title}`}
-                    className="grid size-11 place-items-center border border-ms-charcoal/18 text-ms-draftline-blue transition-colors hover:bg-ms-apex-crimson hover:text-ms-warm-white"
+                    className="grid size-11 place-items-center border border-ms-warm-white/20 text-ms-slipstream-teal transition-colors hover:border-ms-apex-crimson hover:bg-ms-apex-crimson hover:text-ms-warm-white"
                   >
                     <ArrowUpRightIcon className="size-4" />
                   </Link>

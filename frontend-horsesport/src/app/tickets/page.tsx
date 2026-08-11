@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import {
   PageHero,
@@ -9,13 +9,18 @@ import {
 } from "@/components";
 import { fetchTicketsPage } from "@/lib/cms-content";
 import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "Tickets",
-  description:
-    "Secure Sarga Horse Sport race-day tickets through approved partner platforms. No internal checkout - official partner redirect only.",
-  path: "/tickets",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "Tickets",
+    description:
+      "Secure Sarga Horse Sport race-day tickets through approved partner platforms. No internal checkout - official partner redirect only.",
+    path: "/tickets",
+    locale,
+  });
+}
 
 export default async function TicketsPage() {
   const tickets = await fetchTicketsPage();

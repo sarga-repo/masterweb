@@ -8,6 +8,13 @@ export type LinkItem = {
   external?: boolean;
 };
 
+export type HeroVideoMedia = {
+  mp4?: string;
+  webm?: string;
+  poster?: string;
+  mobilePoster?: string;
+};
+
 export type HomepageHeroSlide = {
   id: string;
   eyebrow?: string;
@@ -15,6 +22,7 @@ export type HomepageHeroSlide = {
   description?: string;
   image: MediaSource;
   mobileImage?: MediaSource;
+  video?: HeroVideoMedia;
   imageAlt: string;
   subjectAnchor: "left" | "center" | "right";
   cta?: LinkItem;

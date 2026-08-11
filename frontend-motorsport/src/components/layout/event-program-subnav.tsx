@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { usePathname } from "next/navigation";
 
 import type { ProgramNavItem } from "@/types/design-system";

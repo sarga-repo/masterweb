@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { notFound } from "next/navigation";
 
 import {
@@ -15,6 +15,8 @@ import {
   getIjtcRiders,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
+import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/lib/i18n/request";
 
 type RiderPageProps = {
   params: Promise<{ riderSlug: string }>;
@@ -28,14 +30,20 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: RiderPageProps): Promise<Metadata> {
-  const { riderSlug } = await params;
+  const [{ riderSlug }, locale] = await Promise.all([
+    params,
+    getRequestLocale(),
+  ]);
   const rider = await getIjtcRider(riderSlug);
   if (!rider) return { title: "Rider not found" };
 
-  return {
+  return createMetadata({
     title: rider.name,
     description: `${rider.name}, number ${rider.number ?? "pending"}, ${rider.team ?? "IJTC rider"} profile.`,
-  };
+    path: `${IJTC_BASE_PATH}/riders/${riderSlug}`,
+    image: rider.portrait,
+    locale,
+  });
 }
 
 export default async function IjtcRiderProfilePage({ params }: RiderPageProps) {

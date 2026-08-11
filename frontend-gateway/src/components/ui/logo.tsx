@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 type LogoProps = {
   variant?: "default" | "reverse";
@@ -12,13 +12,15 @@ export function Logo({ variant = "default" }: LogoProps) {
       : "/assets/logos/logo-sarga.png";
 
   return (
-    <Link aria-label="Sarga.co home" className="inline-flex" href="/">
+    <Link aria-label="Sarga.co home" className="inline-flex shrink-0" href="/">
       <Image
         alt="Sarga.co"
+        className="h-auto"
         height={41}
         priority
         sizes="(max-width: 640px) 132px, 160px"
         src={src}
+        style={{ height: "auto" }}
         width={160}
       />
     </Link>

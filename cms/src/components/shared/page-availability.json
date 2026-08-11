@@ -1,0 +1,44 @@
+{
+  "collectionName": "components_shared_page_availabilities",
+  "info": {
+    "displayName": "Page Availability",
+    "description": "Dedicated Page control: enable only after required page content is complete; disabled pages show the branded Coming Soon state"
+  },
+  "options": {},
+  "attributes": {
+    "pageEnabled": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "comingSoonEyebrow": {
+      "type": "string",
+      "default": "Part of the Sarga ecosystem"
+    },
+    "comingSoonTitle": {
+      "type": "string"
+    },
+    "comingSoonDescription": {
+      "type": "text"
+    },
+    "comingSoonMedia": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "launchTargetLabel": {
+      "type": "string"
+    },
+    "showNotifyCta": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "noIndexWhileDisabled": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    }
+  }
+}

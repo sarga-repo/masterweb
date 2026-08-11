@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 
 import { MotorsportFooter, MotorsportHeader } from "@/components";
-import {
-  MOTORSPORT_NAVIGATION,
-  MOTORSPORT_TICKET_LINK,
-} from "@/lib/navigation";
 import { siteConfig } from "@/lib/site-config";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getMotorsportNavigation } from "@/lib/navigation-cms";
+import { localizeExternalSiteHref } from "@/lib/i18n/config";
 
 const FOOTER_COLUMNS = [
   {
@@ -42,20 +42,29 @@ type PageShellProps = {
  * Shared page wrapper - provides consistent header, footer, and metadata
  * chrome across all Motorsport routes.
  */
-export function PageShell({
+export async function PageShell({
   children,
   spectrumSeparators = false,
 }: PageShellProps) {
+  const locale = await getRequestLocale();
+  const dictionary = getDictionary(locale);
+  const navigation = await getMotorsportNavigation(locale);
+  const ticketLink = navigation.items.find(
+    (item) => item.emphasis === "primaryCta",
+  );
   return (
     <>
       <MotorsportHeader
-        navigation={MOTORSPORT_NAVIGATION}
-        ticketLink={MOTORSPORT_TICKET_LINK}
+        navigation={navigation.items}
+        ticketLink={ticketLink}
         gatewayLink={{
           label: "Sarga.co",
-          href: siteConfig.gatewayUrl,
+          href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
           external: true,
         }}
+        locale={locale}
+        dictionary={dictionary}
+        navigationSource={navigation.source}
       />
       <main className={spectrumSeparators ? "ms-spectrum-sections" : undefined}>
         {children}
@@ -65,13 +74,13 @@ export function PageShell({
         crossSiteLinks={[
           {
             label: "Sarga Horse Sport",
-            href: siteConfig.horsesportUrl,
+            href: localizeExternalSiteHref(siteConfig.horsesportUrl, locale),
             external: true,
           },
         ]}
         gatewayLink={{
           label: "Visit Sarga.co",
-          href: siteConfig.gatewayUrl,
+          href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
           external: true,
         }}
         copyright="© 2026 Sarga Motorsport"

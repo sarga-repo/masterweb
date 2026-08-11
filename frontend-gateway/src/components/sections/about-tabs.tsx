@@ -2,6 +2,8 @@
 
 import { useId, useRef, useState, type UIEvent } from "react";
 import Image from "next/image";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
+import { ArrowRightIcon } from "@/components/ui/icons";
 import type { AboutTab } from "@/lib/mock-data";
 
 export function AboutTabs({ tabs }: { tabs: AboutTab[] }) {
@@ -107,37 +109,52 @@ export function AboutTabs({ tabs }: { tabs: AboutTab[] }) {
                     key={`${activeTab.id}-${item.title}`}
                     className="min-h-[11rem] border-b border-sarga-black/15 py-8 first:pt-0 last:border-b-0 last:pb-0"
                   >
-                    <div className="grid gap-5 sm:grid-cols-[8.5rem_1fr] sm:items-start">
-                      {item.image ? (
-                        <div className="relative aspect-[4/3] overflow-hidden bg-sarga-black">
-                          <Image
-                            src={item.image.url}
-                            alt={item.image.alt}
-                            fill
-                            sizes="136px"
-                            className="object-cover"
-                          />
+                    {(() => {
+                      const content = (
+                        <div className="group grid gap-5 sm:grid-cols-[8.5rem_1fr_auto] sm:items-start">
+                          {item.image ? (
+                            <div className="relative aspect-[4/3] overflow-hidden bg-sarga-black">
+                              <Image
+                                src={item.image.url}
+                                alt={item.image.alt}
+                                fill
+                                sizes="136px"
+                                className="object-cover"
+                              />
+                            </div>
+                          ) : (
+                            <div
+                              aria-hidden="true"
+                              className={`aspect-[4/3] overflow-hidden ${item.imageClass ?? "bg-sarga-black/10"}`}
+                            >
+                              <span className="block h-full w-full bg-[linear-gradient(135deg,transparent_35%,rgba(255,255,255,.22)_35%_50%,transparent_50%)]" />
+                            </div>
+                          )}
+                          <div>
+                            <p className="text-xs font-extrabold uppercase tracking-[0.04em] text-sarga-red sm:text-sm">
+                              {item.meta}
+                            </p>
+                            <h3 className="mt-3 max-w-2xl font-heading text-2xl font-bold uppercase leading-[0.95] tracking-[-0.035em] text-sarga-text sm:text-3xl">
+                              {item.title}
+                            </h3>
+                            <p className="mt-4 max-w-3xl text-sm leading-7 text-sarga-text-muted sm:text-base">
+                              {item.description}
+                            </p>
+                          </div>
+                          {item.href ? (
+                            <span className="hidden h-10 w-10 items-center justify-center border border-sarga-text/20 transition-colors group-hover:border-sarga-red group-hover:bg-sarga-red group-hover:text-white sm:flex">
+                              <ArrowRightIcon className="h-4 w-4" />
+                            </span>
+                          ) : null}
                         </div>
+                      );
+
+                      return item.href ? (
+                        <Link href={item.href}>{content}</Link>
                       ) : (
-                        <div
-                          aria-hidden="true"
-                          className={`aspect-[4/3] overflow-hidden ${item.imageClass ?? "bg-sarga-black/10"}`}
-                        >
-                          <span className="block h-full w-full bg-[linear-gradient(135deg,transparent_35%,rgba(255,255,255,.22)_35%_50%,transparent_50%)]" />
-                        </div>
-                      )}
-                      <div>
-                        <p className="text-xs font-extrabold uppercase tracking-[0.04em] text-sarga-red sm:text-sm">
-                          {item.meta}
-                        </p>
-                        <h3 className="mt-3 max-w-2xl font-heading text-2xl font-bold uppercase leading-[0.95] tracking-[-0.035em] text-sarga-text sm:text-3xl">
-                          {item.title}
-                        </h3>
-                        <p className="mt-4 max-w-3xl text-sm leading-7 text-sarga-text-muted sm:text-base">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
+                        content
+                      );
+                    })()}
                   </li>
                 ))}
               </ol>

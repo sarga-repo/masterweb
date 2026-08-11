@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { RiderPortrait } from "@/components/ui/rider-portrait";

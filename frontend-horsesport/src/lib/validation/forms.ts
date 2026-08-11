@@ -47,6 +47,7 @@ export const contactFormSchema = z.object({
     .min(20, "Please provide at least 20 characters of context.")
     .max(5000),
   sourcePage: optionalText(500),
+  sourceLocale: z.enum(["en", "id"]).default("en"),
   ...antiSpamFields,
 });
 

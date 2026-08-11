@@ -14,6 +14,12 @@
   "attributes": {
     "email": { "type": "email", "required": true, "unique": true },
     "sourcePage": { "type": "string" },
+    "sourceLocale": {
+      "type": "enumeration",
+      "enum": ["en", "id"],
+      "default": "en",
+      "required": true
+    },
     "consent": { "type": "boolean", "default": false },
     "subscribedAt": { "type": "datetime" },
     "status": {

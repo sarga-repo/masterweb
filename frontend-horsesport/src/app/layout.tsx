@@ -9,57 +9,57 @@ import {
   GATEWAY_LINK,
   LEGAL_LINKS,
   MOTORSPORT_LINK,
-  PRIMARY_NAV,
-  TICKETS_LINK,
 } from "@/lib/navigation";
 import { resolveSiteUrl, siteConfig } from "@/lib/site-config";
+import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale, getRequestPathname } from "@/lib/i18n/request";
 import "./globals.css";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getHorseSportNavigation } from "@/lib/navigation-cms";
+import { localizeExternalSiteHref } from "@/lib/i18n/config";
 
 const socialImage = resolveSiteUrl("/media/horse-sport-hero.png");
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.siteUrl),
-  title: {
-    default: `${siteConfig.name} - ${siteConfig.tagline}`,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  applicationName: siteConfig.name,
-  alternates: { canonical: siteConfig.siteUrl },
-  openGraph: {
-    type: "website",
-    siteName: siteConfig.name,
-    locale: "en_US",
-    url: siteConfig.siteUrl,
-    title: `${siteConfig.name} - ${siteConfig.tagline}`,
-    description: siteConfig.description,
-    images: [
-      {
-        url: socialImage,
-        width: 1200,
-        height: 630,
-        alt: `${siteConfig.name} - ${siteConfig.tagline}`,
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${siteConfig.name} - ${siteConfig.tagline}`,
-    description: siteConfig.description,
-    images: [socialImage],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true },
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const [locale, pathname] = await Promise.all([
+    getRequestLocale(),
+    getRequestPathname(),
+  ]);
+  return {
+    ...createMetadata({
+      title: `${siteConfig.name} - ${siteConfig.tagline}`,
+      description: siteConfig.description,
+      path: pathname,
+      image: socialImage,
+      locale,
+    }),
+    metadataBase: new URL(siteConfig.siteUrl),
+    applicationName: siteConfig.name,
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const locale = await getRequestLocale();
+  const dictionary = getDictionary(locale);
+  const navigation = await getHorseSportNavigation(locale);
+  const ticketLink = navigation.items.find(
+    (item) => item.emphasis === "primaryCta",
+  ) ??
+    navigation.items.find((item) => item.href === "/tickets") ?? {
+      internalName: "tickets-fallback",
+      label: locale === "id" ? "Tiket" : "Tickets",
+      href: "/tickets",
+      emphasis: "primaryCta" as const,
+      openInNewTab: false,
+      displayOrder: 999,
+    };
+  const primaryNavigation = navigation.items.filter(
+    (item) => item !== ticketLink,
+  );
   return (
-    <html lang="en">
+    <html lang={locale} data-scroll-behavior="smooth">
       <body>
         <SeoJsonLd
           data={{
@@ -69,6 +69,7 @@ export default function RootLayout({
             description: siteConfig.description,
             url: siteConfig.siteUrl,
             logo: socialImage,
+            inLanguage: locale === "id" ? "id-ID" : "en-US",
             sameAs: [siteConfig.gatewayUrl, siteConfig.motorsportUrl],
           }}
         />
@@ -76,14 +77,17 @@ export default function RootLayout({
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-hs-red focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-hs-white"
         >
-          Skip to content
+          {dictionary.skipToContent}
         </a>
 
         <HorseSportHeader
-          navigation={PRIMARY_NAV}
-          ticketLink={TICKETS_LINK}
+          navigation={primaryNavigation}
+          ticketLink={ticketLink}
           gatewayLink={GATEWAY_LINK}
           motorsportLink={MOTORSPORT_LINK}
+          locale={locale}
+          dictionary={dictionary}
+          navigationSource={navigation.source}
         />
 
         <main id="main">{children}</main>
@@ -91,8 +95,15 @@ export default function RootLayout({
         <HorseSportFooter
           columns={FOOTER_COLUMNS}
           crossSiteLinks={[
-            { ...GATEWAY_LINK, label: "Visit Sarga.co" },
-            MOTORSPORT_LINK,
+            {
+              ...GATEWAY_LINK,
+              label: "Visit Sarga.co",
+              href: localizeExternalSiteHref(GATEWAY_LINK.href, locale),
+            },
+            {
+              ...MOTORSPORT_LINK,
+              href: localizeExternalSiteHref(MOTORSPORT_LINK.href, locale),
+            },
           ]}
           legalLinks={LEGAL_LINKS}
           copyright={`© ${new Date().getFullYear()} Sarga Horse Sport`}

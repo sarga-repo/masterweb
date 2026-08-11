@@ -16,13 +16,18 @@ import {
   TrophyIcon,
 } from "@/components/ui/hs-icons";
 import { fetchPartners } from "@/lib/cms-content";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "Partners",
-  description:
-    "Sponsorship and strategic partnership opportunities across the Sarga Horse Sport ecosystem.",
-  path: "/partners",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "Partners",
+    description:
+      "Sponsorship and strategic partnership opportunities across the Sarga Horse Sport ecosystem.",
+    path: "/partners",
+    locale,
+  });
+}
 
 const TIERS = [
   {

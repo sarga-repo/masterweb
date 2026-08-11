@@ -1,21 +1,27 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { AboutTabs } from "@/components/sections/about-tabs";
 import { EditorialHeading } from "@/components/sections/editorial-heading";
 import { InteriorHero } from "@/components/sections/interior-hero";
 import { ArrowRightIcon } from "@/components/ui/icons";
-import { aboutTabs, homepage } from "@/lib/mock-data";
+import { homepage } from "@/lib/mock-data";
 import { getTimelineItems, getLeadershipPeople } from "@/lib/strapi/about";
+import { getGatewaySitePageByPath } from "@/lib/strapi/site-pages";
+import { buildAboutTabs } from "@/lib/about-tabs";
 import { createMetadata } from "@/lib/seo/metadata";
-import type { AboutTab, AboutTabItem } from "@/lib/mock-data";
-import type { TimelineItem, LeadershipPerson } from "@/lib/strapi/types";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "About",
-  description:
-    "The corporate root, governance model, history, and reporting framework behind Sarga Group.",
-  path: "/about",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "About",
+    description:
+      "The corporate root, governance model, history, and reporting framework behind Sarga Group.",
+    path: "/about",
+    locale,
+    isFallback: locale === "id",
+  });
+}
 
 const principles = [
   [
@@ -35,69 +41,22 @@ const principles = [
   ],
 ] as const;
 
-/** Merge CMS timeline items into the history tab, keeping mock as fallback. */
-function buildTabs(
-  timelineItems: TimelineItem[],
-  leadershipPeople: LeadershipPerson[],
-): AboutTab[] {
-  // Use CMS timeline items if available, otherwise fall back to mock
-  const historyTab = aboutTabs.find((t) => t.id === "history");
-  const historyItems: AboutTabItem[] =
-    timelineItems.length > 0
-      ? timelineItems.map((item) => ({
-          meta: `${item.year} - ${item.label}`,
-          title: item.title,
-          description: item.description,
-          image: item.image,
-        }))
-      : (historyTab?.items ?? []);
-
-  // Build leadership tab from CMS data, fall back to mock
-  const leadershipTab = aboutTabs.find((t) => t.id === "leadership");
-  const leadershipItems: AboutTabItem[] =
-    leadershipPeople.length > 0
-      ? leadershipPeople.map((person) => ({
-          meta: person.role,
-          title: person.name,
-          description:
-            person.biography ??
-            `Member of the ${person.group === "board" ? "Board of Directors" : "Executive Council"}.`,
-          image: person.portrait,
-        }))
-      : (leadershipTab?.items ?? []);
-
-  return [
-    {
-      id: "history",
-      label: "History Timeline",
-      items: historyItems,
-      emptyMessage: historyTab?.emptyMessage,
-    },
-    {
-      id: "leadership",
-      label: "Leadership Council",
-      items: leadershipItems,
-      emptyMessage:
-        aboutTabs.find((t) => t.id === "leadership")?.emptyMessage ??
-        "Leadership profiles are prepared for CMS publication once the official council roster and portraits are approved.",
-    },
-    aboutTabs.find((t) => t.id === "reports") ?? {
-      id: "reports",
-      label: "Reports & Charters",
-      items: [],
-      emptyMessage:
-        "Corporate reports and sustainability charters will appear here when approved files are published in Strapi.",
-    },
-  ];
-}
-
 export default async function AboutPage() {
-  const [timelineItems, leadershipPeople] = await Promise.all([
-    getTimelineItems(),
-    getLeadershipPeople(),
+  const locale = await getRequestLocale();
+  const [timelineItems, leadershipPeople, reportPages] = await Promise.all([
+    getTimelineItems(locale),
+    getLeadershipPeople(locale),
+    Promise.all([
+      getGatewaySitePageByPath("/about/annual-report", locale),
+      getGatewaySitePageByPath("/about/sustainability-report", locale),
+    ]),
   ]);
 
-  const tabs = buildTabs(timelineItems, leadershipPeople);
+  const tabs = buildAboutTabs(
+    timelineItems,
+    leadershipPeople,
+    reportPages.filter((page) => page !== null),
+  );
   return (
     <>
       <InteriorHero
@@ -111,9 +70,14 @@ export default async function AboutPage() {
           "Established 2023",
           "Four connected pillars",
         ]}
+        image={{
+          url: "/assets/media/sarga-cinematic-hero-concept.png",
+          alt: "Horse sport and motorsport moving through one integrated Sarga landscape",
+        }}
+        tone="slate"
       />
 
-      <section className="gateway-surface-light-signature bg-sarga-light py-20 sm:py-28 lg:py-36">
+      <section className="gateway-warm-panel py-20 sm:py-28 lg:py-36">
         <div className="site-container relative z-10">
           <EditorialHeading
             index="02"
@@ -145,7 +109,7 @@ export default async function AboutPage() {
               <Link
                 key={highlight.href}
                 href={highlight.href}
-                className="group flex min-h-72 flex-col justify-between bg-white p-8 transition-colors duration-300 hover:bg-sarga-black hover:text-white focus-visible:bg-sarga-black focus-visible:text-white focus-visible:outline-none sm:p-10"
+                className="group flex min-h-72 flex-col justify-between bg-[#fbf8f3] p-8 transition-colors duration-300 hover:bg-sarga-soft hover:text-white focus-visible:bg-sarga-soft focus-visible:text-white focus-visible:outline-none sm:p-10"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-heading text-3xl font-bold text-sarga-red">
@@ -170,7 +134,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="gateway-surface-light-signature gateway-surface-light-signature--left bg-white py-20 sm:py-28 lg:py-36">
+      <section className="gateway-surface-light-signature gateway-surface-light-signature--left bg-sarga-light py-20 sm:py-28 lg:py-36">
         <div className="site-container">
           <EditorialHeading
             index="03"
@@ -181,6 +145,45 @@ export default async function AboutPage() {
           <div className="mt-16 border-t border-sarga-black pt-8">
             <AboutTabs tabs={tabs} />
           </div>
+          <nav
+            aria-label="Corporate records"
+            className="mt-14 grid gap-px bg-sarga-black/20 sm:grid-cols-3"
+          >
+            {[
+              ["History", "/about/history"],
+              ["Annual Report", "/about/annual-report"],
+              ["Sustainability Report", "/about/sustainability-report"],
+            ].map(([label, href]) => (
+              <Link
+                key={href}
+                href={href}
+                className="group flex min-h-28 items-end justify-between gap-4 bg-sarga-light p-6 text-xs font-extrabold uppercase tracking-[0.14em] transition-colors hover:bg-sarga-black hover:text-white"
+              >
+                {label}
+                <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </section>
+
+      <section className="gateway-corporate-root py-16 text-white sm:py-20">
+        <div className="site-container grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.18em] text-white/62">
+              Begin a group conversation
+            </p>
+            <h2 className="gateway-section-title mt-4 max-w-[15ch] font-heading uppercase">
+              Understand the structure. Then find the right desk.
+            </h2>
+          </div>
+          <Link
+            href="/contact"
+            className="group inline-flex min-h-14 min-w-[14rem] items-center justify-between gap-8 bg-white px-6 text-[0.68rem] font-extrabold uppercase tracking-[0.14em] text-sarga-text"
+          >
+            Get in touch
+            <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
       </section>
     </>

@@ -42,11 +42,19 @@ export function BecomeRidersInquiryForm() {
         return;
       }
       const message = `Region: ${region || "Not provided"}\n\nRacing experience and goals:\n${experience}`;
+      const sourceLocale =
+        window.location.pathname === "/id" ||
+        window.location.pathname.startsWith("/id/")
+          ? "id"
+          : "en";
 
       try {
         const response = await fetch("/api/contact", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "X-Sarga-Locale": sourceLocale,
+          },
           body: JSON.stringify({
             name,
             email,
@@ -55,6 +63,7 @@ export function BecomeRidersInquiryForm() {
             website: form.get("website") ?? "",
             formStartedAt: startedAt,
             sourcePage: window.location.pathname,
+            sourceLocale,
           }),
         });
         const result = (await response.json()) as {

@@ -1,8 +1,12 @@
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { businessSiteUrl } from "@/lib/cross-site";
+import {
+  isDedicatedSiteBusiness,
+  isEcosystemBusinessPageLive,
+} from "@/lib/strapi/ecosystem";
 import type { EcosystemBusiness } from "@/lib/strapi/types";
 
 const businessNumbers: Record<string, string> = {
@@ -14,14 +18,32 @@ const businessNumbers: Record<string, string> = {
 };
 
 export function EcosystemCard({ business }: { business: EcosystemBusiness }) {
-  const isActive = business.status === "active";
+  const isDedicated = isDedicatedSiteBusiness(business);
   /* Motorsport / Horse Sport have dedicated frontends - link externally when
      configured, otherwise fall back to the gateway detail page. */
-  const externalHref = businessSiteUrl(business.slug);
-  const href = isActive
-    ? (externalHref ?? `/ecosystem/${business.slug}`)
-    : undefined;
+  const externalHref = businessSiteUrl(
+    business.slug,
+    business.dedicatedSiteUrl,
+  );
+  const href = externalHref ?? `/ecosystem/${business.slug}`;
   const isExternal = Boolean(externalHref);
+  const isActive = isDedicated
+    ? Boolean(externalHref)
+    : isEcosystemBusinessPageLive(business);
+  const statusLabel = isDedicated
+    ? externalHref
+      ? "Dedicated site"
+      : "Site connection pending"
+    : isActive
+      ? "Live"
+      : "Coming soon";
+  const actionLabel = isDedicated
+    ? externalHref
+      ? "Enter dedicated site"
+      : "Connection status"
+    : isActive
+      ? business.ctaLabel
+      : "Preview launch";
   const number = businessNumbers[business.slug] ?? "00";
 
   const inner = (
@@ -73,20 +95,18 @@ export function EcosystemCard({ business }: { business: EcosystemBusiness }) {
         </div>
 
         <div className="mt-auto pt-32">
-          {!isActive ? (
-            <span className="mb-4 inline-block border border-white/30 px-3 py-1.5 text-[0.58rem] font-bold uppercase tracking-[0.18em] text-white/70">
-              In development
-            </span>
-          ) : null}
-          <h4 className="max-w-[13ch] font-heading text-3xl font-bold uppercase leading-[0.94] tracking-[-0.03em] text-white">
+          <span className="mb-4 inline-block border border-white/30 px-3 py-1.5 text-[0.58rem] font-bold uppercase tracking-[0.18em] text-white/75">
+            {statusLabel}
+          </span>
+          <h4 className="gateway-card-title max-w-[13ch] font-heading uppercase text-white">
             {business.name}
           </h4>
           <p className="mt-5 max-w-md text-sm leading-6 text-white/68 sm:text-base sm:leading-7">
             {business.shortDescription}
           </p>
           <span className="mt-7 inline-flex items-center gap-4 text-[0.65rem] font-extrabold uppercase tracking-[0.16em] text-white">
-            {business.ctaLabel}
-            {isActive ? (
+            {actionLabel}
+            {href ? (
               <span className="flex h-10 w-10 items-center justify-center bg-sarga-red transition-transform duration-300 group-hover:translate-x-1.5">
                 <ArrowRightIcon className="h-4 w-4" />
               </span>
@@ -108,6 +128,7 @@ export function EcosystemCard({ business }: { business: EcosystemBusiness }) {
       href={href}
       className={classes}
       {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      aria-label={`${actionLabel}: ${business.name}${isExternal ? " (opens dedicated site in a new tab)" : ""}`}
     >
       {inner}
     </Link>

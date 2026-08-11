@@ -10,6 +10,12 @@ archive contains content entities, relations, configuration, schemas, Media
 Library records, and the uploaded asset binaries. It does **not** migrate
 Strapi admin users or API tokens.
 
+This includes CMS-managed hero MP4/WebM sources and poster images. A database-
+only copy is invalid for this feature because component media relations would
+resolve to missing files. Before freezing the source, play each enabled hero
+video and confirm its poster and optional alternate codec are present in the
+Media Library.
+
 ## 1. Choose the correct workflow
 
 | Workflow                          | Use for                                                                               | Result                                                                                      |
@@ -231,6 +237,29 @@ do not erase production form submissions or newer production content with an
 older snapshot.
 
 ## 7. Verification and acceptance
+
+For bilingual releases, capture a source inventory and completeness report
+before export, then capture a target inventory after import/startup and compare
+them exactly:
+
+```bash
+pnpm --dir cms i18n:inventory \
+  --output /var/backups/sarga/release/source-inventory.json
+pnpm --dir cms i18n:completeness \
+  --output /var/backups/sarga/release/bilingual-completeness.md
+
+# Run against the imported target environment/database.
+pnpm --dir cms i18n:inventory \
+  --output /var/backups/sarga/release/target-inventory.json
+pnpm --dir cms i18n:compare \
+  --source /var/backups/sarga/release/source-inventory.json \
+  --target /var/backups/sarga/release/target-inventory.json \
+  --output /var/backups/sarga/release/i18n-reconciliation.md
+```
+
+Any non-zero comparison result blocks reopening editorial traffic. The
+completeness report may contain editorial titles and owner assignments, so
+store it with the restricted release artifacts rather than publishing it.
 
 Record source and target totals for every collection in Content Manager, then
 verify at minimum:

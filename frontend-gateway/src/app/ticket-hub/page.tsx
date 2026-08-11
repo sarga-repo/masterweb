@@ -1,22 +1,29 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { EditorialHeading } from "@/components/sections/editorial-heading";
 import { InteriorHero } from "@/components/sections/interior-hero";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { getEvents } from "@/lib/strapi/events";
 import { dedicatedSiteLabel, resolveContentUrl } from "@/lib/cross-site";
 import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "Ticket Hub",
-  description:
-    "Discover Sarga events and continue securely to approved ticketing partners.",
-  path: "/ticket-hub",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "Ticket Hub",
+    description:
+      "Discover Sarga events and continue securely to approved ticketing partners.",
+    path: "/ticket-hub",
+    locale,
+    isFallback: locale === "id",
+  });
+}
 
 export default async function TicketHubPage() {
-  const events = await getEvents();
+  const locale = await getRequestLocale();
+  const events = await getEvents(locale);
 
   return (
     <>

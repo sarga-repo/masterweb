@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { notFound } from "next/navigation";
 
 import {
@@ -17,7 +17,8 @@ import {
   FIA_RALLYCROSS_SLUG,
   getFiaRallycrossCampaign,
 } from "@/lib/rallycross-data";
-import { resolveSiteUrl, resolveSocialImageUrl } from "@/lib/site-config";
+import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/lib/i18n/request";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -26,38 +27,21 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { slug } = await props.params;
+  const [{ slug }, locale] = await Promise.all([
+    props.params,
+    getRequestLocale(),
+  ]);
   if (slug !== FIA_RALLYCROSS_SLUG) return { title: "Campaign not found" };
 
   const campaign = await getFiaRallycrossCampaign();
-  const canonical = campaign.seo?.canonical ?? FIA_RALLYCROSS_PATH;
-  const canonicalUrl = canonical.startsWith("/")
-    ? resolveSiteUrl(canonical)
-    : canonical;
-  const socialImage = resolveSocialImageUrl(
-    campaign.seo?.image ?? campaign.image,
-  );
-
-  return {
+  return createMetadata({
     title: campaign.seo?.title ?? campaign.title,
     description: campaign.seo?.description ?? campaign.summary,
-    alternates: { canonical: canonicalUrl },
-    robots: campaign.seo?.noIndex
-      ? { index: false, follow: false }
-      : { index: true, follow: true },
-    openGraph: {
-      title: campaign.seo?.ogTitle ?? campaign.headline ?? campaign.title,
-      description:
-        campaign.seo?.ogDescription ??
-        campaign.seo?.description ??
-        campaign.summary,
-      url: canonicalUrl,
-      type: "website",
-      images: socialImage
-        ? [{ url: socialImage, alt: campaign.imageAlt }]
-        : undefined,
-    },
-  };
+    path: FIA_RALLYCROSS_PATH,
+    image: campaign.seo?.image ?? campaign.image,
+    locale,
+    isFallback: locale === "id" || Boolean(campaign.seo?.noIndex),
+  });
 }
 
 export default async function CampaignPage(props: Props) {

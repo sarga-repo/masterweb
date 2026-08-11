@@ -1,10 +1,12 @@
-import type { Core } from '@strapi/strapi';
+import type { Core } from "@strapi/strapi";
 
 import {
   bootstrapWorkspaceAccessControl,
   registerWorkspaceAccessControl,
-} from './access-control/sarga-workspaces';
-import seedDemoContent from './seed';
+} from "./access-control/sarga-workspaces";
+import { ensureSargaLocales, registerSargaI18nGuards } from "./i18n/sarga-i18n";
+import { assertInquiryNotificationEnvironment } from "./email/inquiry-notifications";
+import seedDemoContent from "./seed";
 
 export default {
   /**
@@ -15,6 +17,7 @@ export default {
    */
   async register({ strapi }: { strapi: Core.Strapi }) {
     await registerWorkspaceAccessControl(strapi);
+    registerSargaI18nGuards(strapi);
   },
 
   /**
@@ -25,6 +28,8 @@ export default {
    * SEED_DEMO_CONTENT=true (see src/seed.ts). No-op otherwise.
    */
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
+    assertInquiryNotificationEnvironment();
+    await ensureSargaLocales(strapi);
     await bootstrapWorkspaceAccessControl(strapi);
     await seedDemoContent(strapi);
   },

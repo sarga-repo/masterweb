@@ -440,6 +440,77 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCorporateReportCorporateReport
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'corporate_reports';
+  info: {
+    description: 'Approved annual and sustainability report library entries';
+    displayName: 'Corporate Report';
+    pluralName: 'corporate-reports';
+    singularName: 'corporate-report';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    coverImage: Schema.Attribute.Media<'images'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    externalUrl: Schema.Attribute.String;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::corporate-report.corporate-report'
+    >;
+    order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    publicationStatus: Schema.Attribute.Enumeration<
+      ['published', 'forthcoming', 'archived']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'forthcoming'>;
+    publishedAt: Schema.Attribute.DateTime;
+    publishedDate: Schema.Attribute.Date;
+    reportFile: Schema.Attribute.Media<'files'>;
+    reportType: Schema.Attribute.Enumeration<['annual', 'sustainability']> &
+      Schema.Attribute.Required;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    siteScope: Schema.Attribute.Enumeration<['gateway', 'shared', 'hidden']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'gateway'>;
+    slug: Schema.Attribute.UID<'title'> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    summary: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    year: Schema.Attribute.Integer & Schema.Attribute.Required;
+  };
+}
+
 export interface ApiEcosystemBusinessEcosystemBusiness
   extends Struct.CollectionTypeSchema {
   collectionName: 'ecosystem_businesses';
@@ -452,6 +523,11 @@ export interface ApiEcosystemBusinessEcosystemBusiness
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
     businessStatus: Schema.Attribute.Enumeration<
       ['active', 'comingSoon', 'hidden']
@@ -463,6 +539,11 @@ export interface ApiEcosystemBusinessEcosystemBusiness
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     ctaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
       Schema.Attribute.DefaultTo<'Find Out More'>;
     ctaUrl: Schema.Attribute.String;
     dedicatedSiteKey: Schema.Attribute.Enumeration<
@@ -472,18 +553,41 @@ export interface ApiEcosystemBusinessEcosystemBusiness
     dedicatedSiteUrl: Schema.Attribute.String;
     gallery: Schema.Attribute.Media<'images' | 'videos', true>;
     heroImage: Schema.Attribute.Media<'images'>;
-    highlights: Schema.Attribute.Component<'shared.key-highlight', true>;
-    launchTarget: Schema.Attribute.String;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    highlights: Schema.Attribute.Component<'shared.key-highlight', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    launchTarget: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::ecosystem-business.ecosystem-business'
-    > &
-      Schema.Attribute.Private;
+    >;
     logo: Schema.Attribute.Media<'images'>;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    overview: Schema.Attribute.RichText;
+    overview: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pageAvailability: Schema.Attribute.Component<
+      'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     pillar: Schema.Attribute.Enumeration<
       ['sports', 'venue', 'media', 'technology', 'festival', 'other']
     > &
@@ -494,8 +598,19 @@ export interface ApiEcosystemBusinessEcosystemBusiness
       'api::news-article.news-article'
     >;
     relatedEvents: Schema.Attribute.Relation<'oneToMany', 'api::event.event'>;
-    seo: Schema.Attribute.Component<'shared.seo', false>;
-    shortDescription: Schema.Attribute.Text & Schema.Attribute.Required;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    shortDescription: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     siteScope: Schema.Attribute.Enumeration<
       ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
     > &
@@ -519,18 +634,34 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
     broadcastUrl: Schema.Attribute.String;
     business: Schema.Attribute.Relation<
       'manyToOne',
       'api::ecosystem-business.ecosystem-business'
     >;
-    circuitName: Schema.Attribute.String;
+    circuitName: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     coverImage: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.RichText & Schema.Attribute.Required;
+    description: Schema.Attribute.RichText &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     embedCode: Schema.Attribute.Text & Schema.Attribute.Private;
     embedUrl: Schema.Attribute.String;
     endDate: Schema.Attribute.DateTime;
@@ -563,16 +694,40 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<'upcoming'>;
     gallery: Schema.Attribute.Media<'images' | 'videos', true>;
     heroMedia: Schema.Attribute.Media<'images' | 'videos'>;
-    hospitalityInfo: Schema.Attribute.RichText;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::event.event'> &
-      Schema.Attribute.Private;
+    hospitalityInfo: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::event.event'>;
     publishedAt: Schema.Attribute.DateTime;
     raceClass: Schema.Attribute.String;
-    racingCategory: Schema.Attribute.String;
-    schedule: Schema.Attribute.Component<'shared.event-session', true>;
-    seo: Schema.Attribute.Component<'shared.seo', false>;
-    seriesName: Schema.Attribute.String;
+    racingCategory: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    schedule: Schema.Attribute.Component<'shared.event-session', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    seriesName: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     showOnGateway: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     showOnHorseSport: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<false>;
@@ -586,8 +741,18 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<'gateway'>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     sponsors: Schema.Attribute.Relation<'manyToMany', 'api::partner.partner'>;
-    stableAccessInfo: Schema.Attribute.RichText;
-    ticketCtaLabel: Schema.Attribute.String;
+    stableAccessInfo: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    ticketCtaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     ticketCtas: Schema.Attribute.Relation<
       'oneToMany',
       'api::ticket-cta.ticket-cta'
@@ -597,15 +762,31 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.DefaultTo<'redirect'>;
     ticketUrl: Schema.Attribute.String;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     trackType: Schema.Attribute.Enumeration<
       ['turf', 'dirt', 'mixed', 'indoor', 'other']
     >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    venue: Schema.Attribute.String;
-    venueAddress: Schema.Attribute.Text;
+    venue: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    venueAddress: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
   };
 }
 
@@ -620,9 +801,24 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
-    aboutSummaryBody: Schema.Attribute.RichText;
-    aboutSummaryTitle: Schema.Attribute.String;
+    aboutSummaryBody: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    aboutSummaryTitle: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -635,23 +831,57 @@ export interface ApiHomepageHomepage extends Struct.SingleTypeSchema {
       'api::ecosystem-business.ecosystem-business'
     >;
     featuredEvents: Schema.Attribute.Relation<'oneToMany', 'api::event.event'>;
-    heroDescription: Schema.Attribute.RichText & Schema.Attribute.Required;
-    heroEyebrow: Schema.Attribute.String & Schema.Attribute.Required;
+    heroDescription: Schema.Attribute.RichText &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    heroEyebrow: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     heroImage: Schema.Attribute.Media<'images'>;
     heroImageMobile: Schema.Attribute.Media<'images'>;
-    heroTitle: Schema.Attribute.String & Schema.Attribute.Required;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    heroTitle: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    heroVideo: Schema.Attribute.Component<'shared.hero-video', false>;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::homepage.homepage'
-    > &
-      Schema.Attribute.Private;
-    primaryCtaLabel: Schema.Attribute.String & Schema.Attribute.Required;
+    >;
+    primaryCtaLabel: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     primaryCtaUrl: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    secondaryCtaLabel: Schema.Attribute.String;
+    secondaryCtaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     secondaryCtaUrl: Schema.Attribute.String;
-    seo: Schema.Attribute.Component<'shared.seo', false>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -684,6 +914,8 @@ export interface ApiInquirySubmissionInquirySubmission
         'event',
         'venue',
         'career',
+        'ticketing',
+        'stable',
         'general',
       ]
     > &
@@ -697,9 +929,39 @@ export interface ApiInquirySubmissionInquirySubmission
       Schema.Attribute.Private;
     message: Schema.Attribute.Text & Schema.Attribute.Required;
     name: Schema.Attribute.String & Schema.Attribute.Required;
+    notificationAttempts: Schema.Attribute.Integer &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    notificationLastAttemptAt: Schema.Attribute.DateTime &
+      Schema.Attribute.Private;
+    notificationLastErrorCode: Schema.Attribute.String &
+      Schema.Attribute.Private;
+    notificationNextAttemptAt: Schema.Attribute.DateTime &
+      Schema.Attribute.Private;
+    notificationSentAt: Schema.Attribute.DateTime & Schema.Attribute.Private;
+    notificationStatus: Schema.Attribute.Enumeration<
+      ['disabled', 'pending', 'processing', 'sent', 'failed']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'disabled'>;
     phone: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    sourceLocale: Schema.Attribute.Enumeration<['en', 'id']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'en'>;
     sourcePage: Schema.Attribute.String;
+    sourceSite: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'horsesport']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'gateway'>;
     status: Schema.Attribute.Enumeration<['new', 'contacted', 'closed']> &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'new'>;
@@ -707,6 +969,121 @@ export interface ApiInquirySubmissionInquirySubmission
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiJobVacancyJobVacancy extends Struct.CollectionTypeSchema {
+  collectionName: 'job_vacancies';
+  info: {
+    description: 'Gateway careers vacancies with approved LinkedIn application links';
+    displayName: 'Job Vacancy';
+    pluralName: 'job-vacancies';
+    singularName: 'job-vacancy';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    applicationUrl: Schema.Attribute.String;
+    closingDate: Schema.Attribute.Date;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.RichText &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    discipline: Schema.Attribute.Enumeration<
+      [
+        'sport-operations',
+        'venue-experience',
+        'media-creative',
+        'technology-group',
+      ]
+    > &
+      Schema.Attribute.Required;
+    employmentType: Schema.Attribute.Enumeration<
+      ['full-time', 'part-time', 'contract', 'internship']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'full-time'>;
+    featured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::job-vacancy.job-vacancy'
+    >;
+    location: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    postedDate: Schema.Attribute.Date & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    requirements: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    responsibilities: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    seniority: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    siteScope: Schema.Attribute.Enumeration<['gateway', 'shared', 'hidden']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'gateway'>;
+    slug: Schema.Attribute.UID<'title'> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    summary: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    vacancyStatus: Schema.Attribute.Enumeration<['open', 'closed', 'filled']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'open'>;
+    workMode: Schema.Attribute.Enumeration<['onsite', 'hybrid', 'remote']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'onsite'>;
   };
 }
 
@@ -722,24 +1099,38 @@ export interface ApiLeadershipPersonLeadershipPerson
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     group: Schema.Attribute.Enumeration<['board', 'executive', 'advisor']> &
       Schema.Attribute.DefaultTo<'executive'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::leadership-person.leadership-person'
-    > &
-      Schema.Attribute.Private;
+    >;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     portrait: Schema.Attribute.Media<'images'>;
     publishedAt: Schema.Attribute.DateTime;
-    role: Schema.Attribute.String;
-    summary: Schema.Attribute.Text;
+    role: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    summary: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -758,6 +1149,11 @@ export interface ApiMediaGalleryMediaGallery
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
     category: Schema.Attribute.Enumeration<
       [
@@ -774,13 +1170,17 @@ export interface ApiMediaGalleryMediaGallery
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.Text;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::media-gallery.media-gallery'
-    > &
-      Schema.Attribute.Private;
+    >;
     mediaItems: Schema.Attribute.Media<'images' | 'videos', true>;
     publishedAt: Schema.Attribute.DateTime;
     relatedEvent: Schema.Attribute.Relation<'manyToOne', 'api::event.event'>;
@@ -791,7 +1191,13 @@ export interface ApiMediaGalleryMediaGallery
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'shared'>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -810,6 +1216,11 @@ export interface ApiMerchandiseItemMerchandiseItem
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
     availabilityStatus: Schema.Attribute.Enumeration<
       ['comingSoon', 'availableExternal', 'inquiryOnly', 'hidden']
@@ -819,18 +1230,32 @@ export interface ApiMerchandiseItemMerchandiseItem
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.RichText;
+    description: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     externalUrl: Schema.Attribute.String;
     image: Schema.Attribute.Media<'images'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::merchandise-item.merchandise-item'
-    > &
-      Schema.Attribute.Private;
-    priceLabel: Schema.Attribute.String;
+    >;
+    priceLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     publishedAt: Schema.Attribute.DateTime;
-    seo: Schema.Attribute.Component<'shared.seo', false>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
     siteScope: Schema.Attribute.Enumeration<
       ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
@@ -839,7 +1264,13 @@ export interface ApiMerchandiseItemMerchandiseItem
       Schema.Attribute.DefaultTo<'motorsport'>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -858,25 +1289,57 @@ export interface ApiMotorsportProgramMotorsportProgram
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
-    bannerSlides: Schema.Attribute.Component<'motorsport.campaign-slide', true>;
-    becomeRidersLabel: Schema.Attribute.String;
+    bannerSlides: Schema.Attribute.Component<
+      'motorsport.campaign-slide',
+      true
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    becomeRidersLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     becomeRidersUrl: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     eventEndDate: Schema.Attribute.DateTime;
-    eventRules: Schema.Attribute.Component<'motorsport.rule-item', true>;
+    eventRules: Schema.Attribute.Component<'motorsport.rule-item', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     eventStartDate: Schema.Attribute.DateTime;
     heroMedia: Schema.Attribute.Media<'images' | 'videos'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::motorsport-program.motorsport-program'
-    > &
-      Schema.Attribute.Private;
-    mainHeadline: Schema.Attribute.String;
-    primaryCtaLabel: Schema.Attribute.String;
+    >;
+    mainHeadline: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    primaryCtaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     primaryCtaUrl: Schema.Attribute.String;
     programStatus: Schema.Attribute.Enumeration<
       [
@@ -908,9 +1371,19 @@ export interface ApiMotorsportProgramMotorsportProgram
       'oneToMany',
       'api::motorsport-rider.motorsport-rider'
     >;
-    rundown: Schema.Attribute.Component<'motorsport.rundown-item', true>;
+    rundown: Schema.Attribute.Component<'motorsport.rundown-item', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     seasonLabel: Schema.Attribute.String & Schema.Attribute.Required;
-    seo: Schema.Attribute.Component<'shared.seo', false>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
     siteScope: Schema.Attribute.Enumeration<
       ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
@@ -922,8 +1395,20 @@ export interface ApiMotorsportProgramMotorsportProgram
       'oneToMany',
       'api::motorsport-standing.motorsport-standing'
     >;
-    summary: Schema.Attribute.RichText & Schema.Attribute.Required;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    summary: Schema.Attribute.RichText &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -943,18 +1428,22 @@ export interface ApiMotorsportRegulationMotorsportRegulation
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     effectiveDate: Schema.Attribute.Date & Schema.Attribute.Required;
     isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::motorsport-regulation.motorsport-regulation'
-    > &
-      Schema.Attribute.Private;
+    >;
     pdfFile: Schema.Attribute.Media<'files'>;
     program: Schema.Attribute.Relation<
       'manyToOne',
@@ -968,8 +1457,19 @@ export interface ApiMotorsportRegulationMotorsportRegulation
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'motorsport'>;
-    summary: Schema.Attribute.Text;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    summary: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -989,18 +1489,27 @@ export interface ApiMotorsportRiderMotorsportRider
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
-    bio: Schema.Attribute.RichText;
+    bio: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::motorsport-rider.motorsport-rider'
-    > &
-      Schema.Attribute.Private;
+    >;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     nationality: Schema.Attribute.String;
     number: Schema.Attribute.String;
@@ -1011,8 +1520,18 @@ export interface ApiMotorsportRiderMotorsportRider
     > &
       Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    region: Schema.Attribute.String;
-    seo: Schema.Attribute.Component<'shared.seo', false>;
+    region: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;
     siteScope: Schema.Attribute.Enumeration<
       ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
@@ -1104,9 +1623,24 @@ export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
-    author: Schema.Attribute.String;
-    body: Schema.Attribute.RichText;
+    author: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    body: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     category: Schema.Attribute.Enumeration<
       [
         'news',
@@ -1134,7 +1668,13 @@ export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    excerpt: Schema.Attribute.Text & Schema.Attribute.Required;
+    excerpt: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     featuredOnGateway: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<false>;
     featuredOnHorseSport: Schema.Attribute.Boolean &
@@ -1142,12 +1682,11 @@ export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
     featuredOnMotorsport: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<false>;
     isHotTopic: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::news-article.news-article'
-    > &
-      Schema.Attribute.Private;
+    >;
     publishedAt: Schema.Attribute.DateTime;
     publishedDate: Schema.Attribute.Date & Schema.Attribute.Required;
     relatedBusinesses: Schema.Attribute.Relation<
@@ -1159,7 +1698,12 @@ export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
       'manyToOne',
       'api::media-gallery.media-gallery'
     >;
-    seo: Schema.Attribute.Component<'shared.seo', false>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     showOnGateway: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     showOnHorseSport: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<false>;
@@ -1172,7 +1716,13 @@ export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'gateway'>;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1206,6 +1756,9 @@ export interface ApiNewsletterSubscriptionNewsletterSubscription
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    sourceLocale: Schema.Attribute.Enumeration<['en', 'id']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'en'>;
     sourcePage: Schema.Attribute.String;
     status: Schema.Attribute.Enumeration<['active', 'unsubscribed']> &
       Schema.Attribute.Required &
@@ -1280,27 +1833,83 @@ export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    heroDescription: Schema.Attribute.RichText;
+    heroDescription: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     heroMedia: Schema.Attribute.Media<'images' | 'videos'>;
     heroSlides: Schema.Attribute.Component<'motorsport.hero-slide', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
       Schema.Attribute.SetMinMax<
         {
-          max: 5;
+          max: 3;
         },
         number
       >;
-    heroTitle: Schema.Attribute.String;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    heroTitle: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    heroVideo: Schema.Attribute.Component<'shared.hero-video', false>;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::site-page.site-page'
+    >;
+    motorsportFeaturedEvent: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::event.event'
+    >;
+    motorsportInformationBand: Schema.Attribute.Component<
+      'motorsport.home-information-band',
+      false
     > &
-      Schema.Attribute.Private;
-    navigationLabel: Schema.Attribute.String;
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    motorsportWorldSection: Schema.Attribute.Component<
+      'motorsport.world-of-motorsport',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    navigationLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pageAvailability: Schema.Attribute.Component<
+      'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     pageKind: Schema.Attribute.Enumeration<
       [
         'home',
@@ -1308,6 +1917,8 @@ export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
         'eventHub',
         'campaign',
         'merchandise',
+        'history',
+        'reportIndex',
         'legal',
         'custom',
       ]
@@ -1316,8 +1927,18 @@ export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<'custom'>;
     publishedAt: Schema.Attribute.DateTime;
     routePath: Schema.Attribute.String & Schema.Attribute.Required;
-    sections: Schema.Attribute.DynamicZone<['shared.page-section']>;
-    seo: Schema.Attribute.Component<'shared.seo', false>;
+    sections: Schema.Attribute.DynamicZone<['shared.page-section']> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     site: Schema.Attribute.Relation<'manyToOne', 'api::site.site'>;
     siteScope: Schema.Attribute.Enumeration<
       ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
@@ -1325,7 +1946,13 @@ export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'gateway'>;
     slug: Schema.Attribute.String & Schema.Attribute.Required;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1426,26 +2053,137 @@ export interface ApiTimelineItemTimelineItem
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.Text;
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     image: Schema.Attribute.Media<'images'>;
-    label: Schema.Attribute.String;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    label: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::timeline-item.timeline-item'
-    > &
-      Schema.Attribute.Private;
+    >;
     order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     publishedAt: Schema.Attribute.DateTime;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     year: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ApiTopNavigationItemTopNavigationItem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'top_navigation_items';
+  info: {
+    description: 'Site-scoped bilingual primary navigation configuration';
+    displayName: 'Top Navigation Item';
+    pluralName: 'top-navigation-items';
+    singularName: 'top-navigation-item';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    ariaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    displayOrder: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 1000;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    emphasis: Schema.Attribute.Enumeration<['default', 'primaryCta']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'default'>;
+    enabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    href: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
+    internalName: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+        minLength: 2;
+      }>;
+    label: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+      }>;
+    linkType: Schema.Attribute.Enumeration<
+      ['internal', 'crossSite', 'external']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'internal'>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::top-navigation-item.top-navigation-item'
+    >;
+    openInNewTab: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    publishedAt: Schema.Attribute.DateTime;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'horsesport']
+    > &
+      Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1960,10 +2698,12 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::corporate-report.corporate-report': ApiCorporateReportCorporateReport;
       'api::ecosystem-business.ecosystem-business': ApiEcosystemBusinessEcosystemBusiness;
       'api::event.event': ApiEventEvent;
       'api::homepage.homepage': ApiHomepageHomepage;
       'api::inquiry-submission.inquiry-submission': ApiInquirySubmissionInquirySubmission;
+      'api::job-vacancy.job-vacancy': ApiJobVacancyJobVacancy;
       'api::leadership-person.leadership-person': ApiLeadershipPersonLeadershipPerson;
       'api::media-gallery.media-gallery': ApiMediaGalleryMediaGallery;
       'api::merchandise-item.merchandise-item': ApiMerchandiseItemMerchandiseItem;
@@ -1978,6 +2718,7 @@ declare module '@strapi/strapi' {
       'api::site.site': ApiSiteSite;
       'api::ticket-cta.ticket-cta': ApiTicketCtaTicketCta;
       'api::timeline-item.timeline-item': ApiTimelineItemTimelineItem;
+      'api::top-navigation-item.top-navigation-item': ApiTopNavigationItemTopNavigationItem;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

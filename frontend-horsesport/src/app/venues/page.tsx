@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { createMetadata } from "@/lib/seo/metadata";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import {
   PageHero,
@@ -12,13 +12,18 @@ import {
 } from "@/components";
 import { TrackIcon, StableIcon, RosetteIcon } from "@/components/ui/hs-icons";
 import type { VenueCardData } from "@/types/design-system";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "Venues",
-  description:
-    "Championship-grade turf tracks, stables, and hospitality facilities across the Sarga Horse Sport network.",
-  path: "/venues",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "Venues",
+    description:
+      "Championship-grade turf tracks, stables, and hospitality facilities across the Sarga Horse Sport network.",
+    path: "/venues",
+    locale,
+  });
+}
 
 const VENUES: VenueCardData[] = [
   {

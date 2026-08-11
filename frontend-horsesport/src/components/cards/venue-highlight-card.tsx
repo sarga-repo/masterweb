@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { PinIcon } from "@/components/ui/hs-icons";
 import type { VenueCardData } from "@/types/design-system";

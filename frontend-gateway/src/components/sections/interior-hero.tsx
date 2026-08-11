@@ -9,7 +9,7 @@ type InteriorHeroProps = {
   description: string;
   image?: StrapiImage;
   meta?: string[];
-  tone?: "dark" | "red";
+  tone?: "dark" | "red" | "slate";
   brandLogo?: StrapiImage;
 };
 
@@ -26,7 +26,11 @@ export function InteriorHero({
   return (
     <section
       className={`relative isolate overflow-hidden text-white ${
-        tone === "red" ? "bg-sarga-red" : "bg-sarga-black"
+        tone === "red"
+          ? "bg-sarga-red"
+          : tone === "slate"
+            ? "gateway-corporate-hero bg-sarga-soft"
+            : "bg-sarga-black"
       }`}
     >
       {image ? (
@@ -75,21 +79,21 @@ export function InteriorHero({
         </div>
 
         <div className="py-16 sm:py-20">
-          <h1 className="max-w-[13ch] font-heading text-[clamp(2.1rem,9vw,3rem)] font-bold uppercase leading-[0.84] tracking-[-0.055em] sm:text-[clamp(2.75rem,5.2vw,5.4rem)]">
+          <h1 className="gateway-display-page max-w-[13ch] font-heading uppercase">
             {title}
           </h1>
         </div>
 
         <div className="grid gap-8 border-t border-white/20 pt-7 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-          <p className="max-w-3xl text-base leading-7 text-white/72 sm:text-xl sm:leading-9">
-            {description}
-          </p>
+          <p className="gateway-body-lead text-white/72">{description}</p>
           {meta.length ? (
             <ul className="grid grid-cols-2 gap-px border border-white/20 bg-white/20">
               {meta.map((item) => (
                 <li
                   key={item}
-                  className="bg-sarga-black/80 px-4 py-4 text-[0.6rem] font-bold uppercase leading-4 tracking-[0.14em] text-white/58"
+                  className={`px-4 py-4 text-[0.6rem] font-bold uppercase leading-4 tracking-[0.14em] text-white/65 ${
+                    tone === "dark" ? "bg-sarga-black/80" : "bg-white/10"
+                  }`}
                 >
                   {item}
                 </li>

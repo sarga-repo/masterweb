@@ -1,8 +1,8 @@
 # Sarga Multisite — Phase Progress Log
 
-Running record of what was built in each phase of the Sarga Motorsport multisite
-work (`prompts/motorsport/`). Update this file at the end of **every** completed
-phase (see AGENTS.md → "Phase progress tracking").
+Running record of what was built across the Sarga multisite implementation and
+brand revamp tracks. Update this file at the end of **every** completed phase
+(see AGENTS.md → "Phase progress tracking").
 
 | Phase | Title                         | Status  | Date       |
 | ----- | ----------------------------- | ------- | ---------- |
@@ -16,6 +16,35 @@ phase (see AGENTS.md → "Phase progress tracking").
 | 8     | Forms, ticketing, SEO         | ✅ Done | 2026-07-04 |
 | 9     | Quality & UAT                 | ✅ Done | 2026-07-04 |
 | 10    | Deployment & handover         | ✅ Done | 2026-07-04 |
+
+## Sarga.co Gateway revamp track (`docs/gateway/revamp/`)
+
+| Phase            | Title                                        | Status              | Date       |
+| ---------------- | -------------------------------------------- | ------------------- | ---------- |
+| GWR-0            | Discovery and specification                  | ✅ Done             | 2026-08-10 |
+| GWR-1            | CMS and information architecture foundations | ✅ Done             | 2026-08-10 |
+| GWR-2            | Typography, tokens, and global shell         | ✅ Done             | 2026-08-10 |
+| GWR-3            | Homepage reference alignment                 | ✅ Done             | 2026-08-10 |
+| GWR-4            | Corporate and report pages                   | ✅ Done             | 2026-08-10 |
+| GWR-5            | Ecosystem hub and dedicated pages            | ✅ Done             | 2026-08-10 |
+| GWR-CMS-1        | CMS workspace architecture and audit         | ✅ Done             | 2026-08-10 |
+| GWR-CMS-2        | Segregated CMS workspace implementation      | ✅ Done             | 2026-08-11 |
+| GWR-CMS-3        | CMS RBAC UAT and editor handover             | ✅ Done             | 2026-08-11 |
+| GWR-CMS-4        | i18n and dynamic navigation architecture     | ✅ Done             | 2026-08-11 |
+| GWR-CMS-5        | CMS i18n and navigation foundations          | ✅ Done             | 2026-08-11 |
+| GWR-CMS-6        | Gateway i18n and dynamic navigation          | ✅ Done             | 2026-08-11 |
+| GWR-CMS-7        | Motorsport and Horse Sport rollout           | ✅ Done             | 2026-08-11 |
+| GWR-CMS-MAIL-1   | Exchange Online email assessment             | ✅ Done             | 2026-08-11 |
+| GWR-CMS-MAIL-2   | OAuth transport foundation                   | ✅ Done             | 2026-08-11 |
+| GWR-CMS-MAIL-3   | Transactional notification workflow          | ✅ Done             | 2026-08-11 |
+| GWR-CMS-MAIL-4   | Mail staging UAT and handover                | 🟡 Awaiting IT      | 2026-08-11 |
+| GWR-CMS-MAIL-4.1 | Temporary Basic SMTP launch fallback         | ✅ Done             | 2026-08-11 |
+| GWR-CMS-8        | i18n migration, UAT, and handover            | 🟡 Awaiting staging | 2026-08-11 |
+| GWR-CMS-9        | Multisite CMS hero video                     | ✅ Done             | 2026-08-11 |
+| GWR-CMS-10       | Motorsport homepage managed sections         | ✅ Done             | 2026-08-11 |
+| GWR-CMS-11       | Motorsport media and News refinement          | ✅ Done             | 2026-08-11 |
+| GWR-6            | Publications and Ticket Hub                  | ⬜ Todo             | —          |
+| GWR-7            | Cross-route QA and launch readiness          | ⬜ Todo             | —          |
 
 ## Motorsport revamp track (`prompts/motorsport/revamp/`)
 
@@ -3340,3 +3369,1226 @@ Strapi CMS via the seed (not frontend fallbacks), per request.
   Staging/production imports require a maintenance window and explicit approval.
 - Strapi admin users and API tokens are not exported; they remain
   environment-specific and must be recreated or verified after import.
+
+---
+
+## GWR-0 — Sarga.co Gateway discovery and specification
+
+### What was done
+
+- Reviewed the Website Sarga.co Preview, Brand Visual Preview, typography,
+  colour, and photography direction in the approved Look & Feel PDF.
+- Reviewed the new Sarga.co sitemap PDF and compared it with every current
+  Gateway route and navigation destination.
+- Audited the Gateway homepage, global shell, local font assets, ecosystem
+  detail template, Strapi schemas, and existing Sarga Venues/Media/Tech seeds.
+- Defined target routes, page templates, visual and typography rules, CMS
+  full-page/Coming Soon behaviour, seven implementation phases, and UAT gates.
+- Added a dedicated Gateway revamp documentation package and phase checklist.
+
+### Files changed
+
+- Added `docs/gateway/revamp/**`.
+- Added `checklists/gateway/gateway_revamp_phase_checklist.md`.
+- Added `reference/source-pdfs/sarga.co_sitemap.pdf`.
+- Updated `AGENTS.md`, `README.md`, `docs/03_sitemap_information_architecture.md`,
+  `docs/07_design_system.md`, `docs/11_asset_inventory.md`,
+  `docs/12_visual_reference_guideline.md`, and this progress log.
+
+### How verified
+
+- Rendered and visually inspected the relevant Gateway reference pages and the
+  sitemap PDF.
+- Enumerated current App Router routes and compared them with the target map.
+- Confirmed Plus Jakarta Sans and two local Zalando Expanded cuts are loaded.
+- Confirmed existing CMS/mock seeds include Sarga Venues, Sarga Media, and
+  Sarga Tech as Coming Soon businesses.
+- Ran documentation link/path checks and `git diff --check`.
+
+### Notes / caveats
+
+- GWR-0 is documentation only; no frontend behaviour or CMS schema changed.
+- The approved Zalando ExtraBold font asset is not present yet. The existing
+  Regular/SemiBold files remain temporary until an approved asset is supplied
+  or legally obtained.
+- The sitemap does not define a final standalone Sarga News URL. It remains a
+  News channel until an approved destination exists.
+- Implementation starts with GWR-1 only after user approval.
+
+## GWR-1 — CMS and information architecture foundations
+
+### What was done
+
+- Added a reusable CMS Page Availability component to Ecosystem Business and
+  Site Page, with `pageEnabled` as the authoritative launch switch and managed
+  Coming Soon copy, media, and search behaviour.
+- Added safe idempotent seeds for Gateway History, Annual Report, and
+  Sustainability Report route records and availability state for Sarga
+  Venues, Media, and Tech without overwriting editor choices.
+- Added typed Gateway Site Page adapters and route shells, the canonical Press
+  Releases channel, and CMS-filtered news retrieval.
+- Fixed the Ecosystem Business REST population contract (`logo`, not the
+  invalid `brandLogo` field), added fail-closed API fallback behaviour, and
+  implemented sport-site redirects plus live, Coming Soon, and hidden routing.
+- Updated the sitemap so only live managed pages are advertised.
+
+### Files changed
+
+- `cms/src/components/shared/page-availability.json`, Ecosystem Business and
+  Site Page schemas, generated CMS types, `cms/src/seed.ts`, and the schema
+  mirror in `strapi/content-types.json`.
+- Gateway Strapi types/adapters, ecosystem/news services, route metadata and
+  sitemap, About/Ecosystem cards, Coming Soon/Site Page/News Archive sections,
+  and the new corporate and Press Releases routes.
+- Gateway revamp CMS/IA/phase docs, shared Strapi content-model docs, phase
+  checklist, and this progress log.
+
+### How verified
+
+- Strapi TypeScript and production admin build passed; Gateway TypeScript,
+  lint, 21 unit tests, and production build passed.
+- Repeated CMS startup kept exactly three Gateway Site Page seeds and three
+  venture availability records, confirming idempotency.
+- Exact Ecosystem and Press Releases REST queries returned `200`; focused
+  browser UAT confirmed landmarks, headings, content, and navigation.
+- Runtime checks confirmed corporate and Press routes return `200`, disabled
+  venture routes return canonical `200` plus `noindex`, sport aliases redirect,
+  and disabled/external aliases are absent from the XML sitemap.
+
+### Notes / caveats
+
+- These routes intentionally use the current Gateway theme. GWR-2 owns the
+  Zalando/Plus Jakarta Sans token and global-shell recalibration, while GWR-4
+  through GWR-6 own final page composition and content presentation.
+- CMS role schemas were not broadened. Page Availability inherits the parent
+  record's existing Gateway/Motorsport/Horse Sport/Shared Library access.
+- Coming Soon is the safe result when an editor enables an incomplete internal
+  page; hidden or unpublished content remains a `404`.
+
+## GWR-2 — Typography, tokens, and global shell
+
+### What was done
+
+- Replaced the temporary SemiBold-as-bold mapping with the official
+  OFL-licensed Zalando Sans Expanded variable asset and its license; Gateway
+  display roles now use the real `800` ExtraBold weight while Plus Jakarta Sans
+  remains the body/interface face.
+- Added primitive, semantic, and component-level Gateway tokens for the exact
+  reference palette, warm/slate surfaces, responsive display/body scales,
+  line-height, spacing, header height, and footer treatment.
+- Applied shared display/body roles to the homepage Hero, Interior Hero,
+  Editorial Heading, and Section Container, including optical mobile fitting
+  for unusually long display words.
+- Rebuilt the desktop header alignment on a three-track grid, enlarged labels,
+  added active-page semantics, retained the mobile disclosure menu, and kept
+  Ticket Hub last and visually strongest.
+- Recalibrated the footer to the reference Slate Grey frame with tighter
+  hierarchy, corrected publication/report destinations, and explicit legal
+  navigation.
+- Added cross-route heading wrap/clipping protection and corrected the homepage
+  fill-image positioning warning.
+
+### Files changed
+
+- Gateway root layout/font assets, global design tokens, header, footer, Hero,
+  Interior Hero, Editorial Heading, Section Container, and footer mock links.
+- Gateway visual/type specification, source audit, phase plan/checklist, shared
+  design-system and asset-inventory docs, style handover, and this progress log.
+
+### How verified
+
+- Visually compared the implementation with the rendered Website Sarga.co
+  Preview and Brand Visual Preview pages from the approved Look & Feel PDF.
+- Browser-tested 320×568, 375×812, 768×1024, 1024×768, 1280×720, 1440×900,
+  and 1920×1080: zero page overflow and zero overflowing headings.
+- Verified homepage, History, Sustainability Report, Press Releases, Careers,
+  and Contact shared shells; mobile menu order/visibility and the desktop/mobile
+  footer passed visual inspection.
+- Confirmed computed display typography is Zalando Sans Expanded weight 800,
+  mobile/desktop navigation landmarks are intact, and fresh route loads have
+  no console errors or image-layout warnings.
+
+### Notes / caveats
+
+- GWR-2 changes the global foundation and shell only. GWR-3 still owns homepage
+  composition, hero information reduction, About interaction, and section-level
+  visual alignment.
+- The older Regular/SemiBold font files remain in the repository but are no
+  longer loaded; they were preserved to avoid removing supplied assets.
+
+## GWR-3 — Homepage reference alignment
+
+### What was done
+
+- Rebuilt the Gateway hero as a warm, cinematic group statement using the
+  CMS-managed desktop/mobile art, one editorial headline, concise copy, and two
+  actions; removed the former data rail, venture counters, and autoplay video
+  layer that weakened the reference hierarchy.
+- Added one shared About-tab adapter for CMS timeline items, leadership people,
+  and annual/sustainability report page records. The homepage now presents
+  these as an accessible active left menu with a genuinely scrollable right
+  pane, linked records, focus semantics, and mock fallback only when CMS data is
+  unavailable. The `/about` tab view now uses the same source and links.
+- Reframed the 360° ecosystem as a red/orange brand field with a warm editorial
+  panel, accessible pillar tabs, and CMS-backed business cards/deep links.
+- Replaced the dark publication hierarchy with a balanced three-column
+  editorial grid and refined the Ticket Hub and newsletter into a controlled
+  crimson-to-Slate progression with branded gradient separators.
+- Reduced the global desktop hero ceiling to prevent small-laptop clipping while
+  retaining the approved responsive typography system.
+
+### Files changed
+
+- Gateway homepage route; Hero, About preview/navigator/tabs, ecosystem, news,
+  Ticket Hub, newsletter, Pill Tabs, global styles, mock About type, and the new
+  shared About-tab adapter.
+- Gateway revamp checklist, implementation-phase plan, and this progress log.
+
+### How verified
+
+- Live browser review confirmed the warm hero, About composition, ecosystem
+  composition, publication grid, Ticket Hub, and newsletter progression.
+- Click-tested History, Leadership, Reports & Charters, and Venue tabs; CMS
+  report records and ecosystem business content appeared in the correct panels.
+- Responsive browser matrix passed at 320×800, 375×812, 768×1024, 1024×768,
+  1440×900, and 1920×1080 with zero horizontal overflow. Mobile hero actions
+  remain visible and the live console reports zero errors or warnings.
+- Gateway formatting, TypeScript, ESLint, 21 Vitest tests, and the production
+  Next.js build all pass.
+
+### Notes / caveats
+
+- GWR-3 was approved when the user requested GWR-4; GWR-4 is now complete and
+  remains at its stakeholder approval gate before GWR-5.
+- Timeline entries currently link to the managed History index and leadership
+  entries link to the Board page because person- and milestone-detail routes are
+  outside the approved sitemap. Report entries link to their CMS-managed report
+  landing pages; no unapproved download files are exposed.
+- ESLint exits successfully but continues to print the existing
+  `jsx-ast-utils` TypeScript non-null-expression diagnostic from the dependency.
+
+## GWR-4 — Corporate and report pages
+
+### What was done
+
+- Rebuilt the About hub, History, Board of Directors, Company Structure,
+  Careers, and Contact routes as distinct responsive corporate layouts aligned
+  to the Gateway typography, warm editorial surfaces, and Slate brand fields.
+- Connected History to CMS timeline entries, leadership cards to CMS people,
+  and Company Structure to the shared ecosystem business collection so page
+  content is managed once.
+- Added the site-scoped Corporate Report collection, Gateway/Shared admin menu
+  access, public read permission, typed frontend adapter, and reusable Annual
+  and Sustainability report index with safe file/URL and forthcoming states.
+- Extended Careers with a site-scoped Job Vacancy collection, four live
+  discipline counts, `/careers/jobs` search/filter/eight-item pagination, and a
+  reusable `/careers/jobs/[slug]` detail template. Apply actions accept only
+  validated HTTPS LinkedIn URLs and no internal recruitment workflow was added.
+- Added shared heading overflow protection and corrected responsive logo sizing.
+
+### Files changed
+
+- Gateway About, History, Board, Company Structure, Annual Report,
+  Sustainability Report, Careers, and Contact routes; corporate report section,
+  Strapi adapters/types, shared hero/logo components, and global styles.
+- Strapi Corporate Report schema/API, generated types, seed permissions,
+  workspace access/menu configuration, and content model inventory.
+- Strapi Job Vacancy schema/API; Gateway Careers, vacancy index/detail routes,
+  vacancy browser, filtering and LinkedIn-safety utilities/tests, sitemap, and
+  typed adapter.
+- Gateway phase checklist, implementation plan, CMS model documentation, and
+  this progress log.
+
+### How verified
+
+- All eight routes returned HTTP 200 and their CMS-backed content, Coming Soon
+  behaviour, form anchor, report empty state, and cross-route actions were
+  interaction-tested in a real browser.
+- A 48-case matrix across 320, 375, 768, 1024, 1280, and 1440 pixel viewports
+  passed with no page-level or heading overflow; mobile History received a
+  full-page visual review. A fresh browser session reported zero errors and
+  zero warnings.
+- Gateway formatting, ESLint, TypeScript, 21 Vitest tests, and production build
+  passed. Strapi TypeScript generation/typecheck, public Corporate Report API
+  response, and admin production build passed.
+- Careers and the vacancy index passed a 12-case 320–1440px responsive matrix,
+  browser interaction checks for discipline/search/type filtering, and clean
+  console review. Filtering, pagination, and LinkedIn URL safety raised the
+  Gateway unit suite to 25 passing tests; the public Job Vacancy API returned a
+  valid empty collection.
+
+### Notes / caveats
+
+- No report records or files were fabricated. The report pages intentionally
+  show a managed empty state until editors publish approved report content.
+- No fake vacancies were seeded. All public counts therefore remain zero until
+  an editor publishes a real opening with approved content.
+- GWR-4 was approved when the user requested GWR-5; the ecosystem phase is now
+  complete and has its own approval gate below.
+- ESLint still emits the existing non-failing `jsx-ast-utils` diagnostic for a
+  TypeScript non-null expression.
+
+## GWR-5 — Ecosystem hub and dedicated pages
+
+### What was done
+
+- Reworked `/ecosystem` as a warm editorial portfolio map with accessible
+  Sports, Venue, Media, and Technology switching. Cards now expose truthful
+  Dedicated Site, Live, Coming Soon, and connection-pending states.
+- Kept Sarga Motorsport and Sarga Horse Sport on their dedicated frontends.
+  Deployment environment URLs remain primary, with a validated CMS destination
+  fallback; unsafe, credentialed, and non-HTTPS production URLs fail closed.
+- Added distinct Venues, Media, and Tech proposition/capability art direction
+  to the shared full-page framework and venture-specific branded Coming Soon
+  gradients at the same canonical routes.
+- Backfilled missing overview and capability content for the three internal
+  ventures without overwriting editor-authored values or activation choices.
+  Full pages now require the CMS toggle, overview, and at least one highlight;
+  optional gallery and related sections render only when managed content exists.
+
+### Files changed
+
+- Gateway ecosystem hub/detail routes, Ecosystem Card, Coming Soon template,
+  cross-site routing safety/tests, ecosystem adapter, and mock fallback data.
+- Shared Strapi ecosystem seed/backfill logic and Gateway CMS activation/content
+  model documentation.
+- Gateway phase checklist, implementation plan, and this progress log.
+
+### How verified
+
+- Confirmed both disabled and enabled states for Sarga Venues, Sarga Media, and
+  Sarga Tech. Disabled pages returned their managed launch copy with
+  `noindex,follow`; enabled pages rendered their distinct proposition and three
+  CMS capabilities without a robots exclusion. The local CMS was restored to
+  all three pages disabled after the test.
+- Verified the hub's four category tabs, internal launch-preview links, and
+  Motorsport/Horse Sport dedicated-site targets. A missing venture returned
+  `404`, while disabled and dedicated pages remained absent from the sitemap.
+- A 24-case matrix across the hub and three enabled pages at 320, 375, 768,
+  1024, 1280, and 1440 pixels passed without page or heading overflow. Keyboard
+  tab behavior and live/Coming Soon mobile layouts received browser review.
+- Gateway formatting, ESLint, TypeScript, 28 Vitest tests, and production build
+  passed. Strapi TypeScript and admin production build passed.
+
+### Notes / caveats
+
+- Sarga Venues, Sarga Media, and Sarga Tech remain disabled in the final local
+  CMS state and intentionally show Coming Soon until an editor approves launch.
+- Page media, CTA URLs, and related content are optional. The live template uses
+  branded gradients and omits empty optional sections rather than fabricating
+  proof or publication relationships.
+- GWR-6 has not started and requires stakeholder approval of GWR-5.
+
+## GWR-CMS-1 — CMS workspace architecture and audit
+
+### What was done
+
+- Adopted the lower-effort virtual-segregation architecture: dedicated custom
+  workspaces and roles remain editor-facing while `siteScope` stays as the
+  internal ownership and RBAC discriminator.
+- Specified that Gateway, Motorsport, and Horse Sport administrators see only
+  their own prefixed workspace actions and never choose scope manually; Super
+  Admin remains the only supported cross-site role.
+- Split implementation into three approval-gated Gateway CMS sub-phases and
+  defined the implementation, route-protection, field-permission, bypass-test,
+  and handover contracts for each.
+- Audited the existing Strapi 5.49 menu registration, workspace configuration,
+  role subjects, scope conditions, write guard, and all API schema scope enums.
+- Identified the smallest implementation delta: page-level workspace
+  protection, permission-aware actions, non-writable managed-role scope,
+  prefixed labels, and two missing Gateway workspace actions already covered by
+  RBAC.
+
+### Files changed
+
+- Added/reworked: `docs/strapi-admin-menu/**`.
+- Updated: Gateway implementation/UAT/README documents, shared CMS sync
+  strategy, Motorsport CMS admin UX reference, root README, CMS content model,
+  deployment handover, Gateway phase checklist, and this progress log.
+
+### How verified
+
+- Compared every custom workspace link UID with the managed role subject lists.
+- Inspected every current API schema for `siteScope` presence and enum coverage.
+- Confirmed the current workspace already has grouped navigation, scoped list
+  links, create actions, and guardrails, but lacks page-level permission
+  protection and managed-role field restrictions.
+- Ran documentation formatting/whitespace validation; no CMS runtime code,
+  schema, seed, role, or data change was made in this phase.
+
+### Notes / caveats
+
+- Strapi's supported main sidebar remains flat. The approved hierarchy lives in
+  each custom workspace; native collection display names remain global.
+- Media Library remains a shared asset pool without per-site row isolation.
+- GWR-CMS-2 was approved and completed on 2026-08-11. Gateway GWR-6 remains
+  paused until GWR-CMS-3 is approved and completed.
+
+## GWR-CMS-2 — Segregated CMS workspace implementation
+
+### What was done
+
+- Prefixed site-owned workspace actions for Gateway, Motorsport, and Horse
+  Sport, added the missing Gateway Ticket CTA and Partner actions, and included
+  the approved Gateway Corporate Report and Job Vacancy collections.
+- Protected each custom workspace route with its dedicated access action and
+  filtered workspace cards, create actions, and in-page navigation through the
+  current administrator's Content Manager permissions.
+- Added an immutable workspace-scope badge and replaced manual scope-selection
+  guidance with automatic role-assignment guidance.
+- Excluded `siteScope` from managed-role create/update field permissions using
+  schema-derived writable field lists while preserving scoped row conditions,
+  the create/update/clone write guard, and unrestricted Super Admin control.
+- Added focused tests for field exclusion, role workspace actions, scoped read
+  conditions, and fail-closed unknown content types.
+
+### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `cms/src/access-control/sarga-workspaces.ts`
+- `cms/src/access-control/sarga-workspaces.test.ts`
+- `docs/strapi-admin-menu/**`, Gateway phase/checklist documentation, shared CMS
+  and deployment guidance, Motorsport CMS guidance, root README, and this log.
+
+### How verified
+
+- Ran the focused Node permission suite: four tests passed.
+- Ran the CMS TypeScript check and production admin build successfully.
+- Allowed the running CMS to bootstrap and persist the managed permissions, then
+  inspected PostgreSQL: every managed role had one workspace action and zero
+  writable permissions containing `siteScope`; Super Admin retained all four
+  workspace actions and scope-field access.
+- Opened a custom workspace URL in the available browser and confirmed Strapi
+  redirected an unauthenticated request to the login screen.
+- Ran formatting and whitespace checks on the phase changes.
+
+### Notes / caveats
+
+- Full authenticated browser UAT for Gateway, Motorsport, Horse Sport, Shared
+  Library, and Super Admin sessions is intentionally reserved for GWR-CMS-3.
+- Strapi's native main sidebar remains flat and native Content Manager titles
+  remain global; the branded hierarchy lives inside the protected workspaces.
+- Media Library remains a shared asset pool without per-site row isolation.
+- No schema, seed-data, public API, or frontend query contract changed in this
+  phase.
+- Stop here until the user approves GWR-CMS-3.
+
+## GWR-CMS-3 — CMS RBAC UAT and editor handover
+
+### What was done
+
+- Completed authenticated browser UAT for Gateway, Motorsport, Horse Sport,
+  Shared Library, and Super Admin, confirming exact workspace visibility,
+  protected cross-workspace routes, immutable managed scope, and editable
+  nested SEO content.
+- Added a reusable authenticated API matrix covering direct reads/mutations,
+  tampered filters and submitted scope, create/update/clone, delete,
+  publish/unpublish, relationship selectors, and cleanup.
+- Proved that an account temporarily assigned two managed Sarga roles is
+  rejected before mutation and that Super Admin remains the only supported
+  cross-site role.
+- Fixed nested component/dynamic-zone writable-field expansion and narrowed
+  dedicated-role Site/Ecosystem Business relationship references to
+  conditioned read-only rows.
+- Added editor, provisioning, Super Admin, shared-media, staging, production,
+  and repeatable UAT handover guidance.
+
+### Files changed
+
+- `cms/src/access-control/sarga-workspaces.ts`
+- `cms/src/access-control/sarga-workspaces.test.ts`
+- `cms/scripts/validate-workspace-rbac.mjs`
+- `cms/package.json`
+- `docs/strapi-admin-menu/**`, shared CMS/deployment/Motorsport guidance,
+  Gateway implementation/checklist docs, root README, and this progress log.
+
+### How verified
+
+- Authenticated five-role browser matrix passed; each managed account saw one
+  workspace and Super Admin saw four.
+- Authenticated API matrix passed for all roles, including foreign direct
+  GET/PUT/DELETE/publish denials, relation scoping, forced scope, and
+  publish/unpublish.
+- Multi-role rejection left the target record unchanged; temporary accounts and
+  `codex-uat-*` content were removed after testing.
+- Focused RBAC tests, CMS TypeScript, production admin build, Docker Compose CMS
+  checks, persisted permission inspection, and whitespace validation passed.
+
+### Notes / caveats
+
+- Strapi's native sidebar remains flat. Narrow read-only reference collections
+  may appear because relation selectors require target read permission; only
+  the role-owned reference row is visible and no mutation action is granted.
+- Media Library remains a shared, non-confidential asset pool without per-site
+  row isolation; editors must use site-named folders.
+- GWR-6 has not resumed and requires stakeholder approval of this phase.
+- Post-handover recovery on 2026-08-11 confirmed that manual role edits are
+  overwritten at startup. The recovery also exposed and fixed a Strapi field
+  masking edge case: managed read permissions now persist explicit readable
+  field lists, so authorized detail forms remain visible after resynchronizing
+  a role.
+- A subsequent Site Page publish regression was fixed by separating readable
+  and writable fields: managed reads include required `siteScope` for Strapi's
+  pre-publish validation, managed create/update permissions still exclude it,
+  and the request guard enforces role scope on publish. Focused RBAC regression
+  tests cover this contract, including conditioned publish permission.
+
+## GWR-CMS-4 — i18n and dynamic navigation architecture
+
+### What was done
+
+- Audited Strapi 5.49 i18n readiness, the locale table, all 20 API schemas,
+  three frontend headers, locale-unaware content clients, root language/Open
+  Graph metadata, sitemap handling, and managed role implications.
+- Confirmed built-in i18n and English exist, Indonesian does not, no content
+  type is localized, and all three top-navigation arrays are repository-owned.
+- Defined English at existing unprefixed URLs, Indonesian under `/id`, stable
+  first-release slugs, whole-record English fallback, interface dictionaries,
+  language controls, canonical/hreflang/sitemap behavior, and translation
+  ownership.
+- Defined a localized, site-scoped Top Navigation Item collection with a global
+  enabled toggle/order/link/emphasis contract, per-locale labels, per-site RBAC,
+  safe URL validation, an eight-item desktop limit, and strict configured-menu
+  versus outage fallback behavior.
+- Classified content types into localized editorial and non-localized
+  operational/structural families, documented migration risks and a 14–22 day
+  engineering estimate, and specified GWR-CMS-5 through GWR-CMS-8.
+
+### Files changed
+
+- Added `docs/strapi-admin-menu/05_gwr_cms_4_i18n_navigation_assessment.md`
+  and phase specs `06` through `09`.
+- Updated the Strapi admin-menu plan/readme, Gateway implementation/checklist,
+  root README, sitemap, content model, technical architecture, quality UAT,
+  shared multisite strategy, Motorsport CMS guidance, deployment handover, and
+  this progress log.
+
+### How verified
+
+- Confirmed `@strapi/i18n@5.49.0` in the lockfile and an `English (en)` row in
+  PostgreSQL; no Indonesian locale exists.
+- Confirmed all current API schemas have empty `pluginOptions` and no localized
+  field configuration.
+- Confirmed Gateway, Motorsport, and Horse Sport each use a separate static
+  primary-navigation array, fixed `lang="en"`, and `en_US` Open Graph locale.
+- Confirmed frontend Strapi clients do not currently pass a locale.
+- Formatted all new/updated documentation and ran whitespace validation.
+
+### Notes / caveats
+
+- GWR-CMS-4 is documentation only. No Strapi schema, database, locale, seed,
+  role, API, route, frontend, or public navigation behavior changed.
+- Professional translation, legal review, and bilingual editorial approval are
+  business workstreams outside the 14–22 engineering-day estimate.
+- Enabling i18n against existing content is migration-sensitive and must be
+  rehearsed against a restored backup before production.
+- GWR-CMS-5 requires user approval. Gateway GWR-6 remains paused.
+
+## GWR-CMS-5 — CMS i18n and navigation foundations
+
+### What was done
+
+- Enabled Strapi English/Indonesian localization for the approved editorial
+  matrix while keeping English as default, stable routes structurally aligned,
+  and operational records non-localized with `sourceLocale` provenance.
+- Added the localized, site-scoped Top Navigation collection, safe-link and
+  parity validation, maximum-item enforcement, 21 idempotent bilingual menu
+  seeds, workspace entry points, and managed-role RBAC.
+- Added database/media inventory, isolated PostgreSQL restore rehearsal,
+  authenticated two-locale content/navigation UAT, and repeatable migration
+  tooling.
+- Migrated the real local CMS only after the rehearsal passed; no public
+  frontend routing or header consumption was started.
+
+### Files changed
+
+- CMS schemas, `cms/src/i18n/**`, Top Navigation API, bootstrap/seed, workspace
+  and RBAC implementation/tests, generated types, package scripts/lockfile,
+  rehearsal/inventory/UAT scripts, and `cms/.env.example`.
+- `strapi/content-types.json`, `docs/strapi-admin-menu/**`, shared CMS,
+  architecture, UAT, deployment, Gateway phase/checklist, root README, and this
+  progress log.
+
+### How verified
+
+- Reconciled the restored rehearsal: all 220 original content rows were
+  preserved, 21 navigation documents were added in both locales, structural
+  drift was zero, and 81 media rows plus 531 upload files were unchanged.
+- Passed focused workspace/i18n tests, generated types, TypeScript, all 30 JSON
+  schema parses, authenticated five-role RBAC, localized navigation UAT, and
+  two-locale content/component/relation/draft/publish/clone UAT.
+- Repeated seeds remained idempotent; temporary UAT records were removed.
+- Passed production CMS build, Docker Compose/Strapi image smoke, script syntax,
+  formatting, and whitespace validation.
+
+### Notes / caveats
+
+- Indonesian editorial translations were intentionally not fabricated; only
+  approved navigation labels were seeded.
+- Strapi treats UID and relation fields as locale-specific internally. Stable
+  route parity is enforced by middleware; relation behavior passed UAT.
+- Public applications still use their existing unprefixed English routes and
+  repository menus. GWR-CMS-6 requires explicit approval before frontend
+  locale routing, language controls, SEO, or dynamic navigation begins.
+
+## GWR-CMS-6 — Gateway i18n and dynamic navigation
+
+Status: completed 2026-08-11.
+
+### What was done
+
+- Added the Gateway locale resolver with unchanged English routes and visible
+  `/id` Indonesian routes, typed shell/form/error dictionaries, locale-aware
+  links, and equivalent-path desktop/mobile language switches.
+- Connected the Gateway header to site-scoped CMS Top Navigation with English
+  structural ownership, Indonesian labels, enabled/order/CTA behavior, safe URL
+  filtering, normalized active states, and strict repository fallback.
+- Passed locale to every Gateway Strapi adapter and implemented complete-record
+  English fallback metadata without cross-locale field merging.
+- Localized HTML language, accessibility labels, form source capture/responses,
+  canonical/hreflang/Open Graph metadata, structured data, and sitemap output.
+- Updated architecture, sitemap, page, UAT, deployment, multisite, phase, and
+  CMS sub-track documentation.
+
+### Files changed
+
+- `frontend-gateway/src/proxy.ts`, `src/lib/i18n/**`,
+  `src/lib/navigation/**`, layout/header/footer, locale link, forms/APIs,
+  metadata/sitemap/error routes, Gateway pages, and Strapi adapters/types.
+- `README.md`, `docs/03_sitemap_information_architecture.md`,
+  `docs/04_page_specifications.md`, `docs/06_technical_architecture.md`,
+  `docs/09_quality_uat_acceptance.md`, deployment/multisite/Gateway phase docs,
+  `docs/strapi-admin-menu/**`, and this progress log.
+
+### How verified
+
+- Passed Gateway TypeScript, 36 unit tests, ESLint, and production Next.js
+  build; passed the production Strapi admin build.
+- Browser UAT confirmed CMS Indonesian labels, `/id` URL persistence,
+  `<html lang="id">`, desktop/mobile active states, exact-path language switch,
+  localized canonical/hreflang, `id-ID` JSON-LD, and fallback `noindex`.
+- API smoke confirmed localized Indonesian validation responses; sitemap smoke
+  confirmed language alternates and exclusion of fallback-only Indonesian locs.
+
+### Notes / caveats
+
+- Existing Indonesian editorial translations were not fabricated. Routes with
+  no published Indonesian record render the complete English record and remain
+  `noindex` until editors publish a translation.
+- Motorsport and Horse Sport were intentionally not modified; GWR-CMS-7
+  requires explicit user approval.
+- Gateway GWR-6 remains paused while this CMS continuation track is active.
+
+## GWR-CMS-7 — Motorsport and Horse Sport rollout
+
+Status: completed 2026-08-11.
+
+### What was done
+
+- Added unprefixed English and visible `/id` routing, locale-aware links, typed
+  shell dictionaries, and brand-specific language dropdowns to Motorsport and
+  Horse Sport; upgraded the Gateway selector to the same clear interaction.
+- Connected both dedicated headers to site-scoped CMS Top Navigation with
+  localized labels, enabled/order/CTA behavior, normalized active states, safe
+  URLs, and repository outage fallback.
+- Localized Strapi reads, canonical/hreflang/Open Graph metadata, structured
+  data language, sitemap alternates, cross-site locale links, error controls,
+  and inquiry/newsletter locale provenance.
+- Separated the interactive Motorsport contact form from its server-rendered
+  CMS navigation shell and fixed the Gateway header collision found at 1280px.
+
+### Files changed
+
+- `frontend-gateway/src/components/i18n/language-selector.tsx` and Gateway
+  header spacing.
+- `frontend-motorsport/src/proxy.ts`, `src/lib/i18n/**`, CMS navigation/Strapi/
+  SEO adapters, shell/header/layout/sitemap, dynamic metadata, forms/APIs, and
+  localized error routes.
+- `frontend-horsesport/src/proxy.ts`, `src/lib/i18n/**`, CMS navigation/Strapi/
+  SEO adapters, shell/header/layout/sitemap, dynamic metadata, contact flow,
+  structured data, and localized error routes.
+- README, architecture/sitemap/page/UAT/deployment/multisite guidance, the
+  GWR-CMS spec package, and this progress log.
+
+### How verified
+
+- Passed all three frontend TypeScript and lint checks and all three production
+  builds; Gateway tests passed 36/36 and Horse Sport tests passed 10/10.
+- Browser UAT at 1280×720 and 390×844 confirmed CMS menu sources, locale
+  dropdown visibility, localized nav/links, `/id` persistence, cross-site
+  locale preservation, canonicals/hreflang, fallback `noindex`, and no
+  horizontal overflow.
+- Focused CMS workspace/RBAC tests passed 7/7; reduced-motion rules remain
+  present in all three design systems.
+
+### Notes / caveats
+
+- Indonesian editorial copy was not fabricated. Dedicated-site Indonesian
+  pages remain conservatively `noindex` until the GWR-CMS-8 translation and
+  staging matrix approves indexable records.
+- Horse Sport newsletter remains its existing local placeholder; contact and
+  Motorsport newsletter submissions capture `sourceLocale` in Strapi.
+- Authenticated CMS runtime scripts require non-committed `CMS_UAT_*`
+  credentials; their complete two-locale rerun is a GWR-CMS-8 staging gate.
+- Post-completion navigation freshness fix: Gateway, Motorsport, and Horse Sport
+  Top Navigation fetches now use `revalidate: 0`. Published enable/disable
+  changes appear on the next page request instead of waiting for the previous
+  shared 60-second server cache; other CMS content caching is unchanged.
+- GWR-CMS-8 has not started and requires explicit approval.
+
+## GWR-CMS-MAIL-1 — Exchange Online email assessment
+
+Status: completed 2026-08-11. No mail provider or credential was configured.
+
+### What was done
+
+- Audited the current Strapi default sendmail state, CMS package/configuration,
+  and Gateway, Motorsport, and Horse Sport inquiry/newsletter submission paths.
+- Confirmed that Strapi's outbound Email feature plus the version-matched
+  Nodemailer provider supports SMTP/STARTTLS/OAuth2, so a second backend is not
+  required.
+- Selected app-only Exchange Online SMTP OAuth with a repository-owned Strapi
+  token provisioner and mailbox-scoped Exchange RBAC as the recommended design;
+  Microsoft Graph `Mail.Send` is the approved fallback if SMTP app access is
+  not authorized.
+- Rejected mailbox-password Basic authentication for production and separated
+  optional inbound mailbox processing from the outbound transactional scope.
+- Defined Microsoft 365 prerequisites, secrets, sender/recipient decisions,
+  durable notification delivery, security gates, effort, and approval-gated
+  GWR-CMS-MAIL-2 through GWR-CMS-MAIL-4 phases.
+
+### Files changed
+
+- `docs/strapi-admin-menu/11_gwr_cms_mail_1_exchange_online_assessment.md`
+- `docs/strapi-admin-menu/README.md`
+- `docs/06_technical_architecture.md`
+- `docs/14_ubuntu_single_vm_production_deployment.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Compared the installed Strapi 5.49 configuration and package state with the
+  current official Strapi Email/Nodemailer documentation.
+- Checked current Microsoft documentation for OAuth SMTP, SMTP App RBAC,
+  mailbox SMTP AUTH, Basic authentication retirement, and Exchange endpoint/
+  encryption settings.
+- Confirmed the supplied outbound host/port/STARTTLS values and identified that
+  POP port 995 uses implicit SSL/TLS rather than STARTTLS.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- Microsoft tenant IDs, application credentials, role assignments, approved
+  senders, and recipients have not been provided or configured.
+- POP is unnecessary for current website/CMS workflows. Incoming processing
+  would be a separately approved Graph webhook/subscription phase.
+- GWR-CMS-MAIL-2 was subsequently completed. Credentialed staging verification
+  still requires Microsoft 365 administrator coordination. Existing
+  GWR-CMS-MAIL-3/4, GWR-CMS-8, and Gateway GWR-6 remain paused.
+
+## GWR-CMS-MAIL-2 — OAuth transport foundation
+
+Status: completed 2026-08-11. The transport is implemented, secure by default,
+and disabled until credentialed staging verification.
+
+### What was done
+
+- Added the Strapi 5.49-matched Nodemailer email provider and an app-only
+  Microsoft Entra token provisioner with expiry-aware in-memory caching,
+  renewal, and in-flight request deduplication.
+- Configured Exchange Online SMTP XOAUTH2 on the fixed
+  `smtp.office365.com:587` endpoint with mandatory STARTTLS, TLS 1.2 minimum,
+  certificate validation, restricted sender identity, and no Basic/password
+  authentication path.
+- Added disabled-by-default, fail-closed environment configuration, safe error
+  redaction, and a no-delivery SMTP verification command.
+- Added automated token, renewal, unauthorized-sender, redaction, TLS, OAuth,
+  disabled-default, and insecure-override tests.
+- Updated Compose, example environments, local/Ubuntu deployment, credential
+  rotation, rollback, and operator documentation.
+
+### Files changed
+
+- `cms/package.json`
+- `cms/pnpm-lock.yaml`
+- `cms/config/plugins.ts`
+- `cms/src/email/microsoft-smtp-config.ts`
+- `cms/src/email/microsoft-smtp-oauth.test.ts`
+- `cms/src/email/verify-microsoft-mail.ts`
+- `.env.example`
+- `cms/.env.example`
+- `docker-compose.yml`
+- `README.md`
+- `docs/06_technical_architecture.md`
+- `docs/10_deployment_handover_maintenance.md`
+- `docs/13_local_docker_deployment.md`
+- `docs/14_ubuntu_single_vm_production_deployment.md`
+- `docs/strapi-admin-menu/11_gwr_cms_mail_1_exchange_online_assessment.md`
+- `docs/strapi-admin-menu/12_gwr_cms_mail_2_oauth_transport_spec.md`
+- `docs/strapi-admin-menu/README.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- `pnpm --dir cms test:mail` passed: 6 tests.
+- Existing CMS workspace RBAC regression suite passed: 9 tests.
+- `pnpm --dir cms exec tsc --noEmit` passed.
+- `pnpm --dir cms build` passed, including the Strapi admin panel.
+- `docker compose --profile apps config` passed and resolves mail disabled by
+  default with the complete environment contract.
+- A local TLS preflight to `smtp.office365.com:587` negotiated TLS 1.2 and
+  verified the Microsoft certificate.
+- `pnpm --dir cms mail:verify` refused to run while `MAIL_ENABLED=false`, as
+  required; no message was sent.
+
+### Notes / caveats
+
+- Microsoft Tenant ID, Client ID, client credential, Exchange service
+  principal/RBAC scope, and mailbox SMTP authorization have not been supplied,
+  so credentialed OAuth/SMTP verification is still a staging operator gate.
+- This phase does not connect contact/rider/newsletter records to email.
+  Durable notification state, recipient allowlists, templates, and retries are
+  reserved for GWR-CMS-MAIL-3.
+- Controlled delivery, token revocation/rotation, SPF/DKIM/DMARC, Outlook inbox,
+  monitoring, and operational sign-off remain GWR-CMS-MAIL-4.
+- GWR-CMS-MAIL-3 and the repository-side GWR-CMS-MAIL-4 work were subsequently
+  executed. Credentialed MAIL-4 staging evidence awaits Microsoft 365
+  administrator provisioning. GWR-CMS-8 and Gateway GWR-6 remain approval-gated.
+
+## GWR-CMS-MAIL-3 — Transactional notification workflow
+
+Status: completed 2026-08-11. Notification delivery remains disabled by
+default pending MAIL-4 credentialed staging approval.
+
+### What was done
+
+- Standardized `sourceSite` persistence across Gateway, Motorsport, and Horse
+  Sport inquiries and added the two Horse Sport inquiry categories missing from
+  the shared CMS enumeration.
+- Added private durable notification state to each inquiry. New records become
+  pending only when both transport and notification toggles are enabled;
+  otherwise they remain disabled and cannot become a surprise backlog.
+- Added a single-VM Strapi cron worker with processing recovery, fixed per-site
+  recipient allowlists, localized English/Indonesian text and HTML templates,
+  deterministic message IDs, bounded batches, safe error classifications, and
+  five-attempt exponential retry by default.
+- Enforced server-controlled From/To/template routing, validated Reply-To,
+  CR/LF rejection, HTML escaping, configuration fail-closed behavior, and
+  provider-error redaction.
+- Kept newsletter campaigns and unapproved visitor receipts out of scope.
+
+### Files changed
+
+- `cms/src/api/inquiry-submission/content-types/inquiry-submission/schema.json`
+- `cms/src/api/inquiry-submission/content-types/inquiry-submission/lifecycles.ts`
+- `cms/src/email/inquiry-notifications.ts`
+- `cms/src/email/inquiry-notification-worker.ts`
+- `cms/src/email/inquiry-notifications.test.ts`
+- `cms/config/server.ts`
+- `cms/src/index.ts`
+- `frontend-gateway/src/lib/strapi/forms.ts`
+- `frontend-motorsport/src/app/api/contact/route.ts`
+- `.env.example`, `cms/.env.example`, and `docker-compose.yml`
+- `cms/types/generated/contentTypes.d.ts`
+- `docs/strapi-admin-menu/13_gwr_cms_mail_3_transactional_notifications_spec.md`
+- Related architecture, CMS model, QA, deployment, README, and phase docs.
+
+### How verified
+
+- Mail suite passed 18 tests, including routing, bilingual escaping, success,
+  retry, attempt exhaustion, disabled mode, configuration gates, and injection.
+- Existing CMS workspace RBAC regression suite passed 9 tests.
+- CMS typecheck and production/admin build passed.
+- Gateway, Motorsport, and Horse Sport typechecks and production builds passed.
+- Strapi generated content types successfully; local PostgreSQL schema contains
+  `source_site` and all six notification audit columns.
+- Compose resolves the worker disabled with blank allowlists by default.
+
+### Notes / caveats
+
+- Delivery is at-least-once. A rare SMTP-success/database-update-failure can
+  redeliver; the stable message ID helps downstream duplicate recognition.
+- The initial production topology is one CMS worker. A future multi-instance
+  deployment needs database-level conditional claiming/advisory locking.
+- No real message was sent because Microsoft tenant credentials and recipient
+  approvals have not been supplied.
+
+## GWR-CMS-MAIL-4 — Mail staging UAT and handover
+
+Status: repository implementation completed 2026-08-11; credentialed staging
+UAT and production launch sign-off are awaiting Sarga IT.
+
+### What was done
+
+- Added a controlled staging-only delivery command that requires an exact
+  confirmation phrase, rejects production, and permits only a recipient already
+  present in a server-side site allowlist.
+- Added tests for environment gating, arbitrary-recipient rejection, and masked
+  operator output.
+- Added an end-to-end six site/locale UAT matrix, retry/recovery test,
+  credential-rotation procedure, SPF/DKIM/DMARC and Outlook checks, read-only
+  audit queries, monitoring thresholds, incident rollback, and launch gates.
+- Updated the Ubuntu single-VM and group deployment handover with all worker,
+  recipient, schedule, controlled-send, and production-disable requirements.
+
+### Files changed
+
+- `cms/src/email/run-mail-uat.ts`
+- `cms/src/email/mail-uat.test.ts`
+- `cms/src/email/inquiry-notifications.ts`
+- `cms/package.json`
+- `docs/strapi-admin-menu/14_gwr_cms_mail_4_staging_uat_handover.md`
+- `docs/10_deployment_handover_maintenance.md`
+- `docs/14_ubuntu_single_vm_production_deployment.md`
+- `docs/09_quality_uat_acceptance.md`
+- `README.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- The controlled sender refused its default environment because it was not
+  explicitly marked staging.
+- With the staging confirmation and an allowlisted dummy recipient, it refused
+  again because the Exchange transport was disabled/uncredentialed; no message
+  was sent.
+- The complete 18-test mail suite, CMS build, three frontend builds, Compose
+  validation, and repository whitespace validation passed.
+- MAIL-2 TLS preflight previously negotiated TLS 1.2 and verified Microsoft's
+  certificate on port 587.
+
+### Notes / caveats
+
+- Tenant ID, Client ID, client credential, Exchange service principal/RBAC,
+  mailbox authorization, and approved real recipients are external prerequisites.
+- Therefore SMTP acceptance, Outlook receipt, retry against a real outage,
+  credential rotation, SPF/DKIM/DMARC alignment, and production approval remain
+  open launch gates. Production mail must stay disabled.
+- No work started on GWR-CMS-8 or the next Gateway phase; both still require the
+  user's explicit confirmation.
+
+## GWR-CMS-MAIL-4.1 — Temporary Basic SMTP launch fallback
+
+Status: completed 2026-08-11. The compatibility path is implemented but stays
+disabled until an eligible Microsoft 365 tenant passes staging verification.
+
+### What was done
+
+- Added explicit `oauth`/`basic` transport selection while keeping OAuth as the
+  default and long-term production target.
+- Added a guarded Exchange password path for the urgent 2026-08-14 launch. It
+  requires the exact risk acknowledgement, a runtime-only password, and a
+  future ISO-8601 expiry no later than 2026-12-15.
+- Enforced the expiry at CMS configuration time and before each notification
+  batch/send so a long-running inquiry worker fails closed after the deadline.
+- Kept the fixed Exchange endpoint, mandatory STARTTLS/TLS 1.2+, sender
+  restriction, recipient allowlists, disabled notification default, and safe
+  error handling from the OAuth workflow.
+- Added password redaction, protected-EnvironmentFile verification guidance,
+  Microsoft tenant/mailbox checks, immediate rollback, and mandatory OAuth
+  cutover steps.
+
+### Files changed
+
+- `cms/src/email/microsoft-smtp-config.ts`
+- `cms/src/email/inquiry-notification-worker.ts`
+- `cms/src/email/verify-microsoft-mail.ts`
+- `cms/src/email/microsoft-smtp-oauth.test.ts`
+- `.env.example`, `cms/.env.example`, and `docker-compose.yml`
+- `docs/strapi-admin-menu/15_gwr_cms_mail_4_1_temporary_basic_auth_fallback.md`
+- Related README, architecture, QA, local/production deployment, mail-phase,
+  and handover documents.
+
+### How verified
+
+- Mail suite passed 22 tests, including Basic-mode selection, unchanged TLS,
+  missing acknowledgement/password/expiry failures, invalid/expired/beyond-
+  cutoff expiry failures, OAuth-default behavior, and password redaction.
+- CMS TypeScript compilation passed.
+- Final CMS build, Compose resolution, RBAC regression, and whitespace/secret
+  checks were rerun for this phase.
+
+### Notes / caveats
+
+- Password authentication works only if Microsoft 365 permits Authenticated
+  SMTP and Basic SMTP for this tenant and mailbox; Security Defaults,
+  Conditional Access, or an authentication policy may still block it.
+- No real mailbox password is stored in the repository and no credentialed
+  message was sent. Staging `mail:verify`, controlled delivery, Outlook receipt,
+  SPF/DKIM/DMARC, and business sign-off remain external MAIL-4 launch gates.
+- If authentication fails, the safe launch mode is persisted CMS inquiries with
+  mail notifications disabled. Do not weaken tenant-wide controls merely to
+  enable the fallback.
+- At MAIL-4.1 completion, GWR-CMS-8 and Gateway GWR-6 remained
+  approval-gated and had not started.
+
+## GWR-CMS-8 — i18n migration, UAT, and handover
+
+Status: repository implementation and isolated local rehearsal completed
+2026-08-11. Staging promotion, translation-owner sign-off, and production
+launch approval remain external gates.
+
+### What was done
+
+- Added repeatable bilingual completeness reporting with per-record site owner,
+  English/Indonesian publish state, and a stakeholder sign-off table.
+- Added exact source/target inventory comparison that fails on locale,
+  content-type, row/document, draft/published, per-locale, Media Library, or
+  uploads drift.
+- Extended the rehearsal backup to pair its PostgreSQL dump with an uploads
+  archive and SHA-256 manifest.
+- Restored the current CMS into the isolated
+  `sarga_strapi_i18n_rehearsal` database, booted Strapi only against that
+  target, and ran all three authenticated UAT harnesses with five disposable
+  roles.
+- Ran real-browser English/Indonesian desktop/mobile checks across Gateway,
+  Motorsport, and Horse Sport, including navigation, canonical/hreflang,
+  fallback `noindex`, overflow, cross-site links, sitemap, and robots.
+- Fixed Gateway and Horse Sport homepage cross-site links that lost `/id`, and
+  corrected the Indonesian home alternate in all three sitemaps.
+- Updated editor, content promotion, Ubuntu VM, backup/rollback, checklist, and
+  phase handover documentation.
+
+### Files changed
+
+- `cms/scripts/i18n-completeness-report.mjs`
+- `cms/scripts/compare-i18n-inventories.mjs`
+- `cms/scripts/prepare-i18n-rehearsal.sh`
+- `cms/package.json`
+- `frontend-gateway/src/lib/i18n/config.ts`
+- `frontend-gateway/src/lib/i18n/config.test.ts`
+- `frontend-gateway/src/components/i18n/locale-link.tsx`
+- `frontend-horsesport/src/app/page.tsx`
+- `frontend-motorsport/src/lib/i18n/config.ts`
+- `frontend-horsesport/src/lib/i18n/config.ts`
+- `docs/strapi-admin-menu/16_gwr_cms_8_migration_uat_handover.md`
+- `docs/strapi-admin-menu/17_gwr_cms_8_bilingual_content_completeness.md`
+- Related README, QA, deployment, promotion, editor, checklist, and phase docs.
+
+### How verified
+
+- Isolated source/target reconciliation passed exactly: 21 CMS content types,
+  304 API content rows, 84 media records, 546 upload files, and 222,600,452
+  upload bytes.
+- Five-role workspace RBAC, i18n navigation, and localized dynamic-zone/
+  component/clone/draft/publish/public-query UAT passed; disposable content was
+  cleaned up.
+- Completeness report found 96 localized documents: 96 English published, 21
+  Indonesian published Top Navigation documents, and 75 requiring Indonesian
+  editorial work.
+- Playwright at 1280×720 and 390×844 passed localized navigation, language
+  controls, canonical/hreflang, fallback `noindex`, cross-site `/id`, and no
+  horizontal overflow for all three sites.
+- All three sitemap/robots endpoints passed; sitemap home alternates now use
+  `/` for English and `/id` for Indonesian.
+- CMS mail/access tests, TypeScript, and production build passed. Gateway and
+  Horse Sport lint/type/tests/production builds passed. Motorsport lint and
+  typecheck passed; its GWR-CMS-7 production build remains the latest build
+  evidence because the user-owned development server was left undisturbed.
+- Docker Compose configuration and whitespace validation passed after the
+  fixes.
+
+### Notes / caveats
+
+- The 75 missing Indonesian localizations were not fabricated. Site owners must
+  translate/review/publish them; fallback pages remain `noindex, follow`.
+- No staging/production VM or protected staging admin credentials were
+  available. Real encrypted archive import, HTTPS-domain five-role/browser UAT,
+  media URL checks, rollback drill, and stakeholder launch sign-off remain
+  mandatory.
+- Local Playwright console noise was limited to development HMR WebSocket
+  retries and is not a production-build error.
+- Gateway GWR-6 was not started and still requires explicit approval.
+
+## GWR-CMS-9 — multisite CMS hero video
+
+Status: repository implementation completed 2026-08-11. Approved production
+clips and staging/public-domain media verification remain release gates.
+
+### What was done
+
+- Added a reusable Strapi Hero Video component with an enabled switch, primary
+  and alternate video sources, and desktop/mobile posters.
+- Enabled one CMS-managed hero video on Gateway Homepage and Horse Sport home
+  Site Page records, plus one video per Motorsport hero slide. Motorsport is
+  capped at three ordered slides and mounts video only for the active slide.
+- Added typed media mapping that accepts MP4/WebM by MIME type, extension, or
+  URL and safely retains the existing image for missing, disabled, unsupported,
+  or failed media.
+- Added muted inline looping playback, metadata-only preload, visible
+  pause/play controls, and poster-only reduced-motion behavior across all three
+  frontends.
+- Seeded the missing scoped Horse Sport home Site Page idempotently and extended
+  managed-role nested-field coverage without exposing `siteScope`.
+- Documented the editor workflow, media sizing, uploads/database promotion,
+  Ubuntu/Nginx checks, backup, performance, and staging UAT requirements.
+
+### Files changed
+
+- `cms/src/components/shared/hero-video.json`
+- `cms/src/components/motorsport/hero-slide.json`
+- `cms/src/api/homepage/content-types/homepage/schema.json`
+- `cms/src/api/site-page/content-types/site-page/schema.json`
+- `cms/src/access-control/sarga-workspaces.test.ts`
+- `cms/src/seed.ts`
+- `cms/types/generated/components.d.ts`
+- `cms/types/generated/contentTypes.d.ts`
+- `frontend-gateway/src/components/ui/hero-video.tsx`
+- `frontend-gateway/src/components/sections/hero.tsx`
+- `frontend-gateway/src/lib/strapi/{types,client,homepage}.ts`
+- `frontend-motorsport/src/components/ui/hero-video.tsx`
+- `frontend-motorsport/src/components/sections/motorsport-hero.tsx`
+- `frontend-motorsport/src/lib/{homepage-data,strapi/client}.ts`
+- `frontend-motorsport/src/types/design-system.ts`
+- `frontend-horsesport/src/components/ui/hero-video.tsx`
+- `frontend-horsesport/src/components/sections/hero-race-section.tsx`
+- `frontend-horsesport/src/app/page.tsx`
+- `frontend-horsesport/src/lib/{homepage-data,strapi/client}.ts`
+- `docs/strapi-admin-menu/18_gwr_cms_9_multisite_hero_video_spec.md`
+- Related content-model, architecture, QA, deployment, editor, checklist,
+  README, and phase documents.
+
+### How verified
+
+- CMS TypeScript, production admin build, generated types, and 10 focused
+  managed-field/RBAC tests passed.
+- Gateway lint, TypeScript, 37 tests, and production build passed.
+- Horse Sport lint, TypeScript, 10 tests, and production build passed.
+- Motorsport lint and TypeScript passed; a production build passed in an APFS
+  clone so the user-owned port 3001 development server remained uninterrupted.
+- Playwright proved dual-source WebM/MP4 playback, `preload="metadata"`,
+  pause/play state, poster-only reduced motion, mobile responsiveness, image
+  fallback on unconfigured sites, exactly three Motorsport slides, and no
+  horizontal overflow.
+- Nested Strapi REST population, Docker Compose resolution, and whitespace
+  checks passed.
+
+### Notes / caveats
+
+- No three Motorsport clips were fabricated. The existing three images remain
+  live until editors upload approved, distinct video sources and posters.
+- The repository's existing Horse Sport loop provides local playback evidence;
+  CMS media selection overrides it, while `enabled: false` deliberately forces
+  the static poster.
+- Media Library storage is shared and non-confidential. Use the documented site
+  folders; row-level media isolation is unchanged.
+- The 100 MB upload setting is a technical ceiling, not a delivery target.
+  Editors should aim for short 5-8 MB sources and verify staging HTTPS byte
+  ranges, MIME types, VM disk capacity, and egress before launch.
+- GWR-CMS-8 external staging gates remain open. Gateway GWR-6 was not started
+  and still requires explicit approval.
+
+## GWR-CMS-10 — Motorsport homepage managed sections
+
+Status: repository implementation completed 2026-08-11. Staging content
+promotion and HTTPS role/browser checks remain part of the existing external
+launch gate.
+
+### What was done
+
+- Added localized Race Control and World of Motorsport components to the
+  scoped Motorsport Home Site Page.
+- Added an optional featured Event relation for Race Control. The frontend
+  rejects another site's relation and falls back to the first tickets-open or
+  earliest Motorsport/shared Event.
+- Made both section enabled states, headings, descriptions, labels, region,
+  CTA, and up to six ordered discipline cards editable by Motorsport Admin.
+- Made every discipline title, short label, image, alt text, destination,
+  approved accent, enabled state, and sort order manageable while preserving
+  the approved visual rail and local fallback assets.
+- Added idempotent development backfill that fills only missing new fields and
+  leaves existing hero and editor-managed content untouched.
+- Extended recursive nested-component RBAC evidence, generated Strapi types,
+  the content-model mirror, editor guide, QA criteria, and phase documentation.
+
+### Files changed
+
+- `cms/src/components/motorsport/home-information-band.json`
+- `cms/src/components/motorsport/discipline-card.json`
+- `cms/src/components/motorsport/world-of-motorsport.json`
+- `cms/src/api/site-page/content-types/site-page/schema.json`
+- `cms/src/access-control/sarga-workspaces.test.ts`
+- `cms/src/seed.ts`
+- `cms/types/generated/{components,contentTypes}.d.ts`
+- `frontend-motorsport/src/lib/homepage-data.ts`
+- `frontend-motorsport/src/app/page.tsx`
+- `frontend-motorsport/src/components/sections/world-of-motorsport.tsx`
+- `strapi/content-types.json`
+- `docs/strapi-admin-menu/19_gwr_cms_10_motorsport_home_sections_spec.md`
+- Related content-model, Motorsport CMS, QA, editor, checklist, README, and
+  phase documents.
+
+### How verified
+
+- Strapi type generation, CMS TypeScript, and nested managed-field/RBAC tests
+  passed.
+- Local public API returned the current featured Event, complete Race Control
+  component, and six enabled ordered discipline records.
+- Motorsport lint, TypeScript, and isolated production build passed.
+- Playwright at desktop and 390×844 rendered the managed copy and six cards
+  with zero horizontal document overflow and no console warnings/errors.
+- Docker Compose and whitespace validation passed.
+
+### Notes / caveats
+
+- Existing local discipline images remain runtime fallback until editors attach
+  Media Library images to the seeded cards. Images can now be replaced one card
+  at a time without code changes.
+- An empty enabled discipline list uses the approved six-card fallback. Use the
+  section's enabled switch when the intended public state is hidden.
+- Homepage Strapi requests revalidate for up to 60 seconds after publication;
+  a browser cache clear is not required.
+- GWR-CMS-8 external staging gates remain open. Gateway GWR-6 was not started.
+
+## GWR-CMS-11 — Motorsport media selection and News refinement
+
+Status: repository implementation completed 2026-08-11. Credentialed staging
+role/browser evidence remains part of the existing GWR-CMS-8 launch gate.
+
+### What was done
+
+- Confirmed Motorsport Admin already has the least-privilege Media Library
+  read/create actions required to browse and select existing files.
+- Added inline guidance to the Content Manager media picker and Motorsport
+  workspace explaining that the asset-card checkbox selects a file while the
+  preview opens Details only.
+- Extended the authenticated RBAC harness to verify upload read/create actions
+  and a successful existing-asset list response for every managed role.
+- Kept Media Library update/delete authority out of dedicated roles because
+  Strapi 5.49 combines those operations across the shared upload pool.
+- Replaced cream-dominated News article surfaces with warm brand reflected-light
+  gradients, warm-white copy, dotted texture, and spectrum separators.
+- Added a responsive, non-interactive slanted race-flag field to the Homepage
+  Latest News section's empty lower-left area.
+
+### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `cms/scripts/validate-workspace-rbac.mjs`
+- `frontend-motorsport/src/app/page.tsx`
+- `frontend-motorsport/src/app/news/[slug]/page.tsx`
+- `frontend-motorsport/src/app/globals.css`
+- `docs/strapi-admin-menu/20_gwr_cms_11_motorsport_media_news_refinement.md`
+- `docs/strapi-admin-menu/{README,editor-handover,uat-results}.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Motorsport production build passed all Next.js compilation, TypeScript, page
+  generation, and route-output stages.
+- Strapi TypeScript compilation and production admin-panel build passed.
+- The local PostgreSQL role record contains Media Library read/create,
+  configure-view, download, and copy-link actions and no update/delete action.
+- Browser review confirmed the Latest News decoration and warm News detail
+  introduction, story, metadata, and related-story contrast.
+- Formatting and whitespace checks passed for the implementation files.
+
+### Notes / caveats
+
+- Selecting an existing asset still follows Strapi's native checkbox workflow;
+  the implementation removes the ambiguity without patching third-party code.
+- Media Library files remain shared and non-confidential. Super Admin owns
+  metadata updates, replacement, movement, and deletion.
+- The full authenticated API matrix requires disposable staging credentials;
+  the harness is ready and now includes existing-media browse coverage.

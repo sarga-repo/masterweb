@@ -64,6 +64,9 @@ sarga-website/
 - Initial staging is populated from an encrypted full Strapi archive created
   from the reviewed local CMS snapshot. The archive includes content,
   relations, configuration, schemas, and uploaded media.
+- Hero MP4/WebM files and their poster images are part of that same uploads
+  archive. Never promote a database-only snapshot: its media IDs would point to
+  missing binaries on the target server.
 - Initial production is populated from the frozen, stakeholder-approved
   staging snapshot, never directly from a developer laptop.
 - Every import is a full replacement and requires a target PostgreSQL/uploads
@@ -74,34 +77,69 @@ sarga-website/
 - After go-live, production is authoritative; never overwrite it with an older
   full snapshot containing stale content or missing form submissions.
 
+### Hero-video operations
+
+- Upload an approved short MP4 or WebM in the site's Media Library folder and
+  provide the alternate codec when available. Add a compressed poster before
+  enabling the component.
+- Keep each source below the 100 MB proxy/Strapi technical limit; the editorial
+  target is approximately 5-8 MB per source so the single VM is not used as an
+  unbounded streaming origin.
+- After deployment, verify an HTTPS `GET` and byte-range request for every hero
+  source, then test autoplay, pause/play, poster fallback, and reduced motion on
+  the public domain.
+- Monitor `/srv/sarga-website/cms/public/uploads` capacity and Nginx bandwidth.
+  A CDN/object-storage migration needs separate approval and must preserve URLs
+  or include a reviewed media migration.
+
 ## Environment variable inventory
 
 ### Root `.env` (Docker Compose + shared)
 
-| Variable                          | Purpose                       | Local default           | Production                    |
-| --------------------------------- | ----------------------------- | ----------------------- | ----------------------------- |
-| `POSTGRES_DB`                     | PostgreSQL database name      | `sarga_strapi`          | Managed DB name               |
-| `POSTGRES_USER`                   | PostgreSQL user               | `sarga`                 | Managed DB user               |
-| `POSTGRES_PASSWORD`               | PostgreSQL password           | `sarga_local_password`  | Strong secret                 |
-| `SEED_DEMO_CONTENT`               | Seed demo data on Strapi boot | `true`                  | `false`                       |
-| `STRAPI_APP_KEYS`                 | Strapi encryption keys        | `change_me_*`           | Unique secrets                |
-| `STRAPI_API_TOKEN_SALT`           | API token salt                | `change_me_*`           | Unique secret                 |
-| `STRAPI_ADMIN_JWT_SECRET`         | Admin JWT secret              | `change_me_*`           | Unique secret                 |
-| `STRAPI_TRANSFER_TOKEN_SALT`      | Transfer token salt           | `change_me_*`           | Unique secret                 |
-| `STRAPI_JWT_SECRET`               | JWT secret                    | `change_me_*`           | Unique secret                 |
-| `STRAPI_ENCRYPTION_KEY`           | Encryption key                | `change_me_*`           | Unique secret                 |
-| `NEXT_PUBLIC_SITE_URL`            | Gateway public URL            | `http://localhost:3000` | `https://sarga.co`            |
-| `NEXT_PUBLIC_MOTORSPORT_SITE_URL` | Motorsport public URL         | `http://localhost:3001` | `https://motorsport.sarga.co` |
-| `NEXT_PUBLIC_HORSESPORT_SITE_URL` | Horse Sport public URL        | `http://localhost:3002` | `https://horsesport.sarga.co` |
-| `NEXT_PUBLIC_GATEWAY_SITE_URL`    | Gateway URL (for cross-links) | `http://localhost:3000` | `https://sarga.co`            |
-| `NEXT_PUBLIC_STRAPI_API_URL`      | Browser-reachable Strapi URL  | `http://localhost:1337` | `https://cms.sarga.co`        |
-| `STRAPI_API_URL`                  | Server-side Strapi URL        | `http://localhost:1337` | `https://cms.sarga.co`        |
-| `STRAPI_API_TOKEN`                | Read-only frontend token      | (blank)                 | Least-privilege token         |
-| `FORM_SUBMISSION_MODE`            | Form backend mode             | `placeholder`           | `strapi`                      |
-| `RECAPTCHA_SITE_KEY`              | reCAPTCHA client key          | (blank)                 | If approved                   |
-| `RECAPTCHA_SECRET_KEY`            | reCAPTCHA server key          | (blank)                 | If approved                   |
-| `TICKETING_DEEP_LINK_SCHEMES`     | Allowed app schemes           | (blank)                 | If needed                     |
-| `TICKETING_EMBED_ALLOWLIST`       | Allowed iframe hosts          | (blank)                 | If needed                     |
+| Variable                          | Purpose                        | Local default           | Production                                   |
+| --------------------------------- | ------------------------------ | ----------------------- | -------------------------------------------- |
+| `POSTGRES_DB`                     | PostgreSQL database name       | `sarga_strapi`          | Managed DB name                              |
+| `POSTGRES_USER`                   | PostgreSQL user                | `sarga`                 | Managed DB user                              |
+| `POSTGRES_PASSWORD`               | PostgreSQL password            | `sarga_local_password`  | Strong secret                                |
+| `SEED_DEMO_CONTENT`               | Seed demo data on Strapi boot  | `true`                  | `false`                                      |
+| `STRAPI_APP_KEYS`                 | Strapi encryption keys         | `change_me_*`           | Unique secrets                               |
+| `STRAPI_API_TOKEN_SALT`           | API token salt                 | `change_me_*`           | Unique secret                                |
+| `STRAPI_ADMIN_JWT_SECRET`         | Admin JWT secret               | `change_me_*`           | Unique secret                                |
+| `STRAPI_TRANSFER_TOKEN_SALT`      | Transfer token salt            | `change_me_*`           | Unique secret                                |
+| `STRAPI_JWT_SECRET`               | JWT secret                     | `change_me_*`           | Unique secret                                |
+| `STRAPI_ENCRYPTION_KEY`           | Encryption key                 | `change_me_*`           | Unique secret                                |
+| `NEXT_PUBLIC_SITE_URL`            | Gateway public URL             | `http://localhost:3000` | `https://sarga.co`                           |
+| `NEXT_PUBLIC_MOTORSPORT_SITE_URL` | Motorsport public URL          | `http://localhost:3001` | `https://motorsport.sarga.co`                |
+| `NEXT_PUBLIC_HORSESPORT_SITE_URL` | Horse Sport public URL         | `http://localhost:3002` | `https://horsesport.sarga.co`                |
+| `NEXT_PUBLIC_GATEWAY_SITE_URL`    | Gateway URL (for cross-links)  | `http://localhost:3000` | `https://sarga.co`                           |
+| `NEXT_PUBLIC_STRAPI_API_URL`      | Browser-reachable Strapi URL   | `http://localhost:1337` | `https://cms.sarga.co`                       |
+| `STRAPI_API_URL`                  | Server-side Strapi URL         | `http://localhost:1337` | `https://cms.sarga.co`                       |
+| `STRAPI_API_TOKEN`                | Read-only frontend token       | (blank)                 | Least-privilege token                        |
+| `FORM_SUBMISSION_MODE`            | Form backend mode              | `placeholder`           | `strapi`                                     |
+| `RECAPTCHA_SITE_KEY`              | reCAPTCHA client key           | (blank)                 | If approved                                  |
+| `RECAPTCHA_SECRET_KEY`            | reCAPTCHA server key           | (blank)                 | If approved                                  |
+| `TICKETING_DEEP_LINK_SCHEMES`     | Allowed app schemes            | (blank)                 | If needed                                    |
+| `TICKETING_EMBED_ALLOWLIST`       | Allowed iframe hosts           | (blank)                 | If needed                                    |
+| `MAIL_ENABLED`                    | Enable Exchange SMTP           | `false`                 | Enable only after staging UAT                |
+| `MAIL_AUTH_MODE`                  | Exchange authentication mode   | `oauth`                 | `oauth`; temporary `basic` only per MAIL-4.1 |
+| `MAIL_SMTP_USER`                  | Authorized sender mailbox      | (blank)                 | Approved Sarga mailbox                       |
+| `MAIL_SMTP_PASSWORD`              | Temporary Basic-mode secret    | (blank)                 | Protected runtime only; never for OAuth      |
+| `MAIL_FROM_ADDRESS`               | Server-controlled From         | (blank)                 | Must match SMTP user                         |
+| `MAIL_FROM_NAME`                  | Sender display name            | `Sarga`                 | Approved brand name                          |
+| `MAIL_DEFAULT_REPLY_TO`           | Default reply mailbox          | (blank)                 | Approved mailbox                             |
+| `MICROSOFT_TENANT_ID`             | Microsoft tenant               | (blank)                 | Secret-store runtime value                   |
+| `MICROSOFT_CLIENT_ID`             | Dedicated Entra application    | (blank)                 | Secret-store runtime value                   |
+| `MICROSOFT_CLIENT_SECRET`         | Entra application credential   | (blank)                 | Secret-store runtime value                   |
+| `MICROSOFT_SMTP_SCOPE`            | Exchange app-only OAuth scope  | Outlook `.default`      | Outlook `.default`                           |
+| `MAIL_BASIC_AUTH_ACKNOWLEDGED`    | Exact Basic risk acceptance    | (blank)                 | MAIL-4.1 only                                |
+| `MAIL_BASIC_AUTH_EXPIRES_AT`      | Basic-mode ISO expiry          | (blank)                 | Required; no later than 2026-12-15           |
+| `MAIL_NOTIFICATIONS_ENABLED`      | Inquiry notification worker    | `false`                 | After staging mail UAT                       |
+| `MAIL_RECIPIENT_GATEWAY`          | Gateway internal allowlist     | (blank)                 | Approved recipients only                     |
+| `MAIL_RECIPIENT_MOTORSPORT`       | Motorsport internal allowlist  | (blank)                 | Approved recipients only                     |
+| `MAIL_RECIPIENT_HORSESPORT`       | Horse Sport internal allowlist | (blank)                 | Approved recipients only                     |
+| `MAIL_MAX_ATTEMPTS`               | Bounded delivery attempts      | `5`                     | `5` unless reviewed                          |
+| `MAIL_WORKER_BATCH_SIZE`          | Records per cron batch         | `10`                    | Capacity reviewed                            |
+| `MAIL_WORKER_CRON`                | Notification cron schedule     | Every minute            | Every minute                                 |
 
 ### Gateway `frontend-gateway/.env.local`
 
@@ -147,23 +185,46 @@ sarga-website/
 
 ### CMS `cms/.env`
 
-| Variable              | Purpose               | Local default          |
-| --------------------- | --------------------- | ---------------------- |
-| `HOST`                | Bind address          | `0.0.0.0`              |
-| `PORT`                | Strapi port           | `1337`                 |
-| `DATABASE_HOST`       | PostgreSQL host       | `localhost`            |
-| `DATABASE_PORT`       | PostgreSQL port       | `5435`                 |
-| `DATABASE_NAME`       | Database name         | `sarga_strapi`         |
-| `DATABASE_USERNAME`   | Database user         | `sarga`                |
-| `DATABASE_PASSWORD`   | Database password     | `sarga_local_password` |
-| `DATABASE_SSL`        | SSL for DB connection | `false`                |
-| `APP_KEYS`            | Encryption keys       | `change_me_*`          |
-| `API_TOKEN_SALT`      | API token salt        | `change_me_*`          |
-| `ADMIN_JWT_SECRET`    | Admin JWT secret      | `change_me_*`          |
-| `TRANSFER_TOKEN_SALT` | Transfer token salt   | `change_me_*`          |
-| `JWT_SECRET`          | JWT secret            | `change_me_*`          |
-| `ENCRYPTION_KEY`      | Encryption key        | `change_me_*`          |
-| `SEED_DEMO_CONTENT`   | Seed demo data        | `true`                 |
+| Variable                       | Purpose                         | Local default          |
+| ------------------------------ | ------------------------------- | ---------------------- |
+| `HOST`                         | Bind address                    | `0.0.0.0`              |
+| `PORT`                         | Strapi port                     | `1337`                 |
+| `DATABASE_HOST`                | PostgreSQL host                 | `localhost`            |
+| `DATABASE_PORT`                | PostgreSQL port                 | `5435`                 |
+| `DATABASE_NAME`                | Database name                   | `sarga_strapi`         |
+| `DATABASE_USERNAME`            | Database user                   | `sarga`                |
+| `DATABASE_PASSWORD`            | Database password               | `sarga_local_password` |
+| `DATABASE_SSL`                 | SSL for DB connection           | `false`                |
+| `APP_KEYS`                     | Encryption keys                 | `change_me_*`          |
+| `API_TOKEN_SALT`               | API token salt                  | `change_me_*`          |
+| `ADMIN_JWT_SECRET`             | Admin JWT secret                | `change_me_*`          |
+| `TRANSFER_TOKEN_SALT`          | Transfer token salt             | `change_me_*`          |
+| `JWT_SECRET`                   | JWT secret                      | `change_me_*`          |
+| `ENCRYPTION_KEY`               | Encryption key                  | `change_me_*`          |
+| `SEED_DEMO_CONTENT`            | Seed demo data                  | `true`                 |
+| `MAIL_ENABLED`                 | Exchange transport toggle       | `false`                |
+| `MAIL_AUTH_MODE`               | Exchange auth mode              | `oauth`                |
+| `MAIL_SMTP_HOST`               | Exchange SMTP endpoint          | `smtp.office365.com`   |
+| `MAIL_SMTP_PORT`               | STARTTLS submission port        | `587`                  |
+| `MAIL_SMTP_REQUIRE_TLS`        | Refuse cleartext SMTP           | `true`                 |
+| `MAIL_SMTP_USER`               | Authorized sender               | (blank)                |
+| `MAIL_SMTP_PASSWORD`           | Temporary Basic secret          | (blank)                |
+| `MAIL_FROM_ADDRESS`            | Server-controlled From          | (blank)                |
+| `MAIL_FROM_NAME`               | Sender display name             | `Sarga`                |
+| `MAIL_DEFAULT_REPLY_TO`        | Default reply mailbox           | (blank)                |
+| `MICROSOFT_TENANT_ID`          | Microsoft tenant                | (blank)                |
+| `MICROSOFT_CLIENT_ID`          | Entra application               | (blank)                |
+| `MICROSOFT_CLIENT_SECRET`      | Entra client credential         | (blank)                |
+| `MICROSOFT_SMTP_SCOPE`         | Exchange OAuth scope            | Outlook `.default`     |
+| `MAIL_BASIC_AUTH_ACKNOWLEDGED` | Basic risk acknowledgement      | (blank)                |
+| `MAIL_BASIC_AUTH_EXPIRES_AT`   | Basic compatibility expiry      | (blank)                |
+| `MAIL_NOTIFICATIONS_ENABLED`   | Enable inquiry worker           | `false`                |
+| `MAIL_RECIPIENT_GATEWAY`       | Gateway recipient allowlist     | (blank)                |
+| `MAIL_RECIPIENT_MOTORSPORT`    | Motorsport recipient allowlist  | (blank)                |
+| `MAIL_RECIPIENT_HORSESPORT`    | Horse Sport recipient allowlist | (blank)                |
+| `MAIL_MAX_ATTEMPTS`            | Maximum delivery attempts       | `5`                    |
+| `MAIL_WORKER_BATCH_SIZE`       | Records per run                 | `10`                   |
+| `MAIL_WORKER_CRON`             | Cron schedule                   | Every minute           |
 
 ### PostgreSQL
 
@@ -915,6 +976,18 @@ After deploying all four services (Strapi + 3 frontends), verify:
 11. Test all cross-site links (gateway ↔ motorsport ↔ horse sport).
 12. Configure `TICKETING_EMBED_ALLOWLIST` / `TICKETING_DEEP_LINK_SCHEMES` only if
     partner embeds/deep links are used (empty = redirect-only).
+13. Keep `MAIL_ENABLED=false` until staging `pnpm --dir cms mail:verify`
+    passes. OAuth is the target: follow
+    `docs/strapi-admin-menu/12_gwr_cms_mail_2_oauth_transport_spec.md` for
+    mailbox-scoped Exchange application access, rotation, and rollback. For the
+    approved 2026-08-14 launch contingency only, the protected runtime may use
+    the expiring password mode in
+    `docs/strapi-admin-menu/15_gwr_cms_mail_4_1_temporary_basic_auth_fallback.md`.
+    Never commit, echo, or place that password in a frontend environment.
+14. Keep `MAIL_NOTIFICATIONS_ENABLED=false` until the controlled staging send,
+    per-site/locale inquiry routing, retry/recovery, credential rotation, and
+    SPF/DKIM/DMARC gates in
+    `docs/strapi-admin-menu/14_gwr_cms_mail_4_staging_uat_handover.md` are signed.
 
 ## CMS maintenance notes
 
@@ -932,6 +1005,10 @@ After deploying all four services (Strapi + 3 frontends), verify:
 - Managed role codes are `sarga-gateway-admin`, `sarga-motorsport-admin`,
   `sarga-horsesport-admin`, and `sarga-shared-admin`. Each sees one custom
   workspace and records matching only its assigned `siteScope`.
+- Managed site editors must not choose or change `siteScope`; the role-assigned
+  value is enforced by the server and is excluded from their writable field
+  permissions. Super Admin retains deliberate
+  scope control for shared/hidden and exceptional migration work.
 - Super Admin sees all four workspaces and remains the only supported cross-site
   administrator. Do not assign more than one managed site role to an account.
 - Roles and their managed permissions synchronize at every Strapi startup.
@@ -942,27 +1019,37 @@ After deploying all four services (Strapi + 3 frontends), verify:
 - The Media Library remains a shared asset pool. Managed site roles can
   view/upload/download/copy assets but do not receive the combined asset
   update/delete permission; use site-named folders.
+- Dedicated roles may see the single conditioned Site/Ecosystem Business
+  reference needed by relationship selectors. This is read-only and does not
+  grant cross-site content management.
+- After an access-control change or Strapi upgrade, create disposable staging
+  accounts and run the authenticated matrix documented in
+  `docs/strapi-admin-menu/uat-results.md`, then remove its accounts and content.
+  Production write tests require an approved maintenance window.
 
 ### Content types
 
-| Content type       | Scope field | Key fields                                                                      |
-| ------------------ | ----------- | ------------------------------------------------------------------------------- |
-| News Article       | `siteScope` | title, slug, excerpt, body, category, heroImage                                 |
-| Event              | `siteScope` | title, slug, date, venue, status, racingCategory, ticketCtas                    |
-| Ticket CTA         | `siteScope` | label, provider, ctaType (redirect/deepLink/embed), url, embedUrl, relatedEvent |
-| Inquiry Submission | -           | name, email, inquiryType, message, `sourceSite`, submittedAt, status            |
-| Partner            | `siteScope` | name, logo, website, partnershipType                                            |
-| Media Gallery      | `siteScope` | title, images                                                                   |
-| Ecosystem Business | `siteScope` | name, slug, description, logo, website                                          |
-| Site               | -           | name, slug, url (for cross-site configuration)                                  |
+| Content type       | Scope field | Key fields                                                                                  |
+| ------------------ | ----------- | ------------------------------------------------------------------------------------------- |
+| News Article       | `siteScope` | title, slug, excerpt, body, category, heroImage                                             |
+| Event              | `siteScope` | title, slug, date, venue, status, racingCategory, ticketCtas                                |
+| Ticket CTA         | `siteScope` | label, provider, ctaType (redirect/deepLink/embed), url, embedUrl, relatedEvent             |
+| Inquiry Submission | -           | name, email, inquiryType, message, `sourceSite`, locale, status, private notification state |
+| Partner            | `siteScope` | name, logo, website, partnershipType                                                        |
+| Media Gallery      | `siteScope` | title, images                                                                               |
+| Ecosystem Business | `siteScope` | name, slug, description, logo, website                                                      |
+| Site               | -           | name, slug, url (for cross-site configuration)                                              |
 
 ### Content sync rules
 
 - Content is authored **once** in the shared CMS.
 - No manual duplication between gateway, motorsport, and horse sport.
 - Site scope filters determine where content appears.
-- When adding new content, always set `siteScope` explicitly (and the business
-  relation for horse sport events/news).
+- Managed site editors create content from their dedicated workspace; the CMS
+  assigns `siteScope` from their role. Super Admin must set scope explicitly
+  when authoring shared/hidden content or performing reviewed migration work.
+  Continue setting the business relation for Horse Sport events/news where the
+  schema requires it.
 - Motorsport/Horse Sport events/news with `showOnGateway: true` appear as teasers
   on the gateway, deep-linking to the dedicated site when canonical.
 
@@ -1097,3 +1184,69 @@ Minimum handover requirement:
 - [x] Strapi uses PostgreSQL locally, not SQLite.
 - [x] All three frontends can reach Strapi from browser and server-side runtime.
 - [x] Seed script (`SEED_DEMO_CONTENT=true`) populates demo content automatically.
+
+## i18n/navigation migration controls (GWR-CMS-5)
+
+- Do not enable localization directly in production. Export an encrypted Strapi
+  archive, back up PostgreSQL/uploads, restore into staging, and reconcile
+  document/localization/media/relation counts first.
+- English remains the default locale; Indonesian is `id`. Locale configuration
+  and deletion are Super Admin operations.
+- Translation content is not generated automatically. Business/editorial owners
+  approve Indonesian localizations before publication.
+- Top Navigation URL, enabled state, order, and emphasis are structural; labels
+  are localized. Validate all three site menus at desktop/mobile widths.
+- Production rollout requires a maintenance window and tested rollback to the
+  pre-i18n database/uploads backup.
+- Rehearsal commands, inventory outputs, checksums, reconciliation results, and
+  local rollout evidence are in
+  `docs/strapi-admin-menu/10_gwr_cms_5_migration_rehearsal.md`. Staging and
+  production promotion evidence remains GWR-CMS-8 work.
+
+Before any staging or production start, run a PostgreSQL dump and archive
+`cms/public/uploads`, then restore them into a separate rehearsal database:
+
+```bash
+cd cms
+SOURCE_DATABASE_NAME=sarga_strapi \
+REHEARSAL_DATABASE_NAME=sarga_strapi_i18n_rehearsal \
+pnpm i18n:rehearsal:prepare
+pnpm i18n:inventory --output /secure/artifacts/pre-migration-inventory.json
+```
+
+Boot the rehearsal CMS against only the rehearsal database, run the three
+authenticated UAT commands, and compare the post-migration inventory before
+opening a maintenance window. Never point the rehearsal process at the source
+database. Rollback restores both the paired database dump and uploads archive.
+
+GWR-CMS-8 adds `i18n:completeness` and `i18n:compare`. Store the generated
+completeness report with the release evidence, assign every missing/draft
+Indonesian record to its site owner, and do not index fallback records. The
+source/target comparison must pass exactly for locale, document/row,
+draft/published, media, and uploads measures before staging or production is
+accepted. Local evidence and remaining staging gates are recorded in
+`docs/strapi-admin-menu/16_gwr_cms_8_migration_uat_handover.md`.
+
+### Multisite runtime checks after GWR-CMS-6/7
+
+After deploying all frontends, verify both route forms through Nginx. Do not add
+a separate `/id` location or strip the prefix at the proxy layer because each
+Next.js application owns that rewrite.
+
+```bash
+curl -fsSI https://sarga.co/about
+curl -fsSI https://sarga.co/id/about
+curl -fsS https://sarga.co/id/about | grep 'lang="id"'
+curl -fsS https://sarga.co/sitemap.xml | grep 'hreflang="id"'
+curl -fsSI https://motorsport.sarga.co/id/events
+curl -fsS https://motorsport.sarga.co/sitemap.xml | grep 'hreflang="id"'
+curl -fsSI https://horse.sarga.co/id/events
+curl -fsS https://horse.sarga.co/sitemap.xml | grep 'hreflang="id"'
+```
+
+Set each frontend's `NEXT_PUBLIC_SITE_URL` to its public origin for correct
+canonical and hreflang output. Strapi must expose published site-scoped Top
+Navigation records for both locales; if that API is unavailable or
+unconfigured, that frontend safely uses its repository menu. A configured menu
+with every item disabled is intentionally rendered empty and must not be
+mistaken for an outage.

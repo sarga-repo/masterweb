@@ -27,12 +27,14 @@ export type InquiryPayload = {
   inquiryType: InquiryType;
   message: string;
   sourcePage?: string;
+  sourceLocale: "en" | "id";
 };
 
 export type NewsletterPayload = {
   email: string;
   sourcePage?: string;
   consent?: boolean;
+  sourceLocale: "en" | "id";
 };
 
 /** Submit a contact inquiry to Strapi. */
@@ -41,6 +43,7 @@ export async function submitInquiry(
 ): Promise<StrapiMutationResult> {
   return strapiPost("inquiry-submissions", {
     ...payload,
+    sourceSite: "gateway",
     submittedAt: new Date().toISOString(),
     status: "new",
   });

@@ -70,12 +70,12 @@ export function SectionContainer({
           <header className="mb-10 max-w-3xl sm:mb-12">
             {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
             {title ? (
-              <h2 className="mt-3 font-heading text-4xl font-bold uppercase leading-[0.96] tracking-[-0.025em] sm:text-[2.4rem] lg:text-5xl">
+              <h2 className="gateway-section-title mt-3 font-heading uppercase">
                 {title}
               </h2>
             ) : null}
             {description ? (
-              <div className="mt-5 text-base leading-7 opacity-80 sm:text-lg">
+              <div className="gateway-body-lead mt-5 opacity-80">
                 {description}
               </div>
             ) : null}

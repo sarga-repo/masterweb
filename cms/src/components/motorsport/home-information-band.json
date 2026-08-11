@@ -1,0 +1,48 @@
+{
+  "collectionName": "components_motorsport_home_information_bands",
+  "info": {
+    "displayName": "Homepage Race Control Band",
+    "description": "CMS-managed Motorsport homepage information band with live featured-event values"
+  },
+  "options": {},
+  "attributes": {
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 160
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 320
+    },
+    "nextEventLabel": {
+      "type": "string",
+      "default": "Next event",
+      "maxLength": 40
+    },
+    "ticketStatusLabel": {
+      "type": "string",
+      "default": "Ticket status",
+      "maxLength": 40
+    },
+    "regionLabel": {
+      "type": "string",
+      "default": "Region",
+      "maxLength": 40
+    },
+    "regionValue": {
+      "type": "string",
+      "default": "Indonesia",
+      "maxLength": 80
+    }
+  }
+}

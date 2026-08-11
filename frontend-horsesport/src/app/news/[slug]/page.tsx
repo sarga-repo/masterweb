@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { notFound } from "next/navigation";
 
 import {
@@ -12,6 +12,8 @@ import {
 import { fetchArticleDetail, fetchNewsPage } from "@/lib/cms-content";
 import { createMetadata } from "@/lib/seo/metadata";
 import { resolveSiteUrl, siteConfig } from "@/lib/site-config";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { localizePath } from "@/lib/i18n/config";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -26,6 +28,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getRequestLocale();
   const article = await fetchArticleDetail(slug);
   if (!article) notFound();
   return createMetadata({
@@ -34,11 +37,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     path: `/news/${slug}`,
     image: article.image,
     type: "article",
+    locale,
   });
 }
 
 export default async function NewsDetailPage({ params }: Params) {
-  const { slug } = await params;
+  const [{ slug }, locale] = await Promise.all([params, getRequestLocale()]);
   const article = await fetchArticleDetail(slug);
   if (!article) notFound();
 
@@ -50,7 +54,8 @@ export default async function NewsDetailPage({ params }: Params) {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     headline: article.title,
-    mainEntityOfPage: resolveSiteUrl(`/news/${slug}`),
+    mainEntityOfPage: resolveSiteUrl(localizePath(`/news/${slug}`, locale)),
+    inLanguage: locale === "id" ? "id-ID" : "en-US",
     ...(article.publishedIso ? { datePublished: article.publishedIso } : {}),
     ...(article.excerpt ? { description: article.excerpt } : {}),
     ...(article.image ? { image: article.image } : {}),

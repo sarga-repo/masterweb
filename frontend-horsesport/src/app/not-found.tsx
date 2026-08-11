@@ -1,9 +1,14 @@
-import Link from "next/link";
+"use client";
+
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { ArrowRightIcon } from "@/components/ui/icons";
+import { usePathname } from "next/navigation";
 
 /** 404 - off the pace. Nested within the shared header/footer chrome. */
 export default function NotFound() {
+  const pathname = usePathname();
+  const isIndonesian = pathname === "/id" || pathname.startsWith("/id/");
   return (
     <section className="hs-grain relative isolate flex min-h-[70vh] items-center overflow-hidden bg-hs-black">
       <div
@@ -30,7 +35,9 @@ export default function NotFound() {
           </span>
         </h1>
         <h2 className="hs-display mt-4 max-w-[16ch] text-[clamp(2rem,5vw,4rem)] text-hs-cream">
-          This one left the paddock.
+          {isIndonesian
+            ? "Halaman ini meninggalkan paddock."
+            : "This one left the paddock."}
         </h2>
         <p className="mt-7 max-w-xl text-base leading-8 text-hs-cream/55">
           The page you were looking for may have been retired, moved to another
@@ -41,14 +48,14 @@ export default function NotFound() {
             href="/"
             className="hs-interactive group inline-flex items-center gap-3 bg-hs-red px-7 py-4 text-[0.7rem] font-extrabold uppercase tracking-[0.14em] text-hs-white hover:bg-hs-orange"
           >
-            Back to home
+            {isIndonesian ? "Kembali ke beranda" : "Back to home"}
             <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
           <Link
             href="/events"
             className="hs-interactive group inline-flex items-center gap-3 border border-hs-cream/20 px-7 py-4 text-[0.7rem] font-extrabold uppercase tracking-[0.14em] text-hs-cream/75 hover:border-hs-orange hover:text-hs-orange"
           >
-            Browse events
+            {isIndonesian ? "Lihat acara" : "Browse events"}
             <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>

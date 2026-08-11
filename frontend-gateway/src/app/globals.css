@@ -2,15 +2,15 @@
 
 @theme inline {
   /* Sarga.co brand colors sampled from preview PDF page 7. */
-  --color-sarga-black: #10141b;
+  --color-sarga-black: #12141b;
   --color-sarga-dark: #1a1f29;
-  --color-sarga-soft: #434343;
+  --color-sarga-soft: #4b525b;
   --color-sarga-white: #ffffff;
-  --color-sarga-light: #f3f3f3;
-  --color-sarga-muted: #cccccc;
-  --color-sarga-text: #10141b;
-  --color-sarga-text-muted: #434343;
-  --color-sarga-red: #e2321e;
+  --color-sarga-light: #f7f3ed;
+  --color-sarga-muted: #c5c7ca;
+  --color-sarga-text: #12141b;
+  --color-sarga-text-muted: #4b525b;
+  --color-sarga-red: #e4301c;
   --color-sarga-red-dark: #bd2818;
   --color-sarga-orange: #ff5032;
   --color-sarga-pink: #f4c3bd;
@@ -35,15 +35,34 @@
 
 /* Layout scale tokens (used by .site-container and components) */
 :root {
+  /* Primitive brand tokens: Sarga.co Brand Visual Preview. */
+  --gateway-racing-red: #e4301c;
+  --gateway-midnight: #12141b;
+  --gateway-slate: #4b525b;
+  --gateway-silver: #c5c7ca;
+  --gateway-warm-white: #f7f3ed;
+
+  /* Semantic surface and type tokens. */
   --container-max: 96rem; /* 1536px */
   --container-pad-mobile: 1.25rem; /* 20px */
   --container-pad-tablet: 2.5rem; /* 40px */
   --container-pad-desktop: 4.5rem; /* 72px */
-  --gateway-surface-canvas: #f6f5f2;
-  --gateway-surface-ink: #10141b;
+  --gateway-surface-canvas: var(--gateway-warm-white);
+  --gateway-surface-ink: var(--gateway-midnight);
+  --gateway-surface-footer: var(--gateway-slate);
   --gateway-line-light: rgb(16 20 27 / 12%);
   --gateway-line-dark: rgb(255 255 255 / 14%);
   --gateway-shadow-elevated: 0 24px 70px rgb(16 20 27 / 8%);
+  --gateway-type-hero: clamp(1.9rem, 9vw, 3.25rem);
+  --gateway-type-page: clamp(1.75rem, 8.5vw, 2.875rem);
+  --gateway-type-section: clamp(1.625rem, 7.4vw, 2.5rem);
+  --gateway-type-card: clamp(1.25rem, 2vw, 2rem);
+  --gateway-type-lead: clamp(1rem, 1.35vw, 1.3125rem);
+  --gateway-leading-display: 0.94;
+  --gateway-leading-section: 1;
+  --gateway-leading-body: 1.7;
+  --gateway-header-height: 5rem;
+  --gateway-section-space: clamp(5rem, 9vw, 9rem);
 }
 
 * {
@@ -58,7 +77,7 @@ html {
 body {
   margin: 0;
   overflow-x: hidden;
-  background: var(--color-sarga-white);
+  background: var(--gateway-surface-canvas);
   color: var(--color-sarga-text);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -83,6 +102,9 @@ body {
   h5,
   h6 {
     font-family: var(--font-heading);
+    font-synthesis: none;
+    overflow-wrap: break-word;
+    text-wrap: balance;
   }
 
   button,
@@ -90,6 +112,89 @@ body {
   select,
   textarea {
     font: inherit;
+  }
+}
+
+.font-heading {
+  font-synthesis: none;
+  text-wrap: balance;
+}
+
+.gateway-display-hero,
+.gateway-display-page,
+.gateway-section-title,
+.gateway-card-title {
+  min-width: 0;
+  max-width: 100%;
+  padding-inline: 0.025em;
+  padding-block: 0.04em 0.1em;
+  hyphens: auto;
+  overflow-wrap: anywhere !important;
+  text-wrap: balance;
+  word-break: normal;
+}
+
+.gateway-display-hero {
+  font-size: var(--gateway-type-hero);
+  font-weight: 800;
+  line-height: var(--gateway-leading-display);
+  letter-spacing: -0.055em;
+}
+
+.gateway-display-page {
+  font-size: var(--gateway-type-page);
+  font-weight: 800;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+}
+
+.gateway-section-title {
+  font-size: var(--gateway-type-section);
+  font-weight: 800;
+  line-height: var(--gateway-leading-section);
+  letter-spacing: -0.04em;
+}
+
+.gateway-card-title {
+  font-size: var(--gateway-type-card);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
+.gateway-body-lead {
+  max-width: 65ch;
+  font-size: var(--gateway-type-lead);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.gateway-body-copy {
+  max-width: 65ch;
+  line-height: var(--gateway-leading-body);
+  text-wrap: pretty;
+}
+
+.gateway-footer::before {
+  position: absolute;
+  z-index: 2;
+  inset: 0 0 auto;
+  height: 2px;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--gateway-racing-red),
+    #ff6b35 48%,
+    transparent 86%
+  );
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --gateway-type-hero: clamp(3.5rem, 6vw, 5.25rem);
+    --gateway-type-page: clamp(2.875rem, 5.25vw, 4.75rem);
+    --gateway-type-section: clamp(2.25rem, 3.75vw, 3.75rem);
   }
 }
 
@@ -131,12 +236,8 @@ body {
 }
 
 .velocity-hero__image {
-  object-position: 58% center;
+  object-position: 55% center;
   transform: scale(1.035);
-}
-
-.velocity-hero__video {
-  object-position: 58% center;
 }
 
 .velocity-speed-lines {
@@ -198,24 +299,45 @@ body {
   background:
     linear-gradient(
       90deg,
-      rgb(16 20 27 / 98%) 0%,
-      rgb(16 20 27 / 90%) 34%,
-      rgb(16 20 27 / 54%) 59%,
-      rgb(16 20 27 / 8%) 82%,
-      rgb(16 20 27 / 20%) 100%
+      rgb(247 243 237 / 97%) 0%,
+      rgb(247 243 237 / 92%) 32%,
+      rgb(247 243 237 / 66%) 48%,
+      rgb(247 243 237 / 12%) 69%,
+      transparent 86%
     ),
     linear-gradient(
       180deg,
-      rgb(16 20 27 / 38%) 0%,
-      transparent 38%,
-      rgb(16 20 27 / 82%) 100%
+      rgb(247 243 237 / 18%) 0%,
+      transparent 50%,
+      rgb(18 20 27 / 14%) 100%
     );
 }
 
 .gateway-hero-mark {
-  opacity: 0.72;
+  opacity: 0.11;
   -webkit-mask-image: linear-gradient(90deg, black 0 62%, transparent 96%);
   mask-image: linear-gradient(90deg, black 0 62%, transparent 96%);
+}
+
+.gateway-hero-horizon {
+  background: linear-gradient(
+    90deg,
+    var(--gateway-racing-red),
+    var(--color-sarga-orange) 42%,
+    var(--color-sarga-gold) 68%,
+    transparent
+  );
+}
+
+.gateway-about-menu {
+  background:
+    radial-gradient(circle at 18% 10%, rgb(228 48 28 / 42%), transparent 34%),
+    linear-gradient(145deg, #12141b 0%, #242936 100%);
+}
+
+.home-about-scroll {
+  scrollbar-color: rgb(228 48 28 / 72%) transparent;
+  scrollbar-width: thin;
 }
 
 /* Homepage surface system: one controlled gesture per section. */
@@ -315,6 +437,20 @@ body {
   filter: blur(10px);
 }
 
+.gateway-ecosystem-shell {
+  background:
+    radial-gradient(circle at 82% 18%, rgb(217 164 65 / 30%), transparent 32%),
+    radial-gradient(circle at 12% 88%, rgb(189 40 24 / 72%), transparent 42%),
+    linear-gradient(128deg, #e4301c 0%, #d93620 45%, #ff623c 100%);
+}
+
+.gateway-ecosystem-orbit {
+  border: 1px solid rgb(255 255 255 / 18%);
+  box-shadow:
+    0 0 0 5rem rgb(255 255 255 / 3%),
+    0 0 0 10rem rgb(255 255 255 / 2%);
+}
+
 .gateway-signal-line {
   height: 1px;
   background: linear-gradient(
@@ -331,6 +467,31 @@ body {
   filter: blur(80px);
 }
 
+.gateway-ticket-field {
+  background:
+    radial-gradient(circle at 82% 36%, rgb(255 80 50 / 42%), transparent 30%),
+    linear-gradient(118deg, #bd2818 0%, #e4301c 55%, #ff623c 100%);
+}
+
+.gateway-corporate-hero {
+  background:
+    radial-gradient(circle at 82% 18%, rgb(217 164 65 / 24%), transparent 30%),
+    radial-gradient(circle at 12% 88%, rgb(228 48 28 / 32%), transparent 44%),
+    linear-gradient(126deg, #3f4752 0%, #4b525b 52%, #343b46 100%);
+}
+
+.gateway-corporate-root {
+  background:
+    radial-gradient(circle at 82% 20%, rgb(255 80 50 / 24%), transparent 32%),
+    linear-gradient(128deg, #263247 0%, #34445c 54%, #bd2818 130%);
+}
+
+.gateway-warm-panel {
+  background:
+    radial-gradient(circle at 88% 14%, rgb(255 80 50 / 14%), transparent 28%),
+    linear-gradient(135deg, #f7f3ed 0%, #efe2d7 100%);
+}
+
 .velocity-grain {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.34'/%3E%3C/svg%3E");
   background-size: 180px 180px;
@@ -345,6 +506,13 @@ body {
   opacity: 0;
   transform: translate3d(0, 0.65em, 0);
   animation: velocity-word-in 720ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (max-width: 47.999rem) {
+  .velocity-title__word--long {
+    font-size: clamp(1.625rem, 8.25vw, 2.8rem);
+    letter-spacing: -0.065em;
+  }
 }
 
 .velocity-reveal {
@@ -446,11 +614,7 @@ body {
 
 @media (max-width: 48rem) {
   .velocity-hero__image {
-    object-position: 66% center;
-  }
-
-  .velocity-hero__video {
-    object-position: 66% center;
+    object-position: center center;
   }
 
   .velocity-speed-lines,
@@ -460,14 +624,13 @@ body {
   }
 
   .velocity-hero__veil {
-    background:
-      linear-gradient(90deg, rgb(16 20 27 / 95%), rgb(16 20 27 / 48%)),
-      linear-gradient(
-        180deg,
-        rgb(16 20 27 / 24%) 0%,
-        rgb(16 20 27 / 78%) 74%,
-        rgb(16 20 27 / 96%) 100%
-      );
+    background: linear-gradient(
+      180deg,
+      rgb(16 20 27 / 92%) 0%,
+      rgb(16 20 27 / 62%) 42%,
+      rgb(16 20 27 / 12%) 70%,
+      rgb(16 20 27 / 50%) 100%
+    );
   }
 }
 
@@ -495,7 +658,6 @@ body {
     transform: scale(1.035);
   }
 
-  .velocity-hero__video,
   .velocity-speed-lines,
   .velocity-race-dust,
   .velocity-road-glow {

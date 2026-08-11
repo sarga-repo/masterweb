@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import {
   EventFeatureCard,
@@ -18,69 +18,11 @@ import {
 } from "@/components";
 import { fetchHomepageData } from "@/lib/homepage-data";
 import { fetchEcosystemSites, fetchLeadership } from "@/lib/cms-data";
-import {
-  MOTORSPORT_NAVIGATION,
-  MOTORSPORT_TICKET_LINK,
-} from "@/lib/navigation";
 import { siteConfig } from "@/lib/site-config";
-import type { DisciplineItem } from "@/types/design-system";
-
-const DISCIPLINES: DisciplineItem[] = [
-  {
-    title: "Circuit racing",
-    shortLabel: "Open wheel / Sprint",
-    href: "/events",
-    image: "/media/hero/sarga-motorsport-hero-circuit-golden-hour.jpg",
-    imageAlt:
-      "Red touring race car accelerating through a tropical circuit at golden hour",
-    accent: "crimson",
-  },
-  {
-    title: "Endurance",
-    shortLabel: "GT / Long distance",
-    href: "/events",
-    image: "/media/sarga-motorsport-discipline-endurance-daylight.jpg",
-    imageAlt:
-      "Red endurance prototype racing through a tropical circuit in warm daylight",
-    accent: "blue",
-  },
-  {
-    title: "Rally",
-    shortLabel: "Mixed surface / Stage",
-    href: "/events",
-    image: "/media/hero/sarga-motorsport-hero-rally-highlands.jpg",
-    imageAlt:
-      "Red rally car racing across a sunlit gravel road in tropical highlands",
-    accent: "teal",
-  },
-  {
-    title: "Rallycross",
-    shortLabel: "FIA / World Cup",
-    href: "/campaign/fia-rallycross-world-cup-indonesia-2026",
-    image: "/media/sarga-motorsport-discipline-rallycross-daylight.jpg",
-    imageAlt:
-      "Red and warm-white rallycross cars racing side by side on a tropical dirt circuit",
-    accent: "orange",
-  },
-  {
-    title: "Touring",
-    shortLabel: "Tin top / Sprint",
-    href: "/events",
-    image: "/media/sarga-motorsport-discipline-touring-daylight.jpg",
-    imageAlt:
-      "Three touring cars sweeping through a tropical circuit in warm daylight",
-    accent: "blue",
-  },
-  {
-    title: "Motorcycle",
-    shortLabel: "Superbike / Road racing",
-    href: "/events",
-    image: "/media/sarga-motorsport-discipline-motorcycle-daylight.jpg",
-    imageAlt:
-      "Two superbike racers leaning through a tropical circuit corner in warm daylight",
-    accent: "yellow",
-  },
-];
+import { localizeExternalSiteHref } from "@/lib/i18n/config";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getMotorsportNavigation } from "@/lib/navigation-cms";
 
 function SectionLink({
   href,
@@ -111,6 +53,12 @@ function SectionLink({
 }
 
 export default async function HomePage() {
+  const locale = await getRequestLocale();
+  const dictionary = getDictionary(locale);
+  const navigation = await getMotorsportNavigation(locale);
+  const ticketLink = navigation.items.find(
+    (item) => item.emphasis === "primaryCta",
+  );
   const [data, leadership, ecosystemSites] = await Promise.all([
     fetchHomepageData(),
     fetchLeadership(),
@@ -128,36 +76,46 @@ export default async function HomePage() {
   return (
     <>
       <MotorsportHeader
-        navigation={MOTORSPORT_NAVIGATION}
-        ticketLink={MOTORSPORT_TICKET_LINK}
+        navigation={navigation.items}
+        ticketLink={ticketLink}
         gatewayLink={{
           label: "Sarga.co",
-          href: siteConfig.gatewayUrl,
+          href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
           external: true,
         }}
+        locale={locale}
+        dictionary={dictionary}
+        navigationSource={navigation.source}
       />
 
       <main>
         <MotorsportHero slides={data.page.heroSlides} />
 
-        <InformationBand
-          eyebrow="Race control / 2026 calendar"
-          title="Closer to the machines. Closer to the moment."
-          description="Professional racing, talent development, and international event campaigns-presented through one focused Motorsport calendar."
-          items={[
-            {
-              label: "Next event",
-              value: data.featuredEvent?.dateLabel ?? "TBA",
-            },
-            {
-              label: "Ticket status",
-              value: data.featuredEvent?.status ?? "Announced",
-            },
-            { label: "Region", value: "Indonesia" },
-          ]}
-        />
+        {data.page.informationBand.enabled ? (
+          <InformationBand
+            eyebrow={data.page.informationBand.eyebrow}
+            title={data.page.informationBand.title}
+            description={data.page.informationBand.description}
+            items={[
+              {
+                label: data.page.informationBand.nextEventLabel,
+                value: data.featuredEvent?.dateLabel ?? "TBA",
+              },
+              {
+                label: data.page.informationBand.ticketStatusLabel,
+                value: data.featuredEvent?.status ?? "Announced",
+              },
+              {
+                label: data.page.informationBand.regionLabel,
+                value: data.page.informationBand.regionValue,
+              },
+            ]}
+          />
+        ) : null}
 
-        <WorldOfMotorsport items={DISCIPLINES} />
+        {data.page.worldOfMotorsport.enabled ? (
+          <WorldOfMotorsport {...data.page.worldOfMotorsport} />
+        ) : null}
 
         <section
           id="upcoming-events"
@@ -230,6 +188,11 @@ export default async function HomePage() {
         </section>
 
         <section className="ms-home-news-surface ms-reflected-light-surface ms-section">
+          <div className="ms-news-race-flag" aria-hidden="true">
+            {Array.from({ length: 12 }, (_, index) => (
+              <span key={index} />
+            ))}
+          </div>
           <div className="ms-shell">
             <SectionHeader
               index="NEWS"
@@ -325,13 +288,13 @@ export default async function HomePage() {
         ]}
         gatewayLink={{
           label: "Visit Sarga.co",
-          href: siteConfig.gatewayUrl,
+          href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
           external: true,
         }}
         crossSiteLinks={[
           {
             label: "Sarga Horse Sport",
-            href: siteConfig.horsesportUrl,
+            href: localizeExternalSiteHref(siteConfig.horsesportUrl, locale),
             external: true,
           },
         ]}

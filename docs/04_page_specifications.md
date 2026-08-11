@@ -195,14 +195,19 @@ Provide careers information and allow Sarga to publish hiring/role content.
 
 1. Careers hero
 2. Why join Sarga
-3. Job listings or general call for talent
-4. CTA to email/external recruitment link/form
+3. Four clickable discipline groups with current open-role counts
+4. Searchable/filterable vacancy roster at `/careers/jobs`
+5. Reusable CMS vacancy detail at `/careers/jobs/[slug]`
+6. Validated LinkedIn apply CTA on list and detail pages
 
 ### Acceptance criteria
 
 - Career items are CMS-managed
 - Can operate without active jobs
-- CTA configurable in CMS
+- Search supports keyword, discipline, employment type, and work mode
+- Roster paginates after eight matching roles
+- CTA is configurable in CMS and activates only for an approved HTTPS LinkedIn URL
+- Closed, filled, hidden, draft, and missing-link roles cannot expose an active apply action
 
 ## 8. Contact `/contact`
 
@@ -254,3 +259,17 @@ Show available events and send users to partner ticketing flow.
 - Ticket CTA is configurable per event
 - No internal payment logic
 - External links open safely
+
+## Multisite bilingual delivery (GWR-CMS-6/7)
+
+- Every existing Gateway, Motorsport, and Horse Sport route keeps its
+  unprefixed English URL and has an equivalent Indonesian `/id` URL.
+- Code-owned shell, form, accessibility, and error copy uses typed `en`/`id`
+  dictionaries. Editorial records are requested from Strapi in the URL locale.
+- If a published Indonesian record does not exist, the complete English record
+  is rendered without field-level mixing and the Indonesian URL is `noindex`.
+- Each site uses a visible, brand-appropriate language dropdown that performs a
+  full document navigation to the equivalent path so the root layout,
+  metadata, header, and footer all resolve together.
+- Hiding a Top Navigation record changes discovery only; it does not remove or
+  redirect the underlying route.

@@ -9,13 +9,18 @@ import {
   RosetteIcon,
 } from "@/components/ui/hs-icons";
 import { siteConfig } from "@/lib/site-config";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "Contact",
-  description:
-    "Reach Sarga Horse Sport for ticketing, partnership, sponsorship, media, and general inquiries.",
-  path: "/contact",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "Contact",
+    description:
+      "Reach Sarga Horse Sport for ticketing, partnership, sponsorship, media, and general inquiries.",
+    path: "/contact",
+    locale,
+  });
+}
 
 const CHANNELS = [
   {

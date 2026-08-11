@@ -1,0 +1,50 @@
+{
+  "collectionName": "components_motorsport_world_of_motorsports",
+  "info": {
+    "displayName": "World of Motorsport Section",
+    "description": "CMS-managed homepage racing-format heading, CTA, and discipline cards"
+  },
+  "options": {},
+  "attributes": {
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 100
+    },
+    "titlePrefix": {
+      "type": "string",
+      "required": true,
+      "default": "The world of",
+      "maxLength": 80
+    },
+    "titleAccent": {
+      "type": "string",
+      "required": true,
+      "default": "Motorsport",
+      "maxLength": 80
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 320
+    },
+    "ctaLabel": {
+      "type": "string",
+      "default": "Explore the calendar",
+      "maxLength": 60
+    },
+    "ctaUrl": {
+      "type": "string",
+      "default": "/events"
+    },
+    "disciplines": {
+      "type": "component",
+      "repeatable": true,
+      "component": "motorsport.discipline-card",
+      "max": 6
+    }
+  }
+}

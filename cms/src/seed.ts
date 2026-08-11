@@ -54,6 +54,12 @@ const PUBLIC_READ_ACTIONS = [
   "api::timeline-item.timeline-item.findOne",
   "api::leadership-person.leadership-person.find",
   "api::leadership-person.leadership-person.findOne",
+  "api::corporate-report.corporate-report.find",
+  "api::corporate-report.corporate-report.findOne",
+  "api::job-vacancy.job-vacancy.find",
+  "api::job-vacancy.job-vacancy.findOne",
+  "api::top-navigation-item.top-navigation-item.find",
+  "api::top-navigation-item.top-navigation-item.findOne",
 ];
 
 /** Multisite Site registry (Phase 2). */
@@ -87,6 +93,93 @@ const SITES = [
     isActive: true,
   },
 ];
+
+const TOP_NAVIGATION_ITEMS = [
+  {
+    siteScope: "gateway",
+    internalName: "gateway-about",
+    label: "About",
+    labelId: "Tentang Kami",
+    href: "/about",
+    displayOrder: 10,
+  },
+  {
+    siteScope: "gateway",
+    internalName: "gateway-ecosystem",
+    label: "360° Ecosystem",
+    labelId: "Ekosistem 360°",
+    href: "/ecosystem",
+    displayOrder: 20,
+  },
+  {
+    siteScope: "gateway",
+    internalName: "gateway-news",
+    label: "News & Publication",
+    labelId: "Berita & Publikasi",
+    href: "/news",
+    displayOrder: 30,
+  },
+  {
+    siteScope: "gateway",
+    internalName: "gateway-careers",
+    label: "Careers",
+    labelId: "Karier",
+    href: "/careers",
+    displayOrder: 40,
+  },
+  {
+    siteScope: "gateway",
+    internalName: "gateway-contact",
+    label: "Get in Touch",
+    labelId: "Hubungi Kami",
+    href: "/contact",
+    displayOrder: 50,
+  },
+  {
+    siteScope: "gateway",
+    internalName: "gateway-ticket-hub",
+    label: "Ticket Hub",
+    labelId: "Pusat Tiket",
+    href: "/ticket-hub",
+    displayOrder: 60,
+    emphasis: "primaryCta",
+  },
+  ...[
+    ["home", "Home", "Beranda", "/"],
+    ["about", "About", "Tentang", "/about"],
+    ["event", "Event", "Acara", "/events"],
+    ["news", "News", "Berita", "/news"],
+    ["gallery", "Gallery", "Galeri", "/gallery"],
+    ["merchandise", "Merchandise", "Merchandise", "/merchandise"],
+    ["contact", "Contact", "Kontak", "/contact"],
+    ["ticket", "Ticket", "Tiket", "/tickets"],
+  ].map(([key, label, labelId, href], index) => ({
+    siteScope: "motorsport",
+    internalName: `motorsport-${key}`,
+    label,
+    labelId,
+    href,
+    displayOrder: (index + 1) * 10,
+    ...(key === "ticket" ? { emphasis: "primaryCta" } : {}),
+  })),
+  ...[
+    ["about", "About", "Tentang", "/about"],
+    ["events", "Events", "Acara", "/events"],
+    ["tickets", "Tickets", "Tiket", "/tickets"],
+    ["news", "News", "Berita", "/news"],
+    ["gallery", "Gallery", "Galeri", "/gallery"],
+    ["venues", "Venues", "Venue", "/venues"],
+    ["contact", "Contact", "Kontak", "/contact"],
+  ].map(([key, label, labelId, href], index) => ({
+    siteScope: "horsesport",
+    internalName: `horsesport-${key}`,
+    label,
+    labelId,
+    href,
+    displayOrder: (index + 1) * 10,
+    ...(key === "tickets" ? { emphasis: "primaryCta" } : {}),
+  })),
+] as const;
 
 const HOMEPAGE = {
   heroEyebrow: "360° Sports & Entertainment Leader",
@@ -139,8 +232,40 @@ const ECOSYSTEM_BUSINESSES = [
     pillar: "venue",
     shortDescription:
       "Developing and restoring championship-grade tracks, stables, and spectator venues for world-class events.",
+    overview:
+      "Sarga Venues develops, restores, and operates sporting destinations where technical performance, audience movement, hospitality, safety, and long-term community value are planned as one experience.",
+    highlights: [
+      {
+        label: "Development",
+        title: "Championship-ready infrastructure",
+        description:
+          "Track, turf, stable, paddock, and spectator systems are planned against demanding sporting and safety requirements.",
+      },
+      {
+        label: "Operations",
+        title: "One venue command layer",
+        description:
+          "Event control, guest movement, hospitality, maintenance, and partner delivery are coordinated through one operating standard.",
+      },
+      {
+        label: "Legacy",
+        title: "Places designed to endure",
+        description:
+          "Commercial utility, local participation, and responsible development extend venue value beyond a single event calendar.",
+      },
+    ],
     ctaLabel: "Coming Soon",
     businessStatus: "comingSoon",
+    pageAvailability: {
+      pageEnabled: false,
+      comingSoonEyebrow: "Sarga Venues / In development",
+      comingSoonTitle: "A new stage is taking shape.",
+      comingSoonDescription:
+        "Sarga Venues is preparing a dedicated home for its venue, track, stable, and spectator-infrastructure portfolio.",
+      launchTargetLabel: "Launch timing to be announced",
+      showNotifyCta: true,
+      noIndexWhileDisabled: true,
+    },
     siteScope: "gateway",
     order: 3,
   },
@@ -150,8 +275,40 @@ const ECOSYSTEM_BUSINESSES = [
     pillar: "media",
     shortDescription:
       "Broadcast, editorial, and media-rights operations amplifying every Sarga property across channels.",
+    overview:
+      "Sarga Media turns live sport, entertainment, and ecosystem intelligence into editorial products, broadcast coverage, rights packages, and brand stories designed for audiences across channels.",
+    highlights: [
+      {
+        label: "Broadcast",
+        title: "Live coverage built around the moment",
+        description:
+          "Production planning, race-day and event feeds, and distribution workflows carry the atmosphere beyond the venue.",
+      },
+      {
+        label: "Editorial",
+        title: "One network of credible stories",
+        description:
+          "Newsroom, documentary, social, and partner formats give every Sarga property a consistent but distinctive voice.",
+      },
+      {
+        label: "Rights",
+        title: "Media value made legible",
+        description:
+          "Structured inventory and audience insight support responsible rights, sponsorship, and commercial partnerships.",
+      },
+    ],
     ctaLabel: "Coming Soon",
     businessStatus: "comingSoon",
+    pageAvailability: {
+      pageEnabled: false,
+      comingSoonEyebrow: "Sarga Media / In development",
+      comingSoonTitle: "The network is preparing to broadcast.",
+      comingSoonDescription:
+        "Sarga Media is building its dedicated editorial, broadcast, production, and media-rights destination.",
+      launchTargetLabel: "Launch timing to be announced",
+      showNotifyCta: true,
+      noIndexWhileDisabled: true,
+    },
     siteScope: "gateway",
     order: 4,
   },
@@ -161,8 +318,40 @@ const ECOSYSTEM_BUSINESSES = [
     pillar: "technology",
     shortDescription:
       "Ticketing platforms and live data technology powering seamless fan experiences across the ecosystem.",
+    overview:
+      "Sarga Tech connects ticket discovery, venue access, live information, audience services, and operational data so each Sarga experience can feel simple to enter and dependable to operate.",
+    highlights: [
+      {
+        label: "Access",
+        title: "A clearer path from interest to entry",
+        description:
+          "Connected discovery and approved partner-ticketing journeys reduce friction without creating an internal checkout engine.",
+      },
+      {
+        label: "Operations",
+        title: "Live information where teams need it",
+        description:
+          "Shared operational signals support venue teams, event control, content workflows, and audience communication.",
+      },
+      {
+        label: "Intelligence",
+        title: "Responsible audience understanding",
+        description:
+          "Consent-aware data practices help teams improve programming, service quality, and partner reporting across the group.",
+      },
+    ],
     ctaLabel: "Coming Soon",
     businessStatus: "comingSoon",
+    pageAvailability: {
+      pageEnabled: false,
+      comingSoonEyebrow: "Sarga Tech / In development",
+      comingSoonTitle: "The connected layer is coming online.",
+      comingSoonDescription:
+        "Sarga Tech is preparing a dedicated view of the ticketing, audience, and live-data systems supporting the ecosystem.",
+      launchTargetLabel: "Launch timing to be announced",
+      showNotifyCta: true,
+      noIndexWhileDisabled: true,
+    },
     siteScope: "gateway",
     order: 5,
   },
@@ -555,6 +744,83 @@ const MOTORSPORT_SITE_PAGES = [
     heroTitle: "Feel the friction.",
     heroDescription:
       "Indonesia's premier motorsport ecosystem: elite racing, unfiltered energy, and an event experience built for those who live for the apex.",
+    motorsportInformationBand: {
+      enabled: true,
+      eyebrow: "Race control / 2026 calendar",
+      title: "Closer to the machines. Closer to the moment.",
+      description:
+        "Professional racing, talent development, and international event campaigns-presented through one focused Motorsport calendar.",
+      nextEventLabel: "Next event",
+      ticketStatusLabel: "Ticket status",
+      regionLabel: "Region",
+      regionValue: "Indonesia",
+    },
+    motorsportWorldSection: {
+      enabled: true,
+      eyebrow: "A global ecosystem of racing formats",
+      titlePrefix: "The world of",
+      titleAccent: "Motorsport",
+      description:
+        "From circuit precision to mixed-surface spectacle, every format is part of one international-standard racing programme.",
+      ctaLabel: "Explore the calendar",
+      ctaUrl: "/events",
+      disciplines: [
+        {
+          internalName: "circuit-racing",
+          enabled: true,
+          title: "Circuit racing",
+          shortLabel: "Open wheel / Sprint",
+          href: "/events",
+          accent: "crimson",
+          sortOrder: 10,
+        },
+        {
+          internalName: "endurance",
+          enabled: true,
+          title: "Endurance",
+          shortLabel: "GT / Long distance",
+          href: "/events",
+          accent: "blue",
+          sortOrder: 20,
+        },
+        {
+          internalName: "rally",
+          enabled: true,
+          title: "Rally",
+          shortLabel: "Mixed surface / Stage",
+          href: "/events",
+          accent: "teal",
+          sortOrder: 30,
+        },
+        {
+          internalName: "rallycross",
+          enabled: true,
+          title: "Rallycross",
+          shortLabel: "FIA / World Cup",
+          href: "/campaign/fia-rallycross-world-cup-indonesia-2026",
+          accent: "orange",
+          sortOrder: 40,
+        },
+        {
+          internalName: "touring",
+          enabled: true,
+          title: "Touring",
+          shortLabel: "Tin top / Sprint",
+          href: "/events",
+          accent: "blue",
+          sortOrder: 50,
+        },
+        {
+          internalName: "motorcycle",
+          enabled: true,
+          title: "Motorcycle",
+          shortLabel: "Superbike / Road racing",
+          href: "/events",
+          accent: "yellow",
+          sortOrder: 60,
+        },
+      ],
+    },
     sections: [
       {
         __component: "shared.page-section",
@@ -642,6 +908,88 @@ const MOTORSPORT_SITE_PAGES = [
     heroTitle: "Wear the velocity.",
     heroDescription:
       "Official Sarga Motorsport merchandise previews. Availability is handled by approved partners or inquiry only.",
+  },
+];
+
+/** Gateway corporate pages introduced by the reference-aligned revamp. */
+const GATEWAY_SITE_PAGES = [
+  {
+    title: "Sarga History",
+    slug: "gateway-history",
+    routePath: "/about/history",
+    siteScope: "gateway",
+    pageKind: "history",
+    navigationLabel: "History",
+    heroTitle: "Built across every arena.",
+    heroDescription:
+      "A living record of the decisions, partnerships, and operating milestones that shaped Sarga's integrated ecosystem.",
+    pageAvailability: {
+      pageEnabled: true,
+      showNotifyCta: false,
+      noIndexWhileDisabled: true,
+    },
+    sections: [
+      {
+        __component: "shared.page-section",
+        sectionKey: "history-record",
+        eyebrow: "Corporate record",
+        title: "The group trajectory",
+        body: "Published milestones are managed through the shared Timeline Item collection and displayed chronologically.",
+        theme: "light",
+      },
+    ],
+  },
+  {
+    title: "Annual Report",
+    slug: "gateway-annual-report",
+    routePath: "/about/annual-report",
+    siteScope: "gateway",
+    pageKind: "reportIndex",
+    navigationLabel: "Annual Report",
+    heroTitle: "Performance, documented.",
+    heroDescription:
+      "Approved annual reports and corporate performance publications from the Sarga ecosystem.",
+    pageAvailability: {
+      pageEnabled: true,
+      showNotifyCta: false,
+      noIndexWhileDisabled: true,
+    },
+    sections: [
+      {
+        __component: "shared.page-section",
+        sectionKey: "annual-report-library",
+        eyebrow: "Annual reporting",
+        title: "Approved publications",
+        body: "No annual report file is published yet. Approved files and external report destinations will appear here when supplied through Strapi.",
+        theme: "light",
+      },
+    ],
+  },
+  {
+    title: "Sustainability Report",
+    slug: "gateway-sustainability-report",
+    routePath: "/about/sustainability-report",
+    siteScope: "gateway",
+    pageKind: "reportIndex",
+    navigationLabel: "Sustainability Report",
+    heroTitle: "Progress with a longer horizon.",
+    heroDescription:
+      "Approved sustainability reporting across sport, venues, operations, communities, and responsible growth.",
+    pageAvailability: {
+      pageEnabled: true,
+      showNotifyCta: false,
+      noIndexWhileDisabled: true,
+    },
+    sections: [
+      {
+        __component: "shared.page-section",
+        sectionKey: "sustainability-report-library",
+        eyebrow: "Sustainability reporting",
+        title: "Commitments and evidence",
+        body: "No sustainability report file is published yet. Approved reports will appear here when supplied through Strapi.",
+        theme: "light",
+      },
+    ],
   },
 ];
 
@@ -1328,6 +1676,21 @@ const HORSESPORT_GALLERIES = [
   },
 ];
 
+/** CMS entry point for Horse Sport homepage hero media and video controls. */
+const HORSESPORT_SITE_PAGES = [
+  {
+    title: "Sarga Horse Sport Homepage",
+    slug: "horsesport-home",
+    routePath: "/",
+    siteScope: "horsesport",
+    pageKind: "home",
+    navigationLabel: "Home",
+    heroTitle: "Where champions are made.",
+    heroDescription:
+      "Championship equestrian sport, premium hospitality, and race-day experiences at international standard.",
+  },
+];
+
 /**
  * Placeholder media manifest: files in cms/data/seed-media, attached to the
  * record/field pairs below only while those fields are still empty.
@@ -1836,6 +2199,74 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
 
   await grantPublicReadPermissions(strapi);
 
+  // Site-scoped top navigation. English owns structure; the Indonesian locale
+  // receives labels only. Existing editor-managed records are never overwritten.
+  for (const item of TOP_NAVIGATION_ITEMS) {
+    const { labelId, ...seedItem } = item;
+    let englishItem = (await documents(
+      "api::top-navigation-item.top-navigation-item",
+    ).findFirst({
+      locale: "en",
+      filters: {
+        internalName: { $eq: item.internalName },
+        siteScope: { $eq: item.siteScope },
+      },
+    })) as (Record<string, unknown> & { documentId: string }) | null;
+
+    if (!englishItem) {
+      englishItem = (await documents(
+        "api::top-navigation-item.top-navigation-item",
+      ).create({
+        locale: "en",
+        data: {
+          ...seedItem,
+          ariaLabel: item.label,
+          linkType: "internal",
+          enabled: true,
+          emphasis: "emphasis" in item ? item.emphasis : "default",
+          openInNewTab: false,
+        },
+        status: "published",
+      })) as Record<string, unknown> & { documentId: string };
+      strapi.log.info(
+        `[seed] Created English navigation: ${item.internalName}`,
+      );
+    }
+
+    const indonesianItem = await documents(
+      "api::top-navigation-item.top-navigation-item",
+    ).findFirst({
+      locale: "id",
+      filters: { documentId: { $eq: englishItem.documentId } },
+    });
+    if (indonesianItem) continue;
+
+    const structuralData = {
+      internalName: englishItem.internalName,
+      siteScope: englishItem.siteScope,
+      href: englishItem.href,
+      linkType: englishItem.linkType,
+      enabled: englishItem.enabled,
+      displayOrder: englishItem.displayOrder,
+      emphasis: englishItem.emphasis,
+      openInNewTab: englishItem.openInNewTab,
+    };
+
+    await documents("api::top-navigation-item.top-navigation-item").update({
+      documentId: englishItem.documentId,
+      locale: "id",
+      data: {
+        ...structuralData,
+        label: labelId,
+        ariaLabel: labelId,
+      },
+      status: "published",
+    });
+    strapi.log.info(
+      `[seed] Created Indonesian navigation: ${item.internalName}`,
+    );
+  }
+
   // Homepage (single type)
   const existingHomepage = await documents(
     "api::homepage.homepage",
@@ -1910,6 +2341,87 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         data: { order: site.order },
         status: "published",
       });
+    }
+  }
+
+  const gatewaySite = (await documents("api::site.site").findFirst({
+    filters: { slug: { $eq: "sarga-gateway" } },
+  })) as { documentId: string } | null;
+
+  // Gateway corporate pages (idempotent by slug). Existing editor content is
+  // never overwritten; only a missing availability component is backfilled.
+  for (const page of GATEWAY_SITE_PAGES) {
+    const existing = (await documents("api::site-page.site-page").findFirst({
+      filters: { slug: { $eq: page.slug } },
+      populate: ["pageAvailability"],
+    })) as {
+      documentId: string;
+      pageAvailability?: { pageEnabled?: boolean } | null;
+    } | null;
+
+    if (!existing) {
+      await documents("api::site-page.site-page").create({
+        data: {
+          ...page,
+          ...(gatewaySite ? { site: gatewaySite.documentId } : {}),
+        },
+        status: "published",
+      });
+      strapi.log.info(`[seed] Created Gateway site page: ${page.title}`);
+    } else if (!existing.pageAvailability) {
+      await documents("api::site-page.site-page").update({
+        documentId: existing.documentId,
+        data: { pageAvailability: page.pageAvailability },
+        status: "published",
+      });
+      strapi.log.info(`[seed] Added Gateway page availability: ${page.title}`);
+    }
+  }
+
+  // Backfill the page toggle and minimum live-page content for the three
+  // internal Gateway ventures. Only absent fields are filled, so editor choices
+  // and authored copy remain intact.
+  for (const business of ECOSYSTEM_BUSINESSES) {
+    if (!("pageAvailability" in business) || !business.pageAvailability) {
+      continue;
+    }
+    const existing = (await documents(
+      "api::ecosystem-business.ecosystem-business",
+    ).findFirst({
+      filters: { slug: { $eq: business.slug } },
+      populate: ["pageAvailability", "highlights"],
+    })) as {
+      documentId: string;
+      overview?: string | null;
+      highlights?: unknown[] | null;
+      pageAvailability?: { pageEnabled?: boolean } | null;
+    } | null;
+
+    if (existing) {
+      const updateData: Record<string, unknown> = {};
+      if (!existing.pageAvailability) {
+        updateData.pageAvailability = business.pageAvailability;
+      }
+      if (!existing.overview?.trim() && "overview" in business) {
+        updateData.overview = business.overview;
+      }
+      if (
+        !existing.highlights?.length &&
+        "highlights" in business &&
+        business.highlights
+      ) {
+        updateData.highlights = business.highlights;
+      }
+
+      if (!Object.keys(updateData).length) continue;
+      await documents("api::ecosystem-business.ecosystem-business").update({
+        documentId: existing.documentId,
+        data: updateData,
+        status: "published",
+      });
+      strapi.log.info(
+        `[seed] Backfilled Gateway venture page content: ${business.slug}`,
+      );
     }
   }
 
@@ -2042,8 +2554,25 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
   for (const page of MOTORSPORT_SITE_PAGES) {
     const existing = (await documents("api::site-page.site-page").findFirst({
       filters: { slug: { $eq: page.slug } },
-      populate: ["heroSlides"],
-    })) as { documentId: string; heroSlides?: unknown[] } | null;
+      populate: [
+        "heroSlides",
+        "motorsportFeaturedEvent",
+        "motorsportInformationBand",
+        "motorsportWorldSection",
+      ],
+    })) as {
+      documentId: string;
+      heroSlides?: unknown[];
+      motorsportFeaturedEvent?: unknown;
+      motorsportInformationBand?: unknown;
+      motorsportWorldSection?: unknown;
+    } | null;
+    const homepagePage =
+      page.slug === "motorsport-home" &&
+      "motorsportInformationBand" in page &&
+      "motorsportWorldSection" in page
+        ? page
+        : null;
     const heroSlideData =
       page.slug === "motorsport-home" && homepageHeroSlides.length > 0
         ? { heroSlides: homepageHeroSlides }
@@ -2053,22 +2582,46 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         data: {
           ...page,
           ...heroSlideData,
+          ...(homepagePage && firstMotorsportEvent
+            ? { motorsportFeaturedEvent: firstMotorsportEvent.documentId }
+            : {}),
           ...(motorsportSite ? { site: motorsportSite.documentId } : {}),
         },
         status: "published",
       });
       strapi.log.info(`[seed] Created Motorsport site page: ${page.title}`);
-    } else if (
-      page.slug === "motorsport-home" &&
-      homepageHeroSlides.length > 0 &&
-      (!existing.heroSlides || existing.heroSlides.length === 0)
-    ) {
-      await documents("api::site-page.site-page").update({
-        documentId: existing.documentId,
-        data: heroSlideData,
-        status: "published",
-      });
-      strapi.log.info("[seed] Added Motorsport homepage hero slides.");
+    } else if (homepagePage) {
+      const homepageBackfill: Record<string, unknown> = {};
+
+      if (
+        homepageHeroSlides.length > 0 &&
+        (!existing.heroSlides || existing.heroSlides.length === 0)
+      ) {
+        homepageBackfill.heroSlides = homepageHeroSlides;
+      }
+      if (!existing.motorsportInformationBand) {
+        homepageBackfill.motorsportInformationBand =
+          homepagePage.motorsportInformationBand;
+      }
+      if (!existing.motorsportWorldSection) {
+        homepageBackfill.motorsportWorldSection =
+          homepagePage.motorsportWorldSection;
+      }
+      if (!existing.motorsportFeaturedEvent && firstMotorsportEvent) {
+        homepageBackfill.motorsportFeaturedEvent =
+          firstMotorsportEvent.documentId;
+      }
+
+      if (Object.keys(homepageBackfill).length > 0) {
+        await documents("api::site-page.site-page").update({
+          documentId: existing.documentId,
+          data: homepageBackfill,
+          status: "published",
+        });
+        strapi.log.info(
+          "[seed] Backfilled missing Motorsport homepage managed sections.",
+        );
+      }
     }
   }
 
@@ -2434,6 +2987,26 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
   ).findFirst({ filters: { slug: { $eq: "sarga-horse-sport" } } })) as {
     documentId: string;
   } | null;
+
+  const horseSportSite = (await documents("api::site.site").findFirst({
+    filters: { slug: { $eq: "sarga-horse-sport" } },
+  })) as { documentId: string } | null;
+
+  for (const page of HORSESPORT_SITE_PAGES) {
+    const existing = await documents("api::site-page.site-page").findFirst({
+      filters: { slug: { $eq: page.slug } },
+    });
+    if (!existing) {
+      await documents("api::site-page.site-page").create({
+        data: {
+          ...page,
+          ...(horseSportSite ? { site: horseSportSite.documentId } : {}),
+        },
+        status: "published",
+      });
+      strapi.log.info(`[seed] Created Horse Sport site page: ${page.title}`);
+    }
+  }
 
   // Horse Sport events (idempotent by slug), linked to the horse sport business.
   for (const hsEvent of HORSESPORT_EVENTS) {

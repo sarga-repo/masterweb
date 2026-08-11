@@ -1,17 +1,23 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { ContactForm } from "@/components/forms/contact-form";
 import { EditorialHeading } from "@/components/sections/editorial-heading";
 import { InteriorHero } from "@/components/sections/interior-hero";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = createMetadata({
-  title: "Get in Touch",
-  description:
-    "Start a partnership, media, event, or corporate conversation with Sarga.",
-  path: "/contact",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  return createMetadata({
+    title: "Get in Touch",
+    description:
+      "Start a partnership, media, event, or corporate conversation with Sarga.",
+    path: "/contact",
+    locale,
+    isFallback: locale === "id",
+  });
+}
 
 const inquiryPaths = [
   [
@@ -45,9 +51,10 @@ export default function ContactPage() {
         title="Start with the right signal."
         description="Choose the route that best fits your inquiry. Sarga's group desk will direct approved requests to the right operating team."
         meta={["Partnerships", "Media", "Events", "Corporate"]}
+        tone="slate"
       />
 
-      <section className="gateway-surface-light-signature bg-white py-20 sm:py-28 lg:py-36">
+      <section className="gateway-warm-panel py-20 sm:py-28 lg:py-36">
         <div className="site-container">
           <EditorialHeading
             index="01"
@@ -57,9 +64,10 @@ export default function ContactPage() {
           />
           <div className="mt-16 border-t border-sarga-black">
             {inquiryPaths.map(([index, title, description]) => (
-              <div
+              <Link
                 key={index}
-                className="group grid gap-5 border-b border-sarga-black/20 py-8 sm:grid-cols-[5rem_0.8fr_1.2fr_auto] sm:items-center lg:py-10"
+                href="#inquiry-form"
+                className="group grid gap-5 border-b border-sarga-black/20 py-8 transition-colors hover:bg-white/55 focus-visible:bg-white/55 focus-visible:outline-none sm:grid-cols-[5rem_0.8fr_1.2fr_auto] sm:items-center sm:px-5 lg:py-10"
               >
                 <span className="font-heading text-2xl font-bold text-sarga-red">
                   {index}
@@ -71,19 +79,22 @@ export default function ContactPage() {
                   {description}
                 </p>
                 <ArrowRightIcon className="hidden h-5 w-5 transition-transform group-hover:translate-x-1 sm:block" />
-              </div>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="gateway-surface-light-signature gateway-surface-light-signature--left bg-sarga-light py-20 sm:py-28 lg:py-36">
-        <div className="site-container grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
-          <div>
+      <section
+        id="inquiry-form"
+        className="gateway-surface-light-signature gateway-surface-light-signature--left scroll-mt-20 bg-sarga-light py-20 sm:py-28 lg:py-36"
+      >
+        <div className="site-container grid min-w-0 gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
+          <div className="min-w-0">
             <p className="text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-sarga-red">
               02 / Inquiry form
             </p>
-            <h2 className="mt-5 max-w-[12ch] font-heading text-4xl font-bold uppercase leading-[0.92] tracking-[-0.04em] sm:text-[2.5rem]">
+            <h2 className="mt-5 min-w-0 max-w-full break-words font-heading text-4xl font-bold uppercase leading-[0.92] tracking-[-0.04em] sm:max-w-[12ch] sm:text-[2.5rem]">
               Context moves conversations faster.
             </h2>
             <p className="mt-7 max-w-lg text-sm leading-7 text-sarga-text-muted">
@@ -98,9 +109,9 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <section className="bg-sarga-black py-20 text-white sm:py-28 lg:py-36">
-        <div className="site-container grid gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
-          <h2 className="max-w-full break-words font-heading text-[clamp(2.1rem,9.5vw,3rem)] font-bold uppercase leading-[0.88] tracking-[-0.045em] sm:max-w-[13ch] sm:text-[clamp(3rem,4.4vw,4.8rem)]">
+      <section className="gateway-corporate-root py-20 text-white sm:py-28 lg:py-36">
+        <div className="site-container grid min-w-0 gap-12 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
+          <h2 className="min-w-0 max-w-full break-words font-heading text-[clamp(2.1rem,9.5vw,3rem)] font-bold uppercase leading-[0.88] tracking-[-0.045em] sm:max-w-[13ch] sm:text-[clamp(3rem,4.4vw,4.8rem)]">
             The next move begins with context.
           </h2>
           <div>

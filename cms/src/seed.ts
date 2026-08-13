@@ -454,6 +454,7 @@ const LEADERSHIP_PEOPLE = [
       "Provides group-level direction across Sarga sporting properties, partnerships, and long-term growth.",
     group: "board",
     order: 1,
+    siteScope: "shared",
   },
   {
     name: "Diana Airin",
@@ -462,6 +463,7 @@ const LEADERSHIP_PEOPLE = [
       "Leads operating alignment across event delivery, audience experience, and cross-site execution.",
     group: "executive",
     order: 2,
+    siteScope: "shared",
   },
   {
     name: "Nugdha Achadie",
@@ -470,6 +472,7 @@ const LEADERSHIP_PEOPLE = [
       "Oversees financial governance, investment discipline, and sustainable programme development.",
     group: "executive",
     order: 3,
+    siteScope: "shared",
   },
   {
     name: "Zaki Maulani",
@@ -478,6 +481,7 @@ const LEADERSHIP_PEOPLE = [
       "Builds strategic relationships with rights holders, sponsors, venues, and institutional partners.",
     group: "executive",
     order: 4,
+    siteScope: "shared",
   },
   {
     name: "Aseanto Oudang",
@@ -486,6 +490,7 @@ const LEADERSHIP_PEOPLE = [
       "Guides the shared digital platforms, data systems, and technology supporting every Sarga property.",
     group: "executive",
     order: 5,
+    siteScope: "shared",
   },
   {
     name: "Samsul Purba",
@@ -494,6 +499,7 @@ const LEADERSHIP_PEOPLE = [
       "Leads operational readiness across venues, race weekends, logistics, and live-event delivery.",
     group: "executive",
     order: 6,
+    siteScope: "shared",
   },
 ];
 
@@ -735,6 +741,102 @@ const MOTORSPORT_GALLERIES = [
 /** Site-scoped pages required by the Motorsport revamp. */
 const MOTORSPORT_SITE_PAGES = [
   {
+    title: "Sarga Motorsport Campaign Presentation",
+    slug: "motorsport-rallycross-presentation",
+    routePath: "/campaign/fia-rallycross-world-cup-indonesia-2026",
+    siteScope: "motorsport",
+    pageKind: "campaign",
+    navigationLabel: "FIA Rallycross",
+    sections: [
+      { __component: "shared.page-section", sectionKey: "world-cup-control", eyebrow: "World Cup control / Jakarta", title: "FIA Rallycross World Cup Indonesia 2026", body: "Two days of explosive starts, mixed-surface strategy, and a compact race format that keeps every spectator close to the decisive action." },
+      { __component: "shared.page-section", sectionKey: "format", eyebrow: "Mixed surface / Maximum pressure", title: "Every heat changes the order.", body: "Rallycross compresses starts, contact, strategy, and elimination into a format designed for immediate spectator energy." },
+      { __component: "shared.page-section", sectionKey: "rundown", eyebrow: "5-6 December 2026", title: "Two days. One World Cup.", body: "Session times are managed in the Sarga CMS and remain subject to sporting or operational updates." },
+      { __component: "shared.page-section", sectionKey: "race-day-guide", eyebrow: "Race-day essentials", title: "Know before you go.", body: "A practical spectator guide for a smooth arrival and a safe, high-energy weekend at the circuit." },
+      { __component: "shared.page-section", sectionKey: "campaign-ticket", eyebrow: "Official ticketing", title: "First time. Be there for the first launch.", body: "Review availability before continuing to the approved ticketing partner. Sarga Motorsport does not process checkout or payment on this website." },
+    ],
+  },
+  {
+    title: "Sarga Motorsport Contact",
+    slug: "motorsport-contact",
+    routePath: "/contact",
+    siteScope: "motorsport",
+    pageKind: "custom",
+    navigationLabel: "Contact",
+    heroTitle: "Contact",
+    heroDescription:
+      "Partnership proposals, media requests, ticket support, or a question about Sarga Motorsport. We read every message.",
+    sections: [
+      { __component: "shared.page-section", sectionKey: "inquiry-control", eyebrow: "Inquiry control / Direct routing", title: "One form. The right team.", body: "Choose the closest inquiry type and the message is routed to the Motorsport team responsible for it." },
+      { __component: "shared.page-section", sectionKey: "inquiry-form", eyebrow: "Inquiry form", title: "Send a signal." },
+    ],
+  },
+  {
+    title: "Sarga Motorsport Partners",
+    slug: "motorsport-partners",
+    routePath: "/partners",
+    siteScope: "motorsport",
+    pageKind: "custom",
+    navigationLabel: "Partners",
+    heroTitle: "Partners",
+    heroDescription: "The brands and organisations fuelling the Sarga Motorsport ecosystem. Together we build the stage for Indonesia's most ambitious racing platform.",
+    sections: [
+      { __component: "shared.page-section", sectionKey: "partner-control", eyebrow: "Partner control / Shared platform", title: "One grid. Shared ambition.", body: "The partner network supports competition, event delivery, audience experience, and long-term talent development." },
+      { __component: "shared.page-section", sectionKey: "partner-network", eyebrow: "Official partners", title: "The grid.", body: "Published partner records come from the shared CMS and remain scoped to the Motorsport site." },
+    ],
+  },
+  {
+    title: "Sarga Motorsport Tickets",
+    slug: "motorsport-tickets",
+    routePath: "/tickets",
+    siteScope: "motorsport",
+    pageKind: "custom",
+    navigationLabel: "Tickets",
+    heroTitle: "Tickets",
+    heroDescription: "Sarga Motorsport partners with approved ticketing platforms. Every CTA below redirects to a secure partner checkout - we never process payment directly.",
+    sections: [
+      { __component: "shared.page-section", sectionKey: "ticket-control", eyebrow: "Ticket control / Partner routing", title: "Your seat. Their secure checkout.", body: "Sarga Motorsport publishes approved destinations but never stores payment details or runs an internal ticket engine." },
+      { __component: "shared.page-section", sectionKey: "featured-ticket", eyebrow: "Featured ticket", title: "Secure your seat.", body: "Checkout is handled by our approved ticketing partner. Secure payment, guaranteed entry, zero markup." },
+    ],
+  },
+  {
+    title: "Sarga Motorsport Gallery",
+    slug: "motorsport-gallery",
+    routePath: "/gallery",
+    siteScope: "motorsport",
+    pageKind: "custom",
+    navigationLabel: "Gallery",
+    heroTitle: "Gallery",
+    heroDescription: "Circuit, rally, motorcycle, paddock, people, and fan energy - one bright visual record of Motorsport in motion.",
+    sections: [{ __component: "shared.page-section", sectionKey: "gallery-intro", eyebrow: "Trackside capture feed", title: "Gallery", body: "Trackside photography from Sarga Motorsport - racing, paddock, people, and fan energy captured in motion." }],
+  },
+  {
+    title: "Sarga Motorsport News",
+    slug: "motorsport-news",
+    routePath: "/news",
+    siteScope: "motorsport",
+    pageKind: "newsHub",
+    navigationLabel: "News",
+    heroTitle: "News",
+    heroDescription:
+      "Race reports, rider profiles, technical detail, and the culture moving Indonesian motorsport forward.",
+    sections: [
+      {
+        __component: "shared.page-section",
+        sectionKey: "lead-story",
+        eyebrow: "Editorial control / Motorsport",
+        title: "Stories at race pace.",
+        body: "Reports, announcements, people, technology, and culture from the Motorsport-scoped editorial feed.",
+      },
+      {
+        __component: "shared.page-section",
+        sectionKey: "archive-intro",
+        eyebrow: "Latest dispatches",
+        title: "The archive.",
+        body: "Published Motorsport stories, ordered by publication date.",
+      },
+    ],
+  },
+  {
     title: "Sarga Motorsport Homepage",
     slug: "motorsport-home",
     routePath: "/",
@@ -874,6 +976,56 @@ const MOTORSPORT_SITE_PAGES = [
         title: "What We Do",
         body: "Professional competition, event experiences, media, partnerships, and talent development.",
       },
+      {
+        __component: "motorsport.about-capabilities",
+        enabled: true,
+        eyebrow: "What we do",
+        title: "Competition is the core. Experience completes it.",
+        description:
+          "Professional competition, event experiences, media, partnerships, and talent development—designed as one connected Motorsport system.",
+        cards: [
+          {
+            internalName: "professional-competition",
+            enabled: true,
+            title: "Professional competition",
+            description:
+              "Touring, GT, rallycross, and motorcycle racing delivered to international sporting standards.",
+            sortOrder: 1,
+            accent: "crimson",
+          },
+          {
+            internalName: "talent-development",
+            enabled: true,
+            title: "Talent development",
+            description:
+              "Clear pathways that help Indonesia's next generation of riders and racing professionals progress.",
+            sortOrder: 2,
+            accent: "orange",
+          },
+          {
+            internalName: "event-experience",
+            enabled: true,
+            title: "Event experience",
+            description:
+              "Race weekends shaped through fan access, hospitality, culture, and high-energy live programming.",
+            sortOrder: 3,
+            accent: "yellow",
+          },
+          {
+            internalName: "media-partnerships",
+            enabled: true,
+            title: "Media & partnerships",
+            description:
+              "Broadcast-ready stories and commercial platforms that extend beyond the chequered flag.",
+            sortOrder: 4,
+            accent: "teal",
+          },
+        ],
+      },
+      { __component: "shared.page-section", sectionKey: "operating-idea", eyebrow: "Operating idea", title: "Competition creates the moment.", body: "Competition creates the moment. People, media, hospitality, and development turn it into a lasting Motorsport culture." },
+      { __component: "shared.page-section", sectionKey: "team-intro", eyebrow: "Meet the team", title: "The people behind the programme.", body: "Group leadership and operators building the sporting, commercial, and live-event platform." },
+      { __component: "shared.page-section", sectionKey: "contact-cta", eyebrow: "Contact us", title: "Start a conversation with race control.", body: "Partnerships, media, event support, talent pathways, and general Motorsport inquiries are routed through the contact desk." },
+      { __component: "shared.page-section", sectionKey: "ecosystem-cta", eyebrow: "Part of Sarga.co", title: "One ecosystem. A dedicated racing home.", body: "Sarga.co remains the group gateway. This dedicated site is where Motorsport programmes, events, stories, tickets, and fan culture live in full." },
     ],
   },
   {
@@ -886,6 +1038,29 @@ const MOTORSPORT_SITE_PAGES = [
     heroTitle: "Programs with a pulse.",
     heroDescription:
       "Enter the FIA Rallycross World Cup Indonesia 2026 campaign, explore IJTC, and find the next race weekend.",
+    sections: [
+      {
+        __component: "shared.page-section",
+        sectionKey: "event-control",
+        eyebrow: "Event control / Live index",
+        title: "Programmes with a pulse.",
+        body: "International campaigns, development pathways, and race weekends - each with clear status and approved ticket routing.",
+      },
+      {
+        __component: "shared.page-section",
+        sectionKey: "programmes",
+        eyebrow: "Featured pathways",
+        title: "Choose your entry point.",
+        body: "A world-stage campaign and a national talent-development programme lead the Motorsport calendar.",
+      },
+      {
+        __component: "shared.page-section",
+        sectionKey: "calendar",
+        eyebrow: "Upcoming events",
+        title: "The next grid.",
+        body: "Current Motorsport-scoped events, ordered by the live CMS calendar.",
+      },
+    ],
   },
   {
     title: "FIA Rallycross World Cup Indonesia 2026 Campaign",
@@ -913,6 +1088,122 @@ const MOTORSPORT_SITE_PAGES = [
 
 /** Gateway corporate pages introduced by the reference-aligned revamp. */
 const GATEWAY_SITE_PAGES = [
+  {
+    title: "Gateway About",
+    slug: "gateway-about",
+    routePath: "/about",
+    siteScope: "gateway",
+    pageKind: "about",
+    navigationLabel: "About",
+    heroTitle: "One group. Every arena.",
+    heroDescription: "Sarga Group operates as the direct holding governance overseeing premier tracks, entertainment production, and sustainable sports infrastructure in Indonesia.",
+    sections: [
+      { __component: "shared.page-section", sectionKey: "operating-philosophy", eyebrow: "Operating philosophy", title: "Control at the core. Freedom at the edge.", body: "Sarga gives every property room to build its own culture while a shared corporate center protects quality, accountability, and long-term value." },
+      { __component: "shared.page-section", sectionKey: "corporate-record", eyebrow: "Corporate record", title: "Built in public. Governed for the long run.", body: "Explore Sarga's formation, leadership publication status, and future corporate reports through one living record." },
+    ],
+  },
+  {
+    title: "Gateway Board of Directors",
+    slug: "gateway-board-of-directors",
+    routePath: "/about/board-of-directors",
+    siteScope: "gateway",
+    pageKind: "custom",
+    navigationLabel: "Board of Directors",
+    heroTitle: "Stewardship at every level.",
+    heroDescription: "Sarga's board and executive leadership align long-term governance with decisive operating responsibility across the ecosystem.",
+    sections: [
+      { __component: "shared.page-section", sectionKey: "board-oversight", eyebrow: "Board oversight", title: "Built for the long run.", body: "The board protects Sarga's mandate, governance discipline, and long-term value as the group expands its sporting and entertainment portfolio." },
+      { __component: "shared.page-section", sectionKey: "executive-council", eyebrow: "Executive council", title: "Accountability moves close to the work.", body: "The executive council translates group direction into commercial, financial, and operating momentum across every Sarga property." },
+      { __component: "shared.page-section", sectionKey: "advisory-council", eyebrow: "Advisory council", title: "Experience around the table.", body: "Advisors contribute specialist and independent perspective without obscuring the group's governance and operating lines." },
+    ],
+  },
+  {
+    title: "Gateway Company Structure",
+    slug: "gateway-company-structure",
+    routePath: "/about/company-structure",
+    siteScope: "gateway",
+    pageKind: "custom",
+    navigationLabel: "Company Structure",
+    heroTitle: "One group. Clear lines.",
+    heroDescription: "Sarga combines central governance and shared operating standards with focused business units built to lead their own disciplines.",
+    sections: [
+      { __component: "shared.page-section", sectionKey: "operating-architecture", eyebrow: "Operating architecture", title: "One core. Many operators.", body: "The structure keeps strategic accountability visible while giving every venture the room to build category authority and audience relevance." },
+      { __component: "shared.page-section", sectionKey: "corporate-root", eyebrow: "Corporate root", title: "PT Sarga Multi Ekosistem", body: "Holding governance, portfolio strategy, capital stewardship, and the shared standards connecting every operating property." },
+    ],
+  },
+  {
+    title: "Gateway Job Vacancies",
+    slug: "gateway-job-vacancies",
+    routePath: "/careers/jobs",
+    siteScope: "gateway",
+    pageKind: "custom",
+    navigationLabel: "Job Vacancies",
+    heroTitle: "Find the work that moves you.",
+    heroDescription: "Search current openings across the Sarga ecosystem. Role details are managed by the recruitment team and applications continue securely to LinkedIn.",
+    sections: [{ __component: "shared.page-section", sectionKey: "search-roster", eyebrow: "Search the roster", title: "A precise place to begin.", body: "Use a discipline menu, keyword, employment type, and work mode to narrow the current vacancy list." }],
+  },
+  {
+    title: "Get in Touch",
+    slug: "gateway-contact",
+    routePath: "/contact",
+    siteScope: "gateway",
+    pageKind: "custom",
+    navigationLabel: "Get in Touch",
+    heroTitle: "Start with the right signal.",
+    heroDescription: "Choose the route that best fits your inquiry. Sarga's group desk will direct approved requests to the right operating team.",
+    sections: [{ __component: "shared.page-section", sectionKey: "inquiry-map", eyebrow: "Inquiry map", title: "A direct route into the network.", body: "Choose the closest route below, then give the group desk enough context to connect you with the right operating team." }],
+  },
+  {
+    title: "Careers",
+    slug: "gateway-careers",
+    routePath: "/careers",
+    siteScope: "gateway",
+    pageKind: "custom",
+    navigationLabel: "Careers",
+    heroTitle: "Build what the crowd remembers.",
+    heroDescription: "Sarga brings together operators, creators, engineers, and sporting specialists who want to shape experiences at national scale.",
+    sections: [{ __component: "shared.page-section", sectionKey: "career-disciplines", eyebrow: "Where you can move", title: "Many disciplines. One standard.", body: "Choose a discipline to see its current opportunity roster, then review each role before continuing to its approved LinkedIn application." }],
+  },
+  {
+    title: "Ticket Hub",
+    slug: "gateway-ticket-hub",
+    routePath: "/ticket-hub",
+    siteScope: "gateway",
+    pageKind: "custom",
+    navigationLabel: "Ticket Hub",
+    heroTitle: "Find the moment. Enter the arena.",
+    heroDescription: "Discover Sarga's championship weekends and live experiences. Ticket transactions always continue through approved external partners.",
+    sections: [{ __component: "shared.page-section", sectionKey: "upcoming", eyebrow: "Upcoming", title: "Your next live experience starts here.", body: "Event availability and partner ticket links are published only after organizer approval." }],
+  },
+  {
+    title: "Sarga News & Publications",
+    slug: "gateway-news",
+    routePath: "/news",
+    siteScope: "gateway",
+    pageKind: "newsHub",
+    navigationLabel: "News & Publication",
+    heroTitle: "Signals from every arena.",
+    heroDescription:
+      "Reporting the decisions, performances, partnerships, and people shaping Sarga's integrated sport and entertainment network.",
+    sections: [
+      {
+        __component: "shared.page-section",
+        sectionKey: "lead-story",
+        eyebrow: "Lead story",
+        title: "What the network is watching.",
+        body: "The latest high-priority story from across Sarga's businesses and live properties.",
+        theme: "dark",
+      },
+      {
+        __component: "shared.page-section",
+        sectionKey: "archive-intro",
+        eyebrow: "The editorial desk",
+        title: "The editorial desk",
+        body: "News, publications, press releases, and magazine stories from Sarga.",
+        theme: "light",
+      },
+    ],
+  },
   {
     title: "Sarga History",
     slug: "gateway-history",
@@ -1679,6 +1970,26 @@ const HORSESPORT_GALLERIES = [
 /** CMS entry point for Horse Sport homepage hero media and video controls. */
 const HORSESPORT_SITE_PAGES = [
   {
+    title: "Sarga Horse Sport News",
+    slug: "horsesport-news",
+    routePath: "/news",
+    siteScope: "horsesport",
+    pageKind: "newsHub",
+    navigationLabel: "News",
+    heroTitle: "Every story from the turf.",
+    heroDescription:
+      "Race results, jockey stories, turf and venue development, and stable-life editorial curated by the Sarga Horse Sport team.",
+    sections: [
+      {
+        __component: "shared.page-section",
+        sectionKey: "archive-intro",
+        eyebrow: "Stories & press",
+        title: "Inside the paddock.",
+        body: "Race reports, stable features, venue spotlights, and the stories shaping championship equestrian sport.",
+      },
+    ],
+  },
+  {
     title: "Sarga Horse Sport Homepage",
     slug: "horsesport-home",
     routePath: "/",
@@ -1688,6 +1999,65 @@ const HORSESPORT_SITE_PAGES = [
     heroTitle: "Where champions are made.",
     heroDescription:
       "Championship equestrian sport, premium hospitality, and race-day experiences at international standard.",
+    sections: [
+      {
+        __component: "shared.page-section",
+        sectionKey: "about",
+        eyebrow: "About Sarga Horse Sport",
+        title: "A dedicated home for Indonesian horse sport.",
+        body: "Sarga Horse Sport brings championship racing, disciplined equestrian standards, and race-day hospitality into one premium sports ecosystem - an investable, international-class platform for the sport's next chapter.",
+      },
+    ],
+  },
+  {
+    title: "Sarga Horse Sport About",
+    slug: "horsesport-about",
+    routePath: "/about",
+    siteScope: "horsesport",
+    pageKind: "about",
+    navigationLabel: "About",
+    heroTitle: "The standard for elite horse sport.",
+    heroDescription: "Premium championship racing, disciplined equestrian standards, and a hospitality-forward experience - positioned for a national and international audience.",
+    sections: [
+      { __component: "shared.page-section", sectionKey: "story", eyebrow: "The Sarga Horse Sport story", title: "Heritage, engineered for the modern spectacle.", body: "Sarga Horse Sport formulates premium national race classifications, elite jockey programs, and strict veterinary compliance protocols across Indonesian horse sport. It is built as a complete, investable championship ecosystem - from the turf to the stable to the grandstand." },
+      { __component: "shared.page-section", sectionKey: "capabilities", eyebrow: "What we do", title: "A complete championship capability.", body: "Everything required to run elite horse sport to international standard - under one disciplined organisation." },
+    ],
+  },
+  {
+    title: "Sarga Horse Sport Venues",
+    slug: "horsesport-venues",
+    routePath: "/venues",
+    siteScope: "horsesport",
+    pageKind: "custom",
+    navigationLabel: "Venues",
+    heroTitle: "Championship-grade turf & facilities.",
+    heroDescription: "Premium tracks, turf, stables, and hospitality infrastructure built to international standards.",
+    sections: [
+      { __component: "shared.page-section", sectionKey: "network", eyebrow: "The venue network", title: "Where the sport comes to life.", body: "From championship turf to elite stabling and gala hospitality arenas." },
+      { __component: "shared.page-section", sectionKey: "facilities", eyebrow: "Facilities", title: "Engineered for elite competition.", body: "Tracks, grandstands, paddock clubs, and stables designed for sporting integrity, equine welfare, and premium race-day experience." },
+    ],
+  },
+  {
+    title: "Sarga Horse Sport Stable Life",
+    slug: "horsesport-stable-life",
+    routePath: "/stable-life",
+    siteScope: "horsesport",
+    pageKind: "custom",
+    navigationLabel: "Stable Life",
+    heroTitle: "The discipline behind the sport.",
+    heroDescription: "Inside the stable - training, veterinary care, jockey routines, and the craft that shapes a champion.",
+    sections: [{ __component: "shared.page-section", sectionKey: "intro", eyebrow: "Editorial hub", title: "Where champions are made.", body: "Nutrition, veterinary care, and the daily routines that shape a championship contender - plus the jockeys and equine athletes at the heart of the sport." }],
+  },
+  {
+    title: "Sarga Horse Sport Contact",
+    slug: "horsesport-contact",
+    routePath: "/contact",
+    siteScope: "horsesport",
+    pageKind: "custom",
+    navigationLabel: "Contact",
+    heroTitle: "Let's talk.",
+    heroDescription: "Ticketing, partnership, sponsorship, media, or general - reach the Sarga Horse Sport team.",
+    sections: [{ __component: "shared.page-section", sectionKey: "intro", eyebrow: "Get in touch", title: "One team, every inquiry.", body: "Send us a message and we'll route it to the right team. For tickets, head to our approved partner platforms via the tickets page." }],
   },
 ];
 
@@ -2368,7 +2738,7 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         status: "published",
       });
       strapi.log.info(`[seed] Created Gateway site page: ${page.title}`);
-    } else if (!existing.pageAvailability) {
+    } else if (!existing.pageAvailability && page.pageAvailability) {
       await documents("api::site-page.site-page").update({
         documentId: existing.documentId,
         data: { pageAvailability: page.pageAvailability },
@@ -2559,6 +2929,7 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         "motorsportFeaturedEvent",
         "motorsportInformationBand",
         "motorsportWorldSection",
+        "sections",
       ],
     })) as {
       documentId: string;
@@ -2566,6 +2937,7 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
       motorsportFeaturedEvent?: unknown;
       motorsportInformationBand?: unknown;
       motorsportWorldSection?: unknown;
+      sections?: Array<Record<string, unknown>>;
     } | null;
     const homepagePage =
       page.slug === "motorsport-home" &&
@@ -2620,6 +2992,31 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         });
         strapi.log.info(
           "[seed] Backfilled missing Motorsport homepage managed sections.",
+        );
+      }
+    } else if (Array.isArray(page.sections) && page.sections.length > 0) {
+      const existingSections = Array.isArray(existing.sections)
+        ? existing.sections
+        : [];
+      const sectionIdentity = (section: Record<string, unknown>) =>
+        section.__component === "motorsport.about-capabilities"
+          ? "motorsport.about-capabilities"
+          : `${String(section.__component)}:${String(section.sectionKey)}`;
+      const existingIdentities = new Set(
+        existingSections.map(sectionIdentity),
+      );
+      const missingSections = (
+        page.sections as Array<Record<string, unknown>>
+      ).filter((section) => !existingIdentities.has(sectionIdentity(section)));
+
+      if (missingSections.length > 0) {
+        await documents("api::site-page.site-page").update({
+          documentId: existing.documentId,
+          data: { sections: [...existingSections, ...missingSections] },
+          status: "published",
+        });
+        strapi.log.info(
+          `[seed] Backfilled ${missingSections.length} missing sections: ${page.title}`,
         );
       }
     }
@@ -3145,12 +3542,16 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
     ).findFirst({ filters: { name: { $eq: person.name } } })) as {
       documentId: string;
       summary?: string;
+      siteScope?: string;
     } | null;
 
-    if (existingPerson && !existingPerson.summary) {
+    if (existingPerson && (!existingPerson.summary || !existingPerson.siteScope)) {
       await documents("api::leadership-person.leadership-person").update({
         documentId: existingPerson.documentId,
-        data: { summary: person.summary },
+        data: {
+          ...(existingPerson.summary ? {} : { summary: person.summary }),
+          ...(existingPerson.siteScope ? {} : { siteScope: "shared" }),
+        },
         status: "published",
       });
     }

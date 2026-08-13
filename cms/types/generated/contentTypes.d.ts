@@ -1125,6 +1125,11 @@ export interface ApiLeadershipPersonLeadershipPerson
           localized: true;
         };
       }>;
+    site: Schema.Attribute.Relation<'manyToOne', 'api::site.site'>;
+    siteScope: Schema.Attribute.Enumeration<
+      ['gateway', 'motorsport', 'horsesport', 'shared', 'hidden']
+    > &
+      Schema.Attribute.DefaultTo<'shared'>;
     summary: Schema.Attribute.Text &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -1825,7 +1830,7 @@ export interface ApiPartnerPartner extends Struct.CollectionTypeSchema {
 export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
   collectionName: 'site_pages';
   info: {
-    description: 'Site-scoped static and campaign page content';
+    description: 'Site-scoped page content. Use pageKind to select the page family; optional homepage fields are not required on About, News, Campaign, or Custom pages.';
     displayName: 'Site Page';
     pluralName: 'site-pages';
     singularName: 'site-page';
@@ -1915,6 +1920,7 @@ export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
         'home',
         'about',
         'eventHub',
+        'newsHub',
         'campaign',
         'merchandise',
         'history',
@@ -1927,7 +1933,9 @@ export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<'custom'>;
     publishedAt: Schema.Attribute.DateTime;
     routePath: Schema.Attribute.String & Schema.Attribute.Required;
-    sections: Schema.Attribute.DynamicZone<['shared.page-section']> &
+    sections: Schema.Attribute.DynamicZone<
+      ['shared.page-section', 'motorsport.about-capabilities']
+    > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;

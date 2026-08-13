@@ -3,17 +3,20 @@ import { createMetadata } from "@/lib/seo/metadata";
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { PageHero, NewsArticleCard, ScrollReveal } from "@/components";
-import { fetchNewsPage } from "@/lib/cms-content";
+import { fetchNewsPage, fetchNewsPageConfig } from "@/lib/cms-content";
 import { getRequestLocale } from "@/lib/i18n/request";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
-  return createMetadata({
-    title: "News",
+  const page = await fetchNewsPageConfig();
+    return createMetadata({
+    title: page?.heroTitle ?? "News",
     description:
+      page?.heroDescription ??
       "Race results, event announcements, turf and venue stories, stable life, jockey features, and equine performance from Sarga Horse Sport.",
-    path: "/news",
-    locale,
+      path: "/news",
+      seo: page?.seo,
+      locale,
   });
 }
 
@@ -21,7 +24,13 @@ type Params = { searchParams: Promise<{ category?: string }> };
 
 export default async function NewsPage({ searchParams }: Params) {
   const { category } = await searchParams;
-  const articles = await fetchNewsPage();
+  const [page, articles] = await Promise.all([
+    fetchNewsPageConfig(),
+    fetchNewsPage(),
+  ]);
+  const archiveSection = page?.sections.find(
+    (section) => section.sectionKey === "archive-intro",
+  );
 
   const categories = Array.from(
     new Set(articles.map((a) => a.category).filter(Boolean) as string[]),
@@ -56,11 +65,11 @@ export default async function NewsPage({ searchParams }: Params) {
   return (
     <>
       <PageHero
-        eyebrow="News & publications"
-        title="Every story from the turf."
-        description="Race results, jockey stories, turf and venue development, and stable-life editorial - curated by the Sarga Horse Sport team."
-        backgroundImage="/media/news-turf-track.png"
-        backgroundAlt="Aerial view of a curved championship turf track"
+        eyebrow={archiveSection?.eyebrow ?? "News & publications"}
+        title={page?.heroTitle ?? "Every story from the turf."}
+        description={page?.heroDescription ?? "Race results, jockey stories, turf and venue development, and stable-life editorial - curated by the Sarga Horse Sport team."}
+        backgroundImage={page?.heroImage ?? "/media/news-turf-track.png"}
+        backgroundAlt={page?.heroImageAlt ?? "Aerial view of a curved championship turf track"}
         accent="turf"
       />
 
@@ -81,7 +90,7 @@ export default async function NewsPage({ searchParams }: Params) {
         ) : (
           <div className="hs-card-glass mt-12 p-12 text-center">
             <p className="hs-display text-2xl text-hs-cream">
-              No stories in this category yet.
+               {archiveSection?.body ?? "No stories in this category yet."}
             </p>
             <Link
               href="/news"

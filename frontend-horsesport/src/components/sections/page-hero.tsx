@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import Image from "next/image";
+import { ResilientImage } from "@/components/ui/resilient-image";
 import { HS_ACCENT_HEX, type HorseSportAccent } from "@/types/design-system";
 
 type PageHeroProps = {
@@ -31,9 +31,11 @@ export function PageHero({
   return (
     <section className="relative isolate flex min-h-[55vh] items-end overflow-hidden pt-[calc(var(--hs-header-height)+2rem)]">
       {backgroundImage ? (
-        <Image
+        <ResilientImage
           src={backgroundImage}
           alt={backgroundAlt}
+          fallbackSrc="/media/horse-sport-hero.png"
+          fallbackAlt="Sarga Horse Sport race day"
           fill
           sizes="100vw"
           priority

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResilientImage } from "@/components/ui/resilient-image";
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import type { ArticleCardData } from "@/types/design-system";
@@ -41,9 +41,11 @@ export function NewsArticleCard({
         className={`relative overflow-hidden ${feature ? "aspect-[16/10] md:aspect-auto md:w-[48%]" : compact ? "aspect-[16/10] md:w-[42%]" : "aspect-[16/10]"}`}
       >
         {article.image ? (
-          <Image
+          <ResilientImage
             src={article.image}
             alt={article.imageAlt ?? article.title}
+            fallbackSrc="/media/news-turf-track.png"
+            fallbackAlt="Sarga Horse Sport turf track"
             fill
             priority={priority}
             sizes={

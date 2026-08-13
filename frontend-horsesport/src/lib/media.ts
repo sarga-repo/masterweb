@@ -24,3 +24,5 @@ export function resolveStrapiImage(
     height: media.height,
   };
 }
+
+export { resolveImageAlt } from "./media-alt";

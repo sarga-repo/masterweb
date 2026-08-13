@@ -7,11 +7,22 @@ import {
   siteConfig,
 } from "@/lib/site-config";
 
+export type SeoOverrides = {
+  metaTitle?: string;
+  metaDescription?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImageUrl?: string;
+  canonicalUrl?: string;
+  noIndex?: boolean;
+};
+
 export function createMetadata({
   title,
   description,
   path,
   image,
+  seo,
   type = "website",
   locale = "en",
   isFallback = locale === "id",
@@ -20,16 +31,24 @@ export function createMetadata({
   description: string;
   path: string;
   image?: string | StaticImageData;
+  seo?: SeoOverrides;
   type?: "website" | "article";
   locale?: Locale;
   isFallback?: boolean;
 }): Metadata {
-  const canonical = resolveSiteUrl(localizePath(path, locale));
+  const canonical =
+    locale === "en" && seo?.canonicalUrl
+      ? seo.canonicalUrl
+      : resolveSiteUrl(localizePath(path, locale));
   const alternatePaths = localeAlternates(path);
-  const ogImage = resolveSocialImageUrl(image);
+  const resolvedTitle = seo?.metaTitle ?? title;
+  const resolvedDescription = seo?.metaDescription ?? description;
+  const ogTitle = seo?.ogTitle ?? resolvedTitle;
+  const ogDescription = seo?.ogDescription ?? resolvedDescription;
+  const ogImage = resolveSocialImageUrl(seo?.ogImageUrl ?? image);
   return {
-    title,
-    description,
+    title: resolvedTitle,
+    description: resolvedDescription,
     alternates: {
       canonical,
       languages: Object.fromEntries(
@@ -39,21 +58,21 @@ export function createMetadata({
         ]),
       ),
     },
-    robots: isFallback ? { index: false, follow: true } : undefined,
+    robots: seo?.noIndex || isFallback ? { index: false, follow: isFallback } : undefined,
     openGraph: {
       type,
       url: canonical,
       siteName: siteConfig.name,
       locale: locale === "id" ? "id_ID" : "en_US",
       alternateLocale: locale === "id" ? ["en_US"] : ["id_ID"],
-      title,
-      description,
+      title: ogTitle,
+      description: ogDescription,
       images: ogImage ? [{ url: ogImage }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
+      title: ogTitle,
+      description: ogDescription,
       images: ogImage ? [ogImage] : undefined,
     },
   };

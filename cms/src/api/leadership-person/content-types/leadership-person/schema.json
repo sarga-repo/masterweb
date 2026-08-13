@@ -26,6 +26,16 @@
       "enum": ["board", "executive", "advisor"],
       "default": "executive"
     },
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
+      "default": "shared"
+    },
+    "site": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::site.site"
+    },
     "order": { "type": "integer", "default": 0 },
     "portrait": {
       "type": "media",

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResilientImage } from "@/components/ui/resilient-image";
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { CalendarIcon, PinIcon } from "@/components/ui/hs-icons";
@@ -27,9 +27,11 @@ export function RaceEventCard({
         className={`relative overflow-hidden ${feature ? "aspect-[16/11] xl:aspect-auto xl:min-h-[24rem] xl:w-[56%]" : "aspect-[4/3]"}`}
       >
         {event.image ? (
-          <Image
+          <ResilientImage
             src={event.image}
             alt={event.imageAlt ?? event.title}
+            fallbackSrc="/media/horse-sport-hero.png"
+            fallbackAlt="Sarga Horse Sport race day"
             fill
             priority={priority}
             sizes={

@@ -13,6 +13,7 @@ import {
 import { TrackIcon, StableIcon, RosetteIcon } from "@/components/ui/hs-icons";
 import type { VenueCardData } from "@/types/design-system";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { fetchHorseSportPage } from "@/lib/cms-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
@@ -71,14 +72,17 @@ const FACILITIES = [
   },
 ];
 
-export default function VenuesPage() {
+export default async function VenuesPage() {
+  const page = await fetchHorseSportPage("/venues");
+  const network = page?.sections.find((section) => section.sectionKey === "network");
+  const facilities = page?.sections.find((section) => section.sectionKey === "facilities");
   return (
     <>
       <PageHero
         eyebrow="Venues"
-        title="Championship-grade turf & facilities."
-        description="Premium tracks, turf, stables, and hospitality infrastructure built to international standards."
-        backgroundImage="/media/Racecourse-aerial.png"
+        title={page?.heroTitle ?? "Championship-grade turf & facilities."}
+        description={page?.heroDescription ?? "Premium tracks, turf, stables, and hospitality infrastructure built to international standards."}
+        backgroundImage={page?.heroImage ?? "/media/Racecourse-aerial.png"}
         backgroundAlt="Aerial view of a championship turf racing track"
         accent="turf"
       />
@@ -87,9 +91,9 @@ export default function VenuesPage() {
         <ScrollReveal>
           <SectionHeader
             index="01"
-            eyebrow="The venue network"
-            title="Where the sport comes to life."
-            description="From championship turf to elite stabling and gala hospitality arenas."
+            eyebrow={network?.eyebrow ?? "The venue network"}
+            title={network?.title ?? "Where the sport comes to life."}
+            description={network?.body ?? "From championship turf to elite stabling and gala hospitality arenas."}
           />
         </ScrollReveal>
         <div className="mt-12 grid gap-5 md:grid-cols-3">
@@ -106,8 +110,9 @@ export default function VenuesPage() {
           <ScrollReveal>
             <SectionHeader
               index="02"
-              eyebrow="Facilities"
-              title="Engineered for elite competition."
+              eyebrow={facilities?.eyebrow ?? "Facilities"}
+              title={facilities?.title ?? "Engineered for elite competition."}
+              description={facilities?.body}
             />
           </ScrollReveal>
           <div className="mt-12 grid gap-4 md:grid-cols-3">

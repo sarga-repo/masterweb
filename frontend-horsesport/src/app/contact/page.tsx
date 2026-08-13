@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/hs-icons";
 import { siteConfig } from "@/lib/site-config";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { fetchHorseSportPage } from "@/lib/cms-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
@@ -41,13 +42,15 @@ const CHANNELS = [
   { label: "Based in", value: "Indonesia", Icon: PinIcon },
 ];
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const page = await fetchHorseSportPage("/contact");
+  const intro = page?.sections.find((section) => section.sectionKey === "intro");
   return (
     <>
       <PageHero
         eyebrow="Contact"
-        title="Let's talk."
-        description="Ticketing, partnership, sponsorship, media, or general - reach the Sarga Horse Sport team."
+        title={page?.heroTitle ?? "Let's talk."}
+        description={page?.heroDescription ?? "Ticketing, partnership, sponsorship, media, or general - reach the Sarga Horse Sport team."}
         accent="red"
       />
 
@@ -56,9 +59,9 @@ export default function ContactPage() {
           <div>
             <SectionHeader
               index="01"
-              eyebrow="Get in touch"
-              title="One team, every inquiry."
-              description="Send us a message and we'll route it to the right team. For tickets, head to our approved partner platforms via the tickets page."
+              eyebrow={intro?.eyebrow ?? "Get in touch"}
+              title={intro?.title ?? "One team, every inquiry."}
+              description={intro?.body ?? "Send us a message and we'll route it to the right team. For tickets, head to our approved partner platforms via the tickets page."}
             />
             <dl className="mt-10 grid gap-5 sm:grid-cols-2">
               {CHANNELS.map((c) => (

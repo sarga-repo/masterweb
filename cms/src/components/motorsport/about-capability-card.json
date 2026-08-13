@@ -1,0 +1,44 @@
+{
+  "collectionName": "components_motorsport_about_capability_cards",
+  "info": {
+    "displayName": "About Capability Card",
+    "description": "Ordered, site-owned capability card for the Motorsport About page"
+  },
+  "options": {},
+  "attributes": {
+    "internalName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 60
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "description": {
+      "type": "text",
+      "required": true,
+      "maxLength": 320,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "required": true
+    },
+    "accent": {
+      "type": "enumeration",
+      "enum": ["crimson", "orange", "yellow", "teal", "blue"],
+      "default": "crimson",
+      "required": true
+    }
+  }
+}

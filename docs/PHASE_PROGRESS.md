@@ -46,6 +46,1317 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | GWR-6            | Publications and Ticket Hub                  | ⬜ Todo             | —          |
 | GWR-7            | Cross-route QA and launch readiness          | ⬜ Todo             | —          |
 
+## CMS content coverage and site isolation planning track
+
+| Phase | Title | Status | Date |
+| ----- | ----- | ------ | ---- |
+| CMS-COV-0 | Repository audit and phased implementation specification | ✅ Done | 2026-08-12 |
+| CMS-COV-2 | Site-specific Leadership ownership             | ✅ Done | 2026-08-12 |
+| CMS-COV-3 | Site-specific News root pages                 | ✅ Done | 2026-08-12 |
+| CMS-COV-4 | Motorsport Event Hub editorial coverage       | ✅ Done | 2026-08-12 |
+| CMS-COV-5 | Remaining root-page content coverage          | ✅ Done | 2026-08-12 |
+| CMS-COV-6 | Validation, migration, and handover           | 🟡 Awaiting staging | 2026-08-12 |
+| CMS-COV-7 | Editorial completeness audit and phased specification | ✅ Done | 2026-08-12 |
+| CMS-COV-8 | Horse Sport editorial completeness implementation | ✅ Done | 2026-08-12 |
+| CMS-COV-9 | Media, SEO, and fallback hardening | ✅ Done | 2026-08-12 |
+| CMS-COV-10 | Migration, UAT, rollback rehearsal, and handover | 🟡 Awaiting staging | 2026-08-12 |
+| CMS-COV-11 | Motorsport About capability CMS schema | ✅ Done | 2026-08-12 |
+| CMS-COV-12 | Motorsport About capability seed safety | ✅ Done | 2026-08-12 |
+| CMS-COV-13 | Motorsport About capability frontend consumer | ✅ Done | 2026-08-12 |
+| CMS-COV-14 | Motorsport About capability admin and UAT | 🟡 Awaiting credentials | 2026-08-12 |
+| CMS-COV-15 | Motorsport leadership site-scope isolation | ✅ Done | 2026-08-12 |
+| CMS-COV-16 | Motorsport page section seed backfill | ✅ Done | 2026-08-12 |
+| CMS-COV-17 | Site Page editor UX and Motorsport SEO assessment | ✅ Done | 2026-08-12 |
+| CMS-COV-18 | Motorsport About CMS SEO integration | ✅ Done | 2026-08-12 |
+| CMS-COV-19 | Site Page editor guidance | ✅ Done | 2026-08-12 |
+| CMS-COV-20 | Site Page admin UAT and visibility decision | ✅ Done | 2026-08-12 |
+| CMS-COV-21 | CMS site workspace UI refinement | ✅ Done | 2026-08-12 |
+| CMS-COV-22 | CMS workspace browser verification and Motorsport icon | ✅ Done | 2026-08-12 |
+| CMS-COV-23 | CMS workspace permission-render fix | ✅ Done | 2026-08-13 |
+| CMS-MSR-UI-0 | Motorsport CMS workspace revamp baseline and specification | ✅ Done | 2026-08-13 |
+| CMS-MSR-UI-1 | Motorsport CMS workspace logo and visual foundation | ✅ Done | 2026-08-13 |
+| CMS-MSR-UI-2 | Motorsport CMS workspace hierarchy and task surface | ✅ Done | 2026-08-13 |
+| CMS-MSR-UI-3 | Motorsport CMS workspace guidance and editor assistance | ✅ Done | 2026-08-13 |
+| CMS-MSR-UI-4 | Motorsport CMS workspace shell and upgrade hardening | ✅ Done | 2026-08-13 |
+| CMS-MSR-UI-UX-1 | Motorsport CMS workspace disclosure, scroll, and active-card UX | ✅ Done | 2026-08-13 |
+| CMS-MSR-UI-UX-2 | Motorsport CMS workspace full-scroll canvas background | ✅ Done | 2026-08-13 |
+| CMS-MSR-UI-UX-3 | Motorsport CMS theme lock and disclosure icon refinement | ✅ Done | 2026-08-13 |
+| CMS-MSR-UI-UX-4 | Motorsport CMS direct Site Page workspace entries | ✅ Done | 2026-08-13 |
+
+### CMS-COV-23 — CMS workspace permission-render fix
+
+#### What was done
+
+- Fixed workspace permission discovery so content cards mount before their
+  Content Manager read permissions resolve.
+- Preserved per-card RBAC filtering; denied cards are removed after permission
+  resolution.
+
+#### Files changed
+
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS production build passed.
+- Workspace RBAC tests passed: 11/11.
+- `git diff --check` passed for the workspace page.
+
+#### Notes / caveats
+
+- Browser reached the local Strapi login page, but its saved admin session had
+  expired. Authenticated post-fix browser verification still requires a valid
+  Motorsport Admin session.
+- Standalone admin TypeScript checking remains blocked by the existing missing
+  direct `vite` type dependency; Strapi's production admin build compiled.
+
+### CMS-MSR-UI-0 — Motorsport CMS workspace revamp baseline and specification
+
+#### What was done
+
+- Audited current authenticated Motorsport workspace at desktop and mobile
+  viewports using supplied local Motorsport Admin credentials.
+- Reviewed Motorsport brand tokens, workspace architecture, Strapi admin limits,
+  accessibility risks, and approved logo assets.
+- Defined phased revamp plan covering logo foundation, visual tokens, workspace
+  hierarchy, guidance, shell hardening, and evidence-gated future extensions.
+- Documented explicit preservation boundaries for RBAC, scope filters, routes,
+  schemas, APIs, and shared CMS behavior.
+
+#### Files changed
+
+- `docs/motorsport/revamp/13_cms_workspace_revamp_spec.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Authenticated workspace route loaded successfully.
+- 13 Motorsport permission checks returned HTTP 200.
+- No horizontal overflow at 1200px or 390px.
+- No post-login application errors in browser console.
+- Desktop and mobile baseline screenshots captured for implementation review.
+
+#### Notes / caveats
+
+- CMS-MSR-UI-1 remains awaiting user approval before implementation.
+- Requested full-logo asset is approximately square, but its detailed wording may
+  be too small to read inside Strapi's 28px menu slot; this is documented as an
+  asset-legibility decision, not solved by unapproved cropping.
+- Credentials were used only for local browser authentication and were not
+  written to repository files.
+
+### CMS-MSR-UI-1 — Motorsport CMS workspace logo and visual foundation
+
+#### What was done
+
+- Published requested full Motorsport logo as CMS-owned static admin asset.
+- Used full logo for Motorsport sidebar entry and workspace masthead.
+- Kept non-Motorsport workspace entries on neutral decorative icon treatment.
+- Added scoped Motorsport workspace tokens for Warm White, Cream, Charcoal,
+  Draftline Blue, Crimson, focus Yellow, and supporting text/border roles.
+- Added scoped hover, active, focus-visible, reduced-motion, and dark-mode
+  behavior.
+- Removed global heading uppercase/type styling leakage from Strapi core screens.
+- Made workspace group order explicit: Pages, Editorial, Programs, Commerce,
+  Library.
+- Corrected collection card heading hierarchy to H3 under group H2 headings.
+
+#### Files changed
+
+- `cms/public/admin-assets/logo-sarga-motorsport-full.png`
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `docs/motorsport/revamp/13_cms_workspace_revamp_spec.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS production build passed.
+- Workspace RBAC tests passed: 11/11.
+- Authenticated Motorsport browser UAT passed with supplied local credentials.
+- 13 workspace cards rendered and 13 permission checks returned HTTP 200.
+- Requested logo URL active in sidebar and workspace masthead.
+- Light-mode Warm White canvas and Draftline Blue structure verified.
+- Dark-mode Graphite canvas verified with all 13 cards intact.
+- Electric Yellow focus ring verified on custom workspace action.
+- 1200px desktop and 390px mobile had no horizontal overflow.
+- Browser console reported zero errors after authentication.
+
+#### Notes / caveats
+
+- Full logo wording remains small at the 28px sidebar slot by asset geometry;
+  no unapproved crop was created. Masthead uses larger 74px presentation.
+- CMS-MSR-UI-2 hierarchy and task-surface redesign remains next approval gate.
+
+### CMS-MSR-UI-2 — Motorsport CMS workspace hierarchy and task surface
+
+#### What was done
+
+- Added four priority editor tasks: Edit site pages, Manage events, Publish
+  news, and Manage programs.
+- Reused existing scoped Content Manager links; no API or metric calls added.
+- Kept all 13 authorized collection cards and existing manage/create actions.
+- Made operational group order explicit: Pages, Editorial, Programs, Commerce,
+  Library.
+- Reduced collection card vertical weight and added compact task-surface states.
+- Added task hover, active, and keyboard focus treatment within Motorsport scope.
+
+#### Files changed
+
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `cms/src/admin/app.tsx`
+- `docs/motorsport/revamp/13_cms_workspace_revamp_spec.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS production build passed.
+- Workspace RBAC tests passed: 11/11.
+- Four priority links rendered with exact `siteScope=motorsport` filters.
+- 13 authorized collection cards remained available.
+- First priority task visible within desktop viewport.
+- 1200px desktop and 390px mobile had no horizontal overflow.
+- Keyboard focus outline resolved to Electric Yellow.
+- Dark-mode task surface retained all tasks and collection cards.
+- Browser console reported zero errors after authentication.
+
+#### Notes / caveats
+
+- CMS-MSR-UI-3 guidance and editor-assistance refinement remains next approval
+  gate.
+- Priority task links intentionally do not show live counts or recency data.
+
+### CMS-MSR-UI-3 — Motorsport CMS workspace guidance and editor assistance
+
+#### What was done
+
+- Replaced long Site Page and media notices with semantic progressive disclosure.
+- Added compact Home/About field matrix with Use and Leave empty guidance.
+- Preserved visible publishing guardrail and immutable scope warning.
+- Clarified shared Media Library ownership without claiming site isolation.
+- Kept guidance collapsed by default so priority tasks remain first-fold content.
+- Used semantic `details`, `summary`, `table`, and list markup; no DOM text
+  matching or field hiding added.
+
+#### Files changed
+
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `docs/motorsport/revamp/13_cms_workspace_revamp_spec.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS production build passed.
+- Workspace RBAC tests passed: 11/11.
+- Both guidance panels start collapsed.
+- Site Page guide expanded to two Home/About rows.
+- Media guide expanded to four ordered selection steps.
+- 13 authorized cards remained available.
+- Priority task surface stayed before guidance and collection groups.
+- 1200px desktop and 390px mobile had no horizontal overflow.
+- Dark mode preserved guidance state and collection cards.
+- Browser console reported zero errors after authentication.
+
+#### Notes / caveats
+
+- New workspace copy remains English source copy; translation-key extraction is
+  deferred to a later localization pass because this phase avoids changing
+  Strapi admin locale configuration.
+- CMS-MSR-UI-4 shell and upgrade hardening remains next approval gate.
+
+### CMS-MSR-UI-4 — Motorsport CMS workspace shell and upgrade hardening
+
+#### What was done
+
+- Removed global `[data-strapi-card]` styling override.
+- Removed global heading typography leakage; workspace typography remains scoped.
+- Changed custom menu links to relative paths supported by Strapi.
+- Replaced English text matching in media-picker detection with structural hooks.
+- Batched media-picker scans with `requestAnimationFrame`.
+- Replaced injected media guidance `innerHTML` with DOM-safe text nodes.
+- Preserved Media Library guidance and all workspace/RBAC behavior.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `docs/motorsport/revamp/13_cms_workspace_revamp_spec.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS production build passed.
+- Workspace RBAC tests passed: 11/11.
+- Motorsport workspace loaded with 13 cards and four priority tasks.
+- Home, Content Manager, Media Library, Settings, and Motorsport routes loaded
+  without horizontal overflow.
+- No workspace cards leaked into core Strapi screens.
+- Runtime styles contained no global `[data-strapi-card]` rule.
+- Final authenticated workspace route had no application console errors.
+
+#### Notes / caveats
+
+- Existing Strapi `useRBAC` deprecation and React Router future-flag warnings
+  remain upstream warnings.
+- Core-route smoke captured expected stale-session `401`/`403` requests during
+  navigation; final authenticated workspace route was clean.
+- Restart running dev server to load rebuilt relative menu-link assets and clear
+  stale emitted absolute-path warnings.
+- Future Content Manager editor extensions remain separately approval-gated.
+
+### CMS-MSR-UI-UX-1 — Motorsport CMS workspace disclosure, scroll, and active-card UX
+
+#### What was done
+
+- Added visible arrow buttons to guidance disclosure summaries; arrows rotate
+  when panels expand.
+- Added explicit task-surface class, clipping, background continuity, and shadow
+  treatment so dark surface remains visually contained while page scrolls.
+- Added active sidebar navigation state with `aria-current="location"`.
+- Added active collection-card marker using Crimson border, inset edge marker,
+  and focus shadow.
+- Added IntersectionObserver synchronization between scroll position, sidebar
+  links, and collection cards.
+- Added scroll margin so anchor targets clear the page edge.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS production build passed.
+- Workspace RBAC tests passed: 11/11.
+- Disclosure arrows rendered and rotated on expansion.
+- Sidebar click activated corresponding nav item and collection card.
+- Active card Crimson border and inset marker rendered.
+- Task surface retained clipped dark background during expanded/scroll state.
+- Desktop and mobile had no horizontal overflow.
+- Dark-mode workspace rendered with task surface and 13 cards.
+- Fresh browser tab after Strapi restart reported zero application errors.
+
+#### Notes / caveats
+
+- Existing Strapi `useRBAC` and React Router warnings remain upstream warnings.
+- A stale HMR tab briefly reported an old `useRef` runtime error before the
+  fresh Strapi restart; fresh rebuilt tab was clean.
+
+### CMS-MSR-UI-UX-2 — Motorsport CMS workspace full-scroll canvas background
+
+#### What was done
+
+- Identified Strapi's internal `overflow: auto` scroll shell as the actual page
+  scroll viewport.
+- Added runtime class marking for the nearest scroll ancestor only while the
+  Motorsport workspace is mounted.
+- Applied Warm White canvas background to the full scroll shell in light mode.
+- Applied Graphite canvas background to the full scroll shell in dark mode.
+- Kept sidebar and unrelated Strapi screens outside workspace canvas styling.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Scroll shell identified with `overflow-y: auto`.
+- Light shell background resolved to Warm White through full scroll height.
+- Expanded guidance increased shell scroll height while background remained
+  continuous.
+- Dark shell background resolved to Graphite through full scroll height.
+- Mobile viewport remained overflow-free at 390px.
+- CMS production build passed.
+- Workspace RBAC tests passed: 11/11.
+
+#### Notes / caveats
+
+- Background class is attached and removed through workspace lifecycle cleanup;
+  no permanent Strapi ancestor mutation remains after route exit.
+
+### CMS-MSR-UI-UX-3 — Motorsport CMS theme lock and disclosure icon refinement
+
+#### What was done
+
+- Replaced text arrow glyphs with CSS triangle indicators.
+- Matched closed triangle color to guidance muted text/border family.
+- Matched expanded triangle background to guidance border color while retaining
+  contrasting muted triangle color.
+- Added explicit expanded-state transform and background precedence so icon never
+  disappears against its control background.
+- Forced Strapi admin preference to `light` through `STRAPI_THEME`, overriding
+  device preference and existing user preference on bootstrap.
+- Kept Motorsport workspace and its actual scroll shell dark with explicit
+  Graphite tokens, independent of device preference.
+- Preserved light global shell outside Motorsport workspace.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS production build passed.
+- Workspace RBAC tests passed: 11/11.
+- `STRAPI_THEME` resolved to `light` with device preference set to dark.
+- Global admin body remained light while Motorsport page and scroll shell remained
+  dark.
+- Triangle pseudo-element rendered with muted text color and visible border.
+- Expanded disclosure retained separate border-colored background and contrasting
+  triangle color.
+- Desktop/mobile overflow remained absent.
+
+#### Notes / caveats
+
+- Bootstrap reloads once when existing theme preference is not `light`; this
+  ensures Strapi initializes its internal theme context consistently.
+- Motorsport workspace intentionally remains dark even when global admin mode is
+  light.
+
+### CMS-MSR-UI-UX-4 — Motorsport CMS direct Site Page workspace entries
+
+#### What was done
+
+- Preserved parent `Motorsport Site pages` collection card for full list
+  management, filters, and create workflow.
+- Added live `Page entries` panel below workspace groups.
+- Fetches English Site Page entries through authenticated Content Manager API with
+  exact `siteScope=motorsport` filter.
+- Displays page kind, title, route path, and slug.
+- Links each entry directly to its Strapi document editor using `documentId` and
+  English locale query.
+- Keeps page entry panel permission-protected by the existing Site Page RBAC
+  card and route protection.
+
+#### Files changed
+
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `cms/src/admin/app.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS production build passed.
+- Workspace RBAC tests passed: 11/11.
+- Live workspace rendered all 11 Motorsport Site Page records.
+- Parent Site Pages collection link remained available.
+- Individual About page direct link opened Strapi editor route with expected
+  `documentId` and English locale.
+- All generated page links used Site Page document-editor path.
+- Desktop workspace had no horizontal overflow.
+
+#### Notes / caveats
+
+- Page entry list is live Content Manager data, not hardcoded seed data.
+- Entries are English locale anchors; editors can use the Content Manager locale
+  controls for Indonesian/localized variants.
+- API failure degrades to an empty page-entry panel without affecting parent
+  Site Pages collection access or other workspace cards.
+
+### CMS-COV-22 — CMS workspace browser verification and Motorsport icon
+
+#### What was done
+
+- Replaced generic workspace grid SVG with approved
+  `logo-sarga-motorsport-symbol-sport.png` asset.
+- Published asset to CMS public uploads for admin menu use.
+- Browser-tested authenticated Motorsport workspace dashboard.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/public/uploads/logo-sarga-motorsport-symbol-sport.png`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS TypeScript compilation passed.
+- CMS production build passed.
+- Browser login with Motorsport Admin passed.
+- Workspace dashboard loaded at `/admin/sarga-workspaces/motorsport`.
+- Approved Motorsport icon rendered at 28x28 with accessible alt text.
+- Dashboard width matched viewport: 1200px / 1200px, no horizontal overflow.
+- Browser console: 0 errors; existing warnings only.
+
+#### Notes / caveats
+
+- Strapi core still labels some shell elements as `Strapi DashboardWorkplace`;
+  custom workspace content and menu icon are branded.
+
+### CMS-COV-21 — CMS site workspace UI refinement
+
+#### What was done
+
+- Reworked custom workspace dashboard hierarchy into grouped content panels.
+- Reduced visual clutter from flat cards and repeated notices.
+- Improved spacing, borders, shadows, responsive grid behavior, and action
+  contrast.
+- Made workspace menu icon explicit with fixed dimensions, accessible label, and
+  visible Sarga workspace mark.
+- Preserved existing workspace routes, permission checks, scope filters, and
+  Content Manager actions.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS TypeScript compilation passed.
+- CMS production build passed.
+- Workspace tests passed: 11/11.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Restart CMS and hard-refresh browser to load rebuilt admin assets.
+- Strapi stock sidebar styling remains outside custom workspace dashboard scope.
+
+### CMS-COV-20 — Site Page admin UAT and visibility decision
+
+#### What was done
+
+- Authenticated supplied Gateway, Motorsport, Horse Sport, and Super Admin users.
+- Verified dedicated workspace action isolation.
+- Verified Super Admin sees all four workspace actions.
+- Tested CMS admin login page through browser smoke.
+- Decided against conditional field hiding and Site Page schema split for now.
+- Recorded missing Shared Library Admin credential as UAT limitation.
+
+#### Files changed
+
+- `docs/cms-site-page-editor-ux-and-seo-phase-plan.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Gateway Admin login: passed.
+- Motorsport Admin login: passed.
+- Horse Sport Admin login: passed.
+- Super Admin login: passed.
+- Workspace actions: dedicated roles isolated; Super Admin unrestricted.
+- CMS admin login browser smoke: no browser errors.
+
+#### Notes / caveats
+
+- Full five-role RBAC script subsequently passed with separate Shared Library
+  Admin credentials; Super Admin remained distinct and unrestricted.
+- Conditional visibility deferred until evidence shows guidance is insufficient.
+- Site Page split deferred.
+
+### CMS-COV-19 — Site Page editor guidance
+
+#### What was done
+
+- Added contextual descriptions to optional `Site Page` fields.
+- Added Motorsport workspace guidance for About fields, homepage-only fields,
+  SEO, and dynamic sections.
+- Kept shared Site Page schema and avoided brittle conditional field hiding.
+
+#### Files changed
+
+- `cms/src/api/site-page/content-types/site-page/schema.json`
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `docs/cms-site-page-editor-ux-and-seo-phase-plan.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS TypeScript compilation passed.
+- CMS production build passed.
+
+#### Notes / caveats
+
+- Conditional field visibility remains a Phase 08C decision after authenticated
+  editor UAT.
+- Site Page schema split remains deferred pending evidence.
+
+### CMS-COV-18 — Motorsport About CMS SEO integration
+
+#### What was done
+
+- Added CMS SEO override support to Motorsport metadata helper.
+- Converted Motorsport About static metadata to CMS-backed `generateMetadata()`.
+- Wired CMS title, description, social metadata, canonical URL, OG image, and
+  `noIndex` behavior.
+- Added metadata regression test source.
+
+#### Files changed
+
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/lib/seo/metadata.ts`
+- `frontend-motorsport/src/app/about/page.tsx`
+- `frontend-motorsport/src/lib/seo/metadata.test.ts`
+- `docs/cms-site-page-editor-ux-and-seo-phase-plan.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck passed.
+- Motorsport lint passed.
+- Motorsport production build passed.
+- CMS TypeScript compilation passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Motorsport has no test script or installed test runner; metadata test source was
+  not executed.
+- Phase 08B editor guidance remains pending approval.
+
+### CMS-COV-17 — Site Page editor UX and Motorsport SEO assessment
+
+#### What was done
+
+- Traced Motorsport About SEO from CMS `shared.seo` through frontend metadata.
+- Confirmed About currently uses static metadata and does not fully consume CMS
+  SEO overrides.
+- Assessed conditional field visibility options in current Strapi admin setup.
+- Rejected brittle CSS/DOM hiding as final solution.
+- Assessed shared `Site Page` split and deferred it pending authenticated UAT
+  evidence.
+- Created phased plan for SEO integration, editor guidance, conditional visibility
+  decision, optional admin extension, and schema split reassessment.
+
+#### Files changed
+
+- `docs/cms-site-page-editor-ux-and-seo-phase-plan.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Inspected CMS Site Page schema, SEO component, admin workspace extension, and
+  Motorsport metadata/data consumers.
+
+#### Notes / caveats
+
+- No implementation changes made to SEO, schema, or admin UI in this assessment.
+- Phase 08A requires explicit approval before coding.
+
+### CMS-COV-16 — Motorsport page section seed backfill
+
+#### What was done
+
+- Confirmed existing Motorsport Site Page records were missing seeded dynamic
+  sections, including About `profile`, `operating-idea`, `contact-cta`, and
+  `ecosystem-cta`.
+- Replaced About-only backfill with generic missing-section-only backfill for all
+  Motorsport pages.
+- Preserved existing sections and never replaced editor-authored values.
+- Added page-section verification command covering expected Motorsport routes.
+
+#### Files changed
+
+- `cms/src/seed.ts`
+- `cms/scripts/verify-motorsport-page-sections.mjs`
+- `cms/package.json`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Local CMS restart completed.
+- Motorsport About API now exposes `profile`, `vision`, `what-we-do`, capability
+  component, `operating-idea`, `team-intro`, `contact-cta`, and `ecosystem-cta`.
+- Motorsport page section verification passed for expected section-bearing routes.
+
+#### Notes / caveats
+
+- Campaign and Merchandise records intentionally have no generic sections in
+  seed contract; their content is managed through dedicated campaign/commerce
+  fields and components.
+
+### CMS-COV-15 — Motorsport leadership site-scope isolation
+
+#### What was done
+
+- Fixed Motorsport `fetchLeadership()` query to require exact
+  `siteScope = motorsport`.
+- Prevented Gateway, Horse Sport, Shared, and Hidden leadership records from
+  appearing in Motorsport About team section.
+- Added regression coverage for exact scope query contract.
+
+#### Files changed
+
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/lib/leadership-scope.test.ts`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck passed after scope fix.
+- Local API isolation checks passed 12/12.
+- Motorsport `/about` browser smoke showed only two scoped Motorsport team members,
+  no horizontal overflow at 1200px, and no browser errors.
+
+#### Notes / caveats
+
+- If Motorsport has no scoped leadership records, existing code fallback team
+  renders. This fallback is intentionally not mixed with partial CMS results.
+
+### CMS-COV-14 — Motorsport About capability admin and UAT
+
+#### What was done
+
+- Made About profile heading CMS-managed through `profile.title`.
+- Ran Motorsport About browser smoke UAT.
+- Ran CMS build and TypeScript validation.
+- Ran 12/12 public API site-isolation checks.
+- Attempted authenticated workspace UAT; credentials were unavailable.
+
+#### Files changed
+
+- `frontend-motorsport/src/app/about/page.tsx`
+- `docs/cms-editorial-completeness-phase-07-motorsport-about-capabilities.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck passed.
+- Motorsport lint passed.
+- Motorsport production build passed.
+- CMS TypeScript compilation passed.
+- CMS production build passed.
+- Motorsport `/about` returned HTTP 200, one H1, four capability cards, no
+  horizontal overflow at 1200px, and zero browser console errors.
+- Public API isolation passed 12/12 checks.
+
+#### Notes / caveats
+
+- Authenticated Admin Motorsport edit/publish UAT is blocked by missing
+  `CMS_UAT_PASSWORD` and CMS credentials.
+- Indonesian localization review and stakeholder sign-off remain pending.
+
+### CMS-COV-13 — Motorsport About capability frontend consumer
+
+#### What was done
+
+- Added typed mapping for `motorsport.about-capabilities` and nested cards.
+- Replaced hardcoded card rendering with CMS data when valid.
+- Added enabled filtering, deterministic sorting, and whole-component fallback.
+- Preserved existing Motorsport About layout and technical numbering.
+- Updated About profile heading to consume CMS `profile.title`; fallback remains
+  only for missing CMS content.
+- Added regression tests for ordering, filtering, and fallback behavior.
+
+#### Files changed
+
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/app/about/page.tsx`
+- `frontend-motorsport/src/lib/about-capabilities.test.ts`
+- `docs/cms-editorial-completeness-phase-07-motorsport-about-capabilities.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck passed.
+- Motorsport lint passed.
+- Motorsport production build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Motorsport frontend has no test script or installed test runner; regression test
+  source was not executed.
+- Admin authenticated UAT remains Phase 07D.
+
+### CMS-COV-12 — Motorsport About capability seed safety
+
+#### What was done
+
+- Added four default Motorsport About capability cards to seed data.
+- Added missing-component-only backfill for existing `motorsport-about` records.
+- Preserved existing page sections and editor-authored content.
+- Added API verification command for one component and unique cards.
+
+#### Files changed
+
+- `cms/src/seed.ts`
+- `cms/scripts/verify-motorsport-about-capabilities.mjs`
+- `cms/package.json`
+- `docs/cms-editorial-completeness-phase-07-motorsport-about-capabilities.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS TypeScript compilation passed.
+- CMS production build passed.
+- Local Strapi restart completed.
+- Motorsport About API returned one capability component with four cards.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Frontend rendering remains unchanged; Phase 07C requires separate approval.
+
+### CMS-COV-11 — Motorsport About capability CMS schema
+
+#### What was done
+
+- Added `motorsport.about-capabilities` section component with enabled state,
+  heading copy, description, and repeatable cards.
+- Added `motorsport.about-capability-card` with localized title/description,
+  enabled state, deterministic order, stable internal name, and accent.
+- Registered component in `site-page.sections` dynamic zone.
+- Did not change seed data or frontend rendering; Phase 07B remains next.
+
+#### Files changed
+
+- `cms/src/components/motorsport/about-capabilities.json`
+- `cms/src/components/motorsport/about-capability-card.json`
+- `cms/src/api/site-page/content-types/site-page/schema.json`
+- `cms/types/generated/contentTypes.d.ts`
+- `strapi/content-types.json`
+- `docs/cms-editorial-completeness-phase-07-motorsport-about-capabilities.md`
+
+#### How verified
+
+- CMS TypeScript compilation passed.
+- CMS production build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Seed migration, frontend consumer, admin role UAT, and browser verification are
+  intentionally deferred to Phases 07B–07D.
+
+### CMS-COV-10 — Migration, UAT, rollback rehearsal, and handover
+
+#### What was done
+
+- Added non-destructive migration preflight for archive, checksum, Git SHA, seed,
+  and approval gates.
+- Added paired database/uploads rollback rehearsal that never mutates state.
+- Added public API site-isolation UAT probe for Gateway, Motorsport, and Horse Sport.
+- Documented operator handover, release evidence, backup, import, UAT, and rollback
+  sequence.
+
+#### Files changed
+
+- `cms/scripts/migration-preflight.mjs`
+- `cms/scripts/rollback-rehearsal.mjs`
+- `cms/scripts/validate-site-isolation.mjs`
+- `cms/package.json`
+- `docs/cms-editorial-completeness-phase-06-migration-uat-handover.md`
+- `docs/strapi-cms-phase-06-validation-migration-and-cleanup.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Migration preflight and rollback commands are syntax-checked through Node
+  execution below.
+- CMS build passed.
+- CMS TypeScript compilation passed.
+- Local API isolation UAT passed 12/12 checks.
+- Preflight blocked safely without archive/approval.
+- Rollback rehearsal blocked safely without paired backups.
+- Browser smoke passed Gateway, Motorsport, and Horse Sport homepage/news routes;
+  all returned HTTP 200 with one H1 and no overflow at 1200px.
+- All six local robots/sitemap endpoints returned HTTP 200.
+- Local API isolation passed 12/12 checks.
+- i18n completeness reported 116 English, 21 Indonesian, and 95 translation
+  actions pending.
+- Authenticated RBAC UAT and i18n compare remain blocked by missing credentials
+  and source/target inventory artifacts.
+- Frontend validation remains passing from Phase 5.
+- Production import and destructive rollback were not executed.
+
+#### Notes / caveats
+
+- Phase remains blocked on staging/production access, backup artifacts, credentials,
+  editorial approval, and stakeholder sign-off.
+
+### CMS-COV-9 — Media, SEO, and fallback hardening
+
+#### What was done
+
+- Added Horse Sport CMS SEO population and page-level SEO override mapping.
+- Added resilient fallback media for Horse Sport page heroes, event cards, and
+  news cards.
+- Added non-empty alt-text normalization helper and regression test.
+- Added development-only Strapi failure diagnostics.
+- Confirmed Gateway and Motorsport already satisfy equivalent SEO and locale
+  fallback contracts.
+
+#### Files changed
+
+- `frontend-horsesport/src/lib/cms-content.ts`
+- `frontend-horsesport/src/lib/strapi/client.ts`
+- `frontend-horsesport/src/lib/media.ts`
+- `frontend-horsesport/src/lib/media.test.ts`
+- `frontend-horsesport/src/components/ui/resilient-image.tsx`
+- `frontend-horsesport/src/components/sections/page-hero.tsx`
+- `frontend-horsesport/src/components/cards/race-event-card.tsx`
+- `frontend-horsesport/src/components/cards/news-article-card.tsx`
+- `frontend-horsesport/src/app/news/page.tsx`
+- `docs/cms-editorial-completeness-phase-05-media-seo-fallbacks.md`
+
+#### How verified
+
+- Horse Sport typecheck passed.
+- Horse Sport lint passed.
+- Horse Sport tests passed: 11/11.
+- Horse Sport production build passed.
+- Gateway and Motorsport typecheck/lint passed.
+- CMS TypeScript compilation passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Remaining hardcoded media in static styleguide and brand-only sections is
+  documented fallback/technical content, not CMS editorial record media.
+
+### CMS-COV-8 — Horse Sport editorial completeness implementation
+
+#### What was done
+
+- Added Horse Sport `site-page` seed records for homepage, About, Venues, Stable
+  Life, and Contact.
+- Added generic Horse Sport route page adapter with scoped CMS queries and fallback.
+- Wired homepage About copy, About hero/story/capabilities, Venues, Stable Life,
+  and Contact presentation content to CMS sections.
+- Kept events, news, galleries, partners, tickets, filters, and forms structured
+  or code-owned.
+- Extended editorial contract tests with Horse Sport route and section keys.
+
+#### Files changed
+
+- `cms/src/seed.ts`
+- `cms/src/editorial-completeness.test.ts`
+- `frontend-horsesport/src/lib/cms-content.ts`
+- `frontend-horsesport/src/lib/homepage-data.ts`
+- `frontend-horsesport/src/app/about/page.tsx`
+- `frontend-horsesport/src/app/venues/page.tsx`
+- `frontend-horsesport/src/app/stable-life/page.tsx`
+- `frontend-horsesport/src/app/contact/page.tsx`
+
+#### How verified
+
+- Horse Sport TypeScript check passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- CMS package has no `typecheck` or `test` scripts; CMS validation remains via
+  existing build/runtime checks.
+- Existing Horse Sport test suite was not run in this phase.
+- Production migration, localization review, and authenticated CMS UAT still
+  require staging access.
+
+### CMS-COV-7 — Editorial completeness audit and phased specification
+
+#### What was done
+
+- Re-audited all public routes under Gateway, Motorsport, and Horse Sport.
+- Searched section headings, body copy, CTA labels, fallback media, and rendered
+  media paths across frontend route files.
+- Compared static content against existing `site-page`, collection, adapter,
+  transformer, and renderer contracts.
+- Classified content into CMS-managed, static editorial, technical/UI,
+  fallback-only, and deferred categories.
+- Created new six-phase editorial completeness plan covering Gateway, Motorsport,
+  Horse Sport, media/SEO/fallback hardening, and migration/UAT handover.
+
+#### Files changed
+
+- `docs/cms-editorial-completeness-audit-master-plan.md`
+- `docs/cms-editorial-completeness-phase-01-audit-and-contract.md`
+- `docs/cms-editorial-completeness-phase-02-gateway.md`
+- `docs/cms-editorial-completeness-phase-03-motorsport.md`
+- `docs/cms-editorial-completeness-phase-04-horsesport.md`
+- `docs/cms-editorial-completeness-phase-05-media-seo-fallbacks.md`
+- `docs/cms-editorial-completeness-phase-06-migration-uat-handover.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Enumerated all route page files for all three frontends.
+- Searched route components for static editorial copy and media sources.
+- Reviewed current CMS page, collection, component, seed, and frontend adapter
+  contracts.
+- Confirmed this audit added no runtime implementation changes.
+
+#### Notes / caveats
+
+- Existing prior-phase source changes remain in worktree.
+- New editorial completeness Phase 1 requires approval before implementation.
+- Error/loading/not-found system copy remains a review decision, not automatically
+  CMS content.
+
+### CMS-EDITORIAL-1 — Audit baseline and content contract
+
+#### What was done
+
+- Created frozen route/section/media inventory for Gateway, Motorsport, and Horse
+  Sport.
+- Formalized `CMS_MANAGED`, `STATIC_EDITORIAL`, `FALLBACK_ONLY`, `TECHNICAL`, and
+  `DEFERRED` classifications.
+- Defined stable page/section key contract and media source rules.
+- Added executable contract tests for canonical scope, unique page identity,
+  section-key format, and technical-key exclusion.
+
+#### Files changed
+
+- `docs/cms-editorial-completeness-phase-01-inventory.md`
+- `docs/cms-editorial-completeness-phase-01-audit-and-contract.md`
+- `cms/src/editorial-completeness.test.ts`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- `node --test cms/src/editorial-completeness.test.ts` passed four tests.
+- `git diff --check` passed.
+- No CMS schema, seed, API, frontend, or rendering files changed for this phase.
+
+#### Notes / caveats
+
+- Route inventory is baseline for next phases and must be updated when routes are
+  added.
+- Media source completeness still requires implementation-phase API/runtime
+  checks.
+- Phase 2 Gateway migration requires approval.
+
+### CMS-EDITORIAL-2 — Gateway editorial completeness
+
+#### What was done
+
+- Added Gateway-scoped page records for About, Board of Directors, Company
+  Structure, and Careers Job Vacancies.
+- Moved hero and section presentation copy into existing `site-page` and
+  `shared.page-section` contracts.
+- Updated Gateway route consumers with exact route/page lookup and safe fallback.
+- Preserved collection-owned Leadership, Ecosystem Business, and Job Vacancy
+  data.
+
+#### Files changed
+
+- `cms/src/seed.ts`
+- `frontend-gateway/src/app/about/page.tsx`
+- `frontend-gateway/src/app/about/board-of-directors/page.tsx`
+- `frontend-gateway/src/app/about/company-structure/page.tsx`
+- `frontend-gateway/src/app/careers/jobs/page.tsx`
+- `docs/cms-editorial-completeness-phase-02-gateway.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS typecheck/build passed.
+- Gateway typecheck passed.
+- Gateway tests passed: 8 files, 37 tests.
+- Gateway lint passed with existing non-fatal `jsx-ast-utils` warning.
+- Editorial completeness contract tests passed: 4 tests.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Production Gateway page records require editorial review, localization review,
+  and controlled publish.
+- Remaining Gateway pages are deferred to focused follow-up or hardening phase.
+- Motorsport and Horse Sport files were not changed in this phase.
+
+### CMS-EDITORIAL-3 — Motorsport editorial completeness
+
+#### What was done
+
+- Added Motorsport About presentation sections for operating idea, team intro,
+  contact CTA, and ecosystem CTA.
+- Added route-level FIA Rallycross campaign page sections for format, rundown,
+  race-day guide, and ticket messaging.
+- Added exact scoped `fetchMotorsportPageByRoute` adapter.
+- Preserved structured Event, Program, Rider, Standing, Regulation, Partner,
+  Gallery, and Ticket CTA ownership.
+
+#### Files changed
+
+- `cms/src/seed.ts`
+- `frontend-motorsport/src/app/about/page.tsx`
+- `frontend-motorsport/src/app/campaign/[slug]/page.tsx`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `docs/cms-editorial-completeness-phase-03-motorsport.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS typecheck/build passed.
+- Motorsport typecheck passed.
+- Editorial completeness contract tests remain passing from Phase 1.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Event detail, IJTC, News detail, and homepage support surfaces remain deferred
+  to focused follow-up because generic page sections alone would not safely model
+  their structured contracts.
+- Production Motorsport page records require editorial review, localization
+  review, and controlled publish.
+
+### CMS-COV-0 — Repository audit and phased implementation specification
+
+#### What was done
+
+- Audited authoritative Strapi schemas, components, bootstrap/seed/access-control
+  paths, frontend CMS adapters, root routes, and relevant project specifications.
+- Created evidence-based coverage matrix for Gateway, Motorsport, and Horse Sport.
+- Classified significant hardcoded editorial content and identified Leadership,
+  News Hub, and Motorsport Event Hub gaps.
+- Recommended additive site-scoped Leadership ownership and reuse of `site-page`
+  for News Hub and Event Hub page-level configuration.
+- Defined six approval-gated implementation phases, migration rules, API query
+  contracts, validation requirements, and risks.
+
+#### Files changed
+
+- Added `docs/strapi-cms-content-coverage-master-plan.md`.
+- Added `docs/strapi-cms-phase-01-audit-and-foundation.md`.
+- Added `docs/strapi-cms-phase-02-site-leadership.md`.
+- Added `docs/strapi-cms-phase-03-news-root-pages.md`.
+- Added `docs/strapi-cms-phase-04-motorsport-event-page.md`.
+- Added `docs/strapi-cms-phase-05-root-page-content-coverage.md`.
+- Added `docs/strapi-cms-phase-06-validation-migration-and-cleanup.md`.
+- Added `docs/strapi-cms-phase-01-audit-evidence.md` with route-to-consumer,
+  fallback, migration rehearsal, and isolation fixture contracts.
+- Modified `docs/PHASE_PROGRESS.md`.
+
+#### How verified
+
+- Reviewed source schemas under `cms/src`, not only the schema mirror.
+- Traced Gateway, Motorsport, and Horse Sport page routes to typed CMS queries
+  and rendered components.
+- Ran `git diff --check` successfully.
+- Confirmed no CMS, frontend, seed, migration, or generated source files changed.
+- Confirmed Phase 2 Leadership schema work, Phase 3 News Hub work, and Phase 4
+  Event Hub content work remain deferred.
+
+### CMS-COV-2 — Site-specific Leadership ownership
+
+#### What was done
+
+- Added rollout-safe `siteScope` and optional `site` relation to the existing
+  `leadership-person` collection without duplicating the collection.
+- Moved Leadership into site-scoped Gateway, Motorsport, Horse Sport, and
+  filtered Shared Library workspace links.
+- Extended RBAC subject coverage so managed roles receive conditioned Leadership
+  permissions while `siteScope` remains immutable for editors.
+- Updated local idempotent seed data to preserve legacy records as `shared` until
+  production editorial classification is completed.
+- Updated Gateway and Motorsport Leadership queries to enforce site ownership.
+- Added RBAC test coverage for Leadership scope conditions and immutable scope.
+
+#### Files changed
+
+- `cms/src/api/leadership-person/content-types/leadership-person/schema.json`
+- `cms/src/access-control/sarga-workspaces.ts`
+- `cms/src/access-control/sarga-workspaces.test.ts`
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `cms/src/seed.ts`
+- `cms/types/generated/contentTypes.d.ts`
+- `frontend-gateway/src/lib/strapi/about.ts`
+- `frontend-gateway/src/lib/strapi/types.ts`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `strapi/content-types.json`
+- `docs/strapi-cms-phase-02-site-leadership.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS TypeScript check passed.
+- CMS access-control tests passed: 11 tests.
+- Gateway typecheck passed.
+- Motorsport typecheck passed.
+- Gateway frontend tests passed: 8 files, 37 tests.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Existing production Leadership records require export, editorial ownership
+  classification, and controlled backfill before assigning site-specific scopes.
+- Existing local/demo records default to `shared` for compatibility.
+- Horse Sport Leadership query/rendering remains deferred because no current
+  Horse Sport route consumes Leadership.
+- CMS Prettier validation was unavailable because `prettier` is not installed in
+  CMS dependencies.
+
+### CMS-COV-3 — Site-specific News root pages
+
+#### What was done
+
+- Added `newsHub` to the existing scoped `site-page` model.
+- Added idempotent local page records for Gateway, Motorsport, and Horse Sport
+  `/news` routes using existing hero, section, and SEO contracts.
+- Updated Gateway, Motorsport, and Horse Sport News routes to consume page-level
+  CMS copy/media while preserving article data and fallback behavior.
+- Kept News Articles as independent shared collections with existing filters,
+  category handling, pagination, and detail routes.
+- Updated generated CMS types and schema mirror.
+
+#### Files changed
+
+- `cms/src/api/site-page/content-types/site-page/schema.json`
+- `cms/src/seed.ts`
+- `cms/types/generated/contentTypes.d.ts`
+- `strapi/content-types.json`
+- `frontend-gateway/src/app/news/page.tsx`
+- `frontend-gateway/src/components/sections/news-archive.tsx`
+- `frontend-gateway/src/lib/strapi/site-pages.ts`
+- `frontend-gateway/src/lib/strapi/types.ts`
+- `frontend-motorsport/src/app/news/page.tsx`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-horsesport/src/app/news/page.tsx`
+- `frontend-horsesport/src/lib/cms-content.ts`
+- `docs/strapi-cms-phase-03-news-root-pages.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS TypeScript check passed.
+- CMS production build passed.
+- CMS RBAC tests passed: 11 tests.
+- Gateway typecheck passed.
+- Gateway tests passed: 8 files, 37 tests.
+- Motorsport typecheck passed.
+- Horse Sport typecheck passed.
+
+#### Notes / caveats
+
+- Production page records still require controlled creation, localization
+  review, API response verification, and visual comparison.
+- Existing fallback copy remains intentionally available until production CMS
+  content is approved.
+- Motorsport and Horse Sport frontend test commands were not run because their
+  packages do not expose an installed `vitest` binary.
+
+### CMS-COV-4 — Motorsport Event Hub editorial coverage
+
+#### What was done
+
+- Reused the existing Motorsport `site-page` Event Hub record.
+- Added `event-control`, `programmes`, and `calendar` page sections through the
+  existing `shared.page-section` component.
+- Moved blue information-band and Programme/Calendar editorial copy to CMS.
+- Updated Event Hub renderer to resolve section copy by stable key with safe
+  fallbacks.
+- Preserved Event and Motorsport Program collections, filters, statuses, counts,
+  URLs, and ticket routing.
+
+#### Files changed
+
+- `cms/src/seed.ts`
+- `frontend-motorsport/src/app/events/page.tsx`
+- `docs/strapi-cms-phase-04-motorsport-event-page.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS TypeScript check passed.
+- CMS production build passed.
+- Motorsport typecheck passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Production Event Hub sections require editor review and publish.
+- Fallback copy remains intentionally available until production migration is
+  verified.
+- No Event or Motorsport Program schema/data migration was performed.
+
+### CMS-COV-5 — Remaining root-page content coverage
+
+#### What was done
+
+- Added scoped custom page records for Gateway `/contact`, `/careers`, and
+  `/ticket-hub`.
+- Added scoped custom page records for Motorsport `/contact`, `/partners`,
+  `/tickets`, and `/gallery`.
+- Updated affected routes to consume CMS hero and stable section copy while
+  preserving technical labels, collection data, forms, counts, and fallbacks.
+- Kept Horse Sport and lower-priority mixed-contract routes explicitly deferred
+  rather than introducing an unverified broad abstraction.
+
+#### Files changed
+
+- `cms/src/seed.ts`
+- `frontend-gateway/src/app/contact/page.tsx`
+- `frontend-gateway/src/app/careers/page.tsx`
+- `frontend-gateway/src/app/ticket-hub/page.tsx`
+- `frontend-motorsport/src/app/contact/page.tsx`
+- `frontend-motorsport/src/app/partners/page.tsx`
+- `frontend-motorsport/src/app/tickets/page.tsx`
+- `frontend-motorsport/src/app/gallery/page.tsx`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `docs/strapi-cms-phase-05-root-page-content-coverage.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS TypeScript check passed.
+- Gateway typecheck passed.
+- Motorsport typecheck passed.
+- Horse Sport typecheck passed.
+- Gateway tests passed: 8 files, 37 tests.
+- CMS RBAC tests passed: 11 tests.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Production page records require editor review, localized content verification,
+  and controlled publish.
+- Horse Sport mixed-contract root pages remain deferred for a later focused
+  implementation rather than receiving generic fallback-only CMS wiring.
+- Motorsport frontend tests remain unavailable because package lacks installed
+  `vitest` binary.
+
+### CMS-COV-6 — Validation, migration, and handover
+
+#### What was done
+
+- Ran CMS typecheck/build and RBAC regression tests.
+- Ran Gateway, Motorsport, and Horse Sport typechecks, lint, and production
+  builds.
+- Ran Gateway frontend tests: 8 files, 37 tests.
+- Reviewed source schemas, generated Strapi types, frontend page types, and
+  `strapi/content-types.json` for Leadership and News Hub contract consistency.
+- Confirmed no destructive migration, fallback cleanup, or production data change
+  was performed.
+- Documented production backup/restore, API isolation, authenticated admin UAT,
+  localization, visual comparison, and rollback gates.
+
+#### Files changed
+
+- `docs/strapi-cms-phase-06-validation-migration-and-cleanup.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS build passed.
+- CMS typecheck passed.
+- CMS RBAC tests passed: 11 tests.
+- Gateway typecheck/lint/test/build passed.
+- Motorsport typecheck/lint/build passed.
+- Horse Sport typecheck/lint/build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Production/staging database and uploads backup were unavailable; migration was
+  not executed.
+- Authenticated CMS/API isolation UAT remains pending staging access.
+- Motorsport and Horse Sport frontend tests remain unavailable because current
+  packages do not expose installed `vitest` commands.
+- Phase status remains awaiting staging, not production-ready.
+
+#### Notes / caveats
+
+- Phase 1 implementation remains approval-gated.
+- Leadership record ownership needs editorial classification before migration.
+- Production/staging migration, API UAT, and frontend builds were not run because
+  this run was specification-only.
+
 ## Motorsport revamp track (`prompts/motorsport/revamp/`)
 
 | Phase   | Title                               | Status  | Date       |

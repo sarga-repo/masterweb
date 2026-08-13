@@ -9,6 +9,7 @@ import {
 } from "@/components";
 import { fetchNewsPage } from "@/lib/cms-content";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { fetchHorseSportPage } from "@/lib/cms-content";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
@@ -24,7 +25,11 @@ export async function generateMetadata(): Promise<Metadata> {
 const STABLE_CATEGORIES = ["stable", "jockey", "equine"];
 
 export default async function StableLifePage() {
-  const articles = await fetchNewsPage();
+  const [articles, page] = await Promise.all([
+    fetchNewsPage(),
+    fetchHorseSportPage("/stable-life"),
+  ]);
+  const intro = page?.sections.find((section) => section.sectionKey === "intro");
   const stable = articles.filter((a) =>
     STABLE_CATEGORIES.some((c) => a.category?.toLowerCase().includes(c)),
   );
@@ -34,9 +39,9 @@ export default async function StableLifePage() {
     <>
       <PageHero
         eyebrow="Stable Life"
-        title="The discipline behind the sport."
-        description="Inside the stable - training, veterinary care, jockey routines, and the craft that shapes a champion."
-        backgroundImage="/media/news-stable.png"
+        title={page?.heroTitle ?? "The discipline behind the sport."}
+        description={page?.heroDescription ?? "Inside the stable - training, veterinary care, jockey routines, and the craft that shapes a champion."}
+        backgroundImage={page?.heroImage ?? "/media/news-stable.png"}
         backgroundAlt="Elite race horse inside a premium stable interior"
         accent="brown"
       />
@@ -45,9 +50,9 @@ export default async function StableLifePage() {
         <ScrollReveal>
           <SectionHeader
             index="01"
-            eyebrow="Editorial hub"
-            title="Where champions are made."
-            description="Nutrition, veterinary care, and the daily routines that shape a championship contender - plus the jockeys and equine athletes at the heart of the sport."
+            eyebrow={intro?.eyebrow ?? "Editorial hub"}
+            title={intro?.title ?? "Where champions are made."}
+            description={intro?.body ?? "Nutrition, veterinary care, and the daily routines that shape a championship contender - plus the jockeys and equine athletes at the heart of the sport."}
           />
         </ScrollReveal>
 

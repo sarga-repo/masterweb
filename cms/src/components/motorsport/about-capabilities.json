@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_motorsport_about_capabilities",
+  "info": {
+    "displayName": "About Capabilities",
+    "description": "CMS-managed capability grid for the Motorsport About page"
+  },
+  "options": {},
+  "attributes": {
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 80,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 160,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 320,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "cards": {
+      "type": "component",
+      "repeatable": true,
+      "component": "motorsport.about-capability-card",
+      "min": 1,
+      "max": 6,
+      "pluginOptions": { "i18n": { "localized": true } }
+    }
+  }
+}

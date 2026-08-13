@@ -245,6 +245,7 @@ export type SitePageKind =
   | "home"
   | "about"
   | "eventHub"
+  | "newsHub"
   | "campaign"
   | "merchandise"
   | "history"
@@ -455,6 +456,7 @@ export type RawLeadershipPerson = {
   portrait?: RawStrapiMedia;
   summary?: string;
   order?: number;
+  siteScope?: SiteScope;
 };
 
 export type RawCorporateReport = {

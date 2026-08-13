@@ -256,6 +256,35 @@ test("managed roles retain one workspace action and scoped record conditions", (
   }
 });
 
+test("Leadership Person is scoped for every site workspace", () => {
+  const strapi = createStrapiFixture();
+  const subject = "api::leadership-person.leadership-person";
+
+  for (const role of WORKSPACE_ROLES.filter((role) => role.scope !== "shared")) {
+    assert.ok(role.subjects.includes(subject));
+    const permissions = buildRolePermissions(strapi, role);
+    const readPermission = permissions.find(
+      (permission) =>
+        permission.subject === subject &&
+        permission.action === "plugin::content-manager.explorer.read",
+    );
+    const createPermission = permissions.find(
+      (permission) =>
+        permission.subject === subject &&
+        permission.action === "plugin::content-manager.explorer.create",
+    );
+
+    assert.deepEqual(readPermission?.conditions, [
+      `admin::${role.conditionName}`,
+    ]);
+    assert.equal(createPermission?.properties?.fields?.includes("siteScope"), false);
+  }
+
+  const sharedRole = WORKSPACE_ROLES.find((role) => role.scope === "shared");
+  assert.ok(sharedRole?.subjects.includes(subject));
+  assert.equal(sharedRole?.unscopedSubjects?.includes(subject), false);
+});
+
 test("dedicated roles expose only conditioned read-only reference records", () => {
   const strapi = createStrapiFixture();
 

@@ -1,5 +1,114 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface MotorsportAboutCapabilities extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_about_capabilities';
+  info: {
+    description: 'CMS-managed capability grid for the Motorsport About page';
+    displayName: 'About Capabilities';
+  };
+  attributes: {
+    cards: Schema.Attribute.Component<
+      'motorsport.about-capability-card',
+      true
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 6;
+          min: 1;
+        },
+        number
+      >;
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 320;
+      }>;
+    enabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    eyebrow: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 160;
+      }>;
+  };
+}
+
+export interface MotorsportAboutCapabilityCard extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_about_capability_cards';
+  info: {
+    description: 'Ordered, site-owned capability card for the Motorsport About page';
+    displayName: 'About Capability Card';
+  };
+  attributes: {
+    accent: Schema.Attribute.Enumeration<
+      ['crimson', 'orange', 'yellow', 'teal', 'blue']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'crimson'>;
+    description: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 320;
+      }>;
+    enabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    internalName: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
+    sortOrder: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+  };
+}
+
 export interface MotorsportCampaignSlide extends Struct.ComponentSchema {
   collectionName: 'components_motorsport_campaign_slides';
   info: {
@@ -366,6 +475,8 @@ export interface SharedSeo extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'motorsport.about-capabilities': MotorsportAboutCapabilities;
+      'motorsport.about-capability-card': MotorsportAboutCapabilityCard;
       'motorsport.campaign-slide': MotorsportCampaignSlide;
       'motorsport.discipline-card': MotorsportDisciplineCard;
       'motorsport.hero-slide': MotorsportHeroSlide;

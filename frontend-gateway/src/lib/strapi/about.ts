@@ -15,7 +15,7 @@ const TIMELINE_QUERY =
   "populate[image]=true&sort=order:asc&pagination[pageSize]=100";
 
 const LEADERSHIP_QUERY =
-  "populate[portrait]=true&sort=order:asc&pagination[pageSize]=100";
+  "filters[siteScope][$in][0]=gateway&filters[siteScope][$in][1]=shared&populate[portrait]=true&sort=order:asc&pagination[pageSize]=100";
 
 function mapTimelineItem(
   raw: RawTimelineItem,

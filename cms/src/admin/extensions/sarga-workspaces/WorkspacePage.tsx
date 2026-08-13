@@ -1,8 +1,9 @@
-import { Page, useRBAC } from "@strapi/strapi/admin";
+import { Page, useFetchClient, useRBAC } from "@strapi/strapi/admin";
 import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type CSSProperties,
 } from "react";
@@ -30,6 +31,23 @@ type Workspace = {
   warning: string;
   accent: string;
   links: WorkspaceLink[];
+  priorityTasks?: PriorityTask[];
+};
+
+type PriorityTask = {
+  label: string;
+  description: string;
+  uid: string;
+  filterByScope?: boolean;
+};
+
+type SitePageEntry = {
+  documentId: string;
+  title: string;
+  slug: string;
+  routePath: string;
+  pageKind: string;
+  siteScope: string;
 };
 
 const CONTENT_LINKS = {
@@ -105,6 +123,14 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
       CONTENT_LINKS.topNavigation,
       CONTENT_LINKS.pages,
       CONTENT_LINKS.news,
+      {
+        label: "Leadership",
+        description:
+          "Gateway leadership profiles, summaries, portraits, and ordering.",
+        uid: "api::leadership-person.leadership-person",
+        group: "Editorial",
+        filterByScope: true,
+      },
       CONTENT_LINKS.events,
       CONTENT_LINKS.galleries,
       CONTENT_LINKS.tickets,
@@ -151,7 +177,33 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
       "Manage the Motorsport public site, IJTC program, FIA Rallycross campaign, editorial feed, merchandise teasers, and ticket journeys.",
     warning:
       "Motorsport Admin records are assigned to Motorsport automatically. Ticketing remains partner redirect/deep-link or approved embed only.",
-    accent: "#ff5032",
+    accent: "#b94700",
+    priorityTasks: [
+      {
+        label: "Edit site pages",
+        description: "Homepage, About, campaign, and legal page content.",
+        uid: "api::site-page.site-page",
+        filterByScope: true,
+      },
+      {
+        label: "Manage events",
+        description: "Dates, schedules, venues, and ticket relationships.",
+        uid: "api::event.event",
+        filterByScope: true,
+      },
+      {
+        label: "Publish news",
+        description: "Motorsport-owned and shared editorial stories.",
+        uid: "api::news-article.news-article",
+        filterByScope: true,
+      },
+      {
+        label: "Manage programs",
+        description: "IJTC, FIA Rallycross, and future program hubs.",
+        uid: "api::motorsport-program.motorsport-program",
+        filterByScope: true,
+      },
+    ],
     links: [
       CONTENT_LINKS.topNavigation,
       CONTENT_LINKS.pages,
@@ -194,6 +246,14 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
       },
       CONTENT_LINKS.events,
       CONTENT_LINKS.news,
+      {
+        label: "Leadership",
+        description:
+          "Motorsport leadership profiles, summaries, portraits, and ordering.",
+        uid: "api::leadership-person.leadership-person",
+        group: "Editorial",
+        filterByScope: true,
+      },
       CONTENT_LINKS.galleries,
       CONTENT_LINKS.tickets,
       {
@@ -222,6 +282,14 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
       CONTENT_LINKS.pages,
       CONTENT_LINKS.events,
       CONTENT_LINKS.news,
+      {
+        label: "Leadership",
+        description:
+          "Horse Sport leadership profiles, summaries, portraits, and ordering.",
+        uid: "api::leadership-person.leadership-person",
+        group: "Editorial",
+        filterByScope: true,
+      },
       CONTENT_LINKS.galleries,
       CONTENT_LINKS.tickets,
       {
@@ -274,9 +342,10 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
       {
         label: "Leadership council",
         description:
-          "Shared leadership profiles, summaries, portraits, and display order.",
+          "Leadership profiles intentionally shared across approved Sarga sites.",
         uid: "api::leadership-person.leadership-person",
         group: "Library",
+        filterByScope: true,
       },
       {
         label: "Corporate timeline",
@@ -311,7 +380,7 @@ function resolveWorkspace(pathname: string): Workspace {
 }
 
 function contentManagerPath(
-  link: WorkspaceLink,
+  link: Pick<WorkspaceLink, "uid" | "kind" | "filterByScope">,
   scope: Workspace["scope"],
 ): string {
   const kind = link.kind ?? "collection-types";
@@ -326,8 +395,19 @@ function contentManagerPath(
   return `${base}?${params.toString()}`;
 }
 
+function priorityTaskPath(task: PriorityTask, scope: Workspace["scope"]): string {
+  return contentManagerPath(task, scope);
+}
+
 function createPath(link: WorkspaceLink): string {
   return `/content-manager/collection-types/${link.uid}/create`;
+}
+
+function sitePageEditorPath(documentId: string): string {
+  const params = new URLSearchParams({
+    "plugins[i18n][locale]": "en",
+  });
+  return `/content-manager/collection-types/api::site-page.site-page/${documentId}?${params.toString()}`;
 }
 
 function linkId(link: WorkspaceLink): string {
@@ -340,7 +420,7 @@ function displayLinkLabel(workspace: Workspace, link: WorkspaceLink): string {
 }
 
 function groupLinks(workspace: Workspace) {
-  return workspace.links.reduce<Record<string, WorkspaceLink[]>>(
+  const groups = workspace.links.reduce<Record<string, WorkspaceLink[]>>(
     (groups, link) => {
       groups[link.group] ??= [];
       groups[link.group].push(link);
@@ -348,30 +428,36 @@ function groupLinks(workspace: Workspace) {
     },
     {},
   );
+
+  return Object.fromEntries(
+    ["Pages", "Editorial", "Programs", "Commerce", "Library"]
+      .filter((group) => groups[group]?.length)
+      .map((group) => [group, groups[group]]),
+  );
 }
 
 const styles: Record<string, CSSProperties> = {
   page: {
     minHeight: "100%",
-    padding: "40px clamp(24px, 4vw, 64px) 64px",
-    background: "#f6f6f9",
-    color: "#07111f",
+    padding: "28px clamp(20px, 4vw, 64px) 72px",
+    background: "var(--ms-workspace-canvas)",
+    color: "var(--ms-workspace-text)",
   },
-  shell: { maxWidth: 1240, margin: "0 auto" },
+  shell: { maxWidth: 1440, margin: "0 auto" },
   workspaceLayout: {
     display: "grid",
     gridTemplateColumns: "minmax(180px, 220px) minmax(0, 1fr)",
-    gap: 32,
+    gap: 24,
     alignItems: "start",
-    marginTop: 32,
+    marginTop: 24,
   },
   subnav: {
     position: "sticky",
     top: 24,
-    padding: 18,
-    border: "1px solid #dcdce4",
+    padding: 12,
+    border: "1px solid var(--ms-workspace-border)",
     borderRadius: 10,
-    background: "#fff",
+    background: "var(--ms-workspace-subtle)",
   },
   subnavGroup: { margin: "0 0 18px" },
   subnavHeading: {
@@ -380,17 +466,18 @@ const styles: Record<string, CSSProperties> = {
     fontWeight: 800,
     letterSpacing: "0.12em",
     textTransform: "uppercase",
-    color: "#8e8ea9",
+    color: "var(--ms-workspace-muted)",
   },
   subnavLink: {
     display: "block",
-    padding: "7px 8px",
-    borderRadius: 5,
-    color: "#32324d",
+    padding: "9px 10px",
+    borderRadius: 6,
+    color: "var(--ms-workspace-secondary)",
     fontSize: 13,
     fontWeight: 650,
     lineHeight: 1.35,
     textDecoration: "none",
+    transition: "background 160ms ease, color 160ms ease, transform 160ms ease",
   },
   eyebrow: {
     margin: 0,
@@ -398,11 +485,11 @@ const styles: Record<string, CSSProperties> = {
     fontWeight: 800,
     letterSpacing: "0.16em",
     textTransform: "uppercase",
-    color: "#666687",
+    color: "var(--ms-workspace-muted)",
   },
   title: {
     margin: "12px 0 0",
-    fontSize: "clamp(32px, 4vw, 54px)",
+    fontSize: "clamp(34px, 4.5vw, 64px)",
     lineHeight: 1,
     letterSpacing: "-0.035em",
     textTransform: "none",
@@ -412,17 +499,94 @@ const styles: Record<string, CSSProperties> = {
     margin: "18px 0 0",
     fontSize: 16,
     lineHeight: 1.7,
-    color: "#4a4a68",
+    color: "var(--ms-workspace-secondary)",
   },
   notice: {
-    marginTop: 28,
-    padding: "18px 20px",
-    border: "1px solid #dcdce4",
+    marginTop: 12,
+    padding: "13px 16px",
+    border: "1px solid var(--ms-workspace-border)",
     borderLeftWidth: 5,
     borderRadius: 8,
-    background: "#fff",
+    background: "var(--ms-workspace-raised)",
     lineHeight: 1.6,
-    color: "#32324d",
+    color: "var(--ms-workspace-secondary)",
+  },
+  guidanceStack: {
+    display: "grid",
+    gap: 10,
+    marginTop: 12,
+  },
+  guidance: {
+    border: "1px solid var(--ms-workspace-border)",
+    borderRadius: 8,
+    background: "var(--ms-workspace-raised)",
+    color: "var(--ms-workspace-secondary)",
+  },
+  guidanceSummary: {
+    display: "flex",
+    minHeight: 48,
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 16,
+    padding: "12px 16px",
+    cursor: "pointer",
+    fontWeight: 800,
+    listStyle: "none",
+  },
+  guidanceSummaryNote: {
+    color: "var(--ms-workspace-muted)",
+    fontSize: 12,
+    fontWeight: 500,
+  },
+  guidanceSummaryEnd: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 10,
+  },
+  guidanceArrow: {
+    display: "inline-grid",
+    width: 28,
+    height: 28,
+    placeItems: "center",
+    flex: "0 0 auto",
+    border: "1px solid var(--ms-workspace-strong-border)",
+    borderRadius: 6,
+    color: "var(--ms-workspace-muted)",
+    fontSize: 0,
+    lineHeight: 1,
+    transition: "transform 160ms ease, background 160ms ease",
+  },
+  guidanceBody: {
+    padding: "0 16px 16px",
+    borderTop: "1px solid var(--ms-workspace-border)",
+    fontSize: 14,
+    lineHeight: 1.55,
+  },
+  guidanceIntro: {
+    margin: "14px 0 12px",
+  },
+  fieldMatrix: {
+    width: "100%",
+    borderCollapse: "collapse",
+    fontSize: 13,
+  },
+  fieldMatrixCell: {
+    padding: "10px 8px",
+    borderBottom: "1px solid var(--ms-workspace-border)",
+    textAlign: "left",
+    verticalAlign: "top",
+  },
+  fieldMatrixHeading: {
+    color: "var(--ms-workspace-muted)",
+    fontSize: 11,
+    letterSpacing: ".08em",
+    textTransform: "uppercase",
+  },
+  guidanceList: {
+    display: "grid",
+    gap: 6,
+    margin: "12px 0 0",
+    paddingLeft: 18,
   },
   contextBadge: {
     display: "inline-flex",
@@ -430,9 +594,9 @@ const styles: Record<string, CSSProperties> = {
     gap: 8,
     marginTop: 16,
     padding: "8px 12px",
-    borderRadius: 999,
-    background: "#07111f",
-    color: "#fff",
+    borderRadius: 6,
+    background: "var(--ms-workspace-inverse)",
+    color: "var(--ms-workspace-inverse-text)",
     fontSize: 12,
     fontWeight: 750,
     letterSpacing: "0.06em",
@@ -441,18 +605,101 @@ const styles: Record<string, CSSProperties> = {
   grid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-    gap: 18,
+    gap: 16,
     marginTop: 0,
+  },
+  contentPanel: {
+    padding: 16,
+    border: "1px solid var(--ms-workspace-border)",
+    borderRadius: 10,
+    background: "var(--ms-workspace-subtle)",
+  },
+  contentPanelHeader: {
+    display: "flex",
+    alignItems: "baseline",
+    justifyContent: "space-between",
+    gap: 16,
+    margin: "0 0 14px",
+  },
+  contentPanelTitle: {
+    margin: 0,
+    fontSize: 13,
+    fontWeight: 850,
+    letterSpacing: ".14em",
+    textTransform: "uppercase",
+    color: "var(--ms-workspace-muted)",
+  },
+  taskSurface: {
+    position: "relative",
+    isolation: "isolate",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: 10,
+    marginTop: 24,
+    padding: 16,
+    borderRadius: 10,
+    background: "var(--ms-workspace-inverse)",
+    color: "var(--ms-workspace-inverse-text)",
+  },
+  taskSurfaceHeader: {
+    gridColumn: "1 / -1",
+    display: "flex",
+    alignItems: "baseline",
+    justifyContent: "space-between",
+    gap: 16,
+    padding: "2px 4px 6px",
+  },
+  taskSurfaceTitle: {
+    margin: 0,
+    fontSize: 14,
+    fontWeight: 800,
+    letterSpacing: ".12em",
+    textTransform: "uppercase",
+  },
+  taskSurfaceNote: {
+    margin: 0,
+    color: "#c7bdae",
+    fontSize: 12,
+  },
+  task: {
+    display: "flex",
+    minHeight: 108,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    gap: 14,
+    padding: 14,
+    border: "1px solid rgba(255, 249, 238, .16)",
+    borderRadius: 8,
+    background: "rgba(255, 249, 238, .06)",
+    color: "#fff9ee",
+    textDecoration: "none",
+    transition: "background 160ms ease, border-color 160ms ease, transform 160ms ease",
+  },
+  taskLabel: {
+    margin: 0,
+    fontSize: 16,
+    fontWeight: 800,
+    lineHeight: 1.2,
+  },
+  taskDescription: {
+    margin: 0,
+    color: "#c7bdae",
+    fontSize: 13,
+    lineHeight: 1.45,
   },
   card: {
     display: "flex",
-    minHeight: 190,
+    minHeight: 0,
     flexDirection: "column",
-    padding: 24,
-    border: "1px solid #dcdce4",
-    borderRadius: 10,
-    background: "#fff",
-    boxShadow: "0 1px 2px rgba(3, 3, 18, 0.04)",
+    padding: 16,
+    border: "1px solid var(--ms-workspace-border)",
+    borderRadius: 8,
+    background: "var(--ms-workspace-raised)",
+    scrollMarginTop: 28,
+  },
+  activeCard: {
+    borderColor: "var(--ms-workspace-action)",
+    boxShadow: "0 0 0 3px rgba(196, 20, 39, .2), inset 4px 0 0 var(--ms-workspace-action)",
   },
   cardTitle: {
     margin: 0,
@@ -461,28 +708,79 @@ const styles: Record<string, CSSProperties> = {
     textTransform: "none",
   },
   cardDescription: {
-    margin: "10px 0 20px",
+    margin: "8px 0 16px",
     lineHeight: 1.55,
-    color: "#666687",
+    color: "var(--ms-workspace-muted)",
+  },
+  cardEyebrow: {
+    margin: 0,
+    color: "var(--ms-workspace-muted)",
+    fontSize: 11,
+    fontWeight: 800,
+    letterSpacing: ".12em",
+    textTransform: "uppercase",
   },
   actions: { display: "flex", flexWrap: "wrap", gap: 10, marginTop: "auto" },
   primaryAction: {
-    padding: "10px 14px",
+    minHeight: 40,
+    padding: "9px 14px",
     borderRadius: 6,
-    background: "#07111f",
-    color: "#fff",
+    background: "var(--ms-workspace-action)",
+    color: "var(--ms-workspace-on-action)",
     fontSize: 13,
     fontWeight: 700,
     textDecoration: "none",
   },
   secondaryAction: {
-    padding: "9px 13px",
-    border: "1px solid #c7c7d2",
+    minHeight: 40,
+    padding: "8px 13px",
+    border: "1px solid var(--ms-workspace-strong-border)",
     borderRadius: 6,
-    color: "#32324d",
+    color: "var(--ms-workspace-secondary)",
     fontSize: 13,
     fontWeight: 700,
     textDecoration: "none",
+  },
+  sectionCount: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: "var(--ms-workspace-muted)",
+  },
+  pageEntryGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+    gap: 10,
+  },
+  pageEntry: {
+    display: "flex",
+    minHeight: 112,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    gap: 8,
+    padding: 14,
+    border: "1px solid var(--ms-workspace-border)",
+    borderRadius: 8,
+    background: "var(--ms-workspace-raised)",
+    color: "var(--ms-workspace-secondary)",
+    textDecoration: "none",
+    transition: "border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease",
+  },
+  pageEntryKind: {
+    color: "var(--ms-workspace-muted)",
+    fontSize: 11,
+    fontWeight: 800,
+    letterSpacing: ".1em",
+    textTransform: "uppercase",
+  },
+  pageEntryTitle: {
+    color: "var(--ms-workspace-text)",
+    fontSize: 15,
+    lineHeight: 1.3,
+  },
+  pageEntryRoute: {
+    color: "var(--ms-workspace-muted)",
+    fontSize: 12,
+    overflowWrap: "anywhere",
   },
 };
 
@@ -495,12 +793,14 @@ type WorkspaceCardProps = {
   link: WorkspaceLink;
   workspace: Workspace;
   onPermissionResolved: (linkId: string, canRead: boolean) => void;
+  isActive: boolean;
 };
 
 function WorkspaceCard({
   link,
   workspace,
   onPermissionResolved,
+  isActive,
 }: WorkspaceCardProps) {
   const permissions = useMemo(
     () => [
@@ -525,19 +825,28 @@ function WorkspaceCard({
     Boolean(allowedActions.canCreate);
 
   return (
-    <section id={id} style={styles.card}>
-      <p style={styles.subnavHeading}>{link.group}</p>
-      <h2 style={styles.cardTitle}>{displayLinkLabel(workspace, link)}</h2>
+    <section
+      id={id}
+      style={{ ...styles.card, ...(isActive ? styles.activeCard : {}) }}
+      className={`sarga-workspace-card${isActive ? " is-active" : ""}`}
+    >
+      <p style={styles.cardEyebrow}>{link.group}</p>
+      <h3 style={styles.cardTitle}>{displayLinkLabel(workspace, link)}</h3>
       <p style={styles.cardDescription}>{link.description}</p>
       <div style={styles.actions}>
         <Link
+          className="sarga-workspace-primary-action"
           style={styles.primaryAction}
           to={contentManagerPath(link, workspace.scope)}
         >
           Manage content
         </Link>
         {canCreate ? (
-          <Link style={styles.secondaryAction} to={createPath(link)}>
+          <Link
+            className="sarga-workspace-secondary-action"
+            style={styles.secondaryAction}
+            to={createPath(link)}
+          >
             Create new
           </Link>
         ) : null}
@@ -548,8 +857,65 @@ function WorkspaceCard({
 
 function WorkspaceContent({ workspace }: { workspace: Workspace }) {
   const [allowedLinkIds, setAllowedLinkIds] = useState<Set<string>>(
-    () => new Set(),
+    () => new Set(workspace.links.map(linkId)),
   );
+  const [activeLinkId, setActiveLinkId] = useState<string | null>(null);
+  const [sitePageEntries, setSitePageEntries] = useState<SitePageEntry[]>([]);
+  const [sitePageEntriesLoading, setSitePageEntriesLoading] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const { get } = useFetchClient();
+
+  useEffect(() => {
+    if (workspace.scope !== "motorsport") return;
+    let cancelled = false;
+    setSitePageEntriesLoading(true);
+    const params = new URLSearchParams({
+      page: "1",
+      pageSize: "50",
+      sort: "title:asc",
+      "filters[$and][0][siteScope][$eq]": "motorsport",
+      "locale": "en",
+    });
+    get(`/content-manager/collection-types/api::site-page.site-page?${params}`)
+      .then((response: { data?: { results?: SitePageEntry[] } }) => {
+        if (!cancelled) setSitePageEntries(response.data?.results ?? []);
+      })
+      .catch(() => {
+        if (!cancelled) setSitePageEntries([]);
+      })
+      .finally(() => {
+        if (!cancelled) setSitePageEntriesLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [get, workspace.scope]);
+
+  useEffect(() => {
+    const page = contentRef.current?.closest<HTMLElement>(
+      ".sarga-workspace-page",
+    );
+    if (!page) return;
+
+    let scrollShell = page.parentElement;
+    while (scrollShell && scrollShell !== document.body) {
+      const overflowY = getComputedStyle(scrollShell).overflowY;
+      if (overflowY === "auto" || overflowY === "scroll") break;
+      scrollShell = scrollShell.parentElement;
+    }
+    if (!scrollShell || scrollShell === document.body) return;
+
+    scrollShell.classList.add("sarga-workspace-scroll-shell");
+    if (page.dataset.workspaceScope === "motorsport") {
+      scrollShell.classList.add("sarga-workspace-scroll-shell-motorsport");
+    }
+    return () => {
+      scrollShell.classList.remove(
+        "sarga-workspace-scroll-shell",
+        "sarga-workspace-scroll-shell-motorsport",
+      );
+    };
+  }, []);
   const handlePermissionResolved = useCallback(
     (id: string, canRead: boolean) => {
       setAllowedLinkIds((current) => {
@@ -566,13 +932,66 @@ function WorkspaceContent({ workspace }: { workspace: Workspace }) {
   );
   const groupedLinks = groupLinks({ ...workspace, links: allowedLinks });
 
+  useEffect(() => {
+    const root = contentRef.current;
+    if (!root) return;
+    const cards = Array.from(
+      root.querySelectorAll<HTMLElement>(".sarga-workspace-card"),
+    );
+    if (!cards.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]?.target.id) setActiveLinkId(visible[0].target.id);
+      },
+      { rootMargin: "-18% 0px -62% 0px", threshold: [0, 0.2, 0.6] },
+    );
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, [allowedLinks.length]);
+
+  const handleSubnavClick = (id: string) => {
+    setActiveLinkId(id);
+  };
+
   return (
-    <main style={styles.page}>
+    <main
+      className="sarga-workspace-page"
+      data-workspace-scope={workspace.scope}
+      style={styles.page}
+    >
       <div style={styles.shell}>
-        <p style={styles.eyebrow}>{workspace.eyebrow}</p>
-        <h1 style={{ ...styles.title, color: workspace.accent }}>
-          {workspace.title}
-        </h1>
+        {workspace.scope === "motorsport" ? (
+          <div className="sarga-workspace-masthead">
+            <img
+              src="/admin-assets/logo-sarga-motorsport-full.png"
+              alt="Sarga Motorsport"
+              width="205"
+              height="204"
+              className="sarga-workspace-masthead-logo"
+            />
+            <div>
+              <p className="sarga-workspace-eyebrow" style={styles.eyebrow}>
+                {workspace.eyebrow}
+              </p>
+              <h1 style={{ ...styles.title, color: workspace.accent }}>
+                {workspace.title}
+              </h1>
+            </div>
+          </div>
+        ) : (
+          <>
+            <p className="sarga-workspace-eyebrow" style={styles.eyebrow}>
+              {workspace.eyebrow}
+            </p>
+            <h1 style={{ ...styles.title, color: workspace.accent }}>
+              {workspace.title}
+            </h1>
+          </>
+        )}
         <p style={styles.description}>{workspace.description}</p>
 
         <div style={styles.contextBadge}>
@@ -586,19 +1005,117 @@ function WorkspaceContent({ workspace }: { workspace: Workspace }) {
         </div>
 
         {workspace.scope === "motorsport" ? (
-          <div style={{ ...styles.notice, borderLeftColor: "#00c4cc" }}>
-            <strong>Using an existing Media Library asset:</strong> open the
-            media field, stay on <strong>Browse</strong>, tick the checkbox at
-            the upper-left of the asset card, then select <strong>Finish</strong>.
-            Clicking the image preview opens its details and does not select it.
-          </div>
+          <>
+            <section
+              style={styles.taskSurface}
+              className="sarga-workspace-task-surface"
+              aria-labelledby="priority-tasks-title"
+            >
+              <div style={styles.taskSurfaceHeader}>
+                <h2 id="priority-tasks-title" style={styles.taskSurfaceTitle}>
+                  Priority tasks
+                </h2>
+                <p style={styles.taskSurfaceNote}>
+                  Start with the work editors open most often.
+                </p>
+              </div>
+              {workspace.priorityTasks?.map((task) => (
+                <Link
+                  key={task.uid}
+                  className="sarga-workspace-task"
+                  style={styles.task}
+                  to={priorityTaskPath(task, workspace.scope)}
+                >
+                  <p style={styles.taskLabel}>{task.label}</p>
+                  <p style={styles.taskDescription}>{task.description}</p>
+                </Link>
+              ))}
+            </section>
+            <div style={styles.guidanceStack}>
+              <details style={styles.guidance}>
+                <summary style={styles.guidanceSummary}>
+                  <span>Site Page field guide</span>
+                  <span style={styles.guidanceSummaryEnd}>
+                    <span style={styles.guidanceSummaryNote}>
+                      Home and About use different fields
+                    </span>
+                    <span className="sarga-guidance-arrow" style={styles.guidanceArrow} aria-hidden="true" />
+                  </span>
+                </summary>
+                <div style={styles.guidanceBody}>
+                  <p style={styles.guidanceIntro}>
+                    Keep page-specific fields focused. Empty homepage-only fields
+                    on About records are intentional.
+                  </p>
+                  <table style={styles.fieldMatrix}>
+                    <thead>
+                      <tr>
+                        <th style={{ ...styles.fieldMatrixCell, ...styles.fieldMatrixHeading }}>
+                          Page type
+                        </th>
+                        <th style={{ ...styles.fieldMatrixCell, ...styles.fieldMatrixHeading }}>
+                          Use
+                        </th>
+                        <th style={{ ...styles.fieldMatrixCell, ...styles.fieldMatrixHeading }}>
+                          Leave empty
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row" style={styles.fieldMatrixCell}>Homepage</th>
+                        <td style={styles.fieldMatrixCell}>
+                          Hero slides, featured event, information band, World
+                          section, SEO, and homepage sections.
+                        </td>
+                        <td style={styles.fieldMatrixCell}>About-only sections.</td>
+                      </tr>
+                      <tr>
+                        <th scope="row" style={styles.fieldMatrixCell}>About</th>
+                        <td style={styles.fieldMatrixCell}>
+                          Hero title, description, media, SEO, and profile,
+                          vision, capabilities, team, contact, and ecosystem
+                          sections.
+                        </td>
+                        <td style={styles.fieldMatrixCell}>
+                          Hero slides, featured event, information band, and
+                          World section.
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </details>
+              <details style={styles.guidance}>
+                <summary style={styles.guidanceSummary}>
+                  <span>Shared media selection</span>
+                  <span style={styles.guidanceSummaryEnd}>
+                    <span style={styles.guidanceSummaryNote}>Browse, select, Finish</span>
+                    <span className="sarga-guidance-arrow" style={styles.guidanceArrow} aria-hidden="true" />
+                  </span>
+                </summary>
+                <div style={styles.guidanceBody}>
+                  <ul style={styles.guidanceList}>
+                    <li>Stay on the Browse tab in the media picker.</li>
+                    <li>Tick the checkbox on the asset card.</li>
+                    <li>Choose Finish to attach the existing asset.</li>
+                    <li>Clicking the preview opens asset details only.</li>
+                  </ul>
+                  <p style={styles.guidanceIntro}>
+                    Media Library is shared across Sarga sites. Folder naming
+                    supports organization; it is not a separate security boundary.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </>
         ) : null}
 
         <div style={styles.workspaceLayout} className="sarga-workspace-layout">
-          <nav
-            style={styles.subnav}
-            aria-label={`${workspace.title} content sections`}
-          >
+            <nav
+              style={styles.subnav}
+              aria-label={`${workspace.title} content sections`}
+            >
             {Object.entries(groupedLinks).map(([group, links]) => (
               <div key={group} style={styles.subnavGroup}>
                 <h2 style={styles.subnavHeading}>{group}</h2>
@@ -606,7 +1123,10 @@ function WorkspaceContent({ workspace }: { workspace: Workspace }) {
                   <a
                     key={link.uid}
                     href={`#${linkId(link)}`}
+                    className={`sarga-workspace-subnav-link${activeLinkId === linkId(link) ? " is-active" : ""}`}
                     style={styles.subnavLink}
+                    aria-current={activeLinkId === linkId(link) ? "location" : undefined}
+                    onClick={() => handleSubnavClick(linkId(link))}
                   >
                     {displayLinkLabel(workspace, link)}
                   </a>
@@ -615,15 +1135,61 @@ function WorkspaceContent({ workspace }: { workspace: Workspace }) {
             ))}
           </nav>
 
-          <div style={styles.grid}>
-            {workspace.links.map((link) => (
-              <WorkspaceCard
-                key={link.uid}
-                link={link}
-                workspace={workspace}
-                onPermissionResolved={handlePermissionResolved}
-              />
+          <div ref={contentRef} style={{ display: "grid", gap: 18 }}>
+            {Object.entries(groupedLinks).map(([group, links]) => (
+              <section key={group} style={styles.contentPanel}>
+                <div style={styles.contentPanelHeader}>
+                    <h2 style={styles.contentPanelTitle}>{group}</h2>
+                  <span style={styles.sectionCount}>
+                    {links.length} {links.length === 1 ? "collection" : "collections"}
+                  </span>
+                </div>
+                <div style={styles.grid}>
+                  {links.map((link) => (
+                    <WorkspaceCard
+                      key={link.uid}
+                      link={link}
+                      workspace={workspace}
+                      onPermissionResolved={handlePermissionResolved}
+                      isActive={activeLinkId === linkId(link)}
+                    />
+                  ))}
+                </div>
+              </section>
             ))}
+            {workspace.scope === "motorsport" ? (
+              <section
+                id="motorsport-site-page-entries"
+                style={styles.contentPanel}
+                className="sarga-workspace-page-entries"
+              >
+                <div style={styles.contentPanelHeader}>
+                  <div>
+                    <p style={styles.cardEyebrow}>Pages</p>
+                    <h2 style={styles.contentPanelTitle}>Page entries</h2>
+                  </div>
+                  <span style={styles.sectionCount}>
+                    {sitePageEntriesLoading ? "Loading" : `${sitePageEntries.length} pages`}
+                  </span>
+                </div>
+                <div style={styles.pageEntryGrid}>
+                  {sitePageEntries.map((entry) => (
+                    <Link
+                      key={entry.documentId}
+                      to={sitePageEditorPath(entry.documentId)}
+                      className="sarga-workspace-page-entry"
+                      style={styles.pageEntry}
+                    >
+                      <span style={styles.pageEntryKind}>{entry.pageKind}</span>
+                      <strong style={styles.pageEntryTitle}>{entry.title}</strong>
+                      <span style={styles.pageEntryRoute}>
+                        {entry.routePath} · {entry.slug}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            ) : null}
           </div>
         </div>
       </div>

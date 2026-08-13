@@ -2,12 +2,25 @@ import type { StrapiApp } from "@strapi/strapi/admin";
 
 function WorkspaceIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M4 5.5h6.5V12H4V5.5Zm9.5 0H20V9h-6.5V5.5ZM4 15h6.5v3.5H4V15Zm9.5-3H20v6.5h-6.5V12Z"
-        fill="currentColor"
-      />
-    </svg>
+    <img
+      src="/uploads/logo-sarga-motorsport-symbol-sport.png"
+      alt=""
+      width="28"
+      height="28"
+      style={{ display: "block", objectFit: "contain" }}
+    />
+  );
+}
+
+function MotorsportWorkspaceIcon() {
+  return (
+    <img
+      src="/admin-assets/logo-sarga-motorsport-full.png"
+      alt=""
+      width="28"
+      height="28"
+      style={{ display: "block", objectFit: "contain" }}
+    />
   );
 }
 
@@ -16,7 +29,7 @@ export default {
     // ── Brand logos ──────────────────────────────────────────────
     auth: {
       // Login page has dark background → use white reverse logo
-      logo: "/uploads/logo-sarga-reverse.png",
+      logo: "/uploads/logo-sarga.png",
     },
     menu: {
       // Top-left corner + collapsed sidebar → use black text logo
@@ -247,8 +260,11 @@ export default {
 
     for (const workspace of workspaces) {
       app.addMenuLink({
-        to: `/sarga-workspaces/${workspace.slug}`,
-        icon: WorkspaceIcon,
+        to: `sarga-workspaces/${workspace.slug}`,
+        icon:
+          workspace.slug === "motorsport"
+            ? MotorsportWorkspaceIcon
+            : WorkspaceIcon,
         intlLabel: {
           id: `sarga-workspaces.${workspace.slug}.label`,
           defaultMessage: workspace.label,
@@ -261,6 +277,14 @@ export default {
   },
 
   bootstrap(app: StrapiApp) {
+    // Keep admin shell mode consistent across users and device preferences.
+    // Strapi resolves "system" from prefers-color-scheme during initialization.
+    if (window.localStorage.getItem("STRAPI_THEME") !== "light") {
+      window.localStorage.setItem("STRAPI_THEME", "light");
+      window.location.reload();
+      return;
+    }
+
     // ── Rebrand the browser-tab title ────────────────────────────
     // Strapi hardcodes the document title as `${page} | Strapi` (and the
     // static shell title is "Strapi Admin"); neither is configurable via
@@ -287,25 +311,28 @@ export default {
     // small checkbox is the control that actually selects an existing asset.
     // Keep the shared Media Library least-privilege and make that distinction
     // explicit inside every Content Manager media picker.
+    let mediaPickerFrame: number | null = null;
     const addMediaPickerGuidance = () => {
+      mediaPickerFrame = null;
       document.querySelectorAll<HTMLElement>('[role="dialog"]').forEach(
         (dialog) => {
+          // Use structural hooks only. Text matching breaks localized admin UI.
+          const tabList = dialog.querySelector('[role="tablist"]');
+          const anchor = tabList?.parentElement;
+          const hasUploadControl = dialog.querySelector(
+            'input[type="file"], [data-strapi-upload="true"]',
+          );
           if (
-            !dialog.textContent?.includes("Add new assets") ||
+            !anchor ||
+            !hasUploadControl ||
             dialog.querySelector('[data-sarga-media-picker-help="true"]')
           ) {
             return;
           }
 
-          const tabList = dialog.querySelector('[role="tablist"]');
-          const anchor = tabList?.parentElement;
-          if (!anchor) return;
-
           const guidance = document.createElement("div");
           guidance.dataset.sargaMediaPickerHelp = "true";
           guidance.setAttribute("role", "note");
-          guidance.innerHTML =
-            '<strong>Selecting an existing asset:</strong> use the checkbox at the upper-left of its card, then choose <strong>Finish</strong>. Clicking the preview opens asset details only.';
           guidance.style.cssText = [
             "margin: 0 2rem",
             "padding: 0.85rem 1rem",
@@ -317,12 +344,22 @@ export default {
             "font-size: 0.875rem",
             "line-height: 1.5",
           ].join(";");
+          const strong = document.createElement("strong");
+          strong.textContent = "Selecting an existing asset: ";
+          guidance.append(strong);
+          guidance.append(
+            "use the checkbox at the upper-left of its card, then choose Finish. Clicking the preview opens asset details only.",
+          );
           anchor.after(guidance);
         },
       );
     };
-    addMediaPickerGuidance();
-    new MutationObserver(addMediaPickerGuidance).observe(document.body, {
+    const scheduleMediaPickerGuidance = () => {
+      if (mediaPickerFrame !== null) return;
+      mediaPickerFrame = window.requestAnimationFrame(addMediaPickerGuidance);
+    };
+    scheduleMediaPickerGuidance();
+    new MutationObserver(scheduleMediaPickerGuidance).observe(document.body, {
       childList: true,
       subtree: true,
     });
@@ -397,9 +434,10 @@ export default {
       body {
         font-family: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
       }
-      h1, h2, h3, h4, h5, h6 {
+      .sarga-workspace-page h1,
+      .sarga-workspace-page h2,
+      .sarga-workspace-page h3 {
         font-family: "Zalando Sans Expanded", "Plus Jakarta Sans", system-ui, sans-serif;
-        text-transform: uppercase;
         letter-spacing: 0.04em;
       }
 
@@ -409,10 +447,181 @@ export default {
         font-weight: 600 !important;
       }
 
-      /* ── Content card containers ────────────────────────────── */
-      [data-strapi-card] {
-        border-radius: 12px !important;
-        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+      /* ── Motorsport workspace foundation ───────────────────── */
+      .sarga-workspace-page {
+        --ms-workspace-canvas: #fff9ee;
+        --ms-workspace-subtle: #f6efe3;
+        --ms-workspace-raised: #ffffff;
+        --ms-workspace-inverse: #1b1b1b;
+        --ms-workspace-inverse-text: #fff9ee;
+        --ms-workspace-text: #1b1b1b;
+        --ms-workspace-secondary: #47433d;
+        --ms-workspace-muted: #625e56;
+        --ms-workspace-border: #e8decf;
+        --ms-workspace-strong-border: #716c64;
+        --ms-workspace-action: #c41427;
+        --ms-workspace-action-hover: #a81022;
+        --ms-workspace-on-action: #fff9ee;
+        --ms-workspace-focus: #f5c800;
+        --ms-workspace-structure: #0033a0;
+        font-family: "Noto Sans", "Plus Jakarta Sans", system-ui, sans-serif;
+        scroll-behavior: smooth;
+      }
+      .sarga-workspace-page[data-workspace-scope="motorsport"] {
+        border-top: 4px solid var(--ms-workspace-structure);
+      }
+      .sarga-workspace-scroll-shell {
+        background: #fff9ee !important;
+      }
+      .sarga-workspace-masthead {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        min-height: 92px;
+        padding: 16px 20px;
+        border-radius: 10px;
+        background: var(--ms-workspace-inverse);
+        color: var(--ms-workspace-inverse-text);
+        box-shadow: inset 0 -3px 0 var(--ms-workspace-action);
+      }
+      .sarga-workspace-masthead-logo {
+        display: block;
+        width: 74px;
+        height: 74px;
+        object-fit: contain;
+        flex: 0 0 auto;
+      }
+      .sarga-workspace-masthead .sarga-workspace-eyebrow {
+        color: #e8decf;
+      }
+      .sarga-workspace-masthead h1 {
+        margin-top: 6px !important;
+        color: #fff9ee !important;
+      }
+      .sarga-workspace-page a:focus-visible,
+      .sarga-workspace-page button:focus-visible {
+        outline: 3px solid var(--ms-workspace-focus) !important;
+        outline-offset: 3px;
+      }
+      .sarga-workspace-page .sarga-workspace-subnav-link:hover,
+      .sarga-workspace-page .sarga-workspace-subnav-link:focus-visible {
+        background: var(--ms-workspace-structure);
+        color: #ffffff;
+        transform: translateX(2px);
+      }
+      .sarga-workspace-page .sarga-workspace-subnav-link.is-active {
+        background: var(--ms-workspace-structure);
+        color: #ffffff;
+        box-shadow: inset 3px 0 0 var(--ms-workspace-focus);
+      }
+      .sarga-workspace-page summary::-webkit-details-marker {
+        display: none;
+      }
+      .sarga-workspace-page summary:focus-visible {
+        outline: 3px solid var(--ms-workspace-focus);
+        outline-offset: -3px;
+      }
+      .sarga-workspace-page details[open] .sarga-guidance-arrow {
+        transform: rotate(180deg);
+        background: var(--ms-workspace-border) !important;
+        color: var(--ms-workspace-muted);
+      }
+      .sarga-workspace-page .sarga-guidance-arrow::before {
+        content: "";
+        display: block;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 7px solid currentColor;
+      }
+      .sarga-workspace-page .sarga-workspace-task-surface {
+        overflow: hidden;
+        background-color: var(--ms-workspace-inverse);
+        box-shadow: 0 14px 28px rgba(27, 27, 27, 0.16);
+      }
+      .sarga-workspace-page .sarga-workspace-primary-action:hover,
+      .sarga-workspace-page .sarga-workspace-primary-action:focus-visible {
+        background: var(--ms-workspace-action-hover);
+        color: var(--ms-workspace-on-action);
+        transform: translateY(-1px);
+      }
+      .sarga-workspace-page .sarga-workspace-secondary-action:hover,
+      .sarga-workspace-page .sarga-workspace-secondary-action:focus-visible {
+        border-color: var(--ms-workspace-structure);
+        color: var(--ms-workspace-structure);
+        transform: translateY(-1px);
+      }
+      .sarga-workspace-page .sarga-workspace-primary-action:active,
+      .sarga-workspace-page .sarga-workspace-secondary-action:active {
+        transform: translateY(1px);
+      }
+      .sarga-workspace-page .sarga-workspace-task:hover,
+      .sarga-workspace-page .sarga-workspace-task:focus-visible {
+        border-color: var(--ms-workspace-focus);
+        background: rgba(245, 200, 0, 0.12);
+        color: var(--ms-workspace-inverse-text);
+        transform: translateY(-2px);
+      }
+      .sarga-workspace-page .sarga-workspace-task:active {
+        transform: translateY(1px);
+      }
+      .sarga-workspace-page .sarga-workspace-card {
+        transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+      }
+      .sarga-workspace-page .sarga-workspace-card:hover {
+        border-color: #c9bba8;
+        box-shadow: 0 8px 20px rgba(27, 27, 27, 0.08);
+        transform: translateY(-2px);
+      }
+      .sarga-workspace-page .sarga-workspace-card.is-active:hover {
+        border-color: var(--ms-workspace-action);
+        box-shadow: 0 0 0 3px rgba(196, 20, 39, .2), inset 4px 0 0 var(--ms-workspace-action), 0 8px 20px rgba(27, 27, 27, .08);
+      }
+      .sarga-workspace-page .sarga-workspace-page-entry:hover,
+      .sarga-workspace-page .sarga-workspace-page-entry:focus-visible {
+        border-color: var(--ms-workspace-action);
+        box-shadow: 0 0 0 2px rgba(196, 20, 39, .16);
+        transform: translateY(-2px);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .sarga-workspace-page,
+        .sarga-workspace-page * {
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      .sarga-workspace-page[data-workspace-scope="motorsport"],
+      .sarga-workspace-scroll-shell-motorsport {
+        --ms-workspace-canvas: #111113;
+        --ms-workspace-subtle: #1b1b1b;
+        --ms-workspace-raised: #242426;
+        --ms-workspace-inverse: #050505;
+        --ms-workspace-inverse-text: #fff9ee;
+        --ms-workspace-text: #fff9ee;
+        --ms-workspace-secondary: #e8decf;
+        --ms-workspace-muted: #c2b9aa;
+        --ms-workspace-border: rgba(255, 249, 238, 0.16);
+        --ms-workspace-strong-border: rgba(255, 249, 238, 0.34);
+        --ms-workspace-action: #e8192c;
+        --ms-workspace-action-hover: #ff6b00;
+        --ms-workspace-on-action: #fff9ee;
+      }
+      .sarga-workspace-scroll-shell-motorsport {
+        background: #111113 !important;
+      }
+      .sarga-workspace-page details[open] .sarga-guidance-arrow {
+        background: var(--ms-workspace-border) !important;
+        color: var(--ms-workspace-muted) !important;
+        transform: rotate(180deg) !important;
+      }
+      @media (prefers-color-scheme: dark) {
+        .sarga-workspace-scroll-shell {
+          background: #fff9ee !important;
+        }
+      }
+      .sarga-workspace-scroll-shell-motorsport {
+        background: #111113 !important;
       }
 
       /* ── Workspace nested navigation responsiveness ───────── */
@@ -422,6 +631,14 @@ export default {
         }
         .sarga-workspace-layout > nav {
           position: static !important;
+        }
+        .sarga-workspace-masthead {
+          align-items: flex-start;
+          padding: 14px 16px;
+        }
+        .sarga-workspace-masthead-logo {
+          width: 58px;
+          height: 58px;
         }
       }
     `;

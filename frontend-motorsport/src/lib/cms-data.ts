@@ -80,20 +80,36 @@ export type CmsGallery = {
   mediaItems?: StrapiMedia[];
 };
 
-type CmsPageSection = {
+export type CmsAboutCapabilityCard = {
+  internalName?: string;
+  enabled?: boolean;
+  title?: string;
+  description?: string;
+  sortOrder?: number;
+  accent?: "crimson" | "orange" | "yellow" | "teal" | "blue";
+};
+
+export type CmsPageSection = {
+  __component?: string;
   sectionKey: string;
   eyebrow?: string;
   title?: string;
   body?: string;
+  description?: string;
   ctaLabel?: string;
   ctaUrl?: string;
+  enabled?: boolean;
+  cards?: CmsAboutCapabilityCard[];
 };
 
 type CmsSitePage = {
+  title?: string;
+  navigationLabel?: string;
   heroTitle?: string;
   heroDescription?: string;
   heroMedia?: StrapiMedia | null;
   sections?: CmsPageSection[];
+  seo?: CmsSeo | null;
 };
 
 type CmsProgram = {
@@ -137,7 +153,7 @@ type CmsEventRule = {
   sortOrder?: number;
 };
 
-type CmsSeo = {
+export type CmsSeo = {
   metaTitle?: string;
   metaDescription?: string;
   ogTitle?: string;
@@ -208,6 +224,7 @@ type CmsLeadership = {
   group?: TeamMember["group"];
   summary?: string;
   portrait?: StrapiMedia | null;
+  siteScope?: "gateway" | "motorsport" | "horsesport" | "shared" | "hidden";
 };
 
 type CmsSite = {
@@ -222,12 +239,50 @@ type CmsSite = {
 };
 
 export type SitePageContent = {
+  title?: string;
+  navigationLabel?: string;
   heroTitle?: string;
   heroDescription?: string;
   heroImage?: string;
   heroImageAlt?: string;
   sections: CmsPageSection[];
+  seo?: CmsSeo | null;
 };
+
+export type AboutCapability = {
+  title: string;
+  description: string;
+  accent?: CmsAboutCapabilityCard["accent"];
+};
+
+export function mapAboutCapabilities(
+  sections: CmsPageSection[] | undefined,
+): { eyebrow: string; title: string; description?: string; cards: AboutCapability[] } | null {
+  const section = sections?.find(
+    (item) => item.__component === "motorsport.about-capabilities",
+  );
+  if (!section || section.enabled === false || !section.cards?.length) return null;
+
+  const cards = section.cards
+    .filter(
+      (card): card is CmsAboutCapabilityCard & { title: string; description: string } =>
+        card.enabled !== false && Boolean(card.title?.trim()) && Boolean(card.description?.trim()),
+    )
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+    .map((card) => ({
+      title: card.title.trim(),
+      description: card.description.trim(),
+      accent: card.accent,
+    }));
+
+  if (!cards.length) return null;
+  return {
+    eyebrow: section.eyebrow?.trim() || "What we do",
+    title: section.title?.trim() || "Competition is the core. Experience completes it.",
+    description: section.description?.trim() || undefined,
+    cards,
+  };
+}
 
 const SITE_SCOPE_FILTERS: Record<string, string> = {
   "filters[siteScope][$in][0]": "motorsport",
@@ -420,13 +475,15 @@ export function mapGalleryItems(
 }
 
 export async function fetchSitePage(
-  pageKind: "home" | "about" | "eventHub" | "merchandise",
+  pageKind: "home" | "about" | "eventHub" | "newsHub" | "merchandise" | "custom",
+  routePath?: string,
 ): Promise<SitePageContent | null> {
   const response = await fetchStrapiList<CmsSitePage>("site-pages", {
-    populate: ["heroMedia", "sections"],
+    populate: ["heroMedia", "sections", "seo.ogImage"],
     filters: {
       "filters[siteScope][$eq]": "motorsport",
       "filters[pageKind][$eq]": pageKind,
+      ...(routePath ? { "filters[routePath][$eq]": routePath } : {}),
     },
     limit: 1,
     revalidate: 60,
@@ -439,11 +496,43 @@ export async function fetchSitePage(
       ? mediaUrl(page.heroMedia.url)
       : undefined;
   return {
+    title: page.title,
+    navigationLabel: page.navigationLabel,
     heroTitle: page.heroTitle,
     heroDescription: page.heroDescription,
     heroImage,
     heroImageAlt: page.heroMedia?.alternativeText,
     sections: page.sections ?? [],
+    seo: page.seo,
+  };
+}
+
+export async function fetchMotorsportPageByRoute(
+  routePath: string,
+): Promise<SitePageContent | null> {
+  const response = await fetchStrapiList<CmsSitePage>("site-pages", {
+    populate: ["heroMedia", "sections", "seo.ogImage"],
+    filters: {
+      "filters[siteScope][$eq]": "motorsport",
+      "filters[routePath][$eq]": routePath,
+    },
+    limit: 1,
+    revalidate: 60,
+  });
+  const page = response?.data?.[0];
+  if (!page) return null;
+  const heroImage = page.heroMedia && (!page.heroMedia.mime || page.heroMedia.mime.startsWith("image/"))
+    ? mediaUrl(page.heroMedia.url)
+    : undefined;
+  return {
+    title: page.title,
+    navigationLabel: page.navigationLabel,
+    heroTitle: page.heroTitle,
+    heroDescription: page.heroDescription,
+    heroImage,
+    heroImageAlt: page.heroMedia?.alternativeText,
+    sections: page.sections ?? [],
+    seo: page.seo,
   };
 }
 
@@ -951,6 +1040,7 @@ export async function fetchMerchandise(): Promise<MerchandiseItem[]> {
 export async function fetchLeadership(): Promise<TeamMember[]> {
   const response = await fetchStrapiList<CmsLeadership>("leadership-people", {
     populate: "portrait",
+    filters: { "filters[siteScope][$eq]": "motorsport" },
     sort: "order:asc",
     limit: 20,
     revalidate: 600,

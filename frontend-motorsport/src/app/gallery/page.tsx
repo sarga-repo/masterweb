@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { GalleryArchive, LightLineField, PageShell } from "@/components";
-import { fetchGalleryItems } from "@/lib/cms-data";
+import { fetchGalleryItems, fetchSitePage } from "@/lib/cms-data";
 import type { GalleryItem } from "@/types/design-system";
 
 export const metadata: Metadata = {
@@ -56,7 +56,8 @@ const FALLBACK: GalleryItem[] = [
 ];
 
 export default async function GalleryPage() {
-  const cmsItems = await fetchGalleryItems();
+  const [page, cmsItems] = await Promise.all([fetchSitePage("custom", "/gallery"), fetchGalleryItems()]);
+  const intro = page?.sections.find((section) => section.sectionKey === "gallery-intro");
   const items = cmsItems.length >= 3 ? cmsItems : FALLBACK;
 
   return (
@@ -66,12 +67,11 @@ export default async function GalleryPage() {
         <div className="ms-shell relative z-10 grid gap-10 py-18 sm:py-24 lg:grid-cols-[minmax(0,1.3fr)_minmax(17rem,.7fr)] lg:items-end">
           <div>
             <p className="ms-kicker text-ms-electric-yellow">
-              Trackside capture feed
+              {intro?.eyebrow ?? "Trackside capture feed"}
             </p>
-            <h1 className="ms-heading-page mt-6 text-ms-warm-white">Gallery</h1>
+            <h1 className="ms-heading-page mt-6 text-ms-warm-white">{page?.heroTitle ?? "Gallery"}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-ms-warm-white/72">
-              Circuit, rally, motorcycle, paddock, people, and fan energy—one
-              bright visual record of Motorsport in motion.
+              {page?.heroDescription ?? intro?.body ?? "Circuit, rally, motorcycle, paddock, people, and fan energy—one bright visual record of Motorsport in motion."}
             </p>
           </div>
           <dl className="grid grid-cols-3 border-l border-ms-warm-white/20">

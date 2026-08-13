@@ -5,7 +5,7 @@
     "singularName": "site-page",
     "pluralName": "site-pages",
     "displayName": "Site Page",
-    "description": "Site-scoped static and campaign page content"
+    "description": "Site-scoped page content. Use pageKind to select the page family; optional homepage fields are not required on About, News, Campaign, or Custom pages."
   },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
@@ -34,6 +34,7 @@
         "home",
         "about",
         "eventHub",
+        "newsHub",
         "campaign",
         "merchandise",
         "history",
@@ -63,12 +64,14 @@
       "allowedTypes": ["images", "videos"]
     },
     "heroVideo": {
+      "description": "Optional cinematic hero video. Use for pages with an approved video hero; leave empty for standard image-led pages.",
       "type": "component",
       "component": "shared.hero-video",
       "repeatable": false,
       "required": false
     },
     "heroSlides": {
+      "description": "Motorsport homepage carousel slides only. Leave empty on About, News, Events, Campaign, Tickets, Gallery, Partners, and Merchandise pages.",
       "type": "component",
       "repeatable": true,
       "component": "motorsport.hero-slide",
@@ -76,11 +79,13 @@
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "motorsportFeaturedEvent": {
+      "description": "Motorsport homepage featured event relation only.",
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::event.event"
     },
     "motorsportInformationBand": {
+      "description": "Motorsport homepage Race Control information band only.",
       "type": "component",
       "component": "motorsport.home-information-band",
       "repeatable": false,
@@ -88,6 +93,7 @@
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "motorsportWorldSection": {
+      "description": "Motorsport homepage World of Motorsport section only.",
       "type": "component",
       "component": "motorsport.world-of-motorsport",
       "repeatable": false,
@@ -95,17 +101,23 @@
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "pageAvailability": {
+      "description": "Optional availability/Coming Soon state. Leave empty while page is active and published.",
       "type": "component",
       "component": "shared.page-availability",
       "repeatable": false,
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "sections": {
+      "description": "Page-specific editorial sections rendered by route. Use this for About, News, Events, Tickets, Gallery, Partners, Contact, and Motorsport About Capabilities.",
       "type": "dynamiczone",
-      "components": ["shared.page-section"],
+      "components": [
+        "shared.page-section",
+        "motorsport.about-capabilities"
+      ],
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "seo": {
+      "description": "Search and social metadata. Use metaTitle/metaDescription first; add OG image and canonical only when approved.",
       "type": "component",
       "component": "shared.seo",
       "repeatable": false,

@@ -15,6 +15,7 @@ tmp/
 output/playwright
 output/cms-transfers*
 .playwright-cli
+.playwright-mcp
 
 # Strapi media uploads are intentionally tracked in the repo.
 # (Previously ignored via `cms/public/uploads/*`.)
@@ -22,6 +23,7 @@ cms/public/uploads/*
 !cms/public/uploads/logo-sarga-reverse.png
 !cms/public/uploads/logo-sarga.png
 !cms/public/uploads/favicon-sarga.png
+!cms/public/uploads/logo-sarga-motorsport-symbol-sport.png
 
 *.log
 *.tsbuildinfo

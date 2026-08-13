@@ -48,6 +48,7 @@ const SHARED_EDITORIAL_SUBJECTS = [
   "api::media-gallery.media-gallery",
   "api::ticket-cta.ticket-cta",
   "api::partner.partner",
+  "api::leadership-person.leadership-person",
 ];
 
 export const WORKSPACE_ROLES: WorkspaceRole[] = [
@@ -138,7 +139,6 @@ export const WORKSPACE_ROLES: WorkspaceRole[] = [
     ],
     unscopedSubjects: [
       "api::site.site",
-      "api::leadership-person.leadership-person",
       "api::timeline-item.timeline-item",
     ],
     accountEnvPrefix: "CMS_SHARED_ADMIN",

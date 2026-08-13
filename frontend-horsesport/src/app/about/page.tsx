@@ -19,6 +19,7 @@ import {
   HorseshoeIcon,
 } from "@/components/ui/hs-icons";
 import { fetchHorseSportBusiness } from "@/lib/strapi/content";
+import { fetchHorseSportPage } from "@/lib/cms-content";
 import { getRequestLocale } from "@/lib/i18n/request";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -66,7 +67,14 @@ const CAPABILITIES = [
 ];
 
 export default async function AboutPage() {
-  const business = await fetchHorseSportBusiness();
+  const [business, page] = await Promise.all([
+    fetchHorseSportBusiness(),
+    fetchHorseSportPage("/about"),
+  ]);
+  const story = page?.sections.find((section) => section.sectionKey === "story");
+  const capabilities = page?.sections.find(
+    (section) => section.sectionKey === "capabilities",
+  );
   const overview =
     business?.overview ??
     "Sarga Horse Sport formulates premium national race classifications, elite jockey programs, and strict veterinary compliance protocols across Indonesian horse sport. It is built as a complete, investable championship ecosystem - from the turf to the stable to the grandstand.";
@@ -75,9 +83,9 @@ export default async function AboutPage() {
     <>
       <PageHero
         eyebrow="About"
-        title="The standard for elite horse sport."
-        description="Premium championship racing, disciplined equestrian standards, and a hospitality-forward experience - positioned for a national and international audience."
-        backgroundImage="/media/sarga-horse-sport-concept.png"
+        title={page?.heroTitle ?? "The standard for elite horse sport."}
+        description={page?.heroDescription ?? "Premium championship racing, disciplined equestrian standards, and a hospitality-forward experience - positioned for a national and international audience."}
+        backgroundImage={page?.heroImage ?? "/media/sarga-horse-sport-concept.png"}
         backgroundAlt="Cinematic concept image of a jockey and thoroughbred in motion"
         accent="brown"
       />
@@ -88,10 +96,10 @@ export default async function AboutPage() {
           <ScrollReveal>
             <SectionHeader
               index="01"
-              eyebrow="The Sarga Horse Sport story"
-              title="Heritage, engineered for the modern spectacle."
+              eyebrow={story?.eyebrow ?? "The Sarga Horse Sport story"}
+              title={story?.title ?? "Heritage, engineered for the modern spectacle."}
             />
-            <RichText value={overview} className="mt-6" />
+            <RichText value={story?.body ?? overview} className="mt-6" />
           </ScrollReveal>
           <ScrollReveal delay={120}>
             <div className="hs-card-glass relative aspect-[4/5] overflow-hidden">
@@ -117,9 +125,9 @@ export default async function AboutPage() {
           <ScrollReveal>
             <SectionHeader
               index="02"
-              eyebrow="What we do"
-              title="A complete championship capability."
-              description="Everything required to run elite horse sport to international standard - under one disciplined organisation."
+              eyebrow={capabilities?.eyebrow ?? "What we do"}
+              title={capabilities?.title ?? "A complete championship capability."}
+              description={capabilities?.body ?? "Everything required to run elite horse sport to international standard - under one disciplined organisation."}
             />
           </ScrollReveal>
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

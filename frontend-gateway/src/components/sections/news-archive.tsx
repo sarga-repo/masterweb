@@ -4,6 +4,7 @@ import { EditorialHeading } from "@/components/sections/editorial-heading";
 import { InteriorHero } from "@/components/sections/interior-hero";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { getNewsArticles } from "@/lib/strapi/news";
+import { getGatewaySitePageByPath } from "@/lib/strapi/site-pages";
 import type { NewsCategory } from "@/lib/strapi/types";
 import { getRequestLocale } from "@/lib/i18n/request";
 
@@ -37,6 +38,7 @@ export async function NewsArchive({
   basePath?: string;
 }) {
   const locale = await getRequestLocale();
+  const page = await getGatewaySitePageByPath("/news", locale);
   const query = await searchParams;
   const activeCategory: GatewayNewsCategory = fixedCategory
     ? fixedCategory
@@ -60,6 +62,12 @@ export async function NewsArchive({
     currentPage * pageSize,
   );
   const isPressArchive = activeCategory === "press-release";
+  const leadSection = page?.sections.find(
+    (section) => section.sectionKey === "lead-story",
+  );
+  const archiveSection = page?.sections.find(
+    (section) => section.sectionKey === "archive-intro",
+  );
 
   const pageHref = (page: number) => {
     const params = new URLSearchParams();
@@ -76,17 +84,20 @@ export async function NewsArchive({
       <InteriorHero
         index="03"
         eyebrow={
-          isPressArchive ? "Official corporate record" : "Newsroom and record"
+          isPressArchive
+            ? "Official corporate record"
+            : page?.navigationLabel ?? "Newsroom and record"
         }
         title={
           isPressArchive
             ? "Official releases. On the record."
-            : "Signals from every arena."
+            : page?.heroTitle ?? "Signals from every arena."
         }
         description={
           isPressArchive
             ? "Approved corporate announcements and official statements published by Sarga.co."
-            : "Reporting the decisions, performances, partnerships, and people shaping Sarga's integrated sport and entertainment network."
+            : page?.heroDescription ??
+              "Reporting the decisions, performances, partnerships, and people shaping Sarga's integrated sport and entertainment network."
         }
         image={{
           url: "/assets/media/leadership/governance-editorial-concept.png",
@@ -121,16 +132,19 @@ export async function NewsArchive({
           </nav>
           <EditorialHeading
             index="01"
-            eyebrow={isPressArchive ? "Latest release" : "Lead story"}
+            eyebrow={
+              isPressArchive ? "Latest release" : leadSection?.eyebrow ?? "Lead story"
+            }
             title={
               isPressArchive
                 ? "The latest official statement."
-                : "What the network is watching."
+                : leadSection?.title ?? "What the network is watching."
             }
             description={
               isPressArchive
                 ? "The newest approved corporate release from the Sarga group."
-                : "The latest high-priority story from across Sarga's businesses and live properties."
+                : leadSection?.body ??
+                  "The latest high-priority story from across Sarga's businesses and live properties."
             }
           />
           {featured ? (
@@ -187,7 +201,9 @@ export async function NewsArchive({
         <div className="site-container relative z-10">
           <div className="flex items-end justify-between gap-8 border-b border-sarga-black pb-6">
             <h2 className="font-heading text-3xl font-bold uppercase tracking-[-0.03em] sm:text-[2.4rem]">
-              {isPressArchive ? "Release archive" : "The editorial desk"}
+              {isPressArchive
+                ? "Release archive"
+                : archiveSection?.title ?? "The editorial desk"}
             </h2>
             <span className="hidden text-xs font-bold uppercase tracking-[0.16em] text-sarga-text/45 sm:block">
               {String(remainingArticles.length).padStart(2, "0")} stories

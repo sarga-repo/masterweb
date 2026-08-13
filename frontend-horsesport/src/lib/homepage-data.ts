@@ -100,8 +100,11 @@ type CmsHeroVideo = {
   mobilePosterImage?: StrapiMedia | null;
 };
 type CmsSitePage = {
+  heroTitle?: string;
+  heroDescription?: string;
   heroMedia?: StrapiMedia | null;
   heroVideo?: CmsHeroVideo | null;
+  sections?: Array<{ sectionKey: string; title?: string; body?: string }>;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -411,6 +414,7 @@ export async function fetchHomepageData(): Promise<HomepageData> {
         "heroVideo.alternateVideo",
         "heroVideo.posterImage",
         "heroVideo.mobilePosterImage",
+        "sections",
       ],
       filters: {
         "filters[siteScope][$eq]": "horsesport",
@@ -535,9 +539,17 @@ export async function fetchHomepageData(): Promise<HomepageData> {
 
   /* About */
   const business = businessRes?.data?.[0];
-  const about = business?.overview
-    ? { title: DEFAULT_ABOUT.title, body: business.overview }
-    : DEFAULT_ABOUT;
+  const aboutSection = cmsPage?.sections?.find(
+    (section) => section.sectionKey === "about",
+  );
+  const about = aboutSection
+    ? {
+        title: aboutSection.title ?? DEFAULT_ABOUT.title,
+        body: aboutSection.body ?? DEFAULT_ABOUT.body,
+      }
+    : business?.overview
+      ? { title: DEFAULT_ABOUT.title, body: business.overview }
+      : DEFAULT_ABOUT;
 
   return {
     hero,

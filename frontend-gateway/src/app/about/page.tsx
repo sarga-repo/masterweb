@@ -51,6 +51,9 @@ export default async function AboutPage() {
       getGatewaySitePageByPath("/about/sustainability-report", locale),
     ]),
   ]);
+  const page = await getGatewaySitePageByPath("/about", locale);
+  const philosophy = page?.sections.find((section) => section.sectionKey === "operating-philosophy");
+  const record = page?.sections.find((section) => section.sectionKey === "corporate-record");
 
   const tabs = buildAboutTabs(
     timelineItems,
@@ -61,9 +64,9 @@ export default async function AboutPage() {
     <>
       <InteriorHero
         index="01"
-        eyebrow="The corporate root"
-        title="One group. Every arena."
-        description={homepage.aboutSummaryBody}
+        eyebrow={page?.navigationLabel ?? "The corporate root"}
+        title={page?.heroTitle ?? "One group. Every arena."}
+        description={page?.heroDescription ?? homepage.aboutSummaryBody}
         meta={[
           "Holding governance",
           "Indonesia",
@@ -81,9 +84,9 @@ export default async function AboutPage() {
         <div className="site-container relative z-10">
           <EditorialHeading
             index="02"
-            eyebrow="Operating philosophy"
-            title="Control at the core. Freedom at the edge."
-            description="Sarga gives every property room to build its own culture while a shared corporate center protects quality, accountability, and long-term value."
+            eyebrow={philosophy?.eyebrow ?? "Operating philosophy"}
+            title={philosophy?.title ?? "Control at the core. Freedom at the edge."}
+            description={philosophy?.body ?? "Sarga gives every property room to build its own culture while a shared corporate center protects quality, accountability, and long-term value."}
           />
           <ol className="mt-16 border-t border-sarga-black/20">
             {principles.map(([index, title, description]) => (
@@ -138,9 +141,9 @@ export default async function AboutPage() {
         <div className="site-container">
           <EditorialHeading
             index="03"
-            eyebrow="Corporate record"
-            title="Built in public. Governed for the long run."
-            description="Explore Sarga's formation, leadership publication status, and future corporate reports through one living record."
+            eyebrow={record?.eyebrow ?? "Corporate record"}
+            title={record?.title ?? "Built in public. Governed for the long run."}
+            description={record?.body ?? "Explore Sarga's formation, leadership publication status, and future corporate reports through one living record."}
           />
           <div className="mt-16 border-t border-sarga-black pt-8">
             <AboutTabs tabs={tabs} />

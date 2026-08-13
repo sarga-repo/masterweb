@@ -4,14 +4,25 @@ import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { InformationBand, LightLineField, PageShell } from "@/components";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
-import { fetchArticles } from "@/lib/cms-data";
+import { fetchArticles, fetchSitePage } from "@/lib/cms-data";
 import type { MotorsportArticle } from "@/types/design-system";
+import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/lib/i18n/request";
 
-export const metadata: Metadata = {
-  title: "News",
-  description:
-    "Race reports, rider profiles, technical deep-dives, and lifestyle features from the Sarga Motorsport editorial team.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const page = await fetchSitePage("newsHub");
+  return createMetadata({
+    title: page?.title ?? "News",
+    description:
+      page?.heroDescription ??
+      "Race reports, rider profiles, technical deep-dives, and lifestyle features from the Sarga Motorsport editorial team.",
+    path: "/news",
+    locale,
+    image: page?.heroImage,
+    isFallback: locale === "id" && !page,
+  });
+}
 
 const PLACEHOLDER: MotorsportArticle[] = [
   {
@@ -57,9 +68,14 @@ const PLACEHOLDER: MotorsportArticle[] = [
 ];
 
 export default async function NewsPage() {
-  const cmsArticles = await fetchArticles();
+  const [page, cmsArticles] = await Promise.all([
+    fetchSitePage("newsHub"),
+    fetchArticles(),
+  ]);
   const articles = cmsArticles.length > 0 ? cmsArticles : PLACEHOLDER;
   const [featured, ...rest] = articles;
+  const leadSection = page?.sections.find((section) => section.sectionKey === "lead-story");
+  const archiveSection = page?.sections.find((section) => section.sectionKey === "archive-intro");
 
   return (
     <PageShell spectrumSeparators>
@@ -68,12 +84,11 @@ export default async function NewsPage() {
         <div className="ms-shell relative z-10 grid gap-10 py-18 sm:py-24 lg:grid-cols-[minmax(0,1.3fr)_minmax(14rem,.7fr)] lg:items-end">
           <div>
             <p className="ms-kicker text-ms-electric-yellow">
-              Editorial / From the paddock
+              {leadSection?.eyebrow ?? "Editorial / From the paddock"}
             </p>
-            <h1 className="ms-heading-page mt-6 text-ms-warm-white">News</h1>
+            <h1 className="ms-heading-page mt-6 text-ms-warm-white">{page?.heroTitle ?? "News"}</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-ms-warm-white/72">
-              Race reports, rider profiles, technical detail, and the culture
-              moving Indonesian motorsport forward—across four wheels and two.
+              {page?.heroDescription ?? "Race reports, rider profiles, technical detail, and the culture moving Indonesian motorsport forward—across four wheels and two."}
             </p>
           </div>
           <div className="border-t border-ms-warm-white/20 pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
@@ -91,9 +106,9 @@ export default async function NewsPage() {
       </section>
 
       <InformationBand
-        eyebrow="Editorial control / Motorsport"
-        title="Stories at race pace."
-        description="Reports, announcements, people, technology, and culture—published from the Motorsport-scoped editorial feed."
+        eyebrow={leadSection?.eyebrow ?? "Editorial control / Motorsport"}
+        title={leadSection?.title ?? "Stories at race pace."}
+        description={leadSection?.body ?? "Reports, announcements, people, technology, and culture—published from the Motorsport-scoped editorial feed."}
         items={[
           { label: "Stories", value: String(articles.length).padStart(2, "0") },
           { label: "Lead", value: featured?.category ?? "News" },
@@ -155,14 +170,14 @@ export default async function NewsPage() {
               <div className="grid gap-5 border-t border-ms-warm-white/18 pt-5 sm:grid-cols-[1fr_auto] sm:items-end">
                 <div>
                   <p className="ms-kicker text-ms-electric-yellow">
-                    Latest dispatches
+                    {archiveSection?.eyebrow ?? "Latest dispatches"}
                   </p>
                   <h2 className="ms-heading-section mt-5 text-ms-warm-white">
-                    The archive.
+                    {archiveSection?.title ?? "The archive."}
                   </h2>
                 </div>
                 <p className="ms-data-label text-ms-slipstream-teal">
-                  Ordered by publication date
+                  {archiveSection?.body ?? "Ordered by publication date"}
                 </p>
               </div>
 

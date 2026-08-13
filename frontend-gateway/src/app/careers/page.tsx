@@ -7,6 +7,7 @@ import { careerDisciplines } from "@/lib/careers/disciplines";
 import { createMetadata } from "@/lib/seo/metadata";
 import { getJobVacancies } from "@/lib/strapi/jobs";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { getGatewaySitePageByPath } from "@/lib/strapi/site-pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
@@ -23,15 +24,17 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CareersPage() {
   const locale = await getRequestLocale();
   const jobs = await getJobVacancies(locale);
+  const page = await getGatewaySitePageByPath("/careers", locale);
+  const disciplines = page?.sections.find((section) => section.sectionKey === "career-disciplines");
   const openJobs = jobs.filter((job) => job.vacancyStatus === "open");
 
   return (
     <>
       <InteriorHero
         index="05"
-        eyebrow="Join the network"
-        title="Build what the crowd remembers."
-        description="Sarga brings together operators, creators, engineers, and sporting specialists who want to shape experiences at national scale."
+         eyebrow={page?.navigationLabel ?? "Join the network"}
+         title={page?.heroTitle ?? "Build what the crowd remembers."}
+         description={page?.heroDescription ?? "Sarga brings together operators, creators, engineers, and sporting specialists who want to shape experiences at national scale."}
         image={{
           url: "/assets/media/sarga-motorsport-concept.png",
           alt: "Motorsport team environment at a modern racing circuit",
@@ -49,9 +52,9 @@ export default async function CareersPage() {
         <div className="site-container">
           <EditorialHeading
             index="01"
-            eyebrow="Where you can move"
-            title="Many disciplines. One standard."
-            description="Choose a discipline to see its current opportunity roster, then review each role before continuing to its approved LinkedIn application."
+             eyebrow={disciplines?.eyebrow ?? "Where you can move"}
+             title={disciplines?.title ?? "Many disciplines. One standard."}
+             description={disciplines?.body ?? "Choose a discipline to see its current opportunity roster, then review each role before continuing to its approved LinkedIn application."}
           />
           <ol className="mt-16 grid border-l border-t border-sarga-black/20 sm:grid-cols-2">
             {careerDisciplines.map((discipline) => {

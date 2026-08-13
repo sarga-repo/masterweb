@@ -6,6 +6,7 @@ import { InteriorHero } from "@/components/sections/interior-hero";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { createMetadata } from "@/lib/seo/metadata";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { getGatewaySitePageByPath } from "@/lib/strapi/site-pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
@@ -42,14 +43,17 @@ const inquiryPaths = [
   ],
 ] as const;
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const locale = await getRequestLocale();
+  const page = await getGatewaySitePageByPath("/contact", locale);
+  const inquiryMap = page?.sections.find((section) => section.sectionKey === "inquiry-map");
   return (
     <>
       <InteriorHero
         index="06"
-        eyebrow="Open a conversation"
-        title="Start with the right signal."
-        description="Choose the route that best fits your inquiry. Sarga's group desk will direct approved requests to the right operating team."
+         eyebrow={page?.navigationLabel ?? "Open a conversation"}
+         title={page?.heroTitle ?? "Start with the right signal."}
+         description={page?.heroDescription ?? "Choose the route that best fits your inquiry. Sarga's group desk will direct approved requests to the right operating team."}
         meta={["Partnerships", "Media", "Events", "Corporate"]}
         tone="slate"
       />
@@ -58,9 +62,9 @@ export default function ContactPage() {
         <div className="site-container">
           <EditorialHeading
             index="01"
-            eyebrow="Inquiry map"
-            title="A direct route into the network."
-            description="Choose the closest route below, then give the group desk enough context to connect you with the right operating team."
+             eyebrow={inquiryMap?.eyebrow ?? "Inquiry map"}
+             title={inquiryMap?.title ?? "A direct route into the network."}
+             description={inquiryMap?.body ?? "Choose the closest route below, then give the group desk enough context to connect you with the right operating team."}
           />
           <div className="mt-16 border-t border-sarga-black">
             {inquiryPaths.map(([index, title, description]) => (

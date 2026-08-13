@@ -140,7 +140,12 @@ export async function fetchStrapiList<T>(
         : undefined,
     });
     clearTimeout(timeout);
-    if (!res.ok) return null;
+    if (!res.ok) {
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(`[strapi] ${res.status} for ${collection}`);
+      }
+      return null;
+    }
     return (await res.json()) as StrapiListResponse<T>;
   };
   try {
@@ -160,7 +165,13 @@ export async function fetchStrapiList<T>(
           },
         }
       : null;
-  } catch {
+  } catch (error) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn(
+        `[strapi] request failed for ${collection}:`,
+        error instanceof Error ? error.message : error,
+      );
+    }
     return null;
   }
 }

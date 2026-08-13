@@ -292,6 +292,14 @@
         "role": "string",
         "summary": "text",
         "group": ["board", "executive", "advisor"],
+        "siteScope": [
+          "gateway",
+          "motorsport",
+          "horsesport",
+          "shared",
+          "hidden"
+        ],
+        "site": "relation:site",
         "portrait": "media",
         "order": "integer",
         "publishedAt": "datetime"
@@ -386,6 +394,7 @@
           "home",
           "about",
           "eventHub",
+          "newsHub",
           "campaign",
           "merchandise",
           "history",

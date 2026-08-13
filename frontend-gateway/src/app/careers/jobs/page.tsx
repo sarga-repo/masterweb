@@ -7,6 +7,7 @@ import { createMetadata } from "@/lib/seo/metadata";
 import { getJobVacancies } from "@/lib/strapi/jobs";
 import type { JobDiscipline } from "@/lib/strapi/types";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { getGatewaySitePageByPath } from "@/lib/strapi/site-pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
@@ -36,15 +37,17 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
     ? (requestedDiscipline as JobDiscipline)
     : undefined;
   const jobs = await getJobVacancies(locale);
+  const page = await getGatewaySitePageByPath("/careers/jobs", locale);
+  const roster = page?.sections.find((section) => section.sectionKey === "search-roster");
   const openCount = jobs.filter((job) => job.vacancyStatus === "open").length;
 
   return (
     <>
       <InteriorHero
         index="06"
-        eyebrow="Opportunity roster"
-        title="Find the work that moves you."
-        description="Search current openings across the Sarga ecosystem. Role details are managed by the recruitment team and applications continue securely to LinkedIn."
+        eyebrow={page?.navigationLabel ?? "Opportunity roster"}
+        title={page?.heroTitle ?? "Find the work that moves you."}
+        description={page?.heroDescription ?? "Search current openings across the Sarga ecosystem. Role details are managed by the recruitment team and applications continue securely to LinkedIn."}
         meta={[
           `${openCount} open ${openCount === 1 ? "role" : "roles"}`,
           "Four disciplines",
@@ -57,9 +60,9 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
         <div className="site-container">
           <EditorialHeading
             index="01"
-            eyebrow="Search the roster"
-            title="A precise place to begin."
-            description="Use a discipline menu, keyword, employment type, and work mode to narrow the current vacancy list."
+            eyebrow={roster?.eyebrow ?? "Search the roster"}
+            title={roster?.title ?? "A precise place to begin."}
+            description={roster?.body ?? "Use a discipline menu, keyword, employment type, and work mode to narrow the current vacancy list."}
           />
           <div className="mt-14">
             <JobVacancyBrowser

@@ -162,6 +162,38 @@ type CmsPartner = {
   logo?: StrapiMedia | null;
 };
 
+export type HorseSportPageSeo = {
+  metaTitle?: string;
+  metaDescription?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImageUrl?: string;
+  canonicalUrl?: string;
+  noIndex?: boolean;
+};
+
+export type HorseSportNewsPage = {
+  heroTitle?: string;
+  heroDescription?: string;
+  heroImage?: string;
+  heroImageAlt?: string;
+  sections: Array<{
+    sectionKey: string;
+    eyebrow?: string;
+    title?: string;
+    body?: string;
+  }>;
+  seo?: HorseSportPageSeo;
+};
+
+export type HorseSportPage = HorseSportNewsPage & {
+  heroTitle?: string;
+  heroDescription?: string;
+  heroImage?: string;
+  heroImageAlt?: string;
+  seo?: HorseSportPageSeo;
+};
+
 /* -------------------------------------------------------------------------- */
 /*  Formatting                                                                */
 /* -------------------------------------------------------------------------- */
@@ -498,6 +530,65 @@ export async function fetchNewsPage(): Promise<ArticleCardData[]> {
   });
   const articles = (res?.data ?? []).map(mapArticleCard);
   return articles.length > 0 ? articles : PH_ARTICLES;
+}
+
+export async function fetchNewsPageConfig(): Promise<HorseSportNewsPage | null> {
+  const res = await fetchStrapiList<{
+    heroTitle?: string;
+    heroDescription?: string;
+    heroMedia?: StrapiMedia | null;
+    sections?: HorseSportNewsPage["sections"];
+    seo?: HorseSportPageSeo;
+  }>("site-pages", {
+    populate: ["heroMedia", "sections", "seo.ogImage"],
+    filters: {
+      "filters[siteScope][$eq]": "horsesport",
+      "filters[routePath][$eq]": "/news",
+      "filters[pageKind][$eq]": "newsHub",
+    },
+    limit: 1,
+    revalidate: 120,
+  });
+  const page = res?.data?.[0];
+  if (!page) return null;
+  return {
+    heroTitle: page.heroTitle,
+    heroDescription: page.heroDescription,
+    heroImage: mediaUrl(page.heroMedia?.url) || undefined,
+    heroImageAlt: page.heroMedia?.alternativeText ?? undefined,
+    sections: page.sections ?? [],
+    seo: page.seo,
+  };
+}
+
+export async function fetchHorseSportPage(
+  routePath: string,
+): Promise<HorseSportPage | null> {
+  const res = await fetchStrapiList<{
+    heroTitle?: string;
+    heroDescription?: string;
+    heroMedia?: StrapiMedia | null;
+    sections?: HorseSportPage["sections"];
+    seo?: HorseSportPage["seo"];
+  }>("site-pages", {
+    populate: ["heroMedia", "sections", "seo.ogImage"],
+    filters: {
+      "filters[siteScope][$eq]": "horsesport",
+      "filters[routePath][$eq]": routePath,
+    },
+    limit: 1,
+    revalidate: 120,
+  });
+  const page = res?.data?.[0];
+  if (!page) return null;
+  return {
+    heroTitle: page.heroTitle,
+    heroDescription: page.heroDescription,
+    heroImage: mediaUrl(page.heroMedia?.url) || undefined,
+    heroImageAlt: page.heroMedia?.alternativeText ?? undefined,
+    sections: page.sections ?? [],
+    seo: page.seo,
+  };
 }
 
 export async function fetchArticleDetail(

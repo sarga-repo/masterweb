@@ -7,16 +7,39 @@ import { ResilientImage } from "@/components/ui/resilient-image";
 import {
   fetchLeadership,
   fetchSitePage,
+  mapAboutCapabilities,
   type SitePageContent,
 } from "@/lib/cms-data";
+import { createMetadata } from "@/lib/seo/metadata";
+import { getRequestLocale } from "@/lib/i18n/request";
 import { siteConfig } from "@/lib/site-config";
 import type { TeamMember } from "@/types/design-system";
 
-export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Sarga Motorsport is Indonesia's premium racing platform—professional competition, talent development, event experience, and media.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const page = await fetchSitePage("about");
+  return createMetadata({
+    title: page?.title ?? "About",
+    description:
+      page?.heroDescription ??
+      "Sarga Motorsport is Indonesia's premium racing platform—professional competition, talent development, event experience, and media.",
+    path: "/about",
+    image: page?.heroImage,
+    seo: page?.seo
+      ? {
+          metaTitle: page.seo.metaTitle,
+          metaDescription: page.seo.metaDescription,
+          ogTitle: page.seo.ogTitle,
+          ogDescription: page.seo.ogDescription,
+          ogImageUrl: page.seo.ogImage?.url,
+          canonicalUrl: page.seo.canonicalUrl,
+          noIndex: page.seo.noIndex,
+        }
+      : undefined,
+    locale,
+    isFallback: locale === "id" && !page,
+  });
+}
 
 const FALLBACK_TEAM: TeamMember[] = [
   {
@@ -42,7 +65,7 @@ const FALLBACK_TEAM: TeamMember[] = [
   },
 ];
 
-const CAPABILITIES = [
+const FALLBACK_CAPABILITIES = [
   [
     "01",
     "Professional competition",
@@ -75,12 +98,28 @@ function sectionBody(
   );
 }
 
+function sectionValue(
+  sections: SitePageContent["sections"] | undefined,
+  key: string,
+  field: "eyebrow" | "title" | "body",
+  fallback: string,
+) {
+  return sections?.find((section) => section.sectionKey === key)?.[field] || fallback;
+}
+
 export default async function AboutPage() {
   const [page, cmsTeam] = await Promise.all([
     fetchSitePage("about"),
     fetchLeadership(),
   ]);
   const team = cmsTeam.length > 0 ? cmsTeam.slice(0, 6) : FALLBACK_TEAM;
+  const operatingIdea = sectionValue(page?.sections, "operating-idea", "body", "Competition creates the moment. People, media, hospitality, and development turn it into a lasting Motorsport culture.");
+  const profile = page?.sections.find((section) => section.sectionKey === "profile");
+  const teamIntro = page?.sections.find((section) => section.sectionKey === "team-intro");
+  const contactCta = page?.sections.find((section) => section.sectionKey === "contact-cta");
+  const ecosystemCta = page?.sections.find((section) => section.sectionKey === "ecosystem-cta");
+  const capabilities = mapAboutCapabilities(page?.sections);
+  const capabilityCards = capabilities?.cards ?? FALLBACK_CAPABILITIES.map(([, title, description]) => ({ title, description }));
 
   return (
     <PageShell spectrumSeparators>
@@ -152,7 +191,7 @@ export default async function AboutPage() {
                 01 / Who we are
               </p>
               <h2 className="ms-heading-section mt-6 max-w-[13ch] text-ms-warm-white">
-                A stage built for velocity.
+                {profile?.title ?? "A stage built for velocity."}
               </h2>
               <p className="mt-8 max-w-3xl text-lg leading-8 text-ms-warm-white/72">
                 {sectionBody(
@@ -165,11 +204,10 @@ export default async function AboutPage() {
 
             <aside className="border-t border-ms-warm-white/18 pt-6 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0">
               <p className="ms-data-label text-ms-slipstream-teal">
-                Operating idea
+                 {sectionValue(page?.sections, "operating-idea", "eyebrow", "Operating idea")}
               </p>
               <p className="mt-5 text-base leading-7 text-ms-warm-white/68">
-                Competition creates the moment. People, media, hospitality, and
-                development turn it into a lasting Motorsport culture.
+                 {operatingIdea}
               </p>
               <Link
                 href="#team"
@@ -202,28 +240,28 @@ export default async function AboutPage() {
         <div className="ms-shell">
           <SectionHeader
             index="CAPABILITY"
-            eyebrow="What we do"
-            title="Competition is the core. Experience completes it."
-            description={sectionBody(
-              page?.sections,
-              "what-we-do",
-              "Professional competition, event experiences, media, partnerships, and talent development—designed as one connected Motorsport system.",
-            )}
+             eyebrow={capabilities?.eyebrow ?? "What we do"}
+             title={capabilities?.title ?? "Competition is the core. Experience completes it."}
+             description={capabilities?.description ?? sectionBody(
+               page?.sections,
+               "what-we-do",
+               "Professional competition, event experiences, media, partnerships, and talent development—designed as one connected Motorsport system.",
+             )}
           />
           <div className="mt-14 border-y border-ms-warm-white/18 md:grid md:grid-cols-2">
-            {CAPABILITIES.map(([index, title, description]) => (
+             {capabilityCards.map((card, index) => (
               <article
                 key={index}
                 className="border-b border-ms-warm-white/14 px-0 py-9 md:px-8 md:odd:border-r md:first:pl-0"
               >
                 <span className="ms-data-label text-ms-electric-yellow">
-                  {index}
+                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="ms-heading-card mt-7 max-w-[16ch] text-ms-warm-white">
-                  {title}
+                   {card.title}
                 </h3>
                 <p className="mt-5 max-w-xl text-sm leading-7 text-ms-warm-white/68">
-                  {description}
+                   {card.description}
                 </p>
               </article>
             ))}
@@ -235,9 +273,9 @@ export default async function AboutPage() {
         <div className="ms-shell">
           <SectionHeader
             index="TEAM"
-            eyebrow="Meet the team"
-            title="The people behind the programme."
-            description="Group leadership and operators building the sporting, commercial, and live-event platform."
+             eyebrow={teamIntro?.eyebrow ?? "Meet the team"}
+             title={teamIntro?.title ?? "The people behind the programme."}
+             description={teamIntro?.body ?? "Group leadership and operators building the sporting, commercial, and live-event platform."}
           />
           <div className="mt-14 grid grid-cols-2 gap-5 sm:gap-7 lg:grid-cols-4">
             {team.map((member, index) => (
@@ -287,13 +325,12 @@ export default async function AboutPage() {
       >
         <div className="ms-shell grid gap-12 lg:grid-cols-2 lg:gap-20">
           <article>
-            <p className="ms-kicker text-ms-ignition-orange">Contact us</p>
+             <p className="ms-kicker text-ms-ignition-orange">{contactCta?.eyebrow ?? "Contact us"}</p>
             <h2 className="ms-heading-section mt-6 max-w-[11ch]">
-              Start a conversation with race control.
+               {contactCta?.title ?? "Start a conversation with race control."}
             </h2>
             <p className="mt-6 max-w-xl leading-7 text-ms-warm-white/72">
-              Partnerships, media, event support, talent pathways, and general
-              Motorsport inquiries are routed through the contact desk.
+               {contactCta?.body ?? "Partnerships, media, event support, talent pathways, and general Motorsport inquiries are routed through the contact desk."}
             </p>
             <Link
               href="/contact"
@@ -305,15 +342,13 @@ export default async function AboutPage() {
           </article>
           <article className="border-t border-ms-warm-white/18 pt-10 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
             <p className="ms-kicker text-ms-slipstream-teal">
-              Part of Sarga.co
+               {ecosystemCta?.eyebrow ?? "Part of Sarga.co"}
             </p>
             <h2 className="ms-heading-section mt-6 max-w-[11ch]">
-              One ecosystem. A dedicated racing home.
+               {ecosystemCta?.title ?? "One ecosystem. A dedicated racing home."}
             </h2>
             <p className="mt-6 max-w-xl leading-7 text-ms-warm-white/72">
-              Sarga.co remains the group gateway. This dedicated site is where
-              Motorsport programmes, events, stories, tickets, and fan culture
-              live in full.
+               {ecosystemCta?.body ?? "Sarga.co remains the group gateway. This dedicated site is where Motorsport programmes, events, stories, tickets, and fan culture live in full."}
             </p>
             <a
               href={siteConfig.gatewayUrl}

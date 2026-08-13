@@ -107,6 +107,11 @@ export default async function EventsPage() {
     (event) => !["completed", "cancelled"].includes(event.status),
   );
   const ticketedCount = upcoming.filter((event) => event.ticketHref).length;
+  const section = (key: string) =>
+    page?.sections.find((item) => item.sectionKey === key);
+  const eventControl = section("event-control");
+  const programmes = section("programmes");
+  const calendar = section("calendar");
 
   return (
     <PageShell spectrumSeparators>
@@ -128,9 +133,12 @@ export default async function EventsPage() {
       />
 
       <InformationBand
-        eyebrow="Event control / Live index"
-        title="Programmes with a pulse."
-        description="International campaigns, development pathways, and race weekends-each with clear status and approved ticket routing."
+        eyebrow={eventControl?.eyebrow ?? "Event control / Live index"}
+        title={eventControl?.title ?? "Programmes with a pulse."}
+        description={
+          eventControl?.body ??
+          "International campaigns, development pathways, and race weekends-each with clear status and approved ticket routing."
+        }
         items={[
           {
             label: "Programmes",
@@ -151,9 +159,12 @@ export default async function EventsPage() {
         <div className="ms-shell">
           <SectionHeader
             index="PROGRAMMES"
-            eyebrow="Featured pathways"
-            title="Choose your entry point."
-            description="A world-stage campaign and a national talent-development programme lead the Motorsport calendar."
+            eyebrow={programmes?.eyebrow ?? "Featured pathways"}
+            title={programmes?.title ?? "Choose your entry point."}
+            description={
+              programmes?.body ??
+              "A world-stage campaign and a national talent-development programme lead the Motorsport calendar."
+            }
           />
           <div className="mt-14 space-y-6">
             {orderedPrograms.map((program, index) => (
@@ -172,9 +183,12 @@ export default async function EventsPage() {
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <SectionHeader
               index="CALENDAR"
-              eyebrow="Upcoming events"
-              title="The next grid."
-              description="Current Motorsport-scoped events, ordered by the live CMS calendar."
+              eyebrow={calendar?.eyebrow ?? "Upcoming events"}
+              title={calendar?.title ?? "The next grid."}
+              description={
+                calendar?.body ??
+                "Current Motorsport-scoped events, ordered by the live CMS calendar."
+              }
             />
             <div className="flex flex-wrap gap-3 pb-1">
               <StatusChip status="announced" />

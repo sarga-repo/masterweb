@@ -1985,6 +1985,19 @@ export interface ApiSiteSite extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
     favicon: Schema.Attribute.Media<'images'>;
+    footerColumns: Schema.Attribute.Component<'shared.footer-column', true>;
+    footerCopyright: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 160;
+      }>;
+    footerLogo: Schema.Attribute.Media<'images'>;
+    footerSocialLinks: Schema.Attribute.Component<'shared.footer-link', true>;
+    footerStatement: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 240;
+      }>;
+    footerUtilityLinks: Schema.Attribute.Component<'shared.footer-link', true>;
+    headerLogo: Schema.Attribute.Media<'images'>;
     isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::site.site'> &

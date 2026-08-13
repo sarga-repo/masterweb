@@ -18,6 +18,8 @@ type MotorsportFooterProps = {
   crossSiteLinks?: LinkItem[];
   copyright: string;
   statement?: string;
+  logoSrc?: string;
+  logoAlt?: string;
 };
 
 export function MotorsportFooter({
@@ -28,6 +30,8 @@ export function MotorsportFooter({
   crossSiteLinks = [],
   copyright,
   statement = "Racing, amplified.",
+  logoSrc,
+  logoAlt,
 }: MotorsportFooterProps) {
   return (
     <footer className="relative overflow-hidden border-t border-ms-warm-white/12 bg-ms-charcoal">
@@ -38,7 +42,12 @@ export function MotorsportFooter({
       <div className="ms-shell relative py-16 sm:py-20">
         <div className="grid gap-14 border-b border-ms-warm-white/12 pb-14 lg:grid-cols-[1.1fr_1.9fr]">
           <div>
-            <MotorsportLogo variant="part-of-sarga" className="w-52" />
+             <MotorsportLogo
+               src={logoSrc}
+               alt={logoAlt}
+               variant="part-of-sarga"
+               className="w-52"
+             />
             <p className="ms-heading-section mt-10 max-w-xl text-ms-warm-white">
               {statement}
             </p>

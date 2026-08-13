@@ -236,7 +236,94 @@ type CmsSite = {
   isActive?: boolean;
   order?: number;
   logo?: StrapiMedia | null;
+  headerLogo?: StrapiMedia | null;
+  footerLogo?: StrapiMedia | null;
+  footerStatement?: string;
+  footerCopyright?: string;
+  footerColumns?: CmsFooterColumn[];
+  footerSocialLinks?: CmsFooterLink[];
+  footerUtilityLinks?: CmsFooterLink[];
 };
+
+export type CmsFooterLink = {
+  label: string;
+  href: string;
+  linkType?: "internal" | "external";
+  openInNewTab?: boolean;
+  enabled?: boolean;
+  displayOrder?: number;
+};
+
+export type CmsFooterColumn = {
+  title: string;
+  displayOrder?: number;
+  links?: CmsFooterLink[];
+};
+
+export type MotorsportChrome = {
+  headerLogo?: string;
+  headerLogoAlt?: string;
+  footerLogo?: string;
+  footerLogoAlt?: string;
+  footerStatement?: string;
+  footerCopyright?: string;
+  footerColumns?: {
+    title: string;
+    links: CmsFooterLink[];
+  }[];
+  footerSocialLinks?: CmsFooterLink[];
+  footerUtilityLinks?: CmsFooterLink[];
+};
+
+const fallbackFooterColumns = [
+  { title: "Discover", links: [
+    { label: "Home", href: "/" },
+    { label: "About", href: "/about" },
+    { label: "Events", href: "/events" },
+  ] },
+  { title: "Follow", links: [
+    { label: "News", href: "/news" },
+    { label: "Gallery", href: "/gallery" },
+    { label: "Contact", href: "/contact" },
+  ] },
+  { title: "Race day", links: [
+    { label: "Tickets", href: "/tickets" },
+    { label: "Merchandise", href: "/merchandise" },
+  ] },
+];
+
+function mapFooterLinks(links: CmsFooterLink[] | undefined) {
+  return (links ?? [])
+    .filter((link) => link.enabled !== false && link.label?.trim() && link.href?.trim())
+    .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
+}
+
+export async function fetchMotorsportChrome(): Promise<MotorsportChrome> {
+  const response = await fetchStrapiList<CmsSite>("sites", {
+    populate: "headerLogo,footerLogo,footerColumns.links,footerSocialLinks,footerUtilityLinks",
+    filters: { "filters[slug][$eq]": "sarga-motorsport", "filters[isActive][$eq]": "true" },
+    limit: 1,
+    revalidate: 60,
+  });
+  const site = response?.data[0];
+  const columns = (site?.footerColumns ?? [])
+    .filter((column) => column.title?.trim())
+    .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0))
+    .map((column) => ({ title: column.title, links: mapFooterLinks(column.links) }))
+    .filter((column) => column.links.length);
+
+  return {
+    headerLogo: mediaUrl(site?.headerLogo?.url) || "/brand/logo-sarga-motorsport-symbol-sport.png",
+    headerLogoAlt: site?.headerLogo?.alternativeText || "Sarga Motorsport",
+    footerLogo: mediaUrl(site?.footerLogo?.url) || "/brand/logo-sarga-motorsport-part-of-sarga.png",
+    footerLogoAlt: site?.footerLogo?.alternativeText || "Sarga Motorsport, part of Sarga",
+    footerStatement: site?.footerStatement || "Racing, amplified.",
+    footerCopyright: site?.footerCopyright || "© 2026 Sarga Motorsport",
+    footerColumns: columns.length ? columns : fallbackFooterColumns,
+    footerSocialLinks: mapFooterLinks(site?.footerSocialLinks),
+    footerUtilityLinks: mapFooterLinks(site?.footerUtilityLinks),
+  };
+}
 
 export type SitePageContent = {
   title?: string;

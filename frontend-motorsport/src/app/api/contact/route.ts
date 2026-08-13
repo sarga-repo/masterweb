@@ -123,10 +123,17 @@ export async function POST(request: Request) {
 
   /* Production: forward to Strapi or email service. */
   const strapiUrl =
-    process.env.STRAPI_API_URL ?? process.env.NEXT_PUBLIC_STRAPI_API_URL;
-  const token = process.env.STRAPI_API_TOKEN;
+    process.env.STRAPI_API_URL?.trim() ??
+    process.env.NEXT_PUBLIC_STRAPI_API_URL?.trim();
+  const token = process.env.STRAPI_API_TOKEN?.trim();
 
   if (!strapiUrl || !token) {
+    console.error("[Sarga Contact] Inquiry delivery is not configured.", {
+      missing: [
+        !strapiUrl && "STRAPI_API_URL",
+        !token && "STRAPI_API_TOKEN",
+      ].filter(Boolean),
+    });
     return NextResponse.json(
       { ok: false, message: "Inquiry delivery is not configured." },
       { status: 503 },
@@ -158,12 +165,19 @@ export async function POST(request: Request) {
       },
     );
     if (!res.ok) {
+      console.error("[Sarga Contact] Strapi inquiry request failed.", {
+        status: res.status,
+        statusText: res.statusText,
+      });
       return NextResponse.json(
         { ok: false, message: "We could not route your inquiry right now." },
         { status: 502 },
       );
     }
-  } catch {
+  } catch (error) {
+    console.error("[Sarga Contact] Strapi inquiry request errored.", {
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
     return NextResponse.json(
       { ok: false, message: "We could not route your inquiry right now." },
       { status: 502 },

@@ -32,6 +32,9 @@ type Workspace = {
   accent: string;
   links: WorkspaceLink[];
   priorityTasks?: PriorityTask[];
+  logoSrc?: string;
+  logoAlt?: string;
+  theme: "light" | "motorsport";
 };
 
 type PriorityTask = {
@@ -111,6 +114,9 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
     warning:
       "Gateway Admin records are assigned to the Gateway automatically. Super Admin must confirm the intended scope before publishing cross-site content.",
     accent: "#e2321e",
+    logoSrc: "/admin-assets/logo-sarga.png",
+    logoAlt: "Sarga",
+    theme: "light",
     links: [
       {
         label: "Homepage",
@@ -178,6 +184,9 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
     warning:
       "Motorsport Admin records are assigned to Motorsport automatically. Ticketing remains partner redirect/deep-link or approved embed only.",
     accent: "#b94700",
+    logoSrc: "/admin-assets/logo-sarga-motorsport-full.png",
+    logoAlt: "Sarga Motorsport",
+    theme: "motorsport",
     priorityTasks: [
       {
         label: "Edit site pages",
@@ -277,6 +286,9 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
     warning:
       "Horse Sport Admin records are assigned to Horse Sport automatically. Do not reuse Motorsport-specific program collections.",
     accent: "#d9a441",
+    logoSrc: "/admin-assets/logo-sarga-horse-sport-dark.png",
+    logoAlt: "Sarga Horse Sport",
+    theme: "light",
     links: [
       CONTENT_LINKS.topNavigation,
       CONTENT_LINKS.pages,
@@ -312,6 +324,9 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
     warning:
       "Shared Library Admin records are assigned to Shared automatically. Confirm reuse and teaser rules before publishing; never duplicate an event or article solely for menu separation.",
     accent: "#00c4cc",
+    logoSrc: "/admin-assets/logo-sarga.png",
+    logoAlt: "Sarga",
+    theme: "light",
     links: [
       CONTENT_LINKS.pages,
       CONTENT_LINKS.news,
@@ -866,14 +881,13 @@ function WorkspaceContent({ workspace }: { workspace: Workspace }) {
   const { get } = useFetchClient();
 
   useEffect(() => {
-    if (workspace.scope !== "motorsport") return;
     let cancelled = false;
     setSitePageEntriesLoading(true);
     const params = new URLSearchParams({
       page: "1",
       pageSize: "50",
       sort: "title:asc",
-      "filters[$and][0][siteScope][$eq]": "motorsport",
+      "filters[$and][0][siteScope][$eq]": workspace.scope,
       "locale": "en",
     });
     get(`/content-manager/collection-types/api::site-page.site-page?${params}`)
@@ -906,7 +920,7 @@ function WorkspaceContent({ workspace }: { workspace: Workspace }) {
     if (!scrollShell || scrollShell === document.body) return;
 
     scrollShell.classList.add("sarga-workspace-scroll-shell");
-    if (page.dataset.workspaceScope === "motorsport") {
+    if (workspace.theme === "motorsport") {
       scrollShell.classList.add("sarga-workspace-scroll-shell-motorsport");
     }
     return () => {
@@ -915,7 +929,7 @@ function WorkspaceContent({ workspace }: { workspace: Workspace }) {
         "sarga-workspace-scroll-shell-motorsport",
       );
     };
-  }, []);
+  }, [workspace.theme]);
   const handlePermissionResolved = useCallback(
     (id: string, canRead: boolean) => {
       setAllowedLinkIds((current) => {
@@ -964,11 +978,11 @@ function WorkspaceContent({ workspace }: { workspace: Workspace }) {
       style={styles.page}
     >
       <div style={styles.shell}>
-        {workspace.scope === "motorsport" ? (
-          <div className="sarga-workspace-masthead">
+        {workspace.logoSrc ? (
+          <div className={`sarga-workspace-masthead sarga-workspace-masthead-${workspace.theme}`}>
             <img
-              src="/admin-assets/logo-sarga-motorsport-full.png"
-              alt="Sarga Motorsport"
+              src={workspace.logoSrc}
+              alt={workspace.logoAlt}
               width="205"
               height="204"
               className="sarga-workspace-masthead-logo"
@@ -1004,7 +1018,7 @@ function WorkspaceContent({ workspace }: { workspace: Workspace }) {
           <strong>Publishing guardrail:</strong> {workspace.warning}
         </div>
 
-        {workspace.scope === "motorsport" ? (
+        {workspace.theme === "motorsport" ? (
           <>
             <section
               style={styles.taskSurface}
@@ -1157,9 +1171,9 @@ function WorkspaceContent({ workspace }: { workspace: Workspace }) {
                 </div>
               </section>
             ))}
-            {workspace.scope === "motorsport" ? (
+            {(
               <section
-                id="motorsport-site-page-entries"
+                id={`${workspace.scope}-site-page-entries`}
                 style={styles.contentPanel}
                 className="sarga-workspace-page-entries"
               >
@@ -1189,7 +1203,7 @@ function WorkspaceContent({ workspace }: { workspace: Workspace }) {
                   ))}
                 </div>
               </section>
-            ) : null}
+            )}
           </div>
         </div>
       </div>

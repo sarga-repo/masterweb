@@ -110,14 +110,6 @@ export function MotorsportContactForm() {
       }}
       noValidate
     >
-      <input
-        type="text"
-        name="website"
-        tabIndex={-1}
-        autoComplete="off"
-        className="absolute -left-[9999px] opacity-0"
-        aria-hidden="true"
-      />
       {state.status === "error" && state.message ? (
         <p
           role="alert"
@@ -168,6 +160,14 @@ export function MotorsportContactForm() {
         {state.status === "submitting" ? "Sending…" : "Send message"}
         <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
       </button>
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="new-password"
+        className="absolute -left-[9999px] h-px w-px opacity-0"
+        aria-hidden="true"
+      />
     </form>
   );
 }

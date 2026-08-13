@@ -23,6 +23,7 @@ import { localizeExternalSiteHref } from "@/lib/i18n/config";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getMotorsportNavigation } from "@/lib/navigation-cms";
+import { fetchMotorsportChrome } from "@/lib/cms-data";
 
 function SectionLink({
   href,
@@ -59,10 +60,11 @@ export default async function HomePage() {
   const ticketLink = navigation.items.find(
     (item) => item.emphasis === "primaryCta",
   );
-  const [data, leadership, ecosystemSites] = await Promise.all([
+  const [data, leadership, ecosystemSites, chrome] = await Promise.all([
     fetchHomepageData(),
     fetchLeadership(),
     fetchEcosystemSites(),
+    fetchMotorsportChrome(),
   ]);
   const publications = Array.from(
     new Map(
@@ -72,20 +74,32 @@ export default async function HomePage() {
       ].map((article) => [article.href, article]),
     ).values(),
   );
+  const footerLinks = (chrome.footerUtilityLinks ?? []).map((item) => ({
+    label: item.label,
+    href: item.href,
+    external: item.linkType === "external",
+  }));
+  const gatewayLink = footerLinks.find((item) => item.label === "Visit Sarga.co");
+  const crossSiteLinks = footerLinks.filter(
+    (item) => item.label !== gatewayLink?.label,
+  );
+  const headerGatewayLink = footerLinks.find((item) => item.label === "Sarga.co");
 
   return (
     <>
       <MotorsportHeader
         navigation={navigation.items}
         ticketLink={ticketLink}
-        gatewayLink={{
-          label: "Sarga.co",
-          href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
-          external: true,
-        }}
+         gatewayLink={headerGatewayLink ?? {
+           label: "Sarga.co",
+           href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
+           external: true,
+         }}
         locale={locale}
         dictionary={dictionary}
-        navigationSource={navigation.source}
+         navigationSource={navigation.source}
+         logoSrc={chrome.headerLogo}
+         logoAlt={chrome.headerLogoAlt}
       />
 
       <main>
@@ -260,45 +274,21 @@ export default async function HomePage() {
       </main>
 
       <MotorsportFooter
-        statement="Racing, amplified."
-        columns={[
-          {
-            title: "Discover",
-            links: [
-              { label: "Home", href: "/" },
-              { label: "About", href: "/about" },
-              { label: "Events", href: "/events" },
-            ],
-          },
-          {
-            title: "Follow",
-            links: [
-              { label: "News", href: "/news" },
-              { label: "Gallery", href: "/gallery" },
-              { label: "Contact", href: "/contact" },
-            ],
-          },
-          {
-            title: "Race day",
-            links: [
-              { label: "Tickets", href: "/tickets" },
-              { label: "Merchandise", href: "/merchandise" },
-            ],
-          },
-        ]}
-        gatewayLink={{
-          label: "Visit Sarga.co",
-          href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
-          external: true,
-        }}
-        crossSiteLinks={[
-          {
-            label: "Sarga Horse Sport",
-            href: localizeExternalSiteHref(siteConfig.horsesportUrl, locale),
-            external: true,
-          },
-        ]}
-        copyright="© 2026 Sarga Motorsport"
+         statement={chrome.footerStatement}
+         columns={chrome.footerColumns ?? []}
+         gatewayLink={gatewayLink}
+         crossSiteLinks={crossSiteLinks}
+         socialLinks={(chrome.footerSocialLinks ?? []).map((item) => ({
+           label: item.label,
+           href: item.href,
+           external: item.linkType === "external",
+         }))}
+         legalLinks={(chrome.footerUtilityLinks ?? []).filter(
+           (item) => item.label !== gatewayLink?.label && item.label !== "Sarga Horse Sport",
+         ).map((item) => ({ label: item.label, href: item.href }))}
+         copyright={chrome.footerCopyright ?? "© 2026 Sarga Motorsport"}
+         logoSrc={chrome.footerLogo}
+         logoAlt={chrome.footerLogoAlt}
       />
     </>
   );

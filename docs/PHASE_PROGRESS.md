@@ -82,6 +82,10 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | CMS-MSR-UI-UX-2 | Motorsport CMS workspace full-scroll canvas background | ✅ Done | 2026-08-13 |
 | CMS-MSR-UI-UX-3 | Motorsport CMS theme lock and disclosure icon refinement | ✅ Done | 2026-08-13 |
 | CMS-MSR-UI-UX-4 | Motorsport CMS direct Site Page workspace entries | ✅ Done | 2026-08-13 |
+| MSR-RD6.1 | Motorsport CMS-managed header and footer chrome | ✅ Done | 2026-08-13 |
+| CMS-WORKSPACE-UI-1 | Gateway, Horse Sport, and Shared workspace branding and page entries | ✅ Done | 2026-08-13 |
+| CMS-WORKSPACE-UI-2 | Gateway, Horse Sport, and Shared workspace contrast correction | ✅ Done | 2026-08-13 |
+| MS-CONTACT-1 | Motorsport contact honeypot submission fix | ✅ Done | 2026-08-13 |
 
 ### CMS-COV-23 — CMS workspace permission-render fix
 
@@ -457,6 +461,125 @@ brand revamp tracks. Update this file at the end of **every** completed phase
   controls for Indonesian/localized variants.
 - API failure degrades to an empty page-entry panel without affecting parent
   Site Pages collection access or other workspace cards.
+
+### CMS-WORKSPACE-UI-1 — Gateway, Horse Sport, and Shared workspace branding and page entries
+
+#### What was done
+
+- Added CMS-owned copies of requested Gateway, Horse Sport, and Shared logo
+  assets.
+- Added Sarga icon to Gateway, Horse Sport, and Shared left workspace menu items.
+- Added workspace mastheads:
+  - Gateway: Sarga wordmark.
+  - Horse Sport: Horse Sport dark wordmark.
+  - Shared: Sarga wordmark.
+- Added light workspace surface treatment with explicit readable text, border,
+  action, and structural color roles.
+- Generalized live Site Page entry loading to Gateway, Horse Sport, Shared, and
+  Motorsport scopes.
+- Preserved parent Site Pages collection cards and existing Content Manager
+  management/create flows.
+- Kept Motorsport dark theme and branding unchanged.
+
+#### Files changed
+
+- `cms/public/admin-assets/logo-sarga.png`
+- `cms/public/admin-assets/logo-sarga-icon.png`
+- `cms/public/admin-assets/logo-sarga-horse-sport-dark.png`
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/extensions/sarga-workspaces/WorkspacePage.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS production build passed.
+- Workspace RBAC tests passed: 11/11.
+- Gateway Admin authenticated workspace loaded with 11 Site Page entries and
+  `/admin-assets/logo-sarga.png` masthead.
+- Horse Sport Admin authenticated workspace loaded with 6 Site Page entries and
+  `/admin-assets/logo-sarga-horse-sport-dark.png` masthead.
+- Shared Library Admin authenticated workspace loaded with
+  `/admin-assets/logo-sarga.png` masthead and light canvas.
+- Shared Site Page entry panel correctly showed zero records because no
+  `siteScope=shared` Site Page records currently exist.
+- All tested workspaces had no horizontal overflow and no permission-denied
+  state for their assigned role.
+- Parent Site Pages collection entry remained available in each workspace.
+
+#### Notes / caveats
+
+- Shared entry panel is intentionally empty until Shared Site Page records are
+  created or migrated with `siteScope=shared`.
+- Direct page entries use English locale and Content Manager `documentId` editor
+  routes; localized variants remain available through Strapi locale controls.
+- Logo files are copied into CMS-owned static admin assets; CMS does not depend
+  on frontend app public paths at runtime.
+
+### CMS-WORKSPACE-UI-2 — Gateway, Horse Sport, and Shared workspace contrast correction
+
+#### What was done
+
+- Forced light-workspace masthead headings and eyebrow labels to readable dark
+  colors on white raised surfaces.
+- Forced light-workspace selected navigation text to white on Draftline Blue.
+- Added Electric Yellow selected-navigation marker for clear active state.
+- Forced light-workspace hover and keyboard-focus text to white on Draftline
+  Blue, overriding inline link text colors that caused the screenshot conflict.
+- Preserved Motorsport dark workspace contrast behavior.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- CMS production build passed.
+- Workspace RBAC tests passed: 11/11.
+- Gateway masthead text computed as dark text on white background.
+- Gateway hover text computed as white on Draftline Blue.
+- Selected navigation retains white text and yellow marker.
+- Gateway workspace remained permission-authorized and overflow-free.
+
+#### Notes / caveats
+
+- Same scoped selectors apply to Horse Sport and Shared light workspaces.
+- Contrast fix does not alter Content Manager permissions, routes, or data.
+
+### MS-CONTACT-1 — Motorsport contact honeypot submission fix
+
+#### What was done
+
+- Reproduced Motorsport `/api/contact` HTTP 400 response.
+- Identified response error as `website: Spam check failed.`
+- Confirmed email delivery was never reached; failure occurred in frontend
+  validation before CMS submission.
+- Moved hidden honeypot field after visible form controls to prevent browser
+  autofill/test automation from placing the visitor name into `website`.
+- Changed honeypot autocomplete hint to `new-password` and reduced hidden field
+  footprint while retaining bot detection.
+
+#### Files changed
+
+- `frontend-motorsport/src/components/sections/motorsport-contact-form.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck passed.
+- Motorsport lint passed.
+- Motorsport production build passed.
+- CMS email tests passed: 22/22.
+- Controlled valid browser submission returned HTTP 200.
+- `/api/contact` response: `Message received. (Local placeholder mode.)`
+
+#### Notes / caveats
+
+- Local frontend currently runs placeholder mode unless
+  `FORM_SUBMISSION_MODE=production`.
+- Real email delivery still requires `MAIL_ENABLED=true`,
+  `MAIL_NOTIFICATIONS_ENABLED=true`, valid SMTP/OAuth settings, and recipient
+  allowlists in CMS environment.
 
 ### CMS-COV-22 — CMS workspace browser verification and Motorsport icon
 
@@ -1376,6 +1499,96 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | MSR-RD4 | Homepage editorial rebuild          | ✅ Done | 2026-08-09 |
 | MSR-RD5 | Dedicated page redesign groups      | ✅ Done | 2026-08-09 |
 | MSR-RD6 | Media, CMS, QA, and handover        | ✅ Done | 2026-08-10 |
+
+### MSR-RD6.1 — Motorsport CMS-managed header and footer chrome
+
+**What was done**
+
+- Added site-level CMS fields for header logo, footer logo, footer statement,
+  copyright, footer columns, social links, and utility links.
+- Wired Motorsport header and footer to `sarga-motorsport` Site settings.
+- Preserved repository logo/content fallbacks when CMS fields are empty or
+  unpublished.
+
+**Files changed**
+
+- `cms/src/api/site/content-types/site/schema.json`
+- `cms/src/components/shared/footer-column.json`
+- `cms/src/components/shared/footer-link.json`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/components/ui/brand-logo.tsx`
+- `frontend-motorsport/src/components/layout/motorsport-header.tsx`
+- `frontend-motorsport/src/components/layout/motorsport-footer.tsx`
+- `frontend-motorsport/src/components/layout/page-shell.tsx`
+- `frontend-motorsport/src/app/page.tsx`
+
+**How verified**
+
+- `pnpm --dir frontend-motorsport typecheck`
+- `pnpm --dir frontend-motorsport lint`
+- `pnpm --dir cms exec tsc -p tsconfig.json --noEmit`
+- `git diff --check`
+
+**Notes / caveats**
+
+- Editors must populate and publish Motorsport Site record fields before CMS
+  values replace fallbacks.
+- Existing homepage has its own shell, now wired to same CMS chrome source.
+
+### MSR-RD6.2 — Motorsport Site chrome editor permissions
+
+**What was done**
+
+- Changed Motorsport admin access to allow read, update, and publish only for
+  the `sarga-motorsport` Site record.
+- Kept Site create/delete unavailable and retained read-only isolation for
+  other dedicated-site references.
+- Added permission regression coverage for the scoped Site permissions.
+
+**Files changed**
+
+- `cms/src/access-control/sarga-workspaces.ts`
+- `cms/src/access-control/sarga-workspaces.test.ts`
+- `docs/PHASE_PROGRESS.md`
+
+**How verified**
+
+- `pnpm --dir cms exec tsc -p tsconfig.json --noEmit`
+- `git diff --check`
+
+**Notes / caveats**
+
+- Restart Strapi to synchronize generated role permissions, then log out and
+  back in as Motorsport admin.
+
+### MSR-RD6.3 — Dedicated Site record isolation
+
+**What was done**
+
+- Corrected dedicated Site role permissions that had been persisted without
+  conditions and therefore exposed all three Site records.
+- Added scoped editable Site conditions for Gateway, Motorsport, and Horse Sport.
+- Added startup cleanup for stale Site permissions before managed-role
+  permission assignment.
+
+**Files changed**
+
+- `cms/src/access-control/sarga-workspaces.ts`
+- `cms/src/access-control/sarga-workspaces.test.ts`
+- `docs/PHASE_PROGRESS.md`
+
+**How verified**
+
+- Restarted Strapi successfully.
+- Database check confirms each dedicated role has only conditioned Site
+  read/update/publish permissions for its own slug.
+- `pnpm --dir cms exec tsc -p tsconfig.json --noEmit`
+- `git diff --check`
+
+**Notes / caveats**
+
+- Log out and back in to refresh Content Manager permissions in current browser
+  session.
 
 ## Horse Sport track (`prompts/horsesport/`)
 

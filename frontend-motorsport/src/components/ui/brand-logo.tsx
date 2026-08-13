@@ -2,6 +2,8 @@ import Image from "next/image";
 
 type MotorsportLogoProps = {
   variant?: "full" | "part-of-sarga" | "symbol-sport";
+  src?: string;
+  alt?: string;
   className?: string;
   priority?: boolean;
 };
@@ -14,15 +16,17 @@ const LOGOS = {
 
 export function MotorsportLogo({
   variant = "full",
+  src,
+  alt = "Sarga Motorsport",
   className = "w-[clamp(8.75rem,14vw,12rem)]",
   priority = false,
 }: MotorsportLogoProps) {
   return (
     <Image
-      src={LOGOS[variant]}
+      src={src ?? LOGOS[variant]}
       width={777}
       height={195}
-      alt="Sarga Motorsport"
+      alt={alt}
       priority={priority}
       className={`h-auto min-w-[8.75rem] object-contain ${className}`}
     />

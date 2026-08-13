@@ -371,6 +371,64 @@ export interface SharedEventSession extends Struct.ComponentSchema {
   };
 }
 
+export interface SharedFooterColumn extends Struct.ComponentSchema {
+  collectionName: 'components_shared_footer_columns';
+  info: {
+    description: 'A titled group of managed footer links';
+    displayName: 'Footer Column';
+  };
+  attributes: {
+    displayOrder: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 1000;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    links: Schema.Attribute.Component<'shared.footer-link', true>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+  };
+}
+
+export interface SharedFooterLink extends Struct.ComponentSchema {
+  collectionName: 'components_shared_footer_links';
+  info: {
+    description: 'A managed footer navigation or social link';
+    displayName: 'Footer Link';
+  };
+  attributes: {
+    displayOrder: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 1000;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    enabled: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    href: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
+    label: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    linkType: Schema.Attribute.Enumeration<['internal', 'external']> &
+      Schema.Attribute.DefaultTo<'internal'>;
+    openInNewTab: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+  };
+}
+
 export interface SharedHeroVideo extends Struct.ComponentSchema {
   collectionName: 'components_shared_hero_videos';
   info: {
@@ -485,6 +543,8 @@ declare module '@strapi/strapi' {
       'motorsport.rundown-item': MotorsportRundownItem;
       'motorsport.world-of-motorsport': MotorsportWorldOfMotorsport;
       'shared.event-session': SharedEventSession;
+      'shared.footer-column': SharedFooterColumn;
+      'shared.footer-link': SharedFooterLink;
       'shared.hero-video': SharedHeroVideo;
       'shared.key-highlight': SharedKeyHighlight;
       'shared.page-availability': SharedPageAvailability;

@@ -5,6 +5,7 @@ import { siteConfig } from "@/lib/site-config";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getMotorsportNavigation } from "@/lib/navigation-cms";
+import { fetchMotorsportChrome } from "@/lib/cms-data";
 import { localizeExternalSiteHref } from "@/lib/i18n/config";
 
 const FOOTER_COLUMNS = [
@@ -49,6 +50,13 @@ export async function PageShell({
   const locale = await getRequestLocale();
   const dictionary = getDictionary(locale);
   const navigation = await getMotorsportNavigation(locale);
+  const chrome = await fetchMotorsportChrome();
+  const utilityLinks = (chrome.footerUtilityLinks ?? []).map((item) => ({
+    label: item.label,
+    href: item.href,
+    external: item.linkType === "external",
+  }));
+  const gatewayLink = utilityLinks.find((item) => item.label === "Visit Sarga.co");
   const ticketLink = navigation.items.find(
     (item) => item.emphasis === "primaryCta",
   );
@@ -57,33 +65,32 @@ export async function PageShell({
       <MotorsportHeader
         navigation={navigation.items}
         ticketLink={ticketLink}
-        gatewayLink={{
-          label: "Sarga.co",
-          href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
-          external: true,
-        }}
+         gatewayLink={gatewayLink ?? {
+           label: "Sarga.co",
+           href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
+           external: true,
+         }}
         locale={locale}
         dictionary={dictionary}
         navigationSource={navigation.source}
+        logoSrc={chrome.headerLogo}
+        logoAlt={chrome.headerLogoAlt}
       />
       <main className={spectrumSeparators ? "ms-spectrum-sections" : undefined}>
         {children}
       </main>
       <MotorsportFooter
-        columns={FOOTER_COLUMNS}
-        crossSiteLinks={[
-          {
-            label: "Sarga Horse Sport",
-            href: localizeExternalSiteHref(siteConfig.horsesportUrl, locale),
-            external: true,
-          },
-        ]}
+        columns={chrome.footerColumns ?? FOOTER_COLUMNS}
+         crossSiteLinks={utilityLinks.filter((item) => item.label !== gatewayLink?.label)}
         gatewayLink={{
           label: "Visit Sarga.co",
           href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
           external: true,
         }}
-        copyright="© 2026 Sarga Motorsport"
+        copyright={chrome.footerCopyright ?? "© 2026 Sarga Motorsport"}
+        statement={chrome.footerStatement}
+        logoSrc={chrome.footerLogo}
+        logoAlt={chrome.footerLogoAlt}
       />
     </>
   );

@@ -15,6 +15,7 @@ function createStrapiFixture(): Core.Strapi {
       ...role.subjects,
       ...(role.unscopedSubjects ?? []),
       ...(role.readOnlyReferences ?? []).map((reference) => reference.subject),
+      ...(role.editableReferences ?? []).map((reference) => reference.subject),
     ]),
   );
 
@@ -309,6 +310,40 @@ test("dedicated roles expose only conditioned read-only reference records", () =
       ]);
     }
   }
+});
+
+test("Motorsport role can edit only its Site chrome record", () => {
+  const strapi = createStrapiFixture();
+  const role = WORKSPACE_ROLES.find((item) => item.scope === "motorsport");
+  assert.ok(role);
+  const permissions = buildRolePermissions(strapi, role);
+  const sitePermissions = permissions.filter(
+    (permission) => permission.subject === "api::site.site",
+  );
+
+  assert.deepEqual(
+    sitePermissions.map((permission) => permission.action),
+    [
+      "plugin::content-manager.explorer.read",
+      "plugin::content-manager.explorer.update",
+      "plugin::content-manager.explorer.publish",
+    ],
+  );
+  assert.equal(
+    sitePermissions.some(
+      (permission) => permission.conditions?.[0] ===
+        "admin::sarga-workspaces-is-motorsport-site-editable",
+    ),
+    true,
+  );
+  assert.equal(
+    permissions.some(
+      (permission) =>
+        permission.subject === "api::site.site" &&
+        permission.action === "plugin::content-manager.explorer.delete",
+    ),
+    false,
+  );
 });
 
 test("managed roles can read locale choices but cannot administer locales", () => {

@@ -24,6 +24,18 @@ function MotorsportWorkspaceIcon() {
   );
 }
 
+function SargaWorkspaceIcon() {
+  return (
+    <img
+      src="/admin-assets/logo-sarga-icon.png"
+      alt=""
+      width="28"
+      height="28"
+      style={{ display: "block", objectFit: "contain" }}
+    />
+  );
+}
+
 export default {
   config: {
     // ── Brand logos ──────────────────────────────────────────────
@@ -261,10 +273,10 @@ export default {
     for (const workspace of workspaces) {
       app.addMenuLink({
         to: `sarga-workspaces/${workspace.slug}`,
-        icon:
-          workspace.slug === "motorsport"
-            ? MotorsportWorkspaceIcon
-            : WorkspaceIcon,
+          icon:
+            workspace.slug === "motorsport"
+              ? MotorsportWorkspaceIcon
+              : SargaWorkspaceIcon,
         intlLabel: {
           id: `sarga-workspaces.${workspace.slug}.label`,
           defaultMessage: workspace.label,
@@ -463,6 +475,7 @@ export default {
         --ms-workspace-action-hover: #a81022;
         --ms-workspace-on-action: #fff9ee;
         --ms-workspace-focus: #f5c800;
+        --ms-workspace-status: #f5c800;
         --ms-workspace-structure: #0033a0;
         font-family: "Noto Sans", "Plus Jakarta Sans", system-ui, sans-serif;
         scroll-behavior: smooth;
@@ -484,6 +497,18 @@ export default {
         color: var(--ms-workspace-inverse-text);
         box-shadow: inset 0 -3px 0 var(--ms-workspace-action);
       }
+      .sarga-workspace-masthead-light {
+        background: var(--ms-workspace-raised);
+        color: var(--ms-workspace-text);
+        border: 1px solid var(--ms-workspace-border);
+        box-shadow: inset 0 -3px 0 var(--ms-workspace-structure);
+      }
+      .sarga-workspace-masthead-light h1 {
+        color: var(--ms-workspace-text) !important;
+      }
+      .sarga-workspace-masthead-light .sarga-workspace-eyebrow {
+        color: var(--ms-workspace-muted);
+      }
       .sarga-workspace-masthead-logo {
         display: block;
         width: 74px;
@@ -497,6 +522,12 @@ export default {
       .sarga-workspace-masthead h1 {
         margin-top: 6px !important;
         color: #fff9ee !important;
+      }
+      .sarga-workspace-masthead-light h1 {
+        color: var(--ms-workspace-text) !important;
+      }
+      .sarga-workspace-masthead-light .sarga-workspace-eyebrow {
+        color: var(--ms-workspace-muted) !important;
       }
       .sarga-workspace-page a:focus-visible,
       .sarga-workspace-page button:focus-visible {
@@ -513,6 +544,22 @@ export default {
         background: var(--ms-workspace-structure);
         color: #ffffff;
         box-shadow: inset 3px 0 0 var(--ms-workspace-focus);
+      }
+      .sarga-workspace-page[data-workspace-scope="gateway"] .sarga-workspace-subnav-link.is-active,
+      .sarga-workspace-page[data-workspace-scope="horsesport"] .sarga-workspace-subnav-link.is-active,
+      .sarga-workspace-page[data-workspace-scope="shared"] .sarga-workspace-subnav-link.is-active {
+        background: var(--ms-workspace-structure) !important;
+        color: #ffffff !important;
+        box-shadow: inset 3px 0 0 var(--ms-workspace-status) !important;
+      }
+      .sarga-workspace-page[data-workspace-scope="gateway"] .sarga-workspace-subnav-link:hover,
+      .sarga-workspace-page[data-workspace-scope="gateway"] .sarga-workspace-subnav-link:focus-visible,
+      .sarga-workspace-page[data-workspace-scope="horsesport"] .sarga-workspace-subnav-link:hover,
+      .sarga-workspace-page[data-workspace-scope="horsesport"] .sarga-workspace-subnav-link:focus-visible,
+      .sarga-workspace-page[data-workspace-scope="shared"] .sarga-workspace-subnav-link:hover,
+      .sarga-workspace-page[data-workspace-scope="shared"] .sarga-workspace-subnav-link:focus-visible {
+        background: var(--ms-workspace-structure) !important;
+        color: #ffffff !important;
       }
       .sarga-workspace-page summary::-webkit-details-marker {
         display: none;

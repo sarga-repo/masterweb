@@ -13,6 +13,11 @@ type WorkspaceRole = {
     subject: string;
     conditionName: string;
     filters: Record<string, unknown>;
+    }[];
+  editableReferences?: {
+    subject: string;
+    conditionName: string;
+    filters: Record<string, unknown>;
   }[];
   unscopedSubjects?: string[];
   accountEnvPrefix: string;
@@ -65,10 +70,11 @@ export const WORKSPACE_ROLES: WorkspaceRole[] = [
       "api::corporate-report.corporate-report",
       "api::job-vacancy.job-vacancy",
     ],
-    readOnlyReferences: [
+    readOnlyReferences: [],
+    editableReferences: [
       {
         subject: "api::site.site",
-        conditionName: "sarga-workspaces-is-gateway-site-reference",
+        conditionName: "sarga-workspaces-is-gateway-site-editable",
         filters: { slug: "sarga-gateway" },
       },
     ],
@@ -92,13 +98,15 @@ export const WORKSPACE_ROLES: WorkspaceRole[] = [
     ],
     readOnlyReferences: [
       {
-        subject: "api::site.site",
-        conditionName: "sarga-workspaces-is-motorsport-site-reference",
-        filters: { slug: "sarga-motorsport" },
-      },
-      {
         subject: "api::ecosystem-business.ecosystem-business",
         conditionName: "sarga-workspaces-is-motorsport-business-reference",
+        filters: { slug: "sarga-motorsport" },
+      },
+    ],
+    editableReferences: [
+      {
+        subject: "api::site.site",
+        conditionName: "sarga-workspaces-is-motorsport-site-editable",
         filters: { slug: "sarga-motorsport" },
       },
     ],
@@ -113,13 +121,15 @@ export const WORKSPACE_ROLES: WorkspaceRole[] = [
     subjects: [...SHARED_EDITORIAL_SUBJECTS, TOP_NAVIGATION_SUBJECT],
     readOnlyReferences: [
       {
-        subject: "api::site.site",
-        conditionName: "sarga-workspaces-is-horsesport-site-reference",
-        filters: { slug: "sarga-horse-sport" },
-      },
-      {
         subject: "api::ecosystem-business.ecosystem-business",
         conditionName: "sarga-workspaces-is-horsesport-business-reference",
+        filters: { slug: "sarga-horse-sport" },
+      },
+    ],
+    editableReferences: [
+      {
+        subject: "api::site.site",
+        conditionName: "sarga-workspaces-is-horsesport-site-editable",
         filters: { slug: "sarga-horse-sport" },
       },
     ],
@@ -170,6 +180,13 @@ export async function registerWorkspaceAccessControl(strapi: Core.Strapi) {
       },
       ...(role.readOnlyReferences ?? []).map((reference) => ({
         displayName: `${role.name.replace(" Admin", "")} ${reference.subject} reference only`,
+        name: reference.conditionName,
+        plugin: PLUGIN_NAME,
+        category: "Sarga site reference",
+        handler: () => reference.filters,
+      })),
+      ...(role.editableReferences ?? []).map((reference) => ({
+        displayName: `${role.name.replace(" Admin", "")} ${reference.subject} editable reference`,
         name: reference.conditionName,
         plugin: PLUGIN_NAME,
         category: "Sarga site reference",
@@ -355,6 +372,23 @@ export function buildRolePermissions(
     });
   }
 
+  for (const reference of role.editableReferences ?? []) {
+    const fields = getManagedWritableFields(strapi, reference.subject);
+    for (const action of [CONTENT_ACTIONS.read, CONTENT_ACTIONS.update, CONTENT_ACTIONS.publish]) {
+      permissions.push({
+        action,
+        subject: reference.subject,
+        conditions: [`admin::${reference.conditionName}`],
+        properties: {
+          ...(action === CONTENT_ACTIONS.read || action === CONTENT_ACTIONS.update
+            ? { fields }
+            : {}),
+          locales: EDITOR_LOCALES,
+        },
+      });
+    }
+  }
+
   return permissions;
 }
 
@@ -372,6 +406,9 @@ export async function bootstrapWorkspaceAccessControl(strapi: Core.Strapi) {
       });
     }
 
+    if (roleDefinition.scope !== "shared") {
+      await removeUnscopedSitePermissions(strapi, role.id);
+    }
     await roleService.assignPermissions(
       role.id,
       buildRolePermissions(strapi, roleDefinition),
@@ -383,6 +420,30 @@ export async function bootstrapWorkspaceAccessControl(strapi: Core.Strapi) {
   // Refreshing the generated Super Admin permissions makes every workspace visible
   // without granting cross-site actions to any managed site role.
   await roleService.resetSuperAdminPermissions();
+}
+
+async function removeUnscopedSitePermissions(
+  strapi: Core.Strapi,
+  roleId: string | number,
+) {
+  const permissions = await strapi.db.query("admin::permission").findMany({
+    where: {
+      subject: "api::site.site",
+      action: {
+        $in: Object.values(CONTENT_ACTIONS),
+      },
+    },
+  });
+
+  for (const permission of permissions) {
+    const withRoles = await strapi.db.query("admin::permission").findOne({
+      where: { id: permission.id },
+      populate: ["roles"],
+    });
+    if (withRoles?.roles?.some((role: { id: string | number }) => role.id === roleId)) {
+      await strapi.db.query("admin::permission").delete({ where: { id: permission.id } });
+    }
+  }
 }
 
 async function provisionWorkspaceAccount(

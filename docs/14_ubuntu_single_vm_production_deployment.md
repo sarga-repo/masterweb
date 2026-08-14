@@ -652,6 +652,27 @@ then revoking the old credential. If Basic contingency mode was used, remove
 its password/acknowledgement/expiry after OAuth cutover and rotate the mailbox
 password. Never log a secret, password, or access token.
 
+### GitHub Actions staging automation
+
+The repository's CI remains on GitHub-hosted runners. Pull request code must
+never execute on the application VM. The Tencent self-hosted runner is reserved
+for the protected, manually approved `Deploy staging` workflow and carries the
+custom `sarga-staging` label.
+
+Runner installation, GitHub environment protection, deployment targets, branch
+pinning, backup behavior, and operator commands are documented in
+`deploy/production/README.md`. The runner's only passwordless root command is a
+root-owned copy of `deploy_github_revision.sh`; that command also requires a
+256-bit authorization available only through the protected GitHub `staging`
+environment. The workflow cannot invoke arbitrary commands through `sudo`.
+
+The deployment wrapper accepts a full commit SHA only, verifies that it is
+contained by the configured origin release branch, and uses the existing
+sequential frozen-lockfile build helper. CMS deployments take a paired
+PostgreSQL/uploads backup before checkout. This automation does not perform CMS
+snapshot promotion, database restoration, secret changes, firewall changes, or
+certificate management.
+
 ## 14. Monitoring and operational ownership
 
 At minimum monitor HTTPS uptime, certificate expiry, disk usage, memory, load,

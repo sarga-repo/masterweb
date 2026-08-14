@@ -44,13 +44,18 @@ const CHANNELS = [
 
 export default async function ContactPage() {
   const page = await fetchHorseSportPage("/contact");
-  const intro = page?.sections.find((section) => section.sectionKey === "intro");
+  const intro = page?.sections.find(
+    (section) => section.sectionKey === "intro",
+  );
   return (
     <>
       <PageHero
         eyebrow="Contact"
         title={page?.heroTitle ?? "Let's talk."}
-        description={page?.heroDescription ?? "Ticketing, partnership, sponsorship, media, or general - reach the Sarga Horse Sport team."}
+        description={
+          page?.heroDescription ??
+          "Ticketing, partnership, sponsorship, media, or general - reach the Sarga Horse Sport team."
+        }
         accent="red"
       />
 
@@ -61,7 +66,10 @@ export default async function ContactPage() {
               index="01"
               eyebrow={intro?.eyebrow ?? "Get in touch"}
               title={intro?.title ?? "One team, every inquiry."}
-              description={intro?.body ?? "Send us a message and we'll route it to the right team. For tickets, head to our approved partner platforms via the tickets page."}
+              description={
+                intro?.body ??
+                "Send us a message and we'll route it to the right team. For tickets, head to our approved partner platforms via the tickets page."
+              }
             />
             <dl className="mt-10 grid gap-5 sm:grid-cols-2">
               {CHANNELS.map((c) => (

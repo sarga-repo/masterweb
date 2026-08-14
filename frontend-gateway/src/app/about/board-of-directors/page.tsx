@@ -67,7 +67,10 @@ function LeadershipCard({
 export default async function BoardOfDirectorsPage() {
   const locale = await getRequestLocale();
   const cmsPeople = await getLeadershipPeople(locale);
-  const page = await getGatewaySitePageByPath("/about/board-of-directors", locale);
+  const page = await getGatewaySitePageByPath(
+    "/about/board-of-directors",
+    locale,
+  );
   const leadershipPeople = cmsPeople.length > 0 ? cmsPeople : mockLeadership;
 
   const board = leadershipPeople.filter((person) => person.group === "board");
@@ -77,9 +80,15 @@ export default async function BoardOfDirectorsPage() {
   const advisors = leadershipPeople.filter(
     (person) => person.group === "advisor",
   );
-  const boardSection = page?.sections.find((section) => section.sectionKey === "board-oversight");
-  const executiveSection = page?.sections.find((section) => section.sectionKey === "executive-council");
-  const advisorySection = page?.sections.find((section) => section.sectionKey === "advisory-council");
+  const boardSection = page?.sections.find(
+    (section) => section.sectionKey === "board-oversight",
+  );
+  const executiveSection = page?.sections.find(
+    (section) => section.sectionKey === "executive-council",
+  );
+  const advisorySection = page?.sections.find(
+    (section) => section.sectionKey === "advisory-council",
+  );
 
   return (
     <>
@@ -87,7 +96,10 @@ export default async function BoardOfDirectorsPage() {
         index="01"
         eyebrow={page?.navigationLabel ?? "Governance and leadership"}
         title={page?.heroTitle ?? "Stewardship at every level."}
-        description={page?.heroDescription ?? "Sarga's board and executive leadership align long-term governance with decisive operating responsibility across the ecosystem."}
+        description={
+          page?.heroDescription ??
+          "Sarga's board and executive leadership align long-term governance with decisive operating responsibility across the ecosystem."
+        }
         image={{
           url: "/assets/media/leadership/governance-editorial-concept.png",
           alt: "Conceptual silhouettes representing Sarga's leadership and governance",
@@ -107,7 +119,10 @@ export default async function BoardOfDirectorsPage() {
             index="02"
             eyebrow={boardSection?.eyebrow ?? "Board oversight"}
             title={boardSection?.title ?? "Built for the long run."}
-            description={boardSection?.body ?? "The board protects Sarga's mandate, governance discipline, and long-term value as the group expands its sporting and entertainment portfolio."}
+            description={
+              boardSection?.body ??
+              "The board protects Sarga's mandate, governance discipline, and long-term value as the group expands its sporting and entertainment portfolio."
+            }
           />
           <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
             {board.map((person, index) => (
@@ -122,8 +137,14 @@ export default async function BoardOfDirectorsPage() {
           <EditorialHeading
             index="03"
             eyebrow={executiveSection?.eyebrow ?? "Executive council"}
-            title={executiveSection?.title ?? "Accountability moves close to the work."}
-            description={executiveSection?.body ?? "The executive council translates group direction into commercial, financial, and operating momentum across every Sarga property."}
+            title={
+              executiveSection?.title ??
+              "Accountability moves close to the work."
+            }
+            description={
+              executiveSection?.body ??
+              "The executive council translates group direction into commercial, financial, and operating momentum across every Sarga property."
+            }
           />
           <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
             {executive.map((person, index) => (
@@ -140,7 +161,10 @@ export default async function BoardOfDirectorsPage() {
                 index="04"
                 eyebrow={advisorySection?.eyebrow ?? "Advisory council"}
                 title={advisorySection?.title ?? "Experience around the table."}
-                description={advisorySection?.body ?? "Advisors contribute specialist and independent perspective without obscuring the group's governance and operating lines."}
+                description={
+                  advisorySection?.body ??
+                  "Advisors contribute specialist and independent perspective without obscuring the group's governance and operating lines."
+                }
               />
               <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {advisors.map((person, index) => (

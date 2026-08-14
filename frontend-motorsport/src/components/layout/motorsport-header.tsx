@@ -93,12 +93,12 @@ export function MotorsportHeader({
       <div className="absolute inset-x-0 top-0 h-0.5 bg-[linear-gradient(90deg,#E8192C_0_38%,#FF6B00_38%_60%,#F5C800_60%_72%,#00C4CC_72%_84%,#0033A0_84%)]" />
       <div className="ms-shell grid h-(--ms-header-height) grid-cols-[1fr_auto] items-center gap-4 xl:grid-cols-[minmax(11rem,1fr)_auto_minmax(11rem,1fr)]">
         <Link href={logoHref} aria-label={dictionary.home} className="shrink-0">
-           <MotorsportLogo
-             src={logoSrc}
-             alt={logoAlt}
-             variant="symbol-sport"
-             priority
-           />
+          <MotorsportLogo
+            src={logoSrc}
+            alt={logoAlt}
+            variant="symbol-sport"
+            priority
+          />
         </Link>
 
         <nav

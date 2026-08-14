@@ -52,8 +52,12 @@ export default async function AboutPage() {
     ]),
   ]);
   const page = await getGatewaySitePageByPath("/about", locale);
-  const philosophy = page?.sections.find((section) => section.sectionKey === "operating-philosophy");
-  const record = page?.sections.find((section) => section.sectionKey === "corporate-record");
+  const philosophy = page?.sections.find(
+    (section) => section.sectionKey === "operating-philosophy",
+  );
+  const record = page?.sections.find(
+    (section) => section.sectionKey === "corporate-record",
+  );
 
   const tabs = buildAboutTabs(
     timelineItems,
@@ -85,8 +89,13 @@ export default async function AboutPage() {
           <EditorialHeading
             index="02"
             eyebrow={philosophy?.eyebrow ?? "Operating philosophy"}
-            title={philosophy?.title ?? "Control at the core. Freedom at the edge."}
-            description={philosophy?.body ?? "Sarga gives every property room to build its own culture while a shared corporate center protects quality, accountability, and long-term value."}
+            title={
+              philosophy?.title ?? "Control at the core. Freedom at the edge."
+            }
+            description={
+              philosophy?.body ??
+              "Sarga gives every property room to build its own culture while a shared corporate center protects quality, accountability, and long-term value."
+            }
           />
           <ol className="mt-16 border-t border-sarga-black/20">
             {principles.map(([index, title, description]) => (
@@ -142,8 +151,13 @@ export default async function AboutPage() {
           <EditorialHeading
             index="03"
             eyebrow={record?.eyebrow ?? "Corporate record"}
-            title={record?.title ?? "Built in public. Governed for the long run."}
-            description={record?.body ?? "Explore Sarga's formation, leadership publication status, and future corporate reports through one living record."}
+            title={
+              record?.title ?? "Built in public. Governed for the long run."
+            }
+            description={
+              record?.body ??
+              "Explore Sarga's formation, leadership publication status, and future corporate reports through one living record."
+            }
           />
           <div className="mt-16 border-t border-sarga-black pt-8">
             <AboutTabs tabs={tabs} />

@@ -58,7 +58,10 @@ export function createMetadata({
         ]),
       ),
     },
-    robots: seo?.noIndex || isFallback ? { index: false, follow: isFallback } : undefined,
+    robots:
+      seo?.noIndex || isFallback
+        ? { index: false, follow: isFallback }
+        : undefined,
     openGraph: {
       type,
       url: canonical,

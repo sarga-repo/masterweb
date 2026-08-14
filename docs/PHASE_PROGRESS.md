@@ -17,6 +17,12 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | 9     | Quality & UAT                 | ✅ Done | 2026-07-04 |
 | 10    | Deployment & handover         | ✅ Done | 2026-07-04 |
 
+## Infrastructure automation track
+
+| Phase | Title | Status | Date |
+| --- | --- | --- | --- |
+| INFRA-1 | GitHub Actions and Tencent environment runners | 🟡 Awaiting registration | 2026-08-14 |
+
 ## Sarga.co Gateway revamp track (`docs/gateway/revamp/`)
 
 | Phase            | Title                                        | Status              | Date       |
@@ -6116,3 +6122,69 @@ role/browser evidence remains part of the existing GWR-CMS-8 launch gate.
   metadata updates, replacement, movement, and deletion.
 - The full authenticated API matrix requires disposable staging credentials;
   the harness is ready and now includes existing-media browse coverage.
+
+## INFRA-1 — GitHub Actions and Tencent environment runners
+
+Status: repository automation completed 2026-08-14. GitHub environment
+protection, merge to `main`, staging registration, and future production CVM
+provisioning/registration require repository and infrastructure administrators.
+
+### What was done
+
+- Added GitHub-hosted CI for CMS, Gateway, Motorsport, and Horse Sport quality
+  gates. Pull request code does not execute on an application CVM.
+- Added protected manual staging deployment from `main`, supporting exact-SHA
+  releases of CMS, Gateway, Motorsport, or all three active services.
+- Added automatic production deployment of all active services for protected
+  semantic `v*` tags. The workflow is ready but targets a separate, currently
+  unprovisioned `sarga-production` runner.
+- Added a guarded root deployment command with environment isolation,
+  `origin/main` containment, host locking, dirty-tree protection, sequential
+  frozen-lockfile builds, service/route health checks, deployment state, and
+  paired CMS backups.
+- Added a pinned, checksum-verified environment-aware runner installer. Each
+  non-login runner account receives one environment-specific sudo command, and
+  that command additionally requires a 256-bit matching-environment
+  authorization.
+- Formatted the existing Gateway, Motorsport, and Horse Sport baselines so the
+  newly enforced repository format gates start green.
+
+### Files changed
+
+- `.github/actionlint.yaml`
+- `.github/workflows/{ci,deploy-staging,deploy-production}.yml`
+- `deploy/production/{deploy_github_revision,install_github_runner}.sh`
+- `deploy/production/README.md`
+- `docs/14_ubuntu_single_vm_production_deployment.md`
+- `docs/PHASE_PROGRESS.md`
+- 31 existing frontend TypeScript/TSX files formatted with their configured
+  Prettier versions.
+
+### How verified
+
+- `actionlint` 1.7.12 passed all three workflows.
+- `bash -n` and ShellCheck 0.11.0 passed both production scripts.
+- CMS passed 22 mail tests, TypeScript, and the Strapi production build.
+- Gateway passed format, lint, TypeScript, 37 tests, and its production build.
+- Motorsport passed format, lint, TypeScript, and its 47-route production
+  build.
+- Horse Sport passed format, lint, TypeScript, 11 tests, and its 24-route
+  production build.
+- The Tencent CVM has every installer/deployer prerequisite, 4 vCPU, 7.6 GiB
+  RAM, 4 GiB swap, and 157 GiB free disk. Read-only PostgreSQL schema dump and
+  CMS uploads archive checks passed.
+
+### Notes / caveats
+
+- No runner was registered and no live deployment was executed. Staging
+  registration needs a short-lived GitHub repository runner token after this
+  branch is reviewed and merged into `main`.
+- Create the protected GitHub `staging` environment, require a reviewer,
+  restrict deployment to `main`, and add
+  `SARGA_STAGING_DEPLOY_AUTHORIZATION`.
+- Create a protected `v*` tag ruleset. The automatic production workflow must
+  remain offline until a separate production CVM and `sarga-production` runner
+  exist, then configure its HTTPS origin variables and
+  `SARGA_PRODUCTION_DEPLOY_AUTHORIZATION`.
+- The 4-vCPU/8-GB staging VM is the functional minimum. CI remains on
+  GitHub-hosted runners; only sequential approved deployments run on Tencent.

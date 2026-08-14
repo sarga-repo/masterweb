@@ -15,7 +15,10 @@ test("maps enabled About capability cards in CMS order", () => {
       ],
     },
   ]);
-  assert.deepEqual(result?.cards.map((card) => card.title), ["First", "Second"]);
+  assert.deepEqual(
+    result?.cards.map((card) => card.title),
+    ["First", "Second"],
+  );
 });
 
 test("uses whole-component fallback for missing or empty capability data", () => {

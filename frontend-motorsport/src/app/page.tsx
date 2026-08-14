@@ -79,27 +79,33 @@ export default async function HomePage() {
     href: item.href,
     external: item.linkType === "external",
   }));
-  const gatewayLink = footerLinks.find((item) => item.label === "Visit Sarga.co");
+  const gatewayLink = footerLinks.find(
+    (item) => item.label === "Visit Sarga.co",
+  );
   const crossSiteLinks = footerLinks.filter(
     (item) => item.label !== gatewayLink?.label,
   );
-  const headerGatewayLink = footerLinks.find((item) => item.label === "Sarga.co");
+  const headerGatewayLink = footerLinks.find(
+    (item) => item.label === "Sarga.co",
+  );
 
   return (
     <>
       <MotorsportHeader
         navigation={navigation.items}
         ticketLink={ticketLink}
-         gatewayLink={headerGatewayLink ?? {
-           label: "Sarga.co",
-           href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
-           external: true,
-         }}
+        gatewayLink={
+          headerGatewayLink ?? {
+            label: "Sarga.co",
+            href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
+            external: true,
+          }
+        }
         locale={locale}
         dictionary={dictionary}
-         navigationSource={navigation.source}
-         logoSrc={chrome.headerLogo}
-         logoAlt={chrome.headerLogoAlt}
+        navigationSource={navigation.source}
+        logoSrc={chrome.headerLogo}
+        logoAlt={chrome.headerLogoAlt}
       />
 
       <main>
@@ -274,21 +280,25 @@ export default async function HomePage() {
       </main>
 
       <MotorsportFooter
-         statement={chrome.footerStatement}
-         columns={chrome.footerColumns ?? []}
-         gatewayLink={gatewayLink}
-         crossSiteLinks={crossSiteLinks}
-         socialLinks={(chrome.footerSocialLinks ?? []).map((item) => ({
-           label: item.label,
-           href: item.href,
-           external: item.linkType === "external",
-         }))}
-         legalLinks={(chrome.footerUtilityLinks ?? []).filter(
-           (item) => item.label !== gatewayLink?.label && item.label !== "Sarga Horse Sport",
-         ).map((item) => ({ label: item.label, href: item.href }))}
-         copyright={chrome.footerCopyright ?? "© 2026 Sarga Motorsport"}
-         logoSrc={chrome.footerLogo}
-         logoAlt={chrome.footerLogoAlt}
+        statement={chrome.footerStatement}
+        columns={chrome.footerColumns ?? []}
+        gatewayLink={gatewayLink}
+        crossSiteLinks={crossSiteLinks}
+        socialLinks={(chrome.footerSocialLinks ?? []).map((item) => ({
+          label: item.label,
+          href: item.href,
+          external: item.linkType === "external",
+        }))}
+        legalLinks={(chrome.footerUtilityLinks ?? [])
+          .filter(
+            (item) =>
+              item.label !== gatewayLink?.label &&
+              item.label !== "Sarga Horse Sport",
+          )
+          .map((item) => ({ label: item.label, href: item.href }))}
+        copyright={chrome.footerCopyright ?? "© 2026 Sarga Motorsport"}
+        logoSrc={chrome.footerLogo}
+        logoAlt={chrome.footerLogoAlt}
       />
     </>
   );

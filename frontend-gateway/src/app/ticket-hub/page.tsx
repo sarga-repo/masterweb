@@ -26,15 +26,20 @@ export default async function TicketHubPage() {
   const locale = await getRequestLocale();
   const events = await getEvents(locale);
   const page = await getGatewaySitePageByPath("/ticket-hub", locale);
-  const upcoming = page?.sections.find((section) => section.sectionKey === "upcoming");
+  const upcoming = page?.sections.find(
+    (section) => section.sectionKey === "upcoming",
+  );
 
   return (
     <>
       <InteriorHero
         index="04"
-         eyebrow={page?.navigationLabel ?? "Live access"}
-         title={page?.heroTitle ?? "Find the moment. Enter the arena."}
-         description={page?.heroDescription ?? "Discover Sarga's championship weekends and live experiences. Ticket transactions always continue through approved external partners."}
+        eyebrow={page?.navigationLabel ?? "Live access"}
+        title={page?.heroTitle ?? "Find the moment. Enter the arena."}
+        description={
+          page?.heroDescription ??
+          "Discover Sarga's championship weekends and live experiences. Ticket transactions always continue through approved external partners."
+        }
         tone="red"
         meta={[
           "Partner redirect",
@@ -48,9 +53,12 @@ export default async function TicketHubPage() {
         <div className="site-container">
           <EditorialHeading
             index="01"
-             eyebrow={upcoming?.eyebrow ?? "Upcoming"}
-             title={upcoming?.title ?? "Your next live experience starts here."}
-             description={upcoming?.body ?? "Event availability and partner ticket links are published only after organizer approval."}
+            eyebrow={upcoming?.eyebrow ?? "Upcoming"}
+            title={upcoming?.title ?? "Your next live experience starts here."}
+            description={
+              upcoming?.body ??
+              "Event availability and partner ticket links are published only after organizer approval."
+            }
             light
           />
           <div className="mt-14">

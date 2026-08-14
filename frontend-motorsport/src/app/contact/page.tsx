@@ -11,14 +11,18 @@ import { fetchSitePage } from "@/lib/cms-data";
 
 export default async function ContactPage() {
   const page = await fetchSitePage("custom", "/contact");
-  const inquiry = page?.sections.find((section) => section.sectionKey === "inquiry-control");
-  const form = page?.sections.find((section) => section.sectionKey === "inquiry-form");
+  const inquiry = page?.sections.find(
+    (section) => section.sectionKey === "inquiry-control",
+  );
+  const form = page?.sections.find(
+    (section) => section.sectionKey === "inquiry-form",
+  );
   return (
     <PageShell spectrumSeparators>
       <PageHero
-         kicker={page?.navigationLabel ?? "Get in touch"}
+        kicker={page?.navigationLabel ?? "Get in touch"}
         kickerColor="orange"
-         title={page?.heroTitle ?? "Contact"}
+        title={page?.heroTitle ?? "Contact"}
         backgroundImage="/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
         backgroundAlt="Sarga Motorsport driver and paddock team preparing in warm daylight"
         accent="teal"
@@ -26,13 +30,19 @@ export default async function ContactPage() {
         grain
         speedLines
         surface="heat"
-         description={page?.heroDescription ?? "Partnership proposals, media requests, ticket support, or a question about Sarga Motorsport. We read every message."}
+        description={
+          page?.heroDescription ??
+          "Partnership proposals, media requests, ticket support, or a question about Sarga Motorsport. We read every message."
+        }
       />
 
       <InformationBand
-         eyebrow={inquiry?.eyebrow ?? "Inquiry control / Direct routing"}
-         title={inquiry?.title ?? "One form. The right team."}
-         description={inquiry?.body ?? "Choose the closest inquiry type and the message is routed to the Motorsport team responsible for it."}
+        eyebrow={inquiry?.eyebrow ?? "Inquiry control / Direct routing"}
+        title={inquiry?.title ?? "One form. The right team."}
+        description={
+          inquiry?.body ??
+          "Choose the closest inquiry type and the message is routed to the Motorsport team responsible for it."
+        }
         items={[
           { label: "Channels", value: "07" },
           { label: "Accounts", value: "None" },
@@ -45,8 +55,8 @@ export default async function ContactPage() {
           <div className="grid gap-16 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)]">
             <div>
               <SectionHeader
-                 eyebrow={form?.eyebrow ?? "Inquiry form"}
-                 title={form?.title ?? "Send a signal."}
+                eyebrow={form?.eyebrow ?? "Inquiry form"}
+                title={form?.title ?? "Send a signal."}
                 align="left"
               />
               <MotorsportContactForm />

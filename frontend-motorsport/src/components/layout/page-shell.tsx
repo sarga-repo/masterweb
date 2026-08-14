@@ -56,7 +56,9 @@ export async function PageShell({
     href: item.href,
     external: item.linkType === "external",
   }));
-  const gatewayLink = utilityLinks.find((item) => item.label === "Visit Sarga.co");
+  const gatewayLink = utilityLinks.find(
+    (item) => item.label === "Visit Sarga.co",
+  );
   const ticketLink = navigation.items.find(
     (item) => item.emphasis === "primaryCta",
   );
@@ -65,11 +67,13 @@ export async function PageShell({
       <MotorsportHeader
         navigation={navigation.items}
         ticketLink={ticketLink}
-         gatewayLink={gatewayLink ?? {
-           label: "Sarga.co",
-           href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
-           external: true,
-         }}
+        gatewayLink={
+          gatewayLink ?? {
+            label: "Sarga.co",
+            href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
+            external: true,
+          }
+        }
         locale={locale}
         dictionary={dictionary}
         navigationSource={navigation.source}
@@ -81,7 +85,9 @@ export async function PageShell({
       </main>
       <MotorsportFooter
         columns={chrome.footerColumns ?? FOOTER_COLUMNS}
-         crossSiteLinks={utilityLinks.filter((item) => item.label !== gatewayLink?.label)}
+        crossSiteLinks={utilityLinks.filter(
+          (item) => item.label !== gatewayLink?.label,
+        )}
         gatewayLink={{
           label: "Visit Sarga.co",
           href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),

@@ -1,0 +1,109 @@
+name: Deploy staging
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Application set to build and restart
+        required: true
+        default: all-active
+        type: choice
+        options:
+          - all-active
+          - gateway
+          - motorsport
+          - cms
+      confirmation:
+        description: Type DEPLOY-STAGING to continue
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sarga-staging-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy ${{ inputs.target }}
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+      - sarga-staging
+    environment: staging
+    timeout-minutes: 90
+
+    steps:
+      - name: Validate main branch and manual confirmation
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+          DEPLOY_REF: ${{ github.ref }}
+        run: |
+          if [[ "$DEPLOY_REF" != "refs/heads/main" ]]; then
+            echo "Staging deploys only from main; selected ref was $DEPLOY_REF." >&2
+            exit 1
+          fi
+          if [[ "$CONFIRMATION" != "DEPLOY-STAGING" ]]; then
+            echo "The confirmation must be exactly DEPLOY-STAGING." >&2
+            exit 1
+          fi
+
+      - name: Deploy exact Git revision
+        env:
+          DEPLOY_SHA: ${{ github.sha }}
+          DEPLOY_TARGET: ${{ inputs.target }}
+          SARGA_DEPLOY_AUTHORIZATION: ${{ secrets.SARGA_STAGING_DEPLOY_AUTHORIZATION }}
+        run: |
+          set -Eeuo pipefail
+          if [[ -z "$SARGA_DEPLOY_AUTHORIZATION" ]]; then
+            echo "The staging deployment authorization secret is not configured." >&2
+            exit 1
+          fi
+          printf '%s\n' "$SARGA_DEPLOY_AUTHORIZATION" |
+            sudo -n /usr/local/sbin/sarga-deploy-staging "$DEPLOY_SHA" "$DEPLOY_TARGET"
+
+      - name: Verify public staging routes
+        env:
+          DEPLOY_TARGET: ${{ inputs.target }}
+        run: |
+          set -Eeuo pipefail
+
+          case "$DEPLOY_TARGET" in
+            gateway)
+              urls=(https://staging.sarga.co/)
+              ;;
+            motorsport)
+              urls=(https://staging-motorsport.sarga.co/)
+              ;;
+            cms)
+              urls=(https://cms-staging.sarga.co/admin)
+              ;;
+            all-active)
+              urls=(
+                https://staging.sarga.co/
+                https://staging-motorsport.sarga.co/
+                https://cms-staging.sarga.co/admin
+              )
+              ;;
+            *)
+              echo "Unsupported deployment target: $DEPLOY_TARGET" >&2
+              exit 1
+              ;;
+          esac
+
+          for url in "${urls[@]}"; do
+            curl \
+              --fail \
+              --silent \
+              --show-error \
+              --location \
+              --retry 10 \
+              --retry-all-errors \
+              --retry-delay 3 \
+              --max-time 20 \
+              "$url" >/dev/null
+            echo "Verified $url"
+          done

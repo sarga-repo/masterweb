@@ -38,7 +38,9 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
     : undefined;
   const jobs = await getJobVacancies(locale);
   const page = await getGatewaySitePageByPath("/careers/jobs", locale);
-  const roster = page?.sections.find((section) => section.sectionKey === "search-roster");
+  const roster = page?.sections.find(
+    (section) => section.sectionKey === "search-roster",
+  );
   const openCount = jobs.filter((job) => job.vacancyStatus === "open").length;
 
   return (
@@ -47,7 +49,10 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
         index="06"
         eyebrow={page?.navigationLabel ?? "Opportunity roster"}
         title={page?.heroTitle ?? "Find the work that moves you."}
-        description={page?.heroDescription ?? "Search current openings across the Sarga ecosystem. Role details are managed by the recruitment team and applications continue securely to LinkedIn."}
+        description={
+          page?.heroDescription ??
+          "Search current openings across the Sarga ecosystem. Role details are managed by the recruitment team and applications continue securely to LinkedIn."
+        }
         meta={[
           `${openCount} open ${openCount === 1 ? "role" : "roles"}`,
           "Four disciplines",
@@ -62,7 +67,10 @@ export default async function JobsPage({ searchParams }: JobsPageProps) {
             index="01"
             eyebrow={roster?.eyebrow ?? "Search the roster"}
             title={roster?.title ?? "A precise place to begin."}
-            description={roster?.body ?? "Use a discipline menu, keyword, employment type, and work mode to narrow the current vacancy list."}
+            description={
+              roster?.body ??
+              "Use a discipline menu, keyword, employment type, and work mode to narrow the current vacancy list."
+            }
           />
           <div className="mt-14">
             <JobVacancyBrowser

@@ -46,14 +46,19 @@ const inquiryPaths = [
 export default async function ContactPage() {
   const locale = await getRequestLocale();
   const page = await getGatewaySitePageByPath("/contact", locale);
-  const inquiryMap = page?.sections.find((section) => section.sectionKey === "inquiry-map");
+  const inquiryMap = page?.sections.find(
+    (section) => section.sectionKey === "inquiry-map",
+  );
   return (
     <>
       <InteriorHero
         index="06"
-         eyebrow={page?.navigationLabel ?? "Open a conversation"}
-         title={page?.heroTitle ?? "Start with the right signal."}
-         description={page?.heroDescription ?? "Choose the route that best fits your inquiry. Sarga's group desk will direct approved requests to the right operating team."}
+        eyebrow={page?.navigationLabel ?? "Open a conversation"}
+        title={page?.heroTitle ?? "Start with the right signal."}
+        description={
+          page?.heroDescription ??
+          "Choose the route that best fits your inquiry. Sarga's group desk will direct approved requests to the right operating team."
+        }
         meta={["Partnerships", "Media", "Events", "Corporate"]}
         tone="slate"
       />
@@ -62,9 +67,12 @@ export default async function ContactPage() {
         <div className="site-container">
           <EditorialHeading
             index="01"
-             eyebrow={inquiryMap?.eyebrow ?? "Inquiry map"}
-             title={inquiryMap?.title ?? "A direct route into the network."}
-             description={inquiryMap?.body ?? "Choose the closest route below, then give the group desk enough context to connect you with the right operating team."}
+            eyebrow={inquiryMap?.eyebrow ?? "Inquiry map"}
+            title={inquiryMap?.title ?? "A direct route into the network."}
+            description={
+              inquiryMap?.body ??
+              "Choose the closest route below, then give the group desk enough context to connect you with the right operating team."
+            }
           />
           <div className="mt-16 border-t border-sarga-black">
             {inquiryPaths.map(([index, title, description]) => (

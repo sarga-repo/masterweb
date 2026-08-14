@@ -86,18 +86,18 @@ export async function NewsArchive({
         eyebrow={
           isPressArchive
             ? "Official corporate record"
-            : page?.navigationLabel ?? "Newsroom and record"
+            : (page?.navigationLabel ?? "Newsroom and record")
         }
         title={
           isPressArchive
             ? "Official releases. On the record."
-            : page?.heroTitle ?? "Signals from every arena."
+            : (page?.heroTitle ?? "Signals from every arena.")
         }
         description={
           isPressArchive
             ? "Approved corporate announcements and official statements published by Sarga.co."
-            : page?.heroDescription ??
-              "Reporting the decisions, performances, partnerships, and people shaping Sarga's integrated sport and entertainment network."
+            : (page?.heroDescription ??
+              "Reporting the decisions, performances, partnerships, and people shaping Sarga's integrated sport and entertainment network.")
         }
         image={{
           url: "/assets/media/leadership/governance-editorial-concept.png",
@@ -133,18 +133,20 @@ export async function NewsArchive({
           <EditorialHeading
             index="01"
             eyebrow={
-              isPressArchive ? "Latest release" : leadSection?.eyebrow ?? "Lead story"
+              isPressArchive
+                ? "Latest release"
+                : (leadSection?.eyebrow ?? "Lead story")
             }
             title={
               isPressArchive
                 ? "The latest official statement."
-                : leadSection?.title ?? "What the network is watching."
+                : (leadSection?.title ?? "What the network is watching.")
             }
             description={
               isPressArchive
                 ? "The newest approved corporate release from the Sarga group."
-                : leadSection?.body ??
-                  "The latest high-priority story from across Sarga's businesses and live properties."
+                : (leadSection?.body ??
+                  "The latest high-priority story from across Sarga's businesses and live properties.")
             }
           />
           {featured ? (
@@ -203,7 +205,7 @@ export async function NewsArchive({
             <h2 className="font-heading text-3xl font-bold uppercase tracking-[-0.03em] sm:text-[2.4rem]">
               {isPressArchive
                 ? "Release archive"
-                : archiveSection?.title ?? "The editorial desk"}
+                : (archiveSection?.title ?? "The editorial desk")}
             </h2>
             <span className="hidden text-xs font-bold uppercase tracking-[0.16em] text-sarga-text/45 sm:block">
               {String(remainingArticles.length).padStart(2, "0")} stories

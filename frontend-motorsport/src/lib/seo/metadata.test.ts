@@ -18,7 +18,10 @@ test("CMS SEO overrides title, social metadata, and noindex", () => {
   });
   assert.equal(metadata.title, "CMS title");
   assert.equal(metadata.description, "CMS description");
-  assert.equal(metadata.alternates?.canonical, "https://motorsport.example/about");
+  assert.equal(
+    metadata.alternates?.canonical,
+    "https://motorsport.example/about",
+  );
   assert.equal(metadata.openGraph?.title, "CMS social title");
   assert.equal(metadata.openGraph?.description, "CMS social description");
   assert.deepEqual(metadata.robots, { index: false, follow: false });

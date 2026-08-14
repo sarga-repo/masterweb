@@ -104,7 +104,9 @@ function sectionValue(
   field: "eyebrow" | "title" | "body",
   fallback: string,
 ) {
-  return sections?.find((section) => section.sectionKey === key)?.[field] || fallback;
+  return (
+    sections?.find((section) => section.sectionKey === key)?.[field] || fallback
+  );
 }
 
 export default async function AboutPage() {
@@ -113,13 +115,31 @@ export default async function AboutPage() {
     fetchLeadership(),
   ]);
   const team = cmsTeam.length > 0 ? cmsTeam.slice(0, 6) : FALLBACK_TEAM;
-  const operatingIdea = sectionValue(page?.sections, "operating-idea", "body", "Competition creates the moment. People, media, hospitality, and development turn it into a lasting Motorsport culture.");
-  const profile = page?.sections.find((section) => section.sectionKey === "profile");
-  const teamIntro = page?.sections.find((section) => section.sectionKey === "team-intro");
-  const contactCta = page?.sections.find((section) => section.sectionKey === "contact-cta");
-  const ecosystemCta = page?.sections.find((section) => section.sectionKey === "ecosystem-cta");
+  const operatingIdea = sectionValue(
+    page?.sections,
+    "operating-idea",
+    "body",
+    "Competition creates the moment. People, media, hospitality, and development turn it into a lasting Motorsport culture.",
+  );
+  const profile = page?.sections.find(
+    (section) => section.sectionKey === "profile",
+  );
+  const teamIntro = page?.sections.find(
+    (section) => section.sectionKey === "team-intro",
+  );
+  const contactCta = page?.sections.find(
+    (section) => section.sectionKey === "contact-cta",
+  );
+  const ecosystemCta = page?.sections.find(
+    (section) => section.sectionKey === "ecosystem-cta",
+  );
   const capabilities = mapAboutCapabilities(page?.sections);
-  const capabilityCards = capabilities?.cards ?? FALLBACK_CAPABILITIES.map(([, title, description]) => ({ title, description }));
+  const capabilityCards =
+    capabilities?.cards ??
+    FALLBACK_CAPABILITIES.map(([, title, description]) => ({
+      title,
+      description,
+    }));
 
   return (
     <PageShell spectrumSeparators>
@@ -204,10 +224,15 @@ export default async function AboutPage() {
 
             <aside className="border-t border-ms-warm-white/18 pt-6 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0">
               <p className="ms-data-label text-ms-slipstream-teal">
-                 {sectionValue(page?.sections, "operating-idea", "eyebrow", "Operating idea")}
+                {sectionValue(
+                  page?.sections,
+                  "operating-idea",
+                  "eyebrow",
+                  "Operating idea",
+                )}
               </p>
               <p className="mt-5 text-base leading-7 text-ms-warm-white/68">
-                 {operatingIdea}
+                {operatingIdea}
               </p>
               <Link
                 href="#team"
@@ -240,28 +265,34 @@ export default async function AboutPage() {
         <div className="ms-shell">
           <SectionHeader
             index="CAPABILITY"
-             eyebrow={capabilities?.eyebrow ?? "What we do"}
-             title={capabilities?.title ?? "Competition is the core. Experience completes it."}
-             description={capabilities?.description ?? sectionBody(
-               page?.sections,
-               "what-we-do",
-               "Professional competition, event experiences, media, partnerships, and talent development—designed as one connected Motorsport system.",
-             )}
+            eyebrow={capabilities?.eyebrow ?? "What we do"}
+            title={
+              capabilities?.title ??
+              "Competition is the core. Experience completes it."
+            }
+            description={
+              capabilities?.description ??
+              sectionBody(
+                page?.sections,
+                "what-we-do",
+                "Professional competition, event experiences, media, partnerships, and talent development—designed as one connected Motorsport system.",
+              )
+            }
           />
           <div className="mt-14 border-y border-ms-warm-white/18 md:grid md:grid-cols-2">
-             {capabilityCards.map((card, index) => (
+            {capabilityCards.map((card, index) => (
               <article
                 key={index}
                 className="border-b border-ms-warm-white/14 px-0 py-9 md:px-8 md:odd:border-r md:first:pl-0"
               >
                 <span className="ms-data-label text-ms-electric-yellow">
-                   {String(index + 1).padStart(2, "0")}
+                  {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="ms-heading-card mt-7 max-w-[16ch] text-ms-warm-white">
-                   {card.title}
+                  {card.title}
                 </h3>
                 <p className="mt-5 max-w-xl text-sm leading-7 text-ms-warm-white/68">
-                   {card.description}
+                  {card.description}
                 </p>
               </article>
             ))}
@@ -273,9 +304,12 @@ export default async function AboutPage() {
         <div className="ms-shell">
           <SectionHeader
             index="TEAM"
-             eyebrow={teamIntro?.eyebrow ?? "Meet the team"}
-             title={teamIntro?.title ?? "The people behind the programme."}
-             description={teamIntro?.body ?? "Group leadership and operators building the sporting, commercial, and live-event platform."}
+            eyebrow={teamIntro?.eyebrow ?? "Meet the team"}
+            title={teamIntro?.title ?? "The people behind the programme."}
+            description={
+              teamIntro?.body ??
+              "Group leadership and operators building the sporting, commercial, and live-event platform."
+            }
           />
           <div className="mt-14 grid grid-cols-2 gap-5 sm:gap-7 lg:grid-cols-4">
             {team.map((member, index) => (
@@ -325,12 +359,15 @@ export default async function AboutPage() {
       >
         <div className="ms-shell grid gap-12 lg:grid-cols-2 lg:gap-20">
           <article>
-             <p className="ms-kicker text-ms-ignition-orange">{contactCta?.eyebrow ?? "Contact us"}</p>
+            <p className="ms-kicker text-ms-ignition-orange">
+              {contactCta?.eyebrow ?? "Contact us"}
+            </p>
             <h2 className="ms-heading-section mt-6 max-w-[11ch]">
-               {contactCta?.title ?? "Start a conversation with race control."}
+              {contactCta?.title ?? "Start a conversation with race control."}
             </h2>
             <p className="mt-6 max-w-xl leading-7 text-ms-warm-white/72">
-               {contactCta?.body ?? "Partnerships, media, event support, talent pathways, and general Motorsport inquiries are routed through the contact desk."}
+              {contactCta?.body ??
+                "Partnerships, media, event support, talent pathways, and general Motorsport inquiries are routed through the contact desk."}
             </p>
             <Link
               href="/contact"
@@ -342,13 +379,14 @@ export default async function AboutPage() {
           </article>
           <article className="border-t border-ms-warm-white/18 pt-10 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
             <p className="ms-kicker text-ms-slipstream-teal">
-               {ecosystemCta?.eyebrow ?? "Part of Sarga.co"}
+              {ecosystemCta?.eyebrow ?? "Part of Sarga.co"}
             </p>
             <h2 className="ms-heading-section mt-6 max-w-[11ch]">
-               {ecosystemCta?.title ?? "One ecosystem. A dedicated racing home."}
+              {ecosystemCta?.title ?? "One ecosystem. A dedicated racing home."}
             </h2>
             <p className="mt-6 max-w-xl leading-7 text-ms-warm-white/72">
-               {ecosystemCta?.body ?? "Sarga.co remains the group gateway. This dedicated site is where Motorsport programmes, events, stories, tickets, and fan culture live in full."}
+              {ecosystemCta?.body ??
+                "Sarga.co remains the group gateway. This dedicated site is where Motorsport programmes, events, stories, tickets, and fan culture live in full."}
             </p>
             <a
               href={siteConfig.gatewayUrl}

@@ -21,7 +21,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 
 | Phase | Title | Status | Date |
 | --- | --- | --- | --- |
-| INFRA-1 | GitHub Actions and Tencent staging runner | 🟡 Awaiting registration | 2026-08-14 |
+| INFRA-1 | GitHub Actions and Tencent environment runners | 🟡 Awaiting registration | 2026-08-14 |
 
 ## Sarga.co Gateway revamp track (`docs/gateway/revamp/`)
 
@@ -6123,31 +6123,36 @@ role/browser evidence remains part of the existing GWR-CMS-8 launch gate.
 - The full authenticated API matrix requires disposable staging credentials;
   the harness is ready and now includes existing-media browse coverage.
 
-## INFRA-1 — GitHub Actions and Tencent staging runner
+## INFRA-1 — GitHub Actions and Tencent environment runners
 
 Status: repository automation completed 2026-08-14. GitHub environment
-protection, release-branch merge, and runner registration require repository
-administrator access.
+protection, merge to `main`, staging registration, and future production CVM
+provisioning/registration require repository and infrastructure administrators.
 
 ### What was done
 
 - Added GitHub-hosted CI for CMS, Gateway, Motorsport, and Horse Sport quality
-  gates. Pull request code does not execute on the application CVM.
-- Added a protected manual staging workflow for exact-SHA deployments of CMS,
-  Gateway, Motorsport, or all three active services.
-- Added a guarded root deployment command with release-branch containment,
-  host locking, dirty-tree protection, sequential frozen-lockfile builds,
-  service/route health checks, deployment state, and paired CMS backups.
-- Added a pinned, checksum-verified GitHub runner installer for the current
-  Tencent CVM. The non-login runner account receives one sudo command, and that
-  command additionally requires a 256-bit protected-environment authorization.
+  gates. Pull request code does not execute on an application CVM.
+- Added protected manual staging deployment from `main`, supporting exact-SHA
+  releases of CMS, Gateway, Motorsport, or all three active services.
+- Added automatic production deployment of all active services for protected
+  semantic `v*` tags. The workflow is ready but targets a separate, currently
+  unprovisioned `sarga-production` runner.
+- Added a guarded root deployment command with environment isolation,
+  `origin/main` containment, host locking, dirty-tree protection, sequential
+  frozen-lockfile builds, service/route health checks, deployment state, and
+  paired CMS backups.
+- Added a pinned, checksum-verified environment-aware runner installer. Each
+  non-login runner account receives one environment-specific sudo command, and
+  that command additionally requires a 256-bit matching-environment
+  authorization.
 - Formatted the existing Gateway, Motorsport, and Horse Sport baselines so the
   newly enforced repository format gates start green.
 
 ### Files changed
 
 - `.github/actionlint.yaml`
-- `.github/workflows/{ci,deploy-staging}.yml`
+- `.github/workflows/{ci,deploy-staging,deploy-production}.yml`
 - `deploy/production/{deploy_github_revision,install_github_runner}.sh`
 - `deploy/production/README.md`
 - `docs/14_ubuntu_single_vm_production_deployment.md`
@@ -6157,7 +6162,7 @@ administrator access.
 
 ### How verified
 
-- `actionlint` 1.7.12 passed both workflows.
+- `actionlint` 1.7.12 passed all three workflows.
 - `bash -n` and ShellCheck 0.11.0 passed both production scripts.
 - CMS passed 22 mail tests, TypeScript, and the Strapi production build.
 - Gateway passed format, lint, TypeScript, 37 tests, and its production build.
@@ -6171,11 +6176,15 @@ administrator access.
 
 ### Notes / caveats
 
-- No runner was registered and no live deployment was executed. Registration
-  needs a short-lived GitHub repository runner token after this branch is
-  reviewed and merged into the configured release branch.
+- No runner was registered and no live deployment was executed. Staging
+  registration needs a short-lived GitHub repository runner token after this
+  branch is reviewed and merged into `main`.
 - Create the protected GitHub `staging` environment, require a reviewer,
-  restrict its deployment branch, and add the generated
-  `SARGA_DEPLOY_AUTHORIZATION` environment secret before the first deployment.
-- The 4-vCPU/8-GB application VM is the functional minimum. CI remains on
+  restrict deployment to `main`, and add
+  `SARGA_STAGING_DEPLOY_AUTHORIZATION`.
+- Create a protected `v*` tag ruleset. The automatic production workflow must
+  remain offline until a separate production CVM and `sarga-production` runner
+  exist, then configure its HTTPS origin variables and
+  `SARGA_PRODUCTION_DEPLOY_AUTHORIZATION`.
+- The 4-vCPU/8-GB staging VM is the functional minimum. CI remains on
   GitHub-hosted runners; only sequential approved deployments run on Tencent.

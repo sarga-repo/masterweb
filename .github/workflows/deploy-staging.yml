@@ -37,10 +37,15 @@ jobs:
     timeout-minutes: 90
 
     steps:
-      - name: Validate manual confirmation
+      - name: Validate main branch and manual confirmation
         env:
           CONFIRMATION: ${{ inputs.confirmation }}
+          DEPLOY_REF: ${{ github.ref }}
         run: |
+          if [[ "$DEPLOY_REF" != "refs/heads/main" ]]; then
+            echo "Staging deploys only from main; selected ref was $DEPLOY_REF." >&2
+            exit 1
+          fi
           if [[ "$CONFIRMATION" != "DEPLOY-STAGING" ]]; then
             echo "The confirmation must be exactly DEPLOY-STAGING." >&2
             exit 1
@@ -50,7 +55,7 @@ jobs:
         env:
           DEPLOY_SHA: ${{ github.sha }}
           DEPLOY_TARGET: ${{ inputs.target }}
-          SARGA_DEPLOY_AUTHORIZATION: ${{ secrets.SARGA_DEPLOY_AUTHORIZATION }}
+          SARGA_DEPLOY_AUTHORIZATION: ${{ secrets.SARGA_STAGING_DEPLOY_AUTHORIZATION }}
         run: |
           set -Eeuo pipefail
           if [[ -z "$SARGA_DEPLOY_AUTHORIZATION" ]]; then

@@ -2,12 +2,34 @@
 
 set -Eeuo pipefail
 
+fail() {
+  printf 'Error: %s\n' "$*" >&2
+  exit 1
+}
+
+case "${0##*/}" in
+  sarga-deploy-staging)
+    deploy_environment="staging"
+    ;;
+  sarga-deploy-production)
+    deploy_environment="production"
+    ;;
+  deploy_github_revision.sh)
+    deploy_environment="${SARGA_DEPLOY_ENVIRONMENT:-staging}"
+    ;;
+  *)
+    fail "unrecognized installed deployment command: ${0##*/}"
+    ;;
+esac
+[[ "$deploy_environment" == "staging" || "$deploy_environment" == "production" ]] ||
+  fail "deployment environment must be staging or production"
+
 usage() {
   cat <<'EOF'
-Deploy one reviewed Git revision to the Sarga staging services.
+Deploy one reviewed Git revision to a Sarga environment.
 
 Usage:
-  sudo deploy_github_revision.sh GIT_SHA TARGET
+  sudo sarga-deploy-ENVIRONMENT GIT_SHA TARGET
 
 Targets:
   cms          Build and restart the shared Strapi CMS.
@@ -16,24 +38,20 @@ Targets:
   all-active   Build and restart CMS, Gateway, and Motorsport sequentially.
 
 The exact 40-character commit must be contained by the remote release branch
-configured in /etc/sarga/github-runner-release-ref. A matching deployment
+configured for the installed environment. A matching environment deployment
 authorization token must be supplied as the first line on standard input.
 EOF
-}
-
-fail() {
-  printf 'Error: %s\n' "$*" >&2
-  exit 1
+  printf '\nSelected environment: %s\n' "$deploy_environment"
 }
 
 repo_path="/srv/sarga-website"
 app_user="sarga"
-release_ref_file="/etc/sarga/github-runner-release-ref"
-authorization_file="/etc/sarga/github-runner-deploy-token"
-backup_root="/var/backups/sarga/deployments"
-state_root="/var/lib/sarga-deploy"
+release_ref_file="/etc/sarga/github-runner-$deploy_environment-release-ref"
+authorization_file="/etc/sarga/github-runner-$deploy_environment-deploy-token"
+backup_root="/var/backups/sarga/deployments/$deploy_environment"
+state_root="/var/lib/sarga-deploy/$deploy_environment"
 deployment_log="/var/log/sarga-deployments.log"
-lock_file="/run/lock/sarga-deploy.lock"
+lock_file="/run/lock/sarga-$deploy_environment-deploy.lock"
 database_name="sarga_strapi"
 
 [[ "${1:-}" != "--help" && "${1:-}" != "-h" ]] || {
@@ -118,9 +136,9 @@ short_sha="${target_sha:0:12}"
 status="failed"
 log_result() {
   local exit_code="$?"
-  printf '%s status=%s sha=%s target=%s actor=%s\n' \
-    "$(date --utc +%FT%TZ)" "$status" "$target_sha" "$target" "${SUDO_USER:-root}" \
-    >>"$deployment_log"
+  printf '%s status=%s environment=%s sha=%s target=%s actor=%s\n' \
+    "$(date --utc +%FT%TZ)" "$status" "$deploy_environment" "$target_sha" "$target" \
+    "${SUDO_USER:-root}" >>"$deployment_log"
   exit "$exit_code"
 }
 trap log_result EXIT
@@ -216,5 +234,6 @@ printf '%s\n' "$started_at" >"$state_root/last-successful-started-at"
 chmod 0644 "$state_root"/last-successful-*
 
 status="succeeded"
-printf 'Deployment completed: sha=%s target=%s\n' "$target_sha" "$target"
+printf 'Deployment completed: environment=%s sha=%s target=%s\n' \
+  "$deploy_environment" "$target_sha" "$target"
 [[ -z "$backup_dir" ]] || printf 'Pre-deploy CMS backup: %s\n' "$backup_dir"

@@ -652,26 +652,29 @@ then revoking the old credential. If Basic contingency mode was used, remove
 its password/acknowledgement/expiry after OAuth cutover and rotate the mailbox
 password. Never log a secret, password, or access token.
 
-### GitHub Actions staging automation
+### GitHub Actions environment automation
 
 The repository's CI remains on GitHub-hosted runners. Pull request code must
-never execute on the application VM. The Tencent self-hosted runner is reserved
-for the protected, manually approved `Deploy staging` workflow and carries the
-custom `sarga-staging` label.
+never execute on an application VM. Staging uses a manually approved deployment
+from `main` to the current Tencent CVM and the `sarga-staging` runner.
+Production uses a separate CVM and `sarga-production` runner; pushing a protected
+semantic `v*` tag automatically deploys CMS, Gateway, and Motorsport.
 
-Runner installation, GitHub environment protection, deployment targets, branch
-pinning, backup behavior, and operator commands are documented in
-`deploy/production/README.md`. The runner's only passwordless root command is a
-root-owned copy of `deploy_github_revision.sh`; that command also requires a
-256-bit authorization available only through the protected GitHub `staging`
-environment. The workflow cannot invoke arbitrary commands through `sudo`.
+Runner installation, environment protection, tag rules, deployment targets,
+branch pinning, backup behavior, and operator commands are documented in
+`deploy/production/README.md`. Each VM has one environment-specific root-owned
+copy of `deploy_github_revision.sh`. The matching GitHub environment holds a
+256-bit authorization required by that wrapper, and the runner has no other
+passwordless root command.
 
 The deployment wrapper accepts a full commit SHA only, verifies that it is
-contained by the configured origin release branch, and uses the existing
-sequential frozen-lockfile build helper. CMS deployments take a paired
-PostgreSQL/uploads backup before checkout. This automation does not perform CMS
-snapshot promotion, database restoration, secret changes, firewall changes, or
-certificate management.
+contained by `origin/main`, and uses the existing sequential frozen-lockfile
+build helper. CMS deployments take a paired PostgreSQL/uploads backup before
+checkout. This automation does not perform CMS snapshot promotion, database
+restoration, secret changes, firewall changes, or certificate management.
+
+The production workflow must remain offline until the separate production CVM,
+domains, runtime environments, data, backup policy, and runner are provisioned.
 
 ## 14. Monitoring and operational ownership
 

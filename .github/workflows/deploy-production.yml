@@ -1,0 +1,84 @@
+name: Deploy production
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sarga-production-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy ${{ github.ref_name }}
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+      - sarga-production
+    environment: production
+    timeout-minutes: 90
+
+    steps:
+      - name: Validate semantic release tag
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -Eeuo pipefail
+          semver_pattern='^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$'
+          if [[ ! "$RELEASE_TAG" =~ $semver_pattern ]]; then
+            echo "Production tags must use semantic form such as v1.2.3 or v1.2.3-rc.1." >&2
+            exit 1
+          fi
+
+      - name: Deploy exact tagged revision
+        env:
+          DEPLOY_SHA: ${{ github.sha }}
+          SARGA_DEPLOY_AUTHORIZATION: ${{ secrets.SARGA_PRODUCTION_DEPLOY_AUTHORIZATION }}
+        run: |
+          set -Eeuo pipefail
+          if [[ -z "$SARGA_DEPLOY_AUTHORIZATION" ]]; then
+            echo "The production deployment authorization secret is not configured." >&2
+            exit 1
+          fi
+          printf '%s\n' "$SARGA_DEPLOY_AUTHORIZATION" |
+            sudo -n /usr/local/sbin/sarga-deploy-production "$DEPLOY_SHA" all-active
+
+      - name: Verify public production routes
+        env:
+          GATEWAY_URL: ${{ vars.SARGA_GATEWAY_URL }}
+          MOTORSPORT_URL: ${{ vars.SARGA_MOTORSPORT_URL }}
+          CMS_URL: ${{ vars.SARGA_CMS_URL }}
+        run: |
+          set -Eeuo pipefail
+
+          for value in "$GATEWAY_URL" "$MOTORSPORT_URL" "$CMS_URL"; do
+            if [[ ! "$value" =~ ^https://[^/]+/?$ ]]; then
+              echo "Production route variables must be HTTPS origins without paths." >&2
+              exit 1
+            fi
+          done
+
+          urls=(
+            "${GATEWAY_URL%/}/"
+            "${MOTORSPORT_URL%/}/"
+            "${CMS_URL%/}/admin"
+          )
+
+          for url in "${urls[@]}"; do
+            curl \
+              --fail \
+              --silent \
+              --show-error \
+              --location \
+              --retry 10 \
+              --retry-all-errors \
+              --retry-delay 3 \
+              --max-time 20 \
+              "$url" >/dev/null
+            echo "Verified $url"
+          done

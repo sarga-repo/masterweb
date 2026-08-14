@@ -276,32 +276,48 @@ export type MotorsportChrome = {
 };
 
 const fallbackFooterColumns = [
-  { title: "Discover", links: [
-    { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
-    { label: "Events", href: "/events" },
-  ] },
-  { title: "Follow", links: [
-    { label: "News", href: "/news" },
-    { label: "Gallery", href: "/gallery" },
-    { label: "Contact", href: "/contact" },
-  ] },
-  { title: "Race day", links: [
-    { label: "Tickets", href: "/tickets" },
-    { label: "Merchandise", href: "/merchandise" },
-  ] },
+  {
+    title: "Discover",
+    links: [
+      { label: "Home", href: "/" },
+      { label: "About", href: "/about" },
+      { label: "Events", href: "/events" },
+    ],
+  },
+  {
+    title: "Follow",
+    links: [
+      { label: "News", href: "/news" },
+      { label: "Gallery", href: "/gallery" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
+  {
+    title: "Race day",
+    links: [
+      { label: "Tickets", href: "/tickets" },
+      { label: "Merchandise", href: "/merchandise" },
+    ],
+  },
 ];
 
 function mapFooterLinks(links: CmsFooterLink[] | undefined) {
   return (links ?? [])
-    .filter((link) => link.enabled !== false && link.label?.trim() && link.href?.trim())
+    .filter(
+      (link) =>
+        link.enabled !== false && link.label?.trim() && link.href?.trim(),
+    )
     .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
 }
 
 export async function fetchMotorsportChrome(): Promise<MotorsportChrome> {
   const response = await fetchStrapiList<CmsSite>("sites", {
-    populate: "headerLogo,footerLogo,footerColumns.links,footerSocialLinks,footerUtilityLinks",
-    filters: { "filters[slug][$eq]": "sarga-motorsport", "filters[isActive][$eq]": "true" },
+    populate:
+      "headerLogo,footerLogo,footerColumns.links,footerSocialLinks,footerUtilityLinks",
+    filters: {
+      "filters[slug][$eq]": "sarga-motorsport",
+      "filters[isActive][$eq]": "true",
+    },
     limit: 1,
     revalidate: 60,
   });
@@ -309,14 +325,22 @@ export async function fetchMotorsportChrome(): Promise<MotorsportChrome> {
   const columns = (site?.footerColumns ?? [])
     .filter((column) => column.title?.trim())
     .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0))
-    .map((column) => ({ title: column.title, links: mapFooterLinks(column.links) }))
+    .map((column) => ({
+      title: column.title,
+      links: mapFooterLinks(column.links),
+    }))
     .filter((column) => column.links.length);
 
   return {
-    headerLogo: mediaUrl(site?.headerLogo?.url) || "/brand/logo-sarga-motorsport-symbol-sport.png",
+    headerLogo:
+      mediaUrl(site?.headerLogo?.url) ||
+      "/brand/logo-sarga-motorsport-symbol-sport.png",
     headerLogoAlt: site?.headerLogo?.alternativeText || "Sarga Motorsport",
-    footerLogo: mediaUrl(site?.footerLogo?.url) || "/brand/logo-sarga-motorsport-part-of-sarga.png",
-    footerLogoAlt: site?.footerLogo?.alternativeText || "Sarga Motorsport, part of Sarga",
+    footerLogo:
+      mediaUrl(site?.footerLogo?.url) ||
+      "/brand/logo-sarga-motorsport-part-of-sarga.png",
+    footerLogoAlt:
+      site?.footerLogo?.alternativeText || "Sarga Motorsport, part of Sarga",
     footerStatement: site?.footerStatement || "Racing, amplified.",
     footerCopyright: site?.footerCopyright || "© 2026 Sarga Motorsport",
     footerColumns: columns.length ? columns : fallbackFooterColumns,
@@ -342,18 +366,29 @@ export type AboutCapability = {
   accent?: CmsAboutCapabilityCard["accent"];
 };
 
-export function mapAboutCapabilities(
-  sections: CmsPageSection[] | undefined,
-): { eyebrow: string; title: string; description?: string; cards: AboutCapability[] } | null {
+export function mapAboutCapabilities(sections: CmsPageSection[] | undefined): {
+  eyebrow: string;
+  title: string;
+  description?: string;
+  cards: AboutCapability[];
+} | null {
   const section = sections?.find(
     (item) => item.__component === "motorsport.about-capabilities",
   );
-  if (!section || section.enabled === false || !section.cards?.length) return null;
+  if (!section || section.enabled === false || !section.cards?.length)
+    return null;
 
   const cards = section.cards
     .filter(
-      (card): card is CmsAboutCapabilityCard & { title: string; description: string } =>
-        card.enabled !== false && Boolean(card.title?.trim()) && Boolean(card.description?.trim()),
+      (
+        card,
+      ): card is CmsAboutCapabilityCard & {
+        title: string;
+        description: string;
+      } =>
+        card.enabled !== false &&
+        Boolean(card.title?.trim()) &&
+        Boolean(card.description?.trim()),
     )
     .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
     .map((card) => ({
@@ -365,7 +400,9 @@ export function mapAboutCapabilities(
   if (!cards.length) return null;
   return {
     eyebrow: section.eyebrow?.trim() || "What we do",
-    title: section.title?.trim() || "Competition is the core. Experience completes it.",
+    title:
+      section.title?.trim() ||
+      "Competition is the core. Experience completes it.",
     description: section.description?.trim() || undefined,
     cards,
   };
@@ -562,7 +599,8 @@ export function mapGalleryItems(
 }
 
 export async function fetchSitePage(
-  pageKind: "home" | "about" | "eventHub" | "newsHub" | "merchandise" | "custom",
+  pageKind:
+    "home" | "about" | "eventHub" | "newsHub" | "merchandise" | "custom",
   routePath?: string,
 ): Promise<SitePageContent | null> {
   const response = await fetchStrapiList<CmsSitePage>("site-pages", {
@@ -608,9 +646,11 @@ export async function fetchMotorsportPageByRoute(
   });
   const page = response?.data?.[0];
   if (!page) return null;
-  const heroImage = page.heroMedia && (!page.heroMedia.mime || page.heroMedia.mime.startsWith("image/"))
-    ? mediaUrl(page.heroMedia.url)
-    : undefined;
+  const heroImage =
+    page.heroMedia &&
+    (!page.heroMedia.mime || page.heroMedia.mime.startsWith("image/"))
+      ? mediaUrl(page.heroMedia.url)
+      : undefined;
   return {
     title: page.title,
     navigationLabel: page.navigationLabel,

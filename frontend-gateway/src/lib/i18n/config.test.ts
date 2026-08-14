@@ -51,9 +51,7 @@ describe("Gateway locale URL contract", () => {
         "id",
         sites,
       ),
-    ).toBe(
-      "https://motorsport.sarga.co/id/news/story?from=gateway#latest",
-    );
+    ).toBe("https://motorsport.sarga.co/id/news/story?from=gateway#latest");
     expect(
       localizeKnownSiteHref("https://tickets.example.com/event", "id", sites),
     ).toBe("https://tickets.example.com/event");

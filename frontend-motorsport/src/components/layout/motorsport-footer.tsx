@@ -42,12 +42,12 @@ export function MotorsportFooter({
       <div className="ms-shell relative py-16 sm:py-20">
         <div className="grid gap-14 border-b border-ms-warm-white/12 pb-14 lg:grid-cols-[1.1fr_1.9fr]">
           <div>
-             <MotorsportLogo
-               src={logoSrc}
-               alt={logoAlt}
-               variant="part-of-sarga"
-               className="w-52"
-             />
+            <MotorsportLogo
+              src={logoSrc}
+              alt={logoAlt}
+              variant="part-of-sarga"
+              className="w-52"
+            />
             <p className="ms-heading-section mt-10 max-w-xl text-ms-warm-white">
               {statement}
             </p>

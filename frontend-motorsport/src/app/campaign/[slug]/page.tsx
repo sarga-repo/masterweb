@@ -51,7 +51,8 @@ export default async function CampaignPage(props: Props) {
 
   const campaign = await getFiaRallycrossCampaign();
   const page = await fetchMotorsportPageByRoute(FIA_RALLYCROSS_PATH);
-  const section = (key: string) => page?.sections.find((item) => item.sectionKey === key);
+  const section = (key: string) =>
+    page?.sections.find((item) => item.sectionKey === key);
   const ticketCta = campaign.ticketCta ?? {
     label: "Get Your Ticket Now",
     href: "/tickets",
@@ -62,7 +63,9 @@ export default async function CampaignPage(props: Props) {
   return (
     <PageShell spectrumSeparators>
       <PageHero
-         kicker={page?.navigationLabel ?? "FIA / Rallycross World Cup / Indonesia 2026"}
+        kicker={
+          page?.navigationLabel ?? "FIA / Rallycross World Cup / Indonesia 2026"
+        }
         kickerColor="yellow"
         title={campaign.headline ?? "First Time, Wild Action, Closer Than Ever"}
         description={campaign.summary}
@@ -96,7 +99,10 @@ export default async function CampaignPage(props: Props) {
       <InformationBand
         eyebrow="World Cup control / Jakarta"
         title={campaign.title}
-         description={section("world-cup-control")?.body ?? "Two days of explosive starts, mixed-surface strategy, and a compact race format that keeps every spectator close to the decisive action."}
+        description={
+          section("world-cup-control")?.body ??
+          "Two days of explosive starts, mixed-surface strategy, and a compact race format that keeps every spectator close to the decisive action."
+        }
         items={[
           { label: "Date", value: campaign.dateLabel ?? "5-6 December 2026" },
           {
@@ -116,9 +122,14 @@ export default async function CampaignPage(props: Props) {
         <div className="ms-shell">
           <SectionHeader
             index="RX / FORMAT"
-             eyebrow={section("format")?.eyebrow ?? "Mixed surface / Maximum pressure"}
-             title={section("format")?.title ?? "Every heat changes the order."}
-             description={section("format")?.body ?? "Rallycross compresses starts, contact, strategy, and elimination into a format designed for immediate spectator energy."}
+            eyebrow={
+              section("format")?.eyebrow ?? "Mixed surface / Maximum pressure"
+            }
+            title={section("format")?.title ?? "Every heat changes the order."}
+            description={
+              section("format")?.body ??
+              "Rallycross compresses starts, contact, strategy, and elimination into a format designed for immediate spectator energy."
+            }
           />
           <div className="mt-12 grid gap-px overflow-hidden border border-ms-warm-white/14 bg-ms-warm-white/14 md:grid-cols-3">
             {[
@@ -165,9 +176,12 @@ export default async function CampaignPage(props: Props) {
         <div className="ms-shell">
           <SectionHeader
             index="RX / RUNDOWN"
-             eyebrow={section("rundown")?.eyebrow ?? "5-6 December 2026"}
-             title={section("rundown")?.title ?? "Two days. One World Cup."}
-             description={section("rundown")?.body ?? "Session times are managed in the Sarga CMS and remain subject to sporting or operational updates."}
+            eyebrow={section("rundown")?.eyebrow ?? "5-6 December 2026"}
+            title={section("rundown")?.title ?? "Two days. One World Cup."}
+            description={
+              section("rundown")?.body ??
+              "Session times are managed in the Sarga CMS and remain subject to sporting or operational updates."
+            }
           />
           <div className="mt-12 space-y-5">
             {campaign.schedule.map((entry) => (
@@ -184,9 +198,14 @@ export default async function CampaignPage(props: Props) {
         <div className="ms-shell">
           <SectionHeader
             index="RX / GUIDE"
-             eyebrow={section("race-day-guide")?.eyebrow ?? "Race-day essentials"}
-             title={section("race-day-guide")?.title ?? "Know before you go."}
-             description={section("race-day-guide")?.body ?? "A practical spectator guide for a smooth arrival and a safe, high-energy weekend at the circuit."}
+            eyebrow={
+              section("race-day-guide")?.eyebrow ?? "Race-day essentials"
+            }
+            title={section("race-day-guide")?.title ?? "Know before you go."}
+            description={
+              section("race-day-guide")?.body ??
+              "A practical spectator guide for a smooth arrival and a safe, high-energy weekend at the circuit."
+            }
           />
           <div className="mt-12 grid gap-8 lg:grid-cols-2">
             {[
@@ -237,9 +256,17 @@ export default async function CampaignPage(props: Props) {
       <section className="ms-blue-heat-surface ms-section">
         <div className="ms-shell">
           <TicketCtaPanel
-             eyebrow={section("campaign-ticket")?.eyebrow ?? "Official ticketing"}
-             title={section("campaign-ticket")?.title ?? "First time. Be there for the first launch."}
-             description={section("campaign-ticket")?.body ?? "Review availability before continuing to the approved ticketing partner. Sarga Motorsport does not process checkout or payment on this website."}
+            eyebrow={
+              section("campaign-ticket")?.eyebrow ?? "Official ticketing"
+            }
+            title={
+              section("campaign-ticket")?.title ??
+              "First time. Be there for the first launch."
+            }
+            description={
+              section("campaign-ticket")?.body ??
+              "Review availability before continuing to the approved ticketing partner. Sarga Motorsport does not process checkout or payment on this website."
+            }
             cta={ticketCta}
             provider={ticketCta.provider}
             eventMeta={`${campaign.dateLabel ?? "5-6 December 2026"} / ${

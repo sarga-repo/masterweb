@@ -31,9 +31,16 @@ export default async function CompanyStructurePage() {
     getLeadershipPeople(locale),
     getEcosystemBusinesses(locale),
   ]);
-  const page = await getGatewaySitePageByPath("/about/company-structure", locale);
-  const architecture = page?.sections.find((section) => section.sectionKey === "operating-architecture");
-  const root = page?.sections.find((section) => section.sectionKey === "corporate-root");
+  const page = await getGatewaySitePageByPath(
+    "/about/company-structure",
+    locale,
+  );
+  const architecture = page?.sections.find(
+    (section) => section.sectionKey === "operating-architecture",
+  );
+  const root = page?.sections.find(
+    (section) => section.sectionKey === "corporate-root",
+  );
   const leadershipPeople = cmsPeople.length > 0 ? cmsPeople : mockLeadership;
 
   const board = leadershipPeople.filter((person) => person.group === "board");
@@ -47,7 +54,10 @@ export default async function CompanyStructurePage() {
         index="01"
         eyebrow={page?.navigationLabel ?? "Integrated holding model"}
         title={page?.heroTitle ?? "One group. Clear lines."}
-        description={page?.heroDescription ?? "Sarga combines central governance and shared operating standards with focused business units built to lead their own disciplines."}
+        description={
+          page?.heroDescription ??
+          "Sarga combines central governance and shared operating standards with focused business units built to lead their own disciplines."
+        }
         image={{
           url: "/assets/media/sarga-cinematic-hero-concept.png",
           alt: "Horse sport and motorsport moving through one integrated Sarga landscape",
@@ -67,19 +77,23 @@ export default async function CompanyStructurePage() {
             index="02"
             eyebrow={architecture?.eyebrow ?? "Operating architecture"}
             title={architecture?.title ?? "One core. Many operators."}
-            description={architecture?.body ?? "The structure keeps strategic accountability visible while giving every venture the room to build category authority and audience relevance."}
+            description={
+              architecture?.body ??
+              "The structure keeps strategic accountability visible while giving every venture the room to build category authority and audience relevance."
+            }
           />
 
           <div className="mt-16 lg:mt-20">
             <div className="gateway-corporate-root mx-auto max-w-3xl border border-white/15 p-8 text-white shadow-[0_24px_70px_rgb(16_20_27_/_16%)] sm:p-10">
               <p className="text-[0.62rem] font-extrabold uppercase tracking-[0.2em] text-sarga-red">
-                 {root?.eyebrow ?? "Corporate root"}
+                {root?.eyebrow ?? "Corporate root"}
               </p>
               <h2 className="mt-4 font-heading text-4xl font-bold uppercase leading-[1.04] tracking-[-0.03em] sm:text-[2.25rem]">
-                 {root?.title ?? "PT Sarga Multi Ekosistem"}
+                {root?.title ?? "PT Sarga Multi Ekosistem"}
               </h2>
               <p className="mt-5 max-w-xl text-sm leading-7 text-white/58">
-                 {root?.body ?? "Holding governance, portfolio strategy, capital stewardship, and the shared standards connecting every operating property."}
+                {root?.body ??
+                  "Holding governance, portfolio strategy, capital stewardship, and the shared standards connecting every operating property."}
               </p>
             </div>
 

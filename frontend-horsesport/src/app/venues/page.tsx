@@ -74,14 +74,21 @@ const FACILITIES = [
 
 export default async function VenuesPage() {
   const page = await fetchHorseSportPage("/venues");
-  const network = page?.sections.find((section) => section.sectionKey === "network");
-  const facilities = page?.sections.find((section) => section.sectionKey === "facilities");
+  const network = page?.sections.find(
+    (section) => section.sectionKey === "network",
+  );
+  const facilities = page?.sections.find(
+    (section) => section.sectionKey === "facilities",
+  );
   return (
     <>
       <PageHero
         eyebrow="Venues"
         title={page?.heroTitle ?? "Championship-grade turf & facilities."}
-        description={page?.heroDescription ?? "Premium tracks, turf, stables, and hospitality infrastructure built to international standards."}
+        description={
+          page?.heroDescription ??
+          "Premium tracks, turf, stables, and hospitality infrastructure built to international standards."
+        }
         backgroundImage={page?.heroImage ?? "/media/Racecourse-aerial.png"}
         backgroundAlt="Aerial view of a championship turf racing track"
         accent="turf"
@@ -93,7 +100,10 @@ export default async function VenuesPage() {
             index="01"
             eyebrow={network?.eyebrow ?? "The venue network"}
             title={network?.title ?? "Where the sport comes to life."}
-            description={network?.body ?? "From championship turf to elite stabling and gala hospitality arenas."}
+            description={
+              network?.body ??
+              "From championship turf to elite stabling and gala hospitality arenas."
+            }
           />
         </ScrollReveal>
         <div className="mt-12 grid gap-5 md:grid-cols-3">

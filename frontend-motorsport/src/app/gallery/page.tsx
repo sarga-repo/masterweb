@@ -56,8 +56,13 @@ const FALLBACK: GalleryItem[] = [
 ];
 
 export default async function GalleryPage() {
-  const [page, cmsItems] = await Promise.all([fetchSitePage("custom", "/gallery"), fetchGalleryItems()]);
-  const intro = page?.sections.find((section) => section.sectionKey === "gallery-intro");
+  const [page, cmsItems] = await Promise.all([
+    fetchSitePage("custom", "/gallery"),
+    fetchGalleryItems(),
+  ]);
+  const intro = page?.sections.find(
+    (section) => section.sectionKey === "gallery-intro",
+  );
   const items = cmsItems.length >= 3 ? cmsItems : FALLBACK;
 
   return (
@@ -69,9 +74,13 @@ export default async function GalleryPage() {
             <p className="ms-kicker text-ms-electric-yellow">
               {intro?.eyebrow ?? "Trackside capture feed"}
             </p>
-            <h1 className="ms-heading-page mt-6 text-ms-warm-white">{page?.heroTitle ?? "Gallery"}</h1>
+            <h1 className="ms-heading-page mt-6 text-ms-warm-white">
+              {page?.heroTitle ?? "Gallery"}
+            </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-ms-warm-white/72">
-              {page?.heroDescription ?? intro?.body ?? "Circuit, rally, motorcycle, paddock, people, and fan energy—one bright visual record of Motorsport in motion."}
+              {page?.heroDescription ??
+                intro?.body ??
+                "Circuit, rally, motorcycle, paddock, people, and fan energy—one bright visual record of Motorsport in motion."}
             </p>
           </div>
           <dl className="grid grid-cols-3 border-l border-ms-warm-white/20">

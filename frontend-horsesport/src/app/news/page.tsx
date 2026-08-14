@@ -9,14 +9,14 @@ import { getRequestLocale } from "@/lib/i18n/request";
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
   const page = await fetchNewsPageConfig();
-    return createMetadata({
+  return createMetadata({
     title: page?.heroTitle ?? "News",
     description:
       page?.heroDescription ??
       "Race results, event announcements, turf and venue stories, stable life, jockey features, and equine performance from Sarga Horse Sport.",
-      path: "/news",
-      seo: page?.seo,
-      locale,
+    path: "/news",
+    seo: page?.seo,
+    locale,
   });
 }
 
@@ -67,9 +67,15 @@ export default async function NewsPage({ searchParams }: Params) {
       <PageHero
         eyebrow={archiveSection?.eyebrow ?? "News & publications"}
         title={page?.heroTitle ?? "Every story from the turf."}
-        description={page?.heroDescription ?? "Race results, jockey stories, turf and venue development, and stable-life editorial - curated by the Sarga Horse Sport team."}
+        description={
+          page?.heroDescription ??
+          "Race results, jockey stories, turf and venue development, and stable-life editorial - curated by the Sarga Horse Sport team."
+        }
         backgroundImage={page?.heroImage ?? "/media/news-turf-track.png"}
-        backgroundAlt={page?.heroImageAlt ?? "Aerial view of a curved championship turf track"}
+        backgroundAlt={
+          page?.heroImageAlt ??
+          "Aerial view of a curved championship turf track"
+        }
         accent="turf"
       />
 
@@ -90,7 +96,7 @@ export default async function NewsPage({ searchParams }: Params) {
         ) : (
           <div className="hs-card-glass mt-12 p-12 text-center">
             <p className="hs-display text-2xl text-hs-cream">
-               {archiveSection?.body ?? "No stories in this category yet."}
+              {archiveSection?.body ?? "No stories in this category yet."}
             </p>
             <Link
               href="/news"

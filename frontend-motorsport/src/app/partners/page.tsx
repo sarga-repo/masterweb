@@ -35,17 +35,24 @@ const PLACEHOLDER: PartnerItem[] = [
 ];
 
 export default async function PartnersPage() {
-  const [page, cmsPartners] = await Promise.all([fetchSitePage("custom", "/partners"), fetchPartners()]);
-  const control = page?.sections.find((section) => section.sectionKey === "partner-control");
-  const network = page?.sections.find((section) => section.sectionKey === "partner-network");
+  const [page, cmsPartners] = await Promise.all([
+    fetchSitePage("custom", "/partners"),
+    fetchPartners(),
+  ]);
+  const control = page?.sections.find(
+    (section) => section.sectionKey === "partner-control",
+  );
+  const network = page?.sections.find(
+    (section) => section.sectionKey === "partner-network",
+  );
   const partners = cmsPartners.length > 0 ? cmsPartners : PLACEHOLDER;
 
   return (
     <PageShell spectrumSeparators>
       <PageHero
-         kicker={page?.navigationLabel ?? "Official partners & sponsors"}
+        kicker={page?.navigationLabel ?? "Official partners & sponsors"}
         kickerColor="orange"
-         title={page?.heroTitle ?? "Partners"}
+        title={page?.heroTitle ?? "Partners"}
         backgroundImage="/media/hero/sarga-motorsport-hero-circuit-golden-hour.jpg"
         backgroundAlt="Sarga Motorsport circuit and grandstand in warm golden-hour light"
         accent="blue"
@@ -53,13 +60,19 @@ export default async function PartnersPage() {
         grain
         speedLines
         surface="heat"
-         description={page?.heroDescription ?? "The brands and organisations fuelling the Sarga Motorsport ecosystem. Together we build the stage for Indonesia's most ambitious racing platform."}
+        description={
+          page?.heroDescription ??
+          "The brands and organisations fuelling the Sarga Motorsport ecosystem. Together we build the stage for Indonesia's most ambitious racing platform."
+        }
       />
 
       <InformationBand
-         eyebrow={control?.eyebrow ?? "Partner control / Shared platform"}
-         title={control?.title ?? "One grid. Shared ambition."}
-         description={control?.body ?? "The partner network supports competition, event delivery, audience experience, and long-term talent development."}
+        eyebrow={control?.eyebrow ?? "Partner control / Shared platform"}
+        title={control?.title ?? "One grid. Shared ambition."}
+        description={
+          control?.body ??
+          "The partner network supports competition, event delivery, audience experience, and long-term talent development."
+        }
         items={[
           { label: "Network", value: String(partners.length).padStart(2, "0") },
           { label: "Scope", value: "Motorsport" },
@@ -71,9 +84,12 @@ export default async function PartnersPage() {
         <div className="ms-shell">
           <SectionHeader
             index="NETWORK"
-             eyebrow={network?.eyebrow ?? "Official partners"}
-             title={network?.title ?? "The grid."}
-             description={network?.body ?? "Published partner records come from the shared CMS and remain scoped to the Motorsport site."}
+            eyebrow={network?.eyebrow ?? "Official partners"}
+            title={network?.title ?? "The grid."}
+            description={
+              network?.body ??
+              "Published partner records come from the shared CMS and remain scoped to the Motorsport site."
+            }
           />
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {partners.map((partner, index) => {

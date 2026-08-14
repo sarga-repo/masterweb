@@ -3,10 +3,7 @@
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import type { ComponentProps } from "react";
-import {
-  localeFromPathname,
-  localizeKnownSiteHref,
-} from "@/lib/i18n/config";
+import { localeFromPathname, localizeKnownSiteHref } from "@/lib/i18n/config";
 
 export function LocaleLink({
   href,

@@ -29,7 +29,9 @@ export default async function StableLifePage() {
     fetchNewsPage(),
     fetchHorseSportPage("/stable-life"),
   ]);
-  const intro = page?.sections.find((section) => section.sectionKey === "intro");
+  const intro = page?.sections.find(
+    (section) => section.sectionKey === "intro",
+  );
   const stable = articles.filter((a) =>
     STABLE_CATEGORIES.some((c) => a.category?.toLowerCase().includes(c)),
   );
@@ -40,7 +42,10 @@ export default async function StableLifePage() {
       <PageHero
         eyebrow="Stable Life"
         title={page?.heroTitle ?? "The discipline behind the sport."}
-        description={page?.heroDescription ?? "Inside the stable - training, veterinary care, jockey routines, and the craft that shapes a champion."}
+        description={
+          page?.heroDescription ??
+          "Inside the stable - training, veterinary care, jockey routines, and the craft that shapes a champion."
+        }
         backgroundImage={page?.heroImage ?? "/media/news-stable.png"}
         backgroundAlt="Elite race horse inside a premium stable interior"
         accent="brown"
@@ -52,7 +57,10 @@ export default async function StableLifePage() {
             index="01"
             eyebrow={intro?.eyebrow ?? "Editorial hub"}
             title={intro?.title ?? "Where champions are made."}
-            description={intro?.body ?? "Nutrition, veterinary care, and the daily routines that shape a championship contender - plus the jockeys and equine athletes at the heart of the sport."}
+            description={
+              intro?.body ??
+              "Nutrition, veterinary care, and the daily routines that shape a championship contender - plus the jockeys and equine athletes at the heart of the sport."
+            }
           />
         </ScrollReveal>
 

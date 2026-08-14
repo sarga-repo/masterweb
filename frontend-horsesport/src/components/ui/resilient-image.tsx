@@ -21,9 +21,7 @@ export function ResilientImage({
   const resolvedSrc = failed ? fallbackSrc : src;
   const isLocalCmsMedia =
     typeof resolvedSrc === "string" &&
-    /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?\//.test(
-      resolvedSrc,
-    );
+    /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?\//.test(resolvedSrc);
 
   return (
     <Image

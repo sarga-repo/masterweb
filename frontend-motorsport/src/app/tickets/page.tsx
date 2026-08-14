@@ -34,9 +34,17 @@ const PLACEHOLDER_CTAS: Array<{
 ];
 
 export default async function TicketsPage() {
-  const [page, events, ctas] = await Promise.all([fetchSitePage("custom", "/tickets"), fetchEvents(), fetchTicketCtas()]);
-  const control = page?.sections.find((section) => section.sectionKey === "ticket-control");
-  const featured = page?.sections.find((section) => section.sectionKey === "featured-ticket");
+  const [page, events, ctas] = await Promise.all([
+    fetchSitePage("custom", "/tickets"),
+    fetchEvents(),
+    fetchTicketCtas(),
+  ]);
+  const control = page?.sections.find(
+    (section) => section.sectionKey === "ticket-control",
+  );
+  const featured = page?.sections.find(
+    (section) => section.sectionKey === "featured-ticket",
+  );
 
   const ticketedEvents = events.filter((e) => e.ticketHref);
   const displayCtas = ctas.length > 0 ? ctas : PLACEHOLDER_CTAS;
@@ -44,9 +52,9 @@ export default async function TicketsPage() {
   return (
     <PageShell spectrumSeparators>
       <PageHero
-         kicker={page?.navigationLabel ?? "Curated ticket journey"}
+        kicker={page?.navigationLabel ?? "Curated ticket journey"}
         kickerColor="orange"
-         title={page?.heroTitle ?? "Tickets"}
+        title={page?.heroTitle ?? "Tickets"}
         backgroundImage="/media/motorsport-design-hero.png"
         backgroundAlt="Race car throwing sparks under circuit lights"
         accent="orange"
@@ -54,13 +62,19 @@ export default async function TicketsPage() {
         grain
         speedLines
         surface="heat"
-         description={page?.heroDescription ?? "Sarga Motorsport partners with approved ticketing platforms. Every CTA below redirects to a secure partner checkout - we never process payment directly."}
+        description={
+          page?.heroDescription ??
+          "Sarga Motorsport partners with approved ticketing platforms. Every CTA below redirects to a secure partner checkout - we never process payment directly."
+        }
       />
 
       <InformationBand
-         eyebrow={control?.eyebrow ?? "Ticket control / Partner routing"}
-         title={control?.title ?? "Your seat. Their secure checkout."}
-         description={control?.body ?? "Sarga Motorsport publishes approved destinations but never stores payment details or runs an internal ticket engine."}
+        eyebrow={control?.eyebrow ?? "Ticket control / Partner routing"}
+        title={control?.title ?? "Your seat. Their secure checkout."}
+        description={
+          control?.body ??
+          "Sarga Motorsport publishes approved destinations but never stores payment details or runs an internal ticket engine."
+        }
         items={[
           { label: "Checkout", value: "Partner" },
           { label: "Payment", value: "External" },
@@ -72,8 +86,8 @@ export default async function TicketsPage() {
       <section className="ms-reflected-light-surface ms-section">
         <div className="ms-shell">
           <SectionHeader
-             eyebrow={featured?.eyebrow ?? "Featured ticket"}
-             title={featured?.title ?? "Secure your seat."}
+            eyebrow={featured?.eyebrow ?? "Featured ticket"}
+            title={featured?.title ?? "Secure your seat."}
             align="left"
           />
           <div className="mt-12 space-y-8">

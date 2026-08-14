@@ -74,8 +74,12 @@ export default async function NewsPage() {
   ]);
   const articles = cmsArticles.length > 0 ? cmsArticles : PLACEHOLDER;
   const [featured, ...rest] = articles;
-  const leadSection = page?.sections.find((section) => section.sectionKey === "lead-story");
-  const archiveSection = page?.sections.find((section) => section.sectionKey === "archive-intro");
+  const leadSection = page?.sections.find(
+    (section) => section.sectionKey === "lead-story",
+  );
+  const archiveSection = page?.sections.find(
+    (section) => section.sectionKey === "archive-intro",
+  );
 
   return (
     <PageShell spectrumSeparators>
@@ -86,9 +90,12 @@ export default async function NewsPage() {
             <p className="ms-kicker text-ms-electric-yellow">
               {leadSection?.eyebrow ?? "Editorial / From the paddock"}
             </p>
-            <h1 className="ms-heading-page mt-6 text-ms-warm-white">{page?.heroTitle ?? "News"}</h1>
+            <h1 className="ms-heading-page mt-6 text-ms-warm-white">
+              {page?.heroTitle ?? "News"}
+            </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-ms-warm-white/72">
-              {page?.heroDescription ?? "Race reports, rider profiles, technical detail, and the culture moving Indonesian motorsport forward—across four wheels and two."}
+              {page?.heroDescription ??
+                "Race reports, rider profiles, technical detail, and the culture moving Indonesian motorsport forward—across four wheels and two."}
             </p>
           </div>
           <div className="border-t border-ms-warm-white/20 pt-5 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
@@ -108,7 +115,10 @@ export default async function NewsPage() {
       <InformationBand
         eyebrow={leadSection?.eyebrow ?? "Editorial control / Motorsport"}
         title={leadSection?.title ?? "Stories at race pace."}
-        description={leadSection?.body ?? "Reports, announcements, people, technology, and culture—published from the Motorsport-scoped editorial feed."}
+        description={
+          leadSection?.body ??
+          "Reports, announcements, people, technology, and culture—published from the Motorsport-scoped editorial feed."
+        }
         items={[
           { label: "Stories", value: String(articles.length).padStart(2, "0") },
           { label: "Lead", value: featured?.category ?? "News" },

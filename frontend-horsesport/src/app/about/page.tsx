@@ -71,7 +71,9 @@ export default async function AboutPage() {
     fetchHorseSportBusiness(),
     fetchHorseSportPage("/about"),
   ]);
-  const story = page?.sections.find((section) => section.sectionKey === "story");
+  const story = page?.sections.find(
+    (section) => section.sectionKey === "story",
+  );
   const capabilities = page?.sections.find(
     (section) => section.sectionKey === "capabilities",
   );
@@ -84,8 +86,13 @@ export default async function AboutPage() {
       <PageHero
         eyebrow="About"
         title={page?.heroTitle ?? "The standard for elite horse sport."}
-        description={page?.heroDescription ?? "Premium championship racing, disciplined equestrian standards, and a hospitality-forward experience - positioned for a national and international audience."}
-        backgroundImage={page?.heroImage ?? "/media/sarga-horse-sport-concept.png"}
+        description={
+          page?.heroDescription ??
+          "Premium championship racing, disciplined equestrian standards, and a hospitality-forward experience - positioned for a national and international audience."
+        }
+        backgroundImage={
+          page?.heroImage ?? "/media/sarga-horse-sport-concept.png"
+        }
         backgroundAlt="Cinematic concept image of a jockey and thoroughbred in motion"
         accent="brown"
       />
@@ -97,7 +104,9 @@ export default async function AboutPage() {
             <SectionHeader
               index="01"
               eyebrow={story?.eyebrow ?? "The Sarga Horse Sport story"}
-              title={story?.title ?? "Heritage, engineered for the modern spectacle."}
+              title={
+                story?.title ?? "Heritage, engineered for the modern spectacle."
+              }
             />
             <RichText value={story?.body ?? overview} className="mt-6" />
           </ScrollReveal>
@@ -126,8 +135,13 @@ export default async function AboutPage() {
             <SectionHeader
               index="02"
               eyebrow={capabilities?.eyebrow ?? "What we do"}
-              title={capabilities?.title ?? "A complete championship capability."}
-              description={capabilities?.body ?? "Everything required to run elite horse sport to international standard - under one disciplined organisation."}
+              title={
+                capabilities?.title ?? "A complete championship capability."
+              }
+              description={
+                capabilities?.body ??
+                "Everything required to run elite horse sport to international standard - under one disciplined organisation."
+              }
             />
           </ScrollReveal>
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

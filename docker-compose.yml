@@ -33,6 +33,11 @@ services:
       context: .
       dockerfile: docker/strapi.Dockerfile
     restart: unless-stopped
+    # Strapi cryptographic material must be identical for host and container
+    # processes sharing this database. Loading cms/.env prevents API/admin
+    # tokens from becoming invalid when switching local run modes.
+    env_file:
+      - ./cms/.env
     ports:
       - "1337:1337"
     environment:
@@ -48,12 +53,6 @@ services:
       DATABASE_USERNAME: ${POSTGRES_USER:-sarga}
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-sarga_local_password}
       DATABASE_SSL: "false"
-      APP_KEYS: ${STRAPI_APP_KEYS:-localKey1,localKey2,localKey3,localKey4}
-      API_TOKEN_SALT: ${STRAPI_API_TOKEN_SALT:-localApiTokenSalt}
-      ADMIN_JWT_SECRET: ${STRAPI_ADMIN_JWT_SECRET:-localAdminJwtSecret}
-      TRANSFER_TOKEN_SALT: ${STRAPI_TRANSFER_TOKEN_SALT:-localTransferTokenSalt}
-      JWT_SECRET: ${STRAPI_JWT_SECRET:-localJwtSecret}
-      ENCRYPTION_KEY: ${STRAPI_ENCRYPTION_KEY:-localEncryptionKey}
       # Exchange Online mail is opt-in and disabled in local Docker by default.
       MAIL_ENABLED: ${MAIL_ENABLED:-false}
       MAIL_AUTH_MODE: ${MAIL_AUTH_MODE:-oauth}
@@ -80,6 +79,16 @@ services:
       MAIL_WORKER_CRON: ${MAIL_WORKER_CRON:-*/1 * * * *}
       # Local-only demo seed; idempotent (see cms/src/seed.ts).
       SEED_DEMO_CONTENT: ${SEED_DEMO_CONTENT:-true}
+      # One-shot opt-in migration from legacy Site Page records to the
+      # Motorsport page Single Types. Keep false after the first successful run.
+      MOTORSPORT_PAGE_SINGLE_TYPES_MIGRATE: ${MOTORSPORT_PAGE_SINGLE_TYPES_MIGRATE:-false}
+      # Explicit ownership migration gate: off | dry-run | apply | verify.
+      # Never set apply in a long-lived environment variable after a successful run.
+      MOTORSPORT_OWNERSHIP_MIGRATION_MODE: ${MOTORSPORT_OWNERSHIP_MIGRATION_MODE:-off}
+      # Reversible post-cutover archive of legacy shared Motorsport records.
+      MOTORSPORT_LEGACY_RETIREMENT_MODE: ${MOTORSPORT_LEGACY_RETIREMENT_MODE:-off}
+      MOTORSPORT_REVALIDATION_SECRET: ${MOTORSPORT_REVALIDATION_SECRET:-}
+      MOTORSPORT_FRONTEND_REVALIDATE_URL: ${MOTORSPORT_FRONTEND_REVALIDATE_URL:-http://frontend-motorsport:3001/api/revalidate}
     volumes:
       - ./cms:/app
       - strapi_node_modules:/app/node_modules
@@ -109,6 +118,7 @@ services:
       STRAPI_API_URL: ${STRAPI_API_URL:-http://strapi:1337}
       STRAPI_API_URL_INTERNAL: ${STRAPI_API_URL_INTERNAL:-http://strapi:1337}
       STRAPI_API_TOKEN: ${STRAPI_API_TOKEN:-}
+      MOTORSPORT_REVALIDATION_SECRET: ${MOTORSPORT_REVALIDATION_SECRET:-}
     volumes:
       - ./frontend-gateway:/app
       - /app/node_modules
@@ -134,7 +144,8 @@ services:
       # Browser-reachable Strapi (media/image URLs).
       NEXT_PUBLIC_STRAPI_API_URL: ${NEXT_PUBLIC_STRAPI_API_URL:-http://localhost:1337}
       # Server-side content fetch uses the internal service hostname.
-      STRAPI_API_URL: ${STRAPI_API_URL:-http://strapi:1337}
+      # Do not inherit a host-only localhost value from the root .env.
+      STRAPI_API_URL: http://strapi:1337
       STRAPI_API_TOKEN: ${STRAPI_API_TOKEN:-}
     ports:
       - "3001:3001"

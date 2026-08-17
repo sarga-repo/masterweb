@@ -16,6 +16,12 @@
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "slug": { "type": "uid", "targetField": "title", "required": true },
+    "eventMenuLabel": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": true } },
+      "description": "Short localized label used in the Motorsport Event navigation dropdown."
+    },
+    "eventMenuEnabled": { "type": "boolean", "default": true },
     "programType": {
       "type": "enumeration",
       "enum": ["juniorTalentCup", "rallycross", "raceWeekend", "other"],
@@ -124,6 +130,13 @@
       "type": "component",
       "component": "shared.seo",
       "repeatable": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "motorsportPresentation": {
+      "type": "component",
+      "component": "motorsport.detail-presentation",
+      "repeatable": false,
+      "required": false,
       "pluginOptions": { "i18n": { "localized": true } }
     }
   }

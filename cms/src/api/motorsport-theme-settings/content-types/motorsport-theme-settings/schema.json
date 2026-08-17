@@ -1,0 +1,34 @@
+{
+  "kind": "singleType",
+  "info": {
+    "singularName": "motorsport-theme-settings",
+    "pluralName": "motorsport-theme-settings-configs",
+    "displayName": "Motorsport Theme Settings",
+    "description": "Allowlisted visual theme preset for the Motorsport website."
+  },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": { "i18n": { "localized": false } },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Motorsport Theme Settings",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["motorsport"],
+      "default": "motorsport",
+      "required": true,
+      "private": true,
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "themePreset": {
+      "type": "enumeration",
+      "enum": ["current-motorsport", "vendor-editorial", "vendor-night"],
+      "default": "current-motorsport",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": false } }
+    }
+  }
+}

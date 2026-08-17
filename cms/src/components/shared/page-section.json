@@ -7,6 +7,12 @@
   "options": {},
   "attributes": {
     "sectionKey": { "type": "string", "required": true },
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "required": false,
+      "description": "Controls whether this section is rendered on the public page."
+    },
     "eyebrow": { "type": "string" },
     "title": { "type": "string", "required": true },
     "body": { "type": "richtext" },

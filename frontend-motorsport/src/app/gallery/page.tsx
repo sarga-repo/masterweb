@@ -1,8 +1,19 @@
 import type { Metadata } from "next";
 
-import { GalleryArchive, LightLineField, PageShell } from "@/components";
+import {
+  GalleryArchive,
+  MotorsportMetricGroup,
+  MotorsportPageInformationBand,
+  PageComingSoon,
+  PageHero,
+  PageShell,
+  type GalleryFilterKey,
+} from "@/components";
 import { fetchGalleryItems, fetchSitePage } from "@/lib/cms-data";
 import type { GalleryItem } from "@/types/design-system";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
+import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
 
 export const metadata: Metadata = {
   title: "Gallery",
@@ -55,83 +66,186 @@ const FALLBACK: GalleryItem[] = [
   },
 ];
 
-export default async function GalleryPage() {
-  const [page, cmsItems] = await Promise.all([
-    fetchSitePage("custom", "/gallery"),
-    fetchGalleryItems(),
+type GalleryPageProps = {
+  searchParams: Promise<{
+    page?: string;
+    category?: string;
+  }>;
+};
+
+const GALLERY_PAGE_SIZE = 1;
+const GALLERY_CATEGORIES = [
+  "race-day",
+  "stable-life",
+  "venue",
+  "jockey",
+  "hospitality",
+  "press",
+  "circuit",
+  "two-wheels",
+  "mixed-surface",
+  "other",
+] as const satisfies ReadonlyArray<Exclude<GalleryFilterKey, "all">>;
+
+function parseGalleryCategory(value?: string): Exclude<GalleryFilterKey, "all"> | undefined {
+  return GALLERY_CATEGORIES.includes(
+    value as Exclude<GalleryFilterKey, "all">,
+  )
+    ? (value as Exclude<GalleryFilterKey, "all">)
+    : undefined;
+}
+
+export default async function GalleryPage({
+  searchParams,
+}: GalleryPageProps) {
+  const locale = await getRequestLocale();
+  const query = await searchParams;
+  const requestedPage = Number(query.page);
+  const currentPage =
+    Number.isInteger(requestedPage) && requestedPage > 0
+      ? requestedPage
+      : 1;
+  const activeCategory = parseGalleryCategory(query.category);
+  const [page, galleryPage] = await Promise.all([
+    fetchSitePage("custom", "/gallery", locale),
+    fetchGalleryItems({
+      page: currentPage,
+      pageSize: 8,
+      locale,
+      category: activeCategory,
+    }),
   ]);
+  const isPreview = await isStrapiPreviewEnabled();
   const intro = page?.sections.find(
     (section) => section.sectionKey === "gallery-intro",
   );
-  const items = cmsItems.length >= 3 ? cmsItems : FALLBACK;
+  const archive = page?.sections.find(
+    (section) => section.sectionKey === "gallery-archive",
+  );
+  const items = isPreview || galleryPage.items.length > 0
+    ? galleryPage.items
+    : FALLBACK;
+  const pageAvailable = isCmsPageVisible(page?.pageAvailability);
+  const availableCategories = galleryPage.availableCategories.length
+    ? galleryPage.availableCategories
+    : ["circuit", "two-wheels", "mixed-surface"];
 
   return (
     <PageShell spectrumSeparators>
-      <section className="ms-gallery-intro">
-        <LightLineField />
-        <div className="ms-shell relative z-10 grid gap-10 py-18 sm:py-24 lg:grid-cols-[minmax(0,1.3fr)_minmax(17rem,.7fr)] lg:items-end">
-          <div>
-            <p className="ms-kicker text-ms-electric-yellow">
-              {intro?.eyebrow ?? "Trackside capture feed"}
-            </p>
-            <h1 className="ms-heading-page mt-6 text-ms-warm-white">
-              {page?.heroTitle ?? "Gallery"}
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-ms-warm-white/72">
-              {page?.heroDescription ??
-                intro?.body ??
-                "Circuit, rally, motorcycle, paddock, people, and fan energy—one bright visual record of Motorsport in motion."}
-            </p>
-          </div>
-          <dl className="grid grid-cols-3 border-l border-ms-warm-white/20">
-            {[
-              ["Frames", String(items.length).padStart(2, "0")],
-              ["Format", "Editorial"],
-              ["Scope", "Motorsport"],
-            ].map(([label, value]) => (
-              <div
-                key={label}
-                className="border-r border-ms-warm-white/20 px-4 py-2"
+      {!pageAvailable ? (
+        <PageComingSoon
+          availability={page?.pageAvailability ?? { pageEnabled: false }}
+        />
+      ) : (
+        <>
+          {page?.heroEnabled !== false ? (
+            <div
+              data-cms-section-key="hero"
+              data-cms-enabled="true"
+              data-cms-source={page ? "strapi" : "fallback"}
+            >
+              <PageHero
+                kicker={intro?.eyebrow ?? "Trackside capture feed"}
+                kickerColor="yellow"
+                title={page?.heroTitle ?? "Gallery"}
+                description={
+                  page?.heroDescription ??
+                  "Circuit, rally, motorcycle, paddock, people, and fan energy—one bright visual record of Motorsport in motion."
+                }
+                backgroundImage={page?.heroImage}
+                backgroundAlt={
+                  page?.heroImageAlt || "Sarga Motorsport gallery scene"
+                }
               >
-                <dt className="ms-data-label text-ms-slipstream-teal">
-                  {label}
-                </dt>
-                <dd className="ms-tabular mt-3 text-xs font-extrabold uppercase tracking-[0.06em] text-ms-warm-white sm:text-sm">
-                  {value}
-                </dd>
+                {isCmsSectionVisible(intro) ? (
+                  <MotorsportMetricGroup
+                    items={
+                      page?.hero?.showMetricGroup === false
+                        ? []
+                        : page?.hero?.metrics?.length
+                          ? page.hero.metrics
+                          : [
+                              {
+                                label: "Frames",
+                                value: String(items.length).padStart(2, "0"),
+                              },
+                              { label: "Format", value: "Editorial" },
+                              { label: "Scope", value: "Motorsport" },
+                            ]
+                    }
+                    labelClassName="text-ms-slipstream-teal"
+                    className="max-w-3xl"
+                  />
+                ) : null}
+              </PageHero>
+            </div>
+          ) : null}
+
+          {pageAvailable ? (
+            <div
+              data-cms-section-key="information-band"
+              data-cms-enabled="true"
+            >
+              <MotorsportPageInformationBand
+                band={page?.informationBand}
+                fallback={{
+                  title: "Every frame carries the race forward.",
+                  description:
+                    "Trackside photography, rider energy, and paddock detail remain in one published Motorsport visual record.",
+                  metrics: [
+                    {
+                      label: "Frames",
+                      value: String(items.length).padStart(2, "0"),
+                    },
+                    { label: "Format", value: "Editorial" },
+                    { label: "Scope", value: "Motorsport" },
+                  ],
+                }}
+              />
+            </div>
+          ) : null}
+
+          {isCmsSectionVisible(archive) ? (
+            <section
+              data-cms-section-key="gallery-archive"
+              data-cms-enabled="true"
+              className="ms-gallery-wall ms-gallery-archive-light ms-section"
+            >
+              <div className="ms-shell">
+                <div className="grid gap-8 border-t border-ms-warm-white/14 pt-5 lg:grid-cols-[minmax(0,1.3fr)_minmax(18rem,.7fr)]">
+                  <div>
+                    <p className="ms-kicker text-ms-apex-crimson">
+                      {archive?.eyebrow ?? "SYS / Gallery / Published media"}
+                    </p>
+                    <h2 className="ms-heading-section mt-6 max-w-[12ch]">
+                      {archive?.title ?? "Motion, recorded."}
+                    </h2>
+                  </div>
+                  <div className="self-end border-l border-ms-slipstream-teal/45 pl-5">
+                    <p className="ms-data-label text-ms-slipstream-teal">
+                      How to browse
+                    </p>
+                    <p className="mt-4 text-base leading-7 text-ms-warm-white/62">
+                      {archive?.body ??
+                        "Filter the archive by discipline. Select any frame to open the full-screen viewer, then browse with the arrow controls."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-12 sm:mt-16">
+                  <GalleryArchive
+                    items={items}
+                    availableCategories={availableCategories}
+                    activeFilter={activeCategory ?? "all"}
+                    page={galleryPage.page}
+                    pageCount={galleryPage.pageCount}
+                  />
+                </div>
               </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-
-      <section className="ms-gallery-wall ms-section">
-        <div className="ms-shell">
-          <div className="grid gap-8 border-t border-ms-warm-white/14 pt-5 lg:grid-cols-[minmax(0,1.3fr)_minmax(18rem,.7fr)]">
-            <div>
-              <p className="ms-kicker text-ms-apex-crimson">
-                SYS / Gallery / Published media
-              </p>
-              <h2 className="ms-heading-section mt-6 max-w-[12ch]">
-                Motion, recorded.
-              </h2>
-            </div>
-            <div className="self-end border-l border-ms-slipstream-teal/45 pl-5">
-              <p className="ms-data-label text-ms-slipstream-teal">
-                How to browse
-              </p>
-              <p className="mt-4 text-base leading-7 text-ms-warm-white/62">
-                Filter the archive by discipline. Select any frame to open the
-                full-screen viewer, then browse with the arrow controls.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-12 sm:mt-16">
-            <GalleryArchive items={items.slice(0, 18)} />
-          </div>
-        </div>
-      </section>
+            </section>
+          ) : null}
+        </>
+      )}
     </PageShell>
   );
 }

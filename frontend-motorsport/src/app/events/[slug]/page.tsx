@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import {
   InformationBand,
+  MotorsportMetricGroup,
   PageHero,
   PageShell,
   PartnerLogoStrip,
@@ -12,9 +13,26 @@ import {
   TicketCtaPanel,
 } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
-import { fetchEventBySlug, fetchPartners } from "@/lib/cms-data";
+import {
+  fetchEventBySlug,
+  fetchPartners,
+  mapCmsSeo,
+  type CmsSeo,
+} from "@/lib/cms-data";
+import type {
+  MotorsportInformationBandMetric,
+  MotorsportPageHero,
+  MotorsportPageInformationBand,
+} from "@/lib/motorsport-page-foundation";
+import { RallycrossCampaignPage } from "@/app/campaign/[slug]/page";
+import {
+  FIA_RALLYCROSS_PATH,
+  FIA_RALLYCROSS_SLUG,
+  getFiaRallycrossCampaign,
+} from "@/lib/rallycross-data";
 import { createMetadata } from "@/lib/seo/metadata";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
 import type { MotorsportEvent } from "@/types/design-system";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -22,7 +40,7 @@ type Props = { params: Promise<{ slug: string }> };
 /* Placeholder events shown when CMS is unreachable. */
 const PLACEHOLDER_MAP: Record<
   string,
-  MotorsportEvent & { description?: string }
+  MotorsportEvent & { description?: string; seo?: CmsSeo | null }
 > = {
   "race-weekend-indonesia": {
     title: "Race Weekend Indonesia",
@@ -82,9 +100,36 @@ const PLACEHOLDER_MAP: Record<
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [{ slug }, locale] = await Promise.all([params, getRequestLocale()]);
-  const event = await fetchEventBySlug(slug);
+  if (slug === FIA_RALLYCROSS_SLUG) {
+    const campaign = await getFiaRallycrossCampaign(locale);
+    if (!campaign) return { title: "Event not found" };
+    return createMetadata({
+      title: campaign.seo?.title ?? campaign.title,
+      description: campaign.seo?.description ?? campaign.summary,
+      path: FIA_RALLYCROSS_PATH,
+      image: campaign.seo?.image ?? campaign.image,
+      locale,
+      isFallback: Boolean(campaign.seo?.noIndex),
+      seo: {
+        metaTitle: campaign.seo?.title,
+        metaDescription: campaign.seo?.description,
+        ogTitle: campaign.seo?.ogTitle,
+        ogDescription: campaign.seo?.ogDescription,
+        ogImageUrl:
+          typeof campaign.seo?.image === "string"
+            ? campaign.seo.image
+            : campaign.seo?.image?.src,
+        canonicalUrl: campaign.seo?.canonical,
+        noIndex: campaign.seo?.noIndex,
+      },
+    });
+  }
+  const [event, isPreview] = await Promise.all([
+    fetchEventBySlug(slug, locale),
+    isStrapiPreviewEnabled(),
+  ]);
   const fallback = PLACEHOLDER_MAP[slug];
-  const resolved = event ?? fallback;
+  const resolved = event ?? (isPreview ? undefined : fallback);
   if (!resolved) return { title: "Event not found" };
   const desc = `${resolved.title} - ${resolved.dateLabel} at ${resolved.venue}. Sarga Motorsport event.`;
   return createMetadata({
@@ -92,66 +137,126 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: desc,
     path: `/events/${slug}`,
     image: resolved.image,
+    seo: mapCmsSeo(resolved.seo),
     locale,
   });
 }
 
 export default async function EventDetailPage({ params }: Props) {
   const { slug } = await params;
-  const cmsEvent = await fetchEventBySlug(slug);
-  const event = cmsEvent ?? PLACEHOLDER_MAP[slug] ?? null;
+  if (slug === FIA_RALLYCROSS_SLUG) return <RallycrossCampaignPage />;
+  const locale = await getRequestLocale();
+  const [cmsEvent, isPreview] = await Promise.all([
+    fetchEventBySlug(slug, locale),
+    isStrapiPreviewEnabled(),
+  ]);
+  const event =
+    cmsEvent ?? (isPreview ? null : (PLACEHOLDER_MAP[slug] ?? null));
   if (!event) notFound();
+  const detailEvent = event as typeof event & {
+    presentation?: {
+      hero?: MotorsportPageHero | null;
+      informationBand?: MotorsportPageInformationBand | null;
+    };
+  };
+  const presentationHero = detailEvent.presentation?.hero;
+  const presentationBand = detailEvent.presentation?.informationBand;
 
-  const partners = await fetchPartners(5);
+  const partners =
+    event.sponsors?.length || isPreview
+      ? (event.sponsors ?? [])
+      : await fetchPartners(5, locale);
 
   return (
     <PageShell spectrumSeparators>
-      <PageHero
-        kicker={`${event.category ?? "Motorsport event"}${event.seriesName ? ` / ${event.seriesName}` : ""}`}
-        kickerColor="yellow"
-        title={event.title}
-        backgroundImage={event.image}
-        backgroundAlt={event.imageAlt}
-        accent="orange"
-        accentPosition="bottom-left"
-        surface="heat"
-        speedLines
-        grain
-      >
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-          <StatusChip status={event.status} />
-          <dl className="grid flex-1 grid-cols-2 border-l border-ms-warm-white/20 sm:max-w-2xl">
-            <div className="border-r border-ms-warm-white/20 px-4 py-1">
-              <dt className="ms-data-label text-ms-warm-white/48">Date</dt>
-              <dd className="ms-tabular mt-2 text-sm font-bold uppercase">
-                {event.dateLabel}
-              </dd>
+      {presentationHero?.isActive !== false ? (
+        <div data-cms-section-key="hero" data-cms-enabled="true">
+          <PageHero
+            kicker={
+              presentationHero?.eyebrow ||
+              `${event.category ?? "Motorsport event"}${event.seriesName ? ` / ${event.seriesName}` : ""}`
+            }
+            kickerColor="yellow"
+            title={presentationHero?.title || event.title}
+            description={presentationHero?.description}
+            backgroundImage={
+              presentationHero?.backgroundMedia?.url || event.image
+            }
+            backgroundAlt={
+              presentationHero?.backgroundMedia?.alt || event.imageAlt
+            }
+            accent="orange"
+            accentPosition="bottom-left"
+            surface="heat"
+            speedLines
+            grain
+          >
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+              <StatusChip status={event.status} />
+              {presentationHero?.showMetricGroup !== false ? (
+                <MotorsportMetricGroup
+                  items={
+                    presentationHero?.metrics?.length
+                      ? presentationHero.metrics
+                      : [
+                          { label: "Date", value: event.dateLabel },
+                          { label: "Circuit", value: event.venue },
+                        ]
+                  }
+                  columns="two"
+                  className="flex-1 sm:max-w-2xl"
+                  labelClassName="text-ms-warm-white/48"
+                  valueClassName="text-ms-warm-white"
+                />
+              ) : null}
             </div>
-            <div className="border-r border-ms-warm-white/20 px-4 py-1">
-              <dt className="ms-data-label text-ms-warm-white/48">Circuit</dt>
-              <dd className="mt-2 text-sm font-bold uppercase">
-                {event.venue}
-              </dd>
-            </div>
-          </dl>
+          </PageHero>
         </div>
-      </PageHero>
+      ) : null}
 
-      <InformationBand
-        eyebrow="Event control / Published briefing"
-        title="One event. Every essential signal."
-        description="The published event file keeps date, venue, sporting class, status, and approved ticket routing in one place."
-        items={[
-          { label: "Status", value: event.status.replaceAll("-", " ") },
-          { label: "Class", value: event.category ?? "Motorsport" },
-          {
-            label: "Tickets",
-            value: event.ticketHref ? "Available" : "Pending",
-          },
-        ]}
-      />
+      <div data-cms-section-key="event-control" data-cms-enabled="true">
+        <InformationBand
+          eyebrow={
+            presentationBand?.eyebrow || "Event control / Published briefing"
+          }
+          title={
+            presentationBand?.title || "One event. Every essential signal."
+          }
+          description={
+            presentationBand?.description ||
+            "The published event file keeps date, venue, sporting class, status, and approved ticket routing in one place."
+          }
+          showMetricGroup={presentationBand?.showMetricGroup !== false}
+          items={
+            presentationBand?.showMetricGroup === false
+              ? []
+              : presentationBand?.metrics?.length
+                ? presentationBand.metrics.map(
+                    (metric: MotorsportInformationBandMetric) => ({
+                      label: metric.label,
+                      value: metric.value,
+                    }),
+                  )
+                : [
+                    {
+                      label: "Status",
+                      value: event.status.replaceAll("-", " "),
+                    },
+                    { label: "Class", value: event.category ?? "Motorsport" },
+                    {
+                      label: "Tickets",
+                      value: event.ticketHref ? "Available" : "Pending",
+                    },
+                  ]
+          }
+        />
+      </div>
 
-      <section className="ms-blue-heat-surface ms-section">
+      <section
+        data-cms-section-key="event-overview"
+        data-cms-enabled="true"
+        className="ms-blue-heat-surface ms-section"
+      >
         <div className="ms-shell grid gap-14 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,.65fr)] lg:gap-20">
           <article>
             <SectionHeader
@@ -201,7 +306,11 @@ export default async function EventDetailPage({ params }: Props) {
       </section>
 
       {event.ticketHref ? (
-        <section className="ms-reflected-light-surface ms-section">
+        <section
+          data-cms-section-key="event-ticket"
+          data-cms-enabled="true"
+          className="ms-reflected-light-surface ms-section"
+        >
           <div className="ms-shell">
             <TicketCtaPanel
               eyebrow="Official ticketing"

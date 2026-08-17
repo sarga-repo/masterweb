@@ -173,7 +173,7 @@ export function MotorsportHero({ slides }: MotorsportHeroProps) {
                 webm={slide.video.webm}
                 poster={typeof poster === "string" ? poster : undefined}
                 paused={userPaused}
-                objectClassName={`object-cover ${anchorClass}`}
+                objectClassName={`object-contain bg-ms-charcoal sm:object-cover ${anchorClass}`}
               />
             ) : null}
           </div>
@@ -184,8 +184,6 @@ export function MotorsportHero({ slides }: MotorsportHeroProps) {
         aria-hidden="true"
         className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,.24)_0%,rgba(5,5,5,.08)_38%,rgba(5,5,5,.62)_100%),linear-gradient(90deg,rgba(5,5,5,.34)_0%,transparent_45%,rgba(5,5,5,.1)_100%)]"
       />
-      <div aria-hidden="true" className="ms-hero-copy-scrim absolute" />
-      <div aria-hidden="true" className="ms-apex-horizon absolute" />
 
       <div className="ms-shell relative z-10 flex min-h-[inherit] flex-col pb-8 pt-10 sm:pb-10 sm:pt-12">
         <div className="flex flex-1 items-center justify-center py-16 text-center sm:py-20">

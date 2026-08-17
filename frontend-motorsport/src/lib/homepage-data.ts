@@ -15,10 +15,22 @@ import type {
   MotorsportEvent,
   PartnerItem,
 } from "@/types/design-system";
+import type { Locale } from "@/lib/i18n/config";
+import { getRequestLocaleSafe } from "@/lib/i18n/request";
+import { resolvePreviewCollection } from "@/lib/preview/content-policy";
+import type { CmsPageAvailability } from "@/lib/cms-data";
+import {
+  isHomepageArticleVisible,
+  isHomepageEventVisible,
+  isHomepagePartnerVisible,
+  orderHomepageArticles,
+} from "@/lib/homepage-visibility";
 
 import {
   fetchStrapiList,
+  fetchStrapiSingle,
   mediaUrl,
+  isStrapiPreviewEnabled,
   type StrapiListResponse,
   type StrapiMedia,
 } from "./strapi/client";
@@ -31,15 +43,18 @@ export type HomepageData = {
   page: {
     heroTitle: string;
     heroDescription: string;
+    heroEnabled: boolean;
     heroImage?: string;
     heroImageAlt?: string;
     heroSlides: HomepageHeroSlide[];
+    pageAvailability?: CmsPageAvailability | null;
     informationBand: HomepageInformationBand;
     worldOfMotorsport: HomepageWorldSection;
     sections: {
       events: HomepageSectionCopy;
       news: HomepageSectionCopy;
       gallery: HomepageSectionCopy;
+      connectedRecords: HomepageSectionCopy;
     };
   };
   featuredEvent: MotorsportEvent | null;
@@ -53,11 +68,21 @@ export type HomepageData = {
     href: string;
     label: string;
     eventName?: string;
+    image?: string;
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    eventLabel?: string;
+    providerLabel?: string;
+    partnerLabel?: string;
+    footerText?: string;
   } | null;
 };
 
 export type HomepageInformationBand = {
   enabled: boolean;
+  showMetricGroup: boolean;
+  metrics: Array<{ label: string; value: string }>;
   eyebrow: string;
   title: string;
   description: string;
@@ -79,6 +104,7 @@ export type HomepageWorldSection = {
 };
 
 type HomepageSectionCopy = {
+  enabled: boolean;
   eyebrow: string;
   title: string;
   description: string;
@@ -96,6 +122,7 @@ type CmsEvent = {
   venue: string;
   venueAddress?: string;
   eventStatus: string;
+  showOnMotorsport?: boolean;
   racingCategory?: string;
   seriesName?: string;
   siteScope?: string;
@@ -110,6 +137,23 @@ type CmsTicketCta = {
   label: string;
   provider: string;
   url?: string;
+  image?: StrapiMedia | null;
+};
+
+type CmsTicketSection = {
+  isActive?: boolean;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  backgroundImage?: StrapiMedia | null;
+  eventLabel?: string;
+  eventText?: string;
+  providerLabel?: string;
+  providerText?: string;
+  partnerLabel?: string;
+  footerText?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
 };
 
 type CmsArticle = {
@@ -120,6 +164,9 @@ type CmsArticle = {
   excerpt?: string;
   category?: string;
   siteScope?: string;
+  showOnMotorsport?: boolean;
+  featuredOnMotorsport?: boolean;
+  isHotTopic?: boolean;
   coverImage?: StrapiMedia | null;
 };
 
@@ -127,6 +174,7 @@ type CmsPartner = {
   name: string;
   websiteUrl?: string;
   logo?: StrapiMedia | null;
+  isActive?: boolean;
 };
 
 type CmsGallery = {
@@ -137,6 +185,8 @@ type CmsGallery = {
 
 type CmsPageSection = {
   sectionKey: string;
+  isActive?: boolean;
+  enabled?: boolean;
   eyebrow?: string;
   title?: string;
   body?: string;
@@ -145,15 +195,42 @@ type CmsPageSection = {
 type CmsSitePage = {
   heroTitle?: string;
   heroDescription?: string;
+  heroEnabled?: boolean;
   heroMedia?: StrapiMedia | null;
   heroSlides?: CmsHeroSlide[];
   motorsportFeaturedEvent?: CmsEvent | null;
   motorsportInformationBand?: CmsInformationBand | null;
   motorsportWorldSection?: CmsWorldSection | null;
+  motorsportTicketSection?: CmsTicketSection | null;
+  pageAvailability?: CmsPageAvailability | null;
   sections?: CmsPageSection[];
 };
 
+type CmsHomeSinglePage = {
+  hero?: {
+    isActive?: boolean;
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    backgroundAlt?: string;
+    backgroundMedia?: StrapiMedia | null;
+    mobileBackgroundMedia?: StrapiMedia | null;
+  } | null;
+  heroSlides?: CmsHeroSlide[];
+  informationBand?: CmsInformationBand | null;
+  worldSection?: CmsWorldSection | null;
+  ticketSection?: CmsTicketSection | null;
+  pageAvailability?: CmsPageAvailability | null;
+  upcomingEventsSection?: CmsPageSection | null;
+  latestNewsSection?: CmsPageSection | null;
+  connectedRecordsSection?: CmsPageSection | null;
+  gallerySection?: CmsPageSection | null;
+};
+
 type CmsInformationBand = {
+  isActive?: boolean;
+  showMetricGroup?: boolean;
+  metrics?: Array<{ isActive?: boolean; label?: string; value?: string }>;
   enabled?: boolean;
   eyebrow?: string;
   title?: string;
@@ -304,7 +381,7 @@ function mapEvent(
 
 function mapArticle(
   entry: StrapiListResponse<CmsArticle>["data"][number],
-): MotorsportArticle {
+): MotorsportArticle & { featuredOnMotorsport?: boolean } {
   const img = entry.coverImage ?? null;
   return {
     title: entry.title ?? "Untitled article",
@@ -314,6 +391,8 @@ function mapArticle(
     category: entry.category ?? "Motorsport",
     publishedLabel: formatDate(entry.publishedDate ?? entry.publishedAt),
     excerpt: entry.excerpt ?? undefined,
+    featuredOnMotorsport:
+      entry.featuredOnMotorsport ?? entry.isHotTopic ?? false,
   };
 }
 
@@ -336,10 +415,27 @@ function sectionCopy(
 ): HomepageSectionCopy {
   const section = sections?.find((item) => item.sectionKey === key);
   return {
+    enabled: section?.enabled !== false,
     eyebrow: section?.eyebrow || fallback.eyebrow,
     title: section?.title || fallback.title,
     description: section?.body || fallback.description,
   };
+}
+
+function mapNamedSection(
+  section: CmsPageSection | null | undefined,
+  sectionKey: string,
+): CmsPageSection | null {
+  return section
+    ? {
+        sectionKey,
+        isActive: section.isActive,
+        enabled: section.isActive !== false,
+        eyebrow: section.eyebrow,
+        title: section.title,
+        body: section.body,
+      }
+    : null;
 }
 
 function safeHeroCtaUrl(value?: string): string | undefined {
@@ -399,27 +495,32 @@ function mapInformationBand(
   band?: CmsInformationBand | null,
 ): HomepageInformationBand {
   if (!band) return PLACEHOLDER_INFORMATION_BAND;
+  const metrics = (band.metrics ?? []).filter((metric) => metric.isActive !== false && metric.label && metric.value);
+  const metricValues = metrics.slice(0, 3).map((metric) => ({ label: metric.label!.trim(), value: metric.value!.trim() }));
   return {
-    enabled: band.enabled !== false,
+    enabled: band.isActive !== false && band.enabled !== false,
+    showMetricGroup: band.showMetricGroup !== false,
+    metrics: metricValues,
     eyebrow: band.eyebrow?.trim() || PLACEHOLDER_INFORMATION_BAND.eyebrow,
     title: band.title?.trim() || PLACEHOLDER_INFORMATION_BAND.title,
     description:
       band.description?.trim() || PLACEHOLDER_INFORMATION_BAND.description,
     nextEventLabel:
-      band.nextEventLabel?.trim() ||
+      metricValues[0]?.label || band.nextEventLabel?.trim() ||
       PLACEHOLDER_INFORMATION_BAND.nextEventLabel,
     ticketStatusLabel:
-      band.ticketStatusLabel?.trim() ||
+      metricValues[1]?.label || band.ticketStatusLabel?.trim() ||
       PLACEHOLDER_INFORMATION_BAND.ticketStatusLabel,
     regionLabel:
-      band.regionLabel?.trim() || PLACEHOLDER_INFORMATION_BAND.regionLabel,
+      metricValues[2]?.label || band.regionLabel?.trim() || PLACEHOLDER_INFORMATION_BAND.regionLabel,
     regionValue:
-      band.regionValue?.trim() || PLACEHOLDER_INFORMATION_BAND.regionValue,
+      metricValues[2]?.value || band.regionValue?.trim() || PLACEHOLDER_INFORMATION_BAND.regionValue,
   };
 }
 
 function mapWorldSection(
   section?: CmsWorldSection | null,
+  isPreview = false,
 ): HomepageWorldSection {
   if (!section) return PLACEHOLDER_WORLD_SECTION;
 
@@ -460,7 +561,7 @@ function mapWorldSection(
     ctaLabel: section.ctaLabel?.trim() || PLACEHOLDER_WORLD_SECTION.ctaLabel,
     ctaUrl: safeHomepageHref(section.ctaUrl, PLACEHOLDER_WORLD_SECTION.ctaUrl),
     disciplines:
-      disciplines.length > 0
+      disciplines.length > 0 || isPreview
         ? disciplines
         : PLACEHOLDER_WORLD_SECTION.disciplines,
   };
@@ -687,7 +788,7 @@ const PLACEHOLDER_DISCIPLINES: Array<
     internalName: "rallycross",
     title: "Rallycross",
     shortLabel: "FIA / World Cup",
-    href: "/campaign/fia-rallycross-world-cup-indonesia-2026",
+    href: "/events/fia-rallycross-world-cup-indonesia-2026",
     image: "/media/sarga-motorsport-discipline-rallycross-daylight.jpg",
     imageAlt:
       "Red and warm-white rallycross cars racing side by side on a tropical dirt circuit",
@@ -720,6 +821,12 @@ const PLACEHOLDER_DISCIPLINES: Array<
 
 const PLACEHOLDER_INFORMATION_BAND: HomepageInformationBand = {
   enabled: true,
+  showMetricGroup: true,
+  metrics: [
+    { label: "Next event", value: "TBA" },
+    { label: "Ticket status", value: "Pending" },
+    { label: "Region", value: "Indonesia" },
+  ],
   eyebrow: "Race control / 2026 calendar",
   title: "Closer to the machines. Closer to the moment.",
   description:
@@ -744,6 +851,7 @@ const PLACEHOLDER_WORLD_SECTION: HomepageWorldSection = {
 
 const PLACEHOLDER_PAGE: HomepageData["page"] = {
   heroTitle: "Feel the friction.",
+  heroEnabled: true,
   heroDescription:
     "Indonesia's premier motorsport ecosystem: elite racing, unfiltered energy, and an event experience built for those who live for the apex.",
   informationBand: PLACEHOLDER_INFORMATION_BAND,
@@ -793,22 +901,32 @@ const PLACEHOLDER_PAGE: HomepageData["page"] = {
   ],
   sections: {
     events: {
+      enabled: false,
       eyebrow: "Upcoming events",
       title: "The next grid is forming.",
       description:
         "Race weekends, talent programs, and international campaigns-built to put fans closer to the action.",
     },
     news: {
+      enabled: true,
       eyebrow: "Latest news",
       title: "From the paddock.",
       description:
         "Race reports, rider stories, technical detail, and the culture moving Indonesian motorsport forward.",
     },
     gallery: {
+      enabled: true,
       eyebrow: "Gallery",
       title: "Motion, recorded.",
       description:
         "A trackside capture feed from the circuit, paddock, crowd, and machines at full commitment.",
+    },
+    connectedRecords: {
+      enabled: false,
+      eyebrow: "Part of Sarga.co / Connected records",
+      title: "Explore the Sarga network.",
+      description:
+        "Browse published stories, meet the leadership council, and move directly between the active Sarga websites.",
     },
   },
 };
@@ -840,9 +958,14 @@ const PLACEHOLDER_TICKET_CTA = {
 /*  Aggregate fetch                                                           */
 /* -------------------------------------------------------------------------- */
 
-export async function fetchHomepageData(): Promise<HomepageData> {
+export async function fetchHomepageData(
+  locale?: Locale,
+): Promise<HomepageData> {
+  const requestLocale = locale ?? (await getRequestLocaleSafe());
+  const isPreview = await isStrapiPreviewEnabled();
   const [
     pageRes,
+    homeSingleRes,
     eventsRes,
     articlesRes,
     partnersRes,
@@ -863,14 +986,39 @@ export async function fetchHomepageData(): Promise<HomepageData> {
         "motorsportFeaturedEvent.ticketCtas",
         "motorsportInformationBand",
         "motorsportWorldSection.disciplines.image",
+        "motorsportTicketSection.backgroundImage",
+        "pageAvailability.comingSoonMedia",
         "sections",
       ],
       filters: {
         "filters[siteScope][$eq]": "motorsport",
         "filters[pageKind][$eq]": "home",
       },
+      locale: requestLocale,
       limit: 1,
       revalidate: 60,
+    }),
+    fetchStrapiSingle<CmsHomeSinglePage>("motorsport-home-page", {
+      populate: [
+        "hero.backgroundMedia",
+        "hero.mobileBackgroundMedia",
+        "heroSlides.image",
+        "heroSlides.mobileImage",
+        "heroSlides.video.primaryVideo",
+        "heroSlides.video.alternateVideo",
+        "heroSlides.video.posterImage",
+        "heroSlides.video.mobilePosterImage",
+        "informationBand.metrics",
+        "worldSection.disciplines.image",
+        "ticketSection.backgroundImage",
+        "upcomingEventsSection",
+        "latestNewsSection",
+        "connectedRecordsSection",
+        "gallerySection",
+        "pageAvailability.comingSoonMedia",
+      ],
+      locale: requestLocale,
+      revalidate: 0,
     }),
     fetchStrapiList<CmsEvent>("events", {
       populate: ["coverImage", "heroMedia", "ticketCtas"],
@@ -878,16 +1026,14 @@ export async function fetchHomepageData(): Promise<HomepageData> {
         "filters[siteScope][$in][0]": "motorsport",
         "filters[siteScope][$in][1]": "shared",
       },
+      locale: requestLocale,
       sort: "eventDate:asc",
       limit: 8,
       revalidate: 60,
     }),
-    fetchStrapiList<CmsArticle>("news-articles", {
+    fetchStrapiList<CmsArticle>("motorsport-news-articles", {
       populate: "coverImage",
-      filters: {
-        "filters[siteScope][$in][0]": "motorsport",
-        "filters[siteScope][$in][1]": "shared",
-      },
+      locale: requestLocale,
       sort: "publishedDate:desc",
       limit: 6,
       revalidate: 60,
@@ -898,6 +1044,7 @@ export async function fetchHomepageData(): Promise<HomepageData> {
         "filters[siteScope][$in][0]": "motorsport",
         "filters[siteScope][$in][1]": "shared",
       },
+      locale: requestLocale,
       limit: 10,
       revalidate: 600,
     }),
@@ -907,29 +1054,90 @@ export async function fetchHomepageData(): Promise<HomepageData> {
         "filters[siteScope][$in][0]": "motorsport",
         "filters[siteScope][$in][1]": "shared",
       },
+      locale: requestLocale,
       limit: 4,
       revalidate: 600,
     }),
     fetchStrapiList<CmsTicketCta>("ticket-ctas", {
+      populate: "image",
       filters: {
         "filters[siteScope][$in][0]": "motorsport",
         "filters[siteScope][$in][1]": "shared",
         "filters[isActive][$eq]": "true",
       },
+      locale: requestLocale,
       sort: "createdAt:desc",
       limit: 1,
       revalidate: 60,
     }),
   ]);
 
-  /* ---- Page copy ---- */
-  const cmsPage = pageRes?.data?.[0];
+  const singlePage = homeSingleRes?.data;
+  const singleHeroSlides = mapHeroSlides(singlePage?.heroSlides);
+  const primaryHero = singlePage?.hero;
+  const singleHeroCopy =
+    primaryHero?.title?.trim() || primaryHero?.description?.trim();
+  const singleHeroSlide =
+    primaryHero && singleHeroCopy
+      ? {
+          ...(singleHeroSlides[0] ?? PLACEHOLDER_PAGE.heroSlides[0]),
+          id: "motorsport-home-primary-hero",
+          eyebrow:
+            primaryHero.eyebrow?.trim() ||
+            singleHeroSlides[0]?.eyebrow ||
+            undefined,
+          title:
+            primaryHero.title?.trim() ||
+            singleHeroSlides[0]?.title ||
+            PLACEHOLDER_PAGE.heroTitle,
+          description:
+            primaryHero.description?.trim() ||
+            singleHeroSlides[0]?.description ||
+            PLACEHOLDER_PAGE.heroDescription,
+          image:
+            mediaUrl(primaryHero.backgroundMedia?.url) ||
+            singleHeroSlides[0]?.image ||
+            PLACEHOLDER_PAGE.heroSlides[0].image,
+          mobileImage:
+            mediaUrl(primaryHero.mobileBackgroundMedia?.url) ||
+            singleHeroSlides[0]?.mobileImage,
+          imageAlt:
+            primaryHero.backgroundAlt?.trim() ||
+            singleHeroSlides[0]?.imageAlt ||
+            PLACEHOLDER_PAGE.heroSlides[0].imageAlt,
+        }
+      : null;
+  const singleCmsPage = singlePage
+    ? {
+        heroTitle: primaryHero?.title,
+        heroDescription: primaryHero?.description,
+        heroEnabled: primaryHero?.isActive,
+        heroMedia: primaryHero?.backgroundMedia,
+        heroSlides: singlePage.heroSlides,
+        motorsportFeaturedEvent: undefined,
+        motorsportInformationBand: singlePage.informationBand,
+        motorsportWorldSection: singlePage.worldSection,
+        motorsportTicketSection: singlePage.ticketSection,
+        pageAvailability: singlePage.pageAvailability,
+        sections: [
+          mapNamedSection(singlePage.upcomingEventsSection, "upcoming-events"),
+          mapNamedSection(singlePage.latestNewsSection, "latest-news"),
+          mapNamedSection(singlePage.connectedRecordsSection, "connected-records"),
+          mapNamedSection(singlePage.gallerySection, "gallery"),
+        ].filter((section): section is CmsPageSection => section !== null),
+      }
+    : undefined;
+  const cmsPage = singleCmsPage ?? pageRes?.data?.[0];
   const cmsHeroImage =
     cmsPage?.heroMedia &&
     (!cmsPage.heroMedia.mime || cmsPage.heroMedia.mime.startsWith("image/"))
       ? mediaUrl(cmsPage.heroMedia.url)
       : undefined;
-  const cmsHeroSlides = mapHeroSlides(cmsPage?.heroSlides);
+  const cmsHeroSlides = singlePage
+    ? singleHeroSlide
+      ? [singleHeroSlide, ...singleHeroSlides.slice(1)]
+      : singleHeroSlides
+    : mapHeroSlides(cmsPage?.heroSlides);
   const legacyHeroSlide: HomepageHeroSlide = {
     ...PLACEHOLDER_PAGE.heroSlides[0],
     id: "legacy-home-hero",
@@ -948,12 +1156,29 @@ export async function fetchHomepageData(): Promise<HomepageData> {
         heroTitle: cmsPage.heroTitle || PLACEHOLDER_PAGE.heroTitle,
         heroDescription:
           cmsPage.heroDescription || PLACEHOLDER_PAGE.heroDescription,
+        heroEnabled: cmsPage.heroEnabled !== false,
         heroImage: cmsHeroImage || undefined,
         heroImageAlt: cmsPage.heroMedia?.alternativeText || undefined,
-        heroSlides:
-          cmsHeroSlides.length > 0 ? cmsHeroSlides : [legacyHeroSlide],
+         heroSlides:
+           cmsHeroSlides.length > 0 ? cmsHeroSlides : [legacyHeroSlide],
+         pageAvailability: cmsPage.pageAvailability
+           ? {
+               ...cmsPage.pageAvailability,
+               comingSoonMedia: cmsPage.pageAvailability.comingSoonMedia
+                 ? {
+                     ...cmsPage.pageAvailability.comingSoonMedia,
+                     url: mediaUrl(
+                       cmsPage.pageAvailability.comingSoonMedia.url,
+                     ),
+                   }
+                 : null,
+             }
+           : null,
         informationBand: mapInformationBand(cmsPage.motorsportInformationBand),
-        worldOfMotorsport: mapWorldSection(cmsPage.motorsportWorldSection),
+        worldOfMotorsport: mapWorldSection(
+          cmsPage.motorsportWorldSection,
+          isPreview,
+        ),
         sections: {
           events: sectionCopy(
             cmsPage.sections,
@@ -970,17 +1195,30 @@ export async function fetchHomepageData(): Promise<HomepageData> {
             "gallery",
             PLACEHOLDER_PAGE.sections.gallery,
           ),
+          connectedRecords: sectionCopy(
+            cmsPage.sections,
+            "connected-records",
+            PLACEHOLDER_PAGE.sections.connectedRecords,
+          ),
         },
       }
     : PLACEHOLDER_PAGE;
 
   /* ---- Events ---- */
-  const cmsEvents = (eventsRes?.data ?? []).map(mapEvent);
+  const cmsEvents = resolvePreviewCollection(
+    eventsRes?.data,
+    [],
+    isPreview,
+  )
+    .filter(isHomepageEventVisible)
+    .map(mapEvent);
   const manuallyFeaturedEvent =
     cmsPage?.motorsportFeaturedEvent &&
     ["motorsport", "shared", undefined].includes(
       cmsPage.motorsportFeaturedEvent.siteScope,
-    )
+    ) &&
+    cmsPage.motorsportFeaturedEvent.eventStatus !== "hidden" &&
+    cmsPage.motorsportFeaturedEvent.showOnMotorsport !== false
       ? mapEvent({
           ...cmsPage.motorsportFeaturedEvent,
           id: 0,
@@ -991,44 +1229,103 @@ export async function fetchHomepageData(): Promise<HomepageData> {
     manuallyFeaturedEvent ??
     cmsEvents.find((e) => e.status === "tickets-open") ??
     cmsEvents[0] ??
-    PLACEHOLDER_EVENT;
+    (isPreview ? null : PLACEHOLDER_EVENT);
   const upcomingEvents =
     cmsEvents.length >= 2
-      ? cmsEvents.filter((e) => e.href !== featuredEvent.href).slice(0, 4)
-      : PLACEHOLDER_EVENTS;
+      ? cmsEvents.filter((e) => e.href !== featuredEvent?.href).slice(0, 4)
+      : isPreview
+        ? cmsEvents.filter((e) => e.href !== featuredEvent?.href).slice(0, 4)
+        : PLACEHOLDER_EVENTS;
 
   /* ---- Articles ---- */
-  const cmsArticles = (articlesRes?.data ?? []).map(mapArticle);
-  const [featuredArticle, ...restArticles] =
-    cmsArticles.length > 0 ? cmsArticles : PLACEHOLDER_ARTICLES;
+  const cmsArticles = resolvePreviewCollection(
+    articlesRes?.data,
+    [],
+    isPreview,
+  )
+    .filter(isHomepageArticleVisible)
+    .map(mapArticle);
+  const orderedArticles = orderHomepageArticles(cmsArticles);
+  const [featuredArticle, ...restArticles] = resolvePreviewCollection(
+    orderedArticles,
+    PLACEHOLDER_ARTICLES,
+    isPreview,
+  );
 
   /* ---- Partners ---- */
-  const cmsPartners = (partnersRes?.data ?? []).map(mapPartner);
-  const partners = cmsPartners.length > 0 ? cmsPartners : PLACEHOLDER_PARTNERS;
+  const cmsPartners = resolvePreviewCollection(
+    partnersRes?.data,
+    [],
+    isPreview,
+  )
+    .filter(isHomepagePartnerVisible)
+    .map(mapPartner);
+  const partners = resolvePreviewCollection(
+    cmsPartners,
+    PLACEHOLDER_PARTNERS,
+    isPreview,
+  );
 
   /* ---- Gallery ---- */
-  const cmsGallery: GalleryItem[] = (galleriesRes?.data ?? []).flatMap(
-    (entry) =>
-      (entry.mediaItems ?? []).map((img, i) => ({
-        id: `cms-${entry.id}-${i}`,
-        image: mediaUrl(img.url),
-        imageAlt: img.alternativeText ?? `${entry.title} - Sarga Motorsport`,
-        eyebrow: entry.title,
-      })),
+  const cmsGallery: GalleryItem[] = resolvePreviewCollection(
+    galleriesRes?.data,
+    [],
+    isPreview,
+  ).flatMap((entry) =>
+    (entry.mediaItems ?? []).map((img, i) => ({
+      id: `cms-${entry.id}-${i}`,
+      image: mediaUrl(img.url),
+      imageAlt: img.alternativeText ?? `${entry.title} - Sarga Motorsport`,
+      eyebrow: entry.title,
+    })),
   );
   const gallery =
-    cmsGallery.length >= 3 ? cmsGallery.slice(0, 6) : PLACEHOLDER_GALLERY;
+    cmsGallery.length > 0 || isPreview
+      ? cmsGallery.slice(0, 6)
+      : PLACEHOLDER_GALLERY;
 
   /* ---- Ticket CTA ---- */
   const cmsTicket = ticketRes?.data?.[0];
-  const ticketCta = cmsTicket
-    ? {
-        provider: cmsTicket.provider ?? "Official ticketing partner",
-        href: cmsTicket.url ?? "/tickets",
-        label: cmsTicket.label ?? "Get tickets",
-        eventName: featuredEvent.title,
-      }
-    : PLACEHOLDER_TICKET_CTA;
+  const ticketSection = cmsPage?.motorsportTicketSection;
+  const ticketCta = ticketSection
+    ? ticketSection.isActive === false
+      ? null
+      : {
+          provider:
+            ticketSection.providerText ||
+            cmsTicket?.provider ||
+            "Official ticketing partner",
+          href: safeHomepageHref(
+            ticketSection.ctaUrl || cmsTicket?.url,
+            "/tickets",
+          ),
+          label:
+            ticketSection.ctaLabel || cmsTicket?.label || "Secure your seat",
+          eventName: ticketSection.eventText || featuredEvent.title,
+          image:
+            mediaUrl(ticketSection.backgroundImage?.url) ||
+            mediaUrl(cmsTicket?.image?.url) ||
+            undefined,
+          eyebrow: ticketSection.eyebrow || "Official ticketing",
+          title: ticketSection.title || "Be there when the grid goes live.",
+          description: ticketSection.description,
+          eventLabel: ticketSection.eventLabel || "Event",
+          providerLabel: ticketSection.providerLabel || "Provider",
+          partnerLabel:
+            ticketSection.partnerLabel || "Partner redirect / Secure",
+          footerText: ticketSection.footerText,
+        }
+    : cmsTicket
+      ? {
+          provider: cmsTicket.provider ?? "Official ticketing partner",
+          href: cmsTicket.url ?? "/tickets",
+          label: cmsTicket.label ?? "Get tickets",
+          eventName: featuredEvent.title,
+          image: mediaUrl(cmsTicket.image?.url) || undefined,
+        }
+      : isPreview
+        ? null
+        : PLACEHOLDER_TICKET_CTA;
 
   return {
     page,
@@ -1036,7 +1333,9 @@ export async function fetchHomepageData(): Promise<HomepageData> {
     upcomingEvents,
     featuredArticle: featuredArticle ?? null,
     articles:
-      restArticles.length > 0 ? restArticles : PLACEHOLDER_ARTICLES.slice(1),
+      isPreview || restArticles.length > 0
+        ? restArticles
+        : PLACEHOLDER_ARTICLES.slice(1),
     gallery,
     partners,
     ticketCta,

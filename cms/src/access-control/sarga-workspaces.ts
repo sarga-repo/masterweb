@@ -56,6 +56,30 @@ const SHARED_EDITORIAL_SUBJECTS = [
   "api::leadership-person.leadership-person",
 ];
 
+export const MOTORSPORT_PAGE_SINGLE_TYPE_SUBJECTS = [
+  "api::motorsport-theme-settings.motorsport-theme-settings",
+  "api::motorsport-home-page.motorsport-home-page",
+  "api::motorsport-about-page.motorsport-about-page",
+  "api::motorsport-events-page.motorsport-events-page",
+  "api::motorsport-news-page.motorsport-news-page",
+  "api::motorsport-gallery-page.motorsport-gallery-page",
+  "api::motorsport-merchandise-page.motorsport-merchandise-page",
+  "api::motorsport-tickets-page.motorsport-tickets-page",
+  "api::motorsport-contact-page.motorsport-contact-page",
+  "api::motorsport-partners-page.motorsport-partners-page",
+  "api::motorsport-experience-page.motorsport-experience-page",
+];
+
+export const MOTORSPORT_DEDICATED_COLLECTION_SUBJECTS = [
+  "api::motorsport-event.motorsport-event",
+  "api::motorsport-leadership-person.motorsport-leadership-person",
+  "api::motorsport-merchandise-item.motorsport-merchandise-item",
+  "api::motorsport-news-article.motorsport-news-article",
+  "api::motorsport-partner.motorsport-partner",
+  "api::motorsport-ticket-cta.motorsport-ticket-cta",
+  "api::motorsport-top-navigation-item.motorsport-top-navigation-item",
+];
+
 export const WORKSPACE_ROLES: WorkspaceRole[] = [
   {
     scope: "gateway",
@@ -88,14 +112,14 @@ export const WORKSPACE_ROLES: WorkspaceRole[] = [
     accessAction: "admin::sarga-workspaces.access-motorsport",
     conditionName: "sarga-workspaces-is-motorsport-content",
     subjects: [
-      ...SHARED_EDITORIAL_SUBJECTS,
-      TOP_NAVIGATION_SUBJECT,
+      ...MOTORSPORT_PAGE_SINGLE_TYPE_SUBJECTS,
+      "api::media-gallery.media-gallery",
       "api::motorsport-program.motorsport-program",
       "api::motorsport-rider.motorsport-rider",
       "api::motorsport-standing.motorsport-standing",
       "api::motorsport-regulation.motorsport-regulation",
-      "api::merchandise-item.merchandise-item",
     ],
+    unscopedSubjects: [...MOTORSPORT_DEDICATED_COLLECTION_SUBJECTS],
     readOnlyReferences: [
       {
         subject: "api::ecosystem-business.ecosystem-business",

@@ -7,6 +7,16 @@ import {
 import { ensureSargaLocales, registerSargaI18nGuards } from "./i18n/sarga-i18n";
 import { assertInquiryNotificationEnvironment } from "./email/inquiry-notifications";
 import seedDemoContent from "./seed";
+import { registerMotorsportRevalidation } from "./revalidation/motorsport-revalidation";
+import { migrateMotorsportPageSingleTypes } from "./migrations/motorsport-page-single-types";
+import { migrateMotorsportOwnership } from "./migrations/motorsport-ownership";
+import { ensureMotorsportThemeSettings } from "./migrations/motorsport-theme-settings";
+import { retireMotorsportLegacyContent } from "./migrations/motorsport-legacy-retirement";
+import { ensureFrontendApiTokenPermissions } from "./access-control/api-token-permissions";
+import {
+  backfillMotorsportPageRoutes,
+  registerMotorsportPageRouteGuards,
+} from "./motorsport/page-route-registry";
 
 export default {
   /**
@@ -18,6 +28,7 @@ export default {
   async register({ strapi }: { strapi: Core.Strapi }) {
     await registerWorkspaceAccessControl(strapi);
     registerSargaI18nGuards(strapi);
+    registerMotorsportPageRouteGuards(strapi);
   },
 
   /**
@@ -31,6 +42,13 @@ export default {
     assertInquiryNotificationEnvironment();
     await ensureSargaLocales(strapi);
     await bootstrapWorkspaceAccessControl(strapi);
+    await ensureFrontendApiTokenPermissions(strapi);
     await seedDemoContent(strapi);
+    await migrateMotorsportPageSingleTypes(strapi);
+    await migrateMotorsportOwnership(strapi);
+    await ensureMotorsportThemeSettings(strapi);
+    await retireMotorsportLegacyContent(strapi);
+    await backfillMotorsportPageRoutes(strapi);
+    registerMotorsportRevalidation(strapi);
   },
 };

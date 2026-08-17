@@ -123,6 +123,275 @@
     #0033a0 140%
   );
   --ms-border: rgb(255 249 238 / 0.16);
+
+  /* MSR-THEME semantic contract. Components should consume these aliases,
+   * while presets below may change the visual composition without changing
+   * layout or content contracts. */
+  --ms-theme-surface-page: var(--ms-surface-page);
+  --ms-theme-surface-navy: var(--color-ms-draftline-blue);
+  --ms-theme-surface-warm: var(--color-ms-cream-100);
+  --ms-theme-surface-charcoal: var(--color-ms-charcoal);
+  --ms-theme-surface-panel: var(--ms-surface-panel);
+  --ms-theme-text-on-navy: var(--color-ms-warm-white);
+  --ms-theme-text-on-warm: var(--color-ms-charcoal);
+  --ms-theme-text-on-charcoal: var(--color-ms-warm-white);
+  --ms-theme-text-muted-on-navy: rgb(255 249 238 / 0.72);
+  --ms-theme-text-muted-on-warm: var(--ms-ink-700);
+  --ms-theme-body-on-warm: var(--color-ms-charcoal);
+  --ms-theme-eyebrow-on-warm: var(--color-ms-apex-crimson);
+  --ms-theme-accent-crimson: var(--color-ms-apex-crimson);
+  --ms-theme-accent-orange: var(--color-ms-ignition-orange);
+  --ms-theme-accent-cyan: var(--color-ms-slipstream-teal);
+  --ms-theme-accent-yellow: var(--color-ms-electric-yellow);
+  --ms-theme-separator: var(--ms-line-dim);
+  --ms-theme-separator-bright: var(--ms-line-bright);
+  --ms-theme-media-scrim: rgb(5 5 5 / 0.34);
+}
+
+/* Allowlisted, CMS-selectable visual presets. The current preset maps to the
+ * existing approved Motorsport dark system, so a settings change is always
+ * reversible and never changes page geometry. */
+[data-ms-theme="theme-vendor-editorial"] {
+  color-scheme: light;
+  --ms-theme-surface-page: #f6efe3;
+  --ms-theme-surface-navy: #0033a0;
+  --ms-theme-surface-warm: #f6efe3;
+  --ms-theme-surface-charcoal: #1b1b1b;
+  --ms-theme-surface-panel: #fff9ee;
+  --ms-theme-text-on-navy: #fff9ee;
+  --ms-theme-text-on-warm: #0033a0;
+  --ms-theme-text-on-charcoal: #fff9ee;
+  --ms-theme-text-muted-on-navy: rgb(255 249 238 / 0.76);
+  --ms-theme-text-muted-on-warm: #47433d;
+  --ms-theme-body-on-warm: #1b1b1b;
+  --ms-theme-eyebrow-on-warm: #c41427;
+  --ms-theme-accent-crimson: #e8192c;
+  --ms-theme-accent-orange: #b94700;
+  --ms-theme-accent-cyan: #00c4cc;
+  --ms-theme-accent-yellow: #f5c800;
+  --ms-theme-separator: rgb(0 51 160 / 0.18);
+  --ms-theme-separator-bright: rgb(0 51 160 / 0.34);
+  --ms-theme-media-scrim: rgb(5 5 5 / 0.28);
+  --ms-surface-page: var(--ms-theme-surface-page);
+  --ms-surface-canvas: var(--ms-theme-surface-warm);
+  --ms-surface-subtle: #e8decf;
+  --ms-surface-inverse: var(--ms-theme-surface-charcoal);
+  --ms-surface-inverse-strong: #111113;
+  --ms-surface-blue: var(--ms-theme-surface-navy);
+  --ms-surface-panel: var(--ms-theme-surface-panel);
+  --ms-text-on-light-primary: #1b1b1b;
+  --ms-text-on-light-secondary: #47433d;
+  --ms-text-on-light-muted: #625e56;
+  --ms-text-on-dark-primary: #fff9ee;
+  --ms-text-on-dark-secondary: rgb(255 249 238 / 0.76);
+  --ms-text-primary: #fff9ee;
+  --ms-text-secondary: rgb(255 249 238 / 0.76);
+  --ms-action: var(--ms-theme-accent-crimson);
+  --ms-action-hover: #a81022;
+  --ms-orange-on-light: var(--ms-theme-accent-orange);
+  --ms-focus: var(--ms-theme-accent-yellow);
+  --ms-border-light: #e8decf;
+  --ms-border-dark: rgb(255 249 238 / 0.18);
+  --ms-line-dim: var(--ms-theme-separator);
+  --ms-line-bright: var(--ms-theme-separator-bright);
+}
+
+[data-ms-theme="theme-vendor-night"] {
+  color-scheme: dark;
+  --ms-theme-surface-page: #071a3d;
+  --ms-theme-surface-navy: #071f58;
+  --ms-theme-surface-warm: #e8edf4;
+  --ms-theme-surface-charcoal: #080b12;
+  --ms-theme-surface-panel: #101827;
+  --ms-theme-text-on-navy: #fff9ee;
+  --ms-theme-text-on-warm: #0033a0;
+  --ms-theme-text-on-charcoal: #fff9ee;
+  --ms-theme-text-muted-on-navy: rgb(255 249 238 / 0.72);
+  --ms-theme-text-muted-on-warm: #47433d;
+  --ms-theme-accent-crimson: #e8192c;
+  --ms-theme-accent-orange: #ff7a1a;
+  --ms-theme-accent-cyan: #32e6ed;
+  --ms-theme-accent-yellow: #ffe14d;
+  --ms-theme-separator: rgb(255 249 238 / 0.14);
+  --ms-theme-separator-bright: rgb(255 249 238 / 0.3);
+  --ms-theme-media-scrim: rgb(5 5 5 / 0.38);
+  --ms-surface-page: var(--ms-theme-surface-page);
+  --ms-surface-inverse-strong: #050505;
+  --ms-surface-blue: var(--ms-theme-surface-navy);
+  --ms-surface-panel: var(--ms-theme-surface-panel);
+  --ms-text-on-dark-primary: #fff9ee;
+  --ms-text-on-dark-secondary: rgb(255 249 238 / 0.72);
+  --ms-text-primary: #fff9ee;
+  --ms-text-secondary: rgb(255 249 238 / 0.72);
+  --ms-action: var(--ms-theme-accent-crimson);
+  --ms-action-hover: #a81022;
+  --ms-focus: var(--ms-theme-accent-yellow);
+  --ms-line-dim: var(--ms-theme-separator);
+  --ms-line-bright: var(--ms-theme-separator-bright);
+}
+
+/* Utility-color compatibility: older page compositions still use the
+ * approved Tailwind utility names. These scoped aliases let the CMS preset
+ * recolor those surfaces without rewriting content or layout components. */
+[data-ms-theme="theme-vendor-editorial"] .bg-ms-black,
+[data-ms-theme="theme-vendor-editorial"] [class*="bg-ms-black/"] {
+  background-color: var(--ms-theme-surface-charcoal) !important;
+}
+[data-ms-theme="theme-vendor-editorial"] .bg-ms-charcoal,
+[data-ms-theme="theme-vendor-editorial"] [class*="bg-ms-charcoal"] {
+  background-color: var(--ms-theme-surface-charcoal) !important;
+}
+[data-ms-theme="theme-vendor-editorial"] .bg-ms-graphite,
+[data-ms-theme="theme-vendor-editorial"] [class*="bg-ms-graphite"] {
+  background-color: var(--ms-theme-surface-panel) !important;
+}
+[data-ms-theme="theme-vendor-editorial"] .bg-ms-draftline-blue,
+[data-ms-theme="theme-vendor-editorial"] [class*="bg-ms-draftline-blue"] {
+  background-color: var(--ms-theme-surface-navy) !important;
+}
+[data-ms-theme="theme-vendor-editorial"] .bg-ms-warm-white {
+  background-color: var(--ms-theme-surface-warm) !important;
+}
+[data-ms-theme="theme-vendor-editorial"] .ms-reflected-light-surface {
+  background:
+    radial-gradient(circle at 8% 100%, rgb(232 25 44 / 0.2), transparent 34%),
+    radial-gradient(circle at 54% 0%, rgb(255 107 0 / 0.16), transparent 38%),
+    radial-gradient(circle at 100% 88%, rgb(0 196 204 / 0.16), transparent 32%),
+    linear-gradient(118deg, #f6efe3 0%, #eadfce 54%, #d8e1e2 100%);
+  color-scheme: light;
+  color: var(--ms-theme-text-on-warm);
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-blue-band {
+  background: var(--ms-theme-surface-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-editorial-intro,
+[data-ms-theme="theme-vendor-editorial"] .ms-editorial-muted {
+  background: var(--ms-theme-surface-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-newsletter-card {
+  color: var(--ms-theme-body-on-warm) !important;
+  background: var(--ms-theme-surface-panel) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-newsletter-card
+  :is(.ms-kicker, .ms-data-label) {
+  color: var(--ms-theme-eyebrow-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-newsletter-card
+  :is(p, [class*="text-ms-warm-white"], .text-white) {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-newsletter-card
+  :is(input, button.bg-ms-apex-crimson) {
+  color: var(--color-ms-warm-white) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-newsletter-card
+  :is(input, p.border-t) {
+  border-color: var(--ms-theme-separator) !important;
+}
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .text-ms-warm-white {
+  color: var(--ms-theme-text-on-warm) !important;
+}
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .text-ms-warm-white\/72 {
+  color: var(--ms-theme-text-muted-on-warm) !important;
+}
+[data-ms-theme="theme-vendor-editorial"] .ms-reflected-light-surface::before {
+  background-image: radial-gradient(
+    circle,
+    rgb(0 51 160 / 0.1) 1px,
+    transparent 1px
+  );
+}
+
+/* Vendor Editorial follows the PDF's deliberate page rhythm: image hero,
+ * blue information band, warm editorial reading surfaces, then charcoal
+ * people/timeline and footer surfaces. */
+[data-ms-theme="theme-vendor-editorial"] .ms-editorial-surface {
+  color-scheme: light;
+  color: var(--ms-theme-text-on-warm);
+  background: var(--ms-theme-surface-warm);
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-editorial-surface::before {
+  background-image: radial-gradient(
+    circle,
+    rgb(0 51 160 / 0.1) 1px,
+    transparent 1px
+  );
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-editorial-surface
+  .text-ms-warm-white,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-editorial-surface
+  .text-ms-warm-white\/72,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-editorial-surface
+  .text-ms-warm-white\/68,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-editorial-surface
+  .text-ms-warm-white\/58 {
+  color: var(--ms-theme-text-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-editorial-surface
+  .text-ms-electric-yellow {
+  color: var(--ms-theme-accent-crimson) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-editorial-surface
+  .text-ms-slipstream-teal {
+  color: var(--ms-theme-accent-orange) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-editorial-surface
+  .border-ms-warm-white\/18,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-editorial-surface
+  .border-ms-warm-white\/14 {
+  border-color: var(--ms-theme-separator) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-editorial-dark-surface {
+  color-scheme: dark;
+  color: var(--ms-theme-text-on-charcoal);
+  background: var(--ms-theme-surface-charcoal);
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-editorial-dark-surface
+  .ms-heading-section,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-editorial-dark-surface
+  .ms-heading-card {
+  color: var(--ms-theme-text-on-charcoal) !important;
+}
+
+[data-ms-theme="theme-vendor-night"] .ms-about-story-surface,
+[data-ms-theme="theme-vendor-night"] .ms-about-team-surface,
+[data-ms-theme="theme-vendor-night"] .ms-reflected-light-surface {
+  background:
+    radial-gradient(circle at 8% 90%, rgb(232 25 44 / 0.42), transparent 28%),
+    radial-gradient(circle at 82% 8%, rgb(50 230 237 / 0.2), transparent 30%),
+    linear-gradient(122deg, #080b12 0%, #101827 54%, #071f58 100%);
 }
 
 * {
@@ -139,11 +408,46 @@ html {
 body {
   margin: 0;
   overflow-x: clip;
-  background: var(--ms-surface-page);
+  background: var(--ms-theme-surface-page);
   color: var(--color-ms-warm-white);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+.ms-theme-page {
+  background: var(--ms-theme-surface-page);
+}
+.ms-theme-navy {
+  color: var(--ms-theme-text-on-navy);
+  background: var(--ms-theme-surface-navy);
+}
+.ms-theme-warm {
+  color: var(--ms-theme-text-on-warm);
+  background: var(--ms-theme-surface-warm);
+}
+.ms-theme-charcoal {
+  color: var(--ms-theme-text-on-charcoal);
+  background: var(--ms-theme-surface-charcoal);
+}
+.ms-theme-separator {
+  border-color: var(--ms-theme-separator);
+}
+.ms-theme-media-scrim {
+  background: linear-gradient(
+    to top,
+    var(--ms-theme-media-scrim),
+    transparent 68%
+  );
+}
+
+.ms-nav-label {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 p,
@@ -186,47 +490,6 @@ select {
 
 .ms-home-hero {
   min-height: min(50rem, calc(100svh - var(--ms-header-height)));
-}
-
-.ms-hero-copy-scrim {
-  top: 48%;
-  left: 50%;
-  width: min(94vw, 68rem);
-  height: min(58%, 30rem);
-  transform: translate(-50%, -50%);
-  background: radial-gradient(
-    ellipse at center,
-    rgb(5 5 5 / 0.72) 0%,
-    rgb(5 5 5 / 0.52) 42%,
-    rgb(5 5 5 / 0.18) 62%,
-    transparent 78%
-  );
-}
-
-.ms-hero-copy {
-  text-shadow: 0 0.2rem 1.25rem rgb(5 5 5 / 0.78);
-}
-
-.ms-apex-horizon {
-  top: 38%;
-  left: 44%;
-  width: 34%;
-  height: 30%;
-  opacity: 0.34;
-  transform: skewX(-8deg);
-  background: linear-gradient(
-    100deg,
-    rgb(232 25 44 / 0.88),
-    rgb(255 107 0 / 0.72)
-  );
-  mix-blend-mode: multiply;
-  mask-image: linear-gradient(
-    90deg,
-    transparent,
-    black 12%,
-    black 88%,
-    transparent
-  );
 }
 
 .ms-section {
@@ -445,52 +708,18 @@ select {
     var(--ms-surface-subtle);
 }
 
-.ms-gallery-intro,
-.ms-about-intro,
 .ms-about-story-surface,
-.ms-about-team-surface {
+.ms-about-team-surface,
+.ms-about-ctas-surface {
   position: relative;
   isolation: isolate;
   overflow: hidden;
 }
 
-.ms-gallery-intro,
-.ms-about-intro,
-.ms-about-team-surface {
+.ms-about-team-surface,
+.ms-about-ctas-surface {
   color-scheme: dark;
   color: var(--ms-text-on-dark-primary);
-}
-
-.ms-gallery-intro {
-  background:
-    radial-gradient(circle at 10% 16%, rgb(0 196 204 / 0.3), transparent 27%),
-    radial-gradient(circle at 92% 84%, rgb(232 25 44 / 0.34), transparent 32%),
-    linear-gradient(118deg, #061a42 0%, #0033a0 48%, #181d56 74%, #36182d 100%);
-}
-
-.ms-about-intro {
-  background:
-    radial-gradient(circle at 12% 78%, rgb(232 25 44 / 0.34), transparent 32%),
-    radial-gradient(circle at 86% 12%, rgb(0 196 204 / 0.24), transparent 28%),
-    linear-gradient(118deg, #071a3d 0%, #162b61 50%, #44202f 100%);
-}
-
-.ms-gallery-intro::before,
-.ms-about-intro::before,
-.ms-about-story-surface::before,
-.ms-about-team-surface::before {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background-image: radial-gradient(
-    circle,
-    rgb(255 249 238 / 0.13) 1px,
-    transparent 1px
-  );
-  background-size: 1rem 1rem;
-  content: "";
-  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.7), transparent 88%);
-  pointer-events: none;
 }
 
 .ms-about-story-surface {
@@ -508,6 +737,30 @@ select {
     radial-gradient(circle at 6% 92%, rgb(255 107 0 / 0.3), transparent 27%),
     radial-gradient(circle at 92% 8%, rgb(0 196 204 / 0.2), transparent 25%),
     linear-gradient(118deg, #102844 0%, #213d58 54%, #442c39 100%);
+}
+
+.ms-about-ctas-surface {
+  background:
+    radial-gradient(circle at 8% 12%, rgb(232 25 44 / 0.22), transparent 30%),
+    radial-gradient(circle at 92% 88%, rgb(255 107 0 / 0.2), transparent 28%),
+    linear-gradient(122deg, #071830 0%, #102844 56%, #1a1d36 100%);
+}
+
+.ms-about-story-surface::before,
+.ms-about-team-surface::before,
+.ms-about-ctas-surface::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgb(255 249 238 / 0.13) 1px,
+    transparent 1px
+  );
+  background-size: 1rem 1rem;
+  content: "";
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.7), transparent 88%);
+  pointer-events: none;
 }
 
 .ms-about-capabilities {
@@ -580,6 +833,25 @@ select {
     linear-gradient(118deg, #071a3d 0%, #173064 50%, #4a2131 100%);
 }
 
+.ms-page-hero-scrim {
+  background: linear-gradient(
+    0deg,
+    rgb(5 5 5 / 0.92) 0%,
+    rgb(5 5 5 / 0.55) 40%,
+    rgb(5 5 5 / 0.25) 70%
+  );
+}
+
+.ms-page-hero-scrim--heat {
+  background: linear-gradient(
+    0deg,
+    rgb(7 26 61 / 0.94) 0%,
+    rgb(68 32 47 / 0.72) 44%,
+    rgb(123 47 28 / 0.3) 76%,
+    rgb(7 26 61 / 0.18) 100%
+  );
+}
+
 .ms-blue-heat-surface {
   position: relative;
   isolation: isolate;
@@ -645,6 +917,56 @@ select {
     radial-gradient(circle at 62% 112%, rgb(232 25 44 / 0.48), transparent 38%),
     radial-gradient(circle at 100% 100%, rgb(0 51 160 / 0.5), transparent 32%),
     linear-gradient(122deg, rgb(5 19 44 / 0.94), rgb(14 38 82 / 0.94));
+}
+
+.ms-news-gallery-cta-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color-scheme: dark;
+  color: var(--ms-text-on-dark-primary);
+  background:
+    radial-gradient(circle at 8% 88%, rgb(232 25 44 / 0.26), transparent 30%),
+    radial-gradient(circle at 92% 12%, rgb(0 196 204 / 0.2), transparent 28%),
+    linear-gradient(122deg, #071830 0%, #102844 56%, #1a1d36 100%);
+}
+
+.ms-news-gallery-cta-surface::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgb(255 249 238 / 0.12) 1px,
+    transparent 1px
+  );
+  background-size: 1rem 1rem;
+  content: "";
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.62), transparent 82%);
+  pointer-events: none;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-news-featured-date,
+[data-ms-theme="theme-vendor-editorial"] .ms-news-archive-order {
+  color: var(--ms-theme-accent-orange) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-news-archive-eyebrow {
+  color: var(--ms-theme-accent-cyan) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-news-featured-excerpt,
+[data-ms-theme="theme-vendor-editorial"] .ms-news-archive-heading,
+[data-ms-theme="theme-vendor-editorial"] .ms-news-archive-index,
+[data-ms-theme="theme-vendor-editorial"] .ms-news-archive-date,
+[data-ms-theme="theme-vendor-editorial"] .ms-news-archive-title,
+[data-ms-theme="theme-vendor-editorial"] .ms-news-archive-excerpt,
+[data-ms-theme="theme-vendor-editorial"] .ms-news-archive-arrow {
+  color: var(--ms-theme-text-muted-on-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-news-archive-arrow {
+  border-color: var(--ms-theme-text-muted-on-navy) !important;
 }
 
 .ms-reflected-light-surface {
@@ -726,46 +1048,778 @@ select {
   --ms-reflection-teal-x: 96%;
 }
 
-.ms-news-race-flag {
-  position: absolute;
+/* Keep preset composition after base surface declarations in cascade order. */
+[data-ms-theme="theme-vendor-editorial"] .ms-editorial-surface {
+  color: var(--ms-theme-text-on-warm) !important;
+  background: var(--ms-theme-surface-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-editorial-dark-surface {
+  color: var(--ms-theme-text-on-charcoal) !important;
+  background: var(--ms-theme-surface-charcoal) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-reflected-light-surface {
+  color: var(--ms-theme-text-on-warm) !important;
+  color-scheme: light;
+  background: var(--ms-theme-surface-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .text-ms-warm-white,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  [class*="text-ms-warm-white/"] {
+  color: var(--ms-theme-text-muted-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .ms-heading-section,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .ms-heading-feature,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .ms-heading-card,
+[data-ms-theme="theme-vendor-editorial"] .ms-reflected-light-surface h1,
+[data-ms-theme="theme-vendor-editorial"] .ms-reflected-light-surface h2,
+[data-ms-theme="theme-vendor-editorial"] .ms-reflected-light-surface h3 {
+  color: var(--ms-theme-text-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .text-ms-electric-yellow {
+  color: var(--ms-theme-accent-crimson) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .text-ms-slipstream-teal {
+  color: var(--ms-theme-accent-orange) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  [class*="border-ms-warm-white/"] {
+  border-color: var(--ms-theme-separator) !important;
+}
+
+/* Vendor Editorial light surfaces use the PDF contrast recipe: solid cream,
+ * and image captions opt-in so shared legacy markup remains usable. */
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  ) {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  )
+  :is(
+    h1,
+    h2,
+    h3,
+    h4,
+    .ms-heading-hero,
+    .ms-heading-page,
+    .ms-heading-section,
+    .ms-heading-article,
+    .ms-heading-feature,
+    .ms-heading-card
+  ) {
+  color: var(--ms-theme-text-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  )
+  :is(.ms-kicker, .ms-data-label) {
+  color: var(--ms-theme-eyebrow-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  )
+  :is(
+    p:not(
+      :where(
+        .ms-news-featured-excerpt,
+        .ms-news-archive-eyebrow,
+        .ms-news-archive-order,
+        .ms-news-archive-excerpt
+      )
+    ),
+    li,
+    dt,
+    dd,
+    time:not(:where(.ms-news-featured-date, .ms-news-archive-date)),
+    .text-white,
+    [class*="text-ms-warm-white"]:not(
+      :where(
+        h1,
+        h2,
+        h3,
+        h4,
+        .ms-heading-hero,
+        .ms-heading-page,
+        .ms-heading-section,
+        .ms-heading-article,
+        .ms-heading-feature,
+        .ms-heading-card,
+        .ms-news-featured-date,
+        .ms-news-featured-excerpt,
+        .ms-news-archive-index,
+        .ms-news-archive-date,
+        .ms-news-archive-excerpt
+      )
+    )
+  ) {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  )
+  :is(
+    .text-ms-electric-yellow:not(.ms-news-archive-eyebrow),
+    .text-ms-ignition-orange
+  ) {
+  color: var(--ms-theme-eyebrow-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  )
+  :is(.text-ms-slipstream-teal:not(.ms-news-archive-arrow)) {
+  color: var(--ms-theme-accent-orange) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  )
+  :is([class*="border-ms-warm-white"], [class*="border-white"]) {
+  border-color: var(--ms-theme-separator) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  )
+  :is(
+    .bg-ms-apex-crimson,
+    .bg-ms-crimson-700,
+    .bg-ms-ignition-orange,
+    .bg-ms-electric-yellow,
+    .bg-ms-draftline-blue,
+    .bg-ms-charcoal,
+    .bg-ms-black,
+    .bg-ms-graphite
+  ) {
+  color: var(--color-ms-warm-white) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  )
+  [class*="bg-ms-warm-white/"]:not(.ms-event-feature-file) {
+  background-color: var(--ms-theme-separator) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  )
+  :is(
+    .bg-ms-apex-crimson,
+    .bg-ms-crimson-700,
+    .bg-ms-ignition-orange,
+    .bg-ms-electric-yellow,
+    .bg-ms-draftline-blue,
+    .bg-ms-charcoal,
+    .bg-ms-black,
+    .bg-ms-graphite
+  )
+  :is([class*="text-ms-warm-white"], .text-white) {
+  color: var(--color-ms-warm-white) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-editorial-dark-surface,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-editorial-dark-surface
+  :is(
+    h1,
+    h2,
+    h3,
+    h4,
+    .ms-heading-hero,
+    .ms-heading-page,
+    .ms-heading-section,
+    .ms-heading-article,
+    .ms-heading-feature,
+    .ms-heading-card,
+    p,
+    li,
+    dt,
+    dd,
+    time,
+    [class*="text-ms-warm-white"],
+    .text-white
+  ) {
+  color: var(--ms-theme-text-on-charcoal) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-editorial-dark-surface
+  :is(.ms-kicker, .ms-data-label) {
+  color: var(--ms-theme-accent-crimson) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface)
+  )
+  :is(
+    .ms-panel:not(.ms-panel--light),
+    .ms-blue-panel,
+    .ms-ticket-panel-reflected
+  ) {
+  color: var(--ms-theme-text-on-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface)
+  )
+  :is(
+    .ms-panel:not(.ms-panel--light),
+    .ms-blue-panel,
+    .ms-ticket-panel-reflected
+  )
+  :is(
+    h1,
+    h2,
+    h3,
+    h4,
+    .ms-heading-hero,
+    .ms-heading-page,
+    .ms-heading-section,
+    .ms-heading-article,
+    .ms-heading-feature,
+    .ms-heading-card,
+    p:not(:where(.ms-news-featured-excerpt, .ms-news-archive-excerpt)),
+    li,
+    dt,
+    dd,
+    time:not(:where(.ms-news-featured-date, .ms-news-archive-date)),
+    [class*="text-ms-warm-white"]:not(
+      :where(
+        .ms-news-featured-date,
+        .ms-news-featured-excerpt,
+        .ms-news-archive-index,
+        .ms-news-archive-date,
+        .ms-news-archive-title,
+        .ms-news-archive-excerpt
+      )
+    ),
+    .text-white
+  ) {
+  color: var(--ms-theme-text-on-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface)
+  )
+  :is(
+    .ms-panel:not(.ms-panel--light),
+    .ms-blue-panel,
+    .ms-ticket-panel-reflected
+  )
+  :is(
+    .ms-kicker:not(.ms-news-archive-eyebrow),
+    .ms-data-label:not(
+      :where(
+        .ms-news-featured-date,
+        .ms-news-archive-order,
+        .ms-news-archive-date
+      )
+    )
+  ) {
+  color: var(--ms-theme-accent-cyan) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-gallery-archive-light {
+  color-scheme: light;
+  color: var(--ms-theme-body-on-warm);
+  background: var(--ms-theme-surface-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-gallery-archive-light
+  nav[aria-label="Gallery pages"]
+  :is(a, button) {
+  color: var(--ms-theme-text-on-warm) !important;
+  border-color: var(--ms-theme-separator-bright) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-gallery-archive-light
+  nav[aria-label="Gallery pages"]
+  :is(a, button)[aria-current="page"] {
+  color: var(--color-ms-warm-white) !important;
+  border-color: var(--ms-theme-accent-crimson) !important;
+  background-color: var(--ms-theme-accent-crimson) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-gallery-archive-light
+  nav[aria-label="Gallery pages"]
+  :is(a, button):not([aria-current="page"]):not(:disabled):hover {
+  color: var(--color-ms-warm-white) !important;
+  border-color: var(--ms-theme-accent-orange) !important;
+  background-color: var(--ms-theme-accent-orange) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-gallery-archive-light
+  nav[aria-label="Gallery pages"]
+  :is(a, button)[aria-disabled="true"],
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-gallery-archive-light
+  nav[aria-label="Gallery pages"]
+  button:disabled {
+  color: var(--ms-theme-text-muted-on-warm) !important;
+  border-color: var(--ms-theme-separator) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-gallery-archive-light
+  > .ms-shell
+  > div:first-child
+  h2 {
+  color: var(--ms-theme-text-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-gallery-archive-light
+  > .ms-shell
+  > div:first-child
+  :is(.ms-kicker, .ms-data-label) {
+  color: var(--ms-theme-eyebrow-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-gallery-archive-light
+  > .ms-shell
+  > div:first-child
+  p:not(.ms-kicker):not(.ms-data-label) {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+/* News page vendor-editorial refinements must follow the broad light-surface
+ * panel rules above, which intentionally recolor nested dark panels. */
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface
+  .ms-news-featured-date,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface
+  .ms-news-archive-order {
+  color: var(--ms-theme-accent-orange) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface
+  .ms-news-archive-eyebrow {
+  color: var(--ms-theme-accent-cyan) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface
+  .ms-news-featured-excerpt,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface
+  .ms-news-archive-heading,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface
+  .ms-news-archive-index,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface
+  .ms-news-archive-date,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface
+  .ms-news-archive-title,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface
+  .ms-news-archive-excerpt,
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface
+  .ms-news-archive-arrow {
+  color: var(--ms-theme-text-muted-on-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface
+  .ms-news-archive-arrow {
+  border-color: var(--ms-theme-text-muted-on-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface.ms-editorial-surface
+  .ms-blue-panel
+  .ms-news-featured-date.ms-data-label {
+  color: var(--ms-theme-accent-orange) !important;
+}
+
+/* Gallery archive sits on a light vendor-editorial section, but its control
+ * strip and image captions remain dark Motorsport cards. */
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-gallery-wall.ms-editorial-surface
+  :is(.ms-gallery-control-reflection, .ms-gallery-caption) {
+  color: var(--ms-theme-text-on-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-gallery-wall.ms-editorial-surface
+  :is(.ms-gallery-control-reflection, .ms-gallery-caption)
+  :is(
+    p,
+    span,
+    button,
+    .ms-data-label,
+    [class*="text-ms-warm-white"],
+    [class*="text-ms-electric-yellow"],
+    [class*="text-ms-slipstream-teal"]
+  ) {
+  color: inherit !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-gallery-wall.ms-editorial-surface
+  .ms-gallery-caption
+  .ms-data-label {
+  color: var(--ms-theme-accent-yellow) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-gallery-wall.ms-editorial-surface
+  .ms-gallery-control-reflection
+  .ms-data-label {
+  color: var(--ms-theme-accent-cyan) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface.ms-editorial-surface
+  .ms-blue-panel
+  .ms-news-featured-excerpt {
+  color: var(--ms-theme-text-muted-on-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface.ms-editorial-surface
+  .ms-news-latest-surface
+  .ms-news-archive-eyebrow.ms-kicker {
+  color: var(--ms-theme-accent-cyan) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface.ms-editorial-surface
+  .ms-news-latest-surface
+  .ms-news-archive-order.ms-data-label {
+  color: var(--ms-theme-accent-orange) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface.ms-editorial-surface
+  .ms-news-latest-surface
+  :is(
+    .ms-news-archive-heading.ms-heading-section,
+    .ms-news-archive-index,
+    .ms-news-archive-date.ms-data-label,
+    .ms-news-archive-title.ms-heading-card,
+    .ms-news-archive-excerpt,
+    .ms-news-archive-arrow
+  ) {
+  color: var(--ms-theme-text-muted-on-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-feed-surface.ms-editorial-surface
+  .ms-news-latest-surface
+  .ms-news-archive-arrow {
+  border-color: var(--ms-theme-text-muted-on-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-spectrum-sections > section::after,
+[data-ms-theme="theme-vendor-editorial"] .ms-reflected-light-surface::after {
+  background: var(--ms-theme-separator-bright) !important;
+}
+
+/* Vendor Editorial light-section contract: cream surfaces use Draftline Blue
+ * headings, crimson editorial labels/eyebrows, and charcoal body copy. Keep
+ * this scoped to section headers so nested dark/action cards can retain their
+ * own Motorsport signal colors. */
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  )
+  > .ms-shell
+  > header
+  :is(
+    h1,
+    h2,
+    h3,
+    h4,
+    .ms-heading-hero,
+    .ms-heading-page,
+    .ms-heading-section,
+    .ms-heading-article,
+    .ms-heading-feature,
+    .ms-heading-card
+  ) {
+  color: var(--ms-theme-text-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  )
+  > .ms-shell
+  > header
+  :is(.ms-kicker, .ms-data-label) {
+  color: var(--ms-theme-eyebrow-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(
+    .ms-reflected-light-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-surface:not(.ms-editorial-dark-surface),
+    .ms-editorial-intro,
+    .ms-editorial-canvas,
+    .ms-editorial-muted,
+    .ms-surface-light,
+    .ms-tone-light,
+    .ms-surface-subtle,
+    .ms-tone-subtle
+  )
+  > .ms-shell
+  > header
+  :is(p, li, dt, dd, time, [class*="text-ms-warm-white"], .text-white) {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-about-capabilities
+  article
+  .ms-heading-card {
+  color: var(--ms-theme-text-on-warm) !important;
+}
+
+/* The homepage event-control panel is a brand-red signal surface. Use the
+ * yellow Event File action and yellow status treatment so both controls stay
+ * distinct from the red panel and retain accessible contrast. */
+[data-ms-theme="theme-vendor-editorial"] .ms-event-feature-details {
+  background: var(--ms-theme-accent-crimson) !important;
+  color: var(--color-ms-warm-white) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-event-feature-file,
+[data-ms-theme="theme-vendor-editorial"] .ms-event-feature-file:hover,
+[data-ms-theme="theme-vendor-editorial"] .ms-event-feature-file:focus-visible {
+  background: #f5c800 !important;
+  color: #050505 !important;
+  border-color: rgb(27 27 27 / 0.24) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-event-feature-status {
+  border-color: #f5c800 !important;
+  color: #f5c800 !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-event-feature-details
+  > div:first-child
+  > span:last-child {
+  border-color: var(--ms-theme-accent-yellow) !important;
+  color: var(--ms-theme-accent-yellow) !important;
+}
+
+/* Newsletter is a light editorial panel even though its legacy utility class
+ * is `bg-ms-graphite`; keep reading copy dark while retaining white text on
+ * the crimson action and dark email control. */
+[data-ms-theme="theme-vendor-editorial"] .ms-newsletter-card {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-newsletter-card
+  :is(.ms-kicker, .ms-data-label, p) {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-newsletter-card
+  :is(input, button.bg-ms-apex-crimson, button.bg-ms-ignition-orange) {
+  color: var(--color-ms-warm-white) !important;
+}
+
+[data-ms-theme="theme-vendor-night"] .ms-about-story-surface,
+[data-ms-theme="theme-vendor-night"] .ms-about-team-surface,
+[data-ms-theme="theme-vendor-night"] .ms-reflected-light-surface {
+  background:
+    radial-gradient(circle at 8% 90%, rgb(232 25 44 / 0.42), transparent 28%),
+    radial-gradient(circle at 82% 8%, rgb(50 230 237 / 0.2), transparent 30%),
+    linear-gradient(122deg, #080b12 0%, #101827 54%, #071f58 100%);
+}
+
+/* Latest News uses the Gateway-style signature flag treatment instead of the
+ * old span-based race flag strips. */
+[data-ms-theme="theme-vendor-editorial"] .ms-home-news-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-home-news-surface::after {
   z-index: 0;
+  content: "";
+  pointer-events: none;
+  width: clamp(24rem, 46vw, 46rem);
+  height: clamp(13rem, 23vw, 23rem);
+  position: absolute;
+  top: auto;
+  right: auto;
   bottom: clamp(3rem, 7vw, 7rem);
   left: clamp(-6rem, -3vw, -2rem);
-  display: grid;
-  width: min(50vw, 44rem);
-  grid-template-columns: repeat(6, minmax(4rem, 1fr));
-  gap: 0.65rem;
-  opacity: 0.3;
-  pointer-events: none;
-  transform: skewX(-28deg);
-  mask-image: linear-gradient(90deg, black 0%, black 54%, transparent 100%);
-}
-
-.ms-news-race-flag span {
-  height: clamp(4rem, 7vw, 7rem);
   background: linear-gradient(
-    145deg,
-    rgb(255 249 238 / 0.1),
-    rgb(232 25 44 / 0.58) 56%,
-    rgb(255 107 0 / 0.42)
+    112deg,
+    rgb(226 50 30 / 0.18),
+    rgb(255 80 50 / 0.42)
   );
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 810 280' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='white'%3E%3Cpath d='M130 0h72l-81 140H49L130 0Z' opacity='.16'/%3E%3Cpath d='M265 0h72l-81 140h-72L265 0Z' opacity='.31'/%3E%3Cpath d='M400 0h72l-81 140h-72L400 0Z' opacity='.47'/%3E%3Cpath d='M535 0h72l-81 140h-72L535 0Z' opacity='.64'/%3E%3Cpath d='M670 0h72l-81 140h-72L670 0Z' opacity='.82'/%3E%3Cpath d='M117 140h72l-81 140H36l81-140Z' opacity='.16'/%3E%3Cpath d='M252 140h72l-81 140h-72l81-140Z' opacity='.31'/%3E%3Cpath d='M387 140h72l-81 140h-72l81-140Z' opacity='.47'/%3E%3Cpath d='M522 140h72l-81 140h-72l81-140Z' opacity='.64'/%3E%3Cpath d='M657 140h72l-81 140h-72l81-140Z' opacity='.82'/%3E%3C/g%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 810 280' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='white'%3E%3Cpath d='M130 0h72l-81 140H49L130 0Z' opacity='.16'/%3E%3Cpath d='M265 0h72l-81 140h-72L265 0Z' opacity='.31'/%3E%3Cpath d='M400 0h72l-81 140h-72L400 0Z' opacity='.47'/%3E%3Cpath d='M535 0h72l-81 140h-72L535 0Z' opacity='.64'/%3E%3Cpath d='M670 0h72l-81 140h-72L670 0Z' opacity='.82'/%3E%3Cpath d='M117 140h72l-81 140H36l81-140Z' opacity='.16'/%3E%3Cpath d='M252 140h72l-81 140h-72l81-140Z' opacity='.31'/%3E%3Cpath d='M387 140h72l-81 140h-72l81-140Z' opacity='.47'/%3E%3Cpath d='M522 140h72l-81 140h-72l81-140Z' opacity='.64'/%3E%3Cpath d='M657 140h72l-81 140h-72l81-140Z' opacity='.82'/%3E%3C/g%3E%3C/svg%3E");
+  -webkit-mask-position: 0 100%;
+  mask-position: 0 100%;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
-.ms-news-race-flag span:nth-child(2n) {
-  background: linear-gradient(
-    145deg,
-    rgb(245 200 0 / 0.08),
-    rgb(255 107 0 / 0.5) 48%,
-    rgb(232 25 44 / 0.32)
-  );
+[data-ms-theme="theme-vendor-editorial"] .ms-home-news-surface > .ms-shell {
+  position: relative;
+  z-index: 1;
 }
 
-.ms-news-race-flag span:nth-child(n + 7) {
-  transform: translateX(3rem);
-  opacity: 0.72;
-}
-
-.ms-news-detail-intro,
 .ms-news-detail-story,
 .ms-news-detail-related {
   position: relative;
@@ -773,14 +1827,6 @@ select {
   overflow: hidden;
   color-scheme: dark;
   color: var(--ms-text-on-dark-primary);
-}
-
-.ms-news-detail-intro {
-  background:
-    radial-gradient(circle at 8% 92%, rgb(232 25 44 / 0.55), transparent 34%),
-    radial-gradient(circle at 72% 0%, rgb(255 107 0 / 0.46), transparent 32%),
-    radial-gradient(circle at 98% 90%, rgb(0 196 204 / 0.22), transparent 28%),
-    linear-gradient(118deg, #071a3d 0%, #152b5a 52%, #45212f 100%);
 }
 
 .ms-news-detail-story {
@@ -811,7 +1857,6 @@ select {
     linear-gradient(122deg, #071a3d 0%, #142c5e 56%, #3d2132 100%);
 }
 
-.ms-news-detail-intro::before,
 .ms-news-detail-story::before,
 .ms-news-detail-related::before {
   position: absolute;
@@ -871,6 +1916,10 @@ select {
   background:
     linear-gradient(90deg, rgb(0 51 160 / 0.98), rgb(0 33 108 / 0.98)),
     var(--color-ms-draftline-blue);
+}
+
+.ms-blue-band-metric {
+  color: var(--ms-theme-accent-cyan);
 }
 
 .ms-blue-band-grid {
@@ -1127,15 +2176,174 @@ select {
   .ms-home-hero {
     min-height: calc(100svh - var(--ms-header-height));
   }
+}
 
-  .ms-apex-horizon {
-    top: 42%;
-    left: 32%;
-    width: 58%;
-    height: 25%;
-  }
+/* News detail story becomes the warm editorial reading surface in the
+ * vendor-editorial preset. Keep the image caption dark, but translate the
+ * article copy and story file to the light-page contrast system. */
+[data-ms-theme="theme-vendor-editorial"] .ms-news-detail-story {
+  color-scheme: light;
+  color: var(--ms-theme-body-on-warm) !important;
+  background: var(--ms-theme-surface-warm) !important;
+}
 
-  .ms-news-race-flag {
-    display: none;
-  }
+[data-ms-theme="theme-vendor-editorial"] .ms-news-detail-story::before {
+  background-image: radial-gradient(
+    circle,
+    rgb(0 51 160 / 0.1) 1px,
+    transparent 1px
+  );
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-detail-story
+  article
+  .ms-shell
+  > div:first-child {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-detail-story
+  article
+  .ms-shell
+  > div:first-child
+  [class*="text-ms-warm-white/"] {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-news-story-file {
+  color: var(--ms-theme-body-on-warm) !important;
+  background: var(--ms-theme-surface-panel);
+  border-color: var(--ms-theme-separator) !important;
+  box-shadow: 0 1.5rem 4rem rgb(27 27 27 / 0.08);
+  backdrop-filter: none;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-story-file
+  :is(.ms-kicker, .ms-data-label) {
+  color: var(--ms-theme-eyebrow-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-story-file
+  :is(dt, dd, [class*="text-ms-warm-white/"]) {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-story-file
+  :is(dt, [class*="text-ms-warm-white/"]) {
+  color: var(--ms-theme-text-muted-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-news-story-file
+  :is(a.text-ms-slipstream-teal, a[class*="text-ms-slipstream-teal"]) {
+  color: var(--ms-theme-accent-orange) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  [data-cms-section-key="inquiry-form"]
+  form.mt-12.space-y-6
+  :is(input, select, textarea, option) {
+  color: var(--ms-theme-text-on-navy) !important;
+  -webkit-text-fill-color: var(--ms-theme-text-on-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  [data-cms-section-key="inquiry-form"]
+  form.mt-12.space-y-6
+  :is(input[name="name"], input[name="email"]):-webkit-autofill,
+[data-ms-theme="theme-vendor-editorial"]
+  [data-cms-section-key="inquiry-form"]
+  form.mt-12.space-y-6
+  :is(input[name="name"], input[name="email"]):-webkit-autofill:hover,
+[data-ms-theme="theme-vendor-editorial"]
+  [data-cms-section-key="inquiry-form"]
+  form.mt-12.space-y-6
+  :is(input[name="name"], input[name="email"]):-webkit-autofill:focus,
+[data-ms-theme="theme-vendor-editorial"]
+  [data-cms-section-key="inquiry-form"]
+  form.mt-12.space-y-6
+  :is(input[name="name"], input[name="email"]):-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px rgb(7 26 61 / 0.85) inset !important;
+  -webkit-text-fill-color: var(--ms-theme-text-on-navy) !important;
+  caret-color: var(--ms-theme-text-on-navy);
+}
+
+/* Rallycross cards keep their navy Motorsport signal surface in Vendor
+ * Editorial, so their content must use the navy contrast palette. */
+[data-ms-theme="theme-vendor-editorial"] .ms-rx-format-card {
+  color: var(--ms-theme-text-on-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .ms-rx-format-card
+  .ms-heading-card {
+  color: var(--ms-theme-text-on-navy) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .ms-rx-format-card
+  > p:last-child {
+  color: var(--ms-theme-text-muted-on-navy) !important;
+}
+
+/* The race-day guide content sits on a warm panel in Vendor Editorial. */
+[data-ms-theme="theme-vendor-editorial"] #race-day-guide .ms-panel > .divide-y {
+  color: var(--ms-theme-body-on-warm) !important;
+  border-color: var(--ms-theme-separator) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  #race-day-guide
+  .ms-panel
+  > .divide-y
+  > article {
+  color: var(--ms-theme-body-on-warm) !important;
+  border-color: var(--ms-theme-separator) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  #race-day-guide
+  .ms-panel
+  > .divide-y
+  > article
+  h4 {
+  color: var(--ms-theme-text-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  #race-day-guide
+  .ms-panel
+  > .divide-y
+  > article
+  span {
+  color: var(--ms-theme-text-muted-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  #race-day-guide
+  .ms-panel
+  > .divide-y
+  > article
+  p {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-rx-footer-cta {
+  color: var(--ms-theme-text-on-charcoal) !important;
+  background: var(--ms-theme-surface-charcoal) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-merch-final-cta .ms-panel {
+  background: transparent !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-newsletter-thermal-rule {
+  background: rgb(255 249 238 / 0.12) !important;
 }

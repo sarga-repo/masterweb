@@ -57,6 +57,11 @@ export function HeroVideo({
     });
   }, [paused, prefersReducedMotion]);
 
+  const handleVideoReady = () => {
+    setReady(true);
+    if (paused) videoRef.current?.pause();
+  };
+
   if (prefersReducedMotion || (!webm && !mp4)) return null;
 
   return (
@@ -69,9 +74,9 @@ export function HeroVideo({
       loop
       playsInline
       preload="metadata"
-      poster={poster}
-      onCanPlay={() => setReady(true)}
-      onError={() => setReady(false)}
+      poster={ready ? undefined : poster}
+      onLoadedData={handleVideoReady}
+      onCanPlay={handleVideoReady}
       className={`absolute inset-0 size-full ${objectClassName} transition-opacity duration-700 ${
         ready ? "opacity-100" : "opacity-0"
       }`}

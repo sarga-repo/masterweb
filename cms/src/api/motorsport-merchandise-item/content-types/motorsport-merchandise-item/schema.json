@@ -1,0 +1,19 @@
+{
+  "kind": "collectionType",
+  "collectionName": "motorsport_merchandise_items",
+  "info": { "singularName": "motorsport-merchandise-item", "pluralName": "motorsport-merchandise-items", "displayName": "Motorsport Merchandise Item", "description": "Motorsport merchandise showcase teasers without internal commerce" },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": { "i18n": { "localized": true } },
+  "attributes": {
+    "title": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
+    "slug": { "type": "uid", "targetField": "title", "required": true },
+    "description": { "type": "richtext", "pluginOptions": { "i18n": { "localized": true } } },
+    "image": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "priceLabel": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
+    "availabilityStatus": { "type": "enumeration", "enum": ["comingSoon", "availableExternal", "inquiryOnly", "hidden"], "default": "comingSoon", "required": true },
+    "externalUrl": { "type": "string" },
+    "sortOrder": { "type": "integer", "default": 0 },
+    "seo": { "type": "component", "component": "shared.seo", "repeatable": false, "pluginOptions": { "i18n": { "localized": true } } },
+    "legacySourceDocumentId": { "type": "string", "private": true, "configurable": false }
+  }
+}

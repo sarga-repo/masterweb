@@ -3,7 +3,8 @@ import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import {
   EventListCard,
-  InformationBand,
+  MotorsportPageInformationBand,
+  PageComingSoon,
   PageHero,
   PageShell,
   SectionHeader,
@@ -11,6 +12,9 @@ import {
 } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { fetchEvents, fetchSitePage, fetchTicketCtas } from "@/lib/cms-data";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
+import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
 
 export const metadata: Metadata = {
   title: "Tickets",
@@ -34,166 +38,223 @@ const PLACEHOLDER_CTAS: Array<{
 ];
 
 export default async function TicketsPage() {
+  const locale = await getRequestLocale();
   const [page, events, ctas] = await Promise.all([
-    fetchSitePage("custom", "/tickets"),
-    fetchEvents(),
-    fetchTicketCtas(),
+    fetchSitePage("custom", "/tickets", locale),
+    fetchEvents(50, locale),
+    fetchTicketCtas(locale),
   ]);
+  const isPreview = await isStrapiPreviewEnabled();
   const control = page?.sections.find(
     (section) => section.sectionKey === "ticket-control",
   );
   const featured = page?.sections.find(
     (section) => section.sectionKey === "featured-ticket",
   );
+  const info = page?.sections.find(
+    (section) => section.sectionKey === "ticket-info",
+  );
+  const ticketedEventsSection = page?.sections.find(
+    (section) => section.sectionKey === "ticketed-events",
+  );
+  const pageAvailable = isCmsPageVisible(page?.pageAvailability);
 
   const ticketedEvents = events.filter((e) => e.ticketHref);
-  const displayCtas = ctas.length > 0 ? ctas : PLACEHOLDER_CTAS;
+  const displayCtas = isPreview || ctas.length > 0 ? ctas : PLACEHOLDER_CTAS;
 
   return (
     <PageShell spectrumSeparators>
-      <PageHero
-        kicker={page?.navigationLabel ?? "Curated ticket journey"}
-        kickerColor="orange"
-        title={page?.heroTitle ?? "Tickets"}
-        backgroundImage="/media/motorsport-design-hero.png"
-        backgroundAlt="Race car throwing sparks under circuit lights"
-        accent="orange"
-        accentPosition="bottom-left"
-        grain
-        speedLines
-        surface="heat"
-        description={
-          page?.heroDescription ??
-          "Sarga Motorsport partners with approved ticketing platforms. Every CTA below redirects to a secure partner checkout - we never process payment directly."
-        }
-      />
-
-      <InformationBand
-        eyebrow={control?.eyebrow ?? "Ticket control / Partner routing"}
-        title={control?.title ?? "Your seat. Their secure checkout."}
-        description={
-          control?.body ??
-          "Sarga Motorsport publishes approved destinations but never stores payment details or runs an internal ticket engine."
-        }
-        items={[
-          { label: "Checkout", value: "Partner" },
-          { label: "Payment", value: "External" },
-          { label: "Support", value: "Available" },
-        ]}
-      />
-
-      {/* Featured ticket CTA */}
-      <section className="ms-reflected-light-surface ms-section">
-        <div className="ms-shell">
-          <SectionHeader
-            eyebrow={featured?.eyebrow ?? "Featured ticket"}
-            title={featured?.title ?? "Secure your seat."}
-            align="left"
-          />
-          <div className="mt-12 space-y-8">
-            {displayCtas.map((cta, index) => (
-              <div key={`${cta.href}-${cta.eventName}-${index}`}>
-                <TicketCtaPanel
-                  eyebrow="Official partner redirect"
-                  title={cta.eventName ?? "Upcoming event"}
-                  description="Checkout is handled by our approved ticketing partner. Secure payment, guaranteed entry, zero markup."
-                  eventMeta={cta.eventName}
-                  provider={cta.provider}
-                  surface="reflected"
-                  cta={{
-                    label: cta.label,
-                    href: cta.href,
-                    external: cta.href.startsWith("http"),
-                  }}
-                />
-                {/* Optional CMS-driven embed - only rendered when explicitly configured */}
-                {cta.embedHref ? (
-                  <div className="ms-blue-panel mt-4 p-4">
-                    <p className="ms-data-label mb-3 text-ms-warm-white/52">
-                      Embedded checkout
-                    </p>
-                    <iframe
-                      src={cta.embedHref}
-                      title={`Ticket checkout - ${cta.eventName ?? "event"}`}
-                      className="h-[32rem] w-full border-0"
-                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                      referrerPolicy="no-referrer"
-                      loading="lazy"
-                    />
-                  </div>
-                ) : null}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Ticketed events */}
-      {ticketedEvents.length > 0 ? (
-        <section className="ms-reflected-light-surface ms-section">
-          <div className="ms-shell">
-            <SectionHeader
-              index="TICKETS"
-              eyebrow="Events with tickets available"
-              title="On sale now."
-              align="left"
-            />
-            <div className="mt-12">
-              {ticketedEvents.map((event, i) => (
-                <EventListCard
-                  key={event.href}
-                  event={event}
-                  index={String(i + 1).padStart(2, "0")}
-                />
-              ))}
+      {!pageAvailable ? (
+        <PageComingSoon
+          availability={page?.pageAvailability ?? { pageEnabled: false }}
+        />
+      ) : (
+        <>
+          {page?.heroEnabled !== false ? (
+            <div data-cms-section-key="hero" data-cms-enabled="true">
+              <PageHero
+                kicker={page?.navigationLabel ?? "Curated ticket journey"}
+                kickerColor="orange"
+                title={page?.heroTitle ?? "Tickets"}
+                backgroundImage={
+                  page?.heroImage || "/media/motorsport-design-hero.png"
+                }
+                backgroundAlt={
+                  page?.heroImageAlt ||
+                  "Race car throwing sparks under circuit lights"
+                }
+                accent="orange"
+                accentPosition="bottom-left"
+                grain
+                speedLines
+                surface="heat"
+                description={
+                  page?.heroDescription ??
+                  "Sarga Motorsport partners with approved ticketing platforms. Every CTA below redirects to a secure partner checkout - we never process payment directly."
+                }
+              />
             </div>
-          </div>
-        </section>
-      ) : null}
+          ) : null}
 
-      {/* Info section */}
-      <section className="ms-blue-heat-surface py-16">
-        <div className="ms-shell grid gap-10 lg:grid-cols-2">
-          <div>
-            <h2 className="ms-heading-feature">How it works.</h2>
-            <ul className="mt-8 space-y-5 text-base leading-7 text-ms-warm-white/60">
-              <li className="flex gap-4">
-                <span className="mt-1 block h-6 w-1 bg-ms-apex-crimson" />
-                Select an event and click the ticket CTA.
-              </li>
-              <li className="flex gap-4">
-                <span className="mt-1 block h-6 w-1 bg-ms-ignition-orange" />
-                You&apos;ll be redirected to our approved ticketing partner.
-              </li>
-              <li className="flex gap-4">
-                <span className="mt-1 block h-6 w-1 bg-ms-electric-yellow" />
-                Complete your purchase on the partner platform securely.
-              </li>
-              <li className="flex gap-4">
-                <span className="mt-1 block h-6 w-1 bg-ms-slipstream-teal" />
-                Receive your confirmation and show up on race day.
-              </li>
-            </ul>
-          </div>
-          <div className="ms-blue-panel ms-panel p-8">
-            <span className="ms-data-label text-ms-warm-white/42">
-              Ticket support
-            </span>
-            <p className="mt-6 text-base leading-7 text-ms-warm-white/60">
-              Need help with your ticket? Contact our support team for
-              event-specific inquiries, group bookings, or accessibility
-              requests.
-            </p>
-            <Link
-              href="/contact"
-              className="group mt-8 inline-flex items-center gap-3 border-b border-ms-apex-crimson pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] transition-colors hover:text-ms-ignition-orange"
+          {page?.informationBand || isCmsSectionVisible(control) ? (
+            <div data-cms-section-key="ticket-control" data-cms-enabled="true">
+              <MotorsportPageInformationBand
+                band={page?.informationBand}
+                fallback={{
+                  isActive: control?.enabled,
+                  eyebrow:
+                    control?.eyebrow ?? "Ticket control / Partner routing",
+                  title: control?.title ?? "Your seat. Their secure checkout.",
+                  description:
+                    control?.body ??
+                    "Sarga Motorsport publishes approved destinations but never stores payment details or runs an internal ticket engine.",
+                  metrics: [
+                    { label: "Checkout", value: "Partner" },
+                    { label: "Payment", value: "External" },
+                    { label: "Support", value: "Available" },
+                  ],
+                }}
+              />
+            </div>
+          ) : null}
+
+          {/* Featured ticket CTA */}
+          {isCmsSectionVisible(featured) ? (
+            <section
+              data-cms-section-key="featured-ticket"
+              data-cms-enabled="true"
+              className="ms-reflected-light-surface ms-section"
             >
-              Contact support
-              <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
-        </div>
-      </section>
+              <div className="ms-shell">
+                <SectionHeader
+                  eyebrow={featured?.eyebrow ?? "Featured ticket"}
+                  title={featured?.title ?? "Secure your seat."}
+                  align="left"
+                />
+                <div className="mt-12 space-y-8">
+                  {displayCtas.map((cta, index) => (
+                    <div key={`${cta.href}-${cta.eventName}-${index}`}>
+                      <TicketCtaPanel
+                        eyebrow="Official partner redirect"
+                        title={cta.eventName ?? "Upcoming event"}
+                        description="Checkout is handled by our approved ticketing partner. Secure payment, guaranteed entry, zero markup."
+                        eventMeta={cta.eventName}
+                        provider={cta.provider}
+                        surface="reflected"
+                        cta={{
+                          label: cta.label,
+                          href: cta.href,
+                          external: cta.href.startsWith("http"),
+                        }}
+                      />
+                      {/* Optional CMS-driven embed - only rendered when explicitly configured */}
+                      {cta.embedHref ? (
+                        <div className="ms-blue-panel mt-4 p-4">
+                          <p className="ms-data-label mb-3 text-ms-warm-white/52">
+                            Embedded checkout
+                          </p>
+                          <iframe
+                            src={cta.embedHref}
+                            title={`Ticket checkout - ${cta.eventName ?? "event"}`}
+                            className="h-[32rem] w-full border-0"
+                            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                            referrerPolicy="no-referrer"
+                            loading="lazy"
+                          />
+                        </div>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          ) : null}
+
+          {/* Ticketed events */}
+          {isCmsSectionVisible(ticketedEventsSection) &&
+          ticketedEvents.length > 0 ? (
+            <section
+              data-cms-section-key="ticketed-events"
+              data-cms-enabled="true"
+              className="ms-reflected-light-surface ms-section"
+            >
+              <div className="ms-shell">
+                <SectionHeader
+                  index="TICKETS"
+                  eyebrow={
+                    ticketedEventsSection?.eyebrow ??
+                    "Events with tickets available"
+                  }
+                  title={ticketedEventsSection?.title ?? "On sale now."}
+                  description={ticketedEventsSection?.body}
+                  align="left"
+                />
+                <div className="mt-12">
+                  {ticketedEvents.map((event, i) => (
+                    <EventListCard
+                      key={event.href}
+                      event={event}
+                      index={String(i + 1).padStart(2, "0")}
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
+          ) : null}
+
+          {/* Info section */}
+          {isCmsSectionVisible(info) ? (
+            <section
+              data-cms-section-key="ticket-info"
+              data-cms-enabled="true"
+              className="ms-blue-heat-surface py-16"
+            >
+              <div className="ms-shell grid gap-10 lg:grid-cols-2">
+                <div>
+                  <h2 className="ms-heading-feature">
+                    {info?.title ?? "How it works."}
+                  </h2>
+                  <ul className="mt-8 space-y-5 text-base leading-7 text-ms-warm-white/60">
+                    <li className="flex gap-4">
+                      <span className="mt-1 block h-6 w-1 bg-ms-apex-crimson" />
+                      Select an event and click the ticket CTA.
+                    </li>
+                    <li className="flex gap-4">
+                      <span className="mt-1 block h-6 w-1 bg-ms-ignition-orange" />
+                      You&apos;ll be redirected to our approved ticketing
+                      partner.
+                    </li>
+                    <li className="flex gap-4">
+                      <span className="mt-1 block h-6 w-1 bg-ms-electric-yellow" />
+                      Complete your purchase on the partner platform securely.
+                    </li>
+                    <li className="flex gap-4">
+                      <span className="mt-1 block h-6 w-1 bg-ms-slipstream-teal" />
+                      Receive your confirmation and show up on race day.
+                    </li>
+                  </ul>
+                </div>
+                <div className="ms-blue-panel ms-panel p-8">
+                  <span className="ms-data-label text-ms-warm-white/42">
+                    Ticket support
+                  </span>
+                  <p className="mt-6 text-base leading-7 text-ms-warm-white/60">
+                    {info?.body ??
+                      "Need help with your ticket? Contact our support team for event-specific inquiries, group bookings, or accessibility requests."}
+                  </p>
+                  <Link
+                    href="/contact"
+                    className="group mt-8 inline-flex items-center gap-3 border-b border-ms-apex-crimson pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] transition-colors hover:text-ms-ignition-orange"
+                  >
+                    Contact support
+                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+              </div>
+            </section>
+          ) : null}
+        </>
+      )}
     </PageShell>
   );
 }

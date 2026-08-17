@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_motorsport_page_information_bands",
+  "info": {
+    "displayName": "Page Information Band",
+    "description": "Reusable Motorsport information band rendered immediately after a page hero."
+  },
+  "options": {},
+  "attributes": {
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 100,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 180,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "description": {
+      "type": "richtext",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "showMetricGroup": {
+      "type": "boolean",
+      "default": true,
+      "required": true,
+      "description": "Hides the complete right-bottom metric group and all of its separators when false."
+    },
+    "metrics": {
+      "type": "component",
+      "repeatable": true,
+      "component": "motorsport.information-band-metric",
+      "max": 3,
+      "pluginOptions": { "i18n": { "localized": true } }
+    }
+  }
+}

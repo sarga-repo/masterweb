@@ -702,6 +702,15 @@ export interface ApiEventEvent extends Struct.CollectionTypeSchema {
       }>;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::event.event'>;
+    motorsportPresentation: Schema.Attribute.Component<
+      'motorsport.detail-presentation',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     publishedAt: Schema.Attribute.DateTime;
     raceClass: Schema.Attribute.String;
     racingCategory: Schema.Attribute.String &
@@ -1168,6 +1177,9 @@ export interface ApiMediaGalleryMediaGallery
         'jockey',
         'hospitality',
         'press',
+        'circuit',
+        'two-wheels',
+        'mixed-surface',
         'other',
       ]
     >;
@@ -1282,6 +1294,1580 @@ export interface ApiMerchandiseItemMerchandiseItem
   };
 }
 
+export interface ApiMotorsportAboutPageMotorsportAboutPage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'motorsport-about-page';
+  info: {
+    displayName: 'Motorsport About Page';
+    pluralName: 'motorsport-about-pages';
+    singularName: 'motorsport-about-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    capabilities: Schema.Attribute.Component<
+      'motorsport.about-capabilities',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    contactCtaSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ecosystemCtaSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    informationBand: Schema.Attribute.Component<
+      'motorsport.page-information-band',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-about-page.motorsport-about-page'
+    >;
+    navigationLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pageAvailability: Schema.Attribute.Component<
+      'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    profileSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    routeAliases: Schema.Attribute.JSON &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<[]>;
+    routePath: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'/about'>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    siteScope: Schema.Attribute.Enumeration<['motorsport']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    teamSection: Schema.Attribute.Component<'motorsport.page-section', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportContactPageMotorsportContactPage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'motorsport-contact-page';
+  info: {
+    displayName: 'Motorsport Contact Page';
+    pluralName: 'motorsport-contact-pages';
+    singularName: 'motorsport-contact-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    finalCtaSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    informationBand: Schema.Attribute.Component<
+      'motorsport.page-information-band',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    inquiryControlSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    inquiryFormSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-contact-page.motorsport-contact-page'
+    >;
+    navigationLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pageAvailability: Schema.Attribute.Component<
+      'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    routeAliases: Schema.Attribute.JSON &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<[]>;
+    routePath: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'/contact'>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    siteScope: Schema.Attribute.Enumeration<['motorsport']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportEventMotorsportEvent
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'motorsport_events';
+  info: {
+    description: 'Motorsport-owned events, schedules, partners, and ticket destinations';
+    displayName: 'Motorsport Event';
+    pluralName: 'motorsport-events';
+    singularName: 'motorsport-event';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    broadcastUrl: Schema.Attribute.String;
+    business: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::ecosystem-business.ecosystem-business'
+    >;
+    circuitName: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    coverImage: Schema.Attribute.Media<'images'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.RichText &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    embedCode: Schema.Attribute.Text & Schema.Attribute.Private;
+    embedUrl: Schema.Attribute.String;
+    endDate: Schema.Attribute.DateTime;
+    eventDate: Schema.Attribute.DateTime;
+    eventStatus: Schema.Attribute.Enumeration<
+      [
+        'upcoming',
+        'live',
+        'past',
+        'hidden',
+        'announced',
+        'ticketsOpen',
+        'soldOut',
+        'completed',
+        'cancelled',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'upcoming'>;
+    gallery: Schema.Attribute.Media<'images' | 'videos', true>;
+    heroMedia: Schema.Attribute.Media<'images' | 'videos'>;
+    legacySourceDocumentId: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-event.motorsport-event'
+    >;
+    motorsportPresentation: Schema.Attribute.Component<
+      'motorsport.detail-presentation',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    racingCategory: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    schedule: Schema.Attribute.Component<'shared.event-session', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    seriesName: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    sponsors: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::motorsport-partner.motorsport-partner'
+    >;
+    ticketCtaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    ticketCtas: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-ticket-cta.motorsport-ticket-cta'
+    >;
+    ticketIntegrationType: Schema.Attribute.Enumeration<
+      ['redirect', 'deepLink', 'embed']
+    > &
+      Schema.Attribute.DefaultTo<'redirect'>;
+    ticketUrl: Schema.Attribute.String;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    venue: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    venueAddress: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+  };
+}
+
+export interface ApiMotorsportEventsPageMotorsportEventsPage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'motorsport-events-page';
+  info: {
+    displayName: 'Motorsport Events Page';
+    pluralName: 'motorsport-events-pages';
+    singularName: 'motorsport-events-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    calendarSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    eventControlSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    informationBand: Schema.Attribute.Component<
+      'motorsport.page-information-band',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-events-page.motorsport-events-page'
+    >;
+    navigationLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pageAvailability: Schema.Attribute.Component<
+      'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    programmesSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    routeAliases: Schema.Attribute.JSON &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<[]>;
+    routePath: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'/events'>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    siteScope: Schema.Attribute.Enumeration<['motorsport']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportExperiencePageMotorsportExperiencePage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'motorsport-experience-page';
+  info: {
+    displayName: 'Motorsport Experience Page';
+    pluralName: 'motorsport-experience-pages';
+    singularName: 'motorsport-experience-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    experienceControlSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    finalCtaSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    informationBand: Schema.Attribute.Component<
+      'motorsport.page-information-band',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-experience-page.motorsport-experience-page'
+    >;
+    navigationLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pageAvailability: Schema.Attribute.Component<
+      'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pillarsSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    routeAliases: Schema.Attribute.JSON &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<[]>;
+    routePath: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'/experience'>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    siteScope: Schema.Attribute.Enumeration<['motorsport']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    trackSection: Schema.Attribute.Component<'motorsport.page-section', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportGalleryPageMotorsportGalleryPage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'motorsport-gallery-page';
+  info: {
+    displayName: 'Motorsport Gallery Page';
+    pluralName: 'motorsport-gallery-pages';
+    singularName: 'motorsport-gallery-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    archiveSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    informationBand: Schema.Attribute.Component<
+      'motorsport.page-information-band',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-gallery-page.motorsport-gallery-page'
+    >;
+    navigationLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pageAvailability: Schema.Attribute.Component<
+      'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    routeAliases: Schema.Attribute.JSON &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<[]>;
+    routePath: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'/gallery'>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    siteScope: Schema.Attribute.Enumeration<['motorsport']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportHomePageMotorsportHomePage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'motorsport-home-page';
+  info: {
+    displayName: 'Motorsport Home Page';
+    pluralName: 'motorsport-home-pages';
+    singularName: 'motorsport-home-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    connectedRecordsSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    gallerySection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    heroSlides: Schema.Attribute.Component<'motorsport.hero-slide', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 3;
+        },
+        number
+      >;
+    informationBand: Schema.Attribute.Component<
+      'motorsport.page-information-band',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    latestNewsSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-home-page.motorsport-home-page'
+    >;
+    navigationLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pageAvailability: Schema.Attribute.Component<
+      'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    routeAliases: Schema.Attribute.JSON &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<[]>;
+    routePath: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'/'>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    siteScope: Schema.Attribute.Enumeration<['motorsport']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    ticketSection: Schema.Attribute.Component<
+      'motorsport.home-ticket-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    upcomingEventsSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    worldSection: Schema.Attribute.Component<
+      'motorsport.world-of-motorsport',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+  };
+}
+
+export interface ApiMotorsportLeadershipPersonMotorsportLeadershipPerson
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'motorsport_leadership_people';
+  info: {
+    description: 'Motorsport leadership team members for the About page';
+    displayName: 'Motorsport Leadership Person';
+    pluralName: 'motorsport-leadership-people';
+    singularName: 'motorsport-leadership-person';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    group: Schema.Attribute.Enumeration<['board', 'executive', 'advisor']> &
+      Schema.Attribute.DefaultTo<'executive'>;
+    legacySourceDocumentId: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-leadership-person.motorsport-leadership-person'
+    >;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    portrait: Schema.Attribute.Media<'images'>;
+    publishedAt: Schema.Attribute.DateTime;
+    role: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    site: Schema.Attribute.Relation<'manyToOne', 'api::site.site'>;
+    summary: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportMerchandiseItemMotorsportMerchandiseItem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'motorsport_merchandise_items';
+  info: {
+    description: 'Motorsport merchandise showcase teasers without internal commerce';
+    displayName: 'Motorsport Merchandise Item';
+    pluralName: 'motorsport-merchandise-items';
+    singularName: 'motorsport-merchandise-item';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    availabilityStatus: Schema.Attribute.Enumeration<
+      ['comingSoon', 'availableExternal', 'inquiryOnly', 'hidden']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'comingSoon'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    externalUrl: Schema.Attribute.String;
+    image: Schema.Attribute.Media<'images'>;
+    legacySourceDocumentId: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-merchandise-item.motorsport-merchandise-item'
+    >;
+    priceLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportMerchandisePageMotorsportMerchandisePage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'motorsport-merchandise-page';
+  info: {
+    displayName: 'Motorsport Merchandise Page';
+    pluralName: 'motorsport-merchandise-pages';
+    singularName: 'motorsport-merchandise-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    catalogueSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    finalCtaSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    informationBand: Schema.Attribute.Component<
+      'motorsport.page-information-band',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-merchandise-page.motorsport-merchandise-page'
+    >;
+    merchControlSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    navigationLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pageAvailability: Schema.Attribute.Component<
+      'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    routeAliases: Schema.Attribute.JSON &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<[]>;
+    routePath: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'/merchandise'>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    siteScope: Schema.Attribute.Enumeration<['motorsport']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportNewsArticleMotorsportNewsArticle
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'motorsport_news_articles';
+  info: {
+    description: 'Motorsport-owned news, publications, reports, and magazine stories';
+    displayName: 'Motorsport News Article';
+    pluralName: 'motorsport-news-articles';
+    singularName: 'motorsport-news-article';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    author: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    body: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    category: Schema.Attribute.Enumeration<
+      [
+        'news',
+        'publication',
+        'press-release',
+        'report',
+        'magazine',
+        'race-report',
+        'announcement',
+        'lifestyle',
+        'community',
+        'media',
+        'race-results',
+        'event-announcement',
+        'partnership',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'news'>;
+    coverImage: Schema.Attribute.Media<'images'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    excerpt: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    isHotTopic: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    legacySourceDocumentId: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-news-article.motorsport-news-article'
+    >;
+    motorsportPresentation: Schema.Attribute.Component<
+      'motorsport.detail-presentation',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    publishedDate: Schema.Attribute.Date & Schema.Attribute.Required;
+    relatedBusinesses: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::ecosystem-business.ecosystem-business'
+    >;
+    relatedEvent: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::motorsport-event.motorsport-event'
+    >;
+    relatedGallery: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::media-gallery.media-gallery'
+    >;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportNewsPageMotorsportNewsPage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'motorsport-news-page';
+  info: {
+    displayName: 'Motorsport News Page';
+    pluralName: 'motorsport-news-pages';
+    singularName: 'motorsport-news-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    archiveIntroSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    galleryCtaSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    informationBand: Schema.Attribute.Component<
+      'motorsport.page-information-band',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    leadStorySection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-news-page.motorsport-news-page'
+    >;
+    navigationLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    newsControlSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pageAvailability: Schema.Attribute.Component<
+      'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    routeAliases: Schema.Attribute.JSON &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<[]>;
+    routePath: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'/news'>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    siteScope: Schema.Attribute.Enumeration<['motorsport']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportPartnerMotorsportPartner
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'motorsport_partners';
+  info: {
+    description: 'Motorsport sponsors and partners displayed across Motorsport routes';
+    displayName: 'Motorsport Partner';
+    pluralName: 'motorsport-partners';
+    singularName: 'motorsport-partner';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    legacySourceDocumentId: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-partner.motorsport-partner'
+    >;
+    logo: Schema.Attribute.Media<'images'>;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    partnerType: Schema.Attribute.Enumeration<
+      [
+        'sponsor',
+        'technical',
+        'media',
+        'broadcast',
+        'government',
+        'community',
+        'other',
+      ]
+    > &
+      Schema.Attribute.DefaultTo<'sponsor'>;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    websiteUrl: Schema.Attribute.String;
+  };
+}
+
+export interface ApiMotorsportPartnersPageMotorsportPartnersPage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'motorsport-partners-page';
+  info: {
+    displayName: 'Motorsport Partners Page';
+    pluralName: 'motorsport-partners-pages';
+    singularName: 'motorsport-partners-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    finalCtaSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    informationBand: Schema.Attribute.Component<
+      'motorsport.page-information-band',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-partners-page.motorsport-partners-page'
+    >;
+    navigationLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pageAvailability: Schema.Attribute.Component<
+      'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    partnerControlSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    partnerNetworkSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    routeAliases: Schema.Attribute.JSON &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<[]>;
+    routePath: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'/partners'>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    siteScope: Schema.Attribute.Enumeration<['motorsport']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiMotorsportProgramMotorsportProgram
   extends Struct.CollectionTypeSchema {
   collectionName: 'motorsport_programs';
@@ -1320,6 +2906,14 @@ export interface ApiMotorsportProgramMotorsportProgram
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     eventEndDate: Schema.Attribute.DateTime;
+    eventMenuEnabled: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
+    eventMenuLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     eventRules: Schema.Attribute.Component<'motorsport.rule-item', true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -1334,6 +2928,15 @@ export interface ApiMotorsportProgramMotorsportProgram
       'api::motorsport-program.motorsport-program'
     >;
     mainHeadline: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    motorsportPresentation: Schema.Attribute.Component<
+      'motorsport.detail-presentation',
+      false
+    > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -1515,6 +3118,15 @@ export interface ApiMotorsportRiderMotorsportRider
       'oneToMany',
       'api::motorsport-rider.motorsport-rider'
     >;
+    motorsportPresentation: Schema.Attribute.Component<
+      'motorsport.detail-presentation',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     nationality: Schema.Attribute.String;
     number: Schema.Attribute.String;
@@ -1617,6 +3229,354 @@ export interface ApiMotorsportStandingMotorsportStanding
   };
 }
 
+export interface ApiMotorsportThemeSettingsMotorsportThemeSettings
+  extends Struct.SingleTypeSchema {
+  collectionName: 'motorsport-theme-settings';
+  info: {
+    description: 'Allowlisted visual theme preset for the Motorsport website.';
+    displayName: 'Motorsport Theme Settings';
+    pluralName: 'motorsport-theme-settings-configs';
+    singularName: 'motorsport-theme-settings';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: false;
+    };
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-theme-settings.motorsport-theme-settings'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    siteScope: Schema.Attribute.Enumeration<['motorsport']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    themePreset: Schema.Attribute.Enumeration<
+      ['current-motorsport', 'vendor-editorial', 'vendor-night']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'current-motorsport'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'Motorsport Theme Settings'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportTicketCtaMotorsportTicketCta
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'motorsport_ticket_ctas';
+  info: {
+    description: 'Motorsport partner ticket redirects, deep links, and approved embeds. No internal payment.';
+    displayName: 'Motorsport Ticket CTA';
+    pluralName: 'motorsport-ticket-ctas';
+    singularName: 'motorsport-ticket-cta';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    activeFrom: Schema.Attribute.DateTime;
+    activeUntil: Schema.Attribute.DateTime;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ctaType: Schema.Attribute.Enumeration<['redirect', 'deepLink', 'embed']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'redirect'>;
+    embedCode: Schema.Attribute.Text & Schema.Attribute.Private;
+    embedConfigJson: Schema.Attribute.JSON;
+    image: Schema.Attribute.Media<'images'>;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    label: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    legacySourceDocumentId: Schema.Attribute.String & Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-ticket-cta.motorsport-ticket-cta'
+    >;
+    provider: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    relatedEvent: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::motorsport-event.motorsport-event'
+    >;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    trackingParams: Schema.Attribute.JSON;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    url: Schema.Attribute.String;
+  };
+}
+
+export interface ApiMotorsportTicketsPageMotorsportTicketsPage
+  extends Struct.SingleTypeSchema {
+  collectionName: 'motorsport-tickets-page';
+  info: {
+    displayName: 'Motorsport Tickets Page';
+    pluralName: 'motorsport-tickets-pages';
+    singularName: 'motorsport-tickets-page';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    featuredTicketSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    informationBand: Schema.Attribute.Component<
+      'motorsport.page-information-band',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-tickets-page.motorsport-tickets-page'
+    >;
+    navigationLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    pageAvailability: Schema.Attribute.Component<
+      'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    routeAliases: Schema.Attribute.JSON &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<[]>;
+    routePath: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'/tickets'>;
+    seo: Schema.Attribute.Component<'shared.seo', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    siteScope: Schema.Attribute.Enumeration<['motorsport']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'motorsport'>;
+    ticketControlSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    ticketedEventsSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    ticketInfoSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMotorsportTopNavigationItemMotorsportTopNavigationItem
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'motorsport_top_navigation_items';
+  info: {
+    description: 'Motorsport-only bilingual primary navigation configuration';
+    displayName: 'Motorsport Top Navigation Item';
+    pluralName: 'motorsport-top-navigation-items';
+    singularName: 'motorsport-top-navigation-item';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: true;
+    };
+  };
+  attributes: {
+    ariaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    displayOrder: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 1000;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    emphasis: Schema.Attribute.Enumeration<['default', 'primaryCta']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'default'>;
+    enabled: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    href: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
+    internalName: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+        minLength: 2;
+      }>;
+    label: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+      }>;
+    legacySourceDocumentId: Schema.Attribute.String & Schema.Attribute.Private;
+    linkType: Schema.Attribute.Enumeration<
+      ['internal', 'crossSite', 'external']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'internal'>;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::motorsport-top-navigation-item.motorsport-top-navigation-item'
+    >;
+    openInNewTab: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
   collectionName: 'news_articles';
   info: {
@@ -1692,6 +3652,15 @@ export interface ApiNewsArticleNewsArticle extends Struct.CollectionTypeSchema {
       'oneToMany',
       'api::news-article.news-article'
     >;
+    motorsportPresentation: Schema.Attribute.Component<
+      'motorsport.detail-presentation',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     publishedAt: Schema.Attribute.DateTime;
     publishedDate: Schema.Attribute.Date & Schema.Attribute.Required;
     relatedBusinesses: Schema.Attribute.Relation<
@@ -1853,6 +3822,7 @@ export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
+    heroEnabled: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     heroMedia: Schema.Attribute.Media<'images' | 'videos'>;
     heroSlides: Schema.Attribute.Component<'motorsport.hero-slide', true> &
       Schema.Attribute.SetPluginOptions<{
@@ -1884,6 +3854,15 @@ export interface ApiSitePageSitePage extends Struct.CollectionTypeSchema {
     >;
     motorsportInformationBand: Schema.Attribute.Component<
       'motorsport.home-information-band',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    motorsportTicketSection: Schema.Attribute.Component<
+      'motorsport.home-ticket-section',
       false
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -2036,6 +4015,7 @@ export interface ApiTicketCtaTicketCta extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<'redirect'>;
     embedCode: Schema.Attribute.Text & Schema.Attribute.Private;
     embedConfigJson: Schema.Attribute.JSON;
+    image: Schema.Attribute.Media<'images'>;
     isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     label: Schema.Attribute.String & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -2728,10 +4708,28 @@ declare module '@strapi/strapi' {
       'api::leadership-person.leadership-person': ApiLeadershipPersonLeadershipPerson;
       'api::media-gallery.media-gallery': ApiMediaGalleryMediaGallery;
       'api::merchandise-item.merchandise-item': ApiMerchandiseItemMerchandiseItem;
+      'api::motorsport-about-page.motorsport-about-page': ApiMotorsportAboutPageMotorsportAboutPage;
+      'api::motorsport-contact-page.motorsport-contact-page': ApiMotorsportContactPageMotorsportContactPage;
+      'api::motorsport-event.motorsport-event': ApiMotorsportEventMotorsportEvent;
+      'api::motorsport-events-page.motorsport-events-page': ApiMotorsportEventsPageMotorsportEventsPage;
+      'api::motorsport-experience-page.motorsport-experience-page': ApiMotorsportExperiencePageMotorsportExperiencePage;
+      'api::motorsport-gallery-page.motorsport-gallery-page': ApiMotorsportGalleryPageMotorsportGalleryPage;
+      'api::motorsport-home-page.motorsport-home-page': ApiMotorsportHomePageMotorsportHomePage;
+      'api::motorsport-leadership-person.motorsport-leadership-person': ApiMotorsportLeadershipPersonMotorsportLeadershipPerson;
+      'api::motorsport-merchandise-item.motorsport-merchandise-item': ApiMotorsportMerchandiseItemMotorsportMerchandiseItem;
+      'api::motorsport-merchandise-page.motorsport-merchandise-page': ApiMotorsportMerchandisePageMotorsportMerchandisePage;
+      'api::motorsport-news-article.motorsport-news-article': ApiMotorsportNewsArticleMotorsportNewsArticle;
+      'api::motorsport-news-page.motorsport-news-page': ApiMotorsportNewsPageMotorsportNewsPage;
+      'api::motorsport-partner.motorsport-partner': ApiMotorsportPartnerMotorsportPartner;
+      'api::motorsport-partners-page.motorsport-partners-page': ApiMotorsportPartnersPageMotorsportPartnersPage;
       'api::motorsport-program.motorsport-program': ApiMotorsportProgramMotorsportProgram;
       'api::motorsport-regulation.motorsport-regulation': ApiMotorsportRegulationMotorsportRegulation;
       'api::motorsport-rider.motorsport-rider': ApiMotorsportRiderMotorsportRider;
       'api::motorsport-standing.motorsport-standing': ApiMotorsportStandingMotorsportStanding;
+      'api::motorsport-theme-settings.motorsport-theme-settings': ApiMotorsportThemeSettingsMotorsportThemeSettings;
+      'api::motorsport-ticket-cta.motorsport-ticket-cta': ApiMotorsportTicketCtaMotorsportTicketCta;
+      'api::motorsport-tickets-page.motorsport-tickets-page': ApiMotorsportTicketsPageMotorsportTicketsPage;
+      'api::motorsport-top-navigation-item.motorsport-top-navigation-item': ApiMotorsportTopNavigationItemMotorsportTopNavigationItem;
       'api::news-article.news-article': ApiNewsArticleNewsArticle;
       'api::newsletter-subscription.newsletter-subscription': ApiNewsletterSubscriptionNewsletterSubscription;
       'api::partner.partner': ApiPartnerPartner;

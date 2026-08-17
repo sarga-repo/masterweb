@@ -1,0 +1,21 @@
+{
+  "kind": "singleType",
+  "info": { "singularName": "motorsport-news-page", "pluralName": "motorsport-news-pages", "displayName": "Motorsport News Page" },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": { "i18n": { "localized": true } },
+  "attributes": {
+    "siteScope": { "type": "enumeration", "enum": ["motorsport"], "default": "motorsport", "required": true, "private": true },
+    "routePath": { "type": "string", "default": "/news", "required": true, "pluginOptions": { "i18n": { "localized": false } } },
+    "routeAliases": { "type": "json", "default": [], "pluginOptions": { "i18n": { "localized": false } } },
+    "title": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
+    "navigationLabel": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
+    "hero": { "type": "component", "component": "motorsport.page-hero", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
+    "informationBand": { "type": "component", "component": "motorsport.page-information-band", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
+    "newsControlSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
+    "leadStorySection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
+    "archiveIntroSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
+    "galleryCtaSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
+    "pageAvailability": { "type": "component", "component": "shared.page-availability", "repeatable": false, "pluginOptions": { "i18n": { "localized": true } } },
+    "seo": { "type": "component", "component": "shared.seo", "repeatable": false, "pluginOptions": { "i18n": { "localized": true } } }
+  }
+}

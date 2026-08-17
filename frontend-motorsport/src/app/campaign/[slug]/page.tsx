@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { notFound } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
 import {
   CampaignBannerSlider,
@@ -34,29 +35,46 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   ]);
   if (slug !== FIA_RALLYCROSS_SLUG) return { title: "Campaign not found" };
 
-  const campaign = await getFiaRallycrossCampaign();
+  const campaign = await getFiaRallycrossCampaign(locale);
+  if (!campaign) return { title: "Campaign not found" };
   return createMetadata({
     title: campaign.seo?.title ?? campaign.title,
     description: campaign.seo?.description ?? campaign.summary,
     path: FIA_RALLYCROSS_PATH,
     image: campaign.seo?.image ?? campaign.image,
     locale,
-    isFallback: locale === "id" || Boolean(campaign.seo?.noIndex),
+    isFallback: Boolean(campaign.seo?.noIndex),
+    seo: {
+      metaTitle: campaign.seo?.title,
+      metaDescription: campaign.seo?.description,
+      ogTitle: campaign.seo?.ogTitle,
+      ogDescription: campaign.seo?.ogDescription,
+      ogImageUrl:
+        typeof campaign.seo?.image === "string"
+          ? campaign.seo.image
+          : campaign.seo?.image?.src,
+      canonicalUrl: campaign.seo?.canonical,
+      noIndex: campaign.seo?.noIndex,
+    },
   });
 }
 
 export default async function CampaignPage(props: Props) {
   const { slug } = await props.params;
   if (slug !== FIA_RALLYCROSS_SLUG) notFound();
+  permanentRedirect(FIA_RALLYCROSS_PATH);
+}
 
-  const campaign = await getFiaRallycrossCampaign();
-  const page = await fetchMotorsportPageByRoute(FIA_RALLYCROSS_PATH);
+export async function RallycrossCampaignPage() {
+  const locale = await getRequestLocale();
+  const [campaign, page] = await Promise.all([
+    getFiaRallycrossCampaign(locale),
+    fetchMotorsportPageByRoute(FIA_RALLYCROSS_PATH, locale),
+  ]);
+  if (!campaign) notFound();
   const section = (key: string) =>
     page?.sections.find((item) => item.sectionKey === key);
-  const ticketCta = campaign.ticketCta ?? {
-    label: "Get Your Ticket Now",
-    href: "/tickets",
-  };
+  const ticketCta = campaign.ticketCta;
   const dos = campaign.rules.filter((rule) => rule.type === "do");
   const donts = campaign.rules.filter((rule) => rule.type === "dont");
 
@@ -78,15 +96,17 @@ export default async function CampaignPage(props: Props) {
         grain
       >
         <div className="flex flex-wrap gap-4">
-          <Link
-            href={ticketCta.href}
-            target={ticketCta.external ? "_blank" : undefined}
-            rel={ticketCta.external ? "noopener noreferrer" : undefined}
-            className="group inline-flex h-(--ms-control-height) items-center gap-5 bg-ms-apex-crimson px-7 text-[0.66rem] font-black uppercase tracking-[0.16em] text-white transition-colors hover:bg-ms-ignition-orange"
-          >
-            {ticketCta.label}
-            <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+          {ticketCta ? (
+            <Link
+              href={ticketCta.href}
+              target={ticketCta.external ? "_blank" : undefined}
+              rel={ticketCta.external ? "noopener noreferrer" : undefined}
+              className="group inline-flex h-(--ms-control-height) items-center gap-5 bg-ms-apex-crimson px-7 text-[0.66rem] font-black uppercase tracking-[0.16em] text-white transition-colors hover:bg-ms-ignition-orange"
+            >
+              {ticketCta.label}
+              <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          ) : null}
           <Link
             href="#rundown"
             className="inline-flex h-(--ms-control-height) items-center border border-ms-warm-white/40 px-7 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white transition-colors hover:border-ms-warm-white hover:bg-ms-warm-white hover:text-ms-black"
@@ -103,7 +123,10 @@ export default async function CampaignPage(props: Props) {
           section("world-cup-control")?.body ??
           "Two days of explosive starts, mixed-surface strategy, and a compact race format that keeps every spectator close to the decisive action."
         }
-        items={[
+        showMetricGroup={campaign.informationBand?.showMetricGroup ?? true}
+        items={campaign.informationBand?.metrics?.length
+          ? campaign.informationBand.metrics
+          : [
           { label: "Date", value: campaign.dateLabel ?? "5-6 December 2026" },
           {
             label: "Venue",
@@ -154,7 +177,7 @@ export default async function CampaignPage(props: Props) {
             ].map((item) => (
               <article
                 key={item.index}
-                className="min-h-72 bg-[#081a3a]/88 p-7 sm:p-9"
+                className="ms-rx-format-card min-h-72 bg-[#081a3a]/88 p-7 sm:p-9"
               >
                 <p className={`ms-tabular text-2xl font-black ${item.tone}`}>
                   {item.index}
@@ -253,31 +276,33 @@ export default async function CampaignPage(props: Props) {
         </div>
       </section>
 
-      <section className="ms-blue-heat-surface ms-section">
-        <div className="ms-shell">
-          <TicketCtaPanel
-            eyebrow={
-              section("campaign-ticket")?.eyebrow ?? "Official ticketing"
-            }
-            title={
-              section("campaign-ticket")?.title ??
-              "First time. Be there for the first launch."
-            }
-            description={
-              section("campaign-ticket")?.body ??
-              "Review availability before continuing to the approved ticketing partner. Sarga Motorsport does not process checkout or payment on this website."
-            }
-            cta={ticketCta}
-            provider={ticketCta.provider}
-            eventMeta={`${campaign.dateLabel ?? "5-6 December 2026"} / ${
-              campaign.venue ?? "Jakarta International E-Prix Circuit"
-            }`}
-            surface="reflected"
-          />
-        </div>
-      </section>
+      {ticketCta ? (
+        <section className="ms-blue-heat-surface ms-section">
+          <div className="ms-shell">
+            <TicketCtaPanel
+              eyebrow={
+                section("campaign-ticket")?.eyebrow ?? "Official ticketing"
+              }
+              title={
+                section("campaign-ticket")?.title ??
+                "First time. Be there for the first launch."
+              }
+              description={
+                section("campaign-ticket")?.body ??
+                "Review availability before continuing to the approved ticketing partner. Sarga Motorsport does not process checkout or payment on this website."
+              }
+              cta={ticketCta}
+              provider={ticketCta.provider}
+              eventMeta={`${campaign.dateLabel ?? "5-6 December 2026"} / ${
+                campaign.venue ?? "Jakarta International E-Prix Circuit"
+              }`}
+              surface="reflected"
+            />
+          </div>
+        </section>
+      ) : null}
 
-      <section className="ms-blue-heat-surface py-12">
+      <section className="ms-rx-footer-cta ms-blue-heat-surface py-12">
         <div className="ms-shell flex flex-wrap items-center justify-between gap-6 border-t border-ms-warm-white/14 pt-10">
           <Link
             href="/events"

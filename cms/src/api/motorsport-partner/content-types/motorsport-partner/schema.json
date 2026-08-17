@@ -1,0 +1,17 @@
+{
+  "kind": "collectionType",
+  "collectionName": "motorsport_partners",
+  "info": { "singularName": "motorsport-partner", "pluralName": "motorsport-partners", "displayName": "Motorsport Partner", "description": "Motorsport sponsors and partners displayed across Motorsport routes" },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": { "i18n": { "localized": true } },
+  "attributes": {
+    "name": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
+    "slug": { "type": "uid", "targetField": "name", "required": true },
+    "logo": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "websiteUrl": { "type": "string" },
+    "partnerType": { "type": "enumeration", "enum": ["sponsor", "technical", "media", "broadcast", "government", "community", "other"], "default": "sponsor" },
+    "sortOrder": { "type": "integer", "default": 0 },
+    "isActive": { "type": "boolean", "default": true },
+    "legacySourceDocumentId": { "type": "string", "private": true, "configurable": false }
+  }
+}

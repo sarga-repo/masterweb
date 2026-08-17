@@ -28,6 +28,13 @@
     "activeFrom": { "type": "datetime" },
     "activeUntil": { "type": "datetime" },
     "isActive": { "type": "boolean", "default": true },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "description": "Optional artwork or photography shown in homepage ticket panels."
+    },
     "siteScope": {
       "type": "enumeration",
       "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],

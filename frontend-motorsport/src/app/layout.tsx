@@ -4,6 +4,8 @@ import "@fontsource-variable/noto-sans/wght.css";
 import { createMetadata } from "@/lib/seo/metadata";
 import { getRequestLocale, getRequestPathname } from "@/lib/i18n/request";
 import { resolveSiteUrl, siteConfig } from "@/lib/site-config";
+import { fetchMotorsportTheme } from "@/lib/cms-data";
+import { motorsportThemeAttribute } from "@/lib/motorsport-theme";
 import "./globals.css";
 
 const ownersWide = localFont({
@@ -37,6 +39,7 @@ export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getRequestLocale();
+  const theme = await fetchMotorsportTheme(locale);
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -50,6 +53,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
+      data-ms-theme={motorsportThemeAttribute(theme)}
       data-scroll-behavior="smooth"
       className={ownersWide.variable}
     >

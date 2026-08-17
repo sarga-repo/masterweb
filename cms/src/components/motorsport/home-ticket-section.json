@@ -1,0 +1,81 @@
+{
+  "collectionName": "components_motorsport_home_ticket_sections",
+  "info": {
+    "displayName": "Homepage Ticket Card",
+    "description": "Complete CMS-managed Motorsport homepage ticket card. The link must redirect to an approved partner; Sarga does not process payment."
+  },
+  "options": {},
+  "attributes": {
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 80,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 180,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "description": {
+      "type": "text",
+      "maxLength": 360,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "backgroundImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "description": "Optional artwork used as the background of the ticket card's middle content panel. The narrow left rail remains the decorative heat-field treatment."
+    },
+    "eventLabel": {
+      "type": "string",
+      "default": "Event",
+      "maxLength": 40,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "eventText": {
+      "type": "string",
+      "maxLength": 120,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "providerLabel": {
+      "type": "string",
+      "default": "Provider",
+      "maxLength": 40,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "providerText": {
+      "type": "string",
+      "maxLength": 120,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "partnerLabel": {
+      "type": "string",
+      "default": "Partner redirect / Secure",
+      "maxLength": 80,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "footerText": {
+      "type": "string",
+      "maxLength": 180,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "ctaLabel": {
+      "type": "string",
+      "default": "Secure your seat",
+      "maxLength": 80,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "ctaUrl": {
+      "type": "string",
+      "description": "Approved internal or HTTPS partner destination. No checkout/payment URL is processed by Sarga."
+    }
+  }
+}

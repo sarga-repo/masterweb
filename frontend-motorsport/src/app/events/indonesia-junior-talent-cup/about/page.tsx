@@ -4,7 +4,9 @@ import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { InformationBand, PageHero, SectionHeader } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
-import { getIjtcProgram, IJTC_BASE_PATH } from "@/lib/ijtc-data";
+import { getIjtcInformationBand, getIjtcProgram, IJTC_BASE_PATH } from "@/lib/ijtc-data";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "About IJTC",
@@ -31,7 +33,8 @@ const PRINCIPLES = [
 ];
 
 export default async function AboutIjtcPage() {
-  const program = await getIjtcProgram();
+  const program = await getIjtcProgram(await getRequestLocale());
+  if (!program) notFound();
 
   return (
     <>
@@ -40,8 +43,8 @@ export default async function AboutIjtcPage() {
         kickerColor="yellow"
         title="Built for progression."
         description={program.summary}
-        backgroundImage="/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
-        backgroundAlt="Rider and coaching team preparing in the paddock"
+        backgroundImage={program.image}
+        backgroundAlt={program.imageAlt}
         accent="orange"
         accentPosition="bottom-left"
         surface="heat"
@@ -50,14 +53,17 @@ export default async function AboutIjtcPage() {
       />
 
       <InformationBand
-        eyebrow="Programme brief / Development model"
-        title="Talent needs structure around it."
-        description="IJTC combines practical track development with published sporting information and direct programme support."
-        items={[
+        {...getIjtcInformationBand(program, {
+          eyebrow: "Programme brief / Development model",
+          title: "Talent needs structure around it.",
+          description:
+            "IJTC combines practical track development with published sporting information and direct programme support.",
+          items: [
           { label: "Focus", value: "Rider growth" },
           { label: "Format", value: "Season" },
           { label: "Path", value: "Inquiry first" },
-        ]}
+          ],
+        })}
       />
 
       <section className="ms-reflected-light-surface ms-section">

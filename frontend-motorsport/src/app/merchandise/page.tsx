@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import {
-  InformationBand,
+  MotorsportPageInformationBand,
   MerchandiseCatalog,
+  PageComingSoon,
   PageHero,
   PageShell,
   SectionHeader,
@@ -11,6 +12,9 @@ import {
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { fetchMerchandise, fetchSitePage } from "@/lib/cms-data";
 import type { MerchandiseItem } from "@/types/design-system";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
+import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
 
 export const metadata: Metadata = {
   title: "Merchandise",
@@ -85,91 +89,149 @@ const FALLBACK_ITEMS: MerchandiseItem[] = [
 ];
 
 export default async function MerchandisePage() {
+  const locale = await getRequestLocale();
   const [page, cmsItems] = await Promise.all([
-    fetchSitePage("merchandise"),
-    fetchMerchandise(),
+    fetchSitePage("merchandise", undefined, locale),
+    fetchMerchandise(locale),
   ]);
-  const items = cmsItems.length > 0 ? cmsItems : FALLBACK_ITEMS;
+  const isPreview = await isStrapiPreviewEnabled();
+  const items = isPreview || cmsItems.length > 0 ? cmsItems : FALLBACK_ITEMS;
+  const control = page?.sections.find(
+    (section) => section.sectionKey === "merch-control",
+  );
+  const finalCta = page?.sections.find(
+    (section) => section.sectionKey === "merch-final-cta",
+  );
+  const catalog = page?.sections.find(
+    (section) => section.sectionKey === "merchandise-catalog",
+  );
+  const pageAvailable = isCmsPageVisible(page?.pageAvailability);
   const externalCount = items.filter(
     (item) => item.availability === "availableExternal",
   ).length;
 
   return (
     <PageShell spectrumSeparators>
-      <PageHero
-        kicker="Track culture / Product preview"
-        kickerColor="orange"
-        title={page?.heroTitle || "Merchandise"}
-        description={
-          page?.heroDescription ||
-          "Official Sarga Motorsport merchandise previews. Releases are handled through approved partners or direct inquiry."
-        }
-        backgroundImage={
-          page?.heroImage || "/media/sarga-motorsport-race-nascar-2.png"
-        }
-        backgroundAlt={
-          page?.heroImageAlt || "Sarga Motorsport race weekend atmosphere"
-        }
-        accent="orange"
-        accentPosition="bottom-right"
-        speedLines
-        grain
-      />
+      {!pageAvailable ? (
+        <PageComingSoon
+          availability={page?.pageAvailability ?? { pageEnabled: false }}
+        />
+      ) : (
+        <>
+          {page?.heroEnabled !== false ? (
+            <div data-cms-section-key="hero" data-cms-enabled="true">
+              <PageHero
+                kicker="Track culture / Product preview"
+                kickerColor="orange"
+                title={page?.heroTitle || "Merchandise"}
+                description={
+                  page?.heroDescription ||
+                  "Official Sarga Motorsport merchandise previews. Releases are handled through approved partners or direct inquiry."
+                }
+                backgroundImage={
+                  page?.heroImage || "/media/sarga-motorsport-race-nascar-2.png"
+                }
+                backgroundAlt={
+                  page?.heroImageAlt ||
+                  "Sarga Motorsport race weekend atmosphere"
+                }
+                accent="orange"
+                accentPosition="bottom-right"
+                speedLines
+                grain
+              />
+            </div>
+          ) : null}
 
-      <InformationBand
-        eyebrow="Merch control / No internal commerce"
-        title="Wear the velocity. Checkout stays with approved partners."
-        description="This is a showcase-not a store. Sarga Motorsport does not operate a cart, account, checkout, or payment system."
-        items={[
-          {
-            label: "Preview items",
-            value: String(items.length).padStart(2, "0"),
-          },
-          {
-            label: "Partner links",
-            value: String(externalCount).padStart(2, "0"),
-          },
-          { label: "Checkout", value: "External only" },
-        ]}
-      />
+          {page?.informationBand || isCmsSectionVisible(control) ? (
+            <div data-cms-section-key="merch-control" data-cms-enabled="true">
+              <MotorsportPageInformationBand
+                band={page?.informationBand}
+                fallback={{
+                  isActive: control?.enabled,
+                  eyebrow:
+                    control?.eyebrow ?? "Merch control / No internal commerce",
+                  title:
+                    control?.title ??
+                    "Wear the velocity. Checkout stays with approved partners.",
+                  description:
+                    control?.body ??
+                    "This is a showcase-not a store. Sarga Motorsport does not operate a cart, account, checkout, or payment system.",
+                  metrics: [
+                    {
+                      label: "Preview items",
+                      value: String(items.length).padStart(2, "0"),
+                    },
+                    {
+                      label: "Partner links",
+                      value: String(externalCount).padStart(2, "0"),
+                    },
+                    { label: "Checkout", value: "External only" },
+                  ],
+                }}
+              />
+            </div>
+          ) : null}
 
-      <section className="ms-merchandise-catalog-surface ms-reflected-light-surface ms-section">
-        <div className="ms-shell">
-          <SectionHeader
-            index="MERCH"
-            eyebrow="Current showcase"
-            title="Made for the paddock. Ready for the street."
-            description="CMS-managed previews make availability explicit before any visitor leaves for a partner destination. Catalogue pages hold no more than sixteen items on the four-column grid."
-          />
-          <div className="mt-14">
-            <MerchandiseCatalog items={items} />
-          </div>
-        </div>
-      </section>
+          {isCmsSectionVisible(catalog) ? (
+            <section
+              data-cms-section-key="merchandise-catalog"
+              data-cms-enabled="true"
+              className="ms-merchandise-catalog-surface ms-reflected-light-surface ms-section"
+            >
+              <div className="ms-shell">
+                <SectionHeader
+                  index="MERCH"
+                  eyebrow={catalog?.eyebrow ?? "Current showcase"}
+                  title={
+                    catalog?.title ??
+                    "Made for the paddock. Ready for the street."
+                  }
+                  description={
+                    catalog?.body ??
+                    "CMS-managed previews make availability explicit before any visitor leaves for a partner destination. Catalogue pages hold no more than sixteen items on the four-column grid."
+                  }
+                />
+                <div className="mt-14">
+                  <MerchandiseCatalog items={items} />
+                </div>
+              </div>
+            </section>
+          ) : null}
 
-      <section className="ms-shell pb-(--ms-section-space)">
-        <div className="ms-panel grid gap-8 bg-ms-black p-8 sm:p-12 lg:grid-cols-[1fr_auto] lg:items-end">
-          <div>
-            <p className="ms-kicker text-ms-slipstream-teal">
-              Availability desk
-            </p>
-            <h2 className="ms-heading-section mt-5 max-w-[12ch]">
-              Need release or sizing information?
-            </h2>
-            <p className="mt-5 max-w-2xl leading-7 text-ms-warm-white/58">
-              Send a merchandise inquiry. The team can confirm whether an item
-              is pending, inquiry-only, or available through an approved store.
-            </p>
-          </div>
-          <Link
-            href="/contact"
-            className="group inline-flex min-h-14 items-center gap-4 bg-ms-apex-crimson px-7 text-[0.64rem] font-black uppercase tracking-[0.16em] transition-colors hover:bg-ms-ignition-orange"
-          >
-            Contact merchandise desk
-            <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-          </Link>
-        </div>
-      </section>
+          {isCmsSectionVisible(finalCta) ? (
+            <section
+              data-cms-section-key="merch-final-cta"
+              data-cms-enabled="true"
+              className="ms-merch-final-cta ms-blue-heat-surface pb-(--ms-section-space)"
+            >
+              <div className="ms-shell">
+                <div className="ms-panel grid gap-8 bg-transparent p-8 sm:p-12 lg:grid-cols-[1fr_auto] lg:items-end">
+                  <div>
+                    <p className="ms-kicker text-ms-slipstream-teal">
+                      {finalCta?.eyebrow ?? "Availability desk"}
+                    </p>
+                    <h2 className="ms-heading-section mt-5 max-w-[12ch]">
+                      {finalCta?.title ?? "Need release or sizing information?"}
+                    </h2>
+                    <p className="mt-5 max-w-2xl leading-7 text-ms-warm-white/58">
+                      {finalCta?.body ??
+                        "Send a merchandise inquiry. The team can confirm whether an item is pending, inquiry-only, or available through an approved store."}
+                    </p>
+                  </div>
+                  <Link
+                    href="/contact"
+                    className="group inline-flex min-h-14 items-center gap-4 bg-ms-apex-crimson px-7 text-[0.64rem] font-black uppercase tracking-[0.16em] transition-colors hover:bg-ms-ignition-orange"
+                  >
+                    {finalCta?.ctaLabel ?? "Contact merchandise desk"}
+                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+              </div>
+            </section>
+          ) : null}
+        </>
+      )}
     </PageShell>
   );
 }

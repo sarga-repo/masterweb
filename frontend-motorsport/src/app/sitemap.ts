@@ -4,6 +4,7 @@ import { fetchArticles, fetchEvents } from "@/lib/cms-data";
 import { getIjtcRiders, IJTC_BASE_PATH } from "@/lib/ijtc-data";
 import { siteConfig } from "@/lib/site-config";
 import { localizePath } from "@/lib/i18n/config";
+import { getMotorsportPageRoutes } from "@/lib/motorsport-page-routes";
 
 function sitemapEntry(
   path: string,
@@ -22,10 +23,11 @@ function sitemapEntry(
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [articles, events, ijtcRiders] = await Promise.all([
+  const [articles, events, ijtcRiders, pageRoutes] = await Promise.all([
     fetchArticles().catch(() => []),
     fetchEvents().catch(() => []),
     getIjtcRiders().catch(() => []),
+    getMotorsportPageRoutes().catch(() => new Map()),
   ]);
 
   const staticPaths = [
@@ -37,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/merchandise",
     "/tickets",
     "/contact",
-    "/campaign/fia-rallycross-world-cup-indonesia-2026",
+    "/events/fia-rallycross-world-cup-indonesia-2026",
     "/events/indonesia-junior-talent-cup",
     "/events/indonesia-junior-talent-cup/race-schedule",
     "/events/indonesia-junior-talent-cup/riders",
@@ -45,7 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/events/indonesia-junior-talent-cup/about",
     "/events/indonesia-junior-talent-cup/regulation",
     "/events/indonesia-junior-talent-cup/become-riders",
-  ];
+  ].map((path) => pageRoutes.get(path) ?? path);
 
   // These CMS event records remain useful to editors and local demos but must
   // not create duplicate or placeholder URLs in the public search index.

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 import type { Core } from "@strapi/strapi";
+import { isMotorsportLegacyContentRetired } from "./migrations/motorsport-legacy-retirement";
 
 /**
  * Local development seed.
@@ -20,11 +21,15 @@ import type { Core } from "@strapi/strapi";
 
 /** Read permissions granted to the public role for frontend fetching. */
 const PUBLIC_READ_ACTIONS = [
+  "api::motorsport-theme-settings.motorsport-theme-settings.find",
+  "api::motorsport-theme-settings.motorsport-theme-settings.findOne",
   "api::homepage.homepage.find",
   "api::ecosystem-business.ecosystem-business.find",
   "api::ecosystem-business.ecosystem-business.findOne",
   "api::news-article.news-article.find",
   "api::news-article.news-article.findOne",
+  "api::motorsport-news-article.motorsport-news-article.find",
+  "api::motorsport-news-article.motorsport-news-article.findOne",
   "api::event.event.find",
   "api::event.event.findOne",
   // Multisite content types (Phase 2)
@@ -39,6 +44,26 @@ const PUBLIC_READ_ACTIONS = [
   // Site pages and Motorsport revamp program content (MSR-2)
   "api::site-page.site-page.find",
   "api::site-page.site-page.findOne",
+  "api::motorsport-home-page.motorsport-home-page.find",
+  "api::motorsport-home-page.motorsport-home-page.findOne",
+  "api::motorsport-about-page.motorsport-about-page.find",
+  "api::motorsport-about-page.motorsport-about-page.findOne",
+  "api::motorsport-events-page.motorsport-events-page.find",
+  "api::motorsport-events-page.motorsport-events-page.findOne",
+  "api::motorsport-news-page.motorsport-news-page.find",
+  "api::motorsport-news-page.motorsport-news-page.findOne",
+  "api::motorsport-gallery-page.motorsport-gallery-page.find",
+  "api::motorsport-gallery-page.motorsport-gallery-page.findOne",
+  "api::motorsport-merchandise-page.motorsport-merchandise-page.find",
+  "api::motorsport-merchandise-page.motorsport-merchandise-page.findOne",
+  "api::motorsport-tickets-page.motorsport-tickets-page.find",
+  "api::motorsport-tickets-page.motorsport-tickets-page.findOne",
+  "api::motorsport-contact-page.motorsport-contact-page.find",
+  "api::motorsport-contact-page.motorsport-contact-page.findOne",
+  "api::motorsport-partners-page.motorsport-partners-page.find",
+  "api::motorsport-partners-page.motorsport-partners-page.findOne",
+  "api::motorsport-experience-page.motorsport-experience-page.find",
+  "api::motorsport-experience-page.motorsport-experience-page.findOne",
   "api::motorsport-program.motorsport-program.find",
   "api::motorsport-program.motorsport-program.findOne",
   "api::motorsport-rider.motorsport-rider.find",
@@ -734,6 +759,7 @@ const MOTORSPORT_GALLERIES = [
     title: "Galerry",
     slug: "media-gallery",
     description: "Trackside photography from Sarga Motorsport events.",
+    category: "circuit",
     siteScope: "motorsport",
   },
 ];
@@ -796,6 +822,8 @@ const MOTORSPORT_SITE_PAGES = [
     sections: [
       { __component: "shared.page-section", sectionKey: "ticket-control", eyebrow: "Ticket control / Partner routing", title: "Your seat. Their secure checkout.", body: "Sarga Motorsport publishes approved destinations but never stores payment details or runs an internal ticket engine." },
       { __component: "shared.page-section", sectionKey: "featured-ticket", eyebrow: "Featured ticket", title: "Secure your seat.", body: "Checkout is handled by our approved ticketing partner. Secure payment, guaranteed entry, zero markup." },
+      { __component: "shared.page-section", sectionKey: "ticketed-events", eyebrow: "Events with tickets available", title: "On sale now.", body: "Published Motorsport events with an approved external ticket destination." },
+      { __component: "shared.page-section", sectionKey: "ticket-info", eyebrow: "Ticket support", title: "How it works.", body: "Select an event and continue securely to its approved ticketing partner. Contact the Motorsport desk for event-specific support." },
     ],
   },
   {
@@ -807,7 +835,10 @@ const MOTORSPORT_SITE_PAGES = [
     navigationLabel: "Gallery",
     heroTitle: "Gallery",
     heroDescription: "Circuit, rally, motorcycle, paddock, people, and fan energy - one bright visual record of Motorsport in motion.",
-    sections: [{ __component: "shared.page-section", sectionKey: "gallery-intro", eyebrow: "Trackside capture feed", title: "Gallery", body: "Trackside photography from Sarga Motorsport - racing, paddock, people, and fan energy captured in motion." }],
+    sections: [
+      { __component: "shared.page-section", sectionKey: "gallery-intro", eyebrow: "Trackside capture feed", title: "Gallery control", body: "Trackside photography from Sarga Motorsport - racing, paddock, people, and fan energy captured in motion." },
+      { __component: "shared.page-section", sectionKey: "gallery-archive", eyebrow: "SYS / Gallery / Published media", title: "Motion, recorded.", body: "Filter the archive by discipline. Select any frame to open the full-screen viewer, then browse with the arrow controls." },
+    ],
   },
   {
     title: "Sarga Motorsport News",
@@ -822,6 +853,13 @@ const MOTORSPORT_SITE_PAGES = [
     sections: [
       {
         __component: "shared.page-section",
+        sectionKey: "news-control",
+        eyebrow: "Editorial control / Motorsport",
+        title: "Stories at race pace.",
+        body: "Reports, announcements, people, technology, and culture from the Motorsport-scoped editorial feed.",
+      },
+      {
+        __component: "shared.page-section",
         sectionKey: "lead-story",
         eyebrow: "Editorial control / Motorsport",
         title: "Stories at race pace.",
@@ -833,6 +871,13 @@ const MOTORSPORT_SITE_PAGES = [
         eyebrow: "Latest dispatches",
         title: "The archive.",
         body: "Published Motorsport stories, ordered by publication date.",
+      },
+      {
+        __component: "shared.page-section",
+        sectionKey: "news-gallery-cta",
+        eyebrow: "Visual archive",
+        title: "See the machines behind the stories.",
+        body: "Continue from the editorial feed into the Motorsport media archive.",
       },
     ],
   },
@@ -923,10 +968,26 @@ const MOTORSPORT_SITE_PAGES = [
         },
       ],
     },
+    motorsportTicketSection: {
+      isActive: true,
+      eyebrow: "Official ticketing",
+      title: "Be there when the grid goes live.",
+      description:
+        "Choose an event and continue to its approved ticketing destination. Sarga Motorsport does not process checkout directly.",
+      eventLabel: "Event",
+      eventText: "Race Weekend Indonesia",
+      providerLabel: "Provider",
+      providerText: "Official Ticketing Partner",
+      partnerLabel: "Partner redirect / Secure",
+      footerText: "Approved partner destination",
+      ctaLabel: "Secure your seat",
+      ctaUrl: "/tickets",
+    },
     sections: [
       {
         __component: "shared.page-section",
         sectionKey: "upcoming-events",
+        enabled: false,
         eyebrow: "Upcoming events",
         title: "The next grid is forming.",
         body: "Feature the next Motorsport events and their approved ticket status.",
@@ -934,6 +995,7 @@ const MOTORSPORT_SITE_PAGES = [
       {
         __component: "shared.page-section",
         sectionKey: "latest-news",
+        enabled: true,
         eyebrow: "Latest news",
         title: "From the paddock.",
         body: "Surface the latest Motorsport-scoped editorial stories.",
@@ -941,9 +1003,18 @@ const MOTORSPORT_SITE_PAGES = [
       {
         __component: "shared.page-section",
         sectionKey: "gallery",
+        enabled: true,
         eyebrow: "Gallery",
         title: "Motion, recorded.",
         body: "A curated capture feed from the track, paddock, and fan zones.",
+      },
+      {
+        __component: "shared.page-section",
+        sectionKey: "connected-records",
+        enabled: false,
+        eyebrow: "Part of Sarga.co / Connected records",
+        title: "Explore the Sarga network.",
+        body: "Browse published stories, meet the leadership council, and move directly between the active Sarga websites.",
       },
     ],
   },
@@ -1083,6 +1154,45 @@ const MOTORSPORT_SITE_PAGES = [
     heroTitle: "Wear the velocity.",
     heroDescription:
       "Official Sarga Motorsport merchandise previews. Availability is handled by approved partners or inquiry only.",
+    sections: [
+      { __component: "shared.page-section", sectionKey: "merch-control", eyebrow: "Merch control / No internal commerce", title: "Wear the velocity. Checkout stays with approved partners.", body: "This is a showcase—not a store. Sarga Motorsport does not operate a cart, account, checkout, or payment system." },
+      { __component: "shared.page-section", sectionKey: "merchandise-catalog", eyebrow: "Current showcase", title: "Made for the paddock. Ready for the street.", body: "CMS-managed previews make availability explicit before any visitor leaves for a partner destination." },
+      { __component: "shared.page-section", sectionKey: "merch-final-cta", eyebrow: "Availability desk", title: "Need release or sizing information?", body: "Send a merchandise inquiry for release, sizing, and approved-store details.", ctaLabel: "Contact merchandise desk", ctaUrl: "/contact" },
+    ],
+  },
+  {
+    title: "Sarga Motorsport Experience",
+    slug: "motorsport-experience",
+    routePath: "/experience",
+    siteScope: "motorsport",
+    pageKind: "custom",
+    navigationLabel: "Experience",
+    heroTitle: "Experience",
+    heroDescription:
+      "Sarga Motorsport is more than what happens on track. It is a festival, a broadcast, a fan community, and a premium venue experience.",
+    sections: [
+      {
+        __component: "shared.page-section",
+        sectionKey: "experience-control",
+        eyebrow: "Experience control / Complete race weekend",
+        title: "Competition is the core. Access completes it.",
+        body: "Six connected chapters carry the audience from racing and rider development into culture, coverage, community, and venue experiences.",
+      },
+      {
+        __component: "shared.page-section",
+        sectionKey: "experience-pillars",
+        eyebrow: "The complete ecosystem",
+        title: "Racing is the core. The rest is the culture.",
+        body: "Every dimension of the Motorsport experience gets a clear stage.",
+      },
+      {
+        __component: "shared.page-section",
+        sectionKey: "experience-track",
+        eyebrow: "Two forms of precision",
+        title: "Four wheels. Two wheels. One standard.",
+        body: "Both programmes share the same commitment to sporting clarity, athlete development, and race-weekend presentation.",
+      },
+    ],
   },
 ];
 
@@ -1443,6 +1553,8 @@ const MOTORSPORT_PROGRAMS = [
   {
     title: "Indonesia Junior Talent Cup",
     slug: "indonesia-junior-talent-cup",
+    eventMenuLabel: "IJTC",
+    eventMenuEnabled: true,
     programType: "juniorTalentCup",
     programStatus: "registrationOpen",
     seasonLabel: "2026 Season",
@@ -1459,6 +1571,8 @@ const MOTORSPORT_PROGRAMS = [
   {
     title: "FIA Rallycross World Cup Indonesia 2026",
     slug: "fia-rallycross-world-cup-indonesia-2026",
+    eventMenuLabel: "FIA Rallycross",
+    eventMenuEnabled: true,
     programType: "rallycross",
     programStatus: "ticketsOpen",
     seasonLabel: "2026",
@@ -2567,11 +2681,16 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
     delete: (params: Record<string, unknown>) => Promise<unknown>;
   };
 
+  const legacyMotorsportRetired = await isMotorsportLegacyContentRetired(strapi);
+
   await grantPublicReadPermissions(strapi);
 
   // Site-scoped top navigation. English owns structure; the Indonesian locale
   // receives labels only. Existing editor-managed records are never overwritten.
   for (const item of TOP_NAVIGATION_ITEMS) {
+    // Motorsport navigation moved to its dedicated collection. Once legacy
+    // records are archived, never recreate them during an idempotent seed.
+    if (legacyMotorsportRetired && item.siteScope === "motorsport") continue;
     const { labelId, ...seedItem } = item;
     let englishItem = (await documents(
       "api::top-navigation-item.top-navigation-item",
@@ -2730,9 +2849,18 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
     } | null;
 
     if (!existing) {
+      const normalizedPageSections = Array.isArray(page.sections)
+        ? page.sections.map((section) => ({
+            ...section,
+            enabled: true,
+          }))
+        : page.sections;
       await documents("api::site-page.site-page").create({
         data: {
           ...page,
+          ...(normalizedPageSections
+            ? { sections: normalizedPageSections }
+            : {}),
           ...(gatewaySite ? { site: gatewaySite.documentId } : {}),
         },
         status: "published",
@@ -2864,15 +2992,41 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
     }
   }
 
+  // The approved homepage ticket panel accepts a CMS-managed photo. Seed the
+  // first Motorsport CTA with the existing daylight hero artwork only when no
+  // artwork has been selected yet; editors can replace it from Media Library.
+  const homepageTicketCta = (await documents(
+    "api::ticket-cta.ticket-cta",
+  ).findFirst({
+    filters: { title: { $eq: "FIA Rallycross World Cup Indonesia 2026 Tickets" } },
+    populate: ["image"],
+  })) as { documentId: string; image?: unknown } | null;
+  if (homepageTicketCta && !homepageTicketCta.image) {
+    const ticketArtwork = await uploadIfMissing(
+      strapi,
+      "sarga-motorsport-hero-circuit-golden-hour.jpg",
+      "Red touring race car accelerating through a warm daylight circuit",
+    );
+    if (ticketArtwork) {
+      await documents("api::ticket-cta.ticket-cta").update({
+        documentId: homepageTicketCta.documentId,
+        data: { image: ticketArtwork.id },
+        status: "published",
+      });
+      strapi.log.info("[seed] Attached homepage ticket panel artwork.");
+    }
+  }
+
   // Motorsport news articles (idempotent by slug), linked to the business + first event.
   for (const article of MOTORSPORT_NEWS) {
+    const { showOnGateway: _showOnGateway, showOnMotorsport: _showOnMotorsport, featuredOnMotorsport: _featuredOnMotorsport, siteScope: _siteScope, ...dedicatedArticle } = article;
     const existing = await documents(
-      "api::news-article.news-article",
+      "api::motorsport-news-article.motorsport-news-article",
     ).findFirst({ filters: { slug: { $eq: article.slug } } });
     if (!existing) {
-      await documents("api::news-article.news-article").create({
+      await documents("api::motorsport-news-article.motorsport-news-article").create({
         data: {
-          ...article,
+          ...dedicatedArticle,
           ...(motorsportBusiness
             ? { relatedBusinesses: [motorsportBusiness.documentId] }
             : {}),
@@ -2888,15 +3042,25 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
 
   // Motorsport gallery (idempotent by slug)
   for (const gallery of MOTORSPORT_GALLERIES) {
-    const existing = await documents(
+    const existing = (await documents(
       "api::media-gallery.media-gallery",
-    ).findFirst({ filters: { slug: { $eq: gallery.slug } } });
+    ).findFirst({ filters: { slug: { $eq: gallery.slug } } })) as {
+      documentId: string;
+      category?: string;
+    } | null;
     if (!existing) {
       await documents("api::media-gallery.media-gallery").create({
         data: gallery,
         status: "published",
       });
       strapi.log.info(`[seed] Created motorsport gallery: ${gallery.title}`);
+    } else if (!existing.category && gallery.category) {
+      await documents("api::media-gallery.media-gallery").update({
+        documentId: existing.documentId,
+        data: { category: gallery.category },
+        status: "published",
+      });
+      strapi.log.info(`[seed] Set Motorsport gallery category: ${gallery.category}`);
     }
   }
 
@@ -2929,14 +3093,17 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         "motorsportFeaturedEvent",
         "motorsportInformationBand",
         "motorsportWorldSection",
+        "motorsportTicketSection",
         "sections",
       ],
     })) as {
       documentId: string;
+      heroEnabled?: boolean | null;
       heroSlides?: unknown[];
       motorsportFeaturedEvent?: unknown;
       motorsportInformationBand?: unknown;
       motorsportWorldSection?: unknown;
+      motorsportTicketSection?: unknown;
       sections?: Array<Record<string, unknown>>;
     } | null;
     const homepagePage =
@@ -2950,9 +3117,18 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         ? { heroSlides: homepageHeroSlides }
         : {};
     if (!existing) {
+      const normalizedPageSections = Array.isArray(page.sections)
+        ? page.sections.map((section) => ({
+            ...section,
+            enabled: section.enabled !== false,
+          }))
+        : page.sections;
       await documents("api::site-page.site-page").create({
         data: {
           ...page,
+          ...(normalizedPageSections
+            ? { sections: normalizedPageSections }
+            : {}),
           ...heroSlideData,
           ...(homepagePage && firstMotorsportEvent
             ? { motorsportFeaturedEvent: firstMotorsportEvent.documentId }
@@ -2964,6 +3140,10 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
       strapi.log.info(`[seed] Created Motorsport site page: ${page.title}`);
     } else if (homepagePage) {
       const homepageBackfill: Record<string, unknown> = {};
+
+      if (existing.heroEnabled == null) {
+        homepageBackfill.heroEnabled = true;
+      }
 
       if (
         homepageHeroSlides.length > 0 &&
@@ -2979,9 +3159,42 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         homepageBackfill.motorsportWorldSection =
           homepagePage.motorsportWorldSection;
       }
+      if (!existing.motorsportTicketSection) {
+        homepageBackfill.motorsportTicketSection =
+          homepagePage.motorsportTicketSection;
+      }
       if (!existing.motorsportFeaturedEvent && firstMotorsportEvent) {
         homepageBackfill.motorsportFeaturedEvent =
           firstMotorsportEvent.documentId;
+      }
+      if (Array.isArray(existing.sections)) {
+        const configuredSections = Array.isArray(homepagePage.sections)
+          ? (homepagePage.sections as Array<Record<string, unknown>>)
+          : [];
+        const existingSectionKeys = new Set(
+          existing.sections.map((section) => String(section.sectionKey)),
+        );
+        const missingSections = configuredSections.filter(
+          (section) => !existingSectionKeys.has(String(section.sectionKey)),
+        );
+        const normalizedSections = [
+          ...existing.sections.map((section) => {
+          if (typeof section.enabled === "boolean") return section;
+          return {
+            ...section,
+            enabled: section.sectionKey === "upcoming-events" ? false : true,
+          };
+          }),
+          ...missingSections,
+        ];
+        if (
+          missingSections.length > 0 ||
+          normalizedSections.some(
+            (section, index) => section.enabled !== existing.sections?.[index]?.enabled,
+          )
+        ) {
+          homepageBackfill.sections = normalizedSections;
+        }
       }
 
       if (Object.keys(homepageBackfill).length > 0) {
@@ -2994,10 +3207,31 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
           "[seed] Backfilled missing Motorsport homepage managed sections.",
         );
       }
-    } else if (Array.isArray(page.sections) && page.sections.length > 0) {
+    } else if (
+      (Array.isArray(page.sections) && page.sections.length > 0) ||
+      existing.heroEnabled == null
+    ) {
+      if (existing.heroEnabled == null) {
+        await documents("api::site-page.site-page").update({
+          documentId: existing.documentId,
+          data: { heroEnabled: true },
+          status: "published",
+        });
+      }
+      if (!Array.isArray(page.sections) || page.sections.length === 0) {
+        continue;
+      }
       const existingSections = Array.isArray(existing.sections)
         ? existing.sections
         : [];
+      const normalizedExistingSections = existingSections.map((section) =>
+        typeof section.enabled === "boolean"
+          ? section
+          : { ...section, enabled: true },
+      );
+      const existingSectionsChanged = normalizedExistingSections.some(
+        (section, index) => section.enabled !== existingSections[index]?.enabled,
+      );
       const sectionIdentity = (section: Record<string, unknown>) =>
         section.__component === "motorsport.about-capabilities"
           ? "motorsport.about-capabilities"
@@ -3007,12 +3241,17 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
       );
       const missingSections = (
         page.sections as Array<Record<string, unknown>>
-      ).filter((section) => !existingIdentities.has(sectionIdentity(section)));
+      ).map((section) => ({
+        ...section,
+        enabled: section.enabled !== false,
+      })).filter((section) => !existingIdentities.has(sectionIdentity(section)));
 
-      if (missingSections.length > 0) {
+      if (missingSections.length > 0 || existingSectionsChanged) {
         await documents("api::site-page.site-page").update({
           documentId: existing.documentId,
-          data: { sections: [...existingSections, ...missingSections] },
+          data: {
+            sections: [...normalizedExistingSections, ...missingSections],
+          },
           status: "published",
         });
         strapi.log.info(
@@ -3032,7 +3271,28 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
     const existing = await documents(
       "api::motorsport-program.motorsport-program",
     ).findFirst({ filters: { slug: { $eq: program.slug } } });
-    if (existing) continue;
+    if (existing) {
+      const existingRecord = existing as {
+        documentId: string;
+        eventMenuLabel?: string;
+        eventMenuEnabled?: boolean;
+      };
+      const menuFields: Record<string, unknown> = {};
+      if (!existingRecord.eventMenuLabel && program.eventMenuLabel) {
+        menuFields.eventMenuLabel = program.eventMenuLabel;
+      }
+      if (typeof existingRecord.eventMenuEnabled !== "boolean") {
+        menuFields.eventMenuEnabled = program.eventMenuEnabled !== false;
+      }
+      if (Object.keys(menuFields).length > 0) {
+        await documents("api::motorsport-program.motorsport-program").update({
+          documentId: existingRecord.documentId,
+          data: menuFields,
+          status: "published",
+        });
+      }
+      continue;
+    }
 
     const relatedEvent = relatedEventSlug
       ? ((await documents("api::event.event").findFirst({
@@ -3394,9 +3654,18 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
       filters: { slug: { $eq: page.slug } },
     });
     if (!existing) {
+      const normalizedPageSections = Array.isArray(page.sections)
+        ? page.sections.map((section) => ({
+            ...section,
+            enabled: true,
+          }))
+        : page.sections;
       await documents("api::site-page.site-page").create({
         data: {
           ...page,
+          ...(normalizedPageSections
+            ? { sections: normalizedPageSections }
+            : {}),
           ...(horseSportSite ? { site: horseSportSite.documentId } : {}),
         },
         status: "published",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   ArrowUpRightIcon,
@@ -11,17 +11,39 @@ import {
 import { ResilientImage } from "@/components/ui/resilient-image";
 import type { GalleryItem } from "@/types/design-system";
 
-type FilterKey = "all" | "circuit" | "two-wheels" | "mixed-surface";
+export type GalleryFilterKey =
+  | "all"
+  | "race-day"
+  | "stable-life"
+  | "venue"
+  | "jockey"
+  | "hospitality"
+  | "press"
+  | "circuit"
+  | "two-wheels"
+  | "mixed-surface"
+  | "other";
 
 type GalleryArchiveProps = {
   items: GalleryItem[];
+  availableCategories?: string[];
+  activeFilter?: GalleryFilterKey;
+  page?: number;
+  pageCount?: number;
 };
 
-const FILTERS: Array<{ key: FilterKey; label: string }> = [
+const FILTERS: Array<{ key: GalleryFilterKey; label: string }> = [
   { key: "all", label: "All frames" },
+  { key: "race-day", label: "Race day" },
+  { key: "stable-life", label: "Stable life" },
+  { key: "venue", label: "Venue" },
+  { key: "jockey", label: "Jockey" },
+  { key: "hospitality", label: "Hospitality" },
+  { key: "press", label: "Press" },
   { key: "circuit", label: "Circuit" },
   { key: "two-wheels", label: "Two wheels" },
   { key: "mixed-surface", label: "Mixed surface" },
+  { key: "other", label: "Other" },
 ];
 
 const GRID_CLASSES = [
@@ -49,7 +71,24 @@ const FALLBACKS = [
   "/media/sarga-motorsport-discipline-touring-daylight.jpg",
 ];
 
-function itemCategory(item: GalleryItem): Exclude<FilterKey, "all"> {
+function itemCategory(item: GalleryItem): Exclude<GalleryFilterKey, "all"> {
+  const explicitCategory = item.category?.trim().toLowerCase();
+  const cmsCategories: Array<Exclude<GalleryFilterKey, "all">> = [
+    "race-day",
+    "stable-life",
+    "venue",
+    "jockey",
+    "hospitality",
+    "press",
+    "circuit",
+    "two-wheels",
+    "mixed-surface",
+    "other",
+  ];
+  if (cmsCategories.includes(explicitCategory as Exclude<GalleryFilterKey, "all">)) {
+    return explicitCategory as Exclude<GalleryFilterKey, "all">;
+  }
+
   const imageSource =
     typeof item.image === "string" ? item.image : item.image.src;
   const text =
@@ -73,7 +112,7 @@ function itemCategory(item: GalleryItem): Exclude<FilterKey, "all"> {
     return "mixed-surface";
   }
 
-  return "circuit";
+  return "other";
 }
 
 function displayEyebrow(item: GalleryItem) {
@@ -87,32 +126,40 @@ function displayCaption(item: GalleryItem, index: number) {
     return caption;
   }
 
-  const categoryLabel: Record<Exclude<FilterKey, "all">, string> = {
+  const categoryLabel: Record<Exclude<GalleryFilterKey, "all">, string> = {
+    "race-day": "Race-day action",
+    "stable-life": "Stable life",
+    venue: "Venue focus",
+    jockey: "Jockey profile",
+    hospitality: "Hospitality",
+    press: "Press frame",
     circuit: "Circuit velocity",
     "two-wheels": "Two-wheel pressure",
     "mixed-surface": "Mixed-surface attack",
+    other: "Motorsport frame",
   };
 
   return `${categoryLabel[itemCategory(item)]} / Frame ${String(index + 1).padStart(2, "0")}`;
 }
-
-export function GalleryArchive({ items }: GalleryArchiveProps) {
-  const [filter, setFilter] = useState<FilterKey>("all");
+export function GalleryArchive({
+  items,
+  availableCategories = [],
+  activeFilter = "all",
+  page = 1,
+  pageCount = 1,
+}: GalleryArchiveProps) {
+  const visibleFilters = FILTERS.filter(
+    (filter) =>
+      filter.key === "all" || availableCategories.includes(filter.key),
+  );
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
-  const filteredItems = useMemo(
-    () =>
-      filter === "all"
-        ? items
-        : items.filter((item) => itemCategory(item) === filter),
-    [filter, items],
-  );
+  const filteredItems = items;
   const selectedItem =
     selectedIndex === null ? null : filteredItems[selectedIndex];
   const modalOpen = selectedIndex !== null;
-
   useEffect(() => {
     if (!modalOpen) return;
 
@@ -180,9 +227,12 @@ export function GalleryArchive({ items }: GalleryArchiveProps) {
     window.requestAnimationFrame(() => openerRef.current?.focus());
   }
 
-  function selectFilter(nextFilter: FilterKey) {
-    setSelectedIndex(null);
-    setFilter(nextFilter);
+  function galleryHref(nextPage: number, nextFilter: GalleryFilterKey) {
+    const params = new URLSearchParams();
+    if (nextPage > 1) params.set("page", String(nextPage));
+    if (nextFilter !== "all") params.set("category", nextFilter);
+    const query = params.toString();
+    return query ? `/gallery?${query}` : "/gallery";
   }
 
   return (
@@ -201,27 +251,26 @@ export function GalleryArchive({ items }: GalleryArchiveProps) {
           role="group"
           aria-label="Filter gallery"
         >
-          {FILTERS.map((option) => (
-            <button
+          {visibleFilters.map((option) => (
+            <a
               key={option.key}
-              type="button"
-              aria-pressed={filter === option.key}
-              onClick={() => selectFilter(option.key)}
-              className={`min-h-11 shrink-0 border px-4 text-[0.62rem] font-black uppercase tracking-[0.14em] transition-colors ${
-                filter === option.key
+              href={galleryHref(1, option.key)}
+              aria-current={activeFilter === option.key ? "page" : undefined}
+              className={`min-h-11 shrink-0 border px-4 py-3 text-[0.62rem] font-black uppercase tracking-[0.14em] transition-colors ${
+                activeFilter === option.key
                   ? "border-ms-apex-crimson bg-ms-apex-crimson text-ms-warm-white"
                   : "border-ms-warm-white/16 text-ms-warm-white/58 hover:border-ms-warm-white/45 hover:text-ms-warm-white"
               }`}
             >
               {option.label}
-            </button>
+            </a>
           ))}
         </div>
       </div>
 
-      {filteredItems.length > 0 ? (
+      {items.length > 0 ? (
         <div className="mt-8 grid gap-4 md:grid-cols-12">
-          {filteredItems.map((item, index) => {
+          {items.map((item, index) => {
             const caption = displayCaption(item, index);
             const eyebrow = displayEyebrow(item);
 
@@ -252,15 +301,11 @@ export function GalleryArchive({ items }: GalleryArchiveProps) {
                 </button>
                 <figcaption className="ms-gallery-caption flex min-h-24 items-end justify-between gap-5 p-5 sm:p-6">
                   <div>
-                    <p className="ms-data-label text-ms-electric-yellow">
-                      {eyebrow}
-                    </p>
-                    <p className="mt-2 font-display text-xl uppercase leading-tight">
-                      {caption}
-                    </p>
+                    <p className="ms-data-label text-ms-electric-yellow">{eyebrow}</p>
+                    <p className="mt-2 font-display text-xl uppercase leading-tight">{caption}</p>
                   </div>
                   <span className="ms-tabular text-xs font-bold text-ms-warm-white/52">
-                    {String(index + 1).padStart(2, "0")}
+                    {String((page - 1) * 8 + index + 1).padStart(2, "0")}
                   </span>
                 </figcaption>
               </figure>
@@ -272,7 +317,26 @@ export function GalleryArchive({ items }: GalleryArchiveProps) {
           No published frames match this filter yet.
         </div>
       )}
-
+      {pageCount > 1 ? (
+        <nav className="mt-16 flex flex-wrap items-center justify-between gap-5 border-t border-ms-warm-white/18 pt-6" aria-label="Gallery pages">
+          <p className="ms-data-label text-ms-warm-white/56">
+            Page {String(page).padStart(2, "0")} / {String(pageCount).padStart(2, "0")}
+          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <a href={page > 1 ? galleryHref(page - 1, activeFilter) : undefined} aria-disabled={page === 1} aria-label="Previous gallery page" className="grid size-12 place-items-center border border-ms-warm-white/20 text-ms-warm-white disabled:opacity-30">
+              <ChevronLeftIcon className="size-5" />
+            </a>
+            {Array.from({ length: pageCount }, (_, index) => index + 1).map((pageNumber) => (
+              <a key={pageNumber} href={galleryHref(pageNumber, activeFilter)} aria-current={page === pageNumber ? "page" : undefined} aria-label={`Gallery page ${pageNumber}`} className={`grid size-12 place-items-center border text-xs font-black ${page === pageNumber ? "border-ms-apex-crimson bg-ms-apex-crimson text-ms-warm-white" : "border-ms-warm-white/20 text-ms-warm-white/62"}`}>
+                {String(pageNumber).padStart(2, "0")}
+              </a>
+            ))}
+            <a href={page < pageCount ? galleryHref(page + 1, activeFilter) : undefined} aria-disabled={page === pageCount} aria-label="Next gallery page" className="grid size-12 place-items-center border border-ms-warm-white/20 text-ms-warm-white disabled:opacity-30">
+              <ChevronRightIcon className="size-5" />
+            </a>
+          </div>
+        </nav>
+      ) : null}
       {selectedItem && selectedIndex !== null ? (
         <div
           ref={dialogRef}
@@ -287,7 +351,7 @@ export function GalleryArchive({ items }: GalleryArchiveProps) {
           <div className="relative m-auto flex h-full max-h-[calc(100svh-1.5rem)] w-full max-w-[96rem] flex-col overflow-hidden border border-ms-warm-white/16 bg-[#071126] shadow-2xl sm:max-h-[calc(100svh-3rem)]">
             <header className="flex min-h-16 items-center justify-between gap-6 border-b border-ms-warm-white/14 px-4 sm:px-6">
               <p className="ms-data-label text-ms-slipstream-teal">
-                Full frame / {String(selectedIndex + 1).padStart(2, "0")} of{" "}
+                Full frame / {String(selectedIndex + 1).padStart(2, "0")} of {" "}
                 {String(filteredItems.length).padStart(2, "0")}
               </p>
               <button

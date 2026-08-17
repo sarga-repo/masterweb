@@ -125,6 +125,40 @@ export interface MotorsportCampaignSlide extends Struct.ComponentSchema {
   };
 }
 
+export interface MotorsportDetailPresentation extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_detail_presentations';
+  info: {
+    description: 'Optional Hero and Information Band overrides for Motorsport detail records.';
+    displayName: 'Detail Presentation';
+  };
+  attributes: {
+    hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    informationBand: Schema.Attribute.Component<
+      'motorsport.page-information-band',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    routeKey: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+  };
+}
+
 export interface MotorsportDisciplineCard extends Struct.ComponentSchema {
   collectionName: 'components_motorsport_discipline_cards';
   info: {
@@ -268,6 +302,327 @@ export interface MotorsportHomeInformationBand extends Struct.ComponentSchema {
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 160;
+      }>;
+  };
+}
+
+export interface MotorsportHomeTicketSection extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_home_ticket_sections';
+  info: {
+    description: 'Complete CMS-managed Motorsport homepage ticket card. The link must redirect to an approved partner; Sarga does not process payment.';
+    displayName: 'Homepage Ticket Card';
+  };
+  attributes: {
+    backgroundImage: Schema.Attribute.Media<'images'>;
+    ctaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }> &
+      Schema.Attribute.DefaultTo<'Secure your seat'>;
+    ctaUrl: Schema.Attribute.String;
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 360;
+      }>;
+    eventLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+      }> &
+      Schema.Attribute.DefaultTo<'Event'>;
+    eventText: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 120;
+      }>;
+    eyebrow: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    footerText: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+    isActive: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    partnerLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }> &
+      Schema.Attribute.DefaultTo<'Partner redirect / Secure'>;
+    providerLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+      }> &
+      Schema.Attribute.DefaultTo<'Provider'>;
+    providerText: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 120;
+      }>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+  };
+}
+
+export interface MotorsportInformationBandMetric
+  extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_information_band_metrics';
+  info: {
+    description: 'One editable label/value item in a Motorsport metric group.';
+    displayName: 'Metric Group Item';
+  };
+  attributes: {
+    isActive: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    label: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
+    value: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 120;
+      }>;
+  };
+}
+
+export interface MotorsportPageHero extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_page_heroes';
+  info: {
+    description: 'Reusable Motorsport page hero contract. Layout and overlays remain frontend-owned.';
+    displayName: 'Page Hero';
+  };
+  attributes: {
+    backgroundAlt: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+    backgroundMedia: Schema.Attribute.Media<'images' | 'videos'>;
+    description: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    eyebrow: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    isActive: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    metrics: Schema.Attribute.Component<
+      'motorsport.information-band-metric',
+      true
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 3;
+        },
+        number
+      >;
+    mobileBackgroundMedia: Schema.Attribute.Media<'images' | 'videos'>;
+    showMetricGroup: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+  };
+}
+
+export interface MotorsportPageInformationBand extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_page_information_bands';
+  info: {
+    description: 'Reusable Motorsport information band rendered immediately after a page hero.';
+    displayName: 'Page Information Band';
+  };
+  attributes: {
+    description: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    eyebrow: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    isActive: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    metrics: Schema.Attribute.Component<
+      'motorsport.information-band-metric',
+      true
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 3;
+        },
+        number
+      >;
+    showMetricGroup: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+  };
+}
+
+export interface MotorsportPageSection extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_page_sections';
+  info: {
+    description: 'Named Motorsport editorial section used by page-specific Single Types; no manual section key is required.';
+    displayName: 'Named Page Section';
+  };
+  attributes: {
+    body: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    ctaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    ctaTarget: Schema.Attribute.Enumeration<['sameWindow', 'newWindow']> &
+      Schema.Attribute.DefaultTo<'sameWindow'>;
+    ctaUrl: Schema.Attribute.String;
+    eyebrow: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    isActive: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    media: Schema.Attribute.Media<'images' | 'videos'>;
+    theme: Schema.Attribute.Enumeration<
+      ['default', 'dark', 'light', 'accent']
+    > &
+      Schema.Attribute.DefaultTo<'default'>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
       }>;
   };
 }
@@ -496,6 +851,7 @@ export interface SharedPageSection extends Struct.ComponentSchema {
     ctaTarget: Schema.Attribute.Enumeration<['sameWindow', 'newWindow']> &
       Schema.Attribute.DefaultTo<'sameWindow'>;
     ctaUrl: Schema.Attribute.String;
+    enabled: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     eyebrow: Schema.Attribute.String;
     media: Schema.Attribute.Media<'images' | 'videos'>;
     sectionKey: Schema.Attribute.String & Schema.Attribute.Required;
@@ -536,9 +892,15 @@ declare module '@strapi/strapi' {
       'motorsport.about-capabilities': MotorsportAboutCapabilities;
       'motorsport.about-capability-card': MotorsportAboutCapabilityCard;
       'motorsport.campaign-slide': MotorsportCampaignSlide;
+      'motorsport.detail-presentation': MotorsportDetailPresentation;
       'motorsport.discipline-card': MotorsportDisciplineCard;
       'motorsport.hero-slide': MotorsportHeroSlide;
       'motorsport.home-information-band': MotorsportHomeInformationBand;
+      'motorsport.home-ticket-section': MotorsportHomeTicketSection;
+      'motorsport.information-band-metric': MotorsportInformationBandMetric;
+      'motorsport.page-hero': MotorsportPageHero;
+      'motorsport.page-information-band': MotorsportPageInformationBand;
+      'motorsport.page-section': MotorsportPageSection;
       'motorsport.rule-item': MotorsportRuleItem;
       'motorsport.rundown-item': MotorsportRundownItem;
       'motorsport.world-of-motorsport': MotorsportWorldOfMotorsport;

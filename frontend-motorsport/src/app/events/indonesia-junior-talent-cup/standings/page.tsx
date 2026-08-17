@@ -9,9 +9,12 @@ import {
 } from "@/components";
 import {
   getIjtcProgram,
+  getIjtcInformationBand,
   getIjtcStandings,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Standings",
@@ -20,10 +23,12 @@ export const metadata: Metadata = {
 };
 
 export default async function IjtcStandingsPage() {
+  const locale = await getRequestLocale();
   const [program, standings] = await Promise.all([
-    getIjtcProgram(),
-    getIjtcStandings(),
+    getIjtcProgram(locale),
+    getIjtcStandings(locale),
   ]);
+  if (!program) notFound();
   const leader = standings[0];
   const demoData = standings.some((entry) =>
     /demo|demonstration/i.test(`${entry.rider} ${entry.resultSummary ?? ""}`),
@@ -36,8 +41,8 @@ export default async function IjtcStandingsPage() {
         kickerColor="orange"
         title="Standings & results."
         description="One accessible classification for position, rider, team, latest result context, and championship points."
-        backgroundImage="/media/sarge-motorrace-motorbike-race.png"
-        backgroundAlt="Motorcycle racers competing closely through a circuit turn"
+        backgroundImage={program.image}
+        backgroundAlt={program.imageAlt}
         accent="teal"
         accentPosition="bottom-right"
         surface="heat"
@@ -46,10 +51,12 @@ export default async function IjtcStandingsPage() {
       />
 
       <InformationBand
-        eyebrow="Classification control / Current order"
-        title="Every point stays visible."
-        description="The wide classification remains horizontally scrollable on small screens without hiding columns or changing reading order."
-        items={[
+        {...getIjtcInformationBand(program, {
+          eyebrow: "Classification control / Current order",
+          title: "Every point stays visible.",
+          description:
+            "The wide classification remains horizontally scrollable on small screens without hiding columns or changing reading order.",
+          items: [
           { label: "Season", value: program.seasonLabel },
           {
             label: "Classified",
@@ -59,7 +66,8 @@ export default async function IjtcStandingsPage() {
             label: "Leader",
             value: leader ? `#${leader.number ?? leader.position}` : "Pending",
           },
-        ]}
+          ],
+        })}
       />
 
       <section className="ms-reflected-light-surface ms-section">

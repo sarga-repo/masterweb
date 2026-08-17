@@ -198,6 +198,17 @@
         "seo": "component:seo"
       }
     },
+    "motorsportOwnershipCollections": {
+      "fields": {
+        "motorsportEvent": "collection:dedicated Motorsport event record",
+        "motorsportLeadershipPerson": "collection:dedicated Motorsport leadership profile",
+        "motorsportMerchandiseItem": "collection:dedicated Motorsport merchandise item",
+        "motorsportNewsArticle": "collection:dedicated Motorsport editorial article",
+        "motorsportPartner": "collection:dedicated Motorsport partner or sponsor",
+        "motorsportTicketCta": "collection:dedicated Motorsport ticket destination",
+        "motorsportTopNavigationItem": "collection:dedicated Motorsport header navigation item"
+      }
+    },
     "ticketCta": {
       "fields": {
         "title": "string",
@@ -211,6 +222,7 @@
         "activeFrom": "datetime",
         "activeUntil": "datetime",
         "isActive": "boolean",
+        "image": "media",
         "siteScope": [
           "gateway",
           "motorsport",
@@ -411,6 +423,7 @@
         "motorsportFeaturedEvent": "relation:event",
         "motorsportInformationBand": "component:homeInformationBand",
         "motorsportWorldSection": "component:worldOfMotorsport",
+        "motorsportTicketSection": "component:homeTicketSection",
         "pageAvailability": "component:pageAvailability",
         "sections": "dynamicZone:pageSection",
         "seo": "component:seo"
@@ -420,6 +433,8 @@
       "fields": {
         "title": "string",
         "slug": "uid",
+        "eventMenuLabel": "localized:string",
+        "eventMenuEnabled": "boolean",
         "programType": [
           "juniorTalentCup",
           "rallycross",
@@ -630,6 +645,7 @@
     "pageSection": {
       "fields": {
         "sectionKey": "string",
+        "enabled": "boolean",
         "eyebrow": "string",
         "title": "string",
         "body": "richtext",
@@ -725,6 +741,23 @@
         "disciplines": "repeatableComponent:disciplineCard"
       }
     },
+    "homeTicketSection": {
+      "fields": {
+        "isActive": "boolean",
+        "eyebrow": "string",
+        "title": "string",
+        "description": "text",
+        "backgroundImage": "media",
+        "eventLabel": "string",
+        "eventText": "string",
+        "providerLabel": "string",
+        "providerText": "string",
+        "partnerLabel": "string",
+        "footerText": "string",
+        "ctaLabel": "string",
+        "ctaUrl": "string"
+      }
+    },
     "rundownItem": {
       "fields": {
         "dayLabel": "string",
@@ -756,5 +789,6 @@
     "GWR-CMS-9 adds an optional shared Hero Video component to Gateway Homepage, scoped Site Page, and each of the maximum three Motorsport hero slides. MP4/WebM sources retain an image poster and reduced-motion fallback.",
     "GWR-CMS-10 moves the Motorsport homepage Race Control and World of Motorsport sections into the scoped Site Page, with an optional featured Event relation and up to six ordered managed discipline cards.",
     "This file mirrors the Strapi schemas under cms/src/api and cms/src/components; it is documentation, not the source of truth."
+    ,"MSR-CMS-OWNERSHIP-1 adds dedicated unscoped Motorsport collections. Their source schemas live under cms/src/api/motorsport-*/content-types; their records are copied from legacy scoped collections by the flag-gated ownership migration before frontend cutover."
   ]
 }

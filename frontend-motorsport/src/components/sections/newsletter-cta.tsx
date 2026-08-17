@@ -83,7 +83,7 @@ export function NewsletterCtaSection({
       {/* Thermal gradient accent */}
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-0.5 bg-[linear-gradient(90deg,#E8192C_0%,#FF6B00_32%,#F5C800_54%,#00C4CC_76%,#0033A0_100%)]"
+        className="ms-newsletter-thermal-rule absolute inset-x-0 top-0 h-0.5 bg-[linear-gradient(90deg,#E8192C_0%,#FF6B00_32%,#F5C800_54%,#00C4CC_76%,#0033A0_100%)]"
       />
       <div
         aria-hidden="true"
@@ -101,7 +101,7 @@ export function NewsletterCtaSection({
         </div>
 
         {/* Right - action panel */}
-        <div className="ms-panel bg-ms-graphite p-8 sm:p-10">
+        <div className="ms-newsletter-card ms-panel bg-ms-graphite p-8 sm:p-10">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <label
               htmlFor="newsletter-email"

@@ -10,9 +10,12 @@ import {
 import { ArrowRightIcon } from "@/components/ui/icons";
 import {
   getIjtcProgram,
+  getIjtcInformationBand,
   getIjtcRegulation,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Regulation",
@@ -39,11 +42,13 @@ const PUBLICATION_STEPS = [
 ];
 
 export default async function IjtcRegulationPage() {
+  const locale = await getRequestLocale();
   const [program, regulation] = await Promise.all([
-    getIjtcProgram(),
-    getIjtcRegulation(),
+    getIjtcProgram(locale),
+    getIjtcRegulation(locale),
   ]);
-  const isPublished = Boolean(regulation.fileHref);
+  if (!program) notFound();
+  const isPublished = Boolean(regulation?.fileHref);
 
   return (
     <>
@@ -52,8 +57,8 @@ export default async function IjtcRegulationPage() {
         kickerColor="yellow"
         title="Sporting regulation."
         description="One controlled source for the programme rules, document version, and effective date."
-        backgroundImage="/media/sarga-motorsport-motorbike-race.png"
-        backgroundAlt="Motorcycle racers contesting a circuit round"
+        backgroundImage={program.image}
+        backgroundAlt={program.imageAlt}
         accent="orange"
         accentPosition="bottom-left"
         surface="heat"
@@ -62,14 +67,17 @@ export default async function IjtcRegulationPage() {
       />
 
       <InformationBand
-        eyebrow="Document control / Sporting notice"
-        title="Race from the approved rulebook."
-        description="This page never substitutes a draft or placeholder file for an official regulation."
-        items={[
+        {...getIjtcInformationBand(program, {
+          eyebrow: "Document control / Sporting notice",
+          title: "Race from the approved rulebook.",
+          description:
+            "This page never substitutes a draft or placeholder file for an official regulation.",
+          items: [
           { label: "Season", value: program.seasonLabel },
           { label: "Status", value: isPublished ? "Published" : "Pending" },
           { label: "Format", value: "PDF" },
-        ]}
+          ],
+        })}
       />
 
       <section className="ms-reflected-light-surface ms-section">
@@ -82,11 +90,11 @@ export default async function IjtcRegulationPage() {
           />
           <div className="mt-14">
             <RegulationDownloadPanel
-              title={regulation.title}
-              summary={regulation.summary}
-              version={regulation.version}
-              effectiveDate={regulation.effectiveDate}
-              fileHref={regulation.fileHref}
+              title={regulation?.title ?? "No approved regulation"}
+              summary={regulation?.summary}
+              version={regulation?.version ?? "Publication pending"}
+              effectiveDate={regulation?.effectiveDate ?? "Publication pending"}
+              fileHref={regulation?.fileHref}
               fileLabel="Open regulation PDF"
             />
           </div>

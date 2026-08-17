@@ -102,6 +102,101 @@ const CONTENT_LINKS = {
   },
 } satisfies Record<string, WorkspaceLink>;
 
+// Motorsport page Single Types are intentionally listed in the Motorsport
+// workspace only.  Keeping these links explicit gives editors a clear page
+// model to open and prevents them from having to edit the legacy Site Page
+// collection for fields that now belong to a dedicated page document.
+const MOTORSPORT_PAGE_LINKS: WorkspaceLink[] = [
+  {
+    label: "Theme Settings",
+    description: "Select the approved Motorsport color composition preset.",
+    uid: "api::motorsport-theme-settings.motorsport-theme-settings",
+    group: "Pages",
+    kind: "single-types",
+    canCreate: false,
+  },
+  {
+    label: "Homepage",
+    description: "Hero, information band, disciplines, ticket CTA, and homepage sections.",
+    uid: "api::motorsport-home-page.motorsport-home-page",
+    group: "Pages",
+    kind: "single-types",
+    canCreate: false,
+  },
+  {
+    label: "About Page",
+    description: "About hero, information band, capabilities, team, and calls to action.",
+    uid: "api::motorsport-about-page.motorsport-about-page",
+    group: "Pages",
+    kind: "single-types",
+    canCreate: false,
+  },
+  {
+    label: "Events Page",
+    description: "Events hero, controls, programmes, calendar, and event discovery content.",
+    uid: "api::motorsport-events-page.motorsport-events-page",
+    group: "Pages",
+    kind: "single-types",
+    canCreate: false,
+  },
+  {
+    label: "News Page",
+    description: "News hero, lead story, archive introduction, and editorial controls.",
+    uid: "api::motorsport-news-page.motorsport-news-page",
+    group: "Pages",
+    kind: "single-types",
+    canCreate: false,
+  },
+  {
+    label: "Gallery Page",
+    description: "Gallery hero, archive, and gallery call-to-action content.",
+    uid: "api::motorsport-gallery-page.motorsport-gallery-page",
+    group: "Pages",
+    kind: "single-types",
+    canCreate: false,
+  },
+  {
+    label: "Merchandise Page",
+    description: "Merchandise hero, catalogue, controls, and final call to action.",
+    uid: "api::motorsport-merchandise-page.motorsport-merchandise-page",
+    group: "Pages",
+    kind: "single-types",
+    canCreate: false,
+  },
+  {
+    label: "Tickets Page",
+    description: "Ticket hero, featured ticket, event tickets, and ticket information.",
+    uid: "api::motorsport-tickets-page.motorsport-tickets-page",
+    group: "Pages",
+    kind: "single-types",
+    canCreate: false,
+  },
+  {
+    label: "Contact Page",
+    description: "Contact hero, inquiry form, notification copy, and final CTA.",
+    uid: "api::motorsport-contact-page.motorsport-contact-page",
+    group: "Pages",
+    kind: "single-types",
+    canCreate: false,
+  },
+  {
+    label: "Partners Page",
+    description: "Partner hero, partner network, and closing CTA content.",
+    uid: "api::motorsport-partners-page.motorsport-partners-page",
+    group: "Pages",
+    kind: "single-types",
+    canCreate: false,
+  },
+  {
+    label: "Experience Page",
+    description: "Experience hero, pillars, track content, and closing CTA.",
+    uid: "api::motorsport-experience-page.motorsport-experience-page",
+    group: "Pages",
+    kind: "single-types",
+    canCreate: false,
+  },
+];
+
 const WORKSPACES: Record<WorkspaceKey, Workspace> = {
   gateway: {
     title: "Sarga Gateway",
@@ -189,22 +284,19 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
     theme: "motorsport",
     priorityTasks: [
       {
-        label: "Edit site pages",
-        description: "Homepage, About, campaign, and legal page content.",
-        uid: "api::site-page.site-page",
-        filterByScope: true,
+        label: "Edit Motorsport pages",
+        description: "Homepage, About, Events, News, Gallery, and dedicated page content.",
+        uid: "api::motorsport-home-page.motorsport-home-page",
       },
       {
         label: "Manage events",
         description: "Dates, schedules, venues, and ticket relationships.",
-        uid: "api::event.event",
-        filterByScope: true,
+        uid: "api::motorsport-event.motorsport-event",
       },
       {
         label: "Publish news",
-        description: "Motorsport-owned and shared editorial stories.",
-        uid: "api::news-article.news-article",
-        filterByScope: true,
+        description: "Motorsport editorial stories and related event coverage.",
+        uid: "api::motorsport-news-article.motorsport-news-article",
       },
       {
         label: "Manage programs",
@@ -214,8 +306,13 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
       },
     ],
     links: [
-      CONTENT_LINKS.topNavigation,
-      CONTENT_LINKS.pages,
+      ...MOTORSPORT_PAGE_LINKS,
+      {
+        label: "Top navigation",
+        description: "Motorsport header labels, visibility, order, and destinations.",
+        uid: "api::motorsport-top-navigation-item.motorsport-top-navigation-item",
+        group: "Pages",
+      },
       {
         label: "Programs",
         description:
@@ -249,29 +346,41 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
         label: "Merchandise",
         description:
           "Showcase teasers with external or inquiry-only availability.",
-        uid: "api::merchandise-item.merchandise-item",
+        uid: "api::motorsport-merchandise-item.motorsport-merchandise-item",
         group: "Commerce",
-        filterByScope: true,
       },
-      CONTENT_LINKS.events,
-      CONTENT_LINKS.news,
+      {
+        label: "Events",
+        description: "Motorsport event records, dates, schedules, venues, and ticket relationships.",
+        uid: "api::motorsport-event.motorsport-event",
+        group: "Editorial",
+      },
+      {
+        label: "News",
+        description: "Motorsport-owned editorial stories, imagery, and related event coverage.",
+        uid: "api::motorsport-news-article.motorsport-news-article",
+        group: "Editorial",
+      },
       {
         label: "Leadership",
         description:
           "Motorsport leadership profiles, summaries, portraits, and ordering.",
-        uid: "api::leadership-person.leadership-person",
+        uid: "api::motorsport-leadership-person.motorsport-leadership-person",
         group: "Editorial",
-        filterByScope: true,
       },
       CONTENT_LINKS.galleries,
-      CONTENT_LINKS.tickets,
+      {
+        label: "Ticket CTAs",
+        description: "Approved Motorsport ticket redirects, deep-links, and partner configuration.",
+        uid: "api::motorsport-ticket-cta.motorsport-ticket-cta",
+        group: "Commerce",
+      },
       {
         label: "Partners & sponsors",
         description:
           "Motorsport-owned partner identities and approved external URLs.",
-        uid: "api::partner.partner",
+        uid: "api::motorsport-partner.motorsport-partner",
         group: "Library",
-        filterByScope: true,
       },
     ],
   },

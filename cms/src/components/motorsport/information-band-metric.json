@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_motorsport_information_band_metrics",
+  "info": {
+    "displayName": "Metric Group Item",
+    "description": "One editable label/value item in a Motorsport metric group."
+  },
+  "options": {},
+  "attributes": {
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "maxLength": 60,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "value": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120,
+      "pluginOptions": { "i18n": { "localized": true } }
+    }
+  }
+}

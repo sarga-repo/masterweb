@@ -1,0 +1,10 @@
+{
+  "collectionName": "components_motorsport_detail_presentations",
+  "info": { "displayName": "Detail Presentation", "description": "Optional Hero and Information Band overrides for Motorsport detail records." },
+  "options": {},
+  "attributes": {
+    "hero": { "type": "component", "component": "motorsport.page-hero", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
+    "informationBand": { "type": "component", "component": "motorsport.page-information-band", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
+    "routeKey": { "type": "string", "maxLength": 80, "pluginOptions": { "i18n": { "localized": true } } }
+  }
+}

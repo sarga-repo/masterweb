@@ -4,6 +4,8 @@ type InformationBandItem = {
 };
 
 type InformationBandProps = {
+  isActive?: boolean;
+  showMetricGroup?: boolean;
   eyebrow?: string;
   title: string;
   description?: string;
@@ -11,11 +13,16 @@ type InformationBandProps = {
 };
 
 export function InformationBand({
+  isActive = true,
+  showMetricGroup = true,
   eyebrow,
   title,
   description,
   items = [],
 }: InformationBandProps) {
+  if (!isActive) return null;
+  const visibleItems = showMetricGroup ? items.slice(0, 3) : [];
+
   return (
     <section className="ms-blue-band relative overflow-hidden">
       <div
@@ -34,9 +41,9 @@ export function InformationBand({
             </p>
           ) : null}
         </div>
-        {items.length > 0 ? (
+        {visibleItems.length > 0 ? (
           <dl className="grid grid-cols-2 border-l border-ms-warm-white/20 sm:grid-cols-3">
-            {items.map((item) => (
+            {visibleItems.map((item) => (
               <div
                 key={`${item.label}-${item.value}`}
                 className="border-r border-ms-warm-white/20 px-4 py-2"
@@ -44,7 +51,7 @@ export function InformationBand({
                 <dt className="ms-data-label text-ms-warm-white/52">
                   {item.label}
                 </dt>
-                <dd className="ms-tabular mt-3 text-sm font-extrabold uppercase tracking-[0.06em]">
+                  <dd className="ms-blue-band-metric ms-tabular mt-3 text-sm font-extrabold uppercase tracking-[0.06em]">
                   {item.value}
                 </dd>
               </div>

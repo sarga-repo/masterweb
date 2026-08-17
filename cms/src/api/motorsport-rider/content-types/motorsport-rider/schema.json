@@ -54,6 +54,13 @@
       "component": "shared.seo",
       "repeatable": false,
       "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "motorsportPresentation": {
+      "type": "component",
+      "component": "motorsport.detail-presentation",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
     }
   }
 }

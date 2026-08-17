@@ -1,0 +1,59 @@
+{
+  "collectionName": "components_motorsport_page_heroes",
+  "info": {
+    "displayName": "Page Hero",
+    "description": "Reusable Motorsport page hero contract. Layout and overlays remain frontend-owned."
+  },
+  "options": {},
+  "attributes": {
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 100,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 180,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "description": {
+      "type": "richtext",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "backgroundMedia": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "videos"]
+    },
+    "mobileBackgroundMedia": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "videos"]
+    },
+    "backgroundAlt": {
+      "type": "string",
+      "maxLength": 180,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "showMetricGroup": {
+      "type": "boolean",
+      "default": true,
+      "description": "Controls visibility of the hero metric group. When false, the complete group and its separators are hidden."
+    },
+    "metrics": {
+      "type": "component",
+      "repeatable": true,
+      "component": "motorsport.information-band-metric",
+      "max": 3,
+      "pluginOptions": { "i18n": { "localized": true } }
+    }
+  }
+}

@@ -4,6 +4,8 @@ import type { Core } from "@strapi/strapi";
 
 import {
   WORKSPACE_ROLES,
+  MOTORSPORT_DEDICATED_COLLECTION_SUBJECTS,
+  MOTORSPORT_PAGE_SINGLE_TYPE_SUBJECTS,
   buildRolePermissions,
   getManagedReadableFields,
   getManagedWritableFields,
@@ -232,6 +234,53 @@ test("managed roles retain conditioned publish permission for every scoped subje
   }
 });
 
+test("Motorsport page Single Types are isolated to the Motorsport workspace", () => {
+  const gateway = WORKSPACE_ROLES.find((role) => role.scope === "gateway");
+  const motorsport = WORKSPACE_ROLES.find((role) => role.scope === "motorsport");
+  const horsesport = WORKSPACE_ROLES.find((role) => role.scope === "horsesport");
+
+  assert.ok(gateway && motorsport && horsesport);
+  for (const subject of MOTORSPORT_PAGE_SINGLE_TYPE_SUBJECTS) {
+    assert.equal(motorsport.subjects.includes(subject), true);
+    assert.equal(gateway.subjects.includes(subject), false);
+    assert.equal(horsesport.subjects.includes(subject), false);
+  }
+});
+
+test("dedicated Motorsport collections are unscoped and isolated to Motorsport", () => {
+  const gateway = WORKSPACE_ROLES.find((role) => role.scope === "gateway");
+  const motorsport = WORKSPACE_ROLES.find((role) => role.scope === "motorsport");
+  const horsesport = WORKSPACE_ROLES.find((role) => role.scope === "horsesport");
+
+  assert.ok(gateway && motorsport && horsesport);
+  for (const subject of MOTORSPORT_DEDICATED_COLLECTION_SUBJECTS) {
+    assert.equal(motorsport.unscopedSubjects?.includes(subject), true);
+    assert.equal(gateway.subjects.includes(subject), false);
+    assert.equal(gateway.unscopedSubjects?.includes(subject) ?? false, false);
+    assert.equal(horsesport.subjects.includes(subject), false);
+    assert.equal(horsesport.unscopedSubjects?.includes(subject) ?? false, false);
+  }
+});
+
+test("Motorsport editors can manage only Motorsport media galleries", () => {
+  const motorsport = WORKSPACE_ROLES.find((role) => role.scope === "motorsport");
+  const subject = "api::media-gallery.media-gallery";
+
+  assert.ok(motorsport);
+  assert.equal(motorsport.subjects.includes(subject), true);
+  assert.equal(motorsport.unscopedSubjects?.includes(subject) ?? false, false);
+
+  const permissions = buildRolePermissions(createStrapiFixture(), motorsport);
+  const readPermission = permissions.find(
+    (permission) =>
+      permission.subject === subject &&
+      permission.action === "plugin::content-manager.explorer.read",
+  );
+  assert.deepEqual(readPermission?.conditions, [
+    "admin::sarga-workspaces-is-motorsport-content",
+  ]);
+});
+
 test("managed roles retain one workspace action and scoped record conditions", () => {
   const strapi = createStrapiFixture();
 
@@ -257,11 +306,13 @@ test("managed roles retain one workspace action and scoped record conditions", (
   }
 });
 
-test("Leadership Person is scoped for every site workspace", () => {
+test("shared Leadership Person remains unavailable to the dedicated Motorsport workspace", () => {
   const strapi = createStrapiFixture();
   const subject = "api::leadership-person.leadership-person";
 
-  for (const role of WORKSPACE_ROLES.filter((role) => role.scope !== "shared")) {
+  for (const role of WORKSPACE_ROLES.filter(
+    (role) => role.scope === "gateway" || role.scope === "horsesport",
+  )) {
     assert.ok(role.subjects.includes(subject));
     const permissions = buildRolePermissions(strapi, role);
     const readPermission = permissions.find(
@@ -284,6 +335,10 @@ test("Leadership Person is scoped for every site workspace", () => {
   const sharedRole = WORKSPACE_ROLES.find((role) => role.scope === "shared");
   assert.ok(sharedRole?.subjects.includes(subject));
   assert.equal(sharedRole?.unscopedSubjects?.includes(subject), false);
+
+  const motorsportRole = WORKSPACE_ROLES.find((role) => role.scope === "motorsport");
+  assert.equal(motorsportRole?.subjects.includes(subject), false);
+  assert.equal(motorsportRole?.unscopedSubjects?.includes(subject) ?? false, false);
 });
 
 test("dedicated roles expose only conditioned read-only reference records", () => {

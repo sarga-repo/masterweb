@@ -22,12 +22,53 @@ function strapiImagePattern() {
   }
 }
 
+function previewAdminOrigins() {
+  return Array.from(
+    new Set(
+      (process.env.PREVIEW_ADMIN_ORIGINS ?? process.env.CMS_ADMIN_ORIGIN ?? "")
+        .split(",")
+        .map((value) => {
+          try {
+            const url = new URL(value.trim());
+            return ["http:", "https:"].includes(url.protocol) &&
+              !url.username &&
+              !url.password &&
+              url.pathname === "/" &&
+              !url.search &&
+              !url.hash
+              ? url.origin
+              : null;
+          } catch {
+            return null;
+          }
+        })
+        .filter((origin): origin is string => Boolean(origin)),
+    ),
+  );
+}
+
 const nextConfig: NextConfig = {
+  async headers() {
+    const adminOrigins = previewAdminOrigins();
+    return adminOrigins.length > 0
+      ? [
+          {
+            source: "/(.*)",
+            headers: [
+              {
+                key: "Content-Security-Policy",
+                value: `frame-ancestors 'self' ${adminOrigins.join(" ")}`,
+              },
+            ],
+          },
+        ]
+      : [];
+  },
   async redirects() {
     return [
       {
-        source: "/events/fia-rallycross-world-cup-indonesia-2026",
-        destination: "/campaign/fia-rallycross-world-cup-indonesia-2026",
+        source: "/campaign/fia-rallycross-world-cup-indonesia-2026",
+        destination: "/events/fia-rallycross-world-cup-indonesia-2026",
         permanent: true,
       },
     ];

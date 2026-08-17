@@ -57,6 +57,12 @@
       "type": "richtext",
       "pluginOptions": { "i18n": { "localized": true } }
     },
+    "heroEnabled": {
+      "type": "boolean",
+      "default": true,
+      "required": false,
+      "description": "Controls whether the page hero is rendered on the public Motorsport route."
+    },
     "heroMedia": {
       "type": "media",
       "multiple": false,
@@ -96,6 +102,14 @@
       "description": "Motorsport homepage World of Motorsport section only.",
       "type": "component",
       "component": "motorsport.world-of-motorsport",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "motorsportTicketSection": {
+      "description": "Motorsport homepage ticket card only. Controls its complete copy, artwork, visibility, footer metadata, and approved partner CTA.",
+      "type": "component",
+      "component": "motorsport.home-ticket-section",
       "repeatable": false,
       "required": false,
       "pluginOptions": { "i18n": { "localized": true } }

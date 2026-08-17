@@ -1,8 +1,10 @@
 import { fetchCampaignProgramBySlug } from "@/lib/cms-data";
+import type { Locale } from "@/lib/i18n/config";
+import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
 import type { MotorsportCampaignDetail } from "@/types/design-system";
 
 export const FIA_RALLYCROSS_SLUG = "fia-rallycross-world-cup-indonesia-2026";
-export const FIA_RALLYCROSS_PATH = `/campaign/${FIA_RALLYCROSS_SLUG}`;
+export const FIA_RALLYCROSS_PATH = `/events/${FIA_RALLYCROSS_SLUG}`;
 
 const fallbackCampaign: MotorsportCampaignDetail = {
   title: "FIA Rallycross World Cup Indonesia 2026",
@@ -200,24 +202,39 @@ const fallbackCampaign: MotorsportCampaignDetail = {
   },
 };
 
-export async function getFiaRallycrossCampaign(): Promise<MotorsportCampaignDetail> {
+export async function getFiaRallycrossCampaign(
+  locale?: Locale,
+): Promise<MotorsportCampaignDetail | null> {
+  const isPreview = await isStrapiPreviewEnabled();
   try {
-    const campaign = await fetchCampaignProgramBySlug(FIA_RALLYCROSS_SLUG);
-    if (!campaign) return fallbackCampaign;
+    const campaign = await fetchCampaignProgramBySlug(
+      FIA_RALLYCROSS_SLUG,
+      locale,
+    );
+    if (!campaign) return isPreview ? null : fallbackCampaign;
     return {
       ...fallbackCampaign,
       ...campaign,
-      schedule: campaign.schedule.length
-        ? campaign.schedule
-        : fallbackCampaign.schedule,
-      slides: campaign.slides.length
-        ? campaign.slides
-        : fallbackCampaign.slides,
-      rules: campaign.rules.length ? campaign.rules : fallbackCampaign.rules,
-      ticketCta: campaign.ticketCta ?? fallbackCampaign.ticketCta,
-      seo: { ...fallbackCampaign.seo, ...campaign.seo },
+      schedule:
+        campaign.schedule.length || !isPreview
+          ? campaign.schedule
+          : fallbackCampaign.schedule,
+      slides:
+        campaign.slides.length || !isPreview
+          ? campaign.slides
+          : fallbackCampaign.slides,
+      rules:
+        campaign.rules.length || !isPreview
+          ? campaign.rules
+          : fallbackCampaign.rules,
+      ticketCta:
+        campaign.ticketCta ??
+        (isPreview ? undefined : fallbackCampaign.ticketCta),
+      seo: isPreview
+        ? campaign.seo
+        : { ...fallbackCampaign.seo, ...campaign.seo },
     };
   } catch {
-    return fallbackCampaign;
+    return isPreview ? null : fallbackCampaign;
   }
 }

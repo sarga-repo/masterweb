@@ -1,12 +1,11 @@
 import type { ReactNode } from "react";
 
 import { MotorsportFooter, MotorsportHeader } from "@/components";
-import { siteConfig } from "@/lib/site-config";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getMotorsportNavigation } from "@/lib/navigation-cms";
-import { fetchMotorsportChrome } from "@/lib/cms-data";
-import { localizeExternalSiteHref } from "@/lib/i18n/config";
+import { fetchMotorsportChrome, fetchPrograms } from "@/lib/cms-data";
+import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
 
 const FOOTER_COLUMNS = [
   {
@@ -15,21 +14,7 @@ const FOOTER_COLUMNS = [
       { label: "Home", href: "/" },
       { label: "About", href: "/about" },
       { label: "Events", href: "/events" },
-    ],
-  },
-  {
-    title: "Follow",
-    links: [
       { label: "News", href: "/news" },
-      { label: "Gallery", href: "/gallery" },
-      { label: "Contact", href: "/contact" },
-    ],
-  },
-  {
-    title: "Race day",
-    links: [
-      { label: "Tickets", href: "/tickets" },
-      { label: "Merchandise", href: "/merchandise" },
     ],
   },
 ];
@@ -50,30 +35,61 @@ export async function PageShell({
   const locale = await getRequestLocale();
   const dictionary = getDictionary(locale);
   const navigation = await getMotorsportNavigation(locale);
-  const chrome = await fetchMotorsportChrome();
-  const utilityLinks = (chrome.footerUtilityLinks ?? []).map((item) => ({
-    label: item.label,
-    href: item.href,
-    external: item.linkType === "external",
-  }));
-  const gatewayLink = utilityLinks.find(
-    (item) => item.label === "Visit Sarga.co",
-  );
+  const [chrome, programs, isPreview] = await Promise.all([
+    fetchMotorsportChrome(locale),
+    fetchPrograms(locale),
+    isStrapiPreviewEnabled(),
+  ]);
+  const utilityLinks = (chrome.footerUtilityLinks ?? [])
+    .filter((item) => item.label !== "Visit Sarga.co")
+    .map((item) => ({
+      label: item.label,
+      href: item.href,
+      external: item.linkType === "external",
+    }));
   const ticketLink = navigation.items.find(
     (item) => item.emphasis === "primaryCta",
   );
+  const eventPrograms =
+    programs.length > 0
+      ? programs
+      : isPreview
+        ? []
+        : [
+            {
+              title: "FIA Rallycross World Cup Indonesia 2026",
+              eventMenuLabel: "FIA Rallycross",
+              eventMenuEnabled: true,
+              href: "/events/fia-rallycross-world-cup-indonesia-2026",
+            },
+            {
+              title: "Indonesia Junior Talent Cup",
+              eventMenuLabel: "IJTC",
+              eventMenuEnabled: true,
+              href: "/events/indonesia-junior-talent-cup",
+            },
+          ];
+  const eventChildren = eventPrograms
+    .filter((program) => program.eventMenuEnabled !== false)
+    .map((program) => ({
+      label:
+        program.eventMenuLabel ||
+        (program.title.length > 30
+          ? `${program.title.slice(0, 27).trimEnd()}…`
+          : program.title),
+      href: program.href,
+    }))
+    .filter(
+      (item, index, items) =>
+        items.findIndex((candidate) => candidate.href === item.href) === index,
+    );
   return (
     <>
       <MotorsportHeader
         navigation={navigation.items}
+        eventChildren={eventChildren}
         ticketLink={ticketLink}
-        gatewayLink={
-          gatewayLink ?? {
-            label: "Sarga.co",
-            href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
-            external: true,
-          }
-        }
+        gatewayLink={undefined}
         locale={locale}
         dictionary={dictionary}
         navigationSource={navigation.source}
@@ -85,16 +101,11 @@ export async function PageShell({
       </main>
       <MotorsportFooter
         columns={chrome.footerColumns ?? FOOTER_COLUMNS}
-        crossSiteLinks={utilityLinks.filter(
-          (item) => item.label !== gatewayLink?.label,
-        )}
-        gatewayLink={{
-          label: "Visit Sarga.co",
-          href: localizeExternalSiteHref(siteConfig.gatewayUrl, locale),
-          external: true,
-        }}
+        crossSiteLinks={utilityLinks}
+        gatewayLink={undefined}
         copyright={chrome.footerCopyright ?? "© 2026 Sarga Motorsport"}
         statement={chrome.footerStatement}
+        socialLinks={chrome.footerSocialLinks}
         logoSrc={chrome.footerLogo}
         logoAlt={chrome.footerLogoAlt}
       />

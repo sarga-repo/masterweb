@@ -1,4 +1,5 @@
 import type { StaticImageData } from "next/image";
+import type { MotorsportPageInformationBand } from "@/lib/motorsport-page-foundation";
 
 export type MediaSource = string | StaticImageData;
 
@@ -49,6 +50,7 @@ export type MotorsportEvent = {
   seriesName?: string;
   ticketHref?: string;
   ticketLabel?: string;
+  sponsors?: PartnerItem[];
 };
 
 export type MotorsportArticle = {
@@ -67,6 +69,7 @@ export type GalleryItem = {
   imageAlt: string;
   caption?: string;
   eyebrow?: string;
+  category?: string;
 };
 
 export type PartnerItem = {
@@ -131,10 +134,17 @@ export type StandingEntry = {
 export type MotorsportProgram = {
   title: string;
   slug: string;
+  eventMenuLabel?: string;
+  eventMenuEnabled?: boolean;
   href: string;
   programType: "juniorTalentCup" | "rallycross" | "raceWeekend" | "other";
   status:
-    "announced" | "registrationOpen" | "ticketsOpen" | "live" | "completed";
+    | "announced"
+    | "registrationOpen"
+    | "ticketsOpen"
+    | "live"
+    | "completed"
+    | "hidden";
   seasonLabel: string;
   summary: string;
   headline?: string;
@@ -143,6 +153,7 @@ export type MotorsportProgram = {
   image: MediaSource;
   imageAlt: string;
   ctaLabel: string;
+  informationBand?: MotorsportPageInformationBand | null;
 };
 
 export type MotorsportProgramDetail = MotorsportProgram & {

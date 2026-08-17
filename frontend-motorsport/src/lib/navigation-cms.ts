@@ -1,7 +1,8 @@
 import "server-only";
 import type { Locale } from "@/lib/i18n/config";
-import { fetchStrapiList } from "@/lib/strapi/client";
+import { fetchStrapiList, isStrapiPreviewEnabled } from "@/lib/strapi/client";
 import { MOTORSPORT_NAVIGATION } from "@/lib/navigation";
+import { getMotorsportPageRoutes } from "@/lib/motorsport-page-routes";
 
 export type SiteNavigationItem = {
   internalName: string;
@@ -15,7 +16,6 @@ export type SiteNavigationItem = {
 };
 type RawItem = SiteNavigationItem & {
   documentId: string;
-  siteScope: string;
   enabled: boolean;
 };
 const NAVIGATION_REVALIDATE_SECONDS = 0;
@@ -35,31 +35,30 @@ function safe(item: RawItem) {
 }
 
 export async function getMotorsportNavigation(locale: Locale) {
-  const filters = { "filters[siteScope][$eq]": "motorsport" };
-  const [english, localized] = await Promise.all([
-    fetchStrapiList<RawItem>("top-navigation-items", {
-      filters,
+  const read = async (endpoint: string, requestedLocale: Locale) =>
+    fetchStrapiList<RawItem>(endpoint, {
       sort: "displayOrder:asc",
       limit: 100,
-      locale: "en",
+      locale: requestedLocale,
       revalidate: NAVIGATION_REVALIDATE_SECONDS,
-    }),
+    });
+  const [english, localized, pageRoutes] = await Promise.all([
+    read("motorsport-top-navigation-items", "en"),
     locale === "en"
       ? Promise.resolve(null)
-      : fetchStrapiList<RawItem>("top-navigation-items", {
-          filters,
-          sort: "displayOrder:asc",
-          limit: 100,
-          locale,
-          revalidate: NAVIGATION_REVALIDATE_SECONDS,
-        }),
+      : read("motorsport-top-navigation-items", locale),
+    getMotorsportPageRoutes(locale),
   ]);
   if (!english?.data.length) {
+    if (await isStrapiPreviewEnabled()) {
+      return { source: "cms" as const, items: [] };
+    }
     return {
       source: "repository" as const,
       items: MOTORSPORT_NAVIGATION.map((item, index) => ({
         internalName: `repository-${index}`,
         ...item,
+        href: item.href.startsWith("/") ? (pageRoutes.get(item.href) ?? item.href) : item.href,
         label:
           locale === "id"
             ? ({
@@ -83,19 +82,26 @@ export async function getMotorsportNavigation(locale: Locale) {
     };
   }
   const translated = new Map(
-    (localized?.data ?? []).map((item) => [item.documentId, item]),
+    (localized?.data ?? []).flatMap((item) => [
+      [item.documentId, item] as const,
+      [item.internalName, item] as const,
+    ]),
   );
   const items = english.data
     .filter((item) => item.enabled && safe(item))
     .sort((a, b) => a.displayOrder - b.displayOrder)
     .slice(0, 8)
     .map((item) => {
-      const copy = locale === "id" ? translated.get(item.documentId) : item;
+      const copy =
+        locale === "id"
+          ? (translated.get(item.documentId) ??
+            translated.get(item.internalName))
+          : item;
       return {
         internalName: item.internalName,
         label: copy?.label ?? item.label,
         ariaLabel: copy?.ariaLabel ?? item.ariaLabel,
-        href: item.href,
+        href: item.href.startsWith("/") ? (pageRoutes.get(item.href) ?? item.href) : item.href,
         external: !item.href.startsWith("/"),
         emphasis: item.emphasis,
         openInNewTab: item.openInNewTab,

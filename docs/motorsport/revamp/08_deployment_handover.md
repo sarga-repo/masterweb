@@ -63,9 +63,15 @@ and must be recreated or verified after import.
    Keep `SEED_DEMO_CONTENT=false`; do not run the local demo seed.
 8. Verify CMS admin workspace nested navigation.
 9. Deploy Motorsport frontend.
-10. Smoke test public pages.
-11. Enable redirects only after public pages are confirmed.
-12. Hand CMS back to editors.
+10. Configure identical `PREVIEW_SECRET` and an independent identical
+    `MOTORSPORT_REVALIDATION_SECRET` on Strapi and Motorsport. Configure
+    Strapi's `MOTORSPORT_FRONTEND_REVALIDATE_URL` using the server-to-server
+    frontend address.
+11. Run `pnpm cms:preview:preflight` and `pnpm uat:routes` from the Motorsport
+    release before accepting traffic.
+12. Smoke test public pages.
+13. Enable redirects only after public pages are confirmed.
+14. Hand CMS back to editors.
 
 ## Rollback sequence
 
@@ -103,9 +109,13 @@ Monitor:
 - Ticket outbound clicks.
 - Contact form errors.
 - CMS publish errors.
+- `[motorsport-revalidation]` failures and unexpected Preview diagnostics.
 - Core Web Vitals.
 - Search indexing of new event/campaign pages.
 
 Final technical evidence and the remaining stakeholder/content prerequisites
 are recorded in
 [`12_final_validation_launch_readiness.md`](12_final_validation_launch_readiness.md).
+Preview, token rotation, editor controls, and cache invalidation operations are
+documented in
+[`34_cms_preview_live_operations_handover.md`](34_cms_preview_live_operations_handover.md).

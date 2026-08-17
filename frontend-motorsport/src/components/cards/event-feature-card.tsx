@@ -58,13 +58,16 @@ export function EventFeatureCard({
       </Link>
 
       <div
-        className={`flex flex-col ${light ? "bg-ms-draftline-blue text-ms-warm-white" : "bg-ms-black"}`}
+        className={`ms-event-feature-details flex flex-col ${light ? "bg-ms-draftline-blue text-ms-warm-white" : "bg-ms-black"}`}
       >
         <div className="flex items-center justify-between border-b border-ms-warm-white/12 p-5">
           <span className="ms-data-label text-ms-warm-white/42">
             Event control
           </span>
-          <StatusChip status={event.status} />
+          <StatusChip
+            status={event.status}
+            className="ms-event-feature-status"
+          />
         </div>
         <dl className="flex-1">
           {[
@@ -96,7 +99,12 @@ export function EventFeatureCard({
         <div className="grid grid-cols-2">
           <Link
             href={event.href}
-            className="flex min-h-16 items-center justify-center border-r border-ms-warm-white/12 text-[0.65rem] font-black uppercase tracking-[0.16em] transition-colors hover:bg-ms-warm-white/8 hover:text-ms-electric-yellow"
+            style={{
+              backgroundColor: "#f5c800",
+              color: "#050505",
+              borderColor: "rgb(27 27 27 / 0.24)",
+            }}
+            className="ms-event-feature-file flex min-h-16 items-center justify-center border-r border-ms-warm-white/12 text-[0.65rem] font-black uppercase tracking-[0.16em] transition-colors"
           >
             Event file
           </Link>

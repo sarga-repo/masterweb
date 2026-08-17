@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 
 import {
   EventListCard,
-  InformationBand,
+  MotorsportPageInformationBand,
+  PageComingSoon,
   PageHero,
   PageShell,
   ProgramCard,
@@ -11,6 +12,9 @@ import {
 } from "@/components";
 import { fetchEvents, fetchPrograms, fetchSitePage } from "@/lib/cms-data";
 import type { MotorsportEvent, MotorsportProgram } from "@/types/design-system";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
+import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
 
 export const metadata: Metadata = {
   title: "Events",
@@ -22,7 +26,7 @@ const FALLBACK_PROGRAMS: MotorsportProgram[] = [
   {
     title: "FIA Rallycross World Cup Indonesia 2026",
     slug: "fia-rallycross-world-cup-indonesia-2026",
-    href: "/campaign/fia-rallycross-world-cup-indonesia-2026",
+    href: "/events/fia-rallycross-world-cup-indonesia-2026",
     programType: "rallycross",
     status: "ticketsOpen",
     seasonLabel: "2026",
@@ -33,7 +37,7 @@ const FALLBACK_PROGRAMS: MotorsportProgram[] = [
     venue: "Jakarta International E-Prix Circuit",
     image: "/media/sarga-motorsport-bike-and-rally.png",
     imageAlt: "Rallycross car and motorcycle race action",
-    ctaLabel: "Explore campaign",
+    ctaLabel: "Explore event",
   },
   {
     title: "Indonesia Junior Talent Cup",
@@ -87,13 +91,17 @@ const FALLBACK_EVENTS: MotorsportEvent[] = [
 ];
 
 export default async function EventsPage() {
+  const locale = await getRequestLocale();
   const [page, cmsPrograms, cmsEvents] = await Promise.all([
-    fetchSitePage("eventHub"),
-    fetchPrograms(),
-    fetchEvents(),
+    fetchSitePage("eventHub", undefined, locale),
+    fetchPrograms(locale),
+    fetchEvents(50, locale),
   ]);
-  const programs = cmsPrograms.length > 0 ? cmsPrograms : FALLBACK_PROGRAMS;
-  const events = cmsEvents.length > 0 ? cmsEvents : FALLBACK_EVENTS;
+  const isPreview = await isStrapiPreviewEnabled();
+  const programs =
+    isPreview || cmsPrograms.length > 0 ? cmsPrograms : FALLBACK_PROGRAMS;
+  const events =
+    isPreview || cmsEvents.length > 0 ? cmsEvents : FALLBACK_EVENTS;
   const programRank = (program: MotorsportProgram) =>
     program.programType === "rallycross"
       ? 0
@@ -112,107 +120,139 @@ export default async function EventsPage() {
   const eventControl = section("event-control");
   const programmes = section("programmes");
   const calendar = section("calendar");
+  const pageAvailable = isCmsPageVisible(page?.pageAvailability);
 
   return (
     <PageShell spectrumSeparators>
-      <PageHero
-        kicker="Programmes / Season 2026"
-        kickerColor="orange"
-        title={page?.heroTitle || "Events"}
-        description={
-          page?.heroDescription ||
-          "Enter FIA Rallycross, follow the Indonesia Junior Talent Cup, and find the next race weekend."
-        }
-        backgroundImage={page?.heroImage}
-        backgroundAlt={page?.heroImageAlt}
-        accent="crimson"
-        accentPosition="top-right"
-        speedLines
-        grain
-        surface="heat"
-      />
-
-      <InformationBand
-        eyebrow={eventControl?.eyebrow ?? "Event control / Live index"}
-        title={eventControl?.title ?? "Programmes with a pulse."}
-        description={
-          eventControl?.body ??
-          "International campaigns, development pathways, and race weekends-each with clear status and approved ticket routing."
-        }
-        items={[
-          {
-            label: "Programmes",
-            value: String(orderedPrograms.length).padStart(2, "0"),
-          },
-          {
-            label: "Upcoming",
-            value: String(upcoming.length).padStart(2, "0"),
-          },
-          {
-            label: "Tickets open",
-            value: String(ticketedCount).padStart(2, "0"),
-          },
-        ]}
-      />
-
-      <section className="ms-events-programmes-surface ms-reflected-light-surface ms-section">
-        <div className="ms-shell">
-          <SectionHeader
-            index="PROGRAMMES"
-            eyebrow={programmes?.eyebrow ?? "Featured pathways"}
-            title={programmes?.title ?? "Choose your entry point."}
-            description={
-              programmes?.body ??
-              "A world-stage campaign and a national talent-development programme lead the Motorsport calendar."
-            }
-          />
-          <div className="mt-14 space-y-6">
-            {orderedPrograms.map((program, index) => (
-              <ProgramCard
-                key={program.slug}
-                program={program}
-                feature={index === 0}
+      {!pageAvailable ? (
+        <PageComingSoon
+          availability={page?.pageAvailability ?? { pageEnabled: false }}
+        />
+      ) : (
+        <>
+          {page?.heroEnabled !== false ? (
+            <div data-cms-section-key="hero" data-cms-enabled="true">
+              <PageHero
+                kicker="Programmes / Season 2026"
+                kickerColor="orange"
+                title={page?.heroTitle || "Events"}
+                description={
+                  page?.heroDescription ||
+                  "Enter FIA Rallycross, follow the Indonesia Junior Talent Cup, and find the next race weekend."
+                }
+                backgroundImage={page?.heroImage}
+                backgroundAlt={page?.heroImageAlt}
+                accent="crimson"
+                accentPosition="top-right"
+                speedLines
+                grain
+                surface="heat"
               />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="ms-events-calendar-surface ms-reflected-light-surface ms-section">
-        <div className="ms-shell">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <SectionHeader
-              index="CALENDAR"
-              eyebrow={calendar?.eyebrow ?? "Upcoming events"}
-              title={calendar?.title ?? "The next grid."}
-              description={
-                calendar?.body ??
-                "Current Motorsport-scoped events, ordered by the live CMS calendar."
-              }
-            />
-            <div className="flex flex-wrap gap-3 pb-1">
-              <StatusChip status="announced" />
-              <StatusChip status="tickets-open" />
-              <StatusChip status="live" />
             </div>
-          </div>
-          <div className="mt-14 border-b border-ms-warm-white/15">
-            {upcoming.length > 0 ? (
-              upcoming.map((event, index) => (
-                <EventListCard
-                  key={event.href}
-                  event={event}
-                  index={String(index + 1).padStart(2, "0")}
+          ) : null}
+
+          {page?.informationBand || isCmsSectionVisible(eventControl) ? (
+            <div data-cms-section-key="event-control" data-cms-enabled="true">
+              <MotorsportPageInformationBand
+                band={page?.informationBand}
+                fallback={{
+                  isActive: eventControl?.enabled,
+                  eyebrow: eventControl?.eyebrow ?? "Event control / Live index",
+                  title: eventControl?.title ?? "Programmes with a pulse.",
+                  description:
+                    eventControl?.body ??
+                    "International campaigns, development pathways, and race weekends-each with clear status and approved ticket routing.",
+                  metrics: [
+                    {
+                      label: "Programmes",
+                      value: String(orderedPrograms.length).padStart(2, "0"),
+                    },
+                    {
+                      label: "Upcoming",
+                      value: String(upcoming.length).padStart(2, "0"),
+                    },
+                    {
+                      label: "Tickets open",
+                      value: String(ticketedCount).padStart(2, "0"),
+                    },
+                  ],
+                }}
+              />
+            </div>
+          ) : null}
+
+          {isCmsSectionVisible(programmes) ? (
+            <section
+              data-cms-section-key="programmes"
+              data-cms-enabled="true"
+              className="ms-events-programmes-surface ms-reflected-light-surface ms-section"
+            >
+              <div className="ms-shell">
+                <SectionHeader
+                  index="PROGRAMMES"
+                  eyebrow={programmes?.eyebrow ?? "Featured pathways"}
+                  title={programmes?.title ?? "Choose your entry point."}
+                  description={
+                    programmes?.body ??
+                    "A world-stage campaign and a national talent-development programme lead the Motorsport calendar."
+                  }
                 />
-              ))
-            ) : (
-              <p className="border-t border-ms-warm-white/12 py-10 text-ms-warm-white/50">
-                No upcoming events are published yet.
-              </p>
-            )}
-          </div>
-        </div>
-      </section>
+                <div className="mt-14 space-y-6">
+                  {orderedPrograms.map((program, index) => (
+                    <ProgramCard
+                      key={program.slug}
+                      program={program}
+                      feature={index === 0}
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
+          ) : null}
+
+          {isCmsSectionVisible(calendar) ? (
+            <section
+              data-cms-section-key="calendar"
+              data-cms-enabled="true"
+              className="ms-events-calendar-surface ms-reflected-light-surface ms-section"
+            >
+              <div className="ms-shell">
+                <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+                  <SectionHeader
+                    index="CALENDAR"
+                    eyebrow={calendar?.eyebrow ?? "Upcoming events"}
+                    title={calendar?.title ?? "The next grid."}
+                    description={
+                      calendar?.body ??
+                      "Current Motorsport-scoped events, ordered by the live CMS calendar."
+                    }
+                  />
+                  <div className="flex flex-wrap gap-3 pb-1">
+                    <StatusChip status="announced" />
+                    <StatusChip status="tickets-open" />
+                    <StatusChip status="live" />
+                  </div>
+                </div>
+                <div className="mt-14 border-b border-ms-warm-white/15">
+                  {upcoming.length > 0 ? (
+                    upcoming.map((event, index) => (
+                      <EventListCard
+                        key={event.href}
+                        event={event}
+                        index={String(index + 1).padStart(2, "0")}
+                      />
+                    ))
+                  ) : (
+                    <p className="border-t border-ms-warm-white/12 py-10 text-ms-warm-white/50">
+                      No upcoming events are published yet.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </section>
+          ) : null}
+        </>
+      )}
     </PageShell>
   );
 }

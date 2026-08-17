@@ -16,6 +16,7 @@ output/playwright
 output/cms-transfers*
 .playwright-cli
 .playwright-mcp
+artifacts/
 
 # Strapi media uploads are intentionally tracked in the repo.
 # (Previously ignored via `cms/public/uploads/*`.)

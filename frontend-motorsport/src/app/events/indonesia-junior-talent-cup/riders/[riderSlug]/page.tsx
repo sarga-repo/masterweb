@@ -11,6 +11,7 @@ import {
 import { ArrowRightIcon } from "@/components/ui/icons";
 import {
   getIjtcProgram,
+  getIjtcInformationBand,
   getIjtcRider,
   getIjtcRiders,
   IJTC_BASE_PATH,
@@ -34,7 +35,7 @@ export async function generateMetadata({
     params,
     getRequestLocale(),
   ]);
-  const rider = await getIjtcRider(riderSlug);
+  const rider = await getIjtcRider(riderSlug, locale);
   if (!rider) return { title: "Rider not found" };
 
   return createMetadata({
@@ -48,11 +49,12 @@ export async function generateMetadata({
 
 export default async function IjtcRiderProfilePage({ params }: RiderPageProps) {
   const { riderSlug } = await params;
+  const locale = await getRequestLocale();
   const [program, rider] = await Promise.all([
-    getIjtcProgram(),
-    getIjtcRider(riderSlug),
+    getIjtcProgram(locale),
+    getIjtcRider(riderSlug, locale),
   ]);
-  if (!rider) notFound();
+  if (!program || !rider) notFound();
 
   const isDemo = /demo|demonstration|fictional/i.test(
     `${rider.name} ${rider.bio ?? ""}`,
@@ -80,14 +82,17 @@ export default async function IjtcRiderProfilePage({ params }: RiderPageProps) {
       />
 
       <InformationBand
-        eyebrow={`Rider profile / ${program.seasonLabel}`}
-        title={`Number ${rider.number ?? "pending"}. One development path.`}
-        description="This shared profile template is populated from the selected rider record in the Motorsport CMS."
-        items={[
+        {...getIjtcInformationBand(program, {
+          eyebrow: `Rider profile / ${program.seasonLabel}`,
+          title: `Number ${rider.number ?? "pending"}. One development path.`,
+          description:
+            "This shared profile template is populated from the selected rider record in the Motorsport CMS.",
+          items: [
           { label: "Team", value: rider.team ?? "Independent" },
           { label: "Region", value: rider.region ?? "Indonesia" },
           { label: "Nation", value: rider.nationality ?? "Indonesia" },
-        ]}
+          ],
+        })}
       />
 
       <section className="ms-reflected-light-surface ms-section">

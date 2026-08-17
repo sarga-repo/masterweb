@@ -10,6 +10,7 @@ const STATUS_LABELS: Record<MotorsportProgram["status"], string> = {
   ticketsOpen: "Tickets open",
   live: "Live",
   completed: "Completed",
+  hidden: "Hidden",
 };
 
 const PROGRAM_TYPE_LABELS: Record<MotorsportProgram["programType"], string> = {

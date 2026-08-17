@@ -1,0 +1,54 @@
+{
+  "collectionName": "components_motorsport_page_sections",
+  "info": {
+    "displayName": "Named Page Section",
+    "description": "Named Motorsport editorial section used by page-specific Single Types; no manual section key is required."
+  },
+  "options": {},
+  "attributes": {
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "eyebrow": {
+      "type": "string",
+      "maxLength": 100,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 180,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "body": {
+      "type": "richtext",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "media": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "videos"]
+    },
+    "ctaLabel": {
+      "type": "string",
+      "maxLength": 80,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "ctaUrl": {
+      "type": "string"
+    },
+    "ctaTarget": {
+      "type": "enumeration",
+      "enum": ["sameWindow", "newWindow"],
+      "default": "sameWindow"
+    },
+    "theme": {
+      "type": "enumeration",
+      "enum": ["default", "dark", "light", "accent"],
+      "default": "default"
+    }
+  }
+}

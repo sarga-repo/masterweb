@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "motorsport_ticket_ctas",
+  "info": { "singularName": "motorsport-ticket-cta", "pluralName": "motorsport-ticket-ctas", "displayName": "Motorsport Ticket CTA", "description": "Motorsport partner ticket redirects, deep links, and approved embeds. No internal payment." },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": { "i18n": { "localized": true } },
+  "attributes": {
+    "title": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
+    "label": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
+    "provider": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
+    "ctaType": { "type": "enumeration", "enum": ["redirect", "deepLink", "embed"], "default": "redirect", "required": true },
+    "url": { "type": "string" },
+    "embedCode": { "type": "text", "private": true },
+    "embedConfigJson": { "type": "json" },
+    "trackingParams": { "type": "json" },
+    "activeFrom": { "type": "datetime" },
+    "activeUntil": { "type": "datetime" },
+    "isActive": { "type": "boolean", "default": true },
+    "image": { "type": "media", "multiple": false, "allowedTypes": ["images"], "description": "Optional artwork or photography used in Motorsport ticket panels." },
+    "relatedEvent": { "type": "relation", "relation": "manyToOne", "target": "api::motorsport-event.motorsport-event", "inversedBy": "ticketCtas" },
+    "legacySourceDocumentId": { "type": "string", "private": true, "configurable": false }
+  }
+}

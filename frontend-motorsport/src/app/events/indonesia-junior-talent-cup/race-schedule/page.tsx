@@ -9,9 +9,12 @@ import {
 } from "@/components";
 import {
   formatProgramStatus,
+  getIjtcInformationBand,
   getIjtcProgram,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Race Schedule",
@@ -20,7 +23,8 @@ export const metadata: Metadata = {
 };
 
 export default async function IjtcSchedulePage() {
-  const program = await getIjtcProgram();
+  const program = await getIjtcProgram(await getRequestLocale());
+  if (!program) notFound();
 
   return (
     <>
@@ -29,8 +33,8 @@ export default async function IjtcSchedulePage() {
         kickerColor="orange"
         title="Race schedule."
         description="Published rounds, sessions, and venue status for the Indonesia Junior Talent Cup programme."
-        backgroundImage="/media/sarga-motorsport-motorbike-race.png"
-        backgroundAlt="Junior motorcycle riders racing through a circuit corner"
+        backgroundImage={program.image}
+        backgroundAlt={program.imageAlt}
         accent="blue"
         accentPosition="bottom-right"
         surface="heat"
@@ -39,17 +43,20 @@ export default async function IjtcSchedulePage() {
       />
 
       <InformationBand
-        eyebrow="Calendar control / Published rounds"
-        title="Preparation begins before the grid forms."
-        description="Dates and venues remain explicitly marked until sporting approval is complete."
-        items={[
+        {...getIjtcInformationBand(program, {
+          eyebrow: "Calendar control / Published rounds",
+          title: "Preparation begins before the grid forms.",
+          description:
+            "Dates and venues remain explicitly marked until sporting approval is complete.",
+          items: [
           { label: "Season", value: program.seasonLabel },
           {
             label: "Rounds",
             value: String(program.schedule.length).padStart(2, "0"),
           },
           { label: "Status", value: formatProgramStatus(program.status) },
-        ]}
+          ],
+        })}
       />
 
       <section className="ms-reflected-light-surface ms-section">

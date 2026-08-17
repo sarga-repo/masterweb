@@ -92,6 +92,13 @@ Minimum feature set:
 
 ### Phase 2: Site-scoped page model
 
+> Current Motorsport note (2026-08-15): this shared `site-page` recommendation
+> remains valid for Gateway and Horse Sport where consumed, but its Motorsport
+> editing contract is scheduled for replacement by page-specific localized
+> Single Types under `36_cms_page_model_simplification_plan.md`. Do not remove
+> the shared collection or migrate another site as part of that Motorsport-only
+> track.
+
 Introduce a `site-page` collection if static pages need CMS control beyond existing route fallbacks.
 
 Suggested fields:

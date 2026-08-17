@@ -14,7 +14,10 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "cms:preview:preflight": "node scripts/verify-cms-preview-access.mjs",
+    "uat:routes": "node scripts/verify-route-crawl.mjs",
+    "test:preview-context": "node --test src/lib/preview/preview-context.test.ts"
   },
   "dependencies": {
     "@fontsource-variable/noto-sans": "^5.2.10",

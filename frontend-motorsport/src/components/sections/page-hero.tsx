@@ -66,14 +66,16 @@ export function PageHero({
     ? { color: ACCENT_MAP[kickerColor as AccentColor] ?? kickerColor }
     : { color: ACCENT_MAP.orange };
   const gradientPos = POSITION_MAP[accentPosition] ?? "ellipse_at_top_right";
+  const hasBackgroundImage = Boolean(backgroundImage);
+  const useHeatSurface = surface === "heat" && !hasBackgroundImage;
 
   return (
     <section
-      className={`relative isolate overflow-hidden border-b border-ms-warm-white/12 ${
+      className={`relative isolate overflow-hidden bg-ms-charcoal text-ms-warm-white border-b border-ms-warm-white/12 ${
         compact
           ? "py-20 sm:py-28"
           : "min-h-[60vh] flex items-end py-20 sm:py-28"
-      } ${grain ? "ms-grain" : ""} ${surface === "heat" ? "ms-page-hero-heat" : ""}`}
+      } ${grain ? "ms-grain" : ""} ${useHeatSurface ? "ms-page-hero-heat" : ""}`}
     >
       {/* Background image (optional cinematic layer) */}
       {backgroundImage ? (
@@ -92,33 +94,37 @@ export function PageHero({
       {/* Multi-layer gradient stack */}
       <div
         aria-hidden="true"
-        className="absolute inset-0"
+        className={`ms-page-hero-scrim absolute inset-0 ${useHeatSurface ? "ms-page-hero-scrim--heat" : ""}`}
         style={{
-          background: backgroundImage
-            ? surface === "heat"
-              ? "linear-gradient(0deg, rgba(7,26,61,.94) 0%, rgba(68,32,47,.72) 44%, rgba(123,47,28,.30) 76%, rgba(7,26,61,.18) 100%)"
-              : `linear-gradient(0deg, rgba(5,5,5,0.92) 0%, rgba(5,5,5,0.55) 40%, rgba(5,5,5,0.25) 70%)`
-            : `radial-gradient(${gradientPos.replace(/_/g, " ")}, ${accentHex}18, transparent 60%)`,
+          background:
+            hasBackgroundImage || useHeatSurface
+              ? undefined
+              : `radial-gradient(${gradientPos.replace(/_/g, " ")}, ${accentHex}18, transparent 60%)`,
         }}
       />
-      {/* Secondary accent bloom (always present, subtle) */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          background: `radial-gradient(${gradientPos.replace(/_/g, " ")}, ${accentHex}14, transparent 55%)`,
-        }}
-      />
-      {/* Opposing accent counter-glow */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          background: `radial-gradient(ellipse_at_${
-            accentPosition.includes("right") ? "bottom_left" : "bottom_right"
-          }, ${ACCENT_MAP.teal}08, transparent 50%)`.replace(/_/g, " "),
-        }}
-      />
+      {!hasBackgroundImage ? (
+        <>
+          {/* Accent blooms stay on text-only heroes; image heroes use a neutral scrim. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0"
+            style={{
+              background: `radial-gradient(${gradientPos.replace(/_/g, " ")}, ${accentHex}14, transparent 55%)`,
+            }}
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0"
+            style={{
+              background: `radial-gradient(ellipse_at_${
+                accentPosition.includes("right")
+                  ? "bottom_left"
+                  : "bottom_right"
+              }, ${ACCENT_MAP.teal}08, transparent 50%)`.replace(/_/g, " "),
+            }}
+          />
+        </>
+      ) : null}
 
       {/* Dot pattern (track grid) */}
       <div

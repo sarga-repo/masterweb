@@ -8,7 +8,9 @@ import {
   SectionHeader,
 } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
-import { getIjtcProgram, IJTC_BASE_PATH } from "@/lib/ijtc-data";
+import { getIjtcInformationBand, getIjtcProgram, IJTC_BASE_PATH } from "@/lib/ijtc-data";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Become Riders",
@@ -35,7 +37,8 @@ const PROCESS = [
 ];
 
 export default async function BecomeIjtcRiderPage() {
-  const program = await getIjtcProgram();
+  const program = await getIjtcProgram(await getRequestLocale());
+  if (!program) notFound();
 
   return (
     <>
@@ -44,8 +47,8 @@ export default async function BecomeIjtcRiderPage() {
         kickerColor="orange"
         title="Start your rider inquiry."
         description="Introduce your background to the Indonesia Junior Talent Cup programme team."
-        backgroundImage="/media/sarga-motorsport-discipline-motorcycle-daylight.jpg"
-        backgroundAlt="Motorcycle riders building race craft on a circuit"
+        backgroundImage={program.image}
+        backgroundAlt={program.imageAlt}
         accent="crimson"
         accentPosition="bottom-right"
         surface="heat"
@@ -54,14 +57,17 @@ export default async function BecomeIjtcRiderPage() {
       />
 
       <InformationBand
-        eyebrow="Programme entry / Direct inquiry"
-        title="A conversation, not an automatic registration."
-        description="Submitting this form does not create an account, guarantee selection, or confirm sporting eligibility."
-        items={[
+        {...getIjtcInformationBand(program, {
+          eyebrow: "Programme entry / Direct inquiry",
+          title: "A conversation, not an automatic registration.",
+          description:
+            "Submitting this form does not create an account, guarantee selection, or confirm sporting eligibility.",
+          items: [
           { label: "Route", value: "Inquiry" },
           { label: "Account", value: "Not required" },
           { label: "Review", value: "Programme team" },
-        ]}
+          ],
+        })}
       />
 
       <section className="ms-reflected-light-surface ms-section">

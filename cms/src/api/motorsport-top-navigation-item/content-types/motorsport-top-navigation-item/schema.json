@@ -1,0 +1,19 @@
+{
+  "kind": "collectionType",
+  "collectionName": "motorsport_top_navigation_items",
+  "info": { "singularName": "motorsport-top-navigation-item", "pluralName": "motorsport-top-navigation-items", "displayName": "Motorsport Top Navigation Item", "description": "Motorsport-only bilingual primary navigation configuration" },
+  "options": { "draftAndPublish": true },
+  "pluginOptions": { "i18n": { "localized": true } },
+  "attributes": {
+    "internalName": { "type": "string", "required": true, "minLength": 2, "maxLength": 80 },
+    "label": { "type": "string", "required": true, "maxLength": 40, "pluginOptions": { "i18n": { "localized": true } } },
+    "ariaLabel": { "type": "string", "maxLength": 100, "pluginOptions": { "i18n": { "localized": true } } },
+    "href": { "type": "string", "required": true, "maxLength": 500 },
+    "linkType": { "type": "enumeration", "enum": ["internal", "crossSite", "external"], "default": "internal", "required": true },
+    "enabled": { "type": "boolean", "default": true, "required": true },
+    "displayOrder": { "type": "integer", "default": 0, "min": 0, "max": 1000, "required": true },
+    "emphasis": { "type": "enumeration", "enum": ["default", "primaryCta"], "default": "default", "required": true },
+    "openInNewTab": { "type": "boolean", "default": false, "required": true },
+    "legacySourceDocumentId": { "type": "string", "private": true, "configurable": false }
+  }
+}

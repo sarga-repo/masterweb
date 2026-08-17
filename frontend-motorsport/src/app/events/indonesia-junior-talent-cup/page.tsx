@@ -4,11 +4,14 @@ import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { InformationBand, PageHero, SectionHeader } from "@/components";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
+import { notFound } from "next/navigation";
 import {
   formatProgramStatus,
+  getIjtcInformationBand,
   getIjtcProgram,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
+import { getRequestLocale } from "@/lib/i18n/request";
 
 export const metadata: Metadata = {
   title: { absolute: "Indonesia Junior Talent Cup | Sarga Motorsport" },
@@ -36,7 +39,8 @@ const PROGRAMME_PATHS = [
 ];
 
 export default async function IjtcOverviewPage() {
-  const program = await getIjtcProgram();
+  const program = await getIjtcProgram(await getRequestLocale());
+  if (!program) notFound();
   const status = formatProgramStatus(program.status);
 
   return (
@@ -64,14 +68,17 @@ export default async function IjtcOverviewPage() {
       </PageHero>
 
       <InformationBand
-        eyebrow="Programme control / Talent pathway"
-        title="A clear route from potential to race craft."
-        description="IJTC brings coaching, structured track time, sporting standards, and public classification into one development programme."
-        items={[
+        {...getIjtcInformationBand(program, {
+          eyebrow: "Programme control / Talent pathway",
+          title: "A clear route from potential to race craft.",
+          description:
+            "IJTC brings coaching, structured track time, sporting standards, and public classification into one development programme.",
+          items: [
           { label: "Season", value: program.seasonLabel },
           { label: "Status", value: status },
           { label: "Sections", value: "07" },
-        ]}
+          ],
+        })}
       />
 
       <section className="ms-reflected-light-surface ms-section">

@@ -12,6 +12,8 @@ import type {
   ProgramNavItem,
   StandingEntry,
 } from "@/types/design-system";
+import type { Locale } from "@/lib/i18n/config";
+import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
 
 export const IJTC_SLUG = "indonesia-junior-talent-cup";
 export const IJTC_BASE_PATH = `/events/${IJTC_SLUG}`;
@@ -44,8 +46,33 @@ export function formatProgramStatus(
     ticketsOpen: "Tickets open",
     live: "Live",
     completed: "Completed",
+    hidden: "Hidden",
   };
   return labels[status];
+}
+
+export function isIjtcHidden(program: MotorsportProgramDetail | null): boolean {
+  return !program || program.status === "hidden";
+}
+
+export function getIjtcInformationBand(
+  program: MotorsportProgramDetail,
+  fallback: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    items: Array<{ label: string; value: string }>;
+  },
+) {
+  const band = program.informationBand;
+  return {
+    isActive: band?.isActive ?? true,
+    showMetricGroup: band?.showMetricGroup ?? true,
+    eyebrow: band?.eyebrow ?? fallback.eyebrow,
+    title: band?.title ?? fallback.title,
+    description: band?.description ?? fallback.description,
+    items: band?.metrics?.length ? band.metrics : fallback.items,
+  };
 }
 
 const FALLBACK_PROGRAM: MotorsportProgramDetail = {
@@ -215,40 +242,72 @@ const FALLBACK_REGULATION: MotorsportRegulation = {
     "The regulation download will be enabled only after the approved sporting PDF is uploaded and activated by the Motorsport editorial team.",
 };
 
-export async function getIjtcProgram(): Promise<MotorsportProgramDetail> {
-  const program = await fetchProgramBySlug(IJTC_SLUG).catch(() => null);
-  if (!program) return FALLBACK_PROGRAM;
+async function isIjtcPreview() {
+  try {
+    return await isStrapiPreviewEnabled();
+  } catch {
+    // Static generation has no request context and must use published behavior.
+    return false;
+  }
+}
+
+export async function getIjtcProgram(
+  locale?: Locale,
+): Promise<MotorsportProgramDetail | null> {
+  const [program, isPreview] = await Promise.all([
+    fetchProgramBySlug(IJTC_SLUG, locale).catch(() => null),
+    isIjtcPreview(),
+  ]);
+  if (!program) return isPreview ? null : FALLBACK_PROGRAM;
   return {
     ...program,
     schedule: program.schedule.length
       ? program.schedule
-      : FALLBACK_PROGRAM.schedule,
-    becomeRidersHref: IJTC_BECOME_RIDERS_LINK.href,
+      : isPreview
+        ? []
+        : FALLBACK_PROGRAM.schedule,
+    becomeRidersHref: program.becomeRidersHref ?? IJTC_BECOME_RIDERS_LINK.href,
   };
 }
 
-export async function getIjtcRiders(): Promise<MotorsportRider[]> {
-  const riders = await fetchProgramRiders(IJTC_SLUG).catch(() => []);
-  return riders.length ? riders : FALLBACK_RIDERS;
+export async function getIjtcRiders(
+  locale?: Locale,
+): Promise<MotorsportRider[]> {
+  const [riders, isPreview] = await Promise.all([
+    fetchProgramRiders(IJTC_SLUG, locale).catch(() => []),
+    isIjtcPreview(),
+  ]);
+  return riders.length || isPreview ? riders : FALLBACK_RIDERS;
 }
 
 export async function getIjtcRider(
   riderSlug: string,
+  locale?: Locale,
 ): Promise<MotorsportRider | null> {
-  const rider = await fetchProgramRiderBySlug(IJTC_SLUG, riderSlug).catch(
-    () => null,
-  );
-  return (
-    rider ?? FALLBACK_RIDERS.find((entry) => entry.slug === riderSlug) ?? null
-  );
+  const [rider, isPreview] = await Promise.all([
+    fetchProgramRiderBySlug(IJTC_SLUG, riderSlug, locale).catch(() => null),
+    isIjtcPreview(),
+  ]);
+  if (rider || isPreview) return rider;
+  return FALLBACK_RIDERS.find((entry) => entry.slug === riderSlug) ?? null;
 }
 
-export async function getIjtcStandings(): Promise<StandingEntry[]> {
-  const standings = await fetchProgramStandings(IJTC_SLUG).catch(() => []);
-  return standings.length ? standings : FALLBACK_STANDINGS;
+export async function getIjtcStandings(
+  locale?: Locale,
+): Promise<StandingEntry[]> {
+  const [standings, isPreview] = await Promise.all([
+    fetchProgramStandings(IJTC_SLUG, locale).catch(() => []),
+    isIjtcPreview(),
+  ]);
+  return standings.length || isPreview ? standings : FALLBACK_STANDINGS;
 }
 
-export async function getIjtcRegulation(): Promise<MotorsportRegulation> {
-  const regulations = await fetchProgramRegulations(IJTC_SLUG).catch(() => []);
-  return regulations[0] ?? FALLBACK_REGULATION;
+export async function getIjtcRegulation(
+  locale?: Locale,
+): Promise<MotorsportRegulation | null> {
+  const [regulations, isPreview] = await Promise.all([
+    fetchProgramRegulations(IJTC_SLUG, locale).catch(() => []),
+    isIjtcPreview(),
+  ]);
+  return regulations[0] ?? (isPreview ? null : FALLBACK_REGULATION);
 }

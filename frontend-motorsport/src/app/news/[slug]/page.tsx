@@ -2,18 +2,32 @@ import type { Metadata } from "next";
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { notFound } from "next/navigation";
 
-import { InformationBand, PageShell } from "@/components";
+import { InformationBand, PageHero, PageShell } from "@/components";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
-import { fetchArticleBySlug, fetchArticles } from "@/lib/cms-data";
+import {
+  fetchArticleBySlug,
+  fetchArticles,
+  mapCmsSeo,
+  type CmsSeo,
+} from "@/lib/cms-data";
+import type {
+  MotorsportInformationBandMetric,
+  MotorsportPageHero,
+  MotorsportPageInformationBand,
+} from "@/lib/motorsport-page-foundation";
 import { createMetadata } from "@/lib/seo/metadata";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
 import type { MotorsportArticle } from "@/types/design-system";
 
 type Props = { params: Promise<{ slug: string }> };
 
 /* Placeholder articles shown when CMS is unreachable. */
-const PLACEHOLDER_MAP: Record<string, MotorsportArticle & { body?: string }> = {
+const PLACEHOLDER_MAP: Record<
+  string,
+  MotorsportArticle & { body?: string; seo?: CmsSeo | null }
+> = {
   "the-line-between-control-and-chaos": {
     title: "The line between control and chaos",
     href: "/news/the-line-between-control-and-chaos",
@@ -62,9 +76,12 @@ const PLACEHOLDER_MAP: Record<string, MotorsportArticle & { body?: string }> = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [{ slug }, locale] = await Promise.all([params, getRequestLocale()]);
-  const article = await fetchArticleBySlug(slug);
+  const [article, isPreview] = await Promise.all([
+    fetchArticleBySlug(slug, locale),
+    isStrapiPreviewEnabled(),
+  ]);
   const fallback = PLACEHOLDER_MAP[slug];
-  const resolved = article ?? fallback;
+  const resolved = article ?? (isPreview ? undefined : fallback);
   if (!resolved) return { title: "Article not found" };
   const desc =
     resolved.excerpt ??
@@ -74,6 +91,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: desc,
     path: `/news/${slug}`,
     image: resolved.image,
+    seo: mapCmsSeo(resolved.seo),
     type: "article",
     locale,
   });
@@ -81,15 +99,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ArticleDetailPage({ params }: Props) {
   const { slug } = await params;
-  const [cmsArticle, cmsArticles] = await Promise.all([
-    fetchArticleBySlug(slug),
-    fetchArticles(6),
+  const locale = await getRequestLocale();
+  const [cmsArticle, cmsArticles, isPreview] = await Promise.all([
+    fetchArticleBySlug(slug, locale),
+    fetchArticles(6, locale),
+    isStrapiPreviewEnabled(),
   ]);
-  const article = cmsArticle ?? PLACEHOLDER_MAP[slug] ?? null;
+  const article =
+    cmsArticle ?? (isPreview ? null : (PLACEHOLDER_MAP[slug] ?? null));
   if (!article) notFound();
   const fallbackArticles = Object.values(PLACEHOLDER_MAP);
   const relatedArticles = (
-    cmsArticles.length > 0 ? cmsArticles : fallbackArticles
+    isPreview || cmsArticles.length > 0 ? cmsArticles : fallbackArticles
   )
     .filter((candidate) => candidate.href !== article.href)
     .slice(0, 3);
@@ -97,29 +118,59 @@ export default async function ArticleDetailPage({ params }: Props) {
     1,
     Math.ceil((article.body?.split(/\s+/).length ?? 180) / 210),
   );
+  const detailArticle = article as typeof article & {
+    presentation?: {
+      hero?: MotorsportPageHero | null;
+      informationBand?: MotorsportPageInformationBand | null;
+    };
+  };
+  const presentationHero = detailArticle.presentation?.hero;
+  const presentationBand = detailArticle.presentation?.informationBand;
 
   return (
     <PageShell spectrumSeparators>
-      <section className="ms-news-detail-intro">
-        <div className="ms-shell py-18 sm:py-24">
-          <div className="flex flex-wrap gap-x-5 gap-y-3">
-            <span className="ms-data-label text-ms-electric-yellow">
-              {article.category}
-            </span>
-            <time className="ms-data-label text-ms-warm-white/56">
-              {article.publishedLabel}
-            </time>
-          </div>
-          <h1 className="ms-heading-article mt-8 max-w-[18ch] text-ms-warm-white">
-            {article.title}
-          </h1>
-          {article.excerpt ? (
-            <p className="mt-8 max-w-3xl border-l-2 border-ms-ignition-orange pl-6 text-xl leading-8 text-ms-warm-white/76 sm:text-2xl sm:leading-9">
-              {article.excerpt}
-            </p>
-          ) : null}
+      {presentationHero?.isActive !== false ? (
+        <div data-cms-section-key="hero" data-cms-enabled="true">
+          <PageHero
+            kicker={`${article.category} / ${article.publishedLabel}`}
+            kickerColor="yellow"
+            title={presentationHero?.title || article.title}
+            description={presentationHero?.description || article.excerpt}
+            backgroundImage={presentationHero?.backgroundMedia?.url}
+            backgroundAlt={
+              presentationHero?.backgroundMedia?.alt ||
+              `${article.title} - Sarga Motorsport`
+            }
+          />
         </div>
-      </section>
+      ) : null}
+      <InformationBand
+        eyebrow={
+          presentationBand?.eyebrow || "Editorial note / Sarga Motorsport"
+        }
+        title={
+          presentationBand?.title ||
+          "Competition makes the moment. Editorial keeps it moving."
+        }
+        description={presentationBand?.description || article.excerpt}
+        showMetricGroup={presentationBand?.showMetricGroup !== false}
+        items={
+          presentationBand?.showMetricGroup === false
+            ? []
+            : presentationBand?.metrics?.length
+              ? presentationBand.metrics.map(
+                  (metric: MotorsportInformationBandMetric) => ({
+                    label: metric.label,
+                    value: metric.value,
+                  }),
+                )
+              : [
+                  { label: "Category", value: article.category },
+                  { label: "Published", value: article.publishedLabel },
+                  { label: "Reading", value: `${readingMinutes} min` },
+                ]
+        }
+      />
 
       <section className="ms-news-detail-story">
         <div className="ms-shell py-10 sm:py-14">
@@ -192,17 +243,6 @@ export default async function ArticleDetailPage({ params }: Props) {
           </div>
         </article>
       </section>
-
-      <InformationBand
-        eyebrow="Editorial note / Sarga Motorsport"
-        title="Competition makes the moment. Editorial keeps it moving."
-        description={article.excerpt}
-        items={[
-          { label: "Category", value: article.category },
-          { label: "Published", value: article.publishedLabel },
-          { label: "Reading", value: `${readingMinutes} min` },
-        ]}
-      />
 
       {relatedArticles.length > 0 ? (
         <section className="ms-news-detail-related ms-section">

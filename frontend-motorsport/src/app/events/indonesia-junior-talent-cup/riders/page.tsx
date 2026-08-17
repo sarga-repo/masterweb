@@ -7,7 +7,9 @@ import {
   RiderCatalog,
   SectionHeader,
 } from "@/components";
-import { getIjtcProgram, getIjtcRiders, IJTC_BASE_PATH } from "@/lib/ijtc-data";
+import { getIjtcInformationBand, getIjtcProgram, getIjtcRiders, IJTC_BASE_PATH } from "@/lib/ijtc-data";
+import { getRequestLocale } from "@/lib/i18n/request";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Riders",
@@ -16,10 +18,12 @@ export const metadata: Metadata = {
 };
 
 export default async function IjtcRidersPage() {
+  const locale = await getRequestLocale();
   const [program, riders] = await Promise.all([
-    getIjtcProgram(),
-    getIjtcRiders(),
+    getIjtcProgram(locale),
+    getIjtcRiders(locale),
   ]);
+  if (!program) notFound();
   const demoCount = riders.filter((rider) =>
     /demo|demonstration/i.test(`${rider.name} ${rider.bio ?? ""}`),
   ).length;
@@ -31,8 +35,8 @@ export default async function IjtcRidersPage() {
         kickerColor="yellow"
         title="The rider field."
         description="Published rider profiles connect number, team, region, and development context in one programme view."
-        backgroundImage="/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
-        backgroundAlt="Rider and race crew preparing together in a warm daylight paddock"
+        backgroundImage={program.image}
+        backgroundAlt={program.imageAlt}
         accent="orange"
         accentPosition="bottom-left"
         surface="heat"
@@ -41,14 +45,17 @@ export default async function IjtcRidersPage() {
       />
 
       <InformationBand
-        eyebrow="Rider control / Published field"
-        title="Every number carries a development story."
-        description="Portraits and participant information appear only after programme publication. Demo records remain explicitly labelled."
-        items={[
+        {...getIjtcInformationBand(program, {
+          eyebrow: "Rider control / Published field",
+          title: "Every number carries a development story.",
+          description:
+            "Portraits and participant information appear only after programme publication. Demo records remain explicitly labelled.",
+          items: [
           { label: "Profiles", value: String(riders.length).padStart(2, "0") },
           { label: "Demo", value: String(demoCount).padStart(2, "0") },
           { label: "Nation", value: "Indonesia" },
-        ]}
+          ],
+        })}
       />
 
       <section className="ms-reflected-light-surface ms-section">

@@ -96,9 +96,13 @@ export default async function ExperiencePage() {
           {page?.heroEnabled !== false ? (
             <div data-cms-section-key="hero" data-cms-enabled="true">
               <PageHero
-                kicker={page?.navigationLabel ?? "Beyond the finish line"}
+                kicker={page?.hero?.eyebrow ?? page?.navigationLabel ?? "Beyond the finish line"}
                 kickerColor="orange"
-                title={page?.heroTitle ?? "Experience"}
+                title={page?.hero?.title ?? page?.heroTitle ?? "Experience"}
+                showKicker={page?.hero?.showEyebrow}
+                showTitle={page?.hero?.showTitle}
+                showDescription={page?.hero?.showDescription}
+                showMedia={page?.hero?.showMedia}
                 backgroundImage={
                   page?.heroImage ||
                   "/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
@@ -155,7 +159,11 @@ export default async function ExperiencePage() {
             >
               <div className="ms-shell">
                 <SectionHeader
-                  index="PILLARS"
+                  index={pillars?.indexLabel ?? "PILLARS"}
+                  showIndex={pillars?.showIndex}
+                  showEyebrow={pillars?.showEyebrow}
+                  showTitle={pillars?.showTitle}
+                  showDescription={pillars?.showBody}
                   eyebrow={pillars?.eyebrow ?? "The complete ecosystem"}
                   title={
                     pillars?.title ??
@@ -199,11 +207,13 @@ export default async function ExperiencePage() {
             >
               <div className="ms-shell">
                 <SectionHeader
-                  index="TRACK"
+                  index={track?.indexLabel ?? "TRACK"}
+                  showIndex={track?.showIndex}
+                  showEyebrow={track?.showEyebrow}
+                  showTitle={track?.showTitle}
+                  showDescription={track?.showBody}
                   eyebrow={track?.eyebrow ?? "Two forms of precision"}
-                  title={
-                    track?.title ?? "Four wheels. Two wheels. One standard."
-                  }
+                  title={track?.title ?? "Four wheels. Two wheels. One standard."}
                   description={
                     track?.body ??
                     "Both programmes share the same commitment to sporting clarity, athlete development, and race-weekend presentation."

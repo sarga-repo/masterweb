@@ -136,6 +136,10 @@ export default async function ArticleDetailPage({ params }: Props) {
             kickerColor="yellow"
             title={presentationHero?.title || article.title}
             description={presentationHero?.description || article.excerpt}
+            showKicker={presentationHero?.showEyebrow}
+            showTitle={presentationHero?.showTitle}
+            showDescription={presentationHero?.showDescription}
+            showMedia={presentationHero?.showMedia}
             backgroundImage={presentationHero?.backgroundMedia?.url}
             backgroundAlt={
               presentationHero?.backgroundMedia?.alt ||
@@ -145,6 +149,9 @@ export default async function ArticleDetailPage({ params }: Props) {
         </div>
       ) : null}
       <InformationBand
+        showEyebrow={presentationBand?.showEyebrow}
+        showTitle={presentationBand?.showTitle}
+        showDescription={presentationBand?.showDescription}
         eyebrow={
           presentationBand?.eyebrow || "Editorial note / Sarga Motorsport"
         }

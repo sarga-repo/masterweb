@@ -39,9 +39,13 @@ export default async function ContactPage() {
           {page?.heroEnabled !== false ? (
             <div data-cms-section-key="hero" data-cms-enabled="true">
               <PageHero
-                kicker={page?.navigationLabel ?? "Get in touch"}
+                kicker={page?.hero?.eyebrow ?? page?.navigationLabel ?? "Get in touch"}
                 kickerColor="orange"
-                title={page?.heroTitle ?? "Contact"}
+                title={page?.hero?.title ?? page?.heroTitle ?? "Contact"}
+                showKicker={page?.hero?.showEyebrow}
+                showTitle={page?.hero?.showTitle}
+                showDescription={page?.hero?.showDescription}
+                showMedia={page?.hero?.showMedia}
                 backgroundImage={
                   page?.heroImage ||
                   "/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
@@ -95,6 +99,10 @@ export default async function ContactPage() {
                 <div className="grid gap-16 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)]">
                   <div>
                     <SectionHeader
+                      showIndex={form?.showIndex}
+                      showEyebrow={form?.showEyebrow}
+                      showTitle={form?.showTitle}
+                      showDescription={form?.showBody}
                       eyebrow={form?.eyebrow ?? "Inquiry form"}
                       title={form?.title ?? "Send a signal."}
                       description={form?.body}

@@ -22,13 +22,13 @@ export function MotorsportPageHero({ hero }: MotorsportPageHeroProps) {
       data-cms-section-key="hero"
       data-cms-enabled="true"
     >
-      {media && isVideo(media) ? (
+      {hero.showMedia && media && isVideo(media) ? (
         <HeroVideo
           mp4={media.mime === "video/mp4" ? media.url : undefined}
           webm={media.mime === "video/webm" ? media.url : undefined}
           objectClassName="object-cover"
         />
-      ) : media ? (
+      ) : hero.showMedia && media ? (
         <ResilientImage
           src={media.url}
           alt={media.alt ?? ""}
@@ -40,7 +40,7 @@ export function MotorsportPageHero({ hero }: MotorsportPageHeroProps) {
           className="object-cover"
         />
       ) : null}
-      {mobileMedia && !isVideo(mobileMedia) ? (
+      {hero.showMedia && mobileMedia && !isVideo(mobileMedia) ? (
         <ResilientImage
           src={mobileMedia.url}
           alt={mobileMedia.alt ?? ""}
@@ -58,13 +58,15 @@ export function MotorsportPageHero({ hero }: MotorsportPageHeroProps) {
       />
       <div className="ms-shell relative z-10 flex min-h-[26rem] items-end py-14 sm:min-h-[32rem] sm:py-20">
         <div className="max-w-4xl">
-          {hero.eyebrow ? (
+          {hero.showEyebrow && hero.eyebrow ? (
             <p className="ms-kicker text-ms-electric-yellow">{hero.eyebrow}</p>
           ) : null}
-          <h1 className="ms-heading-hero mt-5 max-w-[14ch] text-ms-warm-white">
-            {hero.title}
-          </h1>
-          {hero.description ? (
+          {hero.showTitle ? (
+            <h1 className="ms-heading-hero mt-5 max-w-[14ch] text-ms-warm-white">
+              {hero.title}
+            </h1>
+          ) : null}
+          {hero.showDescription && hero.description ? (
             <p className="mt-6 max-w-2xl text-base leading-7 text-ms-warm-white/90 sm:text-lg sm:leading-8">
               {hero.description}
             </p>

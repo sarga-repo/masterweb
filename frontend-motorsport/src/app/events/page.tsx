@@ -133,13 +133,17 @@ export default async function EventsPage() {
           {page?.heroEnabled !== false ? (
             <div data-cms-section-key="hero" data-cms-enabled="true">
               <PageHero
-                kicker="Programmes / Season 2026"
+                kicker={page?.hero?.eyebrow ?? "Programmes / Season 2026"}
                 kickerColor="orange"
-                title={page?.heroTitle || "Events"}
+                title={page?.hero?.title ?? page?.heroTitle ?? "Events"}
                 description={
-                  page?.heroDescription ||
+                  page?.hero?.description ??
                   "Enter FIA Rallycross, follow the Indonesia Junior Talent Cup, and find the next race weekend."
                 }
+                showKicker={page?.hero?.showEyebrow}
+                showTitle={page?.hero?.showTitle}
+                showDescription={page?.hero?.showDescription}
+                showMedia={page?.hero?.showMedia}
                 backgroundImage={page?.heroImage}
                 backgroundAlt={page?.heroImageAlt}
                 accent="crimson"
@@ -189,7 +193,11 @@ export default async function EventsPage() {
             >
               <div className="ms-shell">
                 <SectionHeader
-                  index="PROGRAMMES"
+                  index={programmes?.indexLabel ?? "PROGRAMMES"}
+                  showIndex={programmes?.showIndex}
+                  showEyebrow={programmes?.showEyebrow}
+                  showTitle={programmes?.showTitle}
+                  showDescription={programmes?.showBody}
                   eyebrow={programmes?.eyebrow ?? "Featured pathways"}
                   title={programmes?.title ?? "Choose your entry point."}
                   description={
@@ -219,7 +227,11 @@ export default async function EventsPage() {
               <div className="ms-shell">
                 <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
                   <SectionHeader
-                    index="CALENDAR"
+                    index={calendar?.indexLabel ?? "CALENDAR"}
+                    showIndex={calendar?.showIndex}
+                    showEyebrow={calendar?.showEyebrow}
+                    showTitle={calendar?.showTitle}
+                    showDescription={calendar?.showBody}
                     eyebrow={calendar?.eyebrow ?? "Upcoming events"}
                     title={calendar?.title ?? "The next grid."}
                     description={

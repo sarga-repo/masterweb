@@ -151,13 +151,23 @@ export type CmsAboutCapabilityCard = {
 export type CmsPageSection = {
   __component?: string;
   sectionKey: string;
+  enabled?: boolean;
+  showIndex?: boolean;
+  indexLabel?: string;
+  showEyebrow?: boolean;
+  showTitle?: boolean;
+  showBody?: boolean;
+  showDescription?: boolean;
+  showMedia?: boolean;
+  showCta?: boolean;
+  supportLabel?: string;
+  supportBody?: string;
   eyebrow?: string;
   title?: string;
   body?: string;
   description?: string;
   ctaLabel?: string;
   ctaUrl?: string;
-  enabled?: boolean;
   media?: StrapiMedia | null;
   theme?: "default" | "dark" | "light" | "accent";
   cards?: CmsAboutCapabilityCard[];
@@ -217,6 +227,7 @@ type CmsProgram = {
   primaryCtaUrl?: string;
   becomeRidersLabel?: string;
   becomeRidersUrl?: string;
+  presentationSections?: CmsPageSection[];
   motorsportPresentation?: CmsDetailPresentation | null;
 };
 
@@ -545,6 +556,18 @@ function mapSinglePage(page: CmsMotorsportSinglePage): SitePageContent {
           : key
               .replace(/Section$/, "")
               .replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`),
+      indexLabel:
+        typeof value.indexLabel === "string" ? value.indexLabel : undefined,
+      showIndex: value.showIndex !== false,
+      showEyebrow: value.showEyebrow !== false,
+      showTitle: value.showTitle !== false,
+      showBody: value.showBody !== false,
+      showMedia: value.showMedia !== false,
+      showCta: value.showCta !== false,
+      supportLabel:
+        typeof value.supportLabel === "string" ? value.supportLabel : undefined,
+      supportBody:
+        typeof value.supportBody === "string" ? value.supportBody : undefined,
       eyebrow: typeof value.eyebrow === "string" ? value.eyebrow : undefined,
       title: typeof value.title === "string" ? value.title : undefined,
       body: typeof value.body === "string" ? value.body : undefined,
@@ -591,12 +614,21 @@ export type AboutCapability = {
   accent?: CmsAboutCapabilityCard["accent"];
 };
 
-export function mapAboutCapabilities(sections: CmsPageSection[] | undefined): {
+export type AboutCapabilitiesSection = {
+  showIndex: boolean;
+  indexLabel?: string;
+  showEyebrow: boolean;
+  showTitle: boolean;
+  showDescription: boolean;
   eyebrow: string;
   title: string;
   description?: string;
   cards: AboutCapability[];
-} | null {
+};
+
+export function mapAboutCapabilities(
+  sections: CmsPageSection[] | undefined,
+): AboutCapabilitiesSection | null {
   const section = sections?.find(
     (item) => item.__component === "motorsport.about-capabilities",
   );
@@ -624,6 +656,11 @@ export function mapAboutCapabilities(sections: CmsPageSection[] | undefined): {
 
   if (!cards.length) return null;
   return {
+    showIndex: section.showIndex !== false,
+    indexLabel: section.indexLabel?.trim() || "CAPABILITY",
+    showEyebrow: section.showEyebrow !== false,
+    showTitle: section.showTitle !== false,
+    showDescription: section.showDescription !== false,
     eyebrow: section.eyebrow?.trim() || "What we do",
     title:
       section.title?.trim() ||
@@ -631,8 +668,8 @@ export function mapAboutCapabilities(sections: CmsPageSection[] | undefined): {
     description: section.description?.trim() || undefined,
     cards,
   };
-}
 
+}
 const SITE_SCOPE_FILTERS: Record<string, string> = {
   "filters[siteScope][$in][0]": "motorsport",
   "filters[siteScope][$in][1]": "shared",
@@ -1283,6 +1320,21 @@ function mapProgram(entry: CmsProgram): MotorsportProgram {
     ctaLabel: isRallycross
       ? "Explore event"
       : entry.primaryCtaLabel || "Explore programme",
+    presentationHero: mapMotorsportPageHero(
+      entry.motorsportPresentation?.hero,
+    ),
+    presentationSections: (entry.presentationSections ?? []).map((section) => ({
+      sectionKey: section.sectionKey,
+      isActive: section.enabled !== false,
+      indexLabel: section.indexLabel,
+      showIndex: section.showIndex !== false,
+      showEyebrow: section.showEyebrow !== false,
+      showTitle: section.showTitle !== false,
+      showBody: section.showBody !== false,
+      eyebrow: section.eyebrow,
+      title: section.title ?? "Section",
+      body: section.body,
+    })),
     informationBand: mapMotorsportInformationBand(
       entry.motorsportPresentation?.informationBand,
     ),
@@ -1327,7 +1379,7 @@ export async function fetchPrograms(
   locale?: Locale,
 ): Promise<MotorsportProgram[]> {
   const response = await fetchStrapiList<CmsProgram>("motorsport-programs", {
-    populate: "heroMedia",
+    populate: ["heroMedia", "presentationSections"],
     filters: SITE_SCOPE_FILTERS,
     locale,
     sort: "createdAt:asc",
@@ -1346,6 +1398,7 @@ export async function fetchProgramBySlug(
   const response = await fetchStrapiList<CmsProgram>("motorsport-programs", {
     populate: [
       "heroMedia",
+      "presentationSections",
       "rundown",
       "motorsportPresentation.hero.backgroundMedia",
       "motorsportPresentation.informationBand.metrics",

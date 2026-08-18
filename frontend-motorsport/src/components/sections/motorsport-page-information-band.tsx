@@ -31,6 +31,9 @@ export function MotorsportPageInformationBand({
   return (
     <InformationBand
       isActive={isActive}
+      showEyebrow={useCmsBand ? band?.showEyebrow : true}
+      showTitle={useCmsBand ? band?.showTitle : true}
+      showDescription={useCmsBand ? band?.showDescription : true}
       showMetricGroup={useCmsBand ? band?.showMetricGroup : true}
       eyebrow={band?.eyebrow ?? fallback?.eyebrow}
       title={band?.title || fallback?.title || "Motorsport"}

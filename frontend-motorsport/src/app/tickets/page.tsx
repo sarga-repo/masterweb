@@ -127,6 +127,10 @@ export default async function TicketsPage() {
             >
               <div className="ms-shell">
                 <SectionHeader
+                  showIndex={featured?.showIndex}
+                  showEyebrow={featured?.showEyebrow}
+                  showTitle={featured?.showTitle}
+                  showDescription={featured?.showBody}
                   eyebrow={featured?.eyebrow ?? "Featured ticket"}
                   title={featured?.title ?? "Secure your seat."}
                   align="left"
@@ -180,7 +184,11 @@ export default async function TicketsPage() {
             >
               <div className="ms-shell">
                 <SectionHeader
-                  index="TICKETS"
+                  index={ticketedEventsSection?.indexLabel ?? "TICKETS"}
+                  showIndex={ticketedEventsSection?.showIndex}
+                  showEyebrow={ticketedEventsSection?.showEyebrow}
+                  showTitle={ticketedEventsSection?.showTitle}
+                  showDescription={ticketedEventsSection?.showBody}
                   eyebrow={
                     ticketedEventsSection?.eyebrow ??
                     "Events with tickets available"

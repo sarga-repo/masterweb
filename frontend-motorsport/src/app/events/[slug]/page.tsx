@@ -179,12 +179,12 @@ export default async function EventDetailPage({ params }: Props) {
             kickerColor="yellow"
             title={presentationHero?.title || event.title}
             description={presentationHero?.description}
-            backgroundImage={
-              presentationHero?.backgroundMedia?.url || event.image
-            }
-            backgroundAlt={
-              presentationHero?.backgroundMedia?.alt || event.imageAlt
-            }
+            showKicker={presentationHero?.showEyebrow}
+            showTitle={presentationHero?.showTitle}
+            showDescription={presentationHero?.showDescription}
+            showMedia={presentationHero?.showMedia}
+            backgroundImage={presentationHero?.backgroundMedia?.url || event.image}
+            backgroundAlt={presentationHero?.backgroundMedia?.alt || event.imageAlt}
             accent="orange"
             accentPosition="bottom-left"
             surface="heat"
@@ -216,6 +216,9 @@ export default async function EventDetailPage({ params }: Props) {
 
       <div data-cms-section-key="event-control" data-cms-enabled="true">
         <InformationBand
+          showEyebrow={presentationBand?.showEyebrow}
+          showTitle={presentationBand?.showTitle}
+          showDescription={presentationBand?.showDescription}
           eyebrow={
             presentationBand?.eyebrow || "Event control / Published briefing"
           }

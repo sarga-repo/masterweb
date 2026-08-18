@@ -285,7 +285,8 @@ const WORKSPACES: Record<WorkspaceKey, Workspace> = {
     priorityTasks: [
       {
         label: "Edit Motorsport pages",
-        description: "Homepage, About, Events, News, Gallery, and dedicated page content.",
+        description:
+          "Homepage, About, Events, News, Gallery, and dedicated page content. Hero and section copy include independent show/hide controls, index labels, and support labels; absent controls keep the existing visible fallback.",
         uid: "api::motorsport-home-page.motorsport-home-page",
       },
       {

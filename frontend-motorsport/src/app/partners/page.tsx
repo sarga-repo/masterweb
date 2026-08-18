@@ -72,9 +72,13 @@ export default async function PartnersPage() {
           {page?.heroEnabled !== false ? (
             <div data-cms-section-key="hero" data-cms-enabled="true">
               <PageHero
-                kicker={page?.navigationLabel ?? "Official partners & sponsors"}
+                kicker={page?.hero?.eyebrow ?? page?.navigationLabel ?? "Official partners & sponsors"}
                 kickerColor="orange"
-                title={page?.heroTitle ?? "Partners"}
+                title={page?.hero?.title ?? page?.heroTitle ?? "Partners"}
+                showKicker={page?.hero?.showEyebrow}
+                showTitle={page?.hero?.showTitle}
+                showDescription={page?.hero?.showDescription}
+                showMedia={page?.hero?.showMedia}
                 backgroundImage={
                   page?.heroImage ||
                   "/media/hero/sarga-motorsport-hero-circuit-golden-hour.jpg"
@@ -129,7 +133,11 @@ export default async function PartnersPage() {
             >
               <div className="ms-shell">
                 <SectionHeader
-                  index="NETWORK"
+                  index={network?.indexLabel ?? "NETWORK"}
+                  showIndex={network?.showIndex}
+                  showEyebrow={network?.showEyebrow}
+                  showTitle={network?.showTitle}
+                  showDescription={network?.showBody}
                   eyebrow={network?.eyebrow ?? "Official partners"}
                   title={network?.title ?? "The grid."}
                   description={

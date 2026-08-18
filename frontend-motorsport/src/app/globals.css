@@ -1740,9 +1740,13 @@ select {
   border-color: rgb(27 27 27 / 0.24) !important;
 }
 
-[data-ms-theme="theme-vendor-editorial"] .ms-event-feature-status {
-  border-color: #f5c800 !important;
-  color: #f5c800 !important;
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-events-surface.ms-reflected-light-surface
+  .ms-event-feature-details
+  span.ms-event-feature-status {
+  border-color: var(--ms-theme-accent-yellow) !important;
+  color: var(--ms-theme-accent-yellow) !important;
+  background-color: transparent !important;
 }
 
 [data-ms-theme="theme-vendor-editorial"]

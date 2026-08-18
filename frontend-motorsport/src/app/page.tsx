@@ -203,7 +203,11 @@ export default async function HomePage() {
               >
             <div className="ms-shell">
               <SectionHeader
-                index="EVENTS"
+                index={data.page.sections.events.indexLabel}
+                showIndex={data.page.sections.events.showIndex}
+                showEyebrow={data.page.sections.events.showEyebrow}
+                showTitle={data.page.sections.events.showTitle}
+                showDescription={data.page.sections.events.showDescription}
                 eyebrow={data.page.sections.events.eyebrow}
                 title={data.page.sections.events.title}
                 description={data.page.sections.events.description}
@@ -292,18 +296,22 @@ export default async function HomePage() {
               <section
                 data-cms-section-key="latest-news"
                 data-cms-enabled="true"
-                className="ms-home-news-surface ms-reflected-light-surface ms-section"
+                className="ms-home-news-surface ms-editorial-dark-surface ms-section"
               >
-            <div className="ms-shell">
-              <SectionHeader
-                index="NEWS"
-                eyebrow={data.page.sections.news.eyebrow}
-                title={data.page.sections.news.title}
-                description={data.page.sections.news.description}
-                tone="dark"
-              />
+                <div className="ms-shell">
+                  <SectionHeader
+                    index={data.page.sections.news.indexLabel}
+                    showIndex={data.page.sections.news.showIndex}
+                    showEyebrow={data.page.sections.news.showEyebrow}
+                    showTitle={data.page.sections.news.showTitle}
+                    showDescription={data.page.sections.news.showDescription}
+                    eyebrow={data.page.sections.news.eyebrow}
+                    title={data.page.sections.news.title}
+                    description={data.page.sections.news.description}
+                    tone="dark"
+                  />
 
-              <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.45fr)_minmax(18rem,.55fr)] lg:gap-6">
+                  <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.45fr)_minmax(18rem,.55fr)] lg:gap-6">
                 {data.featuredArticle ? (
                   <NewsCard
                     article={data.featuredArticle}

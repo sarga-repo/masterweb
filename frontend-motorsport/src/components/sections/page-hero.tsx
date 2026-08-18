@@ -14,10 +14,14 @@ const ACCENT_MAP: Record<AccentColor, string> = {
 };
 
 type PageHeroProps = {
-  kicker: string;
+  kicker?: string;
   kickerColor?: AccentColor | string;
-  title: string;
+  title?: string;
   description?: string;
+  showKicker?: boolean;
+  showTitle?: boolean;
+  showDescription?: boolean;
+  showMedia?: boolean;
   /** Optional background image path */
   backgroundImage?: MediaSource;
   backgroundAlt?: string;
@@ -51,6 +55,10 @@ export function PageHero({
   kickerColor,
   title,
   description,
+  showKicker = true,
+  showTitle = true,
+  showDescription = true,
+  showMedia = true,
   backgroundImage,
   backgroundAlt = "",
   accent = "crimson",
@@ -66,7 +74,7 @@ export function PageHero({
     ? { color: ACCENT_MAP[kickerColor as AccentColor] ?? kickerColor }
     : { color: ACCENT_MAP.orange };
   const gradientPos = POSITION_MAP[accentPosition] ?? "ellipse_at_top_right";
-  const hasBackgroundImage = Boolean(backgroundImage);
+  const hasBackgroundImage = showMedia && Boolean(backgroundImage);
   const useHeatSurface = surface === "heat" && !hasBackgroundImage;
 
   return (
@@ -78,7 +86,7 @@ export function PageHero({
       } ${grain ? "ms-grain" : ""} ${useHeatSurface ? "ms-page-hero-heat" : ""}`}
     >
       {/* Background image (optional cinematic layer) */}
-      {backgroundImage ? (
+      {showMedia && backgroundImage ? (
         <ResilientImage
           src={backgroundImage}
           alt={backgroundAlt}
@@ -149,11 +157,15 @@ export function PageHero({
 
       {/* Content */}
       <div className="ms-shell relative z-10">
-        <span className="ms-kicker ms-animate-stagger-1" style={kickerStyle}>
-          {kicker}
-        </span>
-        <h1 className="ms-heading-page ms-animate-stagger-2 mt-6">{title}</h1>
-        {description ? (
+        {showKicker && kicker ? (
+          <span className="ms-kicker ms-animate-stagger-1" style={kickerStyle}>
+            {kicker}
+          </span>
+        ) : null}
+        {showTitle && title ? (
+          <h1 className="ms-heading-page ms-animate-stagger-2 mt-6">{title}</h1>
+        ) : null}
+        {showDescription && description ? (
           <p className="ms-animate-stagger-3 mt-6 max-w-2xl text-lg leading-8 text-ms-warm-white/60">
             {description}
           </p>

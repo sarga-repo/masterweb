@@ -44,6 +44,20 @@ export interface MotorsportAboutCapabilities extends Struct.ComponentSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 80;
       }>;
+    indexLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    showDescription: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
+    showEyebrow: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showIndex: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showTitle: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -501,8 +515,13 @@ export interface MotorsportPageHero extends Struct.ComponentSchema {
         number
       >;
     mobileBackgroundMedia: Schema.Attribute.Media<'images' | 'videos'>;
+    showDescription: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
+    showEyebrow: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showMedia: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     showMetricGroup: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<true>;
+    showTitle: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -556,9 +575,13 @@ export interface MotorsportPageInformationBand extends Struct.ComponentSchema {
         },
         number
       >;
+    showDescription: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
+    showEyebrow: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     showMetricGroup: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<true>;
+    showTitle: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
@@ -606,10 +629,40 @@ export interface MotorsportPageSection extends Struct.ComponentSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 100;
       }>;
+    indexLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
     isActive: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<true>;
     media: Schema.Attribute.Media<'images' | 'videos'>;
+    showBody: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showCta: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showEyebrow: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showIndex: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showMedia: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showTitle: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    supportBody: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    supportLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
     theme: Schema.Attribute.Enumeration<
       ['default', 'dark', 'light', 'accent']
     > &

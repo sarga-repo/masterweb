@@ -11,6 +11,11 @@
       "default": true,
       "required": true
     },
+    "showIndex": { "type": "boolean", "default": true },
+    "indexLabel": { "type": "string", "maxLength": 80, "pluginOptions": { "i18n": { "localized": true } } },
+    "showEyebrow": { "type": "boolean", "default": true },
+    "showTitle": { "type": "boolean", "default": true },
+    "showDescription": { "type": "boolean", "default": true },
     "eyebrow": {
       "type": "string",
       "maxLength": 80,

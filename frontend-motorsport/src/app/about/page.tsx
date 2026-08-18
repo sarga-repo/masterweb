@@ -171,15 +171,19 @@ export default async function AboutPage() {
           data-cms-source={page ? "strapi" : "fallback"}
         >
           <PageHero
-            kicker="The Adrenaline Alchemist"
+            kicker={page?.hero?.eyebrow ?? "The Adrenaline Alchemist"}
             kickerColor="yellow"
-            title={page?.heroTitle || "About Sarga Motorsport"}
+            title={page?.hero?.title ?? page?.heroTitle ?? "About Sarga Motorsport"}
             description={
-              page?.heroDescription ||
+              page?.hero?.description ??
               "We transform raw speed into cultural energy through professional competition, talent development, premium events, and media."
             }
+            showKicker={page?.hero?.showEyebrow}
+            showTitle={page?.hero?.showTitle}
+            showDescription={page?.hero?.showDescription}
+            showMedia={page?.hero?.showMedia}
             backgroundImage={page?.heroImage}
-            backgroundAlt={page?.heroImageAlt || "Sarga Motorsport"}
+            backgroundAlt={page?.heroImageAlt ?? "Sarga Motorsport"}
           >
             <MotorsportMetricGroup
               items={
@@ -242,28 +246,36 @@ export default async function AboutPage() {
                 sizes="100vw"
                 className="object-cover"
               />
-              <figcaption className="absolute bottom-0 left-0 max-w-xs bg-ms-apex-crimson px-6 py-4 text-ms-warm-white sm:px-8">
-                <span className="ms-data-label text-ms-electric-yellow">
-                  Profile / Indonesia
-                </span>
-              </figcaption>
+              {profile?.showMedia !== false ? (
+                <figcaption className="absolute bottom-0 left-0 max-w-xs bg-ms-apex-crimson px-6 py-4 text-ms-warm-white sm:px-8">
+                  <span className="ms-data-label text-ms-electric-yellow">
+                    {profile?.supportLabel ?? "Profile / Indonesia"}
+                  </span>
+                </figcaption>
+              ) : null}
             </figure>
 
             <div className="grid gap-12 pt-14 lg:grid-cols-[minmax(0,1.35fr)_minmax(17rem,.65fr)] lg:gap-20 lg:pt-20">
               <article>
-                <p className="ms-kicker text-ms-electric-yellow">
-                  01 / Who we are
-                </p>
-                <h2 className="ms-heading-section mt-6 max-w-[13ch] text-ms-warm-white">
-                  {profile?.title ?? "A stage built for velocity."}
-                </h2>
-                <p className="mt-8 max-w-3xl text-lg leading-8 text-ms-warm-white/72">
-                  {sectionBody(
-                    page?.sections,
-                    "profile",
-                    "Sarga Motorsport is the dedicated racing property within the Sarga ecosystem. We unite professional racing, live-event production, community, hospitality, and editorial storytelling in one focused platform.",
-                  )}
-                </p>
+                {profile?.showIndex !== false ? (
+                  <p className="ms-kicker text-ms-electric-yellow">
+                    {profile?.indexLabel ?? "01 / Who we are"}
+                  </p>
+                ) : null}
+                {profile?.showTitle !== false ? (
+                  <h2 className="ms-heading-section mt-6 max-w-[13ch] text-ms-warm-white">
+                    {profile?.title ?? "A stage built for velocity."}
+                  </h2>
+                ) : null}
+                {profile?.showBody !== false ? (
+                  <p className="mt-8 max-w-3xl text-lg leading-8 text-ms-warm-white/72">
+                    {sectionBody(
+                      page?.sections,
+                      "profile",
+                      "Sarga Motorsport is the dedicated racing property within the Sarga ecosystem. We unite professional racing, live-event production, community, hospitality, and editorial storytelling in one focused platform.",
+                    )}
+                  </p>
+                ) : null}
               </article>
 
               <aside className="border-t border-ms-warm-white/18 pt-6 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0">
@@ -300,7 +312,11 @@ export default async function AboutPage() {
         >
           <div className="ms-shell">
             <SectionHeader
-              index="CAPABILITY"
+              index={capabilities?.indexLabel ?? "CAPABILITY"}
+              showIndex={capabilities?.showIndex}
+              showEyebrow={capabilities?.showEyebrow}
+              showTitle={capabilities?.showTitle}
+              showDescription={capabilities?.showDescription}
               eyebrow={capabilities?.eyebrow ?? "What we do"}
               title={
                 capabilities?.title ??
@@ -347,7 +363,11 @@ export default async function AboutPage() {
         >
           <div className="ms-shell">
             <SectionHeader
-              index="TEAM"
+              index={teamIntro?.indexLabel ?? "TEAM"}
+              showIndex={teamIntro?.showIndex}
+              showEyebrow={teamIntro?.showEyebrow}
+              showTitle={teamIntro?.showTitle}
+              showDescription={teamIntro?.showBody}
               eyebrow={teamIntro?.eyebrow ?? "Meet the team"}
               title={teamIntro?.title ?? "The people behind the programme."}
               description={

@@ -46,12 +46,14 @@ export default async function IjtcOverviewPage() {
   return (
     <>
       <PageHero
-        kicker={`IJTC / ${program.seasonLabel}`}
+        kicker={program.presentationHero?.eyebrow ?? `IJTC / ${program.seasonLabel}`}
         kickerColor="yellow"
-        title={program.headline ?? program.title}
-        description={program.summary}
-        backgroundImage={program.image}
-        backgroundAlt={program.imageAlt}
+        title={program.presentationHero?.title || program.headline || program.title}
+        description={program.presentationHero?.description ?? program.summary}
+        showKicker={program.presentationHero?.showEyebrow}
+        showTitle={program.presentationHero?.showTitle}
+        showDescription={program.presentationHero?.showDescription}
+        showMedia={program.presentationHero?.showMedia}
         accent="orange"
         accentPosition="bottom-left"
         surface="heat"

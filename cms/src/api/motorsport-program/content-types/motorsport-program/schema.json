@@ -115,6 +115,12 @@
       "target": "api::motorsport-regulation.motorsport-regulation",
       "mappedBy": "program"
     },
+    "presentationSections": {
+      "type": "component",
+      "component": "motorsport.page-section",
+      "repeatable": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "siteScope": {
       "type": "enumeration",
       "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],

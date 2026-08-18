@@ -105,6 +105,11 @@ export type HomepageWorldSection = {
 
 type HomepageSectionCopy = {
   enabled: boolean;
+  indexLabel: string;
+  showIndex: boolean;
+  showEyebrow: boolean;
+  showTitle: boolean;
+  showDescription: boolean;
   eyebrow: string;
   title: string;
   description: string;
@@ -187,6 +192,11 @@ type CmsPageSection = {
   sectionKey: string;
   isActive?: boolean;
   enabled?: boolean;
+  indexLabel?: string;
+  showIndex?: boolean;
+  showEyebrow?: boolean;
+  showTitle?: boolean;
+  showBody?: boolean;
   eyebrow?: string;
   title?: string;
   body?: string;
@@ -416,6 +426,11 @@ function sectionCopy(
   const section = sections?.find((item) => item.sectionKey === key);
   return {
     enabled: section?.enabled !== false,
+    indexLabel: section?.indexLabel || fallback.indexLabel,
+    showIndex: section?.showIndex !== false,
+    showEyebrow: section?.showEyebrow !== false,
+    showTitle: section?.showTitle !== false,
+    showDescription: section?.showBody !== false,
     eyebrow: section?.eyebrow || fallback.eyebrow,
     title: section?.title || fallback.title,
     description: section?.body || fallback.description,
@@ -902,6 +917,11 @@ const PLACEHOLDER_PAGE: HomepageData["page"] = {
   sections: {
     events: {
       enabled: false,
+      indexLabel: "EVENTS",
+      showIndex: true,
+      showEyebrow: true,
+      showTitle: true,
+      showDescription: true,
       eyebrow: "Upcoming events",
       title: "The next grid is forming.",
       description:
@@ -909,6 +929,11 @@ const PLACEHOLDER_PAGE: HomepageData["page"] = {
     },
     news: {
       enabled: true,
+      indexLabel: "NEWS",
+      showIndex: true,
+      showEyebrow: true,
+      showTitle: true,
+      showDescription: true,
       eyebrow: "Latest news",
       title: "From the paddock.",
       description:
@@ -916,6 +941,11 @@ const PLACEHOLDER_PAGE: HomepageData["page"] = {
     },
     gallery: {
       enabled: true,
+      indexLabel: "GALLERY",
+      showIndex: true,
+      showEyebrow: true,
+      showTitle: true,
+      showDescription: true,
       eyebrow: "Gallery",
       title: "Motion, recorded.",
       description:
@@ -923,6 +953,11 @@ const PLACEHOLDER_PAGE: HomepageData["page"] = {
     },
     connectedRecords: {
       enabled: false,
+      indexLabel: "CONNECTED",
+      showIndex: true,
+      showEyebrow: true,
+      showTitle: true,
+      showDescription: true,
       eyebrow: "Part of Sarga.co / Connected records",
       title: "Explore the Sarga network.",
       description:

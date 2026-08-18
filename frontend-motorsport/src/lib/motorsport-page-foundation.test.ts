@@ -108,6 +108,46 @@ test("maps named sections without requiring a manual section key", () => {
   assert.equal(section?.body, undefined);
 });
 
+test("preserves CMS visibility flags for hero, band, and named sections", () => {
+  const hero = mapMotorsportPageHero({
+    title: "Hidden title",
+    showEyebrow: false,
+    showTitle: false,
+    showDescription: false,
+    showMedia: false,
+  });
+  assert.equal(hero?.showEyebrow, false);
+  assert.equal(hero?.showTitle, false);
+  assert.equal(hero?.showDescription, false);
+  assert.equal(hero?.showMedia, false);
+
+  const band = mapMotorsportInformationBand({
+    title: "Band",
+    showEyebrow: false,
+    showTitle: false,
+    showDescription: false,
+  });
+  assert.equal(band?.showEyebrow, false);
+  assert.equal(band?.showTitle, false);
+  assert.equal(band?.showDescription, false);
+
+  const section = mapMotorsportNamedPageSection({
+    title: "Section",
+    showIndex: false,
+    indexLabel: "CONTROL",
+    showEyebrow: false,
+    showTitle: false,
+    showBody: false,
+    showMedia: false,
+    showCta: false,
+    supportLabel: "Support",
+  });
+  assert.equal(section?.showIndex, false);
+  assert.equal(section?.indexLabel, "CONTROL");
+  assert.equal(section?.showCta, false);
+  assert.equal(section?.supportLabel, "Support");
+});
+
 test("requires the exact Preview document ID", () => {
   assert.equal(
     isExactSingleDocument({ data: { documentId: "doc-123" } }, "doc-123"),

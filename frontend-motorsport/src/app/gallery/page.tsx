@@ -147,15 +147,17 @@ export default async function GalleryPage({
               <PageHero
                 kicker={intro?.eyebrow ?? "Trackside capture feed"}
                 kickerColor="yellow"
-                title={page?.heroTitle ?? "Gallery"}
+                title={page?.hero?.title ?? page?.heroTitle ?? "Gallery"}
                 description={
-                  page?.heroDescription ??
+                  page?.hero?.description ??
                   "Circuit, rally, motorcycle, paddock, people, and fan energy—one bright visual record of Motorsport in motion."
                 }
+                showKicker={page?.hero?.showEyebrow}
+                showTitle={page?.hero?.showTitle}
+                showDescription={page?.hero?.showDescription}
+                showMedia={page?.hero?.showMedia}
                 backgroundImage={page?.heroImage}
-                backgroundAlt={
-                  page?.heroImageAlt || "Sarga Motorsport gallery scene"
-                }
+                backgroundAlt={page?.heroImageAlt || "Sarga Motorsport gallery scene"}
               >
                 {isCmsSectionVisible(intro) ? (
                   <MotorsportMetricGroup
@@ -214,21 +216,29 @@ export default async function GalleryPage({
               <div className="ms-shell">
                 <div className="grid gap-8 border-t border-ms-warm-white/14 pt-5 lg:grid-cols-[minmax(0,1.3fr)_minmax(18rem,.7fr)]">
                   <div>
-                    <p className="ms-kicker text-ms-apex-crimson">
-                      {archive?.eyebrow ?? "SYS / Gallery / Published media"}
-                    </p>
-                    <h2 className="ms-heading-section mt-6 max-w-[12ch]">
-                      {archive?.title ?? "Motion, recorded."}
-                    </h2>
+                    {archive?.showEyebrow !== false ? (
+                      <p className="ms-kicker text-ms-apex-crimson">
+                        {archive?.eyebrow ?? "Gallery / Published media"}
+                      </p>
+                    ) : null}
+                    {archive?.showTitle !== false ? (
+                      <h2 className="ms-heading-section mt-6 max-w-[12ch]">
+                        {archive?.title ?? "Motion, recorded."}
+                      </h2>
+                    ) : null}
                   </div>
                   <div className="self-end border-l border-ms-slipstream-teal/45 pl-5">
-                    <p className="ms-data-label text-ms-slipstream-teal">
-                      How to browse
-                    </p>
-                    <p className="mt-4 text-base leading-7 text-ms-warm-white/62">
-                      {archive?.body ??
-                        "Filter the archive by discipline. Select any frame to open the full-screen viewer, then browse with the arrow controls."}
-                    </p>
+                    {archive?.supportLabel ? (
+                      <p className="ms-data-label text-ms-slipstream-teal">
+                        {archive.supportLabel}
+                      </p>
+                    ) : null}
+                    {archive?.showBody !== false ? (
+                      <p className="mt-4 text-base leading-7 text-ms-warm-white/62">
+                        {archive?.supportBody ?? archive?.body ??
+                          "Filter the archive by discipline. Select any frame to open the full-screen viewer, then browse with the arrow controls."}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
 

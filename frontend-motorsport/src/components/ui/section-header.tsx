@@ -1,8 +1,14 @@
 type SectionHeaderProps = {
-  eyebrow: string;
-  title: string;
+  eyebrow?: string;
+  title?: string;
   description?: string;
+  descriptionLabel?: string;
   index?: string;
+  showIndex?: boolean;
+  showEyebrow?: boolean;
+  showTitle?: boolean;
+  showDescription?: boolean;
+  showDescriptionLabel?: boolean;
   align?: "left" | "split";
   tone?: "light" | "warm" | "dark";
   className?: string;
@@ -12,7 +18,13 @@ export function SectionHeader({
   eyebrow,
   title,
   description,
+  descriptionLabel = "Overview",
   index,
+  showIndex = true,
+  showEyebrow = true,
+  showTitle = true,
+  showDescription = true,
+  showDescriptionLabel = true,
   align = "split",
   tone = "dark",
   className = "",
@@ -30,39 +42,45 @@ export function SectionHeader({
     >
       <div>
         <div className="mb-10 grid grid-cols-[auto_1fr_auto] items-center gap-4">
-          {index ? (
+          {showIndex && index ? (
             <span
               className={`ms-data-label ${warm ? "text-[#7f0b19]" : light ? "text-ms-crimson-700" : "text-ms-ignition-orange"}`}
             >
-              SYS / {index}
+              {index}
             </span>
           ) : null}
-          <span
-            className={`ms-data-label ${warm ? "text-ms-ink-700" : light ? "text-ms-ink-500" : "text-ms-warm-white/48"}`}
-          >
-            {eyebrow}
-          </span>
+          {showEyebrow && eyebrow ? (
+            <span
+              className={`ms-data-label ${warm ? "text-ms-ink-700" : light ? "text-ms-ink-500" : "text-ms-warm-white/48"}`}
+            >
+              {eyebrow}
+            </span>
+          ) : null}
           <span className="flex gap-1" aria-hidden="true">
             <i className="size-1.5 bg-ms-apex-crimson" />
             <i className="size-1.5 bg-ms-ignition-orange" />
             <i className="size-1.5 bg-ms-electric-yellow" />
           </span>
         </div>
-        <h2
-          className={`ms-heading-section max-w-[12ch] ${light ? "text-ms-draftline-blue" : "text-ms-warm-white"}`}
-        >
-          {title}
-        </h2>
+        {showTitle && title ? (
+          <h2
+            className={`ms-heading-section max-w-[12ch] ${light ? "text-ms-draftline-blue" : "text-ms-warm-white"}`}
+          >
+            {title}
+          </h2>
+        ) : null}
       </div>
-      {description ? (
+      {showDescription && description ? (
         <div
           className={`self-end border-l pl-5 ${light ? "border-ms-apex-crimson/45" : "border-ms-slipstream-teal/50"}`}
         >
-          <span
-            className={`ms-data-label ${warm ? "text-[#712600]" : light ? "text-ms-orange-800" : "text-ms-slipstream-teal"}`}
-          >
-            Overview
-          </span>
+          {showDescriptionLabel && descriptionLabel ? (
+            <span
+              className={`ms-data-label ${warm ? "text-[#712600]" : light ? "text-ms-orange-800" : "text-ms-slipstream-teal"}`}
+            >
+              {descriptionLabel}
+            </span>
+          ) : null}
           <p
             className={`mt-4 text-base leading-7 sm:text-lg ${warm ? "text-ms-charcoal" : light ? "text-ms-ink-700" : "text-ms-warm-white/62"}`}
           >

@@ -5,6 +5,9 @@ type InformationBandItem = {
 
 type InformationBandProps = {
   isActive?: boolean;
+  showEyebrow?: boolean;
+  showTitle?: boolean;
+  showDescription?: boolean;
   showMetricGroup?: boolean;
   eyebrow?: string;
   title: string;
@@ -14,13 +17,15 @@ type InformationBandProps = {
 
 export function InformationBand({
   isActive = true,
+  showEyebrow = true,
+  showTitle = true,
+  showDescription = true,
   showMetricGroup = true,
   eyebrow,
   title,
   description,
   items = [],
 }: InformationBandProps) {
-  if (!isActive) return null;
   const visibleItems = showMetricGroup ? items.slice(0, 3) : [];
 
   return (
@@ -31,11 +36,13 @@ export function InformationBand({
       />
       <div className="ms-shell relative grid gap-10 py-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(20rem,.75fr)] lg:items-end lg:py-14">
         <div>
-          {eyebrow ? (
+          {showEyebrow && eyebrow ? (
             <p className="ms-kicker text-ms-slipstream-teal">{eyebrow}</p>
           ) : null}
-          <h2 className="ms-heading-section mt-4 max-w-4xl">{title}</h2>
-          {description ? (
+          {showTitle ? (
+            <h2 className="ms-heading-section mt-4 max-w-4xl">{title}</h2>
+          ) : null}
+          {showDescription && description ? (
             <p className="mt-5 max-w-2xl leading-7 text-ms-warm-white/72">
               {description}
             </p>

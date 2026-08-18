@@ -8689,3 +8689,150 @@ Status: ✅ Done 2026-08-17
 - Frontend TypeScript check passed after clearing stale generated `.next/dev`
   types.
 - `git diff --check` passed.
+
+## MSR-CMS-TEXT-CONTROLS-0 — Editorial copy control audit and specification
+
+Status: ✅ Done 2026-08-18
+
+### What was done
+
+- Audited Motorsport Single Type page models, reusable hero/information-band/
+  named-section components, About page copy, and route-level static labels.
+- Confirmed most primary page copy already has CMS fields, but independent
+  show/hide controls and section index/support labels were frontend-owned.
+- Defined a reusable visibility contract and phased migration for primary pages,
+  detail routes, preview behavior, and fallback safety.
+
+### Files changed
+
+- `docs/motorsport/revamp/65_cms_editorial_text_controls_revamp_spec.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Compared the CMS Single Type schemas with all primary Motorsport route
+  consumers and the existing preview/visibility helpers.
+- Confirmed the foundation changes retain default-visible behavior when new
+  fields are absent.
+
+### Notes / caveats
+
+- This phase intentionally does not remove route fallback copy; migration must
+  populate and verify CMS values before obsolete fallbacks are deleted.
+
+## MSR-CMS-TEXT-CONTROLS-1 — Reusable editorial visibility foundation
+
+Status: ✅ Done 2026-08-18
+
+### What was done
+
+- Extended Motorsport Page Hero, Information Band, Named Page Section, and
+  About Capabilities components with independent copy/media visibility flags.
+- Added named section index/support labels for frontend-owned red-square copy
+  such as section indexes and media captions.
+- Wired runtime mappers and renderers with default-visible compatibility when
+  existing records do not yet contain the new fields.
+- Migrated About, Home, Events, Experience, Merchandise, Contact, Partners,
+  Tickets, News, and Gallery primary surfaces to consume the reusable controls
+  where their dedicated CMS sections exist.
+- Added migration support for carrying the controls from legacy Site Page
+  sections into dedicated Motorsport Single Types.
+
+### Files changed
+
+- `docs/motorsport/revamp/65_cms_editorial_text_controls_revamp_spec.md`
+- `cms/src/components/motorsport/page-hero.json`
+- `cms/src/components/motorsport/page-information-band.json`
+- `cms/src/components/motorsport/page-section.json`
+- `cms/src/components/motorsport/about-capabilities.json`
+- `cms/src/migrations/motorsport-page-single-types.ts`
+- `frontend-motorsport/src/lib/motorsport-page-foundation.ts`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/lib/homepage-data.ts`
+- `frontend-motorsport/src/components/sections/page-hero.tsx`
+- `frontend-motorsport/src/components/sections/motorsport-page-hero.tsx`
+- `frontend-motorsport/src/components/sections/information-band.tsx`
+- `frontend-motorsport/src/components/sections/motorsport-page-information-band.tsx`
+- `frontend-motorsport/src/components/sections/motorsport-page-section.tsx`
+- `frontend-motorsport/src/components/ui/section-header.tsx`
+- `frontend-motorsport/src/app/page.tsx`
+- `frontend-motorsport/src/app/about/page.tsx`
+- `frontend-motorsport/src/app/events/page.tsx`
+- `frontend-motorsport/src/app/news/page.tsx`
+- `frontend-motorsport/src/app/gallery/page.tsx`
+- `frontend-motorsport/src/app/merchandise/page.tsx`
+- `frontend-motorsport/src/app/tickets/page.tsx`
+- `frontend-motorsport/src/app/contact/page.tsx`
+- `frontend-motorsport/src/app/partners/page.tsx`
+- `frontend-motorsport/src/app/experience/page.tsx`
+- `frontend-motorsport/src/lib/motorsport-page-foundation.test.ts`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Foundation mapper tests: 7/7 passed.
+- Motorsport TypeScript check passed.
+- Motorsport production build passed.
+- Browser smoke requests for all ten primary routes returned HTTP 200.
+
+### Notes / caveats
+
+- New controls default to visible for existing records. Editors must populate
+  optional index/support labels where they want to replace a legacy fallback.
+- Detail/programme child routes remain in the Phase C presentation migration;
+  their existing program/event data contracts remain unchanged in this phase.
+
+## MSR-CMS-TEXT-CONTROLS-2 — Primary and detail route migration
+
+Status: ✅ Done 2026-08-18
+
+### What was done
+
+- Connected CMS hero visibility/copy controls on About, Home, Events,
+  Experience, Merchandise, Contact, Partners, News, and Gallery surfaces.
+- Connected CMS named-section index, eyebrow, title, body, and description
+  controls to primary route section headers, including the About red-square
+  labels and profile media label.
+- Connected existing detail presentation controls to Event and News detail
+  heroes and information bands.
+- Restored default-visible behavior and route fallback copy for legacy records.
+
+### Files changed
+
+- `frontend-motorsport/src/app/about/page.tsx`
+- `frontend-motorsport/src/app/page.tsx`
+- `frontend-motorsport/src/app/events/page.tsx`
+- `frontend-motorsport/src/app/experience/page.tsx`
+- `frontend-motorsport/src/app/merchandise/page.tsx`
+- `frontend-motorsport/src/app/contact/page.tsx`
+- `frontend-motorsport/src/app/partners/page.tsx`
+- `frontend-motorsport/src/app/tickets/page.tsx`
+- `frontend-motorsport/src/app/news/page.tsx`
+- `frontend-motorsport/src/app/gallery/page.tsx`
+- `frontend-motorsport/src/app/events/[slug]/page.tsx`
+- `frontend-motorsport/src/app/news/[slug]/page.tsx`
+- `frontend-motorsport/src/components/sections/page-hero.tsx`
+- `frontend-motorsport/src/components/sections/motorsport-page-hero.tsx`
+- `frontend-motorsport/src/components/sections/information-band.tsx`
+- `frontend-motorsport/src/components/sections/motorsport-page-information-band.tsx`
+- `frontend-motorsport/src/components/ui/section-header.tsx`
+- `frontend-motorsport/src/lib/homepage-data.ts`
+- `frontend-motorsport/src/lib/motorsport-page-foundation.ts`
+- `frontend-motorsport/src/lib/motorsport-page-foundation.test.ts`
+- `cms/src/migrations/motorsport-page-single-types.ts`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Foundation mapper tests: 7/7 passed.
+- Motorsport TypeScript check and production build passed.
+- CMS production build passed.
+- All ten primary Motorsport route smoke requests returned HTTP 200.
+
+### Notes / caveats
+
+- Editors must populate optional new index/support fields on existing records
+  when replacing legacy fallback labels; absent flags remain visible by design.
+- IJTC child-page route-local copy and program-specific presentation remains a
+  separate future model extension because those routes are not backed by the
+  primary page Single Types.

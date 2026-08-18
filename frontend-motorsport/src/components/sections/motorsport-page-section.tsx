@@ -17,29 +17,30 @@ export function MotorsportPageSection({ section }: MotorsportPageSectionProps) {
     >
       <div className="ms-shell grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,.6fr)] lg:items-center">
         <div>
-          {section.eyebrow ? (
-            <p className="ms-kicker text-ms-electric-yellow">
-              {section.eyebrow}
-            </p>
+          {section.showIndex && section.indexLabel ? (
+            <p className="ms-kicker text-ms-ignition-orange">{section.indexLabel}</p>
           ) : null}
-          <h2 className="ms-heading-section mt-4">{section.title}</h2>
-          {section.body ? (
-            <p className="mt-5 max-w-2xl leading-7 text-ms-warm-white/72">
-              {section.body}
-            </p>
+          {section.showEyebrow && section.eyebrow ? (
+            <p className="ms-kicker mt-4 text-ms-electric-yellow">{section.eyebrow}</p>
           ) : null}
-          {section.ctaLabel && section.ctaUrl ? (
+          {section.showTitle ? (
+            <h2 className="ms-heading-section mt-4">{section.title}</h2>
+          ) : null}
+          {section.showBody && section.body ? (
+            <p className="mt-5 max-w-2xl leading-7">{section.body}</p>
+          ) : null}
+          {section.showCta && section.ctaLabel && section.ctaUrl ? (
             <LocaleLink
               href={section.ctaUrl}
               target={section.ctaTarget === "newWindow" ? "_blank" : undefined}
               rel={section.ctaTarget === "newWindow" ? "noreferrer" : undefined}
-              className="mt-7 inline-flex border-b border-ms-electric-yellow py-2 text-xs font-extrabold uppercase tracking-[0.12em] text-ms-warm-white"
+              className="mt-7 inline-flex border-b border-ms-electric-yellow py-2 text-xs font-extrabold uppercase tracking-[0.12em]"
             >
               {section.ctaLabel}
             </LocaleLink>
           ) : null}
         </div>
-        {section.media ? (
+        {section.showMedia && section.media ? (
           <div className="relative aspect-[4/3] overflow-hidden bg-ms-charcoal">
             <ResilientImage
               src={section.media.url}

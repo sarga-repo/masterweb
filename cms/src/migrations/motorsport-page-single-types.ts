@@ -26,6 +26,15 @@ function namedSection(section: any) {
   if (!section || section.__component !== "shared.page-section") return null;
   return {
     isActive: section.enabled !== false,
+    showIndex: section.showIndex !== false,
+    indexLabel: section.indexLabel,
+    showEyebrow: section.showEyebrow !== false,
+    showTitle: section.showTitle !== false,
+    showBody: section.showBody !== false,
+    showMedia: section.showMedia !== false,
+    showCta: section.showCta !== false,
+    supportLabel: section.supportLabel,
+    supportBody: section.supportBody,
     eyebrow: section.eyebrow,
     title: section.title || "Section",
     body: section.body || section.description,

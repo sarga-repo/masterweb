@@ -1,6 +1,8 @@
 import type { StaticImageData } from "next/image";
-import type { MotorsportPageInformationBand } from "@/lib/motorsport-page-foundation";
-
+import type {
+  MotorsportPageHero,
+  MotorsportPageInformationBand,
+} from "@/lib/motorsport-page-foundation";
 export type MediaSource = string | StaticImageData;
 
 export type LinkItem = {
@@ -153,9 +155,21 @@ export type MotorsportProgram = {
   image: MediaSource;
   imageAlt: string;
   ctaLabel: string;
+  presentationHero?: MotorsportPageHero | null;
+  presentationSections?: Array<{
+    sectionKey: string;
+    isActive: boolean;
+    indexLabel?: string;
+    showIndex: boolean;
+    showEyebrow: boolean;
+    showTitle: boolean;
+    showBody: boolean;
+    eyebrow?: string;
+    title: string;
+    body?: string;
+  }>;
   informationBand?: MotorsportPageInformationBand | null;
 };
-
 export type MotorsportProgramDetail = MotorsportProgram & {
   schedule: ScheduleEntry[];
   becomeRidersLabel?: string;

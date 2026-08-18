@@ -11,6 +11,9 @@
       "default": true,
       "required": true
     },
+    "showEyebrow": { "type": "boolean", "default": true, "description": "Show the information band eyebrow copy." },
+    "showTitle": { "type": "boolean", "default": true, "description": "Show the information band title copy." },
+    "showDescription": { "type": "boolean", "default": true, "description": "Show the information band description copy." },
     "eyebrow": {
       "type": "string",
       "maxLength": 100,

@@ -2942,6 +2942,15 @@ export interface ApiMotorsportProgramMotorsportProgram
           localized: true;
         };
       }>;
+    presentationSections: Schema.Attribute.Component<
+      'motorsport.page-section',
+      true
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     primaryCtaLabel: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

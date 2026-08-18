@@ -112,17 +112,19 @@ export default async function NewsPage() {
               data-cms-source={page ? "strapi" : "fallback"}
             >
               <PageHero
-                kicker={page?.navigationLabel ?? "Editorial / From the paddock"}
+                kicker={page?.hero?.eyebrow ?? page?.navigationLabel ?? "Editorial / From the paddock"}
                 kickerColor="yellow"
-                title={page?.heroTitle ?? "News"}
+                title={page?.hero?.title ?? page?.heroTitle ?? "News"}
                 description={
-                  page?.heroDescription ??
+                  page?.hero?.description ??
                   "Race reports, rider profiles, technical detail, and the culture moving Indonesian motorsport forward—across four wheels and two."
                 }
+                showKicker={page?.hero?.showEyebrow}
+                showTitle={page?.hero?.showTitle}
+                showDescription={page?.hero?.showDescription}
+                showMedia={page?.hero?.showMedia}
                 backgroundImage={page?.heroImage}
-                backgroundAlt={
-                  page?.heroImageAlt || "Sarga Motorsport editorial scene"
-                }
+                backgroundAlt={page?.heroImageAlt || "Sarga Motorsport editorial scene"}
               >
                 <div className="border-t border-ms-warm-white/20 pt-5 sm:max-w-xs sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
                   <p className="ms-data-label text-ms-slipstream-teal">

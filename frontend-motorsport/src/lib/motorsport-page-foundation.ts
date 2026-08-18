@@ -7,6 +7,10 @@ type StrapiMedia = {
 
 export type CmsPageHero = {
   isActive?: boolean;
+  showEyebrow?: boolean;
+  showTitle?: boolean;
+  showDescription?: boolean;
+  showMedia?: boolean;
   eyebrow?: string | null;
   title?: string | null;
   description?: string | null;
@@ -25,6 +29,9 @@ export type CmsInformationBandMetric = {
 
 export type CmsPageInformationBand = {
   isActive?: boolean;
+  showEyebrow?: boolean;
+  showTitle?: boolean;
+  showDescription?: boolean;
   eyebrow?: string | null;
   title?: string | null;
   description?: string | null;
@@ -34,6 +41,15 @@ export type CmsPageInformationBand = {
 
 export type CmsNamedPageSection = {
   isActive?: boolean;
+  showIndex?: boolean;
+  indexLabel?: string | null;
+  showEyebrow?: boolean;
+  showTitle?: boolean;
+  showBody?: boolean;
+  showMedia?: boolean;
+  showCta?: boolean;
+  supportLabel?: string | null;
+  supportBody?: string | null;
   eyebrow?: string | null;
   title?: string | null;
   body?: string | null;
@@ -52,6 +68,10 @@ export type MotorsportHeroMedia = {
 
 export type MotorsportPageHero = {
   isActive: boolean;
+  showEyebrow: boolean;
+  showTitle: boolean;
+  showDescription: boolean;
+  showMedia: boolean;
   eyebrow?: string;
   title: string;
   description?: string;
@@ -68,6 +88,9 @@ export type MotorsportInformationBandMetric = {
 
 export type MotorsportPageInformationBand = {
   isActive: boolean;
+  showEyebrow: boolean;
+  showTitle: boolean;
+  showDescription: boolean;
   eyebrow?: string;
   title: string;
   description?: string;
@@ -77,6 +100,15 @@ export type MotorsportPageInformationBand = {
 
 export type MotorsportNamedPageSection = {
   isActive: boolean;
+  showIndex: boolean;
+  indexLabel?: string;
+  showEyebrow: boolean;
+  showTitle: boolean;
+  showBody: boolean;
+  showMedia: boolean;
+  showCta: boolean;
+  supportLabel?: string;
+  supportBody?: string;
   eyebrow?: string;
   title: string;
   body?: string;
@@ -138,6 +170,10 @@ export function mapMotorsportPageHero(
   if (!input) return null;
   return {
     isActive: input.isActive !== false,
+    showEyebrow: input.showEyebrow !== false,
+    showTitle: input.showTitle !== false,
+    showDescription: input.showDescription !== false,
+    showMedia: input.showMedia !== false,
     eyebrow: clean(input.eyebrow),
     title: clean(input.title) ?? "",
     description: clean(input.description),
@@ -178,6 +214,9 @@ export function mapMotorsportInformationBand(
 
   return {
     isActive: input.isActive !== false,
+    showEyebrow: input.showEyebrow !== false,
+    showTitle: input.showTitle !== false,
+    showDescription: input.showDescription !== false,
     eyebrow: clean(input.eyebrow),
     title: clean(input.title) ?? "",
     description: clean(input.description),
@@ -192,6 +231,15 @@ export function mapMotorsportNamedPageSection(
   if (!input) return null;
   return {
     isActive: input.isActive !== false,
+    showIndex: input.showIndex !== false,
+    indexLabel: clean(input.indexLabel),
+    showEyebrow: input.showEyebrow !== false,
+    showTitle: input.showTitle !== false,
+    showBody: input.showBody !== false,
+    showMedia: input.showMedia !== false,
+    showCta: input.showCta !== false,
+    supportLabel: clean(input.supportLabel),
+    supportBody: clean(input.supportBody),
     eyebrow: clean(input.eyebrow),
     title: clean(input.title) ?? "",
     body: clean(input.body),

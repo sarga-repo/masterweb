@@ -121,20 +121,16 @@ export default async function MerchandisePage() {
           {page?.heroEnabled !== false ? (
             <div data-cms-section-key="hero" data-cms-enabled="true">
               <PageHero
-                kicker="Track culture / Product preview"
+                kicker={page?.hero?.eyebrow ?? "Track culture / Product preview"}
                 kickerColor="orange"
-                title={page?.heroTitle || "Merchandise"}
-                description={
-                  page?.heroDescription ||
-                  "Official Sarga Motorsport merchandise previews. Releases are handled through approved partners or direct inquiry."
-                }
-                backgroundImage={
-                  page?.heroImage || "/media/sarga-motorsport-race-nascar-2.png"
-                }
-                backgroundAlt={
-                  page?.heroImageAlt ||
-                  "Sarga Motorsport race weekend atmosphere"
-                }
+                title={page?.hero?.title ?? page?.heroTitle ?? "Merchandise"}
+                description={page?.hero?.description ?? "Official Sarga Motorsport merchandise previews. Releases are handled through approved partners or direct inquiry."}
+                showKicker={page?.hero?.showEyebrow}
+                showTitle={page?.hero?.showTitle}
+                showDescription={page?.hero?.showDescription}
+                showMedia={page?.hero?.showMedia}
+                backgroundImage={page?.heroImage || "/media/sarga-motorsport-race-nascar-2.png"}
+                backgroundAlt={page?.heroImageAlt || "Sarga Motorsport race weekend atmosphere"}
                 accent="orange"
                 accentPosition="bottom-right"
                 speedLines
@@ -181,7 +177,11 @@ export default async function MerchandisePage() {
             >
               <div className="ms-shell">
                 <SectionHeader
-                  index="MERCH"
+                  index={catalog?.indexLabel ?? "MERCH"}
+                  showIndex={catalog?.showIndex}
+                  showEyebrow={catalog?.showEyebrow}
+                  showTitle={catalog?.showTitle}
+                  showDescription={catalog?.showBody}
                   eyebrow={catalog?.eyebrow ?? "Current showcase"}
                   title={
                     catalog?.title ??

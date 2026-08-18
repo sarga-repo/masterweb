@@ -16,6 +16,12 @@
       "default": true,
       "required": true
     },
+    "indexLabel": {
+      "type": "string",
+      "maxLength": 20,
+      "pluginOptions": { "i18n": { "localized": true } },
+      "description": "Optional label shown above the card title. Defaults to 01, 02, 03… if empty."
+    },
     "title": {
       "type": "string",
       "required": true,

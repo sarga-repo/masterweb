@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image, { type ImageProps } from "next/image";
 
 type MotorsportLogoProps = {
   variant?: "full" | "part-of-sarga" | "symbol-sport";
@@ -21,13 +21,19 @@ export function MotorsportLogo({
   className = "w-[clamp(8.75rem,14vw,12rem)]",
   priority = false,
 }: MotorsportLogoProps) {
+  const resolvedSrc = src ?? LOGOS[variant];
+  const isLocalCmsMedia =
+    typeof resolvedSrc === "string" &&
+    /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?\//.test(resolvedSrc);
+
   return (
     <Image
-      src={src ?? LOGOS[variant]}
+      src={resolvedSrc}
       width={777}
       height={195}
       alt={alt}
       priority={priority}
+      unoptimized={isLocalCmsMedia}
       className={`h-auto min-w-[8.75rem] object-contain ${className}`}
     />
   );

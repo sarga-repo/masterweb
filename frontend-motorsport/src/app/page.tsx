@@ -296,7 +296,7 @@ export default async function HomePage() {
               <section
                 data-cms-section-key="latest-news"
                 data-cms-enabled="true"
-                className="ms-home-news-surface ms-editorial-dark-surface ms-section"
+                className="ms-home-news-surface ms-reflected-light-surface ms-section"
               >
                 <div className="ms-shell">
                   <SectionHeader

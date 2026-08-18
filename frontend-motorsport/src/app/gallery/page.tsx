@@ -218,7 +218,7 @@ export default async function GalleryPage({
                   <div>
                     {archive?.showEyebrow !== false ? (
                       <p className="ms-kicker text-ms-apex-crimson">
-                        {archive?.eyebrow ?? "Gallery / Published media"}
+                        {archive?.eyebrow ?? "SYS / Gallery / Published media"}
                       </p>
                     ) : null}
                     {archive?.showTitle !== false ? (

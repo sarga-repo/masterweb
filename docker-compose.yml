@@ -113,6 +113,7 @@ services:
     environment:
       NODE_ENV: development
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+      # Browser-reachable Strapi (media/image URLs).
       NEXT_PUBLIC_STRAPI_API_URL: ${NEXT_PUBLIC_STRAPI_API_URL:-http://localhost:1337}
       # Server-side content fetch uses the internal service hostname inside the network.
       STRAPI_API_URL: ${STRAPI_API_URL:-http://strapi:1337}

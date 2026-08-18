@@ -15,6 +15,7 @@ import {
   fetchLeadership,
   fetchSitePage,
   mapAboutCapabilities,
+  type AboutCapability,
   type SitePageContent,
 } from "@/lib/cms-data";
 import { createMetadata } from "@/lib/seo/metadata";
@@ -148,7 +149,7 @@ export default async function AboutPage() {
     (section) => section.sectionKey === "ecosystem-cta",
   );
   const capabilities = mapAboutCapabilities(page?.sections);
-  const capabilityCards = capabilities
+  const capabilityCards: AboutCapability[] = capabilities
     ? capabilities.cards
     : capabilitiesSection
       ? []
@@ -338,7 +339,7 @@ export default async function AboutPage() {
                   className="border-b border-ms-warm-white/14 px-0 py-9 md:px-8 md:odd:border-r md:first:pl-0"
                 >
                   <span className="ms-data-label text-ms-electric-yellow">
-                    {String(index + 1).padStart(2, "0")}
+                    {card.indexLabel || String(index + 1).padStart(2, "0")}
                   </span>
                   <h3 className="ms-heading-card mt-7 max-w-[16ch] text-ms-warm-white">
                     {card.title}

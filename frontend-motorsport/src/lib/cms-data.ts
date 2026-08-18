@@ -142,6 +142,7 @@ export type CmsGallery = {
 export type CmsAboutCapabilityCard = {
   internalName?: string;
   enabled?: boolean;
+  indexLabel?: string;
   title?: string;
   description?: string;
   sortOrder?: number;
@@ -609,6 +610,7 @@ function mapSinglePage(page: CmsMotorsportSinglePage): SitePageContent {
 }
 
 export type AboutCapability = {
+  indexLabel?: string;
   title: string;
   description: string;
   accent?: CmsAboutCapabilityCard["accent"];
@@ -649,6 +651,7 @@ export function mapAboutCapabilities(
     )
     .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
     .map((card) => ({
+      indexLabel: card.indexLabel?.trim() || undefined,
       title: card.title.trim(),
       description: card.description.trim(),
       accent: card.accent,

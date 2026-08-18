@@ -169,8 +169,8 @@
   --ms-theme-accent-orange: #b94700;
   --ms-theme-accent-cyan: #00c4cc;
   --ms-theme-accent-yellow: #f5c800;
-  --ms-theme-separator: rgb(0 51 160 / 0.18);
-  --ms-theme-separator-bright: rgb(0 51 160 / 0.34);
+  --ms-theme-separator: rgb(27 27 27 / 0.18);
+  --ms-theme-separator-bright: rgb(27 27 27 / 0.34);
   --ms-theme-media-scrim: rgb(5 5 5 / 0.28);
   --ms-surface-page: var(--ms-theme-surface-page);
   --ms-surface-canvas: var(--ms-theme-surface-warm);

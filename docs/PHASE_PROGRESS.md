@@ -1576,6 +1576,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | MSR-CMS-LIVE-4        | Dedicated popup preview and collection-entry support    | ✅ Done | 2026-08-23 |
 | MSR-CMS-LIVE-5        | Same-tab integrated Preview behavior                     | ✅ Done | 2026-08-23 |
 | MSR-CMS-LIVE-6        | Responsive mobile editor action toolbar                 | ✅ Done | 2026-08-23 |
+| MSR-CMS-OPS-3         | Staging Motorsport navigation data restoration          | ✅ Done | 2026-08-24 |
 
 ### MSR-THEME-REVIEW-1 — Vendor composition and preset differentiation review
 
@@ -10051,3 +10052,145 @@ Status: ✅ Done 2026-08-23
 - The custom editor chrome remains hidden during normal editing; only Strapi
   modal chrome is restored while an editor dialog is open.
 - Existing unrelated local Strapi console warnings/errors remain unchanged.
+
+## MSR-CMS-OPS-1 — One-time staging Single Type migration override
+
+Status: ✅ Done 2026-08-24
+
+### What was done
+
+- Added a dedicated build-helper option to run the Motorsport Single Type
+  migration without editing the protected `/etc/sarga/cms.env` file.
+- The override is applied after the protected environment is sourced and is
+  scoped to the current CMS build/restart invocation.
+
+### Files changed
+
+- `deploy/production/build_applications.sh`
+- `deploy/production/README.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Bash syntax check passed.
+- The helper's override path was reviewed to confirm it is applied after the
+  protected environment file is loaded and before CMS restart.
+
+### Notes / caveats
+
+- Use the option once with `--restart`; it does not edit or persist the
+  protected environment file.
+- The migration remains idempotent and only fills missing dedicated page
+  entries.
+
+## MSR-CMS-OPS-2 — Staging Preview runtime and iframe CSP
+
+Status: ✅ Done 2026-08-24
+
+### What was done
+
+- Added protected systemd preview overrides for the staging CMS and Motorsport
+  services without modifying `/etc/sarga/*.env`.
+- Enabled the Strapi Preview card and synchronized the CMS/frontend preview
+  configuration.
+- Added `CMS_ADMIN_ORIGIN=https://cms-staging.sarga.co` so the custom preview
+  page can embed the CMS editor from the same staging origin.
+
+### Files changed
+
+- Staging server: `/etc/systemd/system/sarga-cms.service.d/20-preview.conf`
+- Staging server: `/etc/systemd/system/sarga-motorsport.service.d/20-preview.conf`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- CMS and Motorsport services are active after restart.
+- The authenticated CMS preview URL endpoint returns HTTP 200.
+- The frontend preview handshake returns the expected HTTP 307 redirect.
+- The CMS Content Security Policy now includes both the staging frontend and
+  `https://cms-staging.sarga.co` in `frame-src`.
+
+### Notes / caveats
+
+- Preview secrets are stored only in protected server-side systemd overrides;
+  no secret was added to the repository.
+- The systemd drop-ins must be preserved if the service units are reinstalled.
+
+## MSR-CMS-OPS-3 — Staging Motorsport navigation data restoration
+
+Status: ✅ Done 2026-08-24
+
+### What was done
+
+- Restored the eight Motorsport navigation items from the legacy
+  `top-navigation-item` collection into the dedicated collection for English
+  and Indonesian locales.
+- Published both locale versions and preserved the existing labels, links,
+  ordering, enabled state, and Ticket CTA emphasis.
+- Hardened the ownership migration so localized records attach to the English
+  document and stable route fields remain English-owned.
+- Added an isolated `navigation` migration mode for safe operational repairs
+  without touching unrelated legacy content.
+
+### Files changed
+
+- `cms/src/migrations/motorsport-ownership.ts`
+- `docs/PHASE_PROGRESS.md`
+- Staging CMS database records in
+  `motorsport_top_navigation_items`
+
+### How verified
+
+- Staging database contains 8 unique published English documents and their
+  Indonesian localizations.
+- Authenticated CMS Content Manager shows 8 published entries.
+- Staging Motorsport homepage shows Home, About, News, Gallery, Merchandise,
+  Contact, and Ticket navigation links.
+- CMS service is active after the one-time migration run.
+
+### Notes / caveats
+
+- The general ownership migration still requires a separate cleanup for
+  unrelated legacy records with invalid localized route data; this repair was
+  deliberately isolated to navigation.
+
+## MSR-CMS-OPS-4 — Content Manager persisted-layout reconciliation
+
+Status: 🟡 Implementation complete; staging application pending — 2026-08-24
+
+### What was done
+
+- Audited local and staging Git state and confirmed staging had only two
+  uncommitted ad-hoc source edits: the deployment helper and ownership
+  migration.
+- Removed those direct staging edits, including a verified stale Git index lock,
+  restoring the checkout to the branch baseline.
+- Added an opt-in, idempotent migration for persisted Motorsport Content
+  Manager component edit layouts. It uses the local persisted order as the
+  canonical layout, preserves metadata and unknown fields, and never changes
+  content records.
+- Added a runbook for dry-run, apply, and verify using a temporary service
+  environment override.
+
+### Files changed
+
+- `cms/src/index.ts`
+- `cms/src/migrations/motorsport-content-manager-layout.ts`
+- `docs/motorsport/revamp/84_cms_content_manager_layout_reconciliation.md`
+- `docs/motorsport/revamp/README.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Local CMS TypeScript check passed.
+- Local and staging persisted-layout inventories confirmed the reported drift:
+  staging placed `show*` controls at the beginning of reusable components,
+  while local held the canonical editorial order.
+- Staging Git checkout is clean after restoring only the two identified files.
+
+### Notes / caveats
+
+- The migration is not enabled during normal startup. Staging apply and verify
+  remain to be run after the repository commit is deployed.
+- The existing systemd preview drop-ins are operational configuration and were
+  intentionally preserved.

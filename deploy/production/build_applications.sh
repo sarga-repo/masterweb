@@ -19,6 +19,10 @@ Applications (select at least one):
 Options:
   --repo PATH       Repository path (default: /srv/sarga-website).
   --app-user NAME   Linux application user (default: sarga).
+  --motorsport-page-single-types-migrate
+                    Run the one-time Motorsport Single Type migration during
+                    the next CMS restart; implies --cms and does not modify
+                    the protected environment file.
   --restart         Restart selected existing systemd services only after all
                     selected installs/builds succeed.
   --help            Show this help.
@@ -42,6 +46,8 @@ require_value() {
 repo_path="/srv/sarga-website"
 app_user="sarga"
 restart_services=false
+motorsport_page_single_types_migrate=false
+motorsport_migration_runtime_override_set=false
 selected=()
 
 add_selected() {
@@ -88,6 +94,11 @@ while (($#)); do
       app_user="$2"
       shift 2
       ;;
+    --motorsport-page-single-types-migrate)
+      add_selected cms
+      motorsport_page_single_types_migrate=true
+      shift
+      ;;
     --restart)
       restart_services=true
       shift
@@ -110,6 +121,24 @@ id "$app_user" >/dev/null 2>&1 || fail "application user does not exist: $app_us
 [[ -d "$repo_path/.git" ]] || fail "repository checkout was not found: $repo_path"
 command -v pnpm >/dev/null || fail "pnpm is not installed"
 command -v sudo >/dev/null || fail "sudo is not installed"
+command -v getent >/dev/null || fail "getent is not installed"
+if [[ "$motorsport_page_single_types_migrate" == true && "$restart_services" != true ]]; then
+  fail "--motorsport-page-single-types-migrate requires --restart"
+fi
+
+clear_motorsport_migration_runtime_override() {
+  if [[ "$motorsport_migration_runtime_override_set" == true ]]; then
+    systemctl unset-environment MOTORSPORT_PAGE_SINGLE_TYPES_MIGRATE || true
+    motorsport_migration_runtime_override_set=false
+  fi
+}
+
+trap clear_motorsport_migration_runtime_override EXIT
+
+app_home="$(getent passwd "$app_user" | cut -d: -f6)"
+[[ -n "$app_home" && -d "$app_home" ]] ||
+  fail "home directory is not available for application user: $app_user"
+cd "$repo_path"
 
 application_path() {
   case "$1" in
@@ -140,7 +169,7 @@ for application in "${selected[@]}"; do
   fi
 done
 
-release_sha="$(git -C "$repo_path" rev-parse HEAD)"
+release_sha="$(git -c safe.directory="$repo_path" -C "$repo_path" rev-parse HEAD)"
 printf 'Building Git revision: %s\n' "$release_sha"
 
 for application in "${selected[@]}"; do
@@ -155,6 +184,9 @@ for application in "${selected[@]}"; do
     set -a
     source "$env_path"
     set +a
+    export HOME="$app_home"
+    export XDG_CACHE_HOME="$app_home/.cache"
+    export COREPACK_HOME="$app_home/.cache/node/corepack"
     [[ "${NODE_ENV:-}" == "production" ]] ||
       fail "$env_path must set NODE_ENV=production"
     sudo -u "$app_user" --preserve-env pnpm --dir "$app_path" build
@@ -165,12 +197,24 @@ for application in "${selected[@]}"; do
   fi
 done
 
-[[ "$(git -C "$repo_path" rev-parse HEAD)" == "$release_sha" ]] ||
+[[ "$(git -c safe.directory="$repo_path" -C "$repo_path" rev-parse HEAD)" == "$release_sha" ]] ||
   fail "repository Git revision changed while builds were running"
 
 if [[ "$restart_services" == true ]]; then
   for application in "${selected[@]}"; do
+    if [[ "$application" == "cms" && "$motorsport_page_single_types_migrate" == true ]]; then
+      # The migration runs in Strapi bootstrap, so the override must be
+      # present on the systemd restart rather than only during pnpm build.
+      # systemd manager environment is cleared immediately after CMS starts
+      # and is also cleared by the EXIT trap if restart fails.
+      systemctl set-environment MOTORSPORT_PAGE_SINGLE_TYPES_MIGRATE=true
+      motorsport_migration_runtime_override_set=true
+      printf 'Using one-time MOTORSPORT_PAGE_SINGLE_TYPES_MIGRATE=true override for CMS restart.\n'
+    fi
     systemctl restart "$(service_name "$application")"
+    if [[ "$application" == "cms" && "$motorsport_page_single_types_migrate" == true ]]; then
+      clear_motorsport_migration_runtime_override
+    fi
     systemctl is-active --quiet "$(service_name "$application")" ||
       fail "service did not become active: $(service_name "$application")"
   done
@@ -180,4 +224,3 @@ printf '\nSelected application builds completed at Git revision %s.\n' "$release
 if [[ "$restart_services" == false ]]; then
   printf 'Services were not restarted. Use install-sarga-stack.sh or systemctl after configuration is ready.\n'
 fi
-

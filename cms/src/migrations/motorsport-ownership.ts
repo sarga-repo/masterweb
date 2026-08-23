@@ -1,6 +1,6 @@
 import type { Core } from "@strapi/strapi";
 
-type Mode = "off" | "dry-run" | "apply" | "verify";
+type Mode = "off" | "dry-run" | "apply" | "verify" | "navigation";
 
 type DocumentService = {
   findFirst: (params?: Record<string, unknown>) => Promise<any>;
@@ -34,7 +34,7 @@ const POPULATE = "*";
 
 function mode(): Mode {
   const value = process.env.MOTORSPORT_OWNERSHIP_MIGRATION_MODE ?? "off";
-  return ["off", "dry-run", "apply", "verify"].includes(value) ? value as Mode : "off";
+  return ["off", "dry-run", "apply", "verify", "navigation"].includes(value) ? value as Mode : "off";
 }
 
 function documentService(strapi: Core.Strapi, uid: string) {
@@ -66,9 +66,16 @@ function componentData(value: any): any {
   );
 }
 
-function copyData(source: any, definition: MigrationDefinition) {
+function copyData(
+  source: any,
+  definition: MigrationDefinition,
+  locale = "en",
+) {
   const data: Record<string, unknown> = { legacySourceDocumentId: source.documentId };
   for (const field of definition.fields) {
+    // Stable route fields belong to the English master and cannot be changed
+    // through an i18n localization update.
+    if (locale !== "en" && ["slug", "routePath"].includes(field)) continue;
     const value = source[field];
     if (value === undefined || value === null) continue;
     if (["coverImage", "heroMedia", "gallery", "portrait", "image", "logo"].includes(field)) {
@@ -91,24 +98,75 @@ function relationDocumentId(value: any): string | undefined {
 export async function migrateMotorsportOwnership(strapi: Core.Strapi) {
   const executionMode = mode();
   if (executionMode === "off") return;
+  const applyMode = executionMode === "apply" || executionMode === "navigation";
+  const definitions =
+    executionMode === "navigation"
+      ? DEFINITIONS.filter(
+          (definition) =>
+            definition.dedicatedUid ===
+            "api::motorsport-top-navigation-item.motorsport-top-navigation-item",
+        )
+      : DEFINITIONS;
 
   const report = { mode: executionMode, source: 0, created: 0, updated: 0, published: 0, skipped: 0, unresolvedRelations: 0, byType: {} as Record<string, { source: number; target: number }> };
   const sourceToTarget = new Map<string, string>();
 
-  for (const definition of DEFINITIONS) {
+  for (const definition of definitions) {
     const legacy = documentService(strapi, definition.legacyUid);
     const dedicated = documentService(strapi, definition.dedicatedUid);
-    const sourceRecords = await legacy.findMany({
-      filters: { siteScope: { $eq: "motorsport" }, ...(definition.sourceFilter ?? {}) },
-      locale: "*",
-      status: "draft",
-      populate: POPULATE,
-    });
+    const sourceRecords: any[] = [];
+    // Query locales separately instead of relying on the ordering of locale
+    // "*". Strapi's i18n middleware requires the English document to be
+    // created before its Indonesian localization can be created.
+    for (const sourceLocale of ["en", "id"] as const) {
+      const localizedRecords = await legacy.findMany({
+        filters: { siteScope: { $eq: "motorsport" }, ...(definition.sourceFilter ?? {}) },
+        locale: sourceLocale,
+        status: "draft",
+        populate: POPULATE,
+      });
+      sourceRecords.push(
+        ...localizedRecords.map((record) => ({
+          ...record,
+          locale: record.locale ?? sourceLocale,
+        })),
+      );
+    }
     report.byType[definition.dedicatedUid] = { source: sourceRecords.length, target: 0 };
     report.source += sourceRecords.length;
 
     for (const source of sourceRecords) {
       const locale = source.locale || "en";
+      if (locale !== "en") {
+        const englishTargetId = sourceToTarget.get(`${source.documentId}:en`);
+        if (!englishTargetId) {
+          report.skipped += 1;
+          continue;
+        }
+        const localizedExisting = await dedicated.findFirst({
+          filters: { documentId: { $eq: englishTargetId } },
+          locale,
+          status: "draft",
+        });
+        if (localizedExisting) {
+          sourceToTarget.set(`${source.documentId}:${locale}`, englishTargetId);
+          report.updated += 1;
+          report.byType[definition.dedicatedUid].target += 1;
+          continue;
+        }
+        if (!applyMode) continue;
+        await dedicated.update({
+          documentId: englishTargetId,
+          locale,
+          data: copyData(source, definition, locale),
+          status: "draft",
+        });
+        sourceToTarget.set(`${source.documentId}:${locale}`, englishTargetId);
+        report.created += 1;
+        report.byType[definition.dedicatedUid].target += 1;
+        continue;
+      }
+
       const existing = await dedicated.findFirst({
         filters: { legacySourceDocumentId: { $eq: source.documentId } },
         locale,
@@ -120,8 +178,8 @@ export async function migrateMotorsportOwnership(strapi: Core.Strapi) {
         report.byType[definition.dedicatedUid].target += 1;
         continue;
       }
-      if (executionMode !== "apply") continue;
-      const created = await dedicated.create({ data: copyData(source, definition), locale, status: "draft" });
+      if (!applyMode) continue;
+      const created = await dedicated.create({ data: copyData(source, definition, locale), locale, status: "draft" });
       sourceToTarget.set(`${source.documentId}:${locale}`, created.documentId);
       report.created += 1;
       report.byType[definition.dedicatedUid].target += 1;
@@ -156,7 +214,7 @@ export async function migrateMotorsportOwnership(strapi: Core.Strapi) {
       if (sponsorIds.length) await eventTarget.update({ documentId: targetId, locale: source.locale || "en", data: { sponsors: sponsorIds }, status: "draft" });
     }
 
-    for (const definition of DEFINITIONS) {
+    for (const definition of definitions) {
       const legacyPublished = await documentService(strapi, definition.legacyUid).findMany({ filters: { siteScope: { $eq: "motorsport" } }, locale: "*", status: "published" });
       const dedicated = documentService(strapi, definition.dedicatedUid);
       for (const source of legacyPublished) {
@@ -164,6 +222,19 @@ export async function migrateMotorsportOwnership(strapi: Core.Strapi) {
         if (!targetId) continue;
         await dedicated.publish({ documentId: targetId, locale: source.locale || "en" });
         report.published += 1;
+      }
+    }
+  }
+
+  if (executionMode === "navigation") {
+    const navigation = documentService(
+      strapi,
+      "api::motorsport-top-navigation-item.motorsport-top-navigation-item",
+    );
+    for (const locale of ["en", "id"] as const) {
+      const records = await navigation.findMany({ locale, status: "draft" });
+      for (const record of records) {
+        await navigation.publish({ documentId: record.documentId, locale });
       }
     }
   }

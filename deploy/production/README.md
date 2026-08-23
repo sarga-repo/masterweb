@@ -32,6 +32,23 @@ password prompted by `initialize_server.sh`. Keep `SEED_DEMO_CONTENT=false`.
 sudo deploy/production/build_applications.sh --cms
 ```
 
+For the first staging rollout of the dedicated Motorsport Single Types, the
+protected `/etc/sarga/cms.env` file can remain unchanged. Run the CMS build
+helper with its one-time migration override and restart the service:
+
+```bash
+sudo deploy/production/build_applications.sh \
+  --cms \
+  --motorsport-page-single-types-migrate \
+  --restart
+```
+
+The override is applied only after the protected CMS environment file is
+loaded, so it is available during the CMS restart without editing that file.
+After the restart, confirm the logs contain the Motorsport Single Type
+migration messages and then use the normal CMS build command for subsequent
+deployments.
+
 ### 3. Install Nginx/systemd and start the empty CMS
 
 Install the HTTP virtual hosts and systemd units without starting Motorsport:

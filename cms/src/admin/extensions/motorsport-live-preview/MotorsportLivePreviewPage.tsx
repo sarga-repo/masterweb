@@ -558,8 +558,10 @@ function contentManagerUrl(
   uid: string,
   locale: Locale,
   documentId?: string | null,
+  previewSession?: string | null,
 ) {
   const params = new URLSearchParams({ "plugins[i18n][locale]": locale });
+  if (previewSession) params.set("previewSession", previewSession);
   const collectionEntryPath =
     isCollectionTypeUid(uid) && documentId
       ? `collection-types/${uid}/${encodeURIComponent(documentId)}`
@@ -743,6 +745,7 @@ function editorSelectionFromUrl() {
   const requestedUid = params.get("uid");
   const requestedLocale = params.get("locale");
   const requestedDocumentId = params.get("documentId")?.trim() || null;
+  const previewSession = params.get("previewSession")?.trim() || null;
 
   return {
     uid: SUPPORTED_PREVIEW_UIDS.has(requestedUid ?? "")
@@ -750,6 +753,7 @@ function editorSelectionFromUrl() {
       : firstPage.uid,
     locale: requestedLocale === "id" ? ("id" as Locale) : ("en" as Locale),
     documentId: requestedDocumentId,
+    previewSession,
   };
 }
 
@@ -1094,8 +1098,8 @@ export default function MotorsportLivePreviewPage() {
     ENTRY_TITLES[uid] ?? selectedPage.label,
   );
   const editorSrc = useMemo(
-    () => contentManagerUrl(uid, locale, documentId),
-    [documentId, locale, uid],
+    () => contentManagerUrl(uid, locale, documentId, selection.previewSession),
+    [documentId, locale, selection.previewSession, uid],
   );
   const previewDeviceWidth = PREVIEW_DEVICE_WIDTHS[previewDevice];
 

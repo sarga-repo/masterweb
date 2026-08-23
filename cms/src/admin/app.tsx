@@ -358,7 +358,14 @@ export default {
       if (contentType === "collection-types" && !documentId) return null;
 
       const locale = url.searchParams.get("plugins[i18n][locale]") ?? "en";
-      const destinationParams = new URLSearchParams({ uid, locale });
+      const destinationParams = new URLSearchParams({
+        uid,
+        locale,
+        // Strapi admin HTML can be cached by the staging edge. Give each
+        // preview session a fresh URL so an updated CSP is not hidden behind
+        // an older cached response that cannot frame the CMS editor.
+        previewSession: Date.now().toString(36),
+      });
       if (documentId) destinationParams.set("documentId", documentId);
       return {
         uid,

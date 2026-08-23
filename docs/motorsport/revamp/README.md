@@ -80,6 +80,7 @@ This folder is the current source of truth for the major Sarga Motorsport UI, si
 | `81_cms_live_preview_mvp.md` | Saved-draft live Preview heartbeat, automatic refresh, security boundary, and unsaved-edit limitation. |
 | `82_cms_side_by_side_preview.md` | Motorsport split-pane CMS editor and private frontend Preview workspace. |
 | `83_cms_integrated_content_manager_preview.md` | Integrated Content Manager Preview action and side-by-side editor flow. |
+| `84_cms_content_manager_layout_reconciliation.md` | Reconcile persisted Motorsport Content Manager component edit layouts between local and staging. |
 
 ## Implementation rule
 

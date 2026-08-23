@@ -10156,7 +10156,7 @@ Status: ✅ Done 2026-08-24
 
 ## MSR-CMS-OPS-4 — Content Manager persisted-layout reconciliation
 
-Status: 🟡 Implementation complete; staging application pending — 2026-08-24
+Status: ✅ Done — 2026-08-24
 
 ### What was done
 
@@ -10187,10 +10187,16 @@ Status: 🟡 Implementation complete; staging application pending — 2026-08-24
   staging placed `show*` controls at the beginning of reusable components,
   while local held the canonical editorial order.
 - Staging Git checkout is clean after restoring only the two identified files.
+- Local migration dry-run/apply/verify passed with `checked: 16,
+  changed: 0, missing: 0`.
+- Staging dry-run reported 5 differences, apply repaired them, and verify
+  passed with `checked: 16, changed: 0, missing: 0`.
+- Local and staging `layouts.edit` hashes match for all 16 covered components;
+  staging CMS is active and its temporary migration environment is cleared.
 
 ### Notes / caveats
 
-- The migration is not enabled during normal startup. Staging apply and verify
-  remain to be run after the repository commit is deployed.
+- The migration is not enabled during normal startup; the repository now
+  contains the canonical repair for future controlled reconciliations.
 - The existing systemd preview drop-ins are operational configuration and were
   intentionally preserved.

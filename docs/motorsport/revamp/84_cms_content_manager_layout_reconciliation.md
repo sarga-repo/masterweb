@@ -1,7 +1,7 @@
 # CMS Content Manager layout reconciliation
 
 Phase: `MSR-CMS-OPS-4`
-Status: implementation complete; staging application pending
+Status: completed 2026-08-24
 
 ## Purpose
 
@@ -40,11 +40,13 @@ The environment variable must be supplied as a one-time service-manager
 override and cleared after each run. Normal CMS startup leaves the migration
 disabled.
 
-## Acceptance
+## Acceptance evidence
 
-- Local and staging component `layouts.edit` signatures match for all
-  Motorsport components covered by the migration.
+- Local and staging MD5 signatures match for all 16 Motorsport component
+  `layouts.edit` values.
+- Staging dry-run found 5 differences; apply repaired those 5 layouts.
+- Staging verify returned `checked: 16, changed: 0, missing: 0`.
 - `page-hero`, `page-information-band`, and `page-section` retain explicit
   `isActive` section controls and the canonical visibility-control order.
-- CMS service is active after apply and verify.
-- No content record is created, deleted, published, or mutated.
+- CMS service is active and the temporary migration environment is cleared.
+- No content record was created, deleted, published, or mutated.

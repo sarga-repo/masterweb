@@ -10017,3 +10017,37 @@ Status: ✅ Done 2026-08-23
 
 - The responsive breakpoint remains the existing side-by-side stacking
   breakpoint; desktop layouts are unchanged.
+
+## MSR-CMS-LIVE-7 — Embedded media picker modal chrome and viewport fix
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Preserved Strapi media-picker modal header/footer chrome inside the embedded
+  CMS editor, including Browse, Selected files, Add folder, Add more assets,
+  and Finish controls.
+- Detected open editor dialogs and temporarily restored the iframe viewport
+  position/height so fixed-position media-picker controls are not clipped by
+  the custom preview toolbar.
+- Wrapped the media-picker tabs and action controls at narrow widths so they
+  remain inside the dialog on mobile screens.
+
+### Files changed
+
+- `cms/src/admin/extensions/motorsport-live-preview/MotorsportLivePreviewPage.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- CMS TypeScript check passed.
+- Authenticated browser smoke passed at 390×844: media-picker header, tabs,
+  actions, and Finish control were visible and contained in the CMS pane.
+- Authenticated browser smoke passed at 1440×900: the same controls were
+  visible without clipping or overflow in the desktop CMS pane.
+
+### Notes / caveats
+
+- The custom editor chrome remains hidden during normal editing; only Strapi
+  modal chrome is restored while an editor dialog is open.
+- Existing unrelated local Strapi console warnings/errors remain unchanged.

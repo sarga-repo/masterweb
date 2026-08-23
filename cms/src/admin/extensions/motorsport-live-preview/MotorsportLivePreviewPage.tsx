@@ -772,6 +772,30 @@ function compactEmbeddedEditor(frame: HTMLIFrameElement) {
     [role="complementary"] {
       display: none !important;
     }
+    /* Content Manager cleanup must not remove Strapi's media picker chrome.
+       Its tabs, Add folder, and Finish controls live in modal header/footer
+       elements inside the embedded document. */
+    [role="dialog"] nav,
+    [role="dialog"] header,
+    [role="dialog"] aside,
+    [role="dialog"] footer,
+    [role="dialog"] [role="complementary"] {
+      display: revert !important;
+    }
+    @media (max-width: 600px) {
+      /* Keep the media-picker tabs and actions inside a phone-width dialog. */
+      [role="dialog"] div:has(> [role="tablist"]) {
+        flex-wrap: wrap !important;
+      }
+      [role="dialog"] div:has(> [role="tablist"]) > [role="tablist"],
+      [role="dialog"] div:has(> [role="tablist"]) > [role="tablist"] + div {
+        flex: 1 1 100% !important;
+        width: 100% !important;
+      }
+      [role="dialog"] div:has(> [role="tablist"]) > [role="tablist"] + div {
+        justify-content: flex-end !important;
+      }
+    }
     main,
     #main-content {
       width: 100% !important;
@@ -1056,6 +1080,7 @@ export default function MotorsportLivePreviewPage() {
   const [directPreviewSrc, setDirectPreviewSrc] = useState<string | null>(null);
   const [previewLoading, setPreviewLoading] = useState(true);
   const [previewError, setPreviewError] = useState<string | null>(null);
+  const [isEditorDialogOpen, setIsEditorDialogOpen] = useState(false);
   const selectedPage = {
     label: entryLabel(uid),
     uid,
@@ -1126,6 +1151,39 @@ export default function MotorsportLivePreviewPage() {
     setZoom(fitPreviewZoom(previewDevice, previewViewportWidth));
     zoomInitializedRef.current = true;
   }, [previewDevice, previewViewportWidth]);
+
+  useEffect(() => {
+    const frame = editorFrameRef.current;
+    if (!frame) return;
+
+    let observer: MutationObserver | null = null;
+    const syncDialogState = () => {
+      setIsEditorDialogOpen(
+        Boolean(frame.contentDocument?.querySelector('[role="dialog"]')),
+      );
+    };
+    const attachDialogObserver = () => {
+      observer?.disconnect();
+      const document = frame.contentDocument;
+      if (!document?.body) return;
+
+      observer = new MutationObserver(syncDialogState);
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+      syncDialogState();
+    };
+
+    attachDialogObserver();
+    frame.addEventListener("load", attachDialogObserver);
+
+    return () => {
+      observer?.disconnect();
+      frame.removeEventListener("load", attachDialogObserver);
+      setIsEditorDialogOpen(false);
+    };
+  }, [editorSrc]);
 
   useEffect(() => {
     if (previousPreviewDeviceRef.current === previewDevice) return;
@@ -1478,8 +1536,12 @@ export default function MotorsportLivePreviewPage() {
               src={editorSrc}
               style={{
                 ...styles.editorFrame,
-                height: `calc(100% + ${EDITOR_CHROME_HEIGHT}px)`,
-                transform: `translateY(-${EDITOR_CHROME_HEIGHT}px)`,
+                height: isEditorDialogOpen
+                  ? "100%"
+                  : `calc(100% + ${EDITOR_CHROME_HEIGHT}px)`,
+                transform: isEditorDialogOpen
+                  ? "translateY(0)"
+                  : `translateY(-${EDITOR_CHROME_HEIGHT}px)`,
               }}
               onLoad={(event) => compactEmbeddedEditor(event.currentTarget)}
             />

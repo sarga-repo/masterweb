@@ -8,8 +8,14 @@ import {
   SectionHeader,
 } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
-import { getIjtcInformationBand, getIjtcProgram, IJTC_BASE_PATH } from "@/lib/ijtc-data";
+import { fetchMotorsportTheme } from "@/lib/cms-data";
+import {
+  getIjtcInformationBand,
+  getIjtcProgram,
+  IJTC_BASE_PATH,
+} from "@/lib/ijtc-data";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -37,8 +43,13 @@ const PROCESS = [
 ];
 
 export default async function BecomeIjtcRiderPage() {
-  const program = await getIjtcProgram(await getRequestLocale());
+  const locale = await getRequestLocale();
+  const [program, theme] = await Promise.all([
+    getIjtcProgram(locale),
+    fetchMotorsportTheme(locale),
+  ]);
   if (!program) notFound();
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
 
   return (
     <>
@@ -63,14 +74,16 @@ export default async function BecomeIjtcRiderPage() {
           description:
             "Submitting this form does not create an account, guarantee selection, or confirm sporting eligibility.",
           items: [
-          { label: "Route", value: "Inquiry" },
-          { label: "Account", value: "Not required" },
-          { label: "Review", value: "Programme team" },
+            { label: "Route", value: "Inquiry" },
+            { label: "Account", value: "Not required" },
+            { label: "Review", value: "Programme team" },
           ],
         })}
       />
 
-      <section className="ms-reflected-light-surface ms-section">
+      <section
+        className={`ms-reflected-light-surface ms-section ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell grid gap-12 lg:grid-cols-[minmax(0,1.12fr)_minmax(20rem,.88fr)]">
           <div>
             <SectionHeader
@@ -115,7 +128,9 @@ export default async function BecomeIjtcRiderPage() {
         </div>
       </section>
 
-      <section className="ms-blue-heat-surface ms-section">
+      <section
+        className={`ms-blue-heat-surface ms-section ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell">
           <SectionHeader
             index="PROCESS"

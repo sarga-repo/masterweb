@@ -14,7 +14,11 @@ import { fetchPartners, fetchSitePage } from "@/lib/cms-data";
 import type { PartnerItem } from "@/types/design-system";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
-import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
+import {
+  isCmsCanonicalSectionVisible,
+  isCmsPageVisible,
+  isCmsSectionVisible,
+} from "@/lib/cms-visibility";
 
 export const metadata: Metadata = {
   title: "Partners",
@@ -45,9 +49,6 @@ export default async function PartnersPage() {
     fetchPartners(20, locale),
   ]);
   const isPreview = await isStrapiPreviewEnabled();
-  const control = page?.sections.find(
-    (section) => section.sectionKey === "partner-control",
-  );
   const network = page?.sections.find(
     (section) => section.sectionKey === "partner-network",
   );
@@ -72,7 +73,11 @@ export default async function PartnersPage() {
           {page?.heroEnabled !== false ? (
             <div data-cms-section-key="hero" data-cms-enabled="true">
               <PageHero
-                kicker={page?.hero?.eyebrow ?? page?.navigationLabel ?? "Official partners & sponsors"}
+                kicker={
+                  page?.hero?.eyebrow ??
+                  page?.navigationLabel ??
+                  "Official partners & sponsors"
+                }
                 kickerColor="orange"
                 title={page?.hero?.title ?? page?.heroTitle ?? "Partners"}
                 showKicker={page?.hero?.showEyebrow}
@@ -100,17 +105,17 @@ export default async function PartnersPage() {
             </div>
           ) : null}
 
-          {page?.informationBand || isCmsSectionVisible(control) ? (
-            <div data-cms-section-key="partner-control" data-cms-enabled="true">
+          {isCmsCanonicalSectionVisible(page?.informationBand) ? (
+            <div
+              data-cms-section-key="information-band"
+              data-cms-enabled="true"
+            >
               <MotorsportPageInformationBand
                 band={page?.informationBand}
                 fallback={{
-                  isActive: control?.enabled,
-                  eyebrow:
-                    control?.eyebrow ?? "Partner control / Shared platform",
-                  title: control?.title ?? "One grid. Shared ambition.",
+                  eyebrow: "Partner control / Shared platform",
+                  title: "One grid. Shared ambition.",
                   description:
-                    control?.body ??
                     "The partner network supports competition, event delivery, audience experience, and long-term talent development.",
                   metrics: [
                     {
@@ -215,9 +220,8 @@ export default async function PartnersPage() {
                     {finalCta?.title ?? "Join the grid."}
                   </h2>
                   <p className="mt-6 max-w-xl text-base leading-7 text-ms-warm-white/64">
-                    We work with brands that share our commitment to
-                    performance, responsible event delivery, and meaningful
-                    community access.
+                    {finalCta?.body ??
+                      "We work with brands that share our commitment to performance, responsible event delivery, and meaningful community access."}
                   </p>
                 </div>
                 <Link

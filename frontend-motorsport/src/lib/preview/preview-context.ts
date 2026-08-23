@@ -38,6 +38,19 @@ const PREVIEW_COLLECTIONS = {
   "api::motorsport-news-article.motorsport-news-article": "motorsport-news-articles",
 } as const;
 
+const PREVIEW_SINGLE_TYPE_COLLECTIONS = new Set([
+  "motorsport-home-page",
+  "motorsport-about-page",
+  "motorsport-events-page",
+  "motorsport-news-page",
+  "motorsport-gallery-page",
+  "motorsport-merchandise-page",
+  "motorsport-tickets-page",
+  "motorsport-contact-page",
+  "motorsport-partners-page",
+  "motorsport-experience-page",
+]);
+
 export type MotorsportPreviewUid = keyof typeof PREVIEW_COLLECTIONS;
 export type MotorsportPreviewStatus = "draft" | "published";
 
@@ -60,6 +73,10 @@ export function isMotorsportPreviewUid(
 
 export function previewCollectionForUid(uid: MotorsportPreviewUid) {
   return PREVIEW_COLLECTIONS[uid];
+}
+
+export function isPreviewSingleTypeCollection(collection: string) {
+  return PREVIEW_SINGLE_TYPE_COLLECTIONS.has(collection);
 }
 
 export function isSafePreviewDocumentId(value: string | null): value is string {

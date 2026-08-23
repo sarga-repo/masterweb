@@ -32,7 +32,14 @@
       "multiple": false,
       "required": false,
       "allowedTypes": ["images"],
-      "description": "Optional artwork used as the background of the ticket card's middle content panel. The narrow left rail remains the decorative heat-field treatment."
+      "description": "Optional artwork used as the background of the ticket card's main content panel."
+    },
+    "backgroundImageMobile": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "description": "Optional mobile-specific artwork for the ticket card. Falls back to backgroundImage when empty."
     },
     "eventLabel": {
       "type": "string",

@@ -7,8 +7,15 @@ import {
   RiderCatalog,
   SectionHeader,
 } from "@/components";
-import { getIjtcInformationBand, getIjtcProgram, getIjtcRiders, IJTC_BASE_PATH } from "@/lib/ijtc-data";
+import { fetchMotorsportTheme } from "@/lib/cms-data";
+import {
+  getIjtcInformationBand,
+  getIjtcProgram,
+  getIjtcRiders,
+  IJTC_BASE_PATH,
+} from "@/lib/ijtc-data";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -24,6 +31,8 @@ export default async function IjtcRidersPage() {
     getIjtcRiders(locale),
   ]);
   if (!program) notFound();
+  const theme = await fetchMotorsportTheme(locale);
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
   const demoCount = riders.filter((rider) =>
     /demo|demonstration/i.test(`${rider.name} ${rider.bio ?? ""}`),
   ).length;
@@ -51,14 +60,19 @@ export default async function IjtcRidersPage() {
           description:
             "Portraits and participant information appear only after programme publication. Demo records remain explicitly labelled.",
           items: [
-          { label: "Profiles", value: String(riders.length).padStart(2, "0") },
-          { label: "Demo", value: String(demoCount).padStart(2, "0") },
-          { label: "Nation", value: "Indonesia" },
+            {
+              label: "Profiles",
+              value: String(riders.length).padStart(2, "0"),
+            },
+            { label: "Demo", value: String(demoCount).padStart(2, "0") },
+            { label: "Nation", value: "Indonesia" },
           ],
         })}
       />
 
-      <section className="ms-reflected-light-surface ms-section">
+      <section
+        className={`ms-reflected-light-surface ms-section ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell">
           <SectionHeader
             index="RIDERS"
@@ -79,7 +93,9 @@ export default async function IjtcRidersPage() {
         </div>
       </section>
 
-      <section className="ms-blue-heat-surface py-12 sm:py-16">
+      <section
+        className={`ms-blue-heat-surface py-12 sm:py-16 ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell flex flex-wrap items-center justify-between gap-6">
           <p className="ms-heading-card max-w-[19ch]">
             Track the field through the season.

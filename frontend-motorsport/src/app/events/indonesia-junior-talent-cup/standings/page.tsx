@@ -7,6 +7,7 @@ import {
   SectionHeader,
   StandingsTable,
 } from "@/components";
+import { fetchMotorsportTheme } from "@/lib/cms-data";
 import {
   getIjtcProgram,
   getIjtcInformationBand,
@@ -14,6 +15,7 @@ import {
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -29,6 +31,8 @@ export default async function IjtcStandingsPage() {
     getIjtcStandings(locale),
   ]);
   if (!program) notFound();
+  const theme = await fetchMotorsportTheme(locale);
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
   const leader = standings[0];
   const demoData = standings.some((entry) =>
     /demo|demonstration/i.test(`${entry.rider} ${entry.resultSummary ?? ""}`),
@@ -57,20 +61,24 @@ export default async function IjtcStandingsPage() {
           description:
             "The wide classification remains horizontally scrollable on small screens without hiding columns or changing reading order.",
           items: [
-          { label: "Season", value: program.seasonLabel },
-          {
-            label: "Classified",
-            value: String(standings.length).padStart(2, "0"),
-          },
-          {
-            label: "Leader",
-            value: leader ? `#${leader.number ?? leader.position}` : "Pending",
-          },
+            { label: "Season", value: program.seasonLabel },
+            {
+              label: "Classified",
+              value: String(standings.length).padStart(2, "0"),
+            },
+            {
+              label: "Leader",
+              value: leader
+                ? `#${leader.number ?? leader.position}`
+                : "Pending",
+            },
           ],
         })}
       />
 
-      <section className="ms-reflected-light-surface ms-section">
+      <section
+        className={`ms-reflected-light-surface ms-section ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell">
           <SectionHeader
             index="STANDINGS"
@@ -94,7 +102,9 @@ export default async function IjtcStandingsPage() {
         </div>
       </section>
 
-      <section className="ms-blue-heat-surface py-12 sm:py-16">
+      <section
+        className={`ms-blue-heat-surface py-12 sm:py-16 ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell flex flex-wrap items-center justify-between gap-6">
           <p className="ms-heading-card max-w-[19ch]">
             Read the field behind the points.

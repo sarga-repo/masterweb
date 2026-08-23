@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_motorsport_page_section_items",
+  "info": {
+    "displayName": "Section Item",
+    "description": "Ordered, independently visible content used by page sections such as Experience pillars, track panels, and Ticket Info bullets."
+  },
+  "options": {},
+  "attributes": {
+    "isActive": { "type": "boolean", "default": true, "required": true },
+    "sortOrder": { "type": "integer", "default": 0 },
+    "label": { "type": "string", "maxLength": 100, "pluginOptions": { "i18n": { "localized": true } } },
+    "title": { "type": "string", "maxLength": 180, "pluginOptions": { "i18n": { "localized": true } } },
+    "description": { "type": "richtext", "pluginOptions": { "i18n": { "localized": true } } },
+    "media": { "type": "media", "multiple": false, "allowedTypes": ["images", "videos"] },
+    "mediaAlt": { "type": "string", "maxLength": 180, "pluginOptions": { "i18n": { "localized": true } } },
+    "accent": {
+      "type": "enumeration",
+      "enum": ["crimson", "orange", "yellow", "teal", "blue"],
+      "default": "crimson"
+    },
+    "href": { "type": "string" },
+    "hrefLabel": { "type": "string", "maxLength": 80, "pluginOptions": { "i18n": { "localized": true } } }
+  }
+}

@@ -8,11 +8,11 @@ type DocumentService = {
 };
 
 const PAGE_DEFINITIONS = [
-  { slug: "motorsport-home", uid: "api::motorsport-home-page.motorsport-home-page", endpoint: "motorsport-home-page", sections: { "upcoming-events": "upcomingEventsSection", "latest-news": "latestNewsSection", gallery: "gallerySection", "connected-records": "connectedRecordsSection" } },
+  { slug: "motorsport-home", uid: "api::motorsport-home-page.motorsport-home-page", endpoint: "motorsport-home-page", sections: { "upcoming-events": "upcomingEventsSection", "latest-news": "latestNewsSection", gallery: "gallerySection", "connected-records": "connectedRecordsSection", partners: "partnersSection", newsletter: "newsletterSection" } },
   { slug: "motorsport-about", uid: "api::motorsport-about-page.motorsport-about-page", endpoint: "motorsport-about-page", sections: { profile: "profileSection", "team-intro": "teamSection", "contact-cta": "contactCtaSection", "ecosystem-cta": "ecosystemCtaSection" } },
   { slug: "motorsport-events", uid: "api::motorsport-events-page.motorsport-events-page", endpoint: "motorsport-events-page", sections: { "event-control": "eventControlSection", programmes: "programmesSection", calendar: "calendarSection" } },
   { slug: "motorsport-news", uid: "api::motorsport-news-page.motorsport-news-page", endpoint: "motorsport-news-page", sections: { "news-control": "newsControlSection", "lead-story": "leadStorySection", "archive-intro": "archiveIntroSection", "news-gallery-cta": "galleryCtaSection" } },
-  { slug: "motorsport-gallery", uid: "api::motorsport-gallery-page.motorsport-gallery-page", endpoint: "motorsport-gallery-page", sections: { "gallery-archive": "archiveSection", "gallery-intro": "archiveSection" } },
+  { slug: "motorsport-gallery", uid: "api::motorsport-gallery-page.motorsport-gallery-page", endpoint: "motorsport-gallery-page", sections: { "gallery-archive": "archiveSection" } },
   { slug: "motorsport-merchandise", uid: "api::motorsport-merchandise-page.motorsport-merchandise-page", endpoint: "motorsport-merchandise-page", sections: { "merch-control": "merchControlSection", "merchandise-catalog": "catalogueSection", "merch-final-cta": "finalCtaSection" } },
   { slug: "motorsport-tickets", uid: "api::motorsport-tickets-page.motorsport-tickets-page", endpoint: "motorsport-tickets-page", sections: { "ticket-control": "ticketControlSection", "featured-ticket": "featuredTicketSection", "ticketed-events": "ticketedEventsSection", "ticket-info": "ticketInfoSection" } },
   { slug: "motorsport-contact", uid: "api::motorsport-contact-page.motorsport-contact-page", endpoint: "motorsport-contact-page", sections: { "inquiry-control": "inquiryControlSection", "inquiry-form": "inquiryFormSection", "contact-final-cta": "finalCtaSection" } },
@@ -83,9 +83,16 @@ function singleData(page: any, definition: (typeof PAGE_DEFINITIONS)[number]) {
   };
 
   if (definition.slug === "motorsport-home") {
+    fields.showPartnersOnHomepage = page.showPartnersOnHomepage !== false;
     fields.heroSlides = (page.heroSlides || []).map((slide: any) => ({ ...slide, image: slide.image?.id, mobileImage: slide.mobileImage?.id }));
     fields.worldSection = page.motorsportWorldSection || undefined;
-    fields.ticketSection = page.motorsportTicketSection ? { ...page.motorsportTicketSection, backgroundImage: page.motorsportTicketSection.backgroundImage?.id } : undefined;
+    fields.ticketSection = page.motorsportTicketSection
+      ? {
+          ...page.motorsportTicketSection,
+          backgroundImage: page.motorsportTicketSection.backgroundImage?.id,
+          backgroundImageMobile: page.motorsportTicketSection.backgroundImageMobile?.id,
+        }
+      : undefined;
   }
   for (const section of page.sections || []) {
     if (section.__component === "motorsport.about-capabilities") {
@@ -107,7 +114,7 @@ export async function migrateMotorsportPageSingleTypes(strapi: Core.Strapi) {
   if (process.env.MOTORSPORT_PAGE_SINGLE_TYPES_MIGRATE !== "true") return;
   const documents = strapi.documents as unknown as (uid: string) => DocumentService;
   const legacy = documents("api::site-page.site-page");
-  const pages = await legacy.findMany({ filters: { siteScope: { $eq: "motorsport" } }, populate: ["heroMedia", "heroSlides.image", "heroSlides.mobileImage", "motorsportInformationBand", "motorsportWorldSection.disciplines.image", "motorsportTicketSection.backgroundImage", "sections", "pageAvailability.comingSoonMedia", "seo.ogImage"], locale: "en", status: "published" });
+  const pages = await legacy.findMany({ filters: { siteScope: { $eq: "motorsport" } }, populate: ["heroMedia", "heroSlides.image", "heroSlides.mobileImage", "motorsportFeaturedEvent", "motorsportInformationBand", "motorsportWorldSection.disciplines.image", "motorsportTicketSection.backgroundImage", "motorsportTicketSection.backgroundImageMobile", "sections", "pageAvailability.comingSoonMedia", "seo.ogImage"], locale: "en", status: "published" });
   for (const definition of PAGE_DEFINITIONS) {
     const source = pages.find((page: any) => page.slug === definition.slug || page.routePath === routeFor(definition.slug));
     if (!source) continue;

@@ -1,6 +1,9 @@
 {
   "collectionName": "components_motorsport_detail_presentations",
-  "info": { "displayName": "Detail Presentation", "description": "Optional Hero and Information Band overrides for Motorsport detail records." },
+  "info": {
+    "displayName": "Motorsport Presentation — Hero & Information Band",
+    "description": "01 — The first presentation group in a Motorsport Program. Edit Hero first, then Information Band. This component is also reused by event/news detail records."
+  },
   "options": {},
   "attributes": {
     "hero": { "type": "component", "component": "motorsport.page-hero", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },

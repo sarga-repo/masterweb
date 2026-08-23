@@ -12,6 +12,7 @@ import {
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
 import {
+  fetchMotorsportTheme,
   fetchLeadership,
   fetchSitePage,
   mapAboutCapabilities,
@@ -21,7 +22,12 @@ import {
 import { createMetadata } from "@/lib/seo/metadata";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
-import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
+import {
+  isCmsCanonicalSectionVisible,
+  isCmsPageVisible,
+  isCmsSectionVisible,
+} from "@/lib/cms-visibility";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 import type { TeamMember } from "@/types/design-system";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -107,35 +113,22 @@ function sectionBody(
   );
 }
 
-function sectionValue(
-  sections: SitePageContent["sections"] | undefined,
-  key: string,
-  field: "eyebrow" | "title" | "body",
-  fallback: string,
-) {
-  return (
-    sections?.find((section) => section.sectionKey === key)?.[field] || fallback
-  );
-}
-
 export default async function AboutPage() {
   const locale = await getRequestLocale();
-  const [page, cmsTeam] = await Promise.all([
+  const [page, cmsTeam, theme] = await Promise.all([
     fetchSitePage("about", undefined, locale),
     fetchLeadership(locale),
+    fetchMotorsportTheme(locale),
   ]);
   const isPreview = await isStrapiPreviewEnabled();
   const team =
     isPreview || cmsTeam.length > 0 ? cmsTeam.slice(0, 6) : FALLBACK_TEAM;
-  const operatingIdea = sectionValue(
-    page?.sections,
-    "operating-idea",
-    "body",
-    "Competition creates the moment. People, media, hospitality, and development turn it into a lasting Motorsport culture.",
-  );
   const profile = page?.sections.find(
     (section) => section.sectionKey === "profile",
   );
+  const operatingIdea =
+    profile?.supportBody ||
+    "Competition creates the moment. People, media, hospitality, and development turn it into a lasting Motorsport culture.";
   const capabilitiesSection = page?.sections.find(
     (section) => section.__component === "motorsport.about-capabilities",
   );
@@ -157,6 +150,7 @@ export default async function AboutPage() {
           title,
           description,
         }));
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
 
   return (
     <PageShell spectrumSeparators>
@@ -165,7 +159,8 @@ export default async function AboutPage() {
           availability={page?.pageAvailability ?? { pageEnabled: false }}
         />
       ) : null}
-      {isCmsPageVisible(page?.pageAvailability) ? (
+      {isCmsPageVisible(page?.pageAvailability) &&
+      isCmsCanonicalSectionVisible(page?.hero) ? (
         <div
           data-cms-section-key="hero"
           data-cms-enabled="true"
@@ -174,7 +169,9 @@ export default async function AboutPage() {
           <PageHero
             kicker={page?.hero?.eyebrow ?? "The Adrenaline Alchemist"}
             kickerColor="yellow"
-            title={page?.hero?.title ?? page?.heroTitle ?? "About Sarga Motorsport"}
+            title={
+              page?.hero?.title ?? page?.heroTitle ?? "About Sarga Motorsport"
+            }
             description={
               page?.hero?.description ??
               "We transform raw speed into cultural energy through professional competition, talent development, premium events, and media."
@@ -203,7 +200,8 @@ export default async function AboutPage() {
           </PageHero>
         </div>
       ) : null}
-      {isCmsPageVisible(page?.pageAvailability) ? (
+      {isCmsPageVisible(page?.pageAvailability) &&
+      isCmsCanonicalSectionVisible(page?.informationBand) ? (
         <div data-cms-section-key="information-band" data-cms-enabled="true">
           <MotorsportPageInformationBand
             band={page?.informationBand}
@@ -227,7 +225,7 @@ export default async function AboutPage() {
         <section
           data-cms-section-key="profile"
           data-cms-enabled="true"
-          className="ms-about-story-surface ms-editorial-surface pb-20 sm:pb-28"
+          className={`ms-about-story-surface ms-editorial-surface pb-20 sm:pb-28 ${nextAlternatingSurface()}`}
         >
           <div className="ms-shell">
             <figure className="relative aspect-[16/9] overflow-hidden bg-ms-cream-200 sm:aspect-[16/7]">
@@ -281,12 +279,7 @@ export default async function AboutPage() {
 
               <aside className="border-t border-ms-warm-white/18 pt-6 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0">
                 <p className="ms-data-label text-ms-slipstream-teal">
-                  {sectionValue(
-                    page?.sections,
-                    "operating-idea",
-                    "eyebrow",
-                    "Operating idea",
-                  )}
+                  {profile?.supportLabel ?? "Operating idea"}
                 </p>
                 <p className="mt-5 text-base leading-7 text-ms-warm-white/68">
                   {operatingIdea}
@@ -309,7 +302,7 @@ export default async function AboutPage() {
         <section
           data-cms-section-key="about-capabilities"
           data-cms-enabled="true"
-          className="ms-about-capabilities ms-reflected-light-surface ms-editorial-surface ms-section"
+          className={`ms-about-capabilities ms-reflected-light-surface ms-editorial-surface ms-section ${nextAlternatingSurface()}`}
         >
           <div className="ms-shell">
             <SectionHeader
@@ -360,7 +353,7 @@ export default async function AboutPage() {
           id="team"
           data-cms-section-key="team-intro"
           data-cms-enabled="true"
-          className="ms-about-team-surface ms-editorial-surface ms-section"
+          className={`ms-about-team-surface ms-editorial-surface ms-section ${nextAlternatingSurface()}`}
         >
           <div className="ms-shell">
             <SectionHeader
@@ -423,13 +416,16 @@ export default async function AboutPage() {
       (isCmsSectionVisible(contactCta) || isCmsSectionVisible(ecosystemCta)) ? (
         <section
           id="part-of-sarga"
-          data-cms-section-key="about-ctas"
+          data-cms-section-key="about-cta-group"
           data-cms-enabled="true"
-          className="ms-about-ctas-surface ms-editorial-dark-surface ms-section"
+          className={`ms-about-ctas-surface ms-editorial-dark-surface ms-section ${nextAlternatingSurface()}`}
         >
           <div className="ms-shell grid gap-12 lg:grid-cols-2 lg:gap-20">
             {isCmsSectionVisible(contactCta) ? (
-              <article>
+              <article
+                data-cms-section-key="contact-cta"
+                data-cms-enabled="true"
+              >
                 <p className="ms-kicker text-ms-ignition-orange">
                   {contactCta?.eyebrow ?? "Contact us"}
                 </p>
@@ -442,16 +438,24 @@ export default async function AboutPage() {
                     "Partnerships, media, event support, talent pathways, and general Motorsport inquiries are routed through the contact desk."}
                 </p>
                 <Link
-                  href="/contact"
+                  href={
+                    contactCta?.ctaUrl?.startsWith("/")
+                      ? contactCta.ctaUrl
+                      : "/contact"
+                  }
                   className="group mt-8 inline-flex items-center gap-4 border-b border-ms-warm-white/55 pb-3 text-[0.65rem] font-black uppercase tracking-[0.16em]"
                 >
-                  Contact Sarga Motorsport
+                  {contactCta?.ctaLabel ?? "Contact Sarga Motorsport"}
                   <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </article>
             ) : null}
             {isCmsSectionVisible(ecosystemCta) ? (
-              <article className="border-t border-ms-warm-white/18 pt-10 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
+              <article
+                data-cms-section-key="ecosystem-cta"
+                data-cms-enabled="true"
+                className="border-t border-ms-warm-white/18 pt-10 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0"
+              >
                 <p className="ms-kicker text-ms-slipstream-teal">
                   {ecosystemCta?.eyebrow ?? "Part of Sarga.co"}
                 </p>
@@ -463,6 +467,15 @@ export default async function AboutPage() {
                   {ecosystemCta?.body ??
                     "Sarga.co remains the group gateway. This dedicated site is where Motorsport programmes, events, stories, tickets, and fan culture live in full."}
                 </p>
+                {ecosystemCta?.ctaUrl?.startsWith("/") ? (
+                  <Link
+                    href={ecosystemCta.ctaUrl}
+                    className="group mt-8 inline-flex items-center gap-4 border-b border-ms-slipstream-teal/55 pb-3 text-[0.65rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
+                  >
+                    {ecosystemCta.ctaLabel ?? "Visit Sarga.co"}
+                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                ) : null}
               </article>
             ) : null}
           </div>

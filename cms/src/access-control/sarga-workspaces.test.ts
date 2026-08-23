@@ -9,6 +9,7 @@ import {
   buildRolePermissions,
   getManagedReadableFields,
   getManagedWritableFields,
+  MOTORSPORT_MAIL_SETTINGS_ACTIONS,
 } from "./sarga-workspaces.ts";
 
 function createStrapiFixture(): Core.Strapi {
@@ -244,6 +245,26 @@ test("Motorsport page Single Types are isolated to the Motorsport workspace", ()
     assert.equal(motorsport.subjects.includes(subject), true);
     assert.equal(gateway.subjects.includes(subject), false);
     assert.equal(horsesport.subjects.includes(subject), false);
+  }
+});
+
+test("Motorsport role can access only the Motorsport mail settings actions", () => {
+  const motorsport = WORKSPACE_ROLES.find((role) => role.scope === "motorsport");
+  const gateway = WORKSPACE_ROLES.find((role) => role.scope === "gateway");
+  assert.ok(motorsport && gateway);
+
+  const motorsportActions = buildRolePermissions(
+    createStrapiFixture(),
+    motorsport,
+  ).map((permission) => permission.action);
+  const gatewayActions = buildRolePermissions(
+    createStrapiFixture(),
+    gateway,
+  ).map((permission) => permission.action);
+
+  for (const action of Object.values(MOTORSPORT_MAIL_SETTINGS_ACTIONS)) {
+    assert.equal(motorsportActions.includes(action), true);
+    assert.equal(gatewayActions.includes(action), false);
   }
 });
 

@@ -26,6 +26,8 @@ export function InformationBand({
   description,
   items = [],
 }: InformationBandProps) {
+  if (!isActive) return null;
+
   const visibleItems = showMetricGroup ? items.slice(0, 3) : [];
 
   return (
@@ -58,7 +60,7 @@ export function InformationBand({
                 <dt className="ms-data-label text-ms-warm-white/52">
                   {item.label}
                 </dt>
-                  <dd className="ms-blue-band-metric ms-tabular mt-3 text-sm font-extrabold uppercase tracking-[0.06em]">
+                <dd className="ms-blue-band-metric ms-tabular mt-3 text-sm font-extrabold uppercase tracking-[0.06em]">
                   {item.value}
                 </dd>
               </div>

@@ -87,6 +87,8 @@ services:
       MOTORSPORT_OWNERSHIP_MIGRATION_MODE: ${MOTORSPORT_OWNERSHIP_MIGRATION_MODE:-off}
       # Reversible post-cutover archive of legacy shared Motorsport records.
       MOTORSPORT_LEGACY_RETIREMENT_MODE: ${MOTORSPORT_LEGACY_RETIREMENT_MODE:-off}
+      # Backfill missing editorial show* values to true; keep off after verify.
+      MOTORSPORT_SHOW_FIELD_DEFAULTS_MODE: ${MOTORSPORT_SHOW_FIELD_DEFAULTS_MODE:-off}
       MOTORSPORT_REVALIDATION_SECRET: ${MOTORSPORT_REVALIDATION_SECRET:-}
       MOTORSPORT_FRONTEND_REVALIDATE_URL: ${MOTORSPORT_FRONTEND_REVALIDATE_URL:-http://frontend-motorsport:3001/api/revalidate}
     volumes:

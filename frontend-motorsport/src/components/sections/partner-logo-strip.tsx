@@ -30,6 +30,10 @@ export function PartnerLogoStrip({
                 alt={partner.name}
                 width={180}
                 height={80}
+                unoptimized={
+                  typeof partner.logo === "string" &&
+                  partner.logo.startsWith("http://localhost:1337/")
+                }
                 className="max-h-10 w-auto max-w-[8rem] object-contain brightness-0 invert opacity-45 transition duration-300 group-hover:opacity-90"
               />
             );

@@ -9,12 +9,21 @@ import {
 } from "@/components";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
-import { fetchArticles, fetchSitePage } from "@/lib/cms-data";
+import {
+  fetchArticles,
+  fetchMotorsportTheme,
+  fetchSitePage,
+} from "@/lib/cms-data";
 import type { MotorsportArticle } from "@/types/design-system";
 import { createMetadata } from "@/lib/seo/metadata";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
-import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
+import {
+  isCmsCanonicalSectionVisible,
+  isCmsPageVisible,
+  isCmsSectionVisible,
+} from "@/lib/cms-visibility";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
@@ -75,17 +84,16 @@ const PLACEHOLDER: MotorsportArticle[] = [
 ];
 
 export default async function NewsPage() {
-  const [page, cmsArticles] = await Promise.all([
-    fetchSitePage("newsHub"),
-    fetchArticles(),
+  const locale = await getRequestLocale();
+  const [page, cmsArticles, isPreview, theme] = await Promise.all([
+    fetchSitePage("newsHub", undefined, locale),
+    fetchArticles(50, locale),
+    isStrapiPreviewEnabled(),
+    fetchMotorsportTheme(locale),
   ]);
-  const isPreview = await isStrapiPreviewEnabled();
   const articles =
     isPreview || cmsArticles.length > 0 ? cmsArticles : PLACEHOLDER;
   const [featured, ...rest] = articles;
-  const controlSection = page?.sections.find(
-    (section) => section.sectionKey === "news-control",
-  );
   const leadSection = page?.sections.find(
     (section) => section.sectionKey === "lead-story",
   );
@@ -96,6 +104,7 @@ export default async function NewsPage() {
     (section) => section.sectionKey === "news-gallery-cta",
   );
   const pageAvailable = isCmsPageVisible(page?.pageAvailability);
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
 
   return (
     <PageShell spectrumSeparators>
@@ -112,7 +121,11 @@ export default async function NewsPage() {
               data-cms-source={page ? "strapi" : "fallback"}
             >
               <PageHero
-                kicker={page?.hero?.eyebrow ?? page?.navigationLabel ?? "Editorial / From the paddock"}
+                kicker={
+                  page?.hero?.eyebrow ??
+                  page?.navigationLabel ??
+                  "Editorial / From the paddock"
+                }
                 kickerColor="yellow"
                 title={page?.hero?.title ?? page?.heroTitle ?? "News"}
                 description={
@@ -124,7 +137,9 @@ export default async function NewsPage() {
                 showDescription={page?.hero?.showDescription}
                 showMedia={page?.hero?.showMedia}
                 backgroundImage={page?.heroImage}
-                backgroundAlt={page?.heroImageAlt || "Sarga Motorsport editorial scene"}
+                backgroundAlt={
+                  page?.heroImageAlt || "Sarga Motorsport editorial scene"
+                }
               >
                 <div className="border-t border-ms-warm-white/20 pt-5 sm:max-w-xs sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
                   <p className="ms-data-label text-ms-slipstream-teal">
@@ -141,17 +156,17 @@ export default async function NewsPage() {
             </div>
           ) : null}
 
-          {page?.informationBand || isCmsSectionVisible(controlSection) ? (
-            <div data-cms-section-key="news-control" data-cms-enabled="true">
+          {isCmsCanonicalSectionVisible(page?.informationBand) ? (
+            <div
+              data-cms-section-key="information-band"
+              data-cms-enabled="true"
+            >
               <MotorsportPageInformationBand
                 band={page?.informationBand}
                 fallback={{
-                  isActive: controlSection?.enabled,
-                  eyebrow:
-                    controlSection?.eyebrow ?? "Editorial control / Motorsport",
-                  title: controlSection?.title ?? "Stories at race pace.",
+                  eyebrow: "Editorial control / Motorsport",
+                  title: "Stories at race pace.",
                   description:
-                    controlSection?.body ??
                     "Reports, announcements, people, technology, and culture—published from the Motorsport-scoped editorial feed.",
                   metrics: [
                     {
@@ -168,7 +183,11 @@ export default async function NewsPage() {
 
           {isCmsSectionVisible(leadSection) ||
           isCmsSectionVisible(archiveSection) ? (
-            <section className="ms-news-feed-surface ms-editorial-surface ms-section">
+            <section
+              data-cms-section-key="news-feed"
+              data-cms-enabled="true"
+              className={`ms-news-feed-surface ms-editorial-surface ms-section ${nextAlternatingSurface()}`}
+            >
               <div className="ms-shell">
                 {isCmsSectionVisible(leadSection) && featured ? (
                   <article
@@ -301,7 +320,7 @@ export default async function NewsPage() {
             <section
               data-cms-section-key="news-gallery-cta"
               data-cms-enabled="true"
-              className="ms-news-gallery-cta-surface ms-editorial-dark-surface py-16 sm:py-20"
+              className={`ms-news-gallery-cta-surface ms-editorial-dark-surface py-16 sm:py-20 ${nextAlternatingSurface()}`}
             >
               <div className="ms-shell flex flex-col gap-7 sm:flex-row sm:items-end sm:justify-between">
                 <div>
@@ -314,10 +333,14 @@ export default async function NewsPage() {
                   </h2>
                 </div>
                 <Link
-                  href="/gallery"
+                  href={
+                    galleryCta?.ctaUrl?.startsWith("/")
+                      ? galleryCta.ctaUrl
+                      : "/gallery"
+                  }
                   className="group inline-flex items-center gap-4 border-b border-ms-warm-white/35 pb-3 text-[0.66rem] font-black uppercase tracking-[0.16em]"
                 >
-                  Open gallery
+                  {galleryCta?.ctaLabel ?? "Open gallery"}
                   <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>

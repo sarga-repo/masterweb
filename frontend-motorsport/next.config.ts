@@ -78,6 +78,12 @@ const nextConfig: NextConfig = {
     // media hostname (docs/06) here once the storage provider is chosen - do not
     // use a wildcard host.
     remotePatterns: [...strapiImagePattern()],
+    // In the local Docker profile the browser can reach Strapi through the
+    // host-mapped localhost:1337 URL, but the Next.js container cannot use
+    // that same loopback address for server-side image optimization. Serve
+    // the original CMS URL directly in development; production keeps the
+    // normal optimizer path.
+    unoptimized: process.env.NODE_ENV === "development",
     // Next 16 blocks image optimization from private/loopback IPs (SSRF
     // protection). Local development fetches Strapi media from localhost, so
     // allow it in development only - never in production.

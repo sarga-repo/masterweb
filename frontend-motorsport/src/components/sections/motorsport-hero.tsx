@@ -54,10 +54,14 @@ function HeroCta({ item }: { item: LinkItem }) {
       href={item.href}
       target={item.external ? "_blank" : undefined}
       rel={item.external ? "noreferrer" : undefined}
-      className="group inline-flex min-h-12 items-center gap-5 border-b-2 border-ms-crimson-700 py-3 text-[0.6875rem] font-extrabold uppercase tracking-[0.12em] text-ms-warm-white transition-colors hover:border-ms-ignition-orange hover:text-ms-ignition-orange"
+      className="group inline-flex min-h-16 w-full items-stretch border border-ms-electric-yellow bg-ms-electric-yellow text-ms-charcoal shadow-ms-lift transition-[background-color,border-color,box-shadow] duration-300 ease-(--ease-ms-out) hover:border-ms-warm-white hover:bg-ms-warm-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ms-warm-white motion-reduce:transition-none sm:w-auto"
     >
-      {item.label}
-      <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+      <span className="flex min-w-0 flex-1 items-center px-5 py-3 text-[0.6875rem] font-extrabold uppercase tracking-[0.14em] whitespace-nowrap sm:flex-none sm:px-6">
+        {item.label}
+      </span>
+      <span className="grid min-w-16 place-items-center border-l border-ms-charcoal/20 bg-ms-charcoal px-4 text-ms-warm-white transition-colors duration-300 ease-(--ease-ms-out) group-hover:bg-ms-apex-crimson motion-reduce:transition-none">
+        <ArrowRightIcon className="size-5" />
+      </span>
     </Link>
   );
 }

@@ -1,8 +1,8 @@
 {
   "collectionName": "components_motorsport_campaign_slides",
   "info": {
-    "displayName": "Campaign Slide",
-    "description": "Campaign banner slide with optional call to action"
+    "displayName": "Campaign Carousel Slide",
+    "description": "02 — One item in the campaign carousel. This is separate from supporting presentation sections."
   },
   "options": {},
   "attributes": {

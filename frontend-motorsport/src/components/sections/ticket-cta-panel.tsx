@@ -16,6 +16,7 @@ type TicketCtaPanelProps = {
   partnerLabel?: string;
   footerText?: string;
   image?: string;
+  mobileImage?: string;
   surface?: "dark" | "reflected";
 };
 
@@ -31,34 +32,38 @@ export function TicketCtaPanel({
   partnerLabel = "Partner redirect / Secure",
   footerText,
   image,
+  mobileImage,
   surface = "dark",
 }: TicketCtaPanelProps) {
+  const desktopImage = image ?? mobileImage;
+  const responsiveMobileImage = mobileImage ?? image;
+
   return (
     <aside
-      className={`ms-panel relative overflow-hidden text-ms-warm-white ${surface === "reflected" ? "ms-ticket-panel-reflected" : "bg-ms-black"}`}
+      className={`ms-panel ms-ticket-card relative text-ms-warm-white ${surface === "reflected" ? "ms-ticket-panel-reflected" : "bg-ms-black"}`}
     >
-      <div className="grid lg:grid-cols-[10rem_minmax(0,1fr)_18rem]">
-        <div className="ms-heat-field hidden min-h-full border-r border-ms-warm-white/14 lg:block">
-          <div
-            className="h-full w-full bg-[repeating-linear-gradient(90deg,transparent_0_7px,rgba(5,5,5,.7)_7px_10px)]"
-            aria-hidden="true"
-          />
-        </div>
-        <div className="relative isolate overflow-hidden bg-ms-black">
-          {image ? (
+      <span className="ms-ticket-card-frame" aria-hidden="true" />
+      <div className="grid overflow-hidden lg:grid-cols-[minmax(0,1fr)_18rem]">
+        <div className="relative isolate min-w-0 overflow-hidden bg-ms-black">
+          {desktopImage ? (
             <>
               <ResilientImage
-                src={image}
+                src={desktopImage}
                 alt=""
                 fallbackSrc="/media/motorsport-design-hero.png"
                 width={1600}
                 height={900}
                 sizes="(min-width: 1024px) calc(100vw - 28rem), 100vw"
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 hidden h-full w-full object-cover md:block"
               />
-              <div
-                className="absolute inset-0 bg-gradient-to-br from-ms-black/95 via-ms-black/80 to-ms-black/60"
-                aria-hidden="true"
+              <ResilientImage
+                src={responsiveMobileImage ?? desktopImage}
+                alt=""
+                fallbackSrc="/media/motorsport-design-hero.png"
+                width={1200}
+                height={900}
+                sizes="100vw"
+                className="absolute inset-0 h-full w-full object-cover md:hidden"
               />
             </>
           ) : null}
@@ -95,13 +100,13 @@ export function TicketCtaPanel({
           href={cta.href}
           target={cta.external ? "_blank" : undefined}
           rel={cta.external ? "noopener noreferrer" : undefined}
-          className="group flex min-h-44 flex-col justify-between border-t border-ms-warm-white/14 bg-ms-apex-crimson p-7 text-ms-black transition-colors hover:bg-ms-ignition-orange lg:min-h-full lg:border-l lg:border-t-0"
+          className="ms-ticket-cta-link group flex min-h-44 flex-col justify-between border-t border-dotted border-ms-warm-white/45 bg-ms-apex-crimson p-7 text-ms-black transition-colors hover:bg-ms-ignition-orange lg:min-h-full lg:border-l lg:border-t-0"
         >
-          <span className="ms-data-label text-ms-black/70">{partnerLabel}</span>
-          <span className="font-display text-2xl uppercase leading-none">
+          <span className="ms-ticket-cta-meta">{partnerLabel}</span>
+          <span className="ms-ticket-cta-title font-display text-2xl uppercase leading-none">
             {cta.label}
           </span>
-          <ArrowRightIcon className="size-7 transition-transform group-hover:translate-x-2" />
+          <ArrowRightIcon className="ms-ticket-cta-arrow size-7 transition-transform group-hover:translate-x-2" />
         </Link>
       </div>
     </aside>

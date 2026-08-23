@@ -1,24 +1,145 @@
 {
   "kind": "singleType",
-  "info": { "singularName": "motorsport-home-page", "pluralName": "motorsport-home-pages", "displayName": "Motorsport Home Page" },
+  "info": {
+    "singularName": "motorsport-home-page",
+    "pluralName": "motorsport-home-pages",
+    "displayName": "Motorsport Home Page"
+  },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
   "attributes": {
-    "siteScope": { "type": "enumeration", "enum": ["motorsport"], "default": "motorsport", "required": true, "private": true },
-    "routePath": { "type": "string", "default": "/", "required": true, "pluginOptions": { "i18n": { "localized": false } } },
-    "routeAliases": { "type": "json", "default": [], "pluginOptions": { "i18n": { "localized": false } } },
-    "title": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
-    "navigationLabel": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
-    "hero": { "type": "component", "component": "motorsport.page-hero", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "heroSlides": { "type": "component", "component": "motorsport.hero-slide", "repeatable": true, "max": 3, "pluginOptions": { "i18n": { "localized": true } } },
-    "informationBand": { "type": "component", "component": "motorsport.page-information-band", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "worldSection": { "type": "component", "component": "motorsport.world-of-motorsport", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "ticketSection": { "type": "component", "component": "motorsport.home-ticket-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "upcomingEventsSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "latestNewsSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "connectedRecordsSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "gallerySection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "pageAvailability": { "type": "component", "component": "shared.page-availability", "repeatable": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "seo": { "type": "component", "component": "shared.seo", "repeatable": false, "pluginOptions": { "i18n": { "localized": true } } }
+    "siteScope": {
+      "type": "enumeration",
+      "enum": ["motorsport"],
+      "default": "motorsport",
+      "required": true,
+      "private": true
+    },
+    "routePath": {
+      "type": "string",
+      "default": "/",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "routeAliases": {
+      "type": "json",
+      "default": [],
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "navigationLabel": {
+      "type": "string",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "hero": {
+      "type": "component",
+      "component": "motorsport.page-hero",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "heroSlides": {
+      "type": "component",
+      "component": "motorsport.hero-slide",
+      "repeatable": true,
+      "max": 3,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "informationBand": {
+      "type": "component",
+      "component": "motorsport.page-information-band",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "worldSection": {
+      "type": "component",
+      "component": "motorsport.world-of-motorsport",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "featuredEvent": {
+      "description": "Event card displayed first in the Upcoming Events section.",
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::motorsport-event.motorsport-event"
+    },
+    "featuredProgram": {
+      "description": "Motorsport program displayed first in the Upcoming Events section.",
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::motorsport-program.motorsport-program"
+    },
+    "upcomingEventsSection": {
+      "type": "component",
+      "component": "motorsport.page-section",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "ticketSection": {
+      "type": "component",
+      "component": "motorsport.home-ticket-section",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "latestNewsSection": {
+      "type": "component",
+      "component": "motorsport.page-section",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "connectedRecordsSection": {
+      "type": "component",
+      "component": "motorsport.page-section",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "gallerySection": {
+      "type": "component",
+      "component": "motorsport.page-section",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "partnersSection": {
+      "type": "component",
+      "component": "motorsport.page-section",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "newsletterSection": {
+      "type": "component",
+      "component": "motorsport.page-section",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "showPartnersOnHomepage": {
+      "type": "boolean",
+      "default": true,
+      "pluginOptions": { "i18n": { "localized": false } }
+    },
+    "pageAvailability": {
+      "type": "component",
+      "component": "shared.page-availability",
+      "repeatable": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    }
   }
 }

@@ -1,12 +1,13 @@
 import type { StrapiApp } from "@strapi/strapi/admin";
+import { APPROVED_MOTORSPORT_PREVIEW_UIDS } from "../preview/preview-path";
 
 function WorkspaceIcon() {
   return (
     <img
       src="/uploads/logo-sarga-motorsport-symbol-sport.png"
       alt=""
-      width="28"
-      height="28"
+      width="20"
+      height="20"
       style={{ display: "block", objectFit: "contain" }}
     />
   );
@@ -17,8 +18,8 @@ function MotorsportWorkspaceIcon() {
     <img
       src="/admin-assets/logo-sarga-motorsport-full.png"
       alt=""
-      width="28"
-      height="28"
+      width="20"
+      height="20"
       style={{ display: "block", objectFit: "contain" }}
     />
   );
@@ -33,6 +34,26 @@ function SargaWorkspaceIcon() {
       height="28"
       style={{ display: "block", objectFit: "contain" }}
     />
+  );
+}
+
+function MotorsportMailIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h13A2.5 2.5 0 0 1 21 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5v-11Z" />
+      <path d="m4 6 8 6 8-6" />
+      <path d="M8 16h8" />
+    </svg>
   );
 }
 
@@ -273,10 +294,10 @@ export default {
     for (const workspace of workspaces) {
       app.addMenuLink({
         to: `sarga-workspaces/${workspace.slug}`,
-          icon:
-            workspace.slug === "motorsport"
-              ? MotorsportWorkspaceIcon
-              : SargaWorkspaceIcon,
+        icon:
+          workspace.slug === "motorsport"
+            ? MotorsportWorkspaceIcon
+            : SargaWorkspaceIcon,
         intlLabel: {
           id: `sarga-workspaces.${workspace.slug}.label`,
           defaultMessage: workspace.label,
@@ -286,9 +307,195 @@ export default {
         position: workspace.position,
       });
     }
+
+    app.addMenuLink({
+      to: "sarga-motorsport-mail-settings",
+      icon: MotorsportMailIcon,
+      intlLabel: {
+        id: "sarga-mail-settings.motorsport.label",
+        defaultMessage: "Motorsport SMTP Mail",
+      },
+      Component: () =>
+        import("./extensions/sarga-mail-settings/MotorsportMailSettingsPage"),
+      permissions: [
+        {
+          action: "admin::sarga-mail-settings.read",
+          subject: null,
+        },
+      ],
+      position: 5,
+    });
+
+    app.router.addRoute({
+      path: "sarga-motorsport-live-preview/*",
+      lazy: async () => {
+        const module = await import(
+          "./extensions/motorsport-live-preview/MotorsportLivePreviewPage"
+        );
+        return { Component: module.default };
+      },
+    });
   },
 
   bootstrap(app: StrapiApp) {
+    // Strapi's native Preview card remains the entry point. Supported
+    // Motorsport Single Types and collection entries open the dedicated
+    // split-view workspace in a separate window, leaving the editor intact.
+    const motorsportPreviewUids = new Set(APPROVED_MOTORSPORT_PREVIEW_UIDS);
+    const getPreviewTarget = (href: string | null) => {
+      if (!href) return null;
+
+      const url = new URL(href, window.location.origin);
+      const match = url.pathname.match(
+        /\/content-manager\/(single-types|collection-types)\/([^/]+)(?:\/([^/]+))?\/preview$/,
+      );
+      if (!match) return null;
+
+      const contentType = match[1];
+      const uid = decodeURIComponent(match[2]);
+      const documentId = match[3] ? decodeURIComponent(match[3]) : null;
+      if (!motorsportPreviewUids.has(uid)) return null;
+      if (contentType === "collection-types" && !documentId) return null;
+
+      const locale = url.searchParams.get("plugins[i18n][locale]") ?? "en";
+      const destinationParams = new URLSearchParams({ uid, locale });
+      if (documentId) destinationParams.set("documentId", documentId);
+      return {
+        uid,
+        locale,
+        documentId,
+        destination: `/admin/sarga-motorsport-live-preview?${destinationParams.toString()}`,
+      };
+    };
+    const openPreviewInCurrentTab = (destination: string) => {
+      window.location.assign(destination);
+    };
+    const wireMotorsportPreviewLinks = () => {
+      document
+        .querySelectorAll<HTMLAnchorElement>(
+          'a[href*="/content-manager/"][href*="/preview"]',
+        )
+        .forEach((link) => {
+          const target = getPreviewTarget(link.getAttribute("href"));
+          if (!target) return;
+
+          // Replace Strapi's native anchor so its own preview action cannot
+          // navigate the editor in parallel with the custom workspace.
+          const previewControl = document.createElement("button");
+          previewControl.type = "button";
+          previewControl.className = link.className;
+          previewControl.style.cssText = link.style.cssText;
+          previewControl.innerHTML = link.innerHTML;
+          link.replaceWith(previewControl);
+          previewControl.dataset.sargaIntegratedPreview = "true";
+          previewControl.dataset.sargaIntegratedPreviewDestination =
+            target.destination;
+          previewControl.setAttribute(
+            "aria-label",
+            `Open side-by-side preview for ${target.uid}`,
+          );
+          if (!previewControl.dataset.sargaPreviewTargetHandlerBound) {
+            const handleTargetActivation = (event: Event) => {
+              event.preventDefault();
+              event.stopImmediatePropagation();
+
+              if (event.type === "click") {
+                openPreviewInCurrentTab(target.destination);
+                return;
+              }
+
+              if (
+                event.type === "keydown" &&
+                ((event as KeyboardEvent).key === "Enter" ||
+                  (event as KeyboardEvent).key === " ")
+              ) {
+                openPreviewInCurrentTab(target.destination);
+              }
+            };
+            for (const eventType of [
+              "pointerdown",
+              "mousedown",
+              "pointerup",
+              "mouseup",
+              "click",
+              "auxclick",
+              "contextmenu",
+              "keydown",
+            ] as const) {
+              previewControl.addEventListener(
+                eventType,
+                handleTargetActivation,
+                true,
+              );
+            }
+            previewControl.dataset.sargaPreviewTargetHandlerBound = "true";
+          }
+        });
+    };
+    const previewLinkObserver = new MutationObserver(wireMotorsportPreviewLinks);
+    previewLinkObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["href"],
+    });
+    wireMotorsportPreviewLinks();
+    if (!document.documentElement.dataset.sargaPreviewInterceptorBound) {
+      const interceptPreviewActivation = (event: Event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+
+        const link = target.closest<HTMLAnchorElement>(
+          'a[data-sarga-integrated-preview="true"]',
+        );
+        const destination = link?.dataset.sargaIntegratedPreviewDestination;
+        if (!destination) return;
+
+        if (
+          event.type === "pointerdown" ||
+          event.type === "mousedown" ||
+          event.type === "pointerup" ||
+          event.type === "mouseup" ||
+          event.type === "auxclick" ||
+          event.type === "contextmenu" ||
+          event.type === "click"
+        ) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          if (event.type === "click") {
+            openPreviewInCurrentTab(destination);
+          }
+          return;
+        }
+
+        if (event.type === "keydown") {
+          const keyboardActivation =
+            (event as KeyboardEvent).key === "Enter" ||
+            (event as KeyboardEvent).key === " ";
+          if (!keyboardActivation) return;
+
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          openPreviewInCurrentTab(destination);
+          return;
+        }
+      };
+
+      for (const eventType of [
+        "pointerdown",
+        "mousedown",
+        "pointerup",
+        "mouseup",
+        "click",
+        "auxclick",
+        "contextmenu",
+        "keydown",
+      ] as const) {
+        window.addEventListener(eventType, interceptPreviewActivation, true);
+      }
+      document.documentElement.dataset.sargaPreviewInterceptorBound = "true";
+    }
+
     // Keep admin shell mode consistent across users and device preferences.
     // Strapi resolves "system" from prefers-color-scheme during initialization.
     if (window.localStorage.getItem("STRAPI_THEME") !== "light") {
@@ -326,8 +533,9 @@ export default {
     let mediaPickerFrame: number | null = null;
     const addMediaPickerGuidance = () => {
       mediaPickerFrame = null;
-      document.querySelectorAll<HTMLElement>('[role="dialog"]').forEach(
-        (dialog) => {
+      document
+        .querySelectorAll<HTMLElement>('[role="dialog"]')
+        .forEach((dialog) => {
           // Use structural hooks only. Text matching breaks localized admin UI.
           const tabList = dialog.querySelector('[role="tablist"]');
           const anchor = tabList?.parentElement;
@@ -363,8 +571,7 @@ export default {
             "use the checkbox at the upper-left of its card, then choose Finish. Clicking the preview opens asset details only.",
           );
           anchor.after(guidance);
-        },
-      );
+        });
     };
     const scheduleMediaPickerGuidance = () => {
       if (mediaPickerFrame !== null) return;

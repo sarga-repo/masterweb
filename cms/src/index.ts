@@ -6,12 +6,15 @@ import {
 } from "./access-control/sarga-workspaces";
 import { ensureSargaLocales, registerSargaI18nGuards } from "./i18n/sarga-i18n";
 import { assertInquiryNotificationEnvironment } from "./email/inquiry-notifications";
+import { resolveMotorsportMailEnvironment } from "./email/motorsport-mail-settings";
 import seedDemoContent from "./seed";
 import { registerMotorsportRevalidation } from "./revalidation/motorsport-revalidation";
 import { migrateMotorsportPageSingleTypes } from "./migrations/motorsport-page-single-types";
 import { migrateMotorsportOwnership } from "./migrations/motorsport-ownership";
 import { ensureMotorsportThemeSettings } from "./migrations/motorsport-theme-settings";
+import { ensureMotorsportProgramEditorLayout } from "./migrations/motorsport-program-editor-layout";
 import { retireMotorsportLegacyContent } from "./migrations/motorsport-legacy-retirement";
+import { backfillMotorsportShowFieldDefaults } from "./migrations/motorsport-show-field-defaults";
 import { ensureFrontendApiTokenPermissions } from "./access-control/api-token-permissions";
 import {
   backfillMotorsportPageRoutes,
@@ -39,7 +42,9 @@ export default {
    * SEED_DEMO_CONTENT=true (see src/seed.ts). No-op otherwise.
    */
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
-    assertInquiryNotificationEnvironment();
+    assertInquiryNotificationEnvironment(
+      await resolveMotorsportMailEnvironment(strapi),
+    );
     await ensureSargaLocales(strapi);
     await bootstrapWorkspaceAccessControl(strapi);
     await ensureFrontendApiTokenPermissions(strapi);
@@ -47,7 +52,9 @@ export default {
     await migrateMotorsportPageSingleTypes(strapi);
     await migrateMotorsportOwnership(strapi);
     await ensureMotorsportThemeSettings(strapi);
+    await ensureMotorsportProgramEditorLayout(strapi);
     await retireMotorsportLegacyContent(strapi);
+    await backfillMotorsportShowFieldDefaults(strapi);
     await backfillMotorsportPageRoutes(strapi);
     registerMotorsportRevalidation(strapi);
   },

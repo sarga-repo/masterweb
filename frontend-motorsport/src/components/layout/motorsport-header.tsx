@@ -45,6 +45,7 @@ export function MotorsportHeader({
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuPanelRef = useRef<HTMLDivElement>(null);
   const eventMenuRef = useRef<HTMLDivElement>(null);
+  const mobileEventMenuRef = useRef<HTMLDivElement>(null);
   const visibleNavigation = navigation.filter(
     (item) => item.href !== "/events" || eventChildren.length > 0,
   );
@@ -95,7 +96,10 @@ export function MotorsportHeader({
   useEffect(() => {
     if (!eventOpen) return;
     const onPointerDown = (event: PointerEvent) => {
-      if (!eventMenuRef.current?.contains(event.target as Node)) {
+      const target = event.target as Node;
+      const isInsideDesktopMenu = eventMenuRef.current?.contains(target);
+      const isInsideMobileMenu = mobileEventMenuRef.current?.contains(target);
+      if (!isInsideDesktopMenu && !isInsideMobileMenu) {
         setEventOpen(false);
       }
     };
@@ -246,7 +250,7 @@ export function MotorsportHeader({
         role="dialog"
         aria-modal="true"
         aria-label="Motorsport navigation"
-        className={`absolute inset-x-0 top-full z-50 h-[calc(100dvh-var(--ms-header-height))] overflow-y-auto bg-[#050505] px-(--ms-page-gutter) py-8 transition-[opacity,visibility] duration-300 xl:hidden ${
+        className={`absolute inset-x-0 top-full z-50 h-[calc(100dvh-var(--ms-header-height))] overflow-y-auto bg-[#050505] px-(--ms-page-gutter) py-5 transition-[opacity,visibility] duration-300 xl:hidden ${
           open ? "visible opacity-100" : "invisible opacity-0"
         }`}
       >
@@ -263,19 +267,20 @@ export function MotorsportHeader({
                 (item.href !== "/" && normalizedPath.startsWith(item.href));
 
               if (isEvent) {
-                return (
-                  <div
-                    key={item.href}
-                    className="border-b border-ms-warm-white/12"
-                  >
+                  return (
+                    <div
+                      key={item.href}
+                      ref={mobileEventMenuRef}
+                      className="border-b border-ms-warm-white/12"
+                    >
                     <button
                       type="button"
                       aria-expanded={eventOpen}
                       aria-controls="motorsport-mobile-event-menu"
                       onClick={() => setEventOpen((value) => !value)}
-                      className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-center px-1 py-4 text-left"
+                      className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-center px-1 py-3 text-left"
                     >
-                      <span className="font-display text-[clamp(1.5rem,7vw,2.75rem)] font-black uppercase leading-[1.04] transition-colors group-hover:text-ms-ignition-orange">
+                      <span className="font-display text-[clamp(1.25rem,5.2vw,2.25rem)] font-black uppercase leading-[1.04] transition-colors group-hover:text-ms-ignition-orange">
                         {item.label}
                       </span>
                       <span className="ms-data-label text-ms-warm-white/40">
@@ -293,8 +298,12 @@ export function MotorsportHeader({
                             key={child.href}
                             href={child.href}
                             role="menuitem"
-                            onClick={() => setOpen(false)}
-                            className="block border-b border-ms-warm-white/10 py-3 text-xs font-bold uppercase tracking-[0.14em] text-ms-warm-white/68 hover:text-ms-electric-yellow"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setEventOpen(false);
+                              setOpen(false);
+                            }}
+                            className="block border-b border-ms-warm-white/10 py-2.5 text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-ms-warm-white/68 hover:text-ms-electric-yellow"
                           >
                             {child.label}
                           </Link>
@@ -311,15 +320,18 @@ export function MotorsportHeader({
                   href={item.href}
                   target={item.external ? "_blank" : undefined}
                   rel={item.external ? "noreferrer" : undefined}
-                  onClick={() => setOpen(false)}
+                  onClick={() => {
+                    setEventOpen(false);
+                    setOpen(false);
+                  }}
                   aria-current={active ? "page" : undefined}
-                  className={`group mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-center border-b px-1 py-4 ${
+                  className={`group mt-1 grid grid-cols-[minmax(0,1fr)_auto] items-center border-b px-1 py-3 ${
                     isTicket
                       ? "border-ms-crimson-700 bg-ms-crimson-700 px-5 text-ms-warm-white"
                       : "border-ms-warm-white/12"
                   }`}
                 >
-                  <span className="font-display text-[clamp(1.5rem,7vw,2.75rem)] font-black uppercase leading-[1.04] transition-colors group-hover:text-ms-ignition-orange">
+                  <span className="font-display text-[clamp(1.25rem,5.2vw,2.25rem)] font-black uppercase leading-[1.04] transition-colors group-hover:text-ms-ignition-orange">
                     {item.label}
                   </span>
                   <span
@@ -331,7 +343,7 @@ export function MotorsportHeader({
               );
             })}
           </div>
-          <div className="mt-auto flex flex-col gap-4 pt-8 sm:flex-row">
+          <div className="mt-auto flex flex-col gap-3 pt-5 sm:flex-row">
             <MotorsportLanguageSelector
               locale={locale}
               dictionary={dictionary}

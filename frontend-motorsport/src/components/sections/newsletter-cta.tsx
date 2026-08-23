@@ -11,6 +11,7 @@ type NewsletterCtaProps = {
   description: string;
   cta?: { label: string; href: string };
   actionLabel?: string;
+  legalText?: string;
 };
 
 export function NewsletterCtaSection({
@@ -19,6 +20,7 @@ export function NewsletterCtaSection({
   description,
   cta,
   actionLabel = "Subscribe",
+  legalText = "No spam. Unsubscribe anytime. We respect your inbox.",
 }: NewsletterCtaProps) {
   const [status, setStatus] = useState<
     | { type: "idle" }
@@ -167,7 +169,7 @@ export function NewsletterCtaSection({
           ) : null}
 
           <p className="mt-4 text-[0.65rem] leading-5 text-ms-warm-white/58">
-            No spam. Unsubscribe anytime. We respect your inbox.
+            {legalText}
           </p>
         </div>
       </div>

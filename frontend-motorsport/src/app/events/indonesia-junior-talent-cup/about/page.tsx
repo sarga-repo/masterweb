@@ -4,8 +4,14 @@ import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { InformationBand, PageHero, SectionHeader } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
-import { getIjtcInformationBand, getIjtcProgram, IJTC_BASE_PATH } from "@/lib/ijtc-data";
+import { fetchMotorsportTheme } from "@/lib/cms-data";
+import {
+  getIjtcInformationBand,
+  getIjtcProgram,
+  IJTC_BASE_PATH,
+} from "@/lib/ijtc-data";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -33,8 +39,13 @@ const PRINCIPLES = [
 ];
 
 export default async function AboutIjtcPage() {
-  const program = await getIjtcProgram(await getRequestLocale());
+  const locale = await getRequestLocale();
+  const [program, theme] = await Promise.all([
+    getIjtcProgram(locale),
+    fetchMotorsportTheme(locale),
+  ]);
   if (!program) notFound();
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
 
   return (
     <>
@@ -59,14 +70,16 @@ export default async function AboutIjtcPage() {
           description:
             "IJTC combines practical track development with published sporting information and direct programme support.",
           items: [
-          { label: "Focus", value: "Rider growth" },
-          { label: "Format", value: "Season" },
-          { label: "Path", value: "Inquiry first" },
+            { label: "Focus", value: "Rider growth" },
+            { label: "Format", value: "Season" },
+            { label: "Path", value: "Inquiry first" },
           ],
         })}
       />
 
-      <section className="ms-reflected-light-surface ms-section">
+      <section
+        className={`ms-reflected-light-surface ms-section ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell grid gap-12 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:items-center">
           <div className="ms-panel relative aspect-[16/11] overflow-hidden">
             <ResilientImage
@@ -104,7 +117,9 @@ export default async function AboutIjtcPage() {
         </div>
       </section>
 
-      <section className="ms-blue-heat-surface ms-section">
+      <section
+        className={`ms-blue-heat-surface ms-section ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell">
           <SectionHeader
             index="MODEL"
@@ -131,7 +146,9 @@ export default async function AboutIjtcPage() {
         </div>
       </section>
 
-      <section className="ms-reflected-light-surface py-14 sm:py-20">
+      <section
+        className={`ms-reflected-light-surface py-14 sm:py-20 ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>
             <p className="ms-data-label text-ms-slipstream-teal">

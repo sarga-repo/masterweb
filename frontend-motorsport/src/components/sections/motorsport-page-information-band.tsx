@@ -12,9 +12,9 @@ export type MotorsportInformationBandFallback = {
 type MotorsportPageInformationBandProps = {
   band?: MotorsportPageInformationBand | null;
   /**
-   * Legacy section copy is retained as a safe migration fallback. Once a
-   * page's dedicated `informationBand` exists, its copy, metrics, and
-   * visibility flags are authoritative.
+   * Legacy section copy is retained only as a migration-era content fallback.
+   * It cannot control visibility; `informationBand.isActive` is the sole
+   * visible section switch.
    */
   fallback?: MotorsportInformationBandFallback;
 };
@@ -23,9 +23,7 @@ export function MotorsportPageInformationBand({
   band,
   fallback,
 }: MotorsportPageInformationBandProps) {
-  const isActive =
-    (band?.isActive ?? fallback?.isActive ?? true) &&
-    fallback?.isActive !== false;
+  const isActive = band?.isActive !== false;
   const useCmsBand = Boolean(band);
 
   return (
@@ -38,7 +36,7 @@ export function MotorsportPageInformationBand({
       eyebrow={band?.eyebrow ?? fallback?.eyebrow}
       title={band?.title || fallback?.title || "Motorsport"}
       description={band?.description ?? fallback?.description}
-      items={useCmsBand ? band?.metrics ?? [] : fallback?.metrics ?? []}
+      items={useCmsBand ? (band?.metrics ?? []) : (fallback?.metrics ?? [])}
     />
   );
 }

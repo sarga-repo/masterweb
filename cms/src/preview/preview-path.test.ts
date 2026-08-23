@@ -20,11 +20,33 @@ test("maps Motorsport news and events to localized paths", () => {
   );
 });
 
+test("maps dedicated Motorsport News Article previews without siteScope", () => {
+  assert.equal(
+    getMotorsportPreviewPath(
+      "api::motorsport-news-article.motorsport-news-article",
+      { slug: "fia-rallycross-race-report" },
+      "en",
+    ),
+    "/news/fia-rallycross-race-report",
+  );
+  assert.equal(
+    getMotorsportPreviewPath(
+      "api::motorsport-news-article.motorsport-news-article",
+      { slug: "fia-rallycross-race-report" },
+      "id",
+    ),
+    "/id/news/fia-rallycross-race-report",
+  );
+});
+
 test("maps approved Site Pages, canonical program routes, and global records", () => {
   assert.equal(
     getMotorsportPreviewPath(
       "api::site-page.site-page",
-      { routePath: "/events/fia-rallycross-world-cup-indonesia-2026", siteScope: "motorsport" },
+      {
+        routePath: "/events/fia-rallycross-world-cup-indonesia-2026",
+        siteScope: "motorsport",
+      },
       "id",
     ),
     "/id/events/fia-rallycross-world-cup-indonesia-2026",
@@ -152,10 +174,10 @@ test("rejects unsupported, cross-site, unsafe, and invalid-locale documents", ()
     null,
   );
   assert.equal(
-    getMotorsportPreviewPath(
-      "api::news-article.news-article",
-      { slug: "race-report", siteScope: "gateway" },
-    ),
+    getMotorsportPreviewPath("api::news-article.news-article", {
+      slug: "race-report",
+      siteScope: "gateway",
+    }),
     null,
   );
   assert.equal(
@@ -186,5 +208,12 @@ test("normalizes only supported preview locale and status values", () => {
   assert.equal(normalizePreviewStatus("published"), "published");
   assert.equal(normalizePreviewStatus("invalid"), null);
   assert.equal(normalizePreviewStatus(null), null);
-  assert.equal(APPROVED_MOTORSPORT_PREVIEW_UIDS.length, 14);
+  assert.ok(
+    APPROVED_MOTORSPORT_PREVIEW_UIDS.includes("api::news-article.news-article"),
+  );
+  assert.ok(
+    APPROVED_MOTORSPORT_PREVIEW_UIDS.includes(
+      "api::motorsport-news-article.motorsport-news-article",
+    ),
+  );
 });

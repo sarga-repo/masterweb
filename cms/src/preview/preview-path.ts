@@ -53,7 +53,8 @@ const SECONDARY_COLLECTION_PATHS: Record<string, string> = {
   "api::merchandise-item.merchandise-item": "/merchandise",
   "api::ticket-cta.ticket-cta": "/tickets",
   "api::motorsport-partner.motorsport-partner": "/partners",
-  "api::motorsport-merchandise-item.motorsport-merchandise-item": "/merchandise",
+  "api::motorsport-merchandise-item.motorsport-merchandise-item":
+    "/merchandise",
   "api::motorsport-ticket-cta.motorsport-ticket-cta": "/tickets",
 };
 
@@ -129,8 +130,17 @@ function safeSlug(value?: string | null) {
   return slug && slug.length <= 120 && SAFE_SLUG.test(slug) ? slug : null;
 }
 
-function isMotorsportDocument(document: PreviewDocument | null | undefined) {
-  return document?.siteScope === "motorsport";
+function isMotorsportDocument(
+  uid: string,
+  document: PreviewDocument | null | undefined,
+) {
+  // Dedicated Motorsport content types are already site-scoped by their UID.
+  // Some of them intentionally do not expose a siteScope field, including
+  // Motorsport News Article, so requiring that field made their CMS preview
+  // button resolve to no URL.
+  return (
+    document?.siteScope === "motorsport" || uid.startsWith("api::motorsport-")
+  );
 }
 
 function isIjtcProgram(document: PreviewDocument | null | undefined) {
@@ -151,7 +161,7 @@ export function getMotorsportPreviewPath(
       : null;
   }
 
-  if (!isMotorsportDocument(document)) return null;
+  if (!isMotorsportDocument(uid, document)) return null;
 
   if (uid === "api::site-page.site-page") {
     const routePath = document.routePath?.trim();
@@ -168,7 +178,8 @@ export function getMotorsportPreviewPath(
     "api::motorsport-events-page.motorsport-events-page": "/events",
     "api::motorsport-news-page.motorsport-news-page": "/news",
     "api::motorsport-gallery-page.motorsport-gallery-page": "/gallery",
-    "api::motorsport-merchandise-page.motorsport-merchandise-page": "/merchandise",
+    "api::motorsport-merchandise-page.motorsport-merchandise-page":
+      "/merchandise",
     "api::motorsport-tickets-page.motorsport-tickets-page": "/tickets",
     "api::motorsport-contact-page.motorsport-contact-page": "/contact",
     "api::motorsport-partners-page.motorsport-partners-page": "/partners",
@@ -186,7 +197,8 @@ export function getMotorsportPreviewPath(
 
   if (
     uid === "api::top-navigation-item.top-navigation-item" ||
-    uid === "api::motorsport-top-navigation-item.motorsport-top-navigation-item" ||
+    uid ===
+      "api::motorsport-top-navigation-item.motorsport-top-navigation-item" ||
     uid === "api::leadership-person.leadership-person" ||
     uid === "api::motorsport-leadership-person.motorsport-leadership-person"
   ) {

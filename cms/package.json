@@ -27,6 +27,7 @@
     "uat:motorsport-about-capabilities": "node scripts/verify-motorsport-about-capabilities.mjs",
     "uat:motorsport-page-sections": "node scripts/verify-motorsport-page-sections.mjs",
     "uat:motorsport-single-types": "node scripts/validate-motorsport-page-single-types.mjs",
+    "audit:show-field-defaults": "node scripts/audit-show-field-defaults.mjs",
     "test:mail": "node --test src/email/*.test.ts",
     "mail:verify": "tsc -p tsconfig.json && node dist/src/email/verify-microsoft-mail.js",
     "mail:uat-send": "tsc -p tsconfig.json && node dist/src/email/run-mail-uat.js",

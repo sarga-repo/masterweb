@@ -4,8 +4,9 @@ import { MotorsportFooter, MotorsportHeader } from "@/components";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getMotorsportNavigation } from "@/lib/navigation-cms";
-import { fetchMotorsportChrome, fetchPrograms } from "@/lib/cms-data";
+import { fetchEventMenuPrograms, fetchMotorsportChrome } from "@/lib/cms-data";
 import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
+import { buildEventMenuLinks } from "@/lib/event-navigation";
 
 const FOOTER_COLUMNS = [
   {
@@ -37,7 +38,7 @@ export async function PageShell({
   const navigation = await getMotorsportNavigation(locale);
   const [chrome, programs, isPreview] = await Promise.all([
     fetchMotorsportChrome(locale),
-    fetchPrograms(locale),
+    fetchEventMenuPrograms(locale),
     isStrapiPreviewEnabled(),
   ]);
   const utilityLinks = (chrome.footerUtilityLinks ?? [])
@@ -50,39 +51,7 @@ export async function PageShell({
   const ticketLink = navigation.items.find(
     (item) => item.emphasis === "primaryCta",
   );
-  const eventPrograms =
-    programs.length > 0
-      ? programs
-      : isPreview
-        ? []
-        : [
-            {
-              title: "FIA Rallycross World Cup Indonesia 2026",
-              eventMenuLabel: "FIA Rallycross",
-              eventMenuEnabled: true,
-              href: "/events/fia-rallycross-world-cup-indonesia-2026",
-            },
-            {
-              title: "Indonesia Junior Talent Cup",
-              eventMenuLabel: "IJTC",
-              eventMenuEnabled: true,
-              href: "/events/indonesia-junior-talent-cup",
-            },
-          ];
-  const eventChildren = eventPrograms
-    .filter((program) => program.eventMenuEnabled !== false)
-    .map((program) => ({
-      label:
-        program.eventMenuLabel ||
-        (program.title.length > 30
-          ? `${program.title.slice(0, 27).trimEnd()}…`
-          : program.title),
-      href: program.href,
-    }))
-    .filter(
-      (item, index, items) =>
-        items.findIndex((candidate) => candidate.href === item.href) === index,
-    );
+  const eventChildren = buildEventMenuLinks(programs, isPreview);
   return (
     <>
       <MotorsportHeader

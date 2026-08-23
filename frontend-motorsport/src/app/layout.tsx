@@ -6,6 +6,9 @@ import { getRequestLocale, getRequestPathname } from "@/lib/i18n/request";
 import { resolveSiteUrl, siteConfig } from "@/lib/site-config";
 import { fetchMotorsportTheme } from "@/lib/cms-data";
 import { motorsportThemeAttribute } from "@/lib/motorsport-theme";
+import { getMotorsportPreviewContext } from "@/lib/preview/preview-request-context";
+import PreviewLiveRefresh from "@/components/preview-live-refresh";
+import { draftMode } from "next/headers";
 import "./globals.css";
 
 const ownersWide = localFont({
@@ -38,8 +41,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const locale = await getRequestLocale();
-  const theme = await fetchMotorsportTheme(locale);
+  const [locale, theme, mode, previewContext] = await Promise.all([
+    getRequestLocale(),
+    getRequestLocale().then(fetchMotorsportTheme),
+    draftMode(),
+    getMotorsportPreviewContext(),
+  ]);
+  const isLivePreview = mode.isEnabled && Boolean(previewContext);
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -68,6 +76,7 @@ export default async function RootLayout({
           }}
         />
         {children}
+        {isLivePreview ? <PreviewLiveRefresh /> : null}
       </body>
     </html>
   );

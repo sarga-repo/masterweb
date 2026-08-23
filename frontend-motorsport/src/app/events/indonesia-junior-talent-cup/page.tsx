@@ -11,7 +11,9 @@ import {
   getIjtcProgram,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
+import { fetchMotorsportTheme } from "@/lib/cms-data";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 
 export const metadata: Metadata = {
   title: { absolute: "Indonesia Junior Talent Cup | Sarga Motorsport" },
@@ -39,16 +41,25 @@ const PROGRAMME_PATHS = [
 ];
 
 export default async function IjtcOverviewPage() {
-  const program = await getIjtcProgram(await getRequestLocale());
+  const locale = await getRequestLocale();
+  const [program, theme] = await Promise.all([
+    getIjtcProgram(locale),
+    fetchMotorsportTheme(locale),
+  ]);
   if (!program) notFound();
   const status = formatProgramStatus(program.status);
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
 
   return (
     <>
       <PageHero
-        kicker={program.presentationHero?.eyebrow ?? `IJTC / ${program.seasonLabel}`}
+        kicker={
+          program.presentationHero?.eyebrow ?? `IJTC / ${program.seasonLabel}`
+        }
         kickerColor="yellow"
-        title={program.presentationHero?.title || program.headline || program.title}
+        title={
+          program.presentationHero?.title || program.headline || program.title
+        }
         description={program.presentationHero?.description ?? program.summary}
         showKicker={program.presentationHero?.showEyebrow}
         showTitle={program.presentationHero?.showTitle}
@@ -76,14 +87,16 @@ export default async function IjtcOverviewPage() {
           description:
             "IJTC brings coaching, structured track time, sporting standards, and public classification into one development programme.",
           items: [
-          { label: "Season", value: program.seasonLabel },
-          { label: "Status", value: status },
-          { label: "Sections", value: "07" },
+            { label: "Season", value: program.seasonLabel },
+            { label: "Status", value: status },
+            { label: "Sections", value: "07" },
           ],
         })}
       />
 
-      <section className="ms-reflected-light-surface ms-section">
+      <section
+        className={`ms-reflected-light-surface ms-section ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell grid gap-12 lg:grid-cols-[minmax(0,.86fr)_minmax(0,1.14fr)] lg:items-center">
           <div>
             <SectionHeader
@@ -127,7 +140,9 @@ export default async function IjtcOverviewPage() {
         </div>
       </section>
 
-      <section className="ms-blue-heat-surface ms-section">
+      <section
+        className={`ms-blue-heat-surface ms-section ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell">
           <SectionHeader
             index="ROUTES"
@@ -158,7 +173,9 @@ export default async function IjtcOverviewPage() {
         </div>
       </section>
 
-      <section className="ms-reflected-light-surface py-14 sm:py-20">
+      <section
+        className={`ms-reflected-light-surface py-14 sm:py-20 ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>
             <p className="ms-data-label text-ms-slipstream-teal">Next intake</p>

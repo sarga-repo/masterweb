@@ -25,6 +25,7 @@ export function CampaignBannerSlider({
   if (slides.length === 0) return null;
 
   const activeSlide = slides[activeIndex];
+  const hasActiveImage = Boolean(activeSlide.image);
   const selectRelative = (offset: number) => {
     setActiveIndex(
       (current) => (current + offset + slides.length) % slides.length,
@@ -46,22 +47,28 @@ export function CampaignBannerSlider({
               : "pointer-events-none opacity-0"
           }`}
         >
-          <Image
-            src={slide.image}
-            alt={index === activeIndex ? slide.imageAlt : ""}
-            fill
-            priority={index === 0}
-            sizes="100vw"
-            className="object-cover"
-          />
+          {slide.image ? (
+            <Image
+              src={slide.image}
+              alt={index === activeIndex ? (slide.imageAlt ?? "") : ""}
+              fill
+              priority={index === 0}
+              sizes="100vw"
+              className="object-cover"
+            />
+          ) : null}
         </div>
       ))}
 
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.94)_0%,rgba(5,5,5,.7)_48%,rgba(5,5,5,.12)_78%),linear-gradient(0deg,rgba(5,5,5,.92)_0%,transparent_50%)]" />
-      <div
-        className="absolute inset-y-0 left-[44%] hidden w-[18%] -skew-x-12 bg-ms-apex-crimson/28 mix-blend-screen lg:block"
-        aria-hidden="true"
-      />
+      {!hasActiveImage ? (
+        <>
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,.94)_0%,rgba(5,5,5,.7)_48%,rgba(5,5,5,.12)_78%),linear-gradient(0deg,rgba(5,5,5,.92)_0%,transparent_50%)]" />
+          <div
+            className="absolute inset-y-0 left-[44%] hidden w-[18%] -skew-x-12 bg-ms-apex-crimson/28 mix-blend-screen lg:block"
+            aria-hidden="true"
+          />
+        </>
+      ) : null}
 
       <div className="ms-shell relative flex min-h-[42rem] flex-col justify-end py-12 sm:py-16 lg:justify-center">
         <div className="max-w-5xl" aria-live="polite">

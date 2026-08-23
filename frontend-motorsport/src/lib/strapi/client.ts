@@ -75,6 +75,7 @@ export function mediaUrl(url?: string): string {
 
 /** Build the ?populate=… value for nested relations. */
 function populateParam(populate: string | string[]): string {
+  if (populate === "*") return "populate=*";
   if (Array.isArray(populate)) {
     return populate
       .map((field) => {

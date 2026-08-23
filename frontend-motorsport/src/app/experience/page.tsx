@@ -12,7 +12,11 @@ import {
 } from "@/components";
 import { fetchSitePage } from "@/lib/cms-data";
 import { getRequestLocale } from "@/lib/i18n/request";
-import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
+import {
+  isCmsCanonicalSectionVisible,
+  isCmsPageVisible,
+  isCmsSectionVisible,
+} from "@/lib/cms-visibility";
 
 export const metadata: Metadata = {
   title: "Experience",
@@ -68,15 +72,45 @@ const PILLARS = [
 export default async function ExperiencePage() {
   const locale = await getRequestLocale();
   const page = await fetchSitePage("custom", "/experience", locale);
-  const control = page?.sections.find(
-    (section) => section.sectionKey === "experience-control",
-  );
   const pillars = page?.sections.find(
     (section) => section.sectionKey === "experience-pillars",
   );
   const track = page?.sections.find(
     (section) => section.sectionKey === "experience-track",
   );
+  const cmsPillars =
+    pillars?.items
+      ?.filter((item) => item.isActive !== false && item.title)
+      .map((item, index) => ({
+        index: item.label || String(index + 1).padStart(2, "0"),
+        title: item.title as string,
+        description: item.description || "",
+        accent: item.accent || "crimson",
+        href: item.href,
+      })) ?? [];
+  const pillarItems = cmsPillars.length ? cmsPillars : PILLARS;
+  const cmsTrackItems =
+    track?.items
+      ?.filter((item) => item.isActive !== false && item.media)
+      .map((item, index) => ({
+        src: item.media?.url as string,
+        alt: item.mediaAlt || item.media?.alternativeText || item.title || "",
+        label: item.label || item.title || `Track / ${index + 1}`,
+      })) ?? [];
+  const trackItems = cmsTrackItems.length
+    ? cmsTrackItems
+    : [
+        {
+          src: "/media/sarga-motorsport-discipline-touring-daylight.jpg",
+          alt: "Touring race car competing in warm daylight",
+          label: "Four wheels / Touring",
+        },
+        {
+          src: "/media/sarga-motorsport-discipline-motorcycle-daylight.jpg",
+          alt: "Motorcycle racers leaning through a circuit corner",
+          label: "Two wheels / Road racing",
+        },
+      ];
   const finalCta = page?.sections.find(
     (section) => section.sectionKey === "experience-final-cta",
   );
@@ -96,7 +130,11 @@ export default async function ExperiencePage() {
           {page?.heroEnabled !== false ? (
             <div data-cms-section-key="hero" data-cms-enabled="true">
               <PageHero
-                kicker={page?.hero?.eyebrow ?? page?.navigationLabel ?? "Beyond the finish line"}
+                kicker={
+                  page?.hero?.eyebrow ??
+                  page?.navigationLabel ??
+                  "Beyond the finish line"
+                }
                 kickerColor="orange"
                 title={page?.hero?.title ?? page?.heroTitle ?? "Experience"}
                 showKicker={page?.hero?.showEyebrow}
@@ -124,23 +162,17 @@ export default async function ExperiencePage() {
             </div>
           ) : null}
 
-          {page?.informationBand || isCmsSectionVisible(control) ? (
+          {isCmsCanonicalSectionVisible(page?.informationBand) ? (
             <div
-              data-cms-section-key="experience-control"
+              data-cms-section-key="information-band"
               data-cms-enabled="true"
             >
               <MotorsportPageInformationBand
                 band={page?.informationBand}
                 fallback={{
-                  isActive: control?.enabled,
-                  eyebrow:
-                    control?.eyebrow ??
-                    "Experience control / Complete race weekend",
-                  title:
-                    control?.title ??
-                    "Competition is the core. Access completes it.",
+                  eyebrow: "Experience control / Complete race weekend",
+                  title: "Competition is the core. Access completes it.",
                   description:
-                    control?.body ??
                     "Six connected chapters carry the audience from racing and rider development into culture, coverage, community, and venue experiences.",
                   metrics: [
                     { label: "Competition", value: "Car + Moto" },
@@ -175,7 +207,7 @@ export default async function ExperiencePage() {
                   }
                 />
                 <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-12">
-                  {PILLARS.map((pillar, index) => (
+                  {pillarItems.map((pillar, index) => (
                     <ExperiencePillarCard
                       key={pillar.index}
                       index={pillar.index}
@@ -213,25 +245,16 @@ export default async function ExperiencePage() {
                   showTitle={track?.showTitle}
                   showDescription={track?.showBody}
                   eyebrow={track?.eyebrow ?? "Two forms of precision"}
-                  title={track?.title ?? "Four wheels. Two wheels. One standard."}
+                  title={
+                    track?.title ?? "Four wheels. Two wheels. One standard."
+                  }
                   description={
                     track?.body ??
                     "Both programmes share the same commitment to sporting clarity, athlete development, and race-weekend presentation."
                   }
                 />
                 <div className="mt-14 grid gap-4 md:grid-cols-[1.15fr_.85fr]">
-                  {[
-                    {
-                      src: "/media/sarga-motorsport-discipline-touring-daylight.jpg",
-                      alt: "Touring race car competing in warm daylight",
-                      label: "Four wheels / Touring",
-                    },
-                    {
-                      src: "/media/sarga-motorsport-discipline-motorcycle-daylight.jpg",
-                      alt: "Motorcycle racers leaning through a circuit corner",
-                      label: "Two wheels / Road racing",
-                    },
-                  ].map((image) => (
+                  {trackItems.map((image) => (
                     <figure
                       key={image.label}
                       className="ms-panel relative aspect-[16/10] overflow-hidden"
@@ -280,10 +303,14 @@ export default async function ExperiencePage() {
                     {finalCta?.ctaLabel ?? "Explore events"}
                   </Link>
                   <Link
-                    href="/contact"
+                    href={
+                      finalCta?.secondaryCtaUrl?.startsWith("/")
+                        ? finalCta.secondaryCtaUrl
+                        : "/contact"
+                    }
                     className="border-b border-ms-slipstream-teal/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
                   >
-                    Experience inquiries
+                    {finalCta?.secondaryCtaLabel ?? "Experience inquiries"}
                   </Link>
                 </div>
               </div>

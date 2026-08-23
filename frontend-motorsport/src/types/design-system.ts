@@ -39,6 +39,20 @@ export type MotorsportStatus =
   | "completed"
   | "cancelled";
 
+export type MotorsportTicketCard = {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  eventMeta?: string;
+  eventMetaLabel?: string;
+  provider?: string;
+  providerLabel?: string;
+  partnerLabel?: string;
+  footerText?: string;
+  image?: MediaSource;
+  mobileImage?: MediaSource;
+};
+
 export type MotorsportEvent = {
   title: string;
   slug?: string;
@@ -52,6 +66,7 @@ export type MotorsportEvent = {
   seriesName?: string;
   ticketHref?: string;
   ticketLabel?: string;
+  ticketCard?: MotorsportTicketCard;
   sponsors?: PartnerItem[];
 };
 
@@ -100,8 +115,8 @@ export type CampaignSlide = {
   eventTitle: string;
   dateLabel?: string;
   venue?: string;
-  image: MediaSource;
-  imageAlt: string;
+  image?: MediaSource;
+  imageAlt?: string;
   cta?: LinkItem;
 };
 
@@ -164,9 +179,12 @@ export type MotorsportProgram = {
     showEyebrow: boolean;
     showTitle: boolean;
     showBody: boolean;
+    showMedia?: boolean;
+    showCta?: boolean;
     eyebrow?: string;
     title: string;
     body?: string;
+    media?: MediaSource;
   }>;
   informationBand?: MotorsportPageInformationBand | null;
 };
@@ -196,7 +214,7 @@ export type CampaignSeo = {
 export type MotorsportCampaignDetail = MotorsportProgramDetail & {
   slides: CampaignSlide[];
   rules: CampaignRule[];
-  ticketCta?: LinkItem & { provider?: string };
+  ticketCta?: LinkItem & MotorsportTicketCard;
   seo?: CampaignSeo;
 };
 

@@ -2077,6 +2077,14 @@ export interface ApiMotorsportHomePageMotorsportHomePage
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    featuredEvent: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::motorsport-event.motorsport-event'
+    >;
+    featuredProgram: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::motorsport-program.motorsport-program'
+    >;
     gallerySection: Schema.Attribute.Component<
       'motorsport.page-section',
       false
@@ -2133,8 +2141,26 @@ export interface ApiMotorsportHomePageMotorsportHomePage
           localized: true;
         };
       }>;
+    newsletterSection: Schema.Attribute.Component<
+      'motorsport.page-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     pageAvailability: Schema.Attribute.Component<
       'shared.page-availability',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    partnersSection: Schema.Attribute.Component<
+      'motorsport.page-section',
       false
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -2164,6 +2190,13 @@ export interface ApiMotorsportHomePageMotorsportHomePage
           localized: true;
         };
       }>;
+    showPartnersOnHomepage: Schema.Attribute.Boolean &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<true>;
     siteScope: Schema.Attribute.Enumeration<['motorsport']> &
       Schema.Attribute.Required &
       Schema.Attribute.Private &
@@ -2979,7 +3012,10 @@ export interface ApiMotorsportProgramMotorsportProgram
       'oneToMany',
       'api::motorsport-regulation.motorsport-regulation'
     >;
-    relatedEvents: Schema.Attribute.Relation<'manyToMany', 'api::event.event'>;
+    relatedEvents: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::motorsport-event.motorsport-event'
+    >;
     relatedTicketCtas: Schema.Attribute.Relation<
       'manyToMany',
       'api::ticket-cta.ticket-cta'
@@ -3319,14 +3355,52 @@ export interface ApiMotorsportTicketCtaMotorsportTicketCta
   attributes: {
     activeFrom: Schema.Attribute.DateTime;
     activeUntil: Schema.Attribute.DateTime;
+    backgroundImage: Schema.Attribute.Media<'images'>;
+    backgroundImageMobile: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    ctaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     ctaType: Schema.Attribute.Enumeration<['redirect', 'deepLink', 'embed']> &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'redirect'>;
+    description: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     embedCode: Schema.Attribute.Text & Schema.Attribute.Private;
     embedConfigJson: Schema.Attribute.JSON;
+    eventLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    eventText: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    eyebrow: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    footerText: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     image: Schema.Attribute.Media<'images'>;
     isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     label: Schema.Attribute.String &
@@ -3342,7 +3416,25 @@ export interface ApiMotorsportTicketCtaMotorsportTicketCta
       'oneToMany',
       'api::motorsport-ticket-cta.motorsport-ticket-cta'
     >;
+    partnerLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     provider: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    providerLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    providerText: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -4016,14 +4108,22 @@ export interface ApiTicketCtaTicketCta extends Struct.CollectionTypeSchema {
   attributes: {
     activeFrom: Schema.Attribute.DateTime;
     activeUntil: Schema.Attribute.DateTime;
+    backgroundImage: Schema.Attribute.Media<'images'>;
+    backgroundImageMobile: Schema.Attribute.Media<'images'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    ctaLabel: Schema.Attribute.String;
     ctaType: Schema.Attribute.Enumeration<['redirect', 'deepLink', 'embed']> &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'redirect'>;
+    description: Schema.Attribute.Text;
     embedCode: Schema.Attribute.Text & Schema.Attribute.Private;
     embedConfigJson: Schema.Attribute.JSON;
+    eventLabel: Schema.Attribute.String;
+    eventText: Schema.Attribute.String;
+    eyebrow: Schema.Attribute.String;
+    footerText: Schema.Attribute.String;
     image: Schema.Attribute.Media<'images'>;
     isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     label: Schema.Attribute.String & Schema.Attribute.Required;
@@ -4033,7 +4133,10 @@ export interface ApiTicketCtaTicketCta extends Struct.CollectionTypeSchema {
       'api::ticket-cta.ticket-cta'
     > &
       Schema.Attribute.Private;
+    partnerLabel: Schema.Attribute.String;
     provider: Schema.Attribute.String;
+    providerLabel: Schema.Attribute.String;
+    providerText: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     relatedEvent: Schema.Attribute.Relation<'manyToOne', 'api::event.event'>;
     sites: Schema.Attribute.Relation<'manyToMany', 'api::site.site'>;

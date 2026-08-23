@@ -8,16 +8,21 @@ import {
   SectionHeader,
 } from "@/components";
 import { MotorsportContactForm } from "@/components/sections/motorsport-contact-form";
-import { fetchSitePage } from "@/lib/cms-data";
+import { fetchMotorsportTheme, fetchSitePage } from "@/lib/cms-data";
 import { getRequestLocale } from "@/lib/i18n/request";
-import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
+import {
+  isCmsCanonicalSectionVisible,
+  isCmsPageVisible,
+  isCmsSectionVisible,
+} from "@/lib/cms-visibility";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 
 export default async function ContactPage() {
   const locale = await getRequestLocale();
-  const page = await fetchSitePage("custom", "/contact", locale);
-  const inquiry = page?.sections.find(
-    (section) => section.sectionKey === "inquiry-control",
-  );
+  const [page, theme] = await Promise.all([
+    fetchSitePage("custom", "/contact", locale),
+    fetchMotorsportTheme(locale),
+  ]);
   const form = page?.sections.find(
     (section) => section.sectionKey === "inquiry-form",
   );
@@ -28,6 +33,7 @@ export default async function ContactPage() {
   const finalCtaEventsHref = finalCta?.ctaUrl?.startsWith("/")
     ? finalCta.ctaUrl
     : "/events";
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
   return (
     <PageShell spectrumSeparators>
       {!pageAvailable ? (
@@ -39,7 +45,9 @@ export default async function ContactPage() {
           {page?.heroEnabled !== false ? (
             <div data-cms-section-key="hero" data-cms-enabled="true">
               <PageHero
-                kicker={page?.hero?.eyebrow ?? page?.navigationLabel ?? "Get in touch"}
+                kicker={
+                  page?.hero?.eyebrow ?? page?.navigationLabel ?? "Get in touch"
+                }
                 kickerColor="orange"
                 title={page?.hero?.title ?? page?.heroTitle ?? "Contact"}
                 showKicker={page?.hero?.showEyebrow}
@@ -67,17 +75,17 @@ export default async function ContactPage() {
             </div>
           ) : null}
 
-          {page?.informationBand || isCmsSectionVisible(inquiry) ? (
-            <div data-cms-section-key="inquiry-control" data-cms-enabled="true">
+          {isCmsCanonicalSectionVisible(page?.informationBand) ? (
+            <div
+              data-cms-section-key="information-band"
+              data-cms-enabled="true"
+            >
               <MotorsportPageInformationBand
                 band={page?.informationBand}
                 fallback={{
-                  isActive: inquiry?.enabled,
-                  eyebrow:
-                    inquiry?.eyebrow ?? "Inquiry control / Direct routing",
-                  title: inquiry?.title ?? "One form. The right team.",
+                  eyebrow: "Inquiry control / Direct routing",
+                  title: "One form. The right team.",
                   description:
-                    inquiry?.body ??
                     "Choose the closest inquiry type and the message is routed to the Motorsport team responsible for it.",
                   metrics: [
                     { label: "Channels", value: "07" },
@@ -93,7 +101,7 @@ export default async function ContactPage() {
             <section
               data-cms-section-key="inquiry-form"
               data-cms-enabled="true"
-              className="ms-reflected-light-surface ms-section"
+              className={`ms-reflected-light-surface ms-section ${nextAlternatingSurface()}`}
             >
               <div className="ms-shell">
                 <div className="grid gap-16 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)]">
@@ -155,7 +163,7 @@ export default async function ContactPage() {
             <section
               data-cms-section-key="contact-final-cta"
               data-cms-enabled="true"
-              className="ms-blue-heat-surface py-12 sm:py-16"
+              className={`ms-blue-heat-surface py-12 sm:py-16 ${nextAlternatingSurface()}`}
             >
               <div className="ms-shell grid gap-8 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
                 <div>
@@ -175,10 +183,14 @@ export default async function ContactPage() {
                     {finalCta?.ctaLabel ?? "Browse events"}
                   </Link>
                   <Link
-                    href="/tickets"
+                    href={
+                      finalCta?.secondaryCtaUrl?.startsWith("/")
+                        ? finalCta.secondaryCtaUrl
+                        : "/tickets"
+                    }
                     className="border-b border-ms-slipstream-teal/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
                   >
-                    Ticket support
+                    {finalCta?.secondaryCtaLabel ?? "Ticket support"}
                   </Link>
                 </div>
               </div>

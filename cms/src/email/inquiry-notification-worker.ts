@@ -1,9 +1,16 @@
 import type { Core } from "@strapi/strapi";
-
-import { assertMailAuthenticationWindow } from "./microsoft-smtp-config";
+import nodemailerProvider from "@strapi/provider-email-nodemailer";
 
 import {
+  assertMailAuthenticationWindow,
+  createMicrosoftEmailPluginConfig,
+} from "./microsoft-smtp-config";
+import { resolveMotorsportMailEnvironment } from "./motorsport-mail-settings";
+
+import {
+  assertInquiryNotificationEnvironment,
   runInquiryNotificationBatch,
+  shouldQueueInquiryNotification,
   type InquiryNotificationRecord,
   type NotificationRepository,
 } from "./inquiry-notifications";
@@ -78,16 +85,38 @@ function createRepository(strapi: Core.Strapi): NotificationRepository {
 }
 
 export async function processPendingInquiryNotifications(strapi: Core.Strapi) {
-  assertMailAuthenticationWindow();
-  const result = await runInquiryNotificationBatch({
-    repository: createRepository(strapi),
-    mailer: {
-      async send(mail) {
-        assertMailAuthenticationWindow();
-        await strapi.plugin("email").service("email").send(mail);
+  const env = await resolveMotorsportMailEnvironment(strapi);
+  assertInquiryNotificationEnvironment(env);
+  if (!shouldQueueInquiryNotification(env)) {
+    return { selected: 0, sent: 0, failed: 0, deferred: 0 };
+  }
+
+  assertMailAuthenticationWindow(env);
+  const plugins = createMicrosoftEmailPluginConfig(env) as any;
+  const emailConfig = plugins.email?.config;
+  if (!emailConfig) {
+    throw new Error("[Sarga Mail] Microsoft email configuration is unavailable.");
+  }
+  const provider = nodemailerProvider.init(
+    emailConfig.providerOptions,
+    emailConfig.settings,
+  ) as any;
+
+  let result;
+  try {
+    result = await runInquiryNotificationBatch({
+      repository: createRepository(strapi),
+      env,
+      mailer: {
+        async send(mail) {
+          assertMailAuthenticationWindow(env);
+          await provider.send(mail);
+        },
       },
-    },
-  });
+    });
+  } finally {
+    provider.close();
+  }
 
   if (result.selected > 0) {
     strapi.log.info(

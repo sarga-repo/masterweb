@@ -10,6 +10,35 @@
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
   "attributes": {
+    "motorsportPresentation": {
+      "type": "component",
+      "component": "motorsport.detail-presentation",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } },
+      "description": "01 — Hero and information band. This is the first presentation group rendered on the programme page. Edit Hero first, then Information Band."
+    },
+    "heroMedia": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "videos"],
+      "description": "02 — Legacy programme fallback image. For the campaign hero, edit Motorsport Presentation > Hero instead. This field remains as a safe fallback for older records."
+    },
+    "bannerSlides": {
+      "type": "component",
+      "component": "motorsport.campaign-slide",
+      "repeatable": true,
+      "pluginOptions": { "i18n": { "localized": true } },
+      "description": "03 — Campaign carousel slides, shown after the hero and information band. Set image, title, description, CTA, and sort order per slide."
+    },
+    "presentationSections": {
+      "type": "component",
+      "component": "motorsport.page-section",
+      "repeatable": true,
+      "pluginOptions": { "i18n": { "localized": true } },
+      "description": "04 — Supporting named sections such as Format and Rundown. These are not carousel slides; each item controls its own copy, media, visibility, and order."
+    },
     "title": {
       "type": "string",
       "required": true,
@@ -53,29 +82,19 @@
     "eventStartDate": { "type": "datetime" },
     "eventEndDate": { "type": "datetime" },
     "venue": { "type": "string" },
-    "heroMedia": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": ["images", "videos"]
-    },
-    "bannerSlides": {
-      "type": "component",
-      "component": "motorsport.campaign-slide",
-      "repeatable": true,
-      "pluginOptions": { "i18n": { "localized": true } }
-    },
     "rundown": {
       "type": "component",
       "component": "motorsport.rundown-item",
       "repeatable": true,
-      "pluginOptions": { "i18n": { "localized": true } }
+      "pluginOptions": { "i18n": { "localized": true } },
+      "description": "05 — Race-day schedule items rendered in the programme rundown."
     },
     "eventRules": {
       "type": "component",
       "component": "motorsport.rule-item",
       "repeatable": true,
-      "pluginOptions": { "i18n": { "localized": true } }
+      "pluginOptions": { "i18n": { "localized": true } },
+      "description": "06 — Sporting rules and do/don't guidance for the programme."
     },
     "primaryCtaLabel": {
       "type": "string",
@@ -90,7 +109,7 @@
     "relatedEvents": {
       "type": "relation",
       "relation": "manyToMany",
-      "target": "api::event.event"
+      "target": "api::motorsport-event.motorsport-event"
     },
     "relatedTicketCtas": {
       "type": "relation",
@@ -115,12 +134,6 @@
       "target": "api::motorsport-regulation.motorsport-regulation",
       "mappedBy": "program"
     },
-    "presentationSections": {
-      "type": "component",
-      "component": "motorsport.page-section",
-      "repeatable": true,
-      "pluginOptions": { "i18n": { "localized": true } }
-    },
     "siteScope": {
       "type": "enumeration",
       "enum": ["gateway", "motorsport", "horsesport", "shared", "hidden"],
@@ -136,13 +149,6 @@
       "type": "component",
       "component": "shared.seo",
       "repeatable": false,
-      "pluginOptions": { "i18n": { "localized": true } }
-    },
-    "motorsportPresentation": {
-      "type": "component",
-      "component": "motorsport.detail-presentation",
-      "repeatable": false,
-      "required": false,
       "pluginOptions": { "i18n": { "localized": true } }
     }
   }

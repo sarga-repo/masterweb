@@ -1,8 +1,8 @@
 {
   "collectionName": "components_motorsport_page_sections",
   "info": {
-    "displayName": "Named Page Section",
-    "description": "Named Motorsport editorial section used by page-specific Single Types; no manual section key is required."
+    "displayName": "Supporting Presentation Section",
+    "description": "03 — A named supporting section such as Format or Rundown. Use this for section copy, media, CTA, visibility, and order; do not use it for carousel slides."
   },
   "options": {},
   "attributes": {
@@ -20,6 +20,12 @@
     "showCta": { "type": "boolean", "default": true, "description": "Show the section CTA." },
     "supportLabel": { "type": "string", "maxLength": 100, "pluginOptions": { "i18n": { "localized": true } } },
     "supportBody": { "type": "richtext", "pluginOptions": { "i18n": { "localized": true } } },
+    "legalText": {
+      "type": "text",
+      "maxLength": 300,
+      "pluginOptions": { "i18n": { "localized": true } },
+      "description": "Optional legal or reassurance copy shown below the section actions."
+    },
     "eyebrow": {
       "type": "string",
       "maxLength": 100,
@@ -51,6 +57,24 @@
       "type": "enumeration",
       "enum": ["sameWindow", "newWindow"],
       "default": "sameWindow"
+    },
+    "secondaryCtaLabel": {
+      "type": "string",
+      "maxLength": 80,
+      "pluginOptions": { "i18n": { "localized": true } },
+      "description": "Optional secondary action label for sections with two editorial destinations."
+    },
+    "secondaryCtaUrl": { "type": "string" },
+    "secondaryCtaTarget": {
+      "type": "enumeration",
+      "enum": ["sameWindow", "newWindow"],
+      "default": "sameWindow"
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "motorsport.page-section-item",
+      "description": "Optional ordered cards, bullets, or media items. Each item has its own show/hide control."
     },
     "theme": {
       "type": "enumeration",

@@ -1535,6 +1535,12 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | MSR-CMS-CLEAN-9  | Common/detail template presentation contract            | ✅ Done        | 2026-08-15 |
 | MSR-CMS-CLEAN-10 | RBAC cutover and legacy retirement                      | ✅ Done        | 2026-08-15 |
 | MSR-CMS-CLEAN-11 | Full UAT and editor handover                            | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-0A | CMS/frontend alignment reassessment                    | ✅ Done        | 2026-08-23 |
+| MSR-CMS-CLEAN-1A | Ordered adapter and canonical Information Band follow-up | ✅ Done        | 2026-08-23 |
+| MSR-CMS-CLEAN-2A | Homepage named CMS coverage follow-up                  | ✅ Done        | 2026-08-23 |
+| MSR-CMS-CLEAN-3A | Gallery legacy-field cleanup follow-up                 | ✅ Done        | 2026-08-23 |
+| MSR-CMS-CLEAN-4A | Canonical source enforcement follow-up                 | ✅ Done        | 2026-08-23 |
+| MSR-CMS-CLEAN-5A | Editorial coverage and strict audit closure            | ✅ Done        | 2026-08-23 |
 | MSR-CMS-UAT-6    | Motorsport Single-Type workspace access repair         | ✅ Done        | 2026-08-15 |
 | MSR-CMS-UAT-7    | Draft Mode API-token permission repair                 | ✅ Done        | 2026-08-15 |
 | MSR-CMS-OWNERSHIP-0 | Motorsport CMS ownership audit and migration contract | ✅ Done        | 2026-08-16 |
@@ -1553,6 +1559,23 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | MSR-THEME-5          | Full UAT and editor handover                          | ✅ Done        | 2026-08-16 |
 | MSR-THEME-REVIEW-1   | Vendor composition and preset differentiation review  | ✅ Done        | 2026-08-16 |
 | MSR-THEME-REVIEW-2   | Vendor Editorial light-surface contrast correction    | ✅ Done        | 2026-08-16 |
+| MSR-TICKET-CARD-2    | Background-adaptive ticket serration correction       | ✅ Done        | 2026-08-21 |
+| MSR-TICKET-CARD-3    | Clean two-part ticket rollback                        | ✅ Done        | 2026-08-21 |
+| MSR-MOBILE-NAV-1     | Mobile menu sizing and Event submenu navigation      | ✅ Done        | 2026-08-21 |
+| MSR-SURFACE-1        | Vendor Editorial surface sequencer and contrast gate | ✅ Done        | 2026-08-22 |
+| MSR-SURFACE-2        | Vendor Editorial About route surface rhythm         | ✅ Done        | 2026-08-22 |
+| MSR-SURFACE-3        | Vendor Editorial News hub and detail rhythm         | ✅ Done        | 2026-08-22 |
+| MSR-SURFACE-4        | Vendor Editorial Gallery and Contact rhythm        | ✅ Done        | 2026-08-22 |
+| MSR-SURFACE-5        | Vendor Editorial Tickets and FIA campaign rhythm   | ✅ Done        | 2026-08-22 |
+| MSR-SURFACE-6        | Vendor Editorial cross-route UAT and handover      | ✅ Done        | 2026-08-22 |
+| MSR-SURFACE-IJTC     | Vendor Editorial IJTC hub and programme sub-page rhythm | ✅ Done     | 2026-08-22 |
+| MSR-CMS-OPS-1         | Editorial show-toggle defaults and local operational gate | ✅ Done | 2026-08-23 |
+| MSR-CMS-LIVE-1        | Motorsport saved-draft live Preview MVP                  | ✅ Done | 2026-08-23 |
+| MSR-CMS-LIVE-2        | Motorsport side-by-side CMS and frontend Preview         | ✅ Done | 2026-08-23 |
+| MSR-CMS-LIVE-3        | Integrated Content Manager Preview action                | ✅ Done | 2026-08-23 |
+| MSR-CMS-LIVE-4        | Dedicated popup preview and collection-entry support    | ✅ Done | 2026-08-23 |
+| MSR-CMS-LIVE-5        | Same-tab integrated Preview behavior                     | ✅ Done | 2026-08-23 |
+| MSR-CMS-LIVE-6        | Responsive mobile editor action toolbar                 | ✅ Done | 2026-08-23 |
 
 ### MSR-THEME-REVIEW-1 — Vendor composition and preset differentiation review
 
@@ -8679,7 +8702,7 @@ Status: ✅ Done 2026-08-17
 
 ### Files changed
 
-- `frontend-motorsport/src/app/globals.css`
+- `frontend-motorsport/src/components/sections/ticket-cta-panel.tsx`
 - `docs/PHASE_PROGRESS.md`
 
 ### How verified
@@ -8836,3 +8859,1161 @@ Status: ✅ Done 2026-08-18
 - IJTC child-page route-local copy and program-specific presentation remains a
   separate future model extension because those routes are not backed by the
   primary page Single Types.
+
+## MSR-CMS-EDITOR-1 — Motorsport Program editor order and source guidance
+
+Status: ✅ Done 2026-08-22
+
+### What was done
+
+- Reordered the Motorsport Program schema so the primary presentation groups
+  are at the top and match the public campaign flow: hero/information band,
+  carousel, supporting sections, legacy fallback media, rundown, and rules.
+- Added explicit CMS descriptions explaining which field is canonical and
+  which fields are supporting or legacy fallbacks.
+- Made `motorsportPresentation → hero → backgroundMedia` the preferred
+  programme image in the frontend while retaining root `heroMedia` fallback
+  compatibility.
+- Preserved supporting-section media and visibility metadata in the programme
+  adapter.
+
+### Files changed
+
+- `cms/src/api/motorsport-program/content-types/motorsport-program/schema.json`
+- `cms/src/migrations/motorsport-program-editor-layout.ts`
+- `cms/src/components/motorsport/detail-presentation.json`
+- `cms/src/components/motorsport/campaign-slide.json`
+- `cms/src/components/motorsport/page-section.json`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/types/design-system.ts`
+- `docs/motorsport/revamp/70_program_editor_order_and_content_mapping.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Motorsport TypeScript check and production build passed.
+- CMS schema JSON parsed successfully.
+- Rallycross route continued to resolve with existing root-media fallback.
+
+### Notes / caveats
+
+- Existing Strapi installations may retain a persisted Content Manager layout
+  override in `strapi_core_store_settings`; updating the schema file alone does
+  not reorder those editors.
+- Existing records are not deleted or migrated destructively.
+
+### Live editor layout correction — 2026-08-21
+
+- Updated the persisted Content Manager `layouts.edit` configuration for the
+  Motorsport Program content type so `motorsportPresentation`, `heroMedia`,
+  `bannerSlides`, and `presentationSections` appear first.
+- Added a bootstrap repair migration so existing and fresh deployments recover
+  the intended persisted editor order after Strapi initializes.
+- Normalized the persisted `motorsport.page-section` component layout so its
+  visibility controls appear before the content fields.
+- Verified with the authenticated Motorsport Admin session that the FIA
+  Rallycross editor now opens with `motorsportPresentation` at the top, followed
+  by `heroMedia`, `bannerSlides`, and `presentationSections`.
+
+## MSR-CMS-UAT-2 — Rallycross presentation visibility wiring
+
+Status: ✅ Done 2026-08-21
+
+### What was done
+
+- Made the nested Rallycross programme hero the authoritative source for hero
+  copy, media, and `show*` flags, with legacy fallbacks preserved.
+- Honoured hero `isActive` and information-band `isActive` values.
+- Added whole-section visibility gates for Format, Rundown, Race-day Guide,
+  and the campaign ticket panel.
+- Passed section-level index, eyebrow, title, and body visibility flags into
+  the shared section header.
+- Added a documented source-precedence and visibility contract.
+
+### Files changed
+
+- `frontend-motorsport/src/app/campaign/[slug]/page.tsx`
+- `frontend-motorsport/src/components/sections/information-band.tsx`
+- `frontend-motorsport/src/app/events/[slug]/page.tsx`
+- `frontend-motorsport/src/app/news/[slug]/page.tsx`
+- `docs/motorsport/revamp/71_campaign_visibility_wiring.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- CMS API confirmed the Rallycross hero `showDescription` value is `false`.
+- Docker-backed browser reload of the canonical Rallycross route confirmed the
+  hero description is hidden while the title, media, and actions remain.
+- Motorsport TypeScript check passed.
+- Motorsport lint passed with two existing warnings only.
+
+### Notes / caveats
+
+- The information-band description is independent from the hero description;
+  hiding one does not hide the other.
+- Carousel slide visibility is currently controlled by the `bannerSlides`
+  collection membership because the slide component has no `isActive` field.
+
+## MSR-TICKET-CARD-2 — Background-adaptive ticket serration correction
+
+Status: ✅ Done 2026-08-21
+
+### What was done
+
+- Changed the shared Motorsport ticket-card perforations from Apex Crimson dots
+  to canvas-coloured cut-outs.
+- Kept the two-part ticket layout and shared ticket content/CTA contract
+  unchanged.
+- The Vendor Editorial preset now uses its warm cream canvas for the scalloped
+  cut-outs, creating the intended physical ticket silhouette.
+
+### Files changed
+
+- `frontend-motorsport/src/app/globals.css`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Browser checked the shared ticket card at `/tickets`; cream cut-outs render
+  on both ticket edges with no red dotted border. The homepage uses the same
+  shared ticket-card component.
+- TypeScript check and production build passed.
+- Lint completed with only the two existing unused-variable warnings.
+- HTTP smoke checks returned `200` for `/`, `/tickets`, and the FIA Rallycross
+  Event route.
+
+### Notes / caveats
+
+- Ticket cards inherit `--ms-ticket-perforation-color` from
+  `--ms-surface-canvas`. A future section with a deliberately different canvas
+  colour can override that custom property locally.
+
+## MSR-TICKET-CARD-3 — Clean two-part ticket rollback
+
+Status: ✅ Done 2026-08-21
+
+### What was done
+
+- Removed the ticket-specific serration and perforation pseudo-elements from
+  the shared Motorsport ticket card.
+- Restored the clean panel outline while preserving the existing wider main
+  content area and separate right-hand CTA panel.
+- Left all ticket CTA CMS bindings, content fields, links, and responsive
+  layout behavior unchanged.
+
+### Files changed
+
+- `frontend-motorsport/src/components/sections/ticket-cta-panel.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Restarted the local Motorsport Docker service and confirmed `/tickets`
+  returns HTTP `200`.
+- Checked the running Tickets page for its two shared ticket-card instances;
+  the ticket-specific serration class and its pseudo-elements are absent, so no
+  red or canvas-coloured dot edge is rendered.
+
+### Notes / caveats
+
+- The existing small lower-right angled corner remains part of the standard
+  Motorsport panel component. No ticket-specific silhouette treatment remains.
+
+## MSR-MOBILE-NAV-1 — Mobile menu sizing and Event submenu navigation
+
+Status: ✅ Done 2026-08-21
+
+### What was done
+
+- Reduced mobile drawer heading scale, row padding, and bottom control spacing
+  while preserving the desktop navigation scale.
+- Kept the mobile Event parent as an explicit toggle and made each Event child a
+  direct navigation link.
+- Scoped the outside-pointer handler to both desktop and mobile Event menus so
+  child links are not unmounted before their click event runs.
+- Close both mobile menu states after a child or regular navigation link is
+  selected.
+
+### Files changed
+
+- `frontend-motorsport/src/components/layout/motorsport-header.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Browser checked the mobile drawer, expanded Event, and selected the FIA
+  Rallycross child link; the browser landed on
+  `/events/fia-rallycross-world-cup-indonesia-2026` and rendered the campaign
+  H1.
+- Motorsport typecheck, lint, production build, and `git diff --check` passed.
+- Lint reports only the two existing unused-variable warnings in Gallery and
+  BrandLogo.
+
+### Notes / caveats
+
+- Desktop Event dropdown behavior remains unchanged.
+- Event child destinations continue to come from CMS navigation data, with the
+  existing fallback entries when CMS navigation is unavailable.
+
+## MSR-HOME-SURFACE-1 — Vendor Editorial homepage surface rhythm
+
+Status: ✅ Done 2026-08-21
+
+### What was done
+
+- Added a server-rendered visible-section sequence for the homepage after the
+  World section: light cream, then charcoal.
+- Hidden CMS sections do not consume a surface slot, so the next visible section
+  inherits the correct alternation.
+- The homepage ticket card follows the sequence and renders charcoal when the
+  preceding visible section is light; the footer remains the existing charcoal
+  surface.
+- Added Vendor Editorial token-aware text and border overrides so content stays
+  legible on both surfaces.
+
+### Files changed
+
+- `frontend-motorsport/src/app/page.tsx`
+- `frontend-motorsport/src/app/globals.css`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Browser check on `/` with `data-ms-theme="theme-vendor-editorial"` confirmed
+  surfaces in order: cream, charcoal (ticket), cream, charcoal, cream.
+- Motorsport typecheck passed.
+- Production build passed.
+- Lint passed with two existing unused-variable warnings.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- The sequence is based on the visible CMS-driven sections, not fixed DOM
+  positions. The footer/partner and newsletter areas keep their existing
+  charcoal treatment.
+- The local Docker dev service cache was cleared before browser verification.
+
+## MSR-SURFACE-0 — Vendor Editorial cross-page surface rhythm contract
+
+Status: ✅ Spec ready 2026-08-21
+
+### What was done
+
+- Documented the cross-page Vendor Editorial surface alternation contract:
+  visible sections alternate light cream and charcoal after each route anchor;
+  hidden sections do not consume a slot; the footer remains charcoal.
+- Audited the target About, News, News detail, Gallery, Contact, Ticket, and
+  FIA Rallycross routes and recorded their ordered eligible sections.
+- Split implementation into six small, independently verifiable phases for
+  `gpt-5.6-luna`, while keeping the completed homepage phase as the baseline.
+
+### Files changed
+
+- `docs/motorsport/revamp/73_vendor_editorial_cross_page_surface_rhythm_plan.md`
+- `docs/motorsport/revamp/README.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Reviewed the current route implementations, CMS visibility predicates, and
+  existing Vendor Editorial token/surface rules.
+- Confirmed no frontend or CMS code was changed in this specification phase.
+
+### Notes / caveats
+
+- `MSR-SURFACE-1` is complete; later route phases should reuse its helper and
+  preserve the same visibility-first sequencing contract.
+- No new CMS fields or migrations are planned. Surface assignment is derived
+  from the existing visibility state and render order.
+
+## MSR-SURFACE-1 — Vendor Editorial surface sequencer and contrast gate
+
+Status: ✅ Done 2026-08-21
+
+### What was done
+
+- Added a pure, server-safe `createSurfaceSequencer` helper for the
+  `vendor-editorial` preset.
+- Replaced the homepage-local surface counter with the shared helper while
+  preserving the existing visible-section render order and hidden-section
+  behavior.
+- Reused the existing Vendor Editorial light/charcoal surface tokens and
+  contrast rules; no CMS schema or content contract changes were introduced.
+
+### Files changed
+
+- `frontend-motorsport/src/lib/surface-sequencer.ts`
+- `frontend-motorsport/src/app/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- `pnpm typecheck` passed.
+- `pnpm lint` passed with the two existing unused-variable warnings in Gallery
+  and BrandLogo.
+- `npx next build --webpack` passed and generated all 50 routes.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- A direct HTTP smoke check was not available because the local service on
+  `localhost:3001` was not running in this session. The production Webpack
+  build provided route-level validation; the default Turbopack build was
+  blocked by the sandbox's subprocess/port restriction while processing the
+  existing Noto Sans CSS.
+- Later cross-page route phases should call the same helper only for eligible
+  visible sections after each route's designated anchor.
+
+## MSR-SURFACE-2 — Vendor Editorial About route surface rhythm
+
+Status: ✅ Done 2026-08-22
+
+### What was done
+
+- Loaded the active Motorsport theme through the existing CMS theme adapter and
+  reused the shared server-safe surface sequencer on `/about`.
+- Applied the sequence after the Information Band to the visible `profile`,
+  `about-capabilities`, `team-intro`, and combined `about-ctas` sections in
+  render order.
+- Kept CMS visibility predicates as the slot gate, so hidden sections do not
+  consume a cream/charcoal surface slot.
+- Preserved the About hero, blue Information Band, image treatments, team
+  content, and footer behavior. Existing shared token-aware surface selectors
+  required no CSS changes.
+
+### Files changed
+
+- `frontend-motorsport/src/app/about/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Motorsport typecheck passed.
+- Motorsport production build passed and generated all 50 routes.
+- Motorsport lint passed with the two existing unused-variable warnings in
+  Gallery and BrandLogo.
+- `git diff --check` passed.
+- Static render-order review confirmed each conditional branch calls the
+  sequencer only when its CMS section is visible; non-vendor themes return no-op
+  classes through the shared helper.
+
+### Notes / caveats
+
+- A live EN/ID browser smoke check with CMS sections toggled was not available
+  because the local service was not running in this session. Build/type/lint
+  verification and the server-side visibility-first implementation are complete;
+  the cross-route browser/UAT pass remains in `MSR-SURFACE-6`.
+
+## MSR-SURFACE-3 — Vendor Editorial News hub and detail rhythm
+
+Status: ✅ Done 2026-08-22
+
+### What was done
+
+- Loaded the active Motorsport theme with the request locale on the News hub
+  and reused the shared server-safe surface sequencer.
+- Treated the hub lead/archive feed wrapper as one eligible surface unit, then
+  sequenced the optional `news-gallery-cta` as the next unit only when visible.
+- Sequenced article detail after the Information Band with the story as the
+  first eligible unit and `Continue reading` as the second only when related
+  stories exist.
+- Preserved editorial typography, image treatments, related-story links, and
+  existing CMS visibility predicates. Shared surface selectors required no CSS
+  changes.
+
+### Files changed
+
+- `frontend-motorsport/src/app/news/page.tsx`
+- `frontend-motorsport/src/app/news/[slug]/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Prettier check passed for both News route files.
+- Motorsport typecheck passed.
+- Motorsport production build passed and generated all 50 routes.
+- Motorsport lint passed with the two existing unused-variable warnings in
+  Gallery and BrandLogo.
+- `git diff --check` passed.
+- Static render-order review confirmed the hub wrapper consumes one slot and
+  hidden related stories do not consume a detail slot.
+
+### Notes / caveats
+
+- A live EN/ID browser smoke check with CMS visibility toggles was not available
+  because the local service was not running in this session. The route build and
+  server-side visibility-first implementation are complete; cross-route browser
+  UAT remains in `MSR-SURFACE-6`.
+
+## MSR-SURFACE-4 — Vendor Editorial Gallery and Contact rhythm
+
+Status: ✅ Done 2026-08-22
+
+### What was done
+
+- Loaded the active Motorsport theme with the request locale for Gallery and
+  Contact and reused the shared server-safe surface sequencer.
+- Applied the first post–Information Band cream slot to the visible Gallery
+  archive while preserving its approved light archive treatment.
+- Applied the first post–Information Band cream slot to the visible Contact
+  inquiry form and the next charcoal slot to the visible `Race-day route` CTA.
+- Kept existing empty/fallback content, CMS visibility predicates, form fields,
+  CTA destinations, and shared token-aware contrast rules unchanged. No CSS
+  changes were required.
+
+### Files changed
+
+- `frontend-motorsport/src/app/gallery/page.tsx`
+- `frontend-motorsport/src/app/contact/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Prettier check passed for both route files.
+- Motorsport typecheck passed.
+- Motorsport production build passed and generated all 50 routes.
+- Motorsport lint passed with the two existing unused-variable warnings in
+  Gallery and BrandLogo.
+- `git diff --check` passed.
+- Static render-order review confirmed hidden/empty CMS sections do not consume
+  surface slots and Contact alternates form then Race-day CTA when both exist.
+
+### Notes / caveats
+
+- A live desktop/mobile EN/ID browser smoke check with CMS visibility toggles
+  was not available because the local service was not running in this session.
+  Route build/type/lint verification and the server-side visibility-first
+  implementation are complete; cross-route browser UAT remains in
+  `MSR-SURFACE-6`.
+
+## MSR-SURFACE-5 — Vendor Editorial Tickets and FIA campaign rhythm
+
+Status: ✅ Done 2026-08-22
+
+### What was done
+
+- Loaded the active Motorsport theme with the request locale for the Tickets
+  route and reused the shared server-safe surface sequencer.
+- Applied post–Information Band sequencing to visible `featured-ticket`,
+  `ticketed-events`, and `ticket-info` sections, with empty ticketed-event
+  results not consuming a slot.
+- Applied FIA sequencing after `CampaignBannerSlider` to visible `format`,
+  `rundown`, `race-day-guide`, and conditional `campaign-ticket` sections.
+- Preserved the actual `/tickets` route, FIA canonical event route,
+  partner-ticket redirects, CMS ticket fields, campaign media, slider output,
+  Information Band anchors, redirect behavior, and footer treatment.
+
+### Files changed
+
+- `frontend-motorsport/src/app/tickets/page.tsx`
+- `frontend-motorsport/src/app/campaign/[slug]/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Prettier check passed for both route files.
+- Motorsport typecheck passed.
+- Motorsport production build passed and generated all 50 routes.
+- Motorsport lint passed with the two existing unused-variable warnings in
+  Gallery and BrandLogo.
+- `git diff --check` passed.
+- Static render-order review confirmed hidden/empty eligible sections do not
+  consume slots and FIA sequencing begins after the slider anchor.
+
+### Notes / caveats
+
+- The phase contract calls the ticket route `/ticket`, but the implemented
+  canonical route in this repository is `/tickets`; no redirect or navigation
+  change was introduced.
+- A live desktop/mobile EN/ID browser smoke check was not available because the
+  local service was not running in this session. Route build/type/lint
+  verification and the server-side visibility-first implementation are
+  complete; cross-route browser UAT remains in `MSR-SURFACE-6`.
+
+## MSR-SURFACE-6 — Vendor Editorial cross-route UAT and handover
+
+Status: ✅ Done 2026-08-22
+
+### What was done
+
+- Completed live English and Indonesian browser checks for the homepage,
+  About, News hub and article detail, Gallery, Contact, Tickets, and the FIA
+  canonical event route under `vendor-editorial`.
+- Verified the `current-motorsport` and `vendor-night` presets remain stable
+  non-alternating regressions, then restored `vendor-editorial` as the
+  published CMS theme preset.
+- Verified alternating surface order, charcoal footer treatment, no
+  horizontal overflow, no application-error text, and partner ticket CTA
+  destinations across the tested routes.
+- Confirmed the dedicated Motorsport CMS workspace and named section controls
+  are available to editors. The dedicated single-page reader now uses a
+  schema-safe wildcard population contract so CMS section visibility data is
+  present in live route rendering.
+- Performed a reversible Tickets `isActive` draft save/reload check and
+  restored the original visible state.
+
+Editor note: editors control sequence position through section visibility and
+content presence; they do not select cream/charcoal manually. The frontend
+consumes only visible eligible sections, so hidden sections do not consume a
+surface slot.
+
+### Files changed
+
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Live browser matrix: English/Indonesian route checks, footer/background
+  assertions, surface sequence assertions, theme preset regression checks,
+  ticket link checks, and CMS workspace/editor checks.
+- `pnpm typecheck` passed.
+- `pnpm lint` passed with the two existing warnings in Gallery and BrandLogo.
+- `pnpm build` passed and generated all 50 routes.
+- `MOTORSPORT_UAT_URL=http://localhost:3012 pnpm uat:routes` passed for 88
+  localized routes plus the legacy FIA redirect on a production server.
+- Docker Compose config validation passed; local Postgres, Strapi, and
+  Motorsport services were healthy. `git diff --check` passed.
+
+### Notes / caveats
+
+- The CMS draft preview iframe returned its configured “page could not be
+  rendered” fallback, so draft-preview visual parity could not be claimed.
+  The live published route and CMS editor state were restored and verified.
+- The in-app browser viewport override remained at desktop width, so mobile
+  was covered by responsive source/CSS review rather than a true 390px live
+  viewport. Keyboard focus automation was also limited by the browser
+  backend; no focus regression was observed in the source review.
+- Full first/middle/final visibility permutations across every route were not
+  destructive-tested live because the draft preview read failed and the
+  section publish action did not expose a confirmed published-state change.
+
+## MSR-SURFACE-IJTC — Vendor Editorial IJTC hub and programme sub-page rhythm
+
+Status: ✅ Done 2026-08-22
+
+### What was done
+
+- Reused the shared Vendor Editorial surface sequencer across the Indonesia
+  Junior Talent Cup overview, Race Schedule, Riders, rider detail, Standings,
+  About IJTC, Regulation, and Become Riders routes.
+- Kept each Hero and Information Band as an anchor, then applied cream/charcoal
+  alternation to visible post-band sections in render order.
+- Added a dedicated CSS override for sections that retain the legacy reflected
+  light class while receiving a charcoal Vendor Editorial slot.
+- Kept `current-motorsport` and `vendor-night` behavior unchanged because the
+  shared sequencer returns no-op classes for those presets.
+- Preserved CMS/fallback data, IJTC navigation, rider inquiry behavior, and
+  regulation document behavior.
+
+### Files changed
+
+- `frontend-motorsport/src/app/events/indonesia-junior-talent-cup/`
+- `frontend-motorsport/src/app/globals.css`
+- `docs/motorsport/revamp/74_vendor_editorial_ijtc_surface_rhythm.md`
+- `checklists/motorsport/motorsport_revamp_phase_checklist.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Motorsport TypeScript check passed.
+- Motorsport lint passed with the two existing warnings in Gallery and
+  BrandLogo.
+- Prettier check passed for all touched IJTC route files and shared CSS.
+- Motorsport production build passed and generated all 50 routes, including
+  all IJTC and rider detail routes.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- The requested `race-schedulue` spelling is not a repository route; the
+  canonical path remains `/events/indonesia-junior-talent-cup/race-schedule`.
+- A live browser UAT was not run in this session because the local Motorsport
+  service was not running. Build, type, lint, formatting, and render-order
+  verification are complete.
+
+## MSR-CMS-CLEAN-0 — CMS/frontend alignment reassessment
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Audited the ten Motorsport Single Type presentation schemas against their
+  frontend `data-cms-section-key` render order.
+- Documented missing CMS coverage, section grouping/aliasing, hardcoded
+  editorial surfaces, and duplicate Ticket CTA/Information Band sources.
+- Recorded the canonical Information Band, Motorsport Ticket CTA, and
+  per-page ordered-adapter decisions for the next implementation phase.
+- Added a read-only repository validator; no runtime schema, frontend, content,
+  database, or migration changes were made.
+
+### Files changed
+
+- `cms/scripts/audit-motorsport-cms-frontend-alignment.mjs`
+- `docs/motorsport/revamp/75_cms_clean_alignment_phase0_audit.md`
+- `docs/PHASE_PROGRESS.md`
+- `checklists/motorsport/motorsport_revamp_phase_checklist.md`
+
+### How verified
+
+- Read-only validator executed against all ten dedicated page schemas and
+  frontend route markers.
+- Source PDFs and the Motorsport revamp contracts were reviewed before the
+  audit artifact was written.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- This is an alignment reassessment after the historical CLEAN-0–11
+  simplification track; those historical entries remain unchanged.
+- The validator reports known findings in default mode. Strict mode is a
+  future blocking gate after the findings are closed.
+- Live Strapi content and authenticated browser UAT are intentionally deferred
+  to later phases.
+
+## MSR-CMS-CLEAN-1/2 — Alignment foundation and homepage execution
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Replaced the global Motorsport page-section union with per-route ordered
+  field mappings and added tests for CMS-order preservation.
+- Made the canonical Information Band own visibility whenever it exists;
+  legacy control sections remain compatibility fallbacks only.
+- Added named Home Single Type sections for Gallery, Partners, and Newsletter,
+  including show/hide support, localized copy, migration mapping, and persisted
+  Content Manager ordering.
+- Wired the homepage render markers and editorial copy to the new named fields
+  while preserving partner collection, newsletter API, and ticket behavior.
+
+### Files changed
+
+- `cms/src/api/motorsport-home-page/content-types/motorsport-home-page/schema.json`
+- `cms/src/migrations/motorsport-page-single-types.ts`
+- `cms/src/migrations/motorsport-program-editor-layout.ts`
+- `cms/types/generated/contentTypes.d.ts`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/lib/cms-page-order.ts`
+- `frontend-motorsport/src/lib/cms-page-order.test.ts`
+- `frontend-motorsport/src/lib/cms-visibility.ts`
+- `frontend-motorsport/src/lib/homepage-data.ts`
+- `frontend-motorsport/src/app/page.tsx`
+- `frontend-motorsport/src/app/{about,events,news,gallery,merchandise,tickets,partners,experience,contact}/page.tsx`
+- `docs/motorsport/revamp/76_cms_clean_followup_phase1_2_execution.md`
+
+### How verified
+
+- `pnpm --dir cms exec strapi ts:generate-types` passed with zero warnings/errors.
+- CMS typecheck and production admin build passed.
+- Motorsport focused tests passed (14 tests), typecheck, formatting, and
+  production build passed with 50 generated routes.
+- Read-only alignment audit passed with zero structural issues.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- Historical CLEAN-0–11 entries remain unchanged; this is the follow-up
+  alignment execution recorded after the reassessment.
+- Authenticated CMS editor UAT and live EN/ID content verification remain
+  later migration/cutover gates.
+
+## MSR-CMS-CLEAN-3 — Gallery legacy-field cleanup
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Removed the frontend Gallery read of legacy `gallery-intro`.
+- Made the canonical Hero own Gallery eyebrow and hero metric visibility;
+  `archiveSection` remains the only Gallery body section.
+- Removed the legacy migration alias while retaining safe eyebrow transfer for
+  existing records.
+- Updated the static alignment audit and documented the phase evidence.
+
+### Files changed
+
+- `frontend-motorsport/src/app/gallery/page.tsx`
+- `cms/src/migrations/motorsport-page-single-types.ts`
+- `cms/scripts/audit-motorsport-cms-frontend-alignment.mjs`
+- `docs/motorsport/revamp/77_cms_clean_followup_phase3_execution.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Motorsport typecheck and lint passed; lint retained two existing warnings.
+- CMS typecheck passed.
+- Prettier, static alignment audit, and `git diff --check` passed.
+
+### Notes / caveats
+
+- Legacy records remain untouched for rollback. Authenticated CMS/browser UAT
+  remains a later gate.
+
+## MSR-CMS-CLEAN-4A — Canonical source enforcement follow-up
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Made the canonical Information Band the sole frontend visibility/copy
+  source; legacy control sections are no longer read by the Motorsport routes
+  or ordered adapter.
+- Cut the homepage and event ticket resolution paths over to dedicated
+  Motorsport Ticket CTA records rather than the shared Ticket CTA fallback or
+  inline event ticket fields.
+- Added persisted editor layouts for the nine non-home Motorsport Single Types,
+  keeping Hero → Information Band → named editorial sections → availability/
+  SEO and omitting legacy control rows.
+
+### Files changed
+
+- `frontend-motorsport/src/lib/cms-visibility.ts`
+- `frontend-motorsport/src/lib/cms-visibility.test.ts`
+- `frontend-motorsport/src/components/sections/motorsport-page-information-band.tsx`
+- `frontend-motorsport/src/lib/cms-page-order.ts`
+- `frontend-motorsport/src/lib/cms-page-order.test.ts`
+- `frontend-motorsport/src/lib/homepage-data.ts`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/app/{events,news,merchandise,tickets,partners,experience,contact}/page.tsx`
+- `cms/src/migrations/motorsport-program-editor-layout.ts`
+- `cms/scripts/audit-motorsport-cms-frontend-alignment.mjs`
+- `docs/motorsport/revamp/78_cms_clean_followup_phase4_execution.md`
+- `checklists/motorsport/motorsport_revamp_phase_checklist.md`
+
+### How verified
+
+- Focused tests passed: 14 tests.
+- Motorsport typecheck, lint, formatting, and production build passed with 50
+  generated routes; lint retained only the two existing warnings.
+- CMS typecheck and production admin build passed.
+- Static alignment audit reported zero structural issues, 13 documented
+  findings, and 2 remaining schema-level duplicate source sets.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- Legacy schema fields and records remain physically present for rollback and
+  later reconciliation; they are not public frontend sources or persisted
+  editor-layout fields after this phase.
+- Shared Ticket CTA remains operational for non-Motorsport scopes. Live CMS
+  reconciliation and authenticated Preview/browser UAT remain later gates.
+
+## MSR-CMS-CLEAN-5A — Editorial coverage and strict audit closure
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Added reusable page-section legal text, secondary CTA, and ordered repeatable
+  item fields with item-level visibility/media controls.
+- Added the reusable `motorsport.page-section-item` component and its editor
+  layout, then wired Newsletter, About, News, Commerce, Support, Ticket Info,
+  and Experience surfaces to the canonical fields.
+- Made About CTA markers independent and documented structural wrappers as
+  non-editorial layout only.
+- Classified shared Ticket CTA as compatibility-only for non-Motorsport scopes
+  and rollback; no active Motorsport duplicate remains.
+- Closed the strict audit for all ten Motorsport page routes.
+
+### Files changed
+
+- `cms/src/components/motorsport/page-section.json`
+- `cms/src/components/motorsport/page-section-item.json`
+- `cms/src/migrations/motorsport-program-editor-layout.ts`
+- `cms/scripts/audit-motorsport-cms-frontend-alignment.mjs`
+- `cms/types/generated/{components,contentTypes}.d.ts`
+- `frontend-motorsport/src/components/sections/newsletter-cta.tsx`
+- `frontend-motorsport/src/lib/{cms-page-order,cms-data,homepage-data}.ts`
+- `frontend-motorsport/src/app/{page,about,news,merchandise,tickets,partners,experience,contact}/page.tsx`
+- `docs/motorsport/revamp/79_cms_clean_followup_phase5_execution.md`
+
+### How verified
+
+- Strapi type generation passed with zero warnings/errors.
+- Strict audit passed: 10 pages, 0 structural issues, 0 documented findings,
+  and 0 active duplicate source sets.
+- Focused tests passed: 14 tests; frontend and CMS typechecks passed.
+- Motorsport and CMS production builds passed; Motorsport generated 50 routes.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- Fallback copy/cards remain only for CMS outage or unmigrated records.
+- Contact form categories and email routing remain application-owned
+  operational configuration by design.
+- No legacy records or schemas were deleted. Authenticated CMS content
+  reconciliation and browser Preview UAT remain deployment-level gates.
+
+## MSR-CMS-OPS-1 — Editorial show-toggle defaults and local operational gate
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Confirmed every editorial boolean field beginning with `show` in the CMS
+  schema has `default: true` (21 fields across Motorsport components and page
+  settings).
+- Added an idempotent Strapi bootstrap backfill that sets only missing/null
+  editorial `show*` values to `true` across the ten Motorsport page Single
+  Types, including retained compatibility control components.
+- Applied the backfill to the local PostgreSQL-backed CMS: 20 documents and
+  484 valid missing values were repaired; explicit `false` values were
+  preserved. Twelve unsupported `worldSection` candidates were excluded.
+- Kept `showOnGateway`, `showOnMotorsport`, and `showOnHorseSport` unchanged as
+  site-distribution controls with intentional defaults.
+- Added a static schema audit and Docker Compose mode wiring so future schema
+  regressions and one-shot deployment runs are explicit.
+
+### Files changed
+
+- `cms/src/migrations/motorsport-show-field-defaults.ts`
+- `cms/scripts/audit-show-field-defaults.mjs`
+- `cms/src/index.ts`
+- `cms/package.json`
+- `cms/.env.example`
+- `.env.example`
+- `docker-compose.yml`
+- `docs/motorsport/revamp/80_cms_show_field_defaults_and_operational_gate.md`
+- `checklists/motorsport/motorsport_revamp_phase_checklist.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Dry run: 20 documents, 412 candidates, 0 writes; 12 were correctly identified
+  as unsupported `worldSection` keys during implementation tracing.
+- Apply: 20 documents updated; the retained compatibility-field pass updated
+  14 documents and 84 valid values; the unsupported `worldSection` mapping was
+  removed, for 484 valid repaired values overall.
+- Verify: 20 documents, 0 missing values, 0 writes.
+- Static default audit: 21 editorial toggles pass; 6 distribution controls
+  intentionally preserved.
+- Strict CMS/frontend audit: 10 pages, 0 structural issues, 0 findings, and
+  0 active duplicate source sets.
+- CMS typecheck and production admin build passed.
+- Motorsport typecheck, production build (50 routes), focused contract tests
+  (10/10), and local HTTP smoke checks passed (`/admin`, page API, frontend
+  home all returned HTTP 200).
+- Authenticated local CMS browser UAT passed for all ten English and ten
+  Indonesian page editors: every rendered `show*` control had an explicit
+  True or False selection with no blank controls. Homepage Preview opened and
+  rendered successfully with no browser console errors.
+
+### Notes / caveats
+
+- The migration is disabled by default after the local backfill. For another
+  environment use `dry-run`, review the count, run `apply` once, then `verify`
+  and return the mode to `off`.
+- Staging publish parity, desktop/mobile show/hide browser permutations, and
+  release/rollback rehearsal remain external operational gates.
+
+## MSR-CMS-LIVE-1 — Motorsport saved-draft live Preview MVP
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Added a server-only Preview heartbeat that validates Draft Mode and the
+  signed exact-document Preview cookie before reading a revision marker.
+- Added a two-second client poller that refreshes the App Router automatically
+  after a saved CMS change and pauses while the tab is hidden.
+- Added a small Preview status indicator so editors can see whether the live
+  refresh watcher is active, updating, or temporarily paused.
+- Kept the Strapi API token and draft payload server-side; no paid Strapi
+  feature or third-party service was introduced.
+
+### Files changed
+
+- `frontend-motorsport/src/app/api/preview/heartbeat/route.ts`
+- `frontend-motorsport/src/components/preview-live-refresh.tsx`
+- `frontend-motorsport/src/app/layout.tsx`
+- `frontend-motorsport/src/lib/preview/{preview-context,live-preview}.ts`
+- `frontend-motorsport/src/lib/preview/live-preview.test.ts`
+- `docs/motorsport/revamp/81_cms_live_preview_mvp.md`
+- `docs/PHASE_PROGRESS.md`
+- `checklists/motorsport/motorsport_revamp_phase_checklist.md`
+
+### How verified
+
+- Motorsport typecheck passed.
+- Motorsport lint passed.
+- Preview context tests passed.
+- Live-preview fingerprint tests passed.
+
+The public heartbeat boundary returned `401` outside Preview. Full
+authenticated Save → iframe refresh UAT remains a local/staging operational
+gate because the local Strapi service became temporarily unresponsive while
+the updated frontend service was being restarted.
+
+### Notes / caveats
+
+- This phase is live-on-save. Unsaved keystroke-level preview requires a
+  separate custom Strapi editor `postMessage` bridge and source-map contract.
+- The selected Preview document is the heartbeat boundary; changes to related
+  records require previewing that related record or a future dependency-aware
+  live-preview phase.
+
+## MSR-CMS-LIVE-2 — Motorsport side-by-side CMS and frontend Preview
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Added a dedicated `Motorsport Live Preview` Strapi admin menu entry.
+- Added a split-pane workspace with the normal Content Manager editor on the
+  left and the secure Motorsport Preview route on the right.
+- Added selectors for all ten Motorsport page Single Types and both supported
+  locales.
+- Added an explicit editor note clarifying that Save updates the private draft
+  and Publish remains the public release boundary.
+- Kept preview-secret generation server-side through the existing Strapi
+  Preview handler.
+
+### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/extensions/motorsport-live-preview/MotorsportLivePreviewPage.tsx`
+- `cms/config/admin.ts`
+- `cms/.env.example`
+- `docs/motorsport/revamp/82_cms_side_by_side_preview.md`
+- `docs/PHASE_PROGRESS.md`
+- `checklists/motorsport/motorsport_revamp_phase_checklist.md`
+
+### How verified
+
+- Strapi TypeScript compilation passed.
+- Strapi production admin build passed.
+- Motorsport frontend typecheck passed.
+- New admin files passed Prettier formatting.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- The split panes use the authenticated Strapi session and existing Preview
+  route; no CMS content was mutated.
+- Full browser verification of both live iframe panes remains a
+  local/staging operational gate because the local Strapi service became
+  temporarily unresponsive during restart testing.
+
+## MSR-CMS-LIVE-3 — Integrated Content Manager Preview action
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Connected Strapi's native Content Manager `Open preview` action for the ten
+  Motorsport page Single Types to the side-by-side Preview workspace.
+- Preserved the selected page UID and locale when opening the workspace.
+- Hid the nested embedded Strapi navigation and Content Manager collection
+  menu while keeping the editor form and Save/Publish controls visible.
+- Added a compact left entry toolbar matching the reference layout and wired
+  its Save/Publish actions to the underlying Content Manager buttons.
+- Removed the outer Back-to-editor, page selector, and Open Preview controls;
+  restored the Locale selector and kept the compact Strapi-shaped action bar.
+- Replaced the nested native Strapi Preview iframe with the direct Motorsport
+  frontend `/api/preview` iframe. The resolver obtains the current Single Type
+  document ID through the authenticated Content Manager API and retries once
+  through Strapi's access-token refresh flow when needed.
+- Added a dedicated right-side Device layout toolbar for Desktop (1440px) and
+  Mobile (390px) viewport rendering.
+- Added responsive one-column stacking below the split-view breakpoint and
+  dynamic desktop fitting for smaller browser windows.
+- Added 40%–150% Frontend Preview zoom controls with 5% steps and fitted reset
+  behavior.
+- Kept non-Motorsport Preview links on their native Strapi behavior.
+- Added a back-to-editor link and documented the integrated editorial flow.
+- Mirrored the native Content Manager action state in the custom toolbar:
+  Save and Publish remain disabled when clean, use the Motorsport active color
+  only when actionable, show a spinner while forwarding the native action, and
+  emit success/failure toasts.
+- Forwarded Draft/Published selection to the embedded editor and resolved the
+  matching direct frontend draft/published URL; successful Save or Publish
+  remounts the direct frontend iframe.
+- Replaced the custom toolbar's delayed-only polling with direct observation of
+  native Save/Publish disabled-state mutations plus embedded input/change
+  events, while retaining a low-frequency iframe fallback.
+- Added an optimistic iframe-to-parent dirty-state bridge for `beforeinput`,
+  `input`, and `change`, followed by next-frame reconciliation with Strapi's
+  native action state.
+
+### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/extensions/motorsport-live-preview/MotorsportLivePreviewPage.tsx`
+- `docs/motorsport/revamp/82_cms_side_by_side_preview.md`
+- `docs/motorsport/revamp/83_cms_integrated_content_manager_preview.md`
+- `docs/motorsport/revamp/README.md`
+- `checklists/motorsport/motorsport_revamp_phase_checklist.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- CMS `tsc --noEmit` passed.
+- CMS production admin build passed.
+- Authenticated browser smoke passed: the Homepage Content Manager Preview
+  link redirected to the integrated route with the correct UID and locale;
+  both editor and frontend iframe panes loaded.
+- `git diff --check` passed.
+- Clean-state browser smoke confirmed the custom Save and Publish buttons are
+  disabled; the custom Published tab forwarded the status transition to the
+  embedded editor without changing content.
+- Follow-up CMS TypeScript check passed after the immediate action-state sync
+  change.
+- Authenticated live verification measured custom Save activation and clean
+  reset within about 150–400 ms for both text and checkbox edits; no content
+  was saved or published during the timing test.
+- Post-bridge comparison found no multi-second custom-only delay: custom and
+  native activation remained within the same browser-measured window, while
+  local CMS/API load dominated the absolute checkbox timing.
+- Direct-preview browser smoke confirmed exactly two iframes (editor + direct
+  frontend), no nested `/content-manager/preview` iframe, 40% zoom floor, 390px
+  mobile viewport, and stacked editor/preview panes at 760px browser width.
+
+### Notes / caveats
+
+- The split view is a custom Strapi admin extension, not a paid Visual Editing
+  feature.
+- Save-triggered draft refresh is supported; unsaved keystroke-level editing
+  remains a future `postMessage` bridge.
+- The build's admin-panel compilation completes, but the local Strapi process
+  currently exits during shutdown with a Strapi 5 permission-service error;
+  this is separate from the custom admin extension TypeScript check.
+- The direct preview URL is signed and visible to the active iframe by design;
+  the existing Preview secret and frontend validation remain the access gate.
+
+## MSR-CMS-BUGFIX-1 — About hero visibility wiring
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Connected the Motorsport About page hero container to the canonical
+  `hero.isActive` visibility flag.
+- Preserved the existing fallback hero behavior when the CMS hero component is
+  absent.
+
+### Files changed
+
+- `frontend-motorsport/src/app/about/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Motorsport frontend TypeScript check passed.
+- `git diff --check` passed.
+- The renderer now gates the complete hero section with
+  `isCmsCanonicalSectionVisible(page.hero)`, matching the behavior already used
+  by the other About page sections.
+
+### Notes / caveats
+
+- No CMS content was changed, saved, or published during this fix.
+
+## MSR-CMS-LIVE-4 — Dedicated popup preview and collection-entry support
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Removed the visible `Motorsport Live Preview` admin menu entry while keeping
+  the route registered as a hidden implementation route.
+- Made the Content Manager Preview control the single entry point for the
+  custom side-by-side workspace.
+- Replaced the native Preview anchor with a custom button and opened exactly
+  one dedicated preview window, keeping the original editor active.
+- Added close/back behavior that closes the dedicated window and returns to the
+  previously active Content Manager editor.
+- Extended preview selection from Motorsport Single Types to approved
+  collection records using UID, locale, and `documentId`.
+- Added collection-aware editor/data endpoint resolution and entry-title
+  discovery for event, news, gallery, partner, program, regulation, rider,
+  standing, ticket CTA, top-navigation, leadership, and Site records.
+
+### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/extensions/motorsport-live-preview/MotorsportLivePreviewPage.tsx`
+- `docs/motorsport/revamp/83_cms_integrated_content_manager_preview.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- CMS TypeScript check passed.
+- Motorsport frontend TypeScript check passed.
+- Preview-path unit tests passed: 7/7.
+- `git diff --check` passed.
+- Authenticated browser smoke passed for a Motorsport Event collection entry:
+  the standalone menu item was absent, the Preview control contained the
+  collection UID and document ID, one custom window opened, the editor stayed
+  active, and Back to editor closed the custom window.
+
+### Notes / caveats
+
+- Unsupported collection types and non-Motorsport entries retain native
+  Strapi Preview behavior.
+- Popup-blocking browsers fall back to same-tab navigation so the preview
+  remains reachable.
+- Browser smoke showed existing unrelated local Strapi AI/i18n 404 and token
+  refresh noise; no content was changed, saved, or published.
+
+## MSR-CMS-LIVE-5 — Same-tab integrated Preview behavior
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Changed the Content Manager Preview control from popup-based navigation to a
+  same-tab transition.
+- Simplified activation to click and keyboard activation, preventing the
+  pointer-event race that required a second click.
+- Preserved the custom side-by-side workspace and Back to editor return flow.
+
+### Files changed
+
+- `cms/src/admin/app.tsx`
+- `docs/motorsport/revamp/83_cms_integrated_content_manager_preview.md`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- CMS TypeScript check passed.
+- `git diff --check` passed.
+- Authenticated browser smoke passed with one click: the Motorsport Event
+  collection editor transitioned directly to the custom preview in the same
+  tab, with no second tab opened; Back to editor returned to the editor.
+
+### Notes / caveats
+
+- The custom workspace still embeds the CMS editor and direct frontend preview
+  panes; only the outer browser-tab transition changed.
+- No content was changed, saved, or published during verification.
+
+## MSR-CMS-LIVE-6 — Responsive mobile editor action toolbar
+
+Status: ✅ Done 2026-08-23
+
+### What was done
+
+- Changed the narrow CMS editor toolbar from a single clipped flex row to a
+  three-row responsive layout.
+- Kept entry identity on the first row, Draft/Published tabs on the second,
+  and Preview-link, Save, and Publish actions on the third.
+- Preserved the desktop toolbar arrangement and existing action behavior.
+
+### Files changed
+
+- `cms/src/admin/extensions/motorsport-live-preview/MotorsportLivePreviewPage.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- CMS TypeScript check passed.
+- `git diff --check` passed.
+- Authenticated browser smoke at a 390px viewport confirmed Save and Publish
+  are both visible and fully contained in the mobile action row.
+- No content was changed, saved, or published during verification.
+
+### Notes / caveats
+
+- The responsive breakpoint remains the existing side-by-side stacking
+  breakpoint; desktop layouts are unchanged.

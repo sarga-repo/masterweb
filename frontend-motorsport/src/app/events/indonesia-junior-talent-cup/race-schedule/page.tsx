@@ -7,6 +7,7 @@ import {
   ScheduleCard,
   SectionHeader,
 } from "@/components";
+import { fetchMotorsportTheme } from "@/lib/cms-data";
 import {
   formatProgramStatus,
   getIjtcInformationBand,
@@ -14,6 +15,7 @@ import {
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -23,8 +25,13 @@ export const metadata: Metadata = {
 };
 
 export default async function IjtcSchedulePage() {
-  const program = await getIjtcProgram(await getRequestLocale());
+  const locale = await getRequestLocale();
+  const [program, theme] = await Promise.all([
+    getIjtcProgram(locale),
+    fetchMotorsportTheme(locale),
+  ]);
   if (!program) notFound();
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
 
   return (
     <>
@@ -49,17 +56,19 @@ export default async function IjtcSchedulePage() {
           description:
             "Dates and venues remain explicitly marked until sporting approval is complete.",
           items: [
-          { label: "Season", value: program.seasonLabel },
-          {
-            label: "Rounds",
-            value: String(program.schedule.length).padStart(2, "0"),
-          },
-          { label: "Status", value: formatProgramStatus(program.status) },
+            { label: "Season", value: program.seasonLabel },
+            {
+              label: "Rounds",
+              value: String(program.schedule.length).padStart(2, "0"),
+            },
+            { label: "Status", value: formatProgramStatus(program.status) },
           ],
         })}
       />
 
-      <section className="ms-reflected-light-surface ms-section">
+      <section
+        className={`ms-reflected-light-surface ms-section ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell">
           <SectionHeader
             index="SCHEDULE"
@@ -80,7 +89,9 @@ export default async function IjtcSchedulePage() {
         </div>
       </section>
 
-      <section className="ms-blue-heat-surface py-12 sm:py-16">
+      <section
+        className={`ms-blue-heat-surface py-12 sm:py-16 ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell flex flex-wrap items-center justify-between gap-6">
           <p className="ms-heading-card max-w-[20ch]">
             Follow the field after every round.

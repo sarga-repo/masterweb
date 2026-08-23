@@ -15,6 +15,15 @@
     "title": { "type": "string", "required": true },
     "label": { "type": "string", "required": true },
     "provider": { "type": "string" },
+    "eyebrow": { "type": "string" },
+    "description": { "type": "text" },
+    "eventLabel": { "type": "string" },
+    "eventText": { "type": "string" },
+    "providerLabel": { "type": "string" },
+    "providerText": { "type": "string" },
+    "partnerLabel": { "type": "string" },
+    "footerText": { "type": "string" },
+    "ctaLabel": { "type": "string" },
     "ctaType": {
       "type": "enumeration",
       "enum": ["redirect", "deepLink", "embed"],
@@ -34,6 +43,20 @@
       "required": false,
       "allowedTypes": ["images"],
       "description": "Optional artwork or photography shown in homepage ticket panels."
+    },
+    "backgroundImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "description": "Optional artwork or photography shown behind the main ticket copy."
+    },
+    "backgroundImageMobile": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"],
+      "description": "Optional mobile-specific ticket artwork. Falls back to backgroundImage when empty."
     },
     "siteScope": {
       "type": "enumeration",

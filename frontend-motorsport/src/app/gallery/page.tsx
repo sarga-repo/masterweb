@@ -9,11 +9,20 @@ import {
   PageShell,
   type GalleryFilterKey,
 } from "@/components";
-import { fetchGalleryItems, fetchSitePage } from "@/lib/cms-data";
+import {
+  fetchGalleryItems,
+  fetchMotorsportTheme,
+  fetchSitePage,
+} from "@/lib/cms-data";
 import type { GalleryItem } from "@/types/design-system";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
-import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
+import {
+  isCmsCanonicalSectionVisible,
+  isCmsPageVisible,
+  isCmsSectionVisible,
+} from "@/lib/cms-visibility";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 
 export const metadata: Metadata = {
   title: "Gallery",
@@ -87,26 +96,22 @@ const GALLERY_CATEGORIES = [
   "other",
 ] as const satisfies ReadonlyArray<Exclude<GalleryFilterKey, "all">>;
 
-function parseGalleryCategory(value?: string): Exclude<GalleryFilterKey, "all"> | undefined {
-  return GALLERY_CATEGORIES.includes(
-    value as Exclude<GalleryFilterKey, "all">,
-  )
+function parseGalleryCategory(
+  value?: string,
+): Exclude<GalleryFilterKey, "all"> | undefined {
+  return GALLERY_CATEGORIES.includes(value as Exclude<GalleryFilterKey, "all">)
     ? (value as Exclude<GalleryFilterKey, "all">)
     : undefined;
 }
 
-export default async function GalleryPage({
-  searchParams,
-}: GalleryPageProps) {
+export default async function GalleryPage({ searchParams }: GalleryPageProps) {
   const locale = await getRequestLocale();
   const query = await searchParams;
   const requestedPage = Number(query.page);
   const currentPage =
-    Number.isInteger(requestedPage) && requestedPage > 0
-      ? requestedPage
-      : 1;
+    Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
   const activeCategory = parseGalleryCategory(query.category);
-  const [page, galleryPage] = await Promise.all([
+  const [page, galleryPage, isPreview, theme] = await Promise.all([
     fetchSitePage("custom", "/gallery", locale),
     fetchGalleryItems({
       page: currentPage,
@@ -114,21 +119,19 @@ export default async function GalleryPage({
       locale,
       category: activeCategory,
     }),
+    isStrapiPreviewEnabled(),
+    fetchMotorsportTheme(locale),
   ]);
-  const isPreview = await isStrapiPreviewEnabled();
-  const intro = page?.sections.find(
-    (section) => section.sectionKey === "gallery-intro",
-  );
   const archive = page?.sections.find(
     (section) => section.sectionKey === "gallery-archive",
   );
-  const items = isPreview || galleryPage.items.length > 0
-    ? galleryPage.items
-    : FALLBACK;
+  const items =
+    isPreview || galleryPage.items.length > 0 ? galleryPage.items : FALLBACK;
   const pageAvailable = isCmsPageVisible(page?.pageAvailability);
   const availableCategories = galleryPage.availableCategories.length
     ? galleryPage.availableCategories
     : ["circuit", "two-wheels", "mixed-surface"];
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
 
   return (
     <PageShell spectrumSeparators>
@@ -145,7 +148,7 @@ export default async function GalleryPage({
               data-cms-source={page ? "strapi" : "fallback"}
             >
               <PageHero
-                kicker={intro?.eyebrow ?? "Trackside capture feed"}
+                kicker={page?.hero?.eyebrow ?? "Trackside capture feed"}
                 kickerColor="yellow"
                 title={page?.hero?.title ?? page?.heroTitle ?? "Gallery"}
                 description={
@@ -157,33 +160,34 @@ export default async function GalleryPage({
                 showDescription={page?.hero?.showDescription}
                 showMedia={page?.hero?.showMedia}
                 backgroundImage={page?.heroImage}
-                backgroundAlt={page?.heroImageAlt || "Sarga Motorsport gallery scene"}
+                backgroundAlt={
+                  page?.heroImageAlt || "Sarga Motorsport gallery scene"
+                }
               >
-                {isCmsSectionVisible(intro) ? (
-                  <MotorsportMetricGroup
-                    items={
-                      page?.hero?.showMetricGroup === false
-                        ? []
-                        : page?.hero?.metrics?.length
-                          ? page.hero.metrics
-                          : [
-                              {
-                                label: "Frames",
-                                value: String(items.length).padStart(2, "0"),
-                              },
-                              { label: "Format", value: "Editorial" },
-                              { label: "Scope", value: "Motorsport" },
-                            ]
-                    }
-                    labelClassName="text-ms-slipstream-teal"
-                    className="max-w-3xl"
-                  />
-                ) : null}
+                <MotorsportMetricGroup
+                  items={
+                    page?.hero?.showMetricGroup === false
+                      ? []
+                      : page?.hero?.metrics?.length
+                        ? page.hero.metrics
+                        : [
+                            {
+                              label: "Frames",
+                              value: String(items.length).padStart(2, "0"),
+                            },
+                            { label: "Format", value: "Editorial" },
+                            { label: "Scope", value: "Motorsport" },
+                          ]
+                  }
+                  labelClassName="text-ms-slipstream-teal"
+                  className="max-w-3xl"
+                />
               </PageHero>
             </div>
           ) : null}
 
-          {pageAvailable ? (
+          {pageAvailable &&
+          isCmsCanonicalSectionVisible(page?.informationBand) ? (
             <div
               data-cms-section-key="information-band"
               data-cms-enabled="true"
@@ -211,7 +215,7 @@ export default async function GalleryPage({
             <section
               data-cms-section-key="gallery-archive"
               data-cms-enabled="true"
-              className="ms-gallery-wall ms-gallery-archive-light ms-section"
+              className={`ms-gallery-wall ms-gallery-archive-light ms-section ${nextAlternatingSurface()}`}
             >
               <div className="ms-shell">
                 <div className="grid gap-8 border-t border-ms-warm-white/14 pt-5 lg:grid-cols-[minmax(0,1.3fr)_minmax(18rem,.7fr)]">
@@ -235,7 +239,8 @@ export default async function GalleryPage({
                     ) : null}
                     {archive?.showBody !== false ? (
                       <p className="mt-4 text-base leading-7 text-ms-warm-white/62">
-                        {archive?.supportBody ?? archive?.body ??
+                        {archive?.supportBody ??
+                          archive?.body ??
                           "Filter the archive by discipline. Select any frame to open the full-screen viewer, then browse with the arrow controls."}
                       </p>
                     ) : null}

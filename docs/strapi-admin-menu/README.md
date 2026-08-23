@@ -55,6 +55,9 @@ manual site selection from normal CMS editorial work while retaining
 - `20_gwr_cms_11_motorsport_media_news_refinement.md` — existing Media Library
   selection guidance and UAT, least-privilege decision, News detail gradient
   refinement, and Homepage Latest News race-flag treatment.
+- `21_gwr_cms_mail_5_motorsport_settings_ui.md` — protected Motorsport SMTP
+  settings UI, encrypted secret storage, CMS-over-environment fallback, and
+  verification runbook.
 
 ## Source precedence
 
@@ -78,3 +81,6 @@ and staging/public-domain verification. GWR-CMS-10 repository implementation is
 complete; staging promotion remains part of the existing external launch gate.
 GWR-CMS-11 repository implementation is complete; the credentialed Media
 Library request remains included in the existing staging RBAC gate.
+GWR-CMS-MAIL-5 repository implementation is complete; production rollout still
+requires the normal environment encryption-key, Exchange authorization, and
+staging UAT gates.

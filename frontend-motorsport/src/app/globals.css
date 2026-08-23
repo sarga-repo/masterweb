@@ -371,9 +371,50 @@
 }
 
 [data-ms-theme="theme-vendor-editorial"] .ms-editorial-dark-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   color-scheme: dark;
   color: var(--ms-theme-text-on-charcoal);
   background: var(--ms-theme-surface-charcoal);
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-editorial-dark-surface::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgb(255 249 238 / 0.1) 1px,
+    transparent 1px
+  );
+  background-size: 1rem 1rem;
+  content: "";
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.62), transparent 88%);
+  pointer-events: none;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-editorial-dark-surface > * {
+  position: relative;
+  z-index: 1;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-ticket-cta-link {
+  --ms-ticket-cta-foreground: var(--ms-theme-text-on-charcoal);
+  color: var(--ms-ticket-cta-foreground) !important;
+  background-color: var(--ms-theme-accent-crimson) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-ticket-cta-link.ms-ticket-cta-link
+  :is(.ms-ticket-cta-meta, .ms-ticket-cta-title, .ms-ticket-cta-arrow) {
+  color: var(--ms-ticket-cta-foreground) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-ticket-cta-link:is(:hover, :focus-visible) {
+  --ms-ticket-cta-foreground: var(--ms-theme-surface-charcoal);
+  background-color: var(--ms-theme-accent-orange) !important;
 }
 
 [data-ms-theme="theme-vendor-editorial"]
@@ -643,6 +684,256 @@ select {
   letter-spacing: 0.18em;
   line-height: 1.2;
   text-transform: uppercase;
+}
+
+.ms-ticket-cta-meta {
+  font-family: var(--font-body);
+  font-size: 0.625rem;
+  font-variation-settings:
+    "wdth" 87.5,
+    "wght" 760;
+  letter-spacing: 0.18em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-reflected-light-surface {
+  --ms-ticket-surface: var(--ms-theme-surface-warm);
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  :is(.ms-home-alternating-surface--light, .ms-home-alternating-surface--dark) {
+  --ms-ticket-surface: var(--ms-theme-surface-warm);
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-home-alternating-surface--dark {
+  --ms-ticket-surface: var(--ms-theme-surface-charcoal);
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-ticket-card {
+  --ms-ticket-cta-foreground: var(
+    --ms-theme-text-on-charcoal,
+    var(--color-ms-warm-white)
+  );
+  --ms-ticket-edge-color: var(
+    --ms-ticket-surface,
+    var(--ms-theme-surface-warm, var(--color-ms-warm-white))
+  );
+  --ms-ticket-divider-color: var(
+    --ms-theme-accent-orange,
+    var(--color-ms-ignition-orange)
+  );
+  --ms-ticket-edge-outline: transparent;
+  border: 0 !important;
+  isolation: isolate;
+}
+
+.ms-ticket-card-frame {
+  display: none;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--dark
+  .ms-ticket-card {
+  --ms-ticket-edge-outline: var(--ms-theme-text-on-charcoal);
+  --ms-ticket-frame-color: var(--ms-theme-text-on-charcoal);
+  border: 0 !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--dark
+  .ms-ticket-card
+  .ms-ticket-card-frame {
+  position: absolute;
+  z-index: 35;
+  inset: 0 1rem;
+  display: block;
+  border-top: 3px solid var(--ms-ticket-frame-color);
+  border-bottom: 3px solid var(--ms-ticket-frame-color);
+  pointer-events: none;
+}
+
+/* The opposing zigzags make the panel read as a physical ticket stub. The
+ * outer layer provides contrast; the inset layer preserves the section tint. */
+[data-ms-theme="theme-vendor-editorial"] .ms-ticket-card::before,
+[data-ms-theme="theme-vendor-editorial"] .ms-ticket-card::after {
+  display: none;
+  position: absolute;
+  z-index: 40;
+  top: 0;
+  bottom: 0;
+  width: 0.78rem;
+  background: var(--ms-ticket-edge-color);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    12% 4%,
+    12% 6%,
+    88% 9%,
+    88% 11%,
+    12% 14%,
+    12% 16%,
+    88% 19%,
+    88% 21%,
+    12% 24%,
+    12% 26%,
+    88% 29%,
+    88% 31%,
+    12% 34%,
+    12% 36%,
+    88% 39%,
+    88% 41%,
+    12% 44%,
+    12% 46%,
+    88% 49%,
+    88% 51%,
+    12% 54%,
+    12% 56%,
+    88% 59%,
+    88% 61%,
+    12% 64%,
+    12% 66%,
+    88% 69%,
+    88% 71%,
+    12% 74%,
+    12% 76%,
+    88% 79%,
+    88% 81%,
+    12% 84%,
+    12% 86%,
+    88% 89%,
+    88% 91%,
+    12% 94%,
+    12% 96%,
+    100% 100%,
+    0 100%
+  );
+  content: "";
+  pointer-events: none;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-ticket-card::before {
+  left: 0;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-ticket-card::after {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-ticket-card > div {
+  position: relative;
+  isolation: isolate;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-ticket-card > div::before,
+[data-ms-theme="theme-vendor-editorial"] .ms-ticket-card > div::after {
+  display: none;
+  position: absolute;
+  z-index: 30;
+  top: 0;
+  bottom: 0;
+  width: 1rem;
+  background: var(--ms-ticket-edge-outline);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    12% 4%,
+    12% 6%,
+    88% 9%,
+    88% 11%,
+    12% 14%,
+    12% 16%,
+    88% 19%,
+    88% 21%,
+    12% 24%,
+    12% 26%,
+    88% 29%,
+    88% 31%,
+    12% 34%,
+    12% 36%,
+    88% 39%,
+    88% 41%,
+    12% 44%,
+    12% 46%,
+    88% 49%,
+    88% 51%,
+    12% 54%,
+    12% 56%,
+    88% 59%,
+    88% 61%,
+    12% 64%,
+    12% 66%,
+    88% 69%,
+    88% 71%,
+    12% 74%,
+    12% 76%,
+    88% 79%,
+    88% 81%,
+    12% 84%,
+    12% 86%,
+    88% 89%,
+    88% 91%,
+    12% 94%,
+    12% 96%,
+    100% 100%,
+    0 100%
+  );
+  content: "";
+  pointer-events: none;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-ticket-card > div::before {
+  left: 0;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-ticket-card > div::after {
+  right: 0rem;
+  transform: scaleX(-1);
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-ticket-card .ms-ticket-cta-link {
+  position: relative;
+  border: 0;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-ticket-card
+  .ms-ticket-cta-link::before {
+  position: absolute;
+  top: 0;
+  right: 1.75rem;
+  left: 1.75rem;
+  border-top: 2px dashed var(--ms-ticket-cta-foreground);
+  content: "";
+  pointer-events: none;
+}
+
+@media (min-width: 64rem) {
+  [data-ms-theme="theme-vendor-editorial"] .ms-ticket-card {
+    border: 0 !important;
+  }
+
+  [data-ms-theme="theme-vendor-editorial"] .ms-ticket-card > div::before,
+  [data-ms-theme="theme-vendor-editorial"] .ms-ticket-card > div::after {
+    display: block;
+  }
+
+  [data-ms-theme="theme-vendor-editorial"] .ms-ticket-card::before,
+  [data-ms-theme="theme-vendor-editorial"] .ms-ticket-card::after {
+    display: block;
+  }
+
+  [data-ms-theme="theme-vendor-editorial"]
+    .ms-ticket-card
+    .ms-ticket-cta-link::before {
+    top: 1.75rem;
+    right: auto;
+    bottom: 1.75rem;
+    left: 0.75rem;
+    border-top: 0;
+    border-left: 2px dashed var(--ms-ticket-cta-foreground);
+  }
 }
 
 .ms-panel {
@@ -1063,6 +1354,16 @@ select {
   color: var(--ms-theme-text-on-warm) !important;
   color-scheme: light;
   background: var(--ms-theme-surface-warm) !important;
+}
+
+/* Some route sections retain the legacy reflected-light class for the
+ * non-vendor presets while the shared sequencer assigns a dark Vendor
+ * Editorial slot. The dark slot must win over the legacy light selector. */
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface.ms-editorial-dark-surface {
+  color: var(--ms-theme-text-on-charcoal) !important;
+  color-scheme: dark;
+  background: var(--ms-theme-surface-charcoal) !important;
 }
 
 [data-ms-theme="theme-vendor-editorial"]
@@ -1973,6 +2274,183 @@ select {
   .ms-table tbody tr:hover {
     background: rgb(255 249 238 / 0.035);
   }
+
+  .ms-rich-text {
+    display: flow-root;
+  }
+
+  .ms-rich-text > :first-child {
+    margin-top: 0;
+  }
+
+  .ms-rich-text > :last-child {
+    margin-bottom: 0;
+  }
+
+  .ms-rich-text :is(h1, h2, h3, h4, h5, h6) {
+    margin: 2.25rem 0 0.75rem;
+    color: inherit;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+  }
+
+  .ms-rich-text h1 {
+    font-size: clamp(2rem, 4vw, 3.75rem);
+  }
+
+  .ms-rich-text h2 {
+    font-size: clamp(1.75rem, 3vw, 3rem);
+  }
+
+  .ms-rich-text h3 {
+    font-size: clamp(1.4rem, 2.2vw, 2.25rem);
+  }
+
+  .ms-rich-text :is(h4, h5, h6) {
+    font-size: 1.35rem;
+  }
+
+  .ms-rich-text > p {
+    margin: 0 0 1.75rem;
+  }
+
+  .ms-rich-text :is(ul, ol) {
+    margin: 0 0 1.75rem;
+    padding-left: 1.5rem;
+  }
+
+  .ms-rich-text-table-wrap {
+    margin: 2rem 0;
+    overflow-x: auto;
+    border: 1px solid rgb(255 249 238 / 0.18);
+  }
+
+  .ms-rich-text table {
+    width: 100%;
+    min-width: 38rem;
+    border-collapse: collapse;
+    font-size: 0.92em;
+    line-height: 1.5;
+  }
+
+  .ms-rich-text :is(th, td) {
+    border-bottom: 1px solid rgb(255 249 238 / 0.14);
+    padding: 0.85rem 1rem;
+    vertical-align: top;
+  }
+
+  .ms-rich-text th {
+    background: #afaca4;
+    color: inherit;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+
+  .ms-rich-text tbody tr:nth-child(even) {
+    background: #afaca438;
+  }
+
+  .ms-rich-text tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .ms-rich-text ul {
+    list-style: disc;
+  }
+
+  .ms-rich-text ol {
+    list-style: decimal;
+  }
+
+  .ms-rich-text li {
+    padding-left: 0.35rem;
+  }
+
+  .ms-rich-text li + li {
+    margin-top: 0.4rem;
+  }
+
+  .ms-rich-text blockquote {
+    margin: 2rem 0;
+    border-left: 0.25rem solid var(--ms-theme-accent-orange, #ff6b00);
+    padding: 0.25rem 0 0.25rem 1.25rem;
+    color: inherit;
+    font-style: italic;
+  }
+
+  .ms-rich-text blockquote > :last-child {
+    margin-bottom: 0;
+  }
+
+  .ms-rich-text a {
+    color: var(--ms-theme-accent-orange, #ff6b00);
+    text-decoration: underline;
+    text-decoration-thickness: 0.1em;
+    text-underline-offset: 0.2em;
+    transition: color 180ms ease;
+  }
+
+  .ms-rich-text a:hover {
+    color: var(--ms-theme-accent-crimson, #e8192c);
+  }
+
+  .ms-rich-text :not(pre) > code {
+    border: 1px solid rgb(255 249 238 / 0.2);
+    border-radius: 0.25rem;
+    background: rgb(0 0 0 / 0.24);
+    padding: 0.12em 0.35em;
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      monospace;
+    font-size: 0.9em;
+  }
+
+  .ms-rich-text pre {
+    margin: 2rem 0;
+    overflow-x: auto;
+    border: 1px solid rgb(255 249 238 / 0.18);
+    border-radius: 0.25rem;
+    background: rgb(7 26 61 / 0.92);
+    padding: 1.25rem 1.5rem;
+    color: var(--ms-text-on-dark-primary, #fff9ee);
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      monospace;
+    font-size: 0.9em;
+    line-height: 1.65;
+    white-space: pre;
+  }
+
+  .ms-rich-text pre code {
+    font: inherit;
+  }
+
+  .ms-rich-text figure {
+    margin: 2rem 0;
+  }
+
+  .ms-rich-text figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid rgb(255 249 238 / 0.18);
+  }
+
+  .ms-rich-text figcaption {
+    margin-top: 0.6rem;
+    color: inherit;
+    font-size: 0.78em;
+    line-height: 1.5;
+    opacity: 0.7;
+  }
+
+  .ms-rich-text > hr {
+    margin: 2.5rem 0;
+    border: 0;
+    border-top: 1px solid rgb(255 249 238 / 0.18);
+  }
 }
 
 .ms-heat-field {
@@ -2350,4 +2828,137 @@ select {
 
 [data-ms-theme="theme-vendor-editorial"] .ms-newsletter-thermal-rule {
   background: rgb(255 249 238 / 0.12) !important;
+}
+
+/* Homepage Vendor Editorial rhythm: only visible sections after the World
+ * section participate in the alternating light/dark sequence. The class is
+ * assigned by the server render, so hidden CMS sections do not consume a
+ * colour slot. */
+[data-ms-theme="theme-vendor-editorial"] .ms-home-alternating-surface--light {
+  color-scheme: light;
+  color: var(--ms-theme-body-on-warm) !important;
+  background: var(--ms-theme-surface-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"] .ms-home-alternating-surface--dark {
+  color-scheme: dark;
+  color: var(--ms-theme-text-on-charcoal) !important;
+  background: var(--ms-theme-surface-charcoal) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--light
+  :is(
+    h1,
+    h2,
+    h3,
+    h4,
+    .ms-heading-hero,
+    .ms-heading-page,
+    .ms-heading-section,
+    .ms-heading-article,
+    .ms-heading-feature,
+    .ms-heading-card
+  ) {
+  color: var(--ms-theme-text-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--light
+  :is(
+    p,
+    li,
+    dt,
+    dd,
+    time,
+    .text-white,
+    .text-ms-warm-white,
+    [class*="text-ms-warm-white/"]
+  ) {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--light
+  :is(
+    .ms-kicker,
+    .ms-data-label,
+    .text-ms-electric-yellow,
+    .text-ms-ignition-orange
+  ) {
+  color: var(--ms-theme-eyebrow-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--light
+  :is(.text-ms-slipstream-teal, [class*="border-ms-warm-white/"]) {
+  color: var(--ms-theme-accent-orange) !important;
+  border-color: var(--ms-theme-separator) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--dark
+  :is(
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    li,
+    dt,
+    dd,
+    time,
+    .ms-heading-hero,
+    .ms-heading-page,
+    .ms-heading-section,
+    .ms-heading-article,
+    .ms-heading-feature,
+    .ms-heading-card,
+    .text-white,
+    .text-ms-warm-white,
+    [class*="text-ms-warm-white/"]
+  ) {
+  color: var(--ms-theme-text-on-charcoal) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--dark
+  :is([class*="border-ms-warm-white/"], [class*="border-white"]) {
+  border-color: rgb(255 249 238 / 0.18) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--dark
+  :is(.ms-kicker, .ms-data-label) {
+  color: var(--ms-theme-accent-orange) !important;
+}
+
+/* SargaTimeline owns its own charcoal section so explicitly bridge it to the
+ * alternating surface when the CMS makes Connected Records the light slot. */
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--light
+  #sarga-content-hub {
+  color: var(--ms-theme-body-on-warm) !important;
+  background: var(--ms-theme-surface-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--light
+  #sarga-content-hub
+  :is(h1, h2, h3, h4, p, li, dt, dd, time, [class*="text-ms-warm-white"]) {
+  color: var(--ms-theme-body-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--light
+  #sarga-content-hub
+  :is(h1, h2, h3, h4) {
+  color: var(--ms-theme-text-on-warm) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-home-alternating-surface--dark
+  #sarga-content-hub {
+  color: var(--ms-theme-text-on-charcoal) !important;
+  background: var(--ms-theme-surface-charcoal) !important;
 }

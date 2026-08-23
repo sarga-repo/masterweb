@@ -183,8 +183,12 @@ export default async function EventDetailPage({ params }: Props) {
             showTitle={presentationHero?.showTitle}
             showDescription={presentationHero?.showDescription}
             showMedia={presentationHero?.showMedia}
-            backgroundImage={presentationHero?.backgroundMedia?.url || event.image}
-            backgroundAlt={presentationHero?.backgroundMedia?.alt || event.imageAlt}
+            backgroundImage={
+              presentationHero?.backgroundMedia?.url || event.image
+            }
+            backgroundAlt={
+              presentationHero?.backgroundMedia?.alt || event.imageAlt
+            }
             accent="orange"
             accentPosition="bottom-left"
             surface="heat"
@@ -216,6 +220,7 @@ export default async function EventDetailPage({ params }: Props) {
 
       <div data-cms-section-key="event-control" data-cms-enabled="true">
         <InformationBand
+          isActive={presentationBand?.isActive !== false}
           showEyebrow={presentationBand?.showEyebrow}
           showTitle={presentationBand?.showTitle}
           showDescription={presentationBand?.showDescription}
@@ -316,11 +321,20 @@ export default async function EventDetailPage({ params }: Props) {
         >
           <div className="ms-shell">
             <TicketCtaPanel
-              eyebrow="Official ticketing"
-              title="Secure your seat."
-              description="Tickets redirect to our approved partner platform. Secure checkout, guaranteed entry, and no internal payment processing."
-              eventMeta={event.title}
-              provider="Official partner"
+              eyebrow={event.ticketCard?.eyebrow ?? "Official ticketing"}
+              title={event.ticketCard?.title ?? "Secure your seat."}
+              description={
+                event.ticketCard?.description ??
+                "Tickets redirect to our approved partner platform. Secure checkout, guaranteed entry, and no internal payment processing."
+              }
+              eventMeta={event.ticketCard?.eventMeta ?? event.title}
+              eventMetaLabel={event.ticketCard?.eventMetaLabel}
+              provider={event.ticketCard?.provider ?? "Official partner"}
+              providerLabel={event.ticketCard?.providerLabel}
+              partnerLabel={event.ticketCard?.partnerLabel}
+              footerText={event.ticketCard?.footerText}
+              image={event.ticketCard?.image as string | undefined}
+              mobileImage={event.ticketCard?.mobileImage as string | undefined}
               surface="reflected"
               cta={{
                 label: event.ticketLabel ?? "Get tickets",

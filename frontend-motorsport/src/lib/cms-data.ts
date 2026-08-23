@@ -12,6 +12,7 @@ import type {
   MotorsportRegulation,
   MotorsportRider,
   MotorsportStatus,
+  MotorsportTicketCard,
   PartnerItem,
   ScheduleEntry,
   StandingEntry,
@@ -35,6 +36,7 @@ import {
   mapMotorsportInformationBand,
   mapMotorsportPageHero,
 } from "./motorsport-page-foundation";
+import { mapMotorsportSinglePageSections } from "./cms-page-order";
 import type {
   CmsPageHero,
   CmsPageInformationBand,
@@ -90,8 +92,6 @@ export type CmsEvent = {
   coverImage?: StrapiMedia | null;
   heroMedia?: StrapiMedia | null;
   gallery?: StrapiMedia[];
-  ticketUrl?: string;
-  ticketCtaLabel?: string;
   ticketCtas?: Array<CmsTicketCta & { id: number; documentId: string }>;
   sponsors?: Array<CmsPartner & { id: number; documentId: string }>;
   seo?: CmsSeo | null;
@@ -102,8 +102,20 @@ export type CmsTicketCta = {
   title?: string;
   label: string;
   provider?: string;
+  eyebrow?: string;
+  description?: string;
+  eventLabel?: string;
+  eventText?: string;
+  providerLabel?: string;
+  providerText?: string;
+  partnerLabel?: string;
+  footerText?: string;
+  ctaLabel?: string;
   ctaType?: "redirect" | "deepLink" | "embed";
   url?: string;
+  image?: StrapiMedia | null;
+  backgroundImage?: StrapiMedia | null;
+  backgroundImageMobile?: StrapiMedia | null;
   embedConfigJson?: { url?: string; src?: string } | null;
   isActive?: boolean;
   relatedEvent?: {
@@ -163,15 +175,32 @@ export type CmsPageSection = {
   showCta?: boolean;
   supportLabel?: string;
   supportBody?: string;
+  legalText?: string;
   eyebrow?: string;
   title?: string;
   body?: string;
   description?: string;
   ctaLabel?: string;
   ctaUrl?: string;
+  ctaTarget?: "sameWindow" | "newWindow";
+  secondaryCtaLabel?: string;
+  secondaryCtaUrl?: string;
+  secondaryCtaTarget?: "sameWindow" | "newWindow";
   media?: StrapiMedia | null;
   theme?: "default" | "dark" | "light" | "accent";
   cards?: CmsAboutCapabilityCard[];
+  items?: Array<{
+    isActive?: boolean;
+    sortOrder?: number;
+    label?: string;
+    title?: string;
+    description?: string;
+    media?: StrapiMedia | null;
+    mediaAlt?: string;
+    accent?: "crimson" | "orange" | "yellow" | "teal" | "blue";
+    href?: string;
+    hrefLabel?: string;
+  }>;
 };
 
 export type CmsPageAvailability = {
@@ -199,7 +228,7 @@ type CmsSitePage = {
   routeAliases?: string[];
 };
 
-type CmsMotorsportSinglePage = CmsSitePage & {
+export type CmsMotorsportSinglePage = CmsSitePage & {
   hero?: CmsPageHero | null;
   informationBand?: Record<string, unknown> | null;
   [key: string]: unknown;
@@ -483,7 +512,11 @@ const SINGLE_PAGE_ENDPOINTS: Record<string, string> = {
   "/experience": "motorsport-experience-page",
 };
 
-const SINGLE_PAGE_POPULATE = [
+// Dedicated page single types do not share an identical component-field
+// contract. Keep nested population explicit: Strapi's wildcard population
+// does not recursively populate component relations such as hero metrics,
+// information-band metrics, or section media.
+const COMMON_PAGE_POPULATE = [
   "hero.backgroundMedia",
   "hero.mobileBackgroundMedia",
   "hero.metrics",
@@ -491,15 +524,91 @@ const SINGLE_PAGE_POPULATE = [
   "pageAvailability.comingSoonMedia",
   "seo.ogImage",
 ];
+// Home has its own section population contract and remains unchanged by this
+// non-Home single-page population fix.
+const HOME_PAGE_POPULATE = "*";
 
 const ABOUT_PAGE_POPULATE = [
-  ...SINGLE_PAGE_POPULATE,
-  "profileSection",
+  ...COMMON_PAGE_POPULATE,
+  "profileSection.media",
+  "profileSection.items.media",
   "capabilities.cards",
-  "teamSection",
-  "contactCtaSection",
-  "ecosystemCtaSection",
+  "teamSection.media",
+  "teamSection.items.media",
+  "contactCtaSection.media",
+  "contactCtaSection.items.media",
+  "ecosystemCtaSection.media",
+  "ecosystemCtaSection.items.media",
 ];
+
+const SINGLE_PAGE_POPULATE_BY_ENDPOINT: Record<string, string[]> = {
+  "motorsport-events-page": [
+    ...COMMON_PAGE_POPULATE,
+    "programmesSection.media",
+    "programmesSection.items.media",
+    "calendarSection.media",
+    "calendarSection.items.media",
+  ],
+  "motorsport-news-page": [
+    ...COMMON_PAGE_POPULATE,
+    "leadStorySection.media",
+    "leadStorySection.items.media",
+    "archiveIntroSection.media",
+    "archiveIntroSection.items.media",
+    "galleryCtaSection.media",
+    "galleryCtaSection.items.media",
+  ],
+  "motorsport-gallery-page": [
+    ...COMMON_PAGE_POPULATE,
+    "archiveSection.media",
+    "archiveSection.items.media",
+  ],
+  "motorsport-merchandise-page": [
+    ...COMMON_PAGE_POPULATE,
+    "catalogueSection.media",
+    "catalogueSection.items.media",
+    "finalCtaSection.media",
+    "finalCtaSection.items.media",
+  ],
+  "motorsport-tickets-page": [
+    ...COMMON_PAGE_POPULATE,
+    "featuredTicketSection.media",
+    "featuredTicketSection.items.media",
+    "ticketedEventsSection.media",
+    "ticketedEventsSection.items.media",
+    "ticketInfoSection.media",
+    "ticketInfoSection.items.media",
+  ],
+  "motorsport-contact-page": [
+    ...COMMON_PAGE_POPULATE,
+    "inquiryFormSection.media",
+    "inquiryFormSection.items.media",
+    "finalCtaSection.media",
+    "finalCtaSection.items.media",
+  ],
+  "motorsport-partners-page": [
+    ...COMMON_PAGE_POPULATE,
+    "partnerNetworkSection.media",
+    "partnerNetworkSection.items.media",
+    "finalCtaSection.media",
+    "finalCtaSection.items.media",
+  ],
+  "motorsport-experience-page": [
+    ...COMMON_PAGE_POPULATE,
+    "pillarsSection.media",
+    "pillarsSection.items.media",
+    "trackSection.media",
+    "trackSection.items.media",
+    "finalCtaSection.media",
+    "finalCtaSection.items.media",
+  ],
+};
+
+function dedicatedPagePopulate(endpoint?: string): string[] {
+  return (
+    SINGLE_PAGE_POPULATE_BY_ENDPOINT[endpoint ?? ""] ?? COMMON_PAGE_POPULATE
+  );
+}
 
 function singleEndpoint(pageKind: string, routePath?: string) {
   return SINGLE_PAGE_ENDPOINTS[routePath || pageKind];
@@ -516,79 +625,6 @@ async function shouldReadDedicatedPage(endpoint?: string) {
 
 function mapSinglePage(page: CmsMotorsportSinglePage): SitePageContent {
   const hero = mapMotorsportPageHero(page.hero);
-  const sections: CmsPageSection[] = [];
-  const sectionKeys = [
-    "profileSection",
-    "teamSection",
-    "contactCtaSection",
-    "ecosystemCtaSection",
-    "eventControlSection",
-    "programmesSection",
-    "calendarSection",
-    "newsControlSection",
-    "leadStorySection",
-    "archiveIntroSection",
-    "galleryCtaSection",
-    "archiveSection",
-    "merchControlSection",
-    "catalogueSection",
-    "finalCtaSection",
-    "ticketControlSection",
-    "featuredTicketSection",
-    "ticketedEventsSection",
-    "ticketInfoSection",
-    "inquiryControlSection",
-    "inquiryFormSection",
-    "partnerControlSection",
-    "partnerNetworkSection",
-    "experienceControlSection",
-    "pillarsSection",
-    "trackSection",
-  ];
-  for (const key of sectionKeys) {
-    const value = page[key] as Record<string, unknown> | null | undefined;
-    if (!value) continue;
-    const media = value.media as StrapiMedia | null | undefined;
-    sections.push({
-      __component: "shared.page-section",
-      sectionKey:
-        key === "teamSection"
-          ? "team-intro"
-          : key
-              .replace(/Section$/, "")
-              .replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`),
-      indexLabel:
-        typeof value.indexLabel === "string" ? value.indexLabel : undefined,
-      showIndex: value.showIndex !== false,
-      showEyebrow: value.showEyebrow !== false,
-      showTitle: value.showTitle !== false,
-      showBody: value.showBody !== false,
-      showMedia: value.showMedia !== false,
-      showCta: value.showCta !== false,
-      supportLabel:
-        typeof value.supportLabel === "string" ? value.supportLabel : undefined,
-      supportBody:
-        typeof value.supportBody === "string" ? value.supportBody : undefined,
-      eyebrow: typeof value.eyebrow === "string" ? value.eyebrow : undefined,
-      title: typeof value.title === "string" ? value.title : undefined,
-      body: typeof value.body === "string" ? value.body : undefined,
-      description:
-        typeof value.description === "string" ? value.description : undefined,
-      ctaLabel: typeof value.ctaLabel === "string" ? value.ctaLabel : undefined,
-      ctaUrl: typeof value.ctaUrl === "string" ? value.ctaUrl : undefined,
-      enabled: value.isActive !== false,
-      media: media ? { ...media, url: mediaUrl(media.url) } : null,
-      theme: value.theme as CmsPageSection["theme"],
-    });
-  }
-  if (page.capabilities) {
-    sections.push({
-      ...(page.capabilities as CmsPageSection),
-      __component: "motorsport.about-capabilities",
-      sectionKey: "about-capabilities",
-      enabled: (page.capabilities as Record<string, unknown>).enabled !== false,
-    });
-  }
   return {
     title: page.title,
     navigationLabel: page.navigationLabel,
@@ -597,7 +633,7 @@ function mapSinglePage(page: CmsMotorsportSinglePage): SitePageContent {
     heroEnabled: hero?.isActive ?? page.heroEnabled !== false,
     heroImage: hero?.backgroundMedia?.url,
     heroImageAlt: hero?.backgroundMedia?.alt,
-    sections,
+    sections: mapMotorsportSinglePageSections(page, mediaUrl),
     pageAvailability: page.pageAvailability,
     seo: page.seo,
     hero,
@@ -671,7 +707,6 @@ export function mapAboutCapabilities(
     description: section.description?.trim() || undefined,
     cards,
   };
-
 }
 const SITE_SCOPE_FILTERS: Record<string, string> = {
   "filters[siteScope][$in][0]": "motorsport",
@@ -792,6 +827,29 @@ function safeExternalUrl(value?: string): string | undefined {
   return undefined;
 }
 
+function mapTicketCard(
+  ticket?: CmsTicketCta | null,
+): MotorsportTicketCard | undefined {
+  if (!ticket) return undefined;
+  const image =
+    mediaUrl(ticket.backgroundImage?.url) || mediaUrl(ticket.image?.url);
+  const mobileImage =
+    mediaUrl(ticket.backgroundImageMobile?.url) || image || undefined;
+  return {
+    eyebrow: ticket.eyebrow,
+    title: ticket.title,
+    description: ticket.description,
+    eventMeta: ticket.eventText,
+    eventMetaLabel: ticket.eventLabel,
+    provider: ticket.providerText || ticket.provider,
+    providerLabel: ticket.providerLabel,
+    partnerLabel: ticket.partnerLabel,
+    footerText: ticket.footerText,
+    image: image || undefined,
+    mobileImage,
+  };
+}
+
 export function mapEvent(
   entry: StrapiListResponse<CmsEvent>["data"][number],
 ): MotorsportEvent {
@@ -799,9 +857,15 @@ export function mapEvent(
   const ticket = entry.ticketCtas?.find(
     (candidate) => candidate.isActive !== false,
   );
-  const hasTicket = Boolean(
-    entry.ticketUrl || ticket?.url || ticket?.embedConfigJson,
-  );
+  const ticketMode = ticket?.ctaType ?? "redirect";
+  const embedCandidate =
+    ticket?.embedConfigJson?.url ?? ticket?.embedConfigJson?.src ?? ticket?.url;
+  const configuredTicketHref =
+    safeInternalRoute(ticket?.url) ??
+    (ticketMode === "embed"
+      ? safeTicketEmbedUrl(embedCandidate)
+      : safeTicketUrl(ticket?.url, ticketMode));
+  const hasTicket = Boolean(ticket);
   return {
     title: entry.title || "Untitled event",
     slug: entry.slug,
@@ -814,8 +878,9 @@ export function mapEvent(
     status: statusMap(entry.eventStatus),
     category: entry.racingCategory || undefined,
     seriesName: entry.seriesName || undefined,
-    ticketHref: hasTicket ? "/tickets" : undefined,
-    ticketLabel: entry.ticketCtaLabel || ticket?.label,
+    ticketHref: configuredTicketHref ?? (hasTicket ? "/tickets" : undefined),
+    ticketLabel: ticket?.ctaLabel || ticket?.label,
+    ticketCard: mapTicketCard(ticket),
     sponsors: entry.sponsors?.map(mapPartner),
   };
 }
@@ -910,7 +975,11 @@ export async function fetchSitePage(
   if (endpoint && !isLegacySitePagePreview) {
     const single = await fetchStrapiSingle<CmsMotorsportSinglePage>(endpoint, {
       populate:
-        pageKind === "about" ? ABOUT_PAGE_POPULATE : SINGLE_PAGE_POPULATE,
+        pageKind === "home"
+          ? HOME_PAGE_POPULATE
+          : pageKind === "about"
+            ? ABOUT_PAGE_POPULATE
+            : dedicatedPagePopulate(endpoint),
       locale,
       revalidate: 0,
     });
@@ -976,7 +1045,10 @@ export async function fetchMotorsportPageByRoute(
   const endpoint = singleEndpoint("custom", routePath);
   if (await shouldReadDedicatedPage(endpoint)) {
     const single = await fetchStrapiSingle<CmsMotorsportSinglePage>(endpoint, {
-      populate: SINGLE_PAGE_POPULATE,
+      populate:
+        endpoint === "motorsport-about-page"
+          ? ABOUT_PAGE_POPULATE
+          : dedicatedPagePopulate(endpoint),
       locale,
       revalidate: 0,
     });
@@ -1038,7 +1110,14 @@ export async function fetchEvents(
   locale?: Locale,
 ): Promise<MotorsportEvent[]> {
   const dedicatedOptions = {
-    populate: ["coverImage", "heroMedia", "ticketCtas"],
+    populate: [
+      "coverImage",
+      "heroMedia",
+      "ticketCtas",
+      "ticketCtas.image",
+      "ticketCtas.backgroundImage",
+      "ticketCtas.backgroundImageMobile",
+    ],
     locale,
     sort: "eventDate:asc",
     limit,
@@ -1073,6 +1152,9 @@ export async function fetchEventBySlug(
       "heroMedia",
       "gallery",
       "ticketCtas",
+      "ticketCtas.image",
+      "ticketCtas.backgroundImage",
+      "ticketCtas.backgroundImageMobile",
       "sponsors.logo",
       "seo.ogImage",
       "motorsportPresentation.hero.backgroundMedia",
@@ -1185,12 +1267,14 @@ export type GalleryPage = {
   availableCategories: string[];
 };
 
-export async function fetchGalleryItems(options: {
-  page?: number;
-  pageSize?: number;
-  locale?: Locale;
-  category?: string;
-} = {}): Promise<GalleryPage> {
+export async function fetchGalleryItems(
+  options: {
+    page?: number;
+    pageSize?: number;
+    locale?: Locale;
+    category?: string;
+  } = {},
+): Promise<GalleryPage> {
   const requestedPage = Math.max(1, options.page ?? 1);
   const pageSize = Math.max(1, options.pageSize ?? 8);
   const preview = await getMotorsportPreviewContext();
@@ -1218,9 +1302,10 @@ export async function fetchGalleryItems(options: {
       })
     : response;
   const allItems = response ? mapGalleryItems(response) : [];
-  const items = isGalleryPreview && options.category
-    ? allItems.filter((item) => item.category === options.category)
-    : allItems;
+  const items =
+    isGalleryPreview && options.category
+      ? allItems.filter((item) => item.category === options.category)
+      : allItems;
   const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
   const page = Math.min(requestedPage, pageCount);
   const pageItems = items.slice((page - 1) * pageSize, page * pageSize);
@@ -1247,11 +1332,26 @@ export async function fetchTicketCtas(locale?: Locale): Promise<
     provider: string;
     href: string;
     eventName?: string;
+    eyebrow?: string;
+    title?: string;
+    description?: string;
+    eventMeta?: string;
+    eventMetaLabel?: string;
+    providerLabel?: string;
+    partnerLabel?: string;
+    footerText?: string;
+    image?: string;
+    mobileImage?: string;
     embedHref?: string;
   }>
 > {
   const dedicatedOptions = {
-    populate: "relatedEvent",
+    populate: [
+      "relatedEvent",
+      "image",
+      "backgroundImage",
+      "backgroundImageMobile",
+    ],
     filters: { "filters[isActive][$eq]": "true" },
     locale,
     sort: "createdAt:desc",
@@ -1274,10 +1374,27 @@ export async function fetchTicketCtas(locale?: Locale): Promise<
       const embedCandidate =
         entry.embedConfigJson?.url ?? entry.embedConfigJson?.src ?? entry.url;
       return {
-        label: entry.label || "Get tickets",
-        provider: entry.provider || "Official partner",
+        label: entry.ctaLabel || entry.label || "Get tickets",
+        provider: entry.providerText || entry.provider || "Official partner",
         href,
         eventName: entry.relatedEvent?.title || entry.title,
+        eyebrow: entry.eyebrow,
+        title: entry.title,
+        description: entry.description,
+        eventMeta: entry.eventText,
+        eventMetaLabel: entry.eventLabel,
+        providerLabel: entry.providerLabel,
+        partnerLabel: entry.partnerLabel,
+        footerText: entry.footerText,
+        image:
+          mediaUrl(entry.backgroundImage?.url) ||
+          mediaUrl(entry.image?.url) ||
+          undefined,
+        mobileImage:
+          mediaUrl(entry.backgroundImageMobile?.url) ||
+          mediaUrl(entry.backgroundImage?.url) ||
+          mediaUrl(entry.image?.url) ||
+          undefined,
         embedHref:
           mode === "embed" ? safeTicketEmbedUrl(embedCandidate) : undefined,
       };
@@ -1296,6 +1413,11 @@ export async function fetchTicketCtas(locale?: Locale): Promise<
 
 function mapProgram(entry: CmsProgram): MotorsportProgram {
   const isRallycross = entry.programType === "rallycross";
+  const presentationHero = mapMotorsportPageHero(
+    entry.motorsportPresentation?.hero,
+  );
+  const presentationImage = presentationHero?.backgroundMedia;
+  const legacyImage = entry.heroMedia;
   return {
     title: entry.title,
     slug: entry.slug,
@@ -1314,18 +1436,19 @@ function mapProgram(entry: CmsProgram): MotorsportProgram {
       : undefined,
     venue: entry.venue,
     image:
-      mediaUrl(entry.heroMedia?.url) ||
+      presentationImage?.url ||
+      mediaUrl(legacyImage?.url) ||
       (isRallycross
         ? "/media/sarga-motorsport-bike-and-rally.png"
         : "/media/sarga-motorsport-discipline-motorcycle-daylight.jpg"),
     imageAlt:
-      entry.heroMedia?.alternativeText ?? `${entry.title} Motorsport programme`,
+      presentationImage?.alt ||
+      legacyImage?.alternativeText ||
+      `${entry.title} Motorsport programme`,
     ctaLabel: isRallycross
       ? "Explore event"
       : entry.primaryCtaLabel || "Explore programme",
-    presentationHero: mapMotorsportPageHero(
-      entry.motorsportPresentation?.hero,
-    ),
+    presentationHero,
     presentationSections: (entry.presentationSections ?? []).map((section) => ({
       sectionKey: section.sectionKey,
       isActive: section.enabled !== false,
@@ -1334,9 +1457,12 @@ function mapProgram(entry: CmsProgram): MotorsportProgram {
       showEyebrow: section.showEyebrow !== false,
       showTitle: section.showTitle !== false,
       showBody: section.showBody !== false,
+      showMedia: section.showMedia !== false,
+      showCta: section.showCta !== false,
       eyebrow: section.eyebrow,
       title: section.title ?? "Section",
       body: section.body,
+      ...(section.media ? { media: mediaUrl(section.media.url) } : {}),
     })),
     informationBand: mapMotorsportInformationBand(
       entry.motorsportPresentation?.informationBand,
@@ -1382,15 +1508,53 @@ export async function fetchPrograms(
   locale?: Locale,
 ): Promise<MotorsportProgram[]> {
   const response = await fetchStrapiList<CmsProgram>("motorsport-programs", {
-    populate: ["heroMedia", "presentationSections"],
+    populate: [
+      "heroMedia",
+      "presentationSections.media",
+      "motorsportPresentation.hero.backgroundMedia",
+    ],
     filters: SITE_SCOPE_FILTERS,
     locale,
     sort: "createdAt:asc",
-    limit: 20,
+    // The dropdown is an index of all enabled programmes, not a content
+    // preview. Keep the ceiling high enough that older records cannot hide a
+    // newly enabled programme near the end of the collection.
+    limit: 100,
     revalidate: 60,
   });
   return (response?.data ?? [])
     .filter((entry) => entry.programStatus !== "hidden")
+    .map(mapProgram);
+}
+
+/**
+ * Read only the published program fields needed by the global Event menu.
+ * This is intentionally uncached so an editor's eventMenuEnabled change is
+ * visible on the next request instead of waiting for the general program
+ * cache or a separately configured CMS webhook.
+ */
+export async function fetchEventMenuPrograms(
+  locale?: Locale,
+): Promise<MotorsportProgram[]> {
+  const response = await fetchStrapiList<CmsProgram>("motorsport-programs", {
+    filters: {
+      ...SITE_SCOPE_FILTERS,
+      "filters[eventMenuEnabled][$eq]": "true",
+      "filters[programStatus][$ne]": "hidden",
+    },
+    locale,
+    sort: "createdAt:asc",
+    // The dropdown is an index of all enabled programmes, not a content
+    // preview. Keep the ceiling high enough that older records cannot hide a
+    // newly enabled programme near the end of the collection.
+    limit: 100,
+    revalidate: 0,
+  });
+  return (response?.data ?? [])
+    .filter(
+      (entry) =>
+        entry.programStatus !== "hidden" && entry.eventMenuEnabled === true,
+    )
     .map(mapProgram);
 }
 
@@ -1401,7 +1565,7 @@ export async function fetchProgramBySlug(
   const response = await fetchStrapiList<CmsProgram>("motorsport-programs", {
     populate: [
       "heroMedia",
-      "presentationSections",
+      "presentationSections.media",
       "rundown",
       "motorsportPresentation.hero.backgroundMedia",
       "motorsportPresentation.informationBand.metrics",
@@ -1441,7 +1605,11 @@ export async function fetchCampaignProgramBySlug(
       "rundown",
       "eventRules",
       "relatedTicketCtas",
+      "relatedTicketCtas.image",
+      "relatedTicketCtas.backgroundImage",
+      "relatedTicketCtas.backgroundImageMobile",
       "seo.ogImage",
+      "presentationSections.media",
       "motorsportPresentation.hero.backgroundMedia",
       "motorsportPresentation.informationBand.metrics",
     ],
@@ -1474,12 +1642,6 @@ export async function fetchCampaignProgramBySlug(
       : (safeTicketUrl(ticket?.url, ticketMode) ??
         safeInternalRoute(entry.primaryCtaUrl) ??
         "/tickets");
-  const fallbackImages = [
-    "/media/hero/sarga-motorsport-hero-rally-highlands.jpg",
-    "/media/sarga-motorsport-discipline-rallycross-daylight.jpg",
-    "/media/sarga-motorsport-race-nascar-1.png",
-  ];
-
   const slides = [...(entry.bannerSlides ?? [])]
     .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
     .map((slide, index) => {
@@ -1494,9 +1656,7 @@ export async function fetchCampaignProgramBySlug(
         eventTitle: program.title,
         dateLabel: campaignDate,
         venue: program.venue,
-        image:
-          mediaUrl(slide.image?.url) ||
-          fallbackImages[index % fallbackImages.length],
+        image: mediaUrl(slide.image?.url),
         imageAlt:
           slide.image?.alternativeText ?? `${slide.title} — ${program.title}`,
         cta:
@@ -1526,10 +1686,33 @@ export async function fetchCampaignProgramBySlug(
     ticketCta: hasTicketCta
       ? {
           label:
-            ticket?.label || entry.primaryCtaLabel || "Get Your Ticket Now",
+            ticket?.ctaLabel ||
+            ticket?.label ||
+            entry.primaryCtaLabel ||
+            "Get Your Ticket Now",
           href: ticketHref,
           external: !ticketHref.startsWith("/"),
-          provider: ticket?.provider || "Official ticketing partner",
+          provider:
+            ticket?.providerText ||
+            ticket?.provider ||
+            "Official ticketing partner",
+          eyebrow: ticket?.eyebrow,
+          title: ticket?.title,
+          description: ticket?.description,
+          eventMeta: ticket?.eventText,
+          eventMetaLabel: ticket?.eventLabel,
+          providerLabel: ticket?.providerLabel,
+          partnerLabel: ticket?.partnerLabel,
+          footerText: ticket?.footerText,
+          image:
+            mediaUrl(ticket?.backgroundImage?.url) ||
+            mediaUrl(ticket?.image?.url) ||
+            undefined,
+          mobileImage:
+            mediaUrl(ticket?.backgroundImageMobile?.url) ||
+            mediaUrl(ticket?.backgroundImage?.url) ||
+            mediaUrl(ticket?.image?.url) ||
+            undefined,
         }
       : undefined,
     seo: entry.seo

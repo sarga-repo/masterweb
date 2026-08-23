@@ -56,6 +56,12 @@ const SHARED_EDITORIAL_SUBJECTS = [
   "api::leadership-person.leadership-person",
 ];
 
+export const MOTORSPORT_MAIL_SETTINGS_ACTIONS = {
+  read: "admin::sarga-mail-settings.read",
+  update: "admin::sarga-mail-settings.update",
+  verify: "admin::sarga-mail-settings.verify",
+} as const;
+
 export const MOTORSPORT_PAGE_SINGLE_TYPE_SUBJECTS = [
   "api::motorsport-theme-settings.motorsport-theme-settings",
   "api::motorsport-home-page.motorsport-home-page",
@@ -185,12 +191,32 @@ export async function registerWorkspaceAccessControl(strapi: Core.Strapi) {
   const permissionService = strapi.service("admin::permission");
 
   await permissionService.actionProvider.registerMany(
-    WORKSPACE_ROLES.map((role) => ({
-      section: "plugins",
-      displayName: `Access ${role.name.replace(" Admin", "")} workspace`,
-      uid: role.accessAction.replace("admin::", ""),
-      pluginName: PLUGIN_NAME,
-    })),
+    [
+      ...WORKSPACE_ROLES.map((role) => ({
+        section: "plugins",
+        displayName: `Access ${role.name.replace(" Admin", "")} workspace`,
+        uid: role.accessAction.replace("admin::", ""),
+        pluginName: PLUGIN_NAME,
+      })),
+      {
+        section: "plugins",
+        displayName: "Read Motorsport mail settings",
+        uid: MOTORSPORT_MAIL_SETTINGS_ACTIONS.read.replace("admin::", ""),
+        pluginName: PLUGIN_NAME,
+      },
+      {
+        section: "plugins",
+        displayName: "Update Motorsport mail settings",
+        uid: MOTORSPORT_MAIL_SETTINGS_ACTIONS.update.replace("admin::", ""),
+        pluginName: PLUGIN_NAME,
+      },
+      {
+        section: "plugins",
+        displayName: "Verify Motorsport mail settings",
+        uid: MOTORSPORT_MAIL_SETTINGS_ACTIONS.verify.replace("admin::", ""),
+        pluginName: PLUGIN_NAME,
+      },
+    ],
   );
 
   await permissionService.conditionProvider.registerMany(
@@ -318,6 +344,14 @@ export function buildRolePermissions(
     { action: "plugin::upload.assets.download" },
     { action: "plugin::upload.assets.copy-link" },
   ];
+
+  if (role.scope === "motorsport") {
+    permissions.push(
+      { action: MOTORSPORT_MAIL_SETTINGS_ACTIONS.read },
+      { action: MOTORSPORT_MAIL_SETTINGS_ACTIONS.update },
+      { action: MOTORSPORT_MAIL_SETTINGS_ACTIONS.verify },
+    );
+  }
 
   for (const subject of role.subjects) {
     const readableFields = getManagedReadableFields(strapi, subject);

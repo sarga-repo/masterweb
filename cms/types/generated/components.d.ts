@@ -135,8 +135,8 @@ export interface MotorsportAboutCapabilityCard extends Struct.ComponentSchema {
 export interface MotorsportCampaignSlide extends Struct.ComponentSchema {
   collectionName: 'components_motorsport_campaign_slides';
   info: {
-    description: 'Campaign banner slide with optional call to action';
-    displayName: 'Campaign Slide';
+    description: '02 \u2014 One item in the campaign carousel. This is separate from supporting presentation sections.';
+    displayName: 'Campaign Carousel Slide';
   };
   attributes: {
     ctaLabel: Schema.Attribute.String;
@@ -151,8 +151,8 @@ export interface MotorsportCampaignSlide extends Struct.ComponentSchema {
 export interface MotorsportDetailPresentation extends Struct.ComponentSchema {
   collectionName: 'components_motorsport_detail_presentations';
   info: {
-    description: 'Optional Hero and Information Band overrides for Motorsport detail records.';
-    displayName: 'Detail Presentation';
+    description: '01 \u2014 The first presentation group in a Motorsport Program. Edit Hero first, then Information Band. This component is also reused by event/news detail records.';
+    displayName: 'Motorsport Presentation \u2014 Hero & Information Band';
   };
   attributes: {
     hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
@@ -337,6 +337,7 @@ export interface MotorsportHomeTicketSection extends Struct.ComponentSchema {
   };
   attributes: {
     backgroundImage: Schema.Attribute.Media<'images'>;
+    backgroundImageMobile: Schema.Attribute.Media<'images'>;
     ctaLabel: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -607,8 +608,8 @@ export interface MotorsportPageInformationBand extends Struct.ComponentSchema {
 export interface MotorsportPageSection extends Struct.ComponentSchema {
   collectionName: 'components_motorsport_page_sections';
   info: {
-    description: 'Named Motorsport editorial section used by page-specific Single Types; no manual section key is required.';
-    displayName: 'Named Page Section';
+    description: '03 \u2014 A named supporting section such as Format or Rundown. Use this for section copy, media, CTA, visibility, and order; do not use it for carousel slides.';
+    displayName: 'Supporting Presentation Section';
   };
   attributes: {
     body: Schema.Attribute.RichText &
@@ -650,7 +651,31 @@ export interface MotorsportPageSection extends Struct.ComponentSchema {
     isActive: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<true>;
+    items: Schema.Attribute.Component<'motorsport.page-section-item', true>;
+    legalText: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 300;
+      }>;
     media: Schema.Attribute.Media<'images' | 'videos'>;
+    secondaryCtaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    secondaryCtaTarget: Schema.Attribute.Enumeration<
+      ['sameWindow', 'newWindow']
+    > &
+      Schema.Attribute.DefaultTo<'sameWindow'>;
+    secondaryCtaUrl: Schema.Attribute.String;
     showBody: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     showCta: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     showEyebrow: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
@@ -678,6 +703,68 @@ export interface MotorsportPageSection extends Struct.ComponentSchema {
       Schema.Attribute.DefaultTo<'default'>;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+  };
+}
+
+export interface MotorsportPageSectionItem extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_page_section_items';
+  info: {
+    description: 'Ordered, independently visible content used by page sections such as Experience pillars, track panels, and Ticket Info bullets.';
+    displayName: 'Section Item';
+  };
+  attributes: {
+    accent: Schema.Attribute.Enumeration<
+      ['crimson', 'orange', 'yellow', 'teal', 'blue']
+    > &
+      Schema.Attribute.DefaultTo<'crimson'>;
+    description: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    href: Schema.Attribute.String;
+    hrefLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    isActive: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    label: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    media: Schema.Attribute.Media<'images' | 'videos'>;
+    mediaAlt: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    title: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -963,6 +1050,7 @@ declare module '@strapi/strapi' {
       'motorsport.page-hero': MotorsportPageHero;
       'motorsport.page-information-band': MotorsportPageInformationBand;
       'motorsport.page-section': MotorsportPageSection;
+      'motorsport.page-section-item': MotorsportPageSectionItem;
       'motorsport.rule-item': MotorsportRuleItem;
       'motorsport.rundown-item': MotorsportRundownItem;
       'motorsport.world-of-motorsport': MotorsportWorldOfMotorsport;

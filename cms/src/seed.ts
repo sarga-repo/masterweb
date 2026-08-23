@@ -3295,7 +3295,7 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
     }
 
     const relatedEvent = relatedEventSlug
-      ? ((await documents("api::event.event").findFirst({
+      ? ((await documents("api::motorsport-event.motorsport-event").findFirst({
           filters: { slug: { $eq: relatedEventSlug } },
         })) as { documentId: string } | null)
       : null;
@@ -3375,7 +3375,7 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
           uploadIfMissing(strapi, slide.file, slide.alt),
         ),
       );
-      const relatedEvent = (await documents("api::event.event").findFirst({
+      const relatedEvent = (await documents("api::motorsport-event.motorsport-event").findFirst({
         filters: {
           slug: { $eq: fiaCampaignSeed.relatedEventSlug },
         },

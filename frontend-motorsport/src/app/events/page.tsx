@@ -14,7 +14,11 @@ import { fetchEvents, fetchPrograms, fetchSitePage } from "@/lib/cms-data";
 import type { MotorsportEvent, MotorsportProgram } from "@/types/design-system";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
-import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
+import {
+  isCmsCanonicalSectionVisible,
+  isCmsPageVisible,
+  isCmsSectionVisible,
+} from "@/lib/cms-visibility";
 
 export const metadata: Metadata = {
   title: "Events",
@@ -117,7 +121,6 @@ export default async function EventsPage() {
   const ticketedCount = upcoming.filter((event) => event.ticketHref).length;
   const section = (key: string) =>
     page?.sections.find((item) => item.sectionKey === key);
-  const eventControl = section("event-control");
   const programmes = section("programmes");
   const calendar = section("calendar");
   const pageAvailable = isCmsPageVisible(page?.pageAvailability);
@@ -155,16 +158,17 @@ export default async function EventsPage() {
             </div>
           ) : null}
 
-          {page?.informationBand || isCmsSectionVisible(eventControl) ? (
-            <div data-cms-section-key="event-control" data-cms-enabled="true">
+          {isCmsCanonicalSectionVisible(page?.informationBand) ? (
+            <div
+              data-cms-section-key="information-band"
+              data-cms-enabled="true"
+            >
               <MotorsportPageInformationBand
                 band={page?.informationBand}
                 fallback={{
-                  isActive: eventControl?.enabled,
-                  eyebrow: eventControl?.eyebrow ?? "Event control / Live index",
-                  title: eventControl?.title ?? "Programmes with a pulse.",
+                  eyebrow: "Event control / Live index",
+                  title: "Programmes with a pulse.",
                   description:
-                    eventControl?.body ??
                     "International campaigns, development pathways, and race weekends-each with clear status and approved ticket routing.",
                   metrics: [
                     {

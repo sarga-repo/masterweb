@@ -14,7 +14,11 @@ import { fetchMerchandise, fetchSitePage } from "@/lib/cms-data";
 import type { MerchandiseItem } from "@/types/design-system";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
-import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
+import {
+  isCmsCanonicalSectionVisible,
+  isCmsPageVisible,
+  isCmsSectionVisible,
+} from "@/lib/cms-visibility";
 
 export const metadata: Metadata = {
   title: "Merchandise",
@@ -96,9 +100,6 @@ export default async function MerchandisePage() {
   ]);
   const isPreview = await isStrapiPreviewEnabled();
   const items = isPreview || cmsItems.length > 0 ? cmsItems : FALLBACK_ITEMS;
-  const control = page?.sections.find(
-    (section) => section.sectionKey === "merch-control",
-  );
   const finalCta = page?.sections.find(
     (section) => section.sectionKey === "merch-final-cta",
   );
@@ -121,16 +122,26 @@ export default async function MerchandisePage() {
           {page?.heroEnabled !== false ? (
             <div data-cms-section-key="hero" data-cms-enabled="true">
               <PageHero
-                kicker={page?.hero?.eyebrow ?? "Track culture / Product preview"}
+                kicker={
+                  page?.hero?.eyebrow ?? "Track culture / Product preview"
+                }
                 kickerColor="orange"
                 title={page?.hero?.title ?? page?.heroTitle ?? "Merchandise"}
-                description={page?.hero?.description ?? "Official Sarga Motorsport merchandise previews. Releases are handled through approved partners or direct inquiry."}
+                description={
+                  page?.hero?.description ??
+                  "Official Sarga Motorsport merchandise previews. Releases are handled through approved partners or direct inquiry."
+                }
                 showKicker={page?.hero?.showEyebrow}
                 showTitle={page?.hero?.showTitle}
                 showDescription={page?.hero?.showDescription}
                 showMedia={page?.hero?.showMedia}
-                backgroundImage={page?.heroImage || "/media/sarga-motorsport-race-nascar-2.png"}
-                backgroundAlt={page?.heroImageAlt || "Sarga Motorsport race weekend atmosphere"}
+                backgroundImage={
+                  page?.heroImage || "/media/sarga-motorsport-race-nascar-2.png"
+                }
+                backgroundAlt={
+                  page?.heroImageAlt ||
+                  "Sarga Motorsport race weekend atmosphere"
+                }
                 accent="orange"
                 accentPosition="bottom-right"
                 speedLines
@@ -139,19 +150,18 @@ export default async function MerchandisePage() {
             </div>
           ) : null}
 
-          {page?.informationBand || isCmsSectionVisible(control) ? (
-            <div data-cms-section-key="merch-control" data-cms-enabled="true">
+          {isCmsCanonicalSectionVisible(page?.informationBand) ? (
+            <div
+              data-cms-section-key="information-band"
+              data-cms-enabled="true"
+            >
               <MotorsportPageInformationBand
                 band={page?.informationBand}
                 fallback={{
-                  isActive: control?.enabled,
-                  eyebrow:
-                    control?.eyebrow ?? "Merch control / No internal commerce",
+                  eyebrow: "Merch control / No internal commerce",
                   title:
-                    control?.title ??
                     "Wear the velocity. Checkout stays with approved partners.",
                   description:
-                    control?.body ??
                     "This is a showcase-not a store. Sarga Motorsport does not operate a cart, account, checkout, or payment system.",
                   metrics: [
                     {
@@ -220,7 +230,11 @@ export default async function MerchandisePage() {
                     </p>
                   </div>
                   <Link
-                    href="/contact"
+                    href={
+                      finalCta?.ctaUrl?.startsWith("/")
+                        ? finalCta.ctaUrl
+                        : "/contact"
+                    }
                     className="group inline-flex min-h-14 items-center gap-4 bg-ms-apex-crimson px-7 text-[0.64rem] font-black uppercase tracking-[0.16em] transition-colors hover:bg-ms-ignition-orange"
                   >
                     {finalCta?.ctaLabel ?? "Contact merchandise desk"}

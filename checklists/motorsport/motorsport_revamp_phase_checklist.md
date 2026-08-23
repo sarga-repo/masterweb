@@ -47,6 +47,17 @@ Use this checklist for the major revamp track in `docs/motorsport/revamp/`.
 | MSR-CMS-CLEAN-9  | Common/detail template presentation contract            | Done        | 2026-08-15 | Optional detail Hero/Band presentation wired for Event and News. |
 | MSR-CMS-CLEAN-10 | RBAC cutover and legacy retirement                      | Done        | 2026-08-15 | Motorsport page subjects added; Site Page retained as rollback archive. |
 | MSR-CMS-CLEAN-11 | Full UAT and editor handover                            | Done        | 2026-08-15 | Endpoint, typecheck, build, and route smoke gates passed. |
+| MSR-CMS-CLEAN-0A | CMS/frontend alignment reassessment                    | Done        | 2026-08-23 | Read-only order, coverage, visibility, and duplicate-source inventory added; historical CLEAN-0–11 entries remain unchanged. |
+| MSR-CMS-CLEAN-1A | Ordered adapter and canonical Information Band follow-up | Done        | 2026-08-23 | Per-route CMS order mapping, canonical band visibility precedence, focused tests, typecheck, and production build passed. |
+| MSR-CMS-CLEAN-2A | Homepage named CMS coverage follow-up                  | Done        | 2026-08-23 | Gallery, Partners, and Newsletter sections added with visibility controls, migration mapping, persisted form order, and homepage wiring. |
+| MSR-CMS-CLEAN-3A | Gallery legacy-field cleanup follow-up                 | Done        | 2026-08-23 | Gallery hero now owns eyebrow/metric visibility; archive is the only body section and legacy intro is migration-only. |
+| MSR-CMS-CLEAN-4A | Canonical source enforcement follow-up                 | Done        | 2026-08-23 | Information Band no longer reads legacy control fields; Motorsport homepage/events use dedicated Ticket CTA reads; editor layouts omit legacy control rows. |
+| MSR-CMS-CLEAN-5A | Editorial coverage and strict audit closure            | Done        | 2026-08-23 | Reusable section legal/secondary CTA/item fields added; About, News, Commerce, Support, and Experience mappings are CMS-owned; strict audit passed. |
+| MSR-CMS-OPS-1    | Editorial show-toggle defaults and local operational gate | Done     | 2026-08-23 | 21 editorial show toggles default to true; 20 local Motorsport page documents backfilled and verified with zero missing values; authenticated EN/ID editors, Preview, strict alignment, builds, and HTTP smoke passed. |
+| MSR-CMS-LIVE-1  | Motorsport saved-draft live Preview MVP                 | Done        | 2026-08-23 | Exact-document heartbeat and automatic Preview refresh after Save implemented; typecheck, lint, and focused Preview tests passed. |
+| MSR-CMS-LIVE-2  | Motorsport side-by-side CMS and frontend Preview        | Done        | 2026-08-23 | Dedicated split-pane admin route added for ten Motorsport page Single Types and EN/ID Preview; CMS build, frontend typecheck, and formatting passed. |
+| MSR-CMS-LIVE-3  | Integrated Content Manager Preview action              | Done        | 2026-08-23 | Native Motorsport page Preview links open the selected page/locale in the split editor + frontend workspace; authenticated browser smoke passed. |
+| MSR-SURFACE-IJTC | Vendor Editorial IJTC hub and programme sub-page rhythm | Done        | 2026-08-22 | Shared theme sequencer applied to the IJTC overview, schedule, riders/detail, standings, About, regulation, and Become Riders routes; current and Vendor Night remain unchanged. |
 
 ## Phase completion requirements
 

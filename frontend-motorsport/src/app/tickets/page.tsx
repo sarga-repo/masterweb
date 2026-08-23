@@ -11,10 +11,20 @@ import {
   TicketCtaPanel,
 } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
-import { fetchEvents, fetchSitePage, fetchTicketCtas } from "@/lib/cms-data";
+import {
+  fetchEvents,
+  fetchMotorsportTheme,
+  fetchSitePage,
+  fetchTicketCtas,
+} from "@/lib/cms-data";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
-import { isCmsPageVisible, isCmsSectionVisible } from "@/lib/cms-visibility";
+import {
+  isCmsCanonicalSectionVisible,
+  isCmsPageVisible,
+  isCmsSectionVisible,
+} from "@/lib/cms-visibility";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 
 export const metadata: Metadata = {
   title: "Tickets",
@@ -27,6 +37,16 @@ const PLACEHOLDER_CTAS: Array<{
   provider: string;
   href: string;
   eventName: string;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  eventMeta?: string;
+  eventMetaLabel?: string;
+  providerLabel?: string;
+  partnerLabel?: string;
+  footerText?: string;
+  image?: string;
+  mobileImage?: string;
   embedHref?: string;
 }> = [
   {
@@ -39,15 +59,13 @@ const PLACEHOLDER_CTAS: Array<{
 
 export default async function TicketsPage() {
   const locale = await getRequestLocale();
-  const [page, events, ctas] = await Promise.all([
+  const [page, events, ctas, isPreview, theme] = await Promise.all([
     fetchSitePage("custom", "/tickets", locale),
     fetchEvents(50, locale),
     fetchTicketCtas(locale),
+    isStrapiPreviewEnabled(),
+    fetchMotorsportTheme(locale),
   ]);
-  const isPreview = await isStrapiPreviewEnabled();
-  const control = page?.sections.find(
-    (section) => section.sectionKey === "ticket-control",
-  );
   const featured = page?.sections.find(
     (section) => section.sectionKey === "featured-ticket",
   );
@@ -58,9 +76,23 @@ export default async function TicketsPage() {
     (section) => section.sectionKey === "ticketed-events",
   );
   const pageAvailable = isCmsPageVisible(page?.pageAvailability);
+  const ticketInfoItems =
+    info?.items
+      ?.filter((item) => item.isActive !== false)
+      .map((item) => item.description || item.title || item.label)
+      .filter((item): item is string => Boolean(item?.trim())) ?? [];
+  const displayedTicketInfoItems = ticketInfoItems.length
+    ? ticketInfoItems
+    : [
+        "Select an event and click the ticket CTA.",
+        "You will be redirected to our approved ticketing partner.",
+        "Complete your purchase on the partner platform securely.",
+        "Receive your confirmation and show up on race day.",
+      ];
 
   const ticketedEvents = events.filter((e) => e.ticketHref);
   const displayCtas = isPreview || ctas.length > 0 ? ctas : PLACEHOLDER_CTAS;
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
 
   return (
     <PageShell spectrumSeparators>
@@ -96,17 +128,17 @@ export default async function TicketsPage() {
             </div>
           ) : null}
 
-          {page?.informationBand || isCmsSectionVisible(control) ? (
-            <div data-cms-section-key="ticket-control" data-cms-enabled="true">
+          {isCmsCanonicalSectionVisible(page?.informationBand) ? (
+            <div
+              data-cms-section-key="information-band"
+              data-cms-enabled="true"
+            >
               <MotorsportPageInformationBand
                 band={page?.informationBand}
                 fallback={{
-                  isActive: control?.enabled,
-                  eyebrow:
-                    control?.eyebrow ?? "Ticket control / Partner routing",
-                  title: control?.title ?? "Your seat. Their secure checkout.",
+                  eyebrow: "Ticket control / Partner routing",
+                  title: "Your seat. Their secure checkout.",
                   description:
-                    control?.body ??
                     "Sarga Motorsport publishes approved destinations but never stores payment details or runs an internal ticket engine.",
                   metrics: [
                     { label: "Checkout", value: "Partner" },
@@ -123,7 +155,7 @@ export default async function TicketsPage() {
             <section
               data-cms-section-key="featured-ticket"
               data-cms-enabled="true"
-              className="ms-reflected-light-surface ms-section"
+              className={`ms-reflected-light-surface ms-section ${nextAlternatingSurface()}`}
             >
               <div className="ms-shell">
                 <SectionHeader
@@ -139,11 +171,20 @@ export default async function TicketsPage() {
                   {displayCtas.map((cta, index) => (
                     <div key={`${cta.href}-${cta.eventName}-${index}`}>
                       <TicketCtaPanel
-                        eyebrow="Official partner redirect"
-                        title={cta.eventName ?? "Upcoming event"}
-                        description="Checkout is handled by our approved ticketing partner. Secure payment, guaranteed entry, zero markup."
-                        eventMeta={cta.eventName}
+                        eyebrow={cta.eyebrow ?? "Official partner redirect"}
+                        title={cta.title ?? cta.eventName ?? "Upcoming event"}
+                        description={
+                          cta.description ??
+                          "Checkout is handled by our approved ticketing partner. Secure payment, guaranteed entry, zero markup."
+                        }
+                        eventMeta={cta.eventMeta ?? cta.eventName}
+                        eventMetaLabel={cta.eventMetaLabel}
                         provider={cta.provider}
+                        providerLabel={cta.providerLabel}
+                        partnerLabel={cta.partnerLabel}
+                        footerText={cta.footerText}
+                        image={cta.image}
+                        mobileImage={cta.mobileImage}
                         surface="reflected"
                         cta={{
                           label: cta.label,
@@ -180,7 +221,7 @@ export default async function TicketsPage() {
             <section
               data-cms-section-key="ticketed-events"
               data-cms-enabled="true"
-              className="ms-reflected-light-surface ms-section"
+              className={`ms-reflected-light-surface ms-section ${nextAlternatingSurface()}`}
             >
               <div className="ms-shell">
                 <SectionHeader
@@ -215,7 +256,7 @@ export default async function TicketsPage() {
             <section
               data-cms-section-key="ticket-info"
               data-cms-enabled="true"
-              className="ms-blue-heat-surface py-16"
+              className={`ms-blue-heat-surface py-16 ${nextAlternatingSurface()}`}
             >
               <div className="ms-shell grid gap-10 lg:grid-cols-2">
                 <div>
@@ -223,23 +264,14 @@ export default async function TicketsPage() {
                     {info?.title ?? "How it works."}
                   </h2>
                   <ul className="mt-8 space-y-5 text-base leading-7 text-ms-warm-white/60">
-                    <li className="flex gap-4">
-                      <span className="mt-1 block h-6 w-1 bg-ms-apex-crimson" />
-                      Select an event and click the ticket CTA.
-                    </li>
-                    <li className="flex gap-4">
-                      <span className="mt-1 block h-6 w-1 bg-ms-ignition-orange" />
-                      You&apos;ll be redirected to our approved ticketing
-                      partner.
-                    </li>
-                    <li className="flex gap-4">
-                      <span className="mt-1 block h-6 w-1 bg-ms-electric-yellow" />
-                      Complete your purchase on the partner platform securely.
-                    </li>
-                    <li className="flex gap-4">
-                      <span className="mt-1 block h-6 w-1 bg-ms-slipstream-teal" />
-                      Receive your confirmation and show up on race day.
-                    </li>
+                    {displayedTicketInfoItems.map((item, index) => (
+                      <li key={item} className="flex gap-4">
+                        <span
+                          className={`mt-1 block h-6 w-1 ${["bg-ms-apex-crimson", "bg-ms-ignition-orange", "bg-ms-electric-yellow", "bg-ms-slipstream-teal"][index % 4]}`}
+                        />
+                        {item}
+                      </li>
+                    ))}
                   </ul>
                 </div>
                 <div className="ms-blue-panel ms-panel p-8">
@@ -251,10 +283,14 @@ export default async function TicketsPage() {
                       "Need help with your ticket? Contact our support team for event-specific inquiries, group bookings, or accessibility requests."}
                   </p>
                   <Link
-                    href="/contact"
+                    href={
+                      info?.secondaryCtaUrl?.startsWith("/")
+                        ? info.secondaryCtaUrl
+                        : "/contact"
+                    }
                     className="group mt-8 inline-flex items-center gap-3 border-b border-ms-apex-crimson pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] transition-colors hover:text-ms-ignition-orange"
                   >
-                    Contact support
+                    {info?.secondaryCtaLabel ?? "Contact support"}
                     <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </div>

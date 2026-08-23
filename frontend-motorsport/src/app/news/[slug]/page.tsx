@@ -3,11 +3,13 @@ import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { notFound } from "next/navigation";
 
 import { InformationBand, PageHero, PageShell } from "@/components";
+import { MarkdownContent } from "@/components/content/markdown-content";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
 import {
   fetchArticleBySlug,
   fetchArticles,
+  fetchMotorsportTheme,
   mapCmsSeo,
   type CmsSeo,
 } from "@/lib/cms-data";
@@ -19,6 +21,7 @@ import type {
 import { createMetadata } from "@/lib/seo/metadata";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 import type { MotorsportArticle } from "@/types/design-system";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -100,10 +103,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ArticleDetailPage({ params }: Props) {
   const { slug } = await params;
   const locale = await getRequestLocale();
-  const [cmsArticle, cmsArticles, isPreview] = await Promise.all([
+  const [cmsArticle, cmsArticles, isPreview, theme] = await Promise.all([
     fetchArticleBySlug(slug, locale),
     fetchArticles(6, locale),
     isStrapiPreviewEnabled(),
+    fetchMotorsportTheme(locale),
   ]);
   const article =
     cmsArticle ?? (isPreview ? null : (PLACEHOLDER_MAP[slug] ?? null));
@@ -126,6 +130,7 @@ export default async function ArticleDetailPage({ params }: Props) {
   };
   const presentationHero = detailArticle.presentation?.hero;
   const presentationBand = detailArticle.presentation?.informationBand;
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
 
   return (
     <PageShell spectrumSeparators>
@@ -149,6 +154,7 @@ export default async function ArticleDetailPage({ params }: Props) {
         </div>
       ) : null}
       <InformationBand
+        isActive={presentationBand?.isActive !== false}
         showEyebrow={presentationBand?.showEyebrow}
         showTitle={presentationBand?.showTitle}
         showDescription={presentationBand?.showDescription}
@@ -179,7 +185,11 @@ export default async function ArticleDetailPage({ params }: Props) {
         }
       />
 
-      <section className="ms-news-detail-story">
+      <section
+        data-cms-section-key="news-detail-story"
+        data-cms-enabled="true"
+        className={`ms-news-detail-story ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell py-10 sm:py-14">
           <figure className="relative aspect-[16/10] overflow-hidden bg-ms-cream-200 sm:aspect-[21/9]">
             <ResilientImage
@@ -202,19 +212,20 @@ export default async function ArticleDetailPage({ params }: Props) {
 
         <article className="pb-20 pt-8 sm:pb-28 sm:pt-12">
           <div className="ms-shell grid gap-14 lg:grid-cols-[minmax(0,45rem)_minmax(15rem,1fr)] lg:justify-between lg:gap-24">
-            <div className="space-y-7 text-[1.05rem] leading-8 text-ms-warm-white/74">
-              {article.body ? (
-                article.body
-                  .split("\n\n")
-                  .map((para, i) => <p key={i}>{para}</p>)
-              ) : (
+            {article.body ? (
+              <MarkdownContent
+                value={article.body}
+                className="ms-rich-text text-[1.05rem] leading-8 text-ms-warm-white/74"
+              />
+            ) : (
+              <div className="ms-rich-text text-[1.05rem] leading-8 text-ms-warm-white/74">
                 <p>
                   Full editorial content will be published here once available
                   from the Sarga Motorsport editorial team. Check back soon for
                   the complete story.
                 </p>
-              )}
-            </div>
+              </div>
+            )}
 
             <aside className="ms-news-story-file self-start border-t border-ms-warm-white/18 p-6 lg:sticky lg:top-28">
               <p className="ms-data-label text-ms-electric-yellow">
@@ -252,7 +263,11 @@ export default async function ArticleDetailPage({ params }: Props) {
       </section>
 
       {relatedArticles.length > 0 ? (
-        <section className="ms-news-detail-related ms-section">
+        <section
+          data-cms-section-key="news-detail-related"
+          data-cms-enabled="true"
+          className={`ms-news-detail-related ms-section ${nextAlternatingSurface()}`}
+        >
           <div className="ms-shell">
             <div className="flex flex-col gap-5 border-t border-ms-warm-white/18 pt-5 sm:flex-row sm:items-end sm:justify-between">
               <div>

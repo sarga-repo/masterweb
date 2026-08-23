@@ -69,6 +69,17 @@ This folder is the current source of truth for the major Sarga Motorsport UI, si
 | `62_vendor_theme_phase2_cms_settings_spec.md`    | Motorsport theme settings Single Type and RBAC contract.                                                                        |
 | `63_vendor_theme_phase3_runtime_preview_spec.md` | Draft/live theme resolution, root attribute, fallback, and revalidation contract.                                               |
 | `64_vendor_theme_phase4_5_qa_handover_spec.md`   | Vendor preset visual QA, cross-route UAT, and editor handover requirements.                                                     |
+| `73_vendor_editorial_cross_page_surface_rhythm_plan.md` | Cross-route Vendor Editorial cream/charcoal alternation contract and small execution phases after the completed homepage rhythm. |
+| `74_vendor_editorial_ijtc_surface_rhythm.md` | Vendor Editorial surface rhythm rollout for the IJTC hub, sub-pages, and rider detail route. |
+| `75_cms_clean_alignment_phase0_audit.md`       | Read-only CMS/frontend order, coverage, visibility, duplicate-source, and admin UX reassessment for the cleansing follow-up. |
+| `76_cms_clean_followup_phase1_2_execution.md`  | Execution evidence for the ordered adapter, canonical Information Band, and homepage named-section coverage follow-up. |
+| `77_cms_clean_followup_phase3_execution.md`   | Gallery legacy-field cleanup evidence: canonical Hero eyebrow/metrics and archive-only body ownership. |
+| `78_cms_clean_followup_phase4_execution.md`   | Canonical Information Band and Motorsport Ticket CTA read cutover, plus editor-layout cleanup for legacy control fields. |
+| `79_cms_clean_followup_phase5_execution.md`   | Final editorial coverage, reusable section items, strict audit closure, and CMS/frontend handover evidence. |
+| `80_cms_show_field_defaults_and_operational_gate.md` | Editorial `show*` defaults, existing-record backfill, verification, and local operational-gate evidence. |
+| `81_cms_live_preview_mvp.md` | Saved-draft live Preview heartbeat, automatic refresh, security boundary, and unsaved-edit limitation. |
+| `82_cms_side_by_side_preview.md` | Motorsport split-pane CMS editor and private frontend Preview workspace. |
+| `83_cms_integrated_content_manager_preview.md` | Integrated Content Manager Preview action and side-by-side editor flow. |
 
 ## Implementation rule
 

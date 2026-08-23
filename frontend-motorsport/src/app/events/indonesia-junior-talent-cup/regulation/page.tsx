@@ -8,6 +8,7 @@ import {
   SectionHeader,
 } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
+import { fetchMotorsportTheme } from "@/lib/cms-data";
 import {
   getIjtcProgram,
   getIjtcInformationBand,
@@ -15,6 +16,7 @@ import {
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
 import { getRequestLocale } from "@/lib/i18n/request";
+import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -48,6 +50,8 @@ export default async function IjtcRegulationPage() {
     getIjtcRegulation(locale),
   ]);
   if (!program) notFound();
+  const theme = await fetchMotorsportTheme(locale);
+  const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
   const isPublished = Boolean(regulation?.fileHref);
 
   return (
@@ -73,14 +77,16 @@ export default async function IjtcRegulationPage() {
           description:
             "This page never substitutes a draft or placeholder file for an official regulation.",
           items: [
-          { label: "Season", value: program.seasonLabel },
-          { label: "Status", value: isPublished ? "Published" : "Pending" },
-          { label: "Format", value: "PDF" },
+            { label: "Season", value: program.seasonLabel },
+            { label: "Status", value: isPublished ? "Published" : "Pending" },
+            { label: "Format", value: "PDF" },
           ],
         })}
       />
 
-      <section className="ms-reflected-light-surface ms-section">
+      <section
+        className={`ms-reflected-light-surface ms-section ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell">
           <SectionHeader
             index="RULEBOOK"
@@ -101,7 +107,9 @@ export default async function IjtcRegulationPage() {
         </div>
       </section>
 
-      <section className="ms-blue-heat-surface ms-section">
+      <section
+        className={`ms-blue-heat-surface ms-section ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell">
           <SectionHeader
             index="CONTROL"
@@ -128,7 +136,9 @@ export default async function IjtcRegulationPage() {
         </div>
       </section>
 
-      <section className="ms-reflected-light-surface py-14 sm:py-20">
+      <section
+        className={`ms-reflected-light-surface py-14 sm:py-20 ${nextAlternatingSurface()}`}
+      >
         <div className="ms-shell flex flex-wrap items-end justify-between gap-8">
           <div>
             <p className="ms-data-label text-ms-slipstream-teal">

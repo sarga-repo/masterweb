@@ -10430,7 +10430,7 @@ Status: ✅ Done — 2026-08-24
 
 ## MSR-CMS-CM-REPAIR-1 — Repair single-type titles and persisted field helpers
 
-Status: 🔄 In progress — 2026-08-24
+Status: ✅ Done — 2026-08-24
 
 ### What was done
 
@@ -10451,8 +10451,10 @@ Status: 🔄 In progress — 2026-08-24
   while About, Home, Events, and Merchandise were resolving to route values.
 - Live staging browser inspection confirmed the expected helper text was not
   present under the media field before this repair.
+- Deployed the CMS and verified the live staging browser now shows the
+  display-name headers and helper descriptions on the affected editors.
 
 ### Notes / caveats
 
-- The phase remains in progress until the CMS is deployed and the staging
-  editor is rechecked in the browser.
+- The persisted repair is idempotent and runs during CMS bootstrap; later
+  schema metadata changes will be reconciled on the next CMS restart.

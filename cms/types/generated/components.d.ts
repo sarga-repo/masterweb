@@ -922,6 +922,7 @@ export interface SharedFooterLink extends Struct.ComponentSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 500;
       }>;
+    icon: Schema.Attribute.Media<'images'>;
     label: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{

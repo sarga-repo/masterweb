@@ -446,11 +446,7 @@ export default async function HomePage() {
         crossSiteLinks={crossSiteLinks.filter(
           (item) => item.label !== "Visit Sarga.co",
         )}
-        socialLinks={(chrome.footerSocialLinks ?? []).map((item) => ({
-          label: item.label,
-          href: item.href,
-          external: item.linkType === "external",
-        }))}
+        socialLinks={chrome.footerSocialLinks}
         legalLinks={(chrome.footerUtilityLinks ?? [])
           .filter(
             (item) =>

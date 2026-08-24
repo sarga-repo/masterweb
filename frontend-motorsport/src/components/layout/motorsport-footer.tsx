@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { MotorsportLogo } from "@/components/ui/brand-logo";
@@ -9,9 +11,16 @@ type FooterColumn = {
   links: LinkItem[];
 };
 
+type SocialLinkItem = LinkItem & {
+  /** Optional uploaded logo rendered beside the label; empty alt keeps the
+   * visible label as the accessible name. */
+  iconUrl?: string;
+  iconAlt?: string;
+};
+
 type MotorsportFooterProps = {
   columns: FooterColumn[];
-  socialLinks?: LinkItem[];
+  socialLinks?: SocialLinkItem[];
   legalLinks?: LinkItem[];
   gatewayLink?: LinkItem;
   /** Cross-links into other Sarga dedicated sites (e.g. Horse Sport). */
@@ -87,7 +96,22 @@ export function MotorsportFooter({
                 rel="noreferrer"
                 className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-ms-warm-white/65 hover:text-ms-electric-yellow"
               >
-                {item.label} <ArrowUpRightIcon className="size-3.5" />
+                {item.iconUrl ? (
+                  <Image
+                    src={item.iconUrl}
+                    alt=""
+                    width={20}
+                    height={20}
+                    unoptimized={
+                      /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?\//.test(
+                        item.iconUrl,
+                      )
+                    }
+                    className="size-5 object-contain"
+                  />
+                ) : null}
+                <span>{item.label}</span>
+                <ArrowUpRightIcon className="size-3.5" />
               </a>
             ))}
             {crossSiteLinks.map((item) => (

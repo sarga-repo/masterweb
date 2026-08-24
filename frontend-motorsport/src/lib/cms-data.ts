@@ -378,12 +378,22 @@ export type CmsFooterLink = {
   openInNewTab?: boolean;
   enabled?: boolean;
   displayOrder?: number;
+  icon?: StrapiMedia | null;
 };
 
 export type CmsFooterColumn = {
   title: string;
   displayOrder?: number;
   links?: CmsFooterLink[];
+};
+
+export type CmsFooterSocialLink = {
+  label: string;
+  href: string;
+  external: boolean;
+  openInNewTab?: boolean;
+  iconUrl?: string;
+  iconAlt?: string;
 };
 
 export type MotorsportChrome = {
@@ -397,7 +407,7 @@ export type MotorsportChrome = {
     title: string;
     links: CmsFooterLink[];
   }[];
-  footerSocialLinks?: CmsFooterLink[];
+  footerSocialLinks?: CmsFooterSocialLink[];
   footerUtilityLinks?: CmsFooterLink[];
 };
 
@@ -430,7 +440,7 @@ export async function fetchMotorsportChrome(
       "headerLogo",
       "footerLogo",
       "footerColumns.links",
-      "footerSocialLinks",
+      "footerSocialLinks.icon",
       "footerUtilityLinks",
     ],
     filters: {
@@ -477,7 +487,14 @@ export async function fetchMotorsportChrome(
     footerStatement: site?.footerStatement || "Racing, amplified.",
     footerCopyright: site?.footerCopyright || "© 2026 Sarga Motorsport",
     footerColumns: columns.length ? columns : fallbackFooterColumns,
-    footerSocialLinks: mapFooterLinks(site?.footerSocialLinks),
+    footerSocialLinks: mapFooterLinks(site?.footerSocialLinks).map((link) => ({
+      label: link.label.trim(),
+      href: link.href.trim(),
+      external: link.linkType === "external",
+      openInNewTab: link.openInNewTab ?? false,
+      iconUrl: mediaUrl(link.icon?.url) || undefined,
+      iconAlt: link.icon?.alternativeText || `${link.label} logo`,
+    })),
     footerUtilityLinks: mapFooterLinks(site?.footerUtilityLinks),
   };
 }

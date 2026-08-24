@@ -88,6 +88,58 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | CMS-WORKSPACE-UI-1 | Gateway, Horse Sport, and Shared workspace branding and page entries | ✅ Done                 | 2026-08-13 |
 | CMS-WORKSPACE-UI-2 | Gateway, Horse Sport, and Shared workspace contrast correction       | ✅ Done                 | 2026-08-13 |
 | MS-CONTACT-1       | Motorsport contact honeypot submission fix                           | ✅ Done                 | 2026-08-13 |
+| MS-FOOTER-ICON-1   | Motorsport footer social link icons                                  | ✅ Done                  | 2026-08-24 |
+
+### MS-FOOTER-ICON-1 — Motorsport footer social link icons
+
+#### What was done
+
+- Added optional `icon` media field (single image) to the shared
+  `shared.footer-link` component so every `footerSocialLinks` item on
+  `Site -> Sarga Motorsport` can carry an uploaded logo.
+- Workspace RBAC needed no change: managed writable/readable field lists are
+  derived from the schema recursively, so `footerSocialLinks.icon` became
+  editable for site admins on the next Strapi bootstrap, and site admins
+  already hold `plugin::upload.assets.create`.
+- Extended `CmsFooterLink` with `icon`, populated `footerSocialLinks.icon` in
+  the chrome query, and mapped `iconUrl`/`iconAlt` into
+  `MotorsportChrome.footerSocialLinks` (`CmsFooterSocialLink`).
+- Footer social anchors now render the uploaded logo at 20px before the label;
+  links without icons keep the previous text-only rendering.
+- Homepage footer now passes `chrome.footerSocialLinks` through directly
+  instead of re-narrowing the mapping.
+
+#### Files changed
+
+- `cms/src/components/shared/footer-link.json`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/components/layout/motorsport-footer.tsx`
+- `frontend-motorsport/src/app/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- `footer-link.json` parses; Strapi develop reload regenerated component types
+  including `icon`, and the public API returns `footerSocialLinks[].icon`.
+- Authenticated Motorsport Admin browser session saw the new Icon media input
+  inside each footerSocialLinks item.
+- Editor published the facebook link with icon
+  `/uploads/facebook_icon_test_5292b465d3.png`; homepage footer HTML renders
+  the 20x20 image, loaded 64x64 natural size, and a 1280px browser screenshot
+  shows the icon beside the FACEBOOK label.
+- Motorsport typecheck, lint (2 pre-existing unrelated warnings), and
+  production build passed.
+
+#### Notes / caveats
+
+- Icons are optional; empty icon keeps the existing text-only link.
+- Icon renders with `alt=""` because the visible label is the accessible name.
+- The field lives on `shared.footer-link`, so footer column/utility link items
+  also expose it; leaving it empty there has no effect.
+- `facebook-icon-test.png` is a 64x64 orange placeholder circle; replace with
+  real per-network brand icons.
+- Site records are localized; set the icon per locale if the `id` locale
+  record is edited independently.
 
 ### CMS-COV-23 — CMS workspace permission-render fix
 

@@ -15,6 +15,12 @@
     },
     "openInNewTab": { "type": "boolean", "default": false },
     "enabled": { "type": "boolean", "default": true },
-    "displayOrder": { "type": "integer", "default": 0, "min": 0, "max": 1000 }
+    "displayOrder": { "type": "integer", "default": 0, "min": 0, "max": 1000 },
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    }
   }
 }

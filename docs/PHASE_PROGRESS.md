@@ -10627,7 +10627,9 @@ Status: ✅ Done — 2026-08-25
 ### How verified
 
 - Parsed the Rider schema successfully.
-- Confirmed the migration prefix now requires
-  `motorsportPresentation` as the first persisted layout row.
-- Staging CMS restart and persisted-layout verification are pending for this
-  correction.
+- Confirmed the migration prefix requires `motorsportPresentation` as the first
+  persisted layout row.
+- Rebuilt and restarted staging CMS at commit `41d85021b`; bootstrap logs
+  confirmed the Rider layout repair.
+- PostgreSQL verification confirmed the persisted Rider order starts with
+  `motorsportPresentation, name, slug, portrait, bio`.

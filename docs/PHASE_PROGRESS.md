@@ -10562,7 +10562,7 @@ Status: ✅ Done — 2026-08-25
 
 ## MSR-CMS-EDITOR-2 — Motorsport collection detail editor order
 
-Status: ✅ Done locally — 2026-08-25
+Status: ✅ Done — 2026-08-25
 
 ### What was done
 
@@ -10592,11 +10592,16 @@ Status: ✅ Done locally — 2026-08-25
 - CMS TypeScript compilation completed successfully.
 - Motorsport frontend TypeScript check passed.
 - `git diff --check` passed.
+- Pushed commit `7979d2e04` to `feature/sarga-major-revamp` and rebuilt/restarted
+  staging CMS successfully.
+- Staging bootstrap logs confirmed all three persisted layouts were repaired;
+  PostgreSQL verification confirmed the expected first rows for Event, News,
+  and Rider.
 
 ### Notes / caveats
 
-- The Content Manager repair runs during CMS bootstrap and is idempotent. A CMS
-  restart is required for the persisted staging layouts to be reconciled.
+- The Content Manager repair runs during CMS bootstrap and is idempotent. The
+  staging CMS restart has completed the persisted-layout reconciliation.
 - Rider presentation overrides remain at the bottom because the current rider
   frontend route renders the core rider fields directly; the field is retained
   for the existing advanced presentation contract.

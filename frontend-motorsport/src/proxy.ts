@@ -1,12 +1,16 @@
 import { NextResponse, type NextRequest } from "next/server";
 import {
   LOCALE_COOKIE,
+  isLocale,
   localeFromPathname,
   stripLocalePrefix,
 } from "@/lib/i18n/config";
 
 export function proxy(request: NextRequest) {
-  const locale = localeFromPathname(request.nextUrl.pathname);
+  const rewriteLocale = request.nextUrl.searchParams.get("__sarga_locale");
+  const locale = isLocale(rewriteLocale)
+    ? rewriteLocale
+    : localeFromPathname(request.nextUrl.pathname);
   const routePath = stripLocalePrefix(request.nextUrl.pathname);
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-sarga-locale", locale);

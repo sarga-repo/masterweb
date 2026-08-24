@@ -26,7 +26,7 @@ export function proxy(request: NextRequest) {
   cookies.push(`${LOCALE_COOKIE}=${locale}`);
   requestHeaders.set("cookie", cookies.join("; "));
 
-  if (locale === "id") {
+  if (locale === "id" && !isLocale(rewriteLocale)) {
     const rewritten = request.nextUrl.clone();
     rewritten.pathname = routePath;
     rewritten.searchParams.set("__sarga_locale", locale);

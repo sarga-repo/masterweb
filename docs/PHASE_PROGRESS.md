@@ -10575,8 +10575,9 @@ Status: ✅ Done — 2026-08-25
   schedule, ticket/sponsor records, supporting links, and SEO.
 - News order now starts with presentation, article identity/media/body, editorial
   metadata, related records, and SEO.
-- Rider order now starts with profile identity/media, programme and rider
-  metadata, activation/sort controls, site scope, SEO, and advanced presentation.
+- Rider order now starts with the Hero/Information Band presentation, followed
+  by profile identity/media, programme and rider metadata, activation/sort
+  controls, site scope, and SEO.
 
 ### Files changed
 
@@ -10602,6 +10603,31 @@ Status: ✅ Done — 2026-08-25
 
 - The Content Manager repair runs during CMS bootstrap and is idempotent. The
   staging CMS restart has completed the persisted-layout reconciliation.
-- Rider presentation overrides remain at the bottom because the current rider
-  frontend route renders the core rider fields directly; the field is retained
-  for the existing advanced presentation contract.
+- The Rider presentation component remains available at the top because it
+  contains the intended Hero and Information Band editor sections, even though
+  the current rider route still renders core profile fields directly.
+
+## MSR-CMS-EDITOR-2A — Move Rider presentation to the editor top
+
+Status: ✅ Done — 2026-08-25
+
+### What was done
+
+- Corrected the Motorsport Rider schema and persisted Content Manager layout so
+  `motorsportPresentation` is the first editor field group.
+- Kept the Rider Hero and Information Band controls together at the top of the
+  collection entry, before profile identity and supporting rider metadata.
+
+### Files changed
+
+- `cms/src/api/motorsport-rider/content-types/motorsport-rider/schema.json`
+- `cms/src/migrations/motorsport-program-editor-layout.ts`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Parsed the Rider schema successfully.
+- Confirmed the migration prefix now requires
+  `motorsportPresentation` as the first persisted layout row.
+- Staging CMS restart and persisted-layout verification are pending for this
+  correction.

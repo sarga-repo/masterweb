@@ -252,6 +252,7 @@ const NEWS_ARTICLE_EDIT_LAYOUT: LayoutRow[] = [
 ];
 
 const RIDER_EDIT_LAYOUT: LayoutRow[] = [
+  [{ name: "motorsportPresentation", size: 12 }],
   [
     { name: "name", size: 6 },
     { name: "slug", size: 6 },
@@ -276,7 +277,6 @@ const RIDER_EDIT_LAYOUT: LayoutRow[] = [
     { name: "sites", size: 6 },
   ],
   [{ name: "seo", size: 12 }],
-  [{ name: "motorsportPresentation", size: 12 }],
 ];
 
 function pageEditLayout(sectionNames: string[]): LayoutRow[] {

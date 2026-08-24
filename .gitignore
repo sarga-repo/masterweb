@@ -41,4 +41,7 @@ sarga_multisite_codex_ready_package/
 .serena/
 sarga_multisite_horsesport_codex_ready_package/
 supporting-docs/
+
+# Generated CMS user guide artifacts are maintained locally, not versioned.
+docs/cms-user-guide/
 CLAUDE.md

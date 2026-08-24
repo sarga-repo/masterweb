@@ -1238,6 +1238,7 @@ export async function fetchArticleBySlug(
     ],
     filters: { "filters[slug][$eq]": slug },
     locale,
+    fallbackToDefaultLocale: false,
     limit: 1,
     revalidate: 60,
   };
@@ -1245,7 +1246,36 @@ export async function fetchArticleBySlug(
     "motorsport-news-articles",
     dedicatedOptions,
   );
-  const entry = response?.data?.[0];
+  let entry = response?.data?.[0];
+
+  // A localized UID can retain a different slug in older records. Resolve
+  // the English source document first, then request the requested locale by
+  // documentId so the language switch never accidentally renders English
+  // just because the localized slug differs.
+  if (!entry && locale === "id") {
+    const sourceResponse = await fetchStrapiList<CmsArticle>(
+      "motorsport-news-articles",
+      {
+        ...dedicatedOptions,
+        locale: "en",
+        fallbackToDefaultLocale: true,
+      },
+    );
+    const source = sourceResponse?.data?.[0];
+    if (source) {
+      const localizedResponse = await fetchStrapiList<CmsArticle>(
+        "motorsport-news-articles",
+        {
+          ...dedicatedOptions,
+          filters: {
+            "filters[documentId][$eq]": source.documentId,
+          },
+          locale: "id",
+        },
+      );
+      entry = localizedResponse?.data?.[0] ?? source;
+    }
+  }
   return entry
     ? {
         ...mapArticle(entry),

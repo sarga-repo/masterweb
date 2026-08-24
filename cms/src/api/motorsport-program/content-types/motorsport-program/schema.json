@@ -23,7 +23,7 @@
       "multiple": false,
       "required": false,
       "allowedTypes": ["images", "videos"],
-      "description": "02 — Legacy programme fallback image. For the campaign hero, edit Motorsport Presentation > Hero instead. This field remains as a safe fallback for older records."
+      "description": "02 — Legacy programme fallback image. Recommended 2400 × 1200 px (2:1). For the campaign hero, edit Motorsport Presentation > Hero instead. This field remains as a safe fallback for older records."
     },
     "bannerSlides": {
       "type": "component",

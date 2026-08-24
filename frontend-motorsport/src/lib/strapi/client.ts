@@ -101,6 +101,8 @@ type FetchOptions = {
   start?: number;
   revalidate?: number;
   locale?: Locale;
+  /** Keep locale-specific lookups from silently returning the default locale. */
+  fallbackToDefaultLocale?: boolean;
 };
 
 type SingleFetchOptions = Pick<
@@ -282,6 +284,7 @@ export async function fetchStrapiListResult<T>(
     if (
       !preview.status &&
       requestedLocale === "id" &&
+      opts.fallbackToDefaultLocale !== false &&
       result.state === "empty"
     ) {
       result = await requestLocale("en");

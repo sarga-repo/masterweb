@@ -32,14 +32,14 @@
       "multiple": false,
       "required": false,
       "allowedTypes": ["images"],
-      "description": "Optional artwork used as the background of the ticket card's main content panel."
+      "description": "Optional ticket background: 1920 × 900 px (approximately 2.13:1) recommended. Keep copy-safe negative space around the focal subject."
     },
     "backgroundImageMobile": {
       "type": "media",
       "multiple": false,
       "required": false,
       "allowedTypes": ["images"],
-      "description": "Optional mobile-specific artwork for the ticket card. Falls back to backgroundImage when empty."
+      "description": "Optional mobile ticket background: 1080 × 1350 px (4:5) recommended. Falls back to backgroundImage when empty."
     },
     "eventLabel": {
       "type": "string",

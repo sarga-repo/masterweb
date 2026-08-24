@@ -29,7 +29,8 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Discipline card image: 1600 × 1000 px (8:5) recommended. Keep the action and vehicle/rider inside the crop-safe center area."
     },
     "imageAlt": {
       "type": "string",

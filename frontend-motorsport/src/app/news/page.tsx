@@ -27,7 +27,7 @@ import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getRequestLocale();
-  const page = await fetchSitePage("newsHub");
+  const page = await fetchSitePage("newsHub", undefined, locale);
   return createMetadata({
     title: page?.title ?? "News",
     description:

@@ -24,7 +24,8 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Open Graph image: 1200 × 630 px (1.91:1) recommended."
     },
     "canonicalUrl": {
       "type": "string"

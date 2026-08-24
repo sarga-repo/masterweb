@@ -11,7 +11,7 @@
     "group": { "type": "enumeration", "enum": ["board", "executive", "advisor"], "default": "executive" },
     "site": { "type": "relation", "relation": "manyToOne", "target": "api::site.site" },
     "order": { "type": "integer", "default": 0 },
-    "portrait": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "portrait": { "type": "media", "multiple": false, "allowedTypes": ["images"], "description": "Leadership portrait: 1000 × 1250 px (4:5) recommended. Keep the face and shoulders inside the center safe area." },
     "legacySourceDocumentId": { "type": "string", "private": true, "configurable": false }
   }
 }

@@ -119,7 +119,6 @@ export function MotorsportHeader({
       data-navigation-source={navigationSource}
       className="sticky top-0 z-50 isolate overflow-visible border-b border-ms-warm-white/12 bg-(--ms-nav-surface) text-ms-warm-white backdrop-blur-xl"
     >
-      <div className="absolute inset-x-0 top-0 h-0.5 bg-[linear-gradient(90deg,#E8192C_0_38%,#FF6B00_38%_60%,#F5C800_60%_72%,#00C4CC_72%_84%,#0033A0_84%)]" />
       <div className="ms-shell grid h-(--ms-header-height) grid-cols-[1fr_auto] items-center gap-4 xl:grid-cols-[minmax(11rem,1fr)_auto_minmax(11rem,1fr)]">
         <Link href={logoHref} aria-label={dictionary.home} className="shrink-0">
           <MotorsportLogo

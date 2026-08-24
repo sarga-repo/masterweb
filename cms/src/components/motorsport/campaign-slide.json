@@ -12,10 +12,11 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Campaign artwork: 2400 × 1200 px (2:1) recommended for the desktop carousel crop."
     },
-    "ctaLabel": { "type": "string" },
-    "ctaUrl": { "type": "string" },
+    "ctaLabel": { "type": "string", "description": "Short action label shown on the campaign button." },
+    "ctaUrl": { "type": "string", "description": "Use an internal path beginning with / or an approved HTTPS external URL. External URLs open in a new tab." },
     "sortOrder": { "type": "integer", "default": 0 }
   }
 }

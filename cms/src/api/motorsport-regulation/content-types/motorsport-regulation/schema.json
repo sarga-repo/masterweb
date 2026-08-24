@@ -28,7 +28,8 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["files"]
+      "allowedTypes": ["files"],
+      "description": "Regulation document: upload an accessible PDF. Use a source document sized for A4/Letter reading; do not upload scanned screenshots as images."
     },
     "summary": {
       "type": "text",

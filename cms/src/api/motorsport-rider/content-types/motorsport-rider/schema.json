@@ -30,7 +30,8 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Rider portrait: 1000 × 1250 px (4:5) recommended. Keep helmet/face and shoulders within the center safe area."
     },
     "bio": {
       "type": "richtext",

@@ -22,6 +22,9 @@ export function MotorsportLogo({
   priority = false,
 }: MotorsportLogoProps) {
   const resolvedSrc = src ?? LOGOS[variant];
+  const dimensions = resolvedSrc.includes("main-brandmark-inverse")
+    ? { width: 5812, height: 1655 }
+    : { width: 777, height: 195 };
   const isLocalCmsMedia =
     typeof resolvedSrc === "string" &&
     /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?\//.test(resolvedSrc);
@@ -29,8 +32,8 @@ export function MotorsportLogo({
   return (
     <Image
       src={resolvedSrc}
-      width={777}
-      height={195}
+      width={dimensions.width}
+      height={dimensions.height}
       alt={alt}
       priority={priority}
       unoptimized={isLocalCmsMedia}

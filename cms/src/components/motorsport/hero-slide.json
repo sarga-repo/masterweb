@@ -27,13 +27,15 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Desktop hero artwork: 2400 × 1200 px (2:1) recommended. Keep the main subject near the selected focal anchor."
     },
     "mobileImage": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Optional mobile hero artwork: 1080 × 1350 px (4:5) recommended. Use this when the desktop crop does not preserve the subject."
     },
     "video": {
       "type": "component",
@@ -54,10 +56,12 @@
     },
     "ctaLabel": {
       "type": "string",
-      "maxLength": 28
+      "maxLength": 28,
+      "description": "Short action label, for example Explore events or Read the story."
     },
     "ctaUrl": {
-      "type": "string"
+      "type": "string",
+      "description": "Use an internal path beginning with / or an approved HTTPS external URL. External URLs open in a new tab."
     },
     "isActive": {
       "type": "boolean",

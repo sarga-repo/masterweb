@@ -89,6 +89,98 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | CMS-WORKSPACE-UI-2 | Gateway, Horse Sport, and Shared workspace contrast correction       | ✅ Done                 | 2026-08-13 |
 | MS-CONTACT-1       | Motorsport contact honeypot submission fix                           | ✅ Done                 | 2026-08-13 |
 | MS-FOOTER-ICON-1   | Motorsport footer social link icons                                  | ✅ Done                  | 2026-08-24 |
+| MSR-VENDOR-2026-08-24 | Vendor meeting action items: chrome, logo, external CTA, i18n, and media guidance | ✅ Done | 2026-08-24 |
+| MS-CMS-MANUAL-1    | Sarga Motorsport CMS user manual (MD + PDF)                          | ✅ Done                  | 2026-08-24 |
+
+### MS-CMS-MANUAL-1 — Sarga Motorsport CMS user manual
+
+#### What was done
+
+- Inventoried all 21 Motorsport routes, their section order, and the CMS
+  source of each section (`docs/cms-user-guide/inventory.md`).
+- Built and validated the CMS-to-frontend mapping from the actual schemas
+  (`cms/src/api/motorsport-*`, `cms/src/components/**`) and data mappers
+  (`frontend-motorsport/src/lib/cms-data.ts`, `ijtc-data.ts`), including
+  verified ordering rules, cache/revalidation times, and RBAC scope.
+- Wrote the full non-technical user manual: getting started, common tasks,
+  media management, global/shared content, per-page chapters for every route,
+  SEO, publishing workflow, troubleshooting, FAQ, master mapping table, and
+  glossary. Hardcoded content and CMS fields not consumed by the frontend are
+  explicitly marked.
+- Captured 19 screenshots (frontend pages + authenticated CMS views as
+  Motorsport Admin) and embedded them with relative paths.
+- Generated a 46-page A4 PDF with cover page, page numbers, and styled
+  tables/callouts via marked + headless Chrome print.
+
+#### Files changed
+
+- `docs/cms-user-guide/SARGA_MOTORSPORT_CMS_USER_GUIDE.md` (new)
+- `docs/cms-user-guide/SARGA_MOTORSPORT_CMS_USER_GUIDE.pdf` (new)
+- `docs/cms-user-guide/inventory.md` (new)
+- `docs/cms-user-guide/assets/**` (new, 19 PNG screenshots)
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Image audit: every referenced asset exists; no unreferenced assets.
+- Coverage audit: all 21 routes, all 11 single types, all 11 collections, and
+  shared chrome documented; keyword spot-checks passed.
+- PDF inspection: cover, table styling, callouts, and embedded screenshots
+  rendered correctly; 19/19 images loaded; 46 pages A4.
+- CMS labels in the manual match the authenticated Motorsport Admin UI.
+
+#### Notes / caveats
+
+- Screenshots reflect the local Docker stack as of 2026-08-24; recapture when
+  the CMS or frontend visuals change significantly.
+- Fields known to exist but not consumed by the frontend (article relations,
+  event schedule sessions, rider presentation, program related events, site
+  favicon) are documented as such in Troubleshooting.
+- PDF regeneration: build script converts the Markdown via `marked` and Chrome
+  print-to-PDF; the intermediate HTML is not committed.
+
+### MSR-VENDOR-2026-08-24 — Vendor meeting action items
+
+#### What was done
+
+- Removed the top rainbow strip from the Motorsport frontend navigation.
+- Added the supplied `Main Brandmark_inverse.png` as the deterministic local
+  header-logo fallback, while retaining CMS `Site.headerLogo` as the primary
+  source of truth.
+- Kept and documented HTTPS external CTA support for homepage hero slides and
+  campaign slides; external URLs open in a new tab.
+- Made news article localized-slug resolution explicit: Indonesian detail
+  pages now resolve the English source document and then request its Indonesian
+  localization by `documentId` when an older localized slug differs.
+- Added field-level media size and crop guidance across Motorsport content
+  types, reusable components, Site chrome, SEO, video posters, and shared page
+  availability; added the consolidated design handoff guide.
+
+#### Files changed
+
+- `frontend-motorsport/src/components/layout/motorsport-header.tsx`
+- `frontend-motorsport/src/components/ui/brand-logo.tsx`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/lib/strapi/client.ts`
+- `frontend-motorsport/src/app/news/page.tsx`
+- `frontend-motorsport/public/brand/main-brandmark-inverse.png`
+- Motorsport CMS schemas under `cms/src/api/` and `cms/src/components/`
+- `docs/motorsport/revamp/85_cms_media_asset_size_guidelines.md`
+
+#### How verified
+
+- Local Strapi API inspection confirmed the Motorsport Site record is CMS-logo
+  driven and the news collection is locale-aware.
+- CMS JSON schema parsing, CMS TypeScript, Motorsport TypeScript, focused
+  preview/Markdown tests, and both production builds passed.
+
+#### Notes / caveats
+
+- The hero-slider button color was intentionally not changed; exact Sarga hex
+  values are still required.
+- If staging still shows an older CMS `Site.headerLogo`, that media relation
+  must be updated/promoted in staging; the local fallback now uses the supplied
+  inverse brandmark when the relation is absent.
 
 ### MS-FOOTER-ICON-1 — Motorsport footer social link icons
 

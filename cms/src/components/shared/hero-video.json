@@ -15,25 +15,29 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": ["videos"]
+      "allowedTypes": ["videos"],
+      "description": "Primary hero video: MP4/WebM, 2400 × 1200 px (2:1) composition recommended. Keep the important action in the center safe area."
     },
     "alternateVideo": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["videos"]
+      "allowedTypes": ["videos"],
+      "description": "Optional alternate video codec with the same duration and framing as primaryVideo."
     },
     "posterImage": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Desktop video poster: 2400 × 1200 px (2:1) recommended."
     },
     "mobilePosterImage": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Optional mobile video poster: 1080 × 1350 px (4:5) recommended."
     }
   }
 }

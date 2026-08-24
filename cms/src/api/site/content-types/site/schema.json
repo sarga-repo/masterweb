@@ -24,19 +24,22 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Primary site mark: use the approved SVG when available, or a transparent PNG at 1600 × 450 px."
     },
     "headerLogo": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Header wordmark: transparent SVG preferred, or 2400 × 700 px PNG. Keep the full logo visible; do not crop it."
     },
     "footerLogo": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Footer wordmark: transparent SVG preferred, or 2400 × 700 px PNG. Use the inverse/white version on dark surfaces."
     },
     "footerStatement": { "type": "string", "maxLength": 240 },
     "footerCopyright": { "type": "string", "maxLength": 160 },
@@ -59,7 +62,8 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Square browser mark: 512 × 512 px PNG or SVG with transparent background."
     },
     "themeKey": { "type": "string" },
     "order": { "type": "integer", "default": 0 },

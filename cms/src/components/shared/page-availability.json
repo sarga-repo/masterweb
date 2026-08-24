@@ -25,7 +25,8 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Coming Soon artwork: 1600 × 1000 px (8:5) recommended."
     },
     "launchTargetLabel": {
       "type": "string"

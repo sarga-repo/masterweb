@@ -45,13 +45,15 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": ["images"],
+      "description": "Gallery cover: 1600 × 1000 px (8:5) recommended."
     },
     "mediaItems": {
       "type": "media",
       "multiple": true,
       "required": false,
-      "allowedTypes": ["images", "videos"]
+      "allowedTypes": ["images", "videos"],
+      "description": "Gallery items: 2000 × 1333 px (3:2) recommended for images. Keep a consistent orientation for a clean grid."
     },
     "relatedEvent": {
       "type": "relation",

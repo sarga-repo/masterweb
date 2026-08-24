@@ -81,6 +81,7 @@ This folder is the current source of truth for the major Sarga Motorsport UI, si
 | `82_cms_side_by_side_preview.md` | Motorsport split-pane CMS editor and private frontend Preview workspace. |
 | `83_cms_integrated_content_manager_preview.md` | Integrated Content Manager Preview action and side-by-side editor flow. |
 | `84_cms_content_manager_layout_reconciliation.md` | Reconcile persisted Motorsport Content Manager component edit layouts between local and staging. |
+| `85_cms_media_asset_size_guidelines.md`             | Vendor action-item handoff for CMS media dimensions, crop-safe composition, logo guidance, and CTA URL rules. |
 
 ## Implementation rule
 

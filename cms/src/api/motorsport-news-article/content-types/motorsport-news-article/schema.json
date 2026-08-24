@@ -9,7 +9,7 @@
     "slug": { "type": "uid", "targetField": "title", "required": true },
     "excerpt": { "type": "text", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
     "body": { "type": "richtext", "pluginOptions": { "i18n": { "localized": true } } },
-    "coverImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "coverImage": { "type": "media", "multiple": false, "allowedTypes": ["images"], "description": "News cover image: 1600 × 1000 px (8:5) recommended. Keep the editorial subject inside the central safe area for card crops." },
     "category": { "type": "enumeration", "enum": ["news", "publication", "press-release", "report", "magazine", "race-report", "announcement", "lifestyle", "community", "media", "race-results", "event-announcement", "partnership"], "default": "news", "required": true },
     "publishedDate": { "type": "date", "required": true },
     "isHotTopic": { "type": "boolean", "default": false },

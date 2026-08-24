@@ -25,6 +25,7 @@ export function proxy(request: NextRequest) {
   if (locale === "id") {
     const rewritten = request.nextUrl.clone();
     rewritten.pathname = routePath;
+    rewritten.searchParams.set("__sarga_locale", locale);
     return NextResponse.rewrite(rewritten, {
       request: { headers: requestHeaders },
     });

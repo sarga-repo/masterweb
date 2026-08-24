@@ -11,6 +11,25 @@
     "draftAndPublish": true
   },
   "pluginOptions": {},
+  "config": {
+    "metadatas": {
+      "image": {
+        "edit": {
+          "description": "Optional artwork or photography shown in homepage ticket panels."
+        }
+      },
+      "backgroundImage": {
+        "edit": {
+          "description": "Optional artwork or photography shown behind the main ticket copy."
+        }
+      },
+      "backgroundImageMobile": {
+        "edit": {
+          "description": "Optional mobile-specific ticket artwork. Falls back to backgroundImage when empty."
+        }
+      }
+    }
+  },
   "attributes": {
     "title": { "type": "string", "required": true },
     "label": { "type": "string", "required": true },
@@ -41,22 +60,19 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Optional artwork or photography shown in homepage ticket panels."
+      "allowedTypes": ["images"]
     },
     "backgroundImage": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Optional artwork or photography shown behind the main ticket copy."
+      "allowedTypes": ["images"]
     },
     "backgroundImageMobile": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Optional mobile-specific ticket artwork. Falls back to backgroundImage when empty."
+      "allowedTypes": ["images"]
     },
     "siteScope": {
       "type": "enumeration",

@@ -5,13 +5,26 @@
     "description": "Reusable editorial section for site-scoped pages"
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "enabled": {
+        "edit": {
+          "description": "Controls whether this section is rendered on the public page."
+        }
+      },
+      "media": {
+        "edit": {
+          "description": "Shared section media: 2000 × 1333 px (3:2) recommended for images; use 2400 × 1200 px (2:1) for wide banners."
+        }
+      }
+    }
+  },
   "attributes": {
     "sectionKey": { "type": "string", "required": true },
     "enabled": {
       "type": "boolean",
       "default": true,
-      "required": false,
-      "description": "Controls whether this section is rendered on the public page."
+      "required": false
     },
     "eyebrow": { "type": "string" },
     "title": { "type": "string", "required": true },
@@ -20,8 +33,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images", "videos"],
-      "description": "Shared section media: 2000 × 1333 px (3:2) recommended for images; use 2400 × 1200 px (2:1) for wide banners."
+      "allowedTypes": ["images", "videos"]
     },
     "ctaLabel": { "type": "string" },
     "ctaUrl": { "type": "string" },

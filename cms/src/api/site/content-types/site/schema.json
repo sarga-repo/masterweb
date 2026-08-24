@@ -11,6 +11,30 @@
     "draftAndPublish": true
   },
   "pluginOptions": {},
+  "config": {
+    "metadatas": {
+      "logo": {
+        "edit": {
+          "description": "Primary site mark: use the approved SVG when available, or a transparent PNG at 1600 × 450 px."
+        }
+      },
+      "headerLogo": {
+        "edit": {
+          "description": "Header wordmark: transparent SVG preferred, or 2400 × 700 px PNG. Keep the full logo visible; do not crop it."
+        }
+      },
+      "footerLogo": {
+        "edit": {
+          "description": "Footer wordmark: transparent SVG preferred, or 2400 × 700 px PNG. Use the inverse/white version on dark surfaces."
+        }
+      },
+      "favicon": {
+        "edit": {
+          "description": "Square browser mark: 512 × 512 px PNG or SVG with transparent background."
+        }
+      }
+    }
+  },
   "attributes": {
     "name": { "type": "string", "required": true },
     "slug": {
@@ -24,22 +48,19 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Primary site mark: use the approved SVG when available, or a transparent PNG at 1600 × 450 px."
+      "allowedTypes": ["images"]
     },
     "headerLogo": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Header wordmark: transparent SVG preferred, or 2400 × 700 px PNG. Keep the full logo visible; do not crop it."
+      "allowedTypes": ["images"]
     },
     "footerLogo": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Footer wordmark: transparent SVG preferred, or 2400 × 700 px PNG. Use the inverse/white version on dark surfaces."
+      "allowedTypes": ["images"]
     },
     "footerStatement": { "type": "string", "maxLength": 240 },
     "footerCopyright": { "type": "string", "maxLength": 160 },
@@ -62,8 +83,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Square browser mark: 512 × 512 px PNG or SVG with transparent background."
+      "allowedTypes": ["images"]
     },
     "themeKey": { "type": "string" },
     "order": { "type": "integer", "default": 0 },

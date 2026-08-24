@@ -5,13 +5,22 @@
     "description": "Ordered, independently visible content used by page sections such as Experience pillars, track panels, and Ticket Info bullets."
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "media": {
+        "edit": {
+          "description": "Card/item media: 1600 × 1000 px (8:5) recommended for image cards; use a consistent ratio within the section."
+        }
+      }
+    }
+  },
   "attributes": {
     "isActive": { "type": "boolean", "default": true, "required": true },
     "sortOrder": { "type": "integer", "default": 0 },
     "label": { "type": "string", "maxLength": 100, "pluginOptions": { "i18n": { "localized": true } } },
     "title": { "type": "string", "maxLength": 180, "pluginOptions": { "i18n": { "localized": true } } },
     "description": { "type": "richtext", "pluginOptions": { "i18n": { "localized": true } } },
-    "media": { "type": "media", "multiple": false, "allowedTypes": ["images", "videos"], "description": "Card/item media: 1600 × 1000 px (8:5) recommended for image cards; use a consistent ratio within the section." },
+    "media": { "type": "media", "multiple": false, "allowedTypes": ["images", "videos"] },
     "mediaAlt": { "type": "string", "maxLength": 180, "pluginOptions": { "i18n": { "localized": true } } },
     "accent": {
       "type": "enumeration",

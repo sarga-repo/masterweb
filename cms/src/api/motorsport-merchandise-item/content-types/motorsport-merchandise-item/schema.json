@@ -4,11 +4,20 @@
   "info": { "singularName": "motorsport-merchandise-item", "pluralName": "motorsport-merchandise-items", "displayName": "Motorsport Merchandise Item", "description": "Motorsport merchandise showcase teasers without internal commerce" },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "image": {
+        "edit": {
+          "description": "Merchandise image: 1200 × 1200 px (1:1) recommended with the product centered and transparent or neutral background."
+        }
+      }
+    }
+  },
   "attributes": {
     "title": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
     "slug": { "type": "uid", "targetField": "title", "required": true },
     "description": { "type": "richtext", "pluginOptions": { "i18n": { "localized": true } } },
-    "image": { "type": "media", "multiple": false, "allowedTypes": ["images"], "description": "Merchandise image: 1200 × 1200 px (1:1) recommended with the product centered and transparent or neutral background." },
+    "image": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
     "priceLabel": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
     "availabilityStatus": { "type": "enumeration", "enum": ["comingSoon", "availableExternal", "inquiryOnly", "hidden"], "default": "comingSoon", "required": true },
     "externalUrl": { "type": "string" },

@@ -4,6 +4,25 @@
   "info": { "singularName": "motorsport-ticket-cta", "pluralName": "motorsport-ticket-ctas", "displayName": "Motorsport Ticket CTA", "description": "Motorsport partner ticket redirects, deep links, and approved embeds. No internal payment." },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "image": {
+        "edit": {
+          "description": "Legacy artwork field. Recommended 1600 × 1000 px (8:5). Prefer backgroundImage for the main ticket copy."
+        }
+      },
+      "backgroundImage": {
+        "edit": {
+          "description": "Ticket background: 1920 × 900 px (approximately 2.13:1) recommended. Keep copy-safe negative space around the focal subject."
+        }
+      },
+      "backgroundImageMobile": {
+        "edit": {
+          "description": "Optional mobile ticket background: 1080 × 1350 px (4:5) recommended. Falls back to backgroundImage when empty."
+        }
+      }
+    }
+  },
   "attributes": {
     "title": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
     "label": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
@@ -25,9 +44,9 @@
     "activeFrom": { "type": "datetime" },
     "activeUntil": { "type": "datetime" },
     "isActive": { "type": "boolean", "default": true },
-    "image": { "type": "media", "multiple": false, "allowedTypes": ["images"], "description": "Legacy artwork field. Recommended 1600 × 1000 px (8:5). Prefer backgroundImage for the main ticket copy." },
-    "backgroundImage": { "type": "media", "multiple": false, "allowedTypes": ["images"], "description": "Ticket background: 1920 × 900 px (approximately 2.13:1) recommended. Keep copy-safe negative space around the focal subject." },
-    "backgroundImageMobile": { "type": "media", "multiple": false, "allowedTypes": ["images"], "description": "Optional mobile ticket background: 1080 × 1350 px (4:5) recommended. Falls back to backgroundImage when empty." },
+    "image": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "backgroundImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "backgroundImageMobile": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
     "relatedEvent": { "type": "relation", "relation": "manyToOne", "target": "api::motorsport-event.motorsport-event", "inversedBy": "ticketCtas" },
     "legacySourceDocumentId": { "type": "string", "private": true, "configurable": false }
   }

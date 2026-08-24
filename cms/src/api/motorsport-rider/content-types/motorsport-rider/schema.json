@@ -9,6 +9,15 @@
   },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "portrait": {
+        "edit": {
+          "description": "Rider portrait: 1000 × 1250 px (4:5) recommended. Keep helmet/face and shoulders within the center safe area."
+        }
+      }
+    }
+  },
   "attributes": {
     "name": { "type": "string", "required": true },
     "slug": { "type": "uid", "targetField": "name", "required": true },
@@ -30,8 +39,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Rider portrait: 1000 × 1250 px (4:5) recommended. Keep helmet/face and shoulders within the center safe area."
+      "allowedTypes": ["images"]
     },
     "bio": {
       "type": "richtext",

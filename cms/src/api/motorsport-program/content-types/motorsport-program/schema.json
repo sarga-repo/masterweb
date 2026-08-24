@@ -9,35 +9,70 @@
   },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "motorsportPresentation": {
+        "edit": {
+          "description": "01 — Hero and information band. This is the first presentation group rendered on the programme page. Edit Hero first, then Information Band."
+        }
+      },
+      "heroMedia": {
+        "edit": {
+          "description": "02 — Legacy programme fallback image. Recommended 2400 × 1200 px (2:1). For the campaign hero, edit Motorsport Presentation > Hero instead. This field remains as a safe fallback for older records."
+        }
+      },
+      "bannerSlides": {
+        "edit": {
+          "description": "03 — Campaign carousel slides, shown after the hero and information band. Set image, title, description, CTA, and sort order per slide."
+        }
+      },
+      "presentationSections": {
+        "edit": {
+          "description": "04 — Supporting named sections such as Format and Rundown. These are not carousel slides; each item controls its own copy, media, visibility, and order."
+        }
+      },
+      "eventMenuLabel": {
+        "edit": {
+          "description": "Short localized label used in the Motorsport Event navigation dropdown."
+        }
+      },
+      "rundown": {
+        "edit": {
+          "description": "05 — Race-day schedule items rendered in the programme rundown."
+        }
+      },
+      "eventRules": {
+        "edit": {
+          "description": "06 — Sporting rules and do/don't guidance for the programme."
+        }
+      }
+    }
+  },
   "attributes": {
     "motorsportPresentation": {
       "type": "component",
       "component": "motorsport.detail-presentation",
       "repeatable": false,
       "required": false,
-      "pluginOptions": { "i18n": { "localized": true } },
-      "description": "01 — Hero and information band. This is the first presentation group rendered on the programme page. Edit Hero first, then Information Band."
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "heroMedia": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images", "videos"],
-      "description": "02 — Legacy programme fallback image. Recommended 2400 × 1200 px (2:1). For the campaign hero, edit Motorsport Presentation > Hero instead. This field remains as a safe fallback for older records."
+      "allowedTypes": ["images", "videos"]
     },
     "bannerSlides": {
       "type": "component",
       "component": "motorsport.campaign-slide",
       "repeatable": true,
-      "pluginOptions": { "i18n": { "localized": true } },
-      "description": "03 — Campaign carousel slides, shown after the hero and information band. Set image, title, description, CTA, and sort order per slide."
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "presentationSections": {
       "type": "component",
       "component": "motorsport.page-section",
       "repeatable": true,
-      "pluginOptions": { "i18n": { "localized": true } },
-      "description": "04 — Supporting named sections such as Format and Rundown. These are not carousel slides; each item controls its own copy, media, visibility, and order."
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "title": {
       "type": "string",
@@ -47,8 +82,7 @@
     "slug": { "type": "uid", "targetField": "title", "required": true },
     "eventMenuLabel": {
       "type": "string",
-      "pluginOptions": { "i18n": { "localized": true } },
-      "description": "Short localized label used in the Motorsport Event navigation dropdown."
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "eventMenuEnabled": { "type": "boolean", "default": true },
     "programType": {
@@ -86,15 +120,13 @@
       "type": "component",
       "component": "motorsport.rundown-item",
       "repeatable": true,
-      "pluginOptions": { "i18n": { "localized": true } },
-      "description": "05 — Race-day schedule items rendered in the programme rundown."
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "eventRules": {
       "type": "component",
       "component": "motorsport.rule-item",
       "repeatable": true,
-      "pluginOptions": { "i18n": { "localized": true } },
-      "description": "06 — Sporting rules and do/don't guidance for the programme."
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "primaryCtaLabel": {
       "type": "string",

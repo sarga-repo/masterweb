@@ -7,6 +7,20 @@
   },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "featuredEvent": {
+        "edit": {
+          "description": "Event card displayed first in the Upcoming Events section."
+        }
+      },
+      "featuredProgram": {
+        "edit": {
+          "description": "Motorsport program displayed first in the Upcoming Events section."
+        }
+      }
+    }
+  },
   "attributes": {
     "siteScope": {
       "type": "enumeration",
@@ -64,13 +78,11 @@
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "featuredEvent": {
-      "description": "Event card displayed first in the Upcoming Events section.",
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::motorsport-event.motorsport-event"
     },
     "featuredProgram": {
-      "description": "Motorsport program displayed first in the Upcoming Events section.",
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::motorsport-program.motorsport-program"

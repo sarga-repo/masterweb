@@ -5,6 +5,15 @@
     "description": "A managed footer navigation or social link"
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "icon": {
+        "edit": {
+          "description": "Optional social/partner icon: SVG preferred, or transparent PNG at 256 × 256 px."
+        }
+      }
+    }
+  },
   "attributes": {
     "label": { "type": "string", "required": true, "maxLength": 80 },
     "href": { "type": "string", "required": true, "maxLength": 500 },
@@ -20,8 +29,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Optional social/partner icon: SVG preferred, or transparent PNG at 256 × 256 px."
+      "allowedTypes": ["images"]
     }
   }
 }

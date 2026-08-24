@@ -5,6 +5,25 @@
     "description": "02 — One item in the campaign carousel. This is separate from supporting presentation sections."
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "image": {
+        "edit": {
+          "description": "Campaign artwork: 2400 × 1200 px (2:1) recommended for the desktop carousel crop."
+        }
+      },
+      "ctaLabel": {
+        "edit": {
+          "description": "Short action label shown on the campaign button."
+        }
+      },
+      "ctaUrl": {
+        "edit": {
+          "description": "Use an internal path beginning with / or an approved HTTPS external URL. External URLs open in a new tab."
+        }
+      }
+    }
+  },
   "attributes": {
     "title": { "type": "string", "required": true },
     "description": { "type": "text" },
@@ -12,11 +31,10 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Campaign artwork: 2400 × 1200 px (2:1) recommended for the desktop carousel crop."
+      "allowedTypes": ["images"]
     },
-    "ctaLabel": { "type": "string", "description": "Short action label shown on the campaign button." },
-    "ctaUrl": { "type": "string", "description": "Use an internal path beginning with / or an approved HTTPS external URL. External URLs open in a new tab." },
+    "ctaLabel": { "type": "string" },
+    "ctaUrl": { "type": "string" },
     "sortOrder": { "type": "integer", "default": 0 }
   }
 }

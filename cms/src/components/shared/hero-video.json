@@ -5,6 +5,30 @@
     "description": "Optional muted hero video with a required primary source, optional alternate codec, and poster overrides"
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "primaryVideo": {
+        "edit": {
+          "description": "Primary hero video: MP4/WebM, 2400 × 1200 px (2:1) composition recommended. Keep the important action in the center safe area."
+        }
+      },
+      "alternateVideo": {
+        "edit": {
+          "description": "Optional alternate video codec with the same duration and framing as primaryVideo."
+        }
+      },
+      "posterImage": {
+        "edit": {
+          "description": "Desktop video poster: 2400 × 1200 px (2:1) recommended."
+        }
+      },
+      "mobilePosterImage": {
+        "edit": {
+          "description": "Optional mobile video poster: 1080 × 1350 px (4:5) recommended."
+        }
+      }
+    }
+  },
   "attributes": {
     "enabled": {
       "type": "boolean",
@@ -15,29 +39,25 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": ["videos"],
-      "description": "Primary hero video: MP4/WebM, 2400 × 1200 px (2:1) composition recommended. Keep the important action in the center safe area."
+      "allowedTypes": ["videos"]
     },
     "alternateVideo": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["videos"],
-      "description": "Optional alternate video codec with the same duration and framing as primaryVideo."
+      "allowedTypes": ["videos"]
     },
     "posterImage": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Desktop video poster: 2400 × 1200 px (2:1) recommended."
+      "allowedTypes": ["images"]
     },
     "mobilePosterImage": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Optional mobile video poster: 1080 × 1350 px (4:5) recommended."
+      "allowedTypes": ["images"]
     }
   }
 }

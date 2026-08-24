@@ -10344,3 +10344,86 @@ Status: ✅ Done — 2026-08-24
   contains the canonical repair for future controlled reconciliations.
 - The existing systemd preview drop-ins are operational configuration and were
   intentionally preserved.
+
+## MSR-CMS-DOCS-1 — CMS User Manual enrichment
+
+Status: ✅ Done — 2026-08-24
+
+### What was done
+
+- Added numbered visual markers to CMS and frontend screenshots so editors can
+  trace fields, sections, and show/hide controls to their rendered result.
+- Added the custom side-by-side preview workflow and SMTP email configuration
+  guidance, including safe handling of credentials and troubleshooting.
+- Added the complete Motorsport media asset size reference, route coverage
+  audit, known implementation boundaries, and the latest inverse brandmark to
+  the PDF cover.
+- Regenerated the user guide PDF with an A4 layout, table of contents, page
+  numbers, annotated screenshots, and maintainable source scripts.
+
+### Files changed
+
+- `docs/cms-user-guide/SARGA_MOTORSPORT_CMS_USER_GUIDE.md`
+- `docs/cms-user-guide/SARGA_MOTORSPORT_CMS_USER_GUIDE.pdf`
+- `docs/cms-user-guide/annotate_screenshots.py`
+- `docs/cms-user-guide/build_pdf.mjs`
+- `docs/cms-user-guide/assets/`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Captured the side-by-side preview and SMTP settings from the local CMS.
+- Generated all annotated screenshot derivatives and verified every Markdown
+  image path exists.
+- Regenerated the PDF with `wkhtmltopdf`; verified it is an unencrypted,
+  30-page A4 PDF.
+- Rendered all 30 PDF pages to PNG and visually inspected them for clipping,
+  unreadable tables, broken images, and footer/page-number consistency.
+
+### Notes / caveats
+
+- The Site screenshot is explicitly labelled as a local capture limitation
+  because the current local CMS returned “Page not found” for that record; the
+  documented field mapping is based on the schema and frontend wiring.
+- The guide reflects the CMS and website implementation reviewed on 2026-08-24
+  and should be regenerated after future content-model or UI changes.
+
+## MSR-CMS-DESCRIPTIONS-I18N-1 — CMS field helpers and Motorsport locale fallback
+
+Status: ✅ Done — 2026-08-24
+
+### What was done
+
+- Moved CMS field helper text from unsupported attribute-level `description`
+  properties into Strapi Content Manager `config.metadatas.<field>.edit.description`
+  metadata so it renders below the relevant editor field.
+- Applied the metadata mapping to the Motorsport media guidance, show/hide
+  controls, CTA/link guidance, section guidance, SEO image guidance, and related
+  shared fields.
+- Added a request-cookie locale fallback in the Motorsport frontend. The proxy
+  now stamps the locale derived from `/id/...` or the English path onto the
+  rewritten request, covering staging reverse-proxy deployments that drop
+  custom request headers.
+
+### Files changed
+
+- `cms/src/api/**/schema.json` (affected content types)
+- `cms/src/components/**/*.json` (affected components)
+- `frontend-motorsport/src/lib/i18n/request.ts`
+- `frontend-motorsport/src/proxy.ts`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Parsed all CMS API and component JSON schemas successfully.
+- Confirmed the generated metadata uses Strapi’s `config.metadatas` shape.
+- Verified the staging sample URL previously rendered `lang="en"` despite the
+  `/id/` path; the locale fallback is intended to correct that production-only
+  rewrite behavior after deployment.
+
+### Notes / caveats
+
+- Existing CMS content values are not changed; this is a schema metadata and
+  request-locale handling fix.
+- The staging browser may need one hard refresh after deployment if an older
+  frontend bundle is cached.

@@ -5,6 +5,25 @@
     "description": "Complete CMS-managed Motorsport homepage ticket card. The link must redirect to an approved partner; Sarga does not process payment."
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "backgroundImage": {
+        "edit": {
+          "description": "Optional ticket background: 1920 × 900 px (approximately 2.13:1) recommended. Keep copy-safe negative space around the focal subject."
+        }
+      },
+      "backgroundImageMobile": {
+        "edit": {
+          "description": "Optional mobile ticket background: 1080 × 1350 px (4:5) recommended. Falls back to backgroundImage when empty."
+        }
+      },
+      "ctaUrl": {
+        "edit": {
+          "description": "Approved internal or HTTPS partner destination. No checkout/payment URL is processed by Sarga."
+        }
+      }
+    }
+  },
   "attributes": {
     "isActive": {
       "type": "boolean",
@@ -31,15 +50,13 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Optional ticket background: 1920 × 900 px (approximately 2.13:1) recommended. Keep copy-safe negative space around the focal subject."
+      "allowedTypes": ["images"]
     },
     "backgroundImageMobile": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Optional mobile ticket background: 1080 × 1350 px (4:5) recommended. Falls back to backgroundImage when empty."
+      "allowedTypes": ["images"]
     },
     "eventLabel": {
       "type": "string",
@@ -81,8 +98,7 @@
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "ctaUrl": {
-      "type": "string",
-      "description": "Approved internal or HTTPS partner destination. No checkout/payment URL is processed by Sarga."
+      "type": "string"
     }
   }
 }

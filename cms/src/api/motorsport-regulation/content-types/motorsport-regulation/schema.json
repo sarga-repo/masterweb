@@ -9,6 +9,15 @@
   },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "pdfFile": {
+        "edit": {
+          "description": "Regulation document: upload an accessible PDF. Use a source document sized for A4/Letter reading; do not upload scanned screenshots as images."
+        }
+      }
+    }
+  },
   "attributes": {
     "program": {
       "type": "relation",
@@ -28,8 +37,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["files"],
-      "description": "Regulation document: upload an accessible PDF. Use a source document sized for A4/Letter reading; do not upload scanned screenshots as images."
+      "allowedTypes": ["files"]
     },
     "summary": {
       "type": "text",

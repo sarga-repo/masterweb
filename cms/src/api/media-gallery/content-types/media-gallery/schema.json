@@ -11,6 +11,20 @@
     "draftAndPublish": true
   },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "coverImage": {
+        "edit": {
+          "description": "Gallery cover: 1600 × 1000 px (8:5) recommended."
+        }
+      },
+      "mediaItems": {
+        "edit": {
+          "description": "Gallery items: 2000 × 1333 px (3:2) recommended for images. Keep a consistent orientation for a clean grid."
+        }
+      }
+    }
+  },
   "attributes": {
     "title": {
       "type": "string",
@@ -45,15 +59,13 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Gallery cover: 1600 × 1000 px (8:5) recommended."
+      "allowedTypes": ["images"]
     },
     "mediaItems": {
       "type": "media",
       "multiple": true,
       "required": false,
-      "allowedTypes": ["images", "videos"],
-      "description": "Gallery items: 2000 × 1333 px (3:2) recommended for images. Keep a consistent orientation for a clean grid."
+      "allowedTypes": ["images", "videos"]
     },
     "relatedEvent": {
       "type": "relation",

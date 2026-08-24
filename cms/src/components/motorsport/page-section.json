@@ -5,26 +5,79 @@
     "description": "03 — A named supporting section such as Format or Rundown. Use this for section copy, media, CTA, visibility, and order; do not use it for carousel slides."
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "showIndex": {
+        "edit": {
+          "description": "Show the section index label."
+        }
+      },
+      "showEyebrow": {
+        "edit": {
+          "description": "Show the section eyebrow copy."
+        }
+      },
+      "showTitle": {
+        "edit": {
+          "description": "Show the section title copy."
+        }
+      },
+      "showBody": {
+        "edit": {
+          "description": "Show the section body copy."
+        }
+      },
+      "showMedia": {
+        "edit": {
+          "description": "Show the section media."
+        }
+      },
+      "showCta": {
+        "edit": {
+          "description": "Show the section CTA."
+        }
+      },
+      "legalText": {
+        "edit": {
+          "description": "Optional legal or reassurance copy shown below the section actions."
+        }
+      },
+      "media": {
+        "edit": {
+          "description": "Section media: 2000 × 1333 px (3:2) recommended for editorial images; use 2400 × 1200 px (2:1) for wide banners."
+        }
+      },
+      "secondaryCtaLabel": {
+        "edit": {
+          "description": "Optional secondary action label for sections with two editorial destinations."
+        }
+      },
+      "items": {
+        "edit": {
+          "description": "Optional ordered cards, bullets, or media items. Each item has its own show/hide control."
+        }
+      }
+    }
+  },
   "attributes": {
     "isActive": {
       "type": "boolean",
       "default": true,
       "required": true
     },
-    "showIndex": { "type": "boolean", "default": true, "description": "Show the section index label." },
+    "showIndex": { "type": "boolean", "default": true },
     "indexLabel": { "type": "string", "maxLength": 80, "pluginOptions": { "i18n": { "localized": true } } },
-    "showEyebrow": { "type": "boolean", "default": true, "description": "Show the section eyebrow copy." },
-    "showTitle": { "type": "boolean", "default": true, "description": "Show the section title copy." },
-    "showBody": { "type": "boolean", "default": true, "description": "Show the section body copy." },
-    "showMedia": { "type": "boolean", "default": true, "description": "Show the section media." },
-    "showCta": { "type": "boolean", "default": true, "description": "Show the section CTA." },
+    "showEyebrow": { "type": "boolean", "default": true },
+    "showTitle": { "type": "boolean", "default": true },
+    "showBody": { "type": "boolean", "default": true },
+    "showMedia": { "type": "boolean", "default": true },
+    "showCta": { "type": "boolean", "default": true },
     "supportLabel": { "type": "string", "maxLength": 100, "pluginOptions": { "i18n": { "localized": true } } },
     "supportBody": { "type": "richtext", "pluginOptions": { "i18n": { "localized": true } } },
     "legalText": {
       "type": "text",
       "maxLength": 300,
-      "pluginOptions": { "i18n": { "localized": true } },
-      "description": "Optional legal or reassurance copy shown below the section actions."
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "eyebrow": {
       "type": "string",
@@ -45,8 +98,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images", "videos"],
-      "description": "Section media: 2000 × 1333 px (3:2) recommended for editorial images; use 2400 × 1200 px (2:1) for wide banners."
+      "allowedTypes": ["images", "videos"]
     },
     "ctaLabel": {
       "type": "string",
@@ -62,8 +114,7 @@
     "secondaryCtaLabel": {
       "type": "string",
       "maxLength": 80,
-      "pluginOptions": { "i18n": { "localized": true } },
-      "description": "Optional secondary action label for sections with two editorial destinations."
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "secondaryCtaUrl": { "type": "string" },
     "secondaryCtaTarget": {
@@ -74,8 +125,7 @@
     "items": {
       "type": "component",
       "repeatable": true,
-      "component": "motorsport.page-section-item",
-      "description": "Optional ordered cards, bullets, or media items. Each item has its own show/hide control."
+      "component": "motorsport.page-section-item"
     },
     "theme": {
       "type": "enumeration",

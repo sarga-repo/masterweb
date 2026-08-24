@@ -5,6 +5,15 @@
     "description": "Ordered, site-owned capability card for the Motorsport About page"
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "indexLabel": {
+        "edit": {
+          "description": "Optional label shown above the card title. Defaults to 01, 02, 03… if empty."
+        }
+      }
+    }
+  },
   "attributes": {
     "internalName": {
       "type": "string",
@@ -19,8 +28,7 @@
     "indexLabel": {
       "type": "string",
       "maxLength": 20,
-      "pluginOptions": { "i18n": { "localized": true } },
-      "description": "Optional label shown above the card title. Defaults to 01, 02, 03… if empty."
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "title": {
       "type": "string",

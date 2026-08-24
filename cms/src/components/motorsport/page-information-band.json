@@ -5,15 +5,39 @@
     "description": "Reusable Motorsport information band rendered immediately after a page hero."
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "showEyebrow": {
+        "edit": {
+          "description": "Show the information band eyebrow copy."
+        }
+      },
+      "showTitle": {
+        "edit": {
+          "description": "Show the information band title copy."
+        }
+      },
+      "showDescription": {
+        "edit": {
+          "description": "Show the information band description copy."
+        }
+      },
+      "showMetricGroup": {
+        "edit": {
+          "description": "Hides the complete right-bottom metric group and all of its separators when false."
+        }
+      }
+    }
+  },
   "attributes": {
     "isActive": {
       "type": "boolean",
       "default": true,
       "required": true
     },
-    "showEyebrow": { "type": "boolean", "default": true, "description": "Show the information band eyebrow copy." },
-    "showTitle": { "type": "boolean", "default": true, "description": "Show the information band title copy." },
-    "showDescription": { "type": "boolean", "default": true, "description": "Show the information band description copy." },
+    "showEyebrow": { "type": "boolean", "default": true },
+    "showTitle": { "type": "boolean", "default": true },
+    "showDescription": { "type": "boolean", "default": true },
     "eyebrow": {
       "type": "string",
       "maxLength": 100,
@@ -32,8 +56,7 @@
     "showMetricGroup": {
       "type": "boolean",
       "default": true,
-      "required": true,
-      "description": "Hides the complete right-bottom metric group and all of its separators when false."
+      "required": true
     },
     "metrics": {
       "type": "component",

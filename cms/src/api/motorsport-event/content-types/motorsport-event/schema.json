@@ -4,6 +4,25 @@
   "info": { "singularName": "motorsport-event", "pluralName": "motorsport-events", "displayName": "Motorsport Event", "description": "Motorsport-owned events, schedules, partners, and ticket destinations" },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "coverImage": {
+        "edit": {
+          "description": "Event card image: 1600 × 1000 px (8:5) recommended."
+        }
+      },
+      "heroMedia": {
+        "edit": {
+          "description": "Event hero image: 2400 × 1200 px (2:1) recommended. Video may be MP4/WebM with a matching poster."
+        }
+      },
+      "gallery": {
+        "edit": {
+          "description": "Event gallery: images at 2000 × 1333 px (3:2) recommended; use consistent orientation within one gallery."
+        }
+      }
+    }
+  },
   "attributes": {
     "title": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
     "slug": { "type": "uid", "targetField": "title", "required": true },
@@ -11,7 +30,7 @@
     "eventDate": { "type": "datetime" },
     "endDate": { "type": "datetime" },
     "venue": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
-    "coverImage": { "type": "media", "multiple": false, "allowedTypes": ["images"], "description": "Event card image: 1600 × 1000 px (8:5) recommended." },
+    "coverImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
     "business": { "type": "relation", "relation": "manyToOne", "target": "api::ecosystem-business.ecosystem-business" },
     "ticketCtaLabel": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
     "ticketUrl": { "type": "string" },
@@ -24,8 +43,8 @@
     "venueAddress": { "type": "text", "pluginOptions": { "i18n": { "localized": true } } },
     "circuitName": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
     "schedule": { "type": "component", "component": "shared.event-session", "repeatable": true, "pluginOptions": { "i18n": { "localized": true } } },
-    "heroMedia": { "type": "media", "multiple": false, "allowedTypes": ["images", "videos"], "description": "Event hero image: 2400 × 1200 px (2:1) recommended. Video may be MP4/WebM with a matching poster." },
-    "gallery": { "type": "media", "multiple": true, "allowedTypes": ["images", "videos"], "description": "Event gallery: images at 2000 × 1333 px (3:2) recommended; use consistent orientation within one gallery." },
+    "heroMedia": { "type": "media", "multiple": false, "allowedTypes": ["images", "videos"] },
+    "gallery": { "type": "media", "multiple": true, "allowedTypes": ["images", "videos"] },
     "broadcastUrl": { "type": "string" },
     "ticketCtas": { "type": "relation", "relation": "oneToMany", "target": "api::motorsport-ticket-cta.motorsport-ticket-cta", "mappedBy": "relatedEvent" },
     "sponsors": { "type": "relation", "relation": "manyToMany", "target": "api::motorsport-partner.motorsport-partner" },

@@ -5,6 +5,15 @@
     "description": "Search and social metadata shared by public content"
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "ogImage": {
+        "edit": {
+          "description": "Open Graph image: 1200 × 630 px (1.91:1) recommended."
+        }
+      }
+    }
+  },
   "attributes": {
     "metaTitle": {
       "type": "string",
@@ -24,8 +33,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Open Graph image: 1200 × 630 px (1.91:1) recommended."
+      "allowedTypes": ["images"]
     },
     "canonicalUrl": {
       "type": "string"

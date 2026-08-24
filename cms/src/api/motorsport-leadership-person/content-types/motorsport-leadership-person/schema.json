@@ -4,6 +4,15 @@
   "info": { "singularName": "motorsport-leadership-person", "pluralName": "motorsport-leadership-people", "displayName": "Motorsport Leadership Person", "description": "Motorsport leadership team members for the About page" },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "portrait": {
+        "edit": {
+          "description": "Leadership portrait: 1000 × 1250 px (4:5) recommended. Keep the face and shoulders inside the center safe area."
+        }
+      }
+    }
+  },
   "attributes": {
     "name": { "type": "string", "required": true },
     "role": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
@@ -11,7 +20,7 @@
     "group": { "type": "enumeration", "enum": ["board", "executive", "advisor"], "default": "executive" },
     "site": { "type": "relation", "relation": "manyToOne", "target": "api::site.site" },
     "order": { "type": "integer", "default": 0 },
-    "portrait": { "type": "media", "multiple": false, "allowedTypes": ["images"], "description": "Leadership portrait: 1000 × 1250 px (4:5) recommended. Keep the face and shoulders inside the center safe area." },
+    "portrait": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
     "legacySourceDocumentId": { "type": "string", "private": true, "configurable": false }
   }
 }

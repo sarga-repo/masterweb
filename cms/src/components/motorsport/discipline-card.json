@@ -5,6 +5,15 @@
     "description": "Ordered homepage racing-format card with managed media and destination"
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "image": {
+        "edit": {
+          "description": "Discipline card image: 1600 × 1000 px (8:5) recommended. Keep the action and vehicle/rider inside the crop-safe center area."
+        }
+      }
+    }
+  },
   "attributes": {
     "internalName": {
       "type": "string",
@@ -29,8 +38,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
-      "description": "Discipline card image: 1600 × 1000 px (8:5) recommended. Keep the action and vehicle/rider inside the crop-safe center area."
+      "allowedTypes": ["images"]
     },
     "imageAlt": {
       "type": "string",

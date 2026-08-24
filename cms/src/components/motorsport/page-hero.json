@@ -5,16 +5,55 @@
     "description": "Reusable Motorsport page hero contract. Layout and overlays remain frontend-owned."
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "showEyebrow": {
+        "edit": {
+          "description": "Show the hero eyebrow copy."
+        }
+      },
+      "showTitle": {
+        "edit": {
+          "description": "Show the hero title copy."
+        }
+      },
+      "showDescription": {
+        "edit": {
+          "description": "Show the hero description copy."
+        }
+      },
+      "showMedia": {
+        "edit": {
+          "description": "Show the hero background media."
+        }
+      },
+      "backgroundMedia": {
+        "edit": {
+          "description": "Desktop page hero: 2400 × 1200 px (2:1) recommended. Video may be MP4/WebM with a poster image."
+        }
+      },
+      "mobileBackgroundMedia": {
+        "edit": {
+          "description": "Optional mobile page hero: 1080 × 1350 px (4:5) recommended. Falls back to the desktop artwork when empty."
+        }
+      },
+      "showMetricGroup": {
+        "edit": {
+          "description": "Controls visibility of the hero metric group. When false, the complete group and its separators are hidden."
+        }
+      }
+    }
+  },
   "attributes": {
     "isActive": {
       "type": "boolean",
       "default": true,
       "required": true
     },
-    "showEyebrow": { "type": "boolean", "default": true, "description": "Show the hero eyebrow copy." },
-    "showTitle": { "type": "boolean", "default": true, "description": "Show the hero title copy." },
-    "showDescription": { "type": "boolean", "default": true, "description": "Show the hero description copy." },
-    "showMedia": { "type": "boolean", "default": true, "description": "Show the hero background media." },
+    "showEyebrow": { "type": "boolean", "default": true },
+    "showTitle": { "type": "boolean", "default": true },
+    "showDescription": { "type": "boolean", "default": true },
+    "showMedia": { "type": "boolean", "default": true },
     "eyebrow": {
       "type": "string",
       "maxLength": 100,
@@ -34,15 +73,13 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images", "videos"],
-      "description": "Desktop page hero: 2400 × 1200 px (2:1) recommended. Video may be MP4/WebM with a poster image."
+      "allowedTypes": ["images", "videos"]
     },
     "mobileBackgroundMedia": {
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images", "videos"],
-      "description": "Optional mobile page hero: 1080 × 1350 px (4:5) recommended. Falls back to the desktop artwork when empty."
+      "allowedTypes": ["images", "videos"]
     },
     "backgroundAlt": {
       "type": "string",
@@ -51,8 +88,7 @@
     },
     "showMetricGroup": {
       "type": "boolean",
-      "default": true,
-      "description": "Controls visibility of the hero metric group. When false, the complete group and its separators are hidden."
+      "default": true
     },
     "metrics": {
       "type": "component",

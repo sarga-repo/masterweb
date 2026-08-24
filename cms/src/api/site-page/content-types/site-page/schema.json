@@ -9,6 +9,60 @@
   },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "heroEnabled": {
+        "edit": {
+          "description": "Controls whether the page hero is rendered on the public Motorsport route."
+        }
+      },
+      "heroVideo": {
+        "edit": {
+          "description": "Optional cinematic hero video. Use for pages with an approved video hero; leave empty for standard image-led pages."
+        }
+      },
+      "heroSlides": {
+        "edit": {
+          "description": "Motorsport homepage carousel slides only. Leave empty on About, News, Events, Campaign, Tickets, Gallery, Partners, and Merchandise pages."
+        }
+      },
+      "motorsportFeaturedEvent": {
+        "edit": {
+          "description": "Motorsport homepage featured event relation only."
+        }
+      },
+      "motorsportInformationBand": {
+        "edit": {
+          "description": "Motorsport homepage Race Control information band only."
+        }
+      },
+      "motorsportWorldSection": {
+        "edit": {
+          "description": "Motorsport homepage World of Motorsport section only."
+        }
+      },
+      "motorsportTicketSection": {
+        "edit": {
+          "description": "Motorsport homepage ticket card only. Controls its complete copy, artwork, visibility, footer metadata, and approved partner CTA."
+        }
+      },
+      "pageAvailability": {
+        "edit": {
+          "description": "Optional availability/Coming Soon state. Leave empty while page is active and published."
+        }
+      },
+      "sections": {
+        "edit": {
+          "description": "Page-specific editorial sections rendered by route. Use this for About, News, Events, Tickets, Gallery, Partners, Contact, and Motorsport About Capabilities."
+        }
+      },
+      "seo": {
+        "edit": {
+          "description": "Search and social metadata. Use metaTitle/metaDescription first; add OG image and canonical only when approved."
+        }
+      }
+    }
+  },
   "attributes": {
     "title": {
       "type": "string",
@@ -60,8 +114,7 @@
     "heroEnabled": {
       "type": "boolean",
       "default": true,
-      "required": false,
-      "description": "Controls whether the page hero is rendered on the public Motorsport route."
+      "required": false
     },
     "heroMedia": {
       "type": "media",
@@ -70,14 +123,12 @@
       "allowedTypes": ["images", "videos"]
     },
     "heroVideo": {
-      "description": "Optional cinematic hero video. Use for pages with an approved video hero; leave empty for standard image-led pages.",
       "type": "component",
       "component": "shared.hero-video",
       "repeatable": false,
       "required": false
     },
     "heroSlides": {
-      "description": "Motorsport homepage carousel slides only. Leave empty on About, News, Events, Campaign, Tickets, Gallery, Partners, and Merchandise pages.",
       "type": "component",
       "repeatable": true,
       "component": "motorsport.hero-slide",
@@ -85,13 +136,11 @@
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "motorsportFeaturedEvent": {
-      "description": "Motorsport homepage featured event relation only.",
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::event.event"
     },
     "motorsportInformationBand": {
-      "description": "Motorsport homepage Race Control information band only.",
       "type": "component",
       "component": "motorsport.home-information-band",
       "repeatable": false,
@@ -99,7 +148,6 @@
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "motorsportWorldSection": {
-      "description": "Motorsport homepage World of Motorsport section only.",
       "type": "component",
       "component": "motorsport.world-of-motorsport",
       "repeatable": false,
@@ -107,7 +155,6 @@
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "motorsportTicketSection": {
-      "description": "Motorsport homepage ticket card only. Controls its complete copy, artwork, visibility, footer metadata, and approved partner CTA.",
       "type": "component",
       "component": "motorsport.home-ticket-section",
       "repeatable": false,
@@ -115,14 +162,12 @@
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "pageAvailability": {
-      "description": "Optional availability/Coming Soon state. Leave empty while page is active and published.",
       "type": "component",
       "component": "shared.page-availability",
       "repeatable": false,
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "sections": {
-      "description": "Page-specific editorial sections rendered by route. Use this for About, News, Events, Tickets, Gallery, Partners, Contact, and Motorsport About Capabilities.",
       "type": "dynamiczone",
       "components": [
         "shared.page-section",
@@ -131,7 +176,6 @@
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "seo": {
-      "description": "Search and social metadata. Use metaTitle/metaDescription first; add OG image and canonical only when approved.",
       "type": "component",
       "component": "shared.seo",
       "repeatable": false,

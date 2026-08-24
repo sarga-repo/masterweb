@@ -10427,3 +10427,32 @@ Status: ✅ Done — 2026-08-24
   request-locale handling fix.
 - The staging browser may need one hard refresh after deployment if an older
   frontend bundle is cached.
+
+## MSR-CMS-CM-REPAIR-1 — Repair single-type titles and persisted field helpers
+
+Status: 🔄 In progress — 2026-08-24
+
+### What was done
+
+- Added a bootstrap repair for Motorsport single-type editor headers so page
+  names use Strapi's single-type display name instead of route paths.
+- Added a persisted Content Manager metadata repair so schema helper text is
+  restored when an older saved configuration contains empty descriptions.
+
+### Files changed
+
+- `cms/src/migrations/motorsport-content-manager-repair.ts`
+- `cms/src/index.ts`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Live staging browser comparison confirmed Contact uses its display name,
+  while About, Home, Events, and Merchandise were resolving to route values.
+- Live staging browser inspection confirmed the expected helper text was not
+  present under the media field before this repair.
+
+### Notes / caveats
+
+- The phase remains in progress until the CMS is deployed and the staging
+  editor is rechecked in the browser.

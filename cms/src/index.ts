@@ -13,6 +13,7 @@ import { migrateMotorsportPageSingleTypes } from "./migrations/motorsport-page-s
 import { migrateMotorsportOwnership } from "./migrations/motorsport-ownership";
 import { ensureMotorsportThemeSettings } from "./migrations/motorsport-theme-settings";
 import { ensureMotorsportProgramEditorLayout } from "./migrations/motorsport-program-editor-layout";
+import { repairMotorsportContentManagerConfiguration } from "./migrations/motorsport-content-manager-repair";
 import { migrateMotorsportContentManagerLayouts } from "./migrations/motorsport-content-manager-layout";
 import { retireMotorsportLegacyContent } from "./migrations/motorsport-legacy-retirement";
 import { backfillMotorsportShowFieldDefaults } from "./migrations/motorsport-show-field-defaults";
@@ -54,6 +55,7 @@ export default {
     await migrateMotorsportOwnership(strapi);
     await ensureMotorsportThemeSettings(strapi);
     await ensureMotorsportProgramEditorLayout(strapi);
+    await repairMotorsportContentManagerConfiguration(strapi);
     await migrateMotorsportContentManagerLayouts(strapi);
     await retireMotorsportLegacyContent(strapi);
     await backfillMotorsportShowFieldDefaults(strapi);

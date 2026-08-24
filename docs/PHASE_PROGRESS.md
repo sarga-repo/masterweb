@@ -10458,3 +10458,145 @@ Status: ✅ Done — 2026-08-24
 
 - The persisted repair is idempotent and runs during CMS bootstrap; later
   schema metadata changes will be reconciled on the next CMS restart.
+
+## MSR-CMS-DOCS-2 — Complete CMS/frontend page mapping atlas
+
+Status: ✅ Done — 2026-08-24
+
+### What was done
+
+- Reworked the user guide around a map-and-legend model: matching numbered
+  markers now identify the CMS field group and the rendered frontend section.
+- Added complete full-page staging captures for every documented Motorsport
+  route, including the IJTC programme subpages and rider profile route; long
+  pages are split into readable sequential panels rather than top-only crops.
+- Added ordered page legends with page purpose, CMS entry/type, frontend result,
+  exact field names, and visibility-control guidance.
+- Added a complete collection/shared model field checklist for navigation,
+  events, news, programmes, riders, standings, regulations, tickets, media,
+  partners, merchandise, leadership and Site content.
+- Updated the PDF build to include the atlas, retained the side-by-side preview,
+  email configuration, media asset size guidance, and latest inverse logo cover.
+
+### Files changed
+
+- `docs/cms-user-guide/page_mappings.json`
+- `docs/cms-user-guide/generate_guide_atlas.py`
+- `docs/cms-user-guide/page_mapping_atlas.md`
+- `docs/cms-user-guide/assets/captures/`
+- `docs/cms-user-guide/assets/mapping-atlas/`
+- `docs/cms-user-guide/SARGA_MOTORSPORT_CMS_USER_GUIDE.md`
+- `docs/cms-user-guide/build_pdf.mjs`
+- `docs/cms-user-guide/SARGA_MOTORSPORT_CMS_USER_GUIDE.pdf`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Read the route inventory and current Strapi schemas/components, then
+  cross-checked section coordinates against the live staging frontend DOM.
+- Generated 21 route maps, 98 ordered section mappings, 13 model coverage
+  checklists, and 57 visual mapping panels; all configured captures exist.
+- Built an unencrypted 88-page A4 PDF, extracted its text to confirm the atlas,
+  IJTC rider profile, and model coverage sections are included, and rendered all
+  pages to PNG for visual review of the cover, map panels, tables, and final
+  checklist.
+
+### Notes / caveats
+
+- The right side uses live public staging captures. The left side is a complete
+  CMS field map generated from the current Strapi schemas and component
+  definitions, presented as a scroll-independent legend so long native forms
+  remain readable; it is not a claim that every field fits in one native CMS
+  viewport.
+- `docs/cms-user-guide` remains excluded from Git tracking per the earlier
+  repository-cleanup request; the generated PDF and source assets are available
+  locally for review and handoff.
+
+## MSR-CMS-DOCS-3 — Rebuild mapping guide from supplied staging screenshots
+
+Status: ✅ Done — 2026-08-25
+
+### What was done
+
+- Rebuilt the visual mapping atlas from the supplied HD staging screenshots in
+  `docs/cms-user-guide/assets_cms` and `docs/cms-user-guide/assets_fronted`.
+- Replaced the earlier mixed local/staging map references with focused CMS and
+  frontend crop cards. Each card uses the same numbered red marker in both
+  crops and a larger ordered legend table below it.
+- Preserved the page-purpose descriptions, CMS field names, show/hide behavior,
+  side-by-side preview, email configuration, workspace guidance, and media-size
+  guidance in the manual.
+- Removed the orphaned coverage-summary block that produced a mostly blank
+  final PDF page.
+
+### Files changed
+
+- `docs/cms-user-guide/generate_supplied_image_atlas.py`
+- `docs/cms-user-guide/page_mapping_atlas.md`
+- `docs/cms-user-guide/assets_supplied_maps/`
+- `docs/cms-user-guide/SARGA_MOTORSPORT_CMS_USER_GUIDE.md`
+- `docs/cms-user-guide/build_pdf.mjs`
+- `docs/cms-user-guide/SARGA_MOTORSPORT_CMS_USER_GUIDE.pdf`
+- `docs/cms-user-guide/SARGA_MOTORSPORT_CMS_USER_GUIDE.render.html`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Generated 85 focused map cards across 18 routes using only the supplied CMS
+  and frontend screenshot folders as map sources.
+- Verified every generated card is a readable non-blank PNG with sufficient
+  dimensions; inspected the generated card contact sheet and representative
+  homepage, programme, article, and final-page renders.
+- Rebuilt and rendered the complete PDF for visual QA: unencrypted, A4, 110
+  pages, with no orphaned final page.
+- Confirmed the guide contains no references to the previous annotated/global
+  screenshot directories.
+
+### Notes / caveats
+
+- No supplied frontend screenshot exists for `/events`, `/experience`, or
+  `/partners`; those areas remain explicitly documented without fabricated map
+  images. The available campaign/programme and collection maps cover the
+  supplied related content.
+- `docs/cms-user-guide` remains ignored by Git as previously requested.
+
+## MSR-CMS-EDITOR-2 — Motorsport collection detail editor order
+
+Status: ✅ Done locally — 2026-08-25
+
+### What was done
+
+- Reordered the Motorsport Event, Motorsport News Article, and Motorsport Rider
+  schemas to follow their public detail-page content flow.
+- Added persisted Content Manager layout repairs for existing Strapi stores,
+  so deployed editors recover the same order instead of retaining Strapi's old
+  default layout.
+- Event order now starts with presentation/media, then event briefing and
+  schedule, ticket/sponsor records, supporting links, and SEO.
+- News order now starts with presentation, article identity/media/body, editorial
+  metadata, related records, and SEO.
+- Rider order now starts with profile identity/media, programme and rider
+  metadata, activation/sort controls, site scope, SEO, and advanced presentation.
+
+### Files changed
+
+- `cms/src/api/motorsport-event/content-types/motorsport-event/schema.json`
+- `cms/src/api/motorsport-news-article/content-types/motorsport-news-article/schema.json`
+- `cms/src/api/motorsport-rider/content-types/motorsport-rider/schema.json`
+- `cms/src/migrations/motorsport-program-editor-layout.ts`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Parsed all three schemas successfully as JSON.
+- CMS TypeScript compilation completed successfully.
+- Motorsport frontend TypeScript check passed.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- The Content Manager repair runs during CMS bootstrap and is idempotent. A CMS
+  restart is required for the persisted staging layouts to be reconciled.
+- Rider presentation overrides remain at the bottom because the current rider
+  frontend route renders the core rider fields directly; the field is retained
+  for the existing advanced presentation contract.

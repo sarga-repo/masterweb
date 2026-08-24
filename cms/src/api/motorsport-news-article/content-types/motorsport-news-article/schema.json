@@ -14,20 +14,20 @@
     }
   },
   "attributes": {
+    "motorsportPresentation": { "type": "component", "component": "motorsport.detail-presentation", "repeatable": false, "pluginOptions": { "i18n": { "localized": true } } },
     "title": { "type": "string", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
     "slug": { "type": "uid", "targetField": "title", "required": true },
+    "coverImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
     "excerpt": { "type": "text", "required": true, "pluginOptions": { "i18n": { "localized": true } } },
     "body": { "type": "richtext", "pluginOptions": { "i18n": { "localized": true } } },
-    "coverImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
     "category": { "type": "enumeration", "enum": ["news", "publication", "press-release", "report", "magazine", "race-report", "announcement", "lifestyle", "community", "media", "race-results", "event-announcement", "partnership"], "default": "news", "required": true },
     "publishedDate": { "type": "date", "required": true },
     "isHotTopic": { "type": "boolean", "default": false },
     "author": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
-    "relatedBusinesses": { "type": "relation", "relation": "manyToMany", "target": "api::ecosystem-business.ecosystem-business" },
     "relatedEvent": { "type": "relation", "relation": "manyToOne", "target": "api::motorsport-event.motorsport-event" },
     "relatedGallery": { "type": "relation", "relation": "manyToOne", "target": "api::media-gallery.media-gallery" },
+    "relatedBusinesses": { "type": "relation", "relation": "manyToMany", "target": "api::ecosystem-business.ecosystem-business" },
     "seo": { "type": "component", "component": "shared.seo", "repeatable": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "motorsportPresentation": { "type": "component", "component": "motorsport.detail-presentation", "repeatable": false, "pluginOptions": { "i18n": { "localized": true } } },
     "legacySourceDocumentId": { "type": "string", "private": true, "configurable": false }
   }
 }

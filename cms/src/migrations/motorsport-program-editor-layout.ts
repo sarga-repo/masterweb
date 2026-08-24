@@ -9,6 +9,12 @@ const PROGRAM_KEY =
   "configuration_content_types::api::motorsport-program.motorsport-program";
 const HOME_PAGE_KEY =
   "configuration_content_types::api::motorsport-home-page.motorsport-home-page";
+const EVENT_KEY =
+  "configuration_content_types::api::motorsport-event.motorsport-event";
+const NEWS_ARTICLE_KEY =
+  "configuration_content_types::api::motorsport-news-article.motorsport-news-article";
+const RIDER_KEY =
+  "configuration_content_types::api::motorsport-rider.motorsport-rider";
 const PAGE_SECTION_KEY = "configuration_components::motorsport.page-section";
 const PAGE_SECTION_ITEM_KEY =
   "configuration_components::motorsport.page-section-item";
@@ -168,6 +174,109 @@ const HOME_PAGE_EDIT_LAYOUT: LayoutRow[] = [
     { name: "routeAliases", size: 6 },
   ],
   [{ name: "siteScope", size: 6 }],
+];
+
+// Keep collection editors in the same order as their public detail routes:
+// presentation/hero, page content, supporting records, then SEO and advanced
+// compatibility fields.
+const EVENT_EDIT_LAYOUT: LayoutRow[] = [
+  [{ name: "motorsportPresentation", size: 12 }],
+  [
+    { name: "title", size: 6 },
+    { name: "slug", size: 6 },
+  ],
+  [
+    { name: "heroMedia", size: 6 },
+    { name: "coverImage", size: 6 },
+  ],
+  [{ name: "gallery", size: 12 }],
+  [{ name: "description", size: 12 }],
+  [
+    { name: "eventDate", size: 6 },
+    { name: "endDate", size: 6 },
+  ],
+  [
+    { name: "eventStatus", size: 6 },
+    { name: "racingCategory", size: 6 },
+  ],
+  [
+    { name: "seriesName", size: 6 },
+    { name: "venue", size: 6 },
+  ],
+  [
+    { name: "venueAddress", size: 6 },
+    { name: "circuitName", size: 6 },
+  ],
+  [{ name: "schedule", size: 12 }],
+  [{ name: "ticketCtas", size: 12 }],
+  [{ name: "sponsors", size: 12 }],
+  [
+    { name: "ticketCtaLabel", size: 6 },
+    { name: "ticketUrl", size: 6 },
+  ],
+  [
+    { name: "ticketIntegrationType", size: 6 },
+    { name: "broadcastUrl", size: 6 },
+  ],
+  [
+    { name: "embedUrl", size: 6 },
+    { name: "embedCode", size: 6 },
+  ],
+  [{ name: "business", size: 6 }],
+  [{ name: "seo", size: 12 }],
+];
+
+const NEWS_ARTICLE_EDIT_LAYOUT: LayoutRow[] = [
+  [{ name: "motorsportPresentation", size: 12 }],
+  [
+    { name: "title", size: 6 },
+    { name: "slug", size: 6 },
+  ],
+  [{ name: "coverImage", size: 12 }],
+  [{ name: "excerpt", size: 12 }],
+  [{ name: "body", size: 12 }],
+  [
+    { name: "category", size: 6 },
+    { name: "publishedDate", size: 6 },
+  ],
+  [
+    { name: "isHotTopic", size: 6 },
+    { name: "author", size: 6 },
+  ],
+  [
+    { name: "relatedEvent", size: 4 },
+    { name: "relatedGallery", size: 4 },
+    { name: "relatedBusinesses", size: 4 },
+  ],
+  [{ name: "seo", size: 12 }],
+];
+
+const RIDER_EDIT_LAYOUT: LayoutRow[] = [
+  [
+    { name: "name", size: 6 },
+    { name: "slug", size: 6 },
+  ],
+  [
+    { name: "portrait", size: 6 },
+    { name: "bio", size: 6 },
+  ],
+  [{ name: "program", size: 12 }],
+  [
+    { name: "number", size: 4 },
+    { name: "team", size: 4 },
+    { name: "region", size: 4 },
+  ],
+  [{ name: "nationality", size: 6 }],
+  [
+    { name: "isActive", size: 6 },
+    { name: "sortOrder", size: 6 },
+  ],
+  [
+    { name: "siteScope", size: 6 },
+    { name: "sites", size: 6 },
+  ],
+  [{ name: "seo", size: 12 }],
+  [{ name: "motorsportPresentation", size: 12 }],
 ];
 
 function pageEditLayout(sectionNames: string[]): LayoutRow[] {
@@ -340,6 +449,27 @@ export async function ensureMotorsportProgramEditorLayout(strapi: Core.Strapi) {
     HOME_PAGE_KEY,
     HOME_PAGE_EDIT_LAYOUT,
     HOME_PAGE_EDIT_LAYOUT.slice(0, 14),
+  );
+  await repairEditLayout(
+    strapi,
+    store,
+    EVENT_KEY,
+    EVENT_EDIT_LAYOUT,
+    EVENT_EDIT_LAYOUT.slice(0, 5),
+  );
+  await repairEditLayout(
+    strapi,
+    store,
+    NEWS_ARTICLE_KEY,
+    NEWS_ARTICLE_EDIT_LAYOUT,
+    NEWS_ARTICLE_EDIT_LAYOUT.slice(0, 5),
+  );
+  await repairEditLayout(
+    strapi,
+    store,
+    RIDER_KEY,
+    RIDER_EDIT_LAYOUT,
+    RIDER_EDIT_LAYOUT.slice(0, 4),
   );
   for (const page of PAGE_EDIT_LAYOUTS) {
     await repairEditLayout(

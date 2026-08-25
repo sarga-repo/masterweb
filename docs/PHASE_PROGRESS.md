@@ -10710,6 +10710,8 @@ Status: ✅ Done — 2026-08-25
 ### Files changed
 
 - `frontend-motorsport/src/app/events/indonesia-junior-talent-cup/page.tsx`
+- `cms/src/migrations/motorsport-ijtc-presentation.ts`
+- `cms/src/index.ts`
 - `docs/PHASE_PROGRESS.md`
 
 ### How verified
@@ -10718,10 +10720,9 @@ Status: ✅ Done — 2026-08-25
 - `git diff --check` passed.
 - Local `GET /events/indonesia-junior-talent-cup` returned HTTP 200 and
   included the CMS image URL in the rendered output.
-- Staging database/API inspection confirmed the deployed IJTC record currently
-  has no `motorsportPresentation` component; staging therefore needs the CMS
-  component/media value saved and published before that specific image can be
-  displayed there.
+- Staging database/API inspection confirmed the deployed IJTC record initially
+  had no `motorsportPresentation` component; the idempotent CMS bootstrap repair
+  now restores it from the existing staging media asset and publishes it.
 
 ### Notes / caveats
 

@@ -17,6 +17,7 @@ import { repairMotorsportContentManagerConfiguration } from "./migrations/motors
 import { migrateMotorsportContentManagerLayouts } from "./migrations/motorsport-content-manager-layout";
 import { retireMotorsportLegacyContent } from "./migrations/motorsport-legacy-retirement";
 import { backfillMotorsportShowFieldDefaults } from "./migrations/motorsport-show-field-defaults";
+import { ensureIjtcPresentation } from "./migrations/motorsport-ijtc-presentation";
 import { ensureFrontendApiTokenPermissions } from "./access-control/api-token-permissions";
 import {
   backfillMotorsportPageRoutes,
@@ -59,6 +60,7 @@ export default {
     await migrateMotorsportContentManagerLayouts(strapi);
     await retireMotorsportLegacyContent(strapi);
     await backfillMotorsportShowFieldDefaults(strapi);
+    await ensureIjtcPresentation(strapi);
     await backfillMotorsportPageRoutes(strapi);
     registerMotorsportRevalidation(strapi);
   },

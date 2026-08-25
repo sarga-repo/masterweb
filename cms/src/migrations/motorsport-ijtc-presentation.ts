@@ -1,0 +1,77 @@
+import type { Core } from "@strapi/strapi";
+
+const PROGRAM_UID = "api::motorsport-program.motorsport-program";
+const PROGRAM_SLUG = "indonesia-junior-talent-cup";
+const HERO_MEDIA_NAME = "motorcycle-racing-dusk.png";
+
+type DocumentService = {
+  findFirst: (params?: Record<string, unknown>) => Promise<any>;
+  update: (params: Record<string, unknown>) => Promise<any>;
+};
+
+/**
+ * Restores the original IJTC demo presentation in environments where the
+ * programme was seeded before its CMS presentation component was introduced.
+ * Existing editor-managed presentation content is deliberately preserved.
+ */
+export async function ensureIjtcPresentation(strapi: Core.Strapi) {
+  const documents = strapi.documents as unknown as (uid: string) => DocumentService;
+  const service = documents(PROGRAM_UID);
+  const program = await service.findFirst({
+    filters: { slug: { $eq: PROGRAM_SLUG } },
+    locale: "en",
+    status: "published",
+    populate: ["motorsportPresentation"],
+  });
+
+  if (!program || program.motorsportPresentation) return;
+
+  const media = await strapi.db.query("plugin::upload.file").findOne({
+    where: { name: HERO_MEDIA_NAME },
+    select: ["id"],
+  });
+
+  if (!media?.id) {
+    strapi.log.warn(
+      `[motorsport-ijtc] skipped presentation repair: ${HERO_MEDIA_NAME} is not uploaded`,
+    );
+    return;
+  }
+
+  await service.update({
+    documentId: program.documentId,
+    locale: "en",
+    status: "published",
+    data: {
+      motorsportPresentation: {
+        routeKey: "ijtc",
+        hero: {
+          isActive: true,
+          showEyebrow: true,
+          showTitle: true,
+          showDescription: true,
+          showMedia: true,
+          showMetricGroup: true,
+          eyebrow: "IJTC / 2026 Season",
+          title: "- The next generation - starts here.",
+          description:
+            "A development program for Indonesia’s next generation of motorcycle racing talent, combining structured race rounds, rider development, standings, and clear sporting regulations.",
+          backgroundMedia: media.id,
+        },
+        informationBand: {
+          isActive: true,
+          showEyebrow: true,
+          showTitle: true,
+          showDescription: true,
+          showMetricGroup: true,
+          title: "Indonesia Junior Talent Cup",
+          metrics: [],
+        },
+      },
+    },
+  });
+
+  strapi.log.info(
+    `[motorsport-ijtc] restored published presentation using ${HERO_MEDIA_NAME}`,
+  );
+}

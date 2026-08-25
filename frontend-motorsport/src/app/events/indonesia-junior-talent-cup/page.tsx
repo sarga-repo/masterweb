@@ -65,6 +65,12 @@ export default async function IjtcOverviewPage() {
         showTitle={program.presentationHero?.showTitle}
         showDescription={program.presentationHero?.showDescription}
         showMedia={program.presentationHero?.showMedia}
+        backgroundImage={
+          program.presentationHero?.backgroundMedia?.url ?? program.image
+        }
+        backgroundAlt={
+          program.presentationHero?.backgroundMedia?.alt ?? program.imageAlt
+        }
         accent="orange"
         accentPosition="bottom-left"
         surface="heat"

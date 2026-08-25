@@ -91,6 +91,8 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | MS-FOOTER-ICON-1   | Motorsport footer social link icons                                  | ✅ Done                  | 2026-08-24 |
 | MSR-VENDOR-2026-08-24 | Vendor meeting action items: chrome, logo, external CTA, i18n, and media guidance | ✅ Done | 2026-08-24 |
 | MS-CMS-MANUAL-1    | Sarga Motorsport CMS user manual (MD + PDF)                          | ✅ Done                  | 2026-08-24 |
+| MS-CMS-MANUAL-2    | CMS manual rebuilt as section-pair atlas (no badges)                 | ✅ Done                  | 2026-08-25 |
+| MSR-CMS-UAT-3      | IJTC presentation hero media wiring                                 | ✅ Done                  | 2026-08-25 |
 
 ### MS-CMS-MANUAL-1 — Sarga Motorsport CMS user manual
 
@@ -138,6 +140,66 @@ brand revamp tracks. Update this file at the end of **every** completed phase
   favicon) are documented as such in Troubleshooting.
 - PDF regeneration: build script converts the Markdown via `marked` and Chrome
   print-to-PDF; the intermediate HTML is not committed.
+
+### MS-CMS-MANUAL-2 — CMS manual rebuilt as section-pair atlas
+
+#### What was done
+
+- Replaced the numbered-badge annotation model with section-vs-section
+  pairing: every chapter 7 section now shows the CMS editor group
+  (cropped from the supplied staging captures) directly above the frontend
+  section it renders, with the field table unchanged below.
+- Built `section-tools.mjs` + `batch-crop.mjs` + `crop-manifest.json`:
+  automatic detection of Strapi component-group labels (trash-icon /
+  pink-item-header signatures) and batch cropping of 174 section images
+  into `assets_sections/`.
+- Re-derived the true Home Page record structure from the captures
+  (hero, heroSlides, informationBand, worldSection, upcomingEventsSection
+  with featuredEvent/featuredProgram relations above it, ticketSection,
+  latestNewsSection, gallerySection, partnersSection, newsletterSection,
+  pageAvailability + seo); corrected chapters that referenced groups that
+  do not exist on the record (Connected Records, Merch Control, Catalogue).
+- Identified the two Motorsport Program captures (kp0lpji = FIA Rallycross,
+  ndc1f3c9 = Indonesia Junior Talent Cup) and mapped their
+  presentation/bannerSlides/presentationSections/rundown groups.
+- Rewrote intro/atlas prose for the new reading model; removed all marker
+  references. Chapter 4 keeps its 8 verified UI-chrome markers (workflow
+  diagram, not section mapping).
+
+#### Files changed
+
+- `docs/cms-user-guide/guide.source.txt`,
+  `SARGA_MOTORSPORT_CMS_USER_GUIDE_V2.{md,pdf}`, `_guide-v2.html`
+- `docs/cms-user-guide/section-tools.mjs`, `batch-crop.mjs`,
+  `crop-manifest.json`, `assets_sections/` (174 crops)
+
+#### How verified
+
+- Every crop verified visually against its detected group label
+  (labeled contact sheets + per-page pair sheets); 0 broken images in the
+  printed PDF; 167 pages A4; spot-checked Home, About, Contact, Merch,
+  Gallery, Tickets, News, Article, Event, IJTC, rider, standings and
+  regulation pages in the final PDF.
+
+#### Notes / caveats
+
+- Captures still reflect staging as of 2026-08-25. The IJTC About /
+  Schedule subpages reuse programme-record sections, so their cards show
+  FRONTEND figures cross-referenced to 7.10 rather than duplicate crops.
+- Vendor review round: corrected the homepage Sarga-network card to
+  connectedRecordsSection (CMS crops A26835–A28800 + B0–5090; label found at
+  the A capture edge), replaced the homepage partners frontend figure with
+  the dedicated capture in `assets_sections_fixed/`, and re-cropped the
+  latestNews parts that had absorbed connected-records content.
+- Regenerated every chapter-7 table from the CMS schemas
+  (`gen-tables.mjs`): all editor fields per section, numbered rows,
+  Type / Required / Description from schema help text and curated
+  overrides; removed the internal regeneration note from the document.
+- Added all 13 collection list-view captures (nav, event, leadership,
+  merchandise item, news article, partner, program, regulation, rider,
+  standing, ticket CTA, site, media gallery) as entry-point figures with
+  short descriptions in their respective chapters.
+
 
 ### MSR-VENDOR-2026-08-24 — Vendor meeting action items
 
@@ -10633,3 +10695,36 @@ Status: ✅ Done — 2026-08-25
   confirmed the Rider layout repair.
 - PostgreSQL verification confirmed the persisted Rider order starts with
   `motorsportPresentation, name, slug, portrait, bio`.
+
+## MSR-CMS-UAT-3 — IJTC presentation hero media wiring
+
+### What was done
+
+- Connected the IJTC overview `PageHero` to the CMS-managed
+  `motorsportPresentation.hero.backgroundMedia` image and alt text.
+- Kept the existing fallback to the programme image when the presentation
+  hero or its media is not populated.
+- Confirmed the local Strapi response includes the selected background media
+  and the rendered IJTC route emits its uploaded image URL.
+
+### Files changed
+
+- `frontend-motorsport/src/app/events/indonesia-junior-talent-cup/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Motorsport frontend TypeScript check passed.
+- `git diff --check` passed.
+- Local `GET /events/indonesia-junior-talent-cup` returned HTTP 200 and
+  included the CMS image URL in the rendered output.
+- Staging database/API inspection confirmed the deployed IJTC record currently
+  has no `motorsportPresentation` component; staging therefore needs the CMS
+  component/media value saved and published before that specific image can be
+  displayed there.
+
+### Notes / caveats
+
+- This was a frontend mapping defect, not a media URL transformation defect.
+- The deployment preserves the fallback image behavior for records where the
+  presentation component is intentionally empty.

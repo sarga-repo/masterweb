@@ -1782,6 +1782,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | MSR-CMS-LIVE-6        | Responsive mobile editor action toolbar                 | ✅ Done | 2026-08-23 |
 | MSR-CMS-OPS-3         | Staging Motorsport navigation data restoration          | ✅ Done | 2026-08-24 |
 | MSR-CMS-UAT-8         | Tickets preview, mobile hero, and News visibility       | ✅ Done | 2026-08-28 |
+| MSR-CMS-UAT-9         | Seed compatibility and About profile controls           | ✅ Done | 2026-08-28 |
 
 ### MSR-THEME-REVIEW-1 — Vendor composition and preset differentiation review
 
@@ -10929,3 +10930,37 @@ Status: ✅ Done — 2026-08-28
   absent; it does not overwrite existing editorial content.
 - The News hero metric group is a single CMS show/hide control. Its number and
   label remain intentionally derived from the current news feed.
+
+## MSR-CMS-UAT-9 — Seed compatibility and About profile controls
+
+Status: ✅ Done — 2026-08-28
+
+### What was done
+
+- Added `isActive: true` to demo FIA and IJTC rundown/rule seed payloads so
+  staging bootstrap validation satisfies the required visibility contract.
+- Made the About profile media block obey `profileSection.showMedia`.
+- Made the About profile support card and CTA obey `profileSection.showCta`,
+  including its CMS label and URL values.
+- Widened the profile section title field in the CMS component layout and the
+  desktop frontend heading so long editorial titles remain readable.
+
+### Files changed
+
+- `cms/src/seed.ts`
+- `cms/src/migrations/motorsport-content-manager-layout.ts`
+- `cms/src/migrations/motorsport-program-editor-layout.ts`
+- `frontend-motorsport/src/app/about/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Motorsport typecheck, focused visibility/foundation tests, and targeted
+  Prettier checks passed.
+- CMS TypeScript check and Strapi admin build passed.
+- Staging CMS restart and browser verification completed after deployment.
+
+### Notes / caveats
+
+- The wider CMS title layout applies to the shared `motorsport.page-section`
+  component because Strapi component layouts are shared across parent sections.

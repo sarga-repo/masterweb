@@ -231,7 +231,7 @@ const COMPONENT_LAYOUTS: Record<string, Layout> = {
     ],
     [
       { name: "eyebrow", size: 6 },
-      { name: "title", size: 6 },
+      { name: "title", size: 12 },
     ],
     [{ name: "body", size: 12 }],
     [

@@ -229,31 +229,34 @@ export default async function AboutPage() {
           className={`ms-about-story-surface ms-editorial-surface pb-20 sm:pb-28 ${nextAlternatingSurface()}`}
         >
           <div className="ms-shell">
-            <figure className="relative aspect-[16/9] overflow-hidden bg-ms-cream-200 sm:aspect-[16/7]">
-              <ResilientImage
-                src={
-                  page?.heroImage ||
-                  "/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
-                }
-                alt={
-                  page?.heroImageAlt ||
-                  "Driver and pit crew preparing a touring car in a warm daylight paddock"
-                }
-                fallbackSrc="/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
-                fallbackAlt="Driver and pit crew preparing a touring car in a warm daylight paddock"
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover"
-              />
-              {profile?.showMedia !== false ? (
+            {profile?.showMedia !== false ? (
+              <figure
+                data-cms-element-key="profile-media"
+                className="relative aspect-[16/9] overflow-hidden bg-ms-cream-200 sm:aspect-[16/7]"
+              >
+                <ResilientImage
+                  src={
+                    page?.heroImage ||
+                    "/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
+                  }
+                  alt={
+                    page?.heroImageAlt ||
+                    "Driver and pit crew preparing a touring car in a warm daylight paddock"
+                  }
+                  fallbackSrc="/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
+                  fallbackAlt="Driver and pit crew preparing a touring car in a warm daylight paddock"
+                  fill
+                  priority
+                  sizes="100vw"
+                  className="object-cover"
+                />
                 <figcaption className="absolute bottom-0 left-0 max-w-xs bg-ms-apex-crimson px-6 py-4 text-ms-warm-white sm:px-8">
                   <span className="ms-data-label text-ms-electric-yellow">
                     {profile?.supportLabel ?? "Profile / Indonesia"}
                   </span>
                 </figcaption>
-              ) : null}
-            </figure>
+              </figure>
+            ) : null}
 
             <div className="grid gap-12 pt-14 lg:grid-cols-[minmax(0,1.35fr)_minmax(17rem,.65fr)] lg:gap-20 lg:pt-20">
               <article>
@@ -263,7 +266,7 @@ export default async function AboutPage() {
                   </p>
                 ) : null}
                 {profile?.showTitle !== false ? (
-                  <h2 className="ms-heading-section mt-6 max-w-[13ch] text-ms-warm-white">
+                  <h2 className="ms-heading-section mt-6 max-w-[16ch] text-ms-warm-white lg:max-w-[30ch]">
                     {profile?.title ?? "A stage built for velocity."}
                   </h2>
                 ) : null}
@@ -279,22 +282,27 @@ export default async function AboutPage() {
                 ) : null}
               </article>
 
-              <aside className="border-t border-ms-warm-white/18 pt-6 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0">
-                <p className="ms-data-label text-ms-slipstream-teal">
-                  {profile?.supportLabel ?? "Operating idea"}
-                </p>
-                <MarkdownContent
-                  value={operatingIdea}
-                  className="ms-rich-text mt-5 text-base leading-7 text-ms-warm-white/68"
-                />
-                <Link
-                  href="#team"
-                  className="group mt-8 inline-flex items-center gap-3 border-b border-ms-electric-yellow/45 pb-3 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-electric-yellow"
+              {profile?.showCta !== false ? (
+                <aside
+                  data-cms-element-key="profile-support-cta"
+                  className="border-t border-ms-warm-white/18 pt-6 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0"
                 >
-                  Meet the leadership
-                  <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </aside>
+                  <p className="ms-data-label text-ms-slipstream-teal">
+                    {profile?.supportLabel ?? "Operating idea"}
+                  </p>
+                  <MarkdownContent
+                    value={operatingIdea}
+                    className="ms-rich-text mt-5 text-base leading-7 text-ms-warm-white/68"
+                  />
+                  <Link
+                    href={profile?.ctaUrl || "#team"}
+                    className="group mt-8 inline-flex items-center gap-3 border-b border-ms-electric-yellow/45 pb-3 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-electric-yellow"
+                  >
+                    {profile?.ctaLabel ?? "Meet the leadership"}
+                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </aside>
+              ) : null}
             </div>
           </div>
         </section>

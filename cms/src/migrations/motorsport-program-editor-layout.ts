@@ -102,7 +102,7 @@ const PAGE_SECTION_EDIT_LAYOUT: LayoutRow[] = [
   ],
   [
     { name: "eyebrow", size: 6 },
-    { name: "title", size: 6 },
+    { name: "title", size: 12 },
   ],
   [{ name: "body", size: 12 }],
   [

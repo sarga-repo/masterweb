@@ -1546,7 +1546,10 @@ const IJTC_RUNDOWN = [
       "Final classification races followed by programme review and development feedback. Demonstration schedule only.",
     sortOrder: 8,
   },
-];
+].map((item) => ({
+  ...item,
+  isActive: true,
+}));
 
 /** Program and campaign demo content. */
 const MOTORSPORT_PROGRAMS = [
@@ -1681,7 +1684,10 @@ const MOTORSPORT_PROGRAMS = [
           "Semi-final eliminations lead into the FIA Rallycross World Cup Indonesia final.",
         sortOrder: 5,
       },
-    ],
+    ].map((item) => ({
+      ...item,
+      isActive: true,
+    })),
     eventRules: [
       {
         ruleType: "do",
@@ -1725,7 +1731,10 @@ const MOTORSPORT_PROGRAMS = [
           "Session timing can change. Follow venue screens and official Motorsport updates on race day.",
         sortOrder: 6,
       },
-    ],
+    ].map((item) => ({
+      ...item,
+      isActive: true,
+    })),
     relatedEventSlug: "fia-rallycross-world-cup-indonesia-2026",
     relatedTicketTitle: "FIA Rallycross World Cup Indonesia 2026 Tickets",
     siteScope: "motorsport",

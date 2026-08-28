@@ -92,7 +92,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | MS-CMS-MANUAL-1    | Sarga Motorsport CMS user manual (MD + PDF)                          | ✅ Done                  | 2026-08-24 |
 | MS-CMS-MANUAL-2    | CMS manual rebuilt as section-pair atlas (no badges)                 | ✅ Done                  | 2026-08-25 |
 | MSR-CMS-UAT-3      | IJTC presentation hero media wiring                                 | ✅ Done                  | 2026-08-25 |
-| MSR-CMS-UAT-10     | FIA campaign presentation section key normalization and visibility | 🟡 In progress           | 2026-08-28 |
+| MSR-CMS-UAT-10     | FIA campaign presentation section key normalization and visibility | ✅ Done                  | 2026-08-28 |
 
 ### MS-CMS-MANUAL-1 — Sarga Motorsport CMS user manual
 
@@ -10978,7 +10978,7 @@ Status: ✅ Done — 2026-08-28
 
 ## MSR-CMS-UAT-10 — FIA campaign presentation section key normalization and visibility
 
-Status: 🟡 In progress — 2026-08-28
+Status: ✅ Done — 2026-08-28
 
 ### What was done
 
@@ -11015,5 +11015,6 @@ Status: 🟡 In progress — 2026-08-28
 - `sectionKey` remains optional in the shared component schema for compatibility
   with older page-section usages; the FIA repair migration backfills the three
   canonical keys from their existing labels.
-- Staging deployment and authenticated draft visibility verification remain
-  pending for this phase.
+- Staging CMS and Motorsport services run the pushed commit; authenticated
+  side-by-side preview verification confirmed that hiding `RX / GUIDE` removes
+  it from the frontend iframe while `format` and `rundown` remain visible.

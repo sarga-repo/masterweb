@@ -10798,3 +10798,32 @@ Status: ✅ Done — 2026-08-28
 - Listing cards retain their existing crop ratios because they are intentionally
   designed as card thumbnails; this change applies to the full news detail
   cover only.
+
+## MSR-CMS-UAT-6 — Render nested CMS footer links
+
+Status: ✅ Done — 2026-08-28
+
+### What was done
+
+- Removed the hardcoded `Discover` footer route allowlist that dropped nested
+  internal paths such as `/events/fia-rallycross-world-cup-indonesia-2026`.
+- Normalized CMS footer links so `linkType=external` is preserved for frontend
+  navigation behavior, including external sub-URLs.
+
+### Files changed
+
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Motorsport TypeScript check passed.
+- Markdown tests passed.
+- Motorsport production build passed.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- A footer link must remain enabled and have both a label and href to render.
+- Public frontend output reflects the CMS entry after it is saved/published and
+  the frontend cache has revalidated.

@@ -432,6 +432,14 @@ function mapFooterLinks(links: CmsFooterLink[] | undefined) {
     .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
 }
 
+function mapFooterColumnLinks(links: CmsFooterLink[] | undefined) {
+  return mapFooterLinks(links).map((link) => ({
+    label: link.label.trim(),
+    href: link.href.trim(),
+    external: link.linkType === "external",
+  }));
+}
+
 export async function fetchMotorsportChrome(
   locale?: Locale,
 ): Promise<MotorsportChrome> {
@@ -456,22 +464,9 @@ export async function fetchMotorsportChrome(
     .filter((column) => column.title?.trim())
     .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0))
     .map((column) => ({
-      title: column.title,
-      links: mapFooterLinks(column.links),
+      title: column.title.trim(),
+      links: mapFooterColumnLinks(column.links),
     }))
-    .map((column) =>
-      column.title.trim().toLowerCase() === "discover"
-        ? {
-            ...column,
-            links: column.links.filter((link) =>
-              ["/", "/about", "/events", "/news"].includes(link.href),
-            ),
-          }
-        : null,
-    )
-    .filter((column): column is { title: string; links: CmsFooterLink[] } =>
-      Boolean(column),
-    )
     .filter((column) => column.links.length);
 
   return {

@@ -191,7 +191,10 @@ export default async function ArticleDetailPage({ params }: Props) {
         className={`ms-news-detail-story ${nextAlternatingSurface()}`}
       >
         <div className="ms-shell py-10 sm:py-14">
-          <figure className="relative aspect-[16/10] overflow-hidden bg-ms-cream-200 sm:aspect-[21/9]">
+          {/* News cover assets follow the CMS 8:5 guideline. Keep the detail
+              frame at the same ratio so `object-cover` does not crop artwork
+              that was composed for the full cover image. */}
+          <figure className="relative aspect-[8/5] overflow-hidden bg-ms-cream-200">
             <ResilientImage
               src={article.image}
               alt={article.imageAlt}

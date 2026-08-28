@@ -10767,3 +10767,34 @@ Status: ✅ Done — 2026-08-28
 
 - The existing Markdown renderer remains the single safe rich-text rendering
   path; CMS content is not rewritten or migrated.
+
+## MSR-CMS-UAT-5 — Preserve news cover artwork at detail view
+
+Status: ✅ Done — 2026-08-28
+
+### What was done
+
+- Changed the news detail cover frame from the wide `21:9` desktop ratio to
+  the CMS-recommended `8:5` ratio.
+- Kept `object-cover` for the intended full-bleed presentation while matching
+  the source artwork ratio, preventing the supplied 1586 × 992 cover from
+  losing its top and bottom content.
+
+### Files changed
+
+- `frontend-motorsport/src/app/news/[slug]/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Motorsport frontend TypeScript check passed.
+- Motorsport production build passed.
+- Prettier and `git diff --check` passed.
+- The deployed staging route was checked against the source asset dimensions
+  and the updated detail-frame ratio.
+
+### Notes / caveats
+
+- Listing cards retain their existing crop ratios because they are intentionally
+  designed as card thumbnails; this change applies to the full news detail
+  cover only.

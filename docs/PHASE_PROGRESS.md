@@ -10759,8 +10759,11 @@ Status: ✅ Done — 2026-08-28
 - Prettier and `git diff --check` passed.
 - Local About route returned HTTP 200 and rendered CMS-backed copy through
   separate paragraph elements.
+- Staging Motorsport was rebuilt and restarted at commit `8941a269d`; the
+  staging About route returned HTTP 200 with four separate profile paragraphs,
+  and browser inspection confirmed the paragraph spacing is applied.
 
 ### Notes / caveats
 
-- Staging deployment verification is recorded in the final handover after the
-  frontend build and service restart complete.
+- The existing Markdown renderer remains the single safe rich-text rendering
+  path; CMS content is not rewritten or migrated.

@@ -53,6 +53,51 @@ export type OrderedCmsSinglePage = {
   [key: string]: unknown;
 };
 
+type KeyedCmsSection = {
+  sectionKey: string;
+  enabled?: boolean;
+};
+
+/**
+ * Merge a primary section source with a legacy fallback without allowing
+ * duplicate keys to bypass an explicit visibility choice. The first position
+ * remains authoritative for ordering, while a false value is sticky across
+ * duplicates until the CMS data is normalized.
+ */
+export function mergeAuthoritativeCmsSections<T extends KeyedCmsSection>(
+  primary: T[],
+  fallback: Array<T | (KeyedCmsSection & Partial<T>)> = [],
+): T[] {
+  const merged: T[] = [];
+  const positions = new Map<string, number>();
+
+  const add = (section: T) => {
+    const existingPosition = positions.get(section.sectionKey);
+    if (existingPosition == null) {
+      positions.set(section.sectionKey, merged.length);
+      merged.push(section);
+      return;
+    }
+
+    const existing = merged[existingPosition];
+    merged[existingPosition] = {
+      ...existing,
+      ...section,
+      enabled:
+        existing.enabled === false || section.enabled === false
+          ? false
+          : (section.enabled ?? existing.enabled),
+    };
+  };
+
+  primary.forEach(add);
+  fallback.forEach((section) => {
+    if (!positions.has(section.sectionKey)) add(section as T);
+  });
+
+  return merged;
+}
+
 const MOTORSPORT_PAGE_SECTION_ORDER: Record<string, string[]> = {
   "/about": [
     "profileSection",

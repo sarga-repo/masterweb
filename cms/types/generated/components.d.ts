@@ -707,6 +707,10 @@ export interface MotorsportPageSection extends Struct.ComponentSchema {
     > &
       Schema.Attribute.DefaultTo<'sameWindow'>;
     secondaryCtaUrl: Schema.Attribute.String;
+    sectionKey: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
     showBody: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     showCta: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     showEyebrow: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;

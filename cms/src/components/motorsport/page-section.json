@@ -65,6 +65,10 @@
     }
   },
   "attributes": {
+    "sectionKey": {
+      "type": "string",
+      "maxLength": 80
+    },
     "isActive": {
       "type": "boolean",
       "default": true,

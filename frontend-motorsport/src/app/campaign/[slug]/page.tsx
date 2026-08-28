@@ -24,9 +24,37 @@ import {
   fetchMotorsportPageByRoute,
   fetchMotorsportTheme,
 } from "@/lib/cms-data";
+import { mergeAuthoritativeCmsSections } from "@/lib/cms-page-order";
 import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 
 type Props = { params: Promise<{ slug: string }> };
+
+type CampaignRouteSection = {
+  sectionKey: string;
+  eyebrow?: string;
+  title?: string;
+  body?: string;
+  enabled?: boolean;
+  indexLabel?: string;
+  showIndex?: boolean;
+  showEyebrow?: boolean;
+  showTitle?: boolean;
+  showDescription?: boolean;
+  showMedia?: boolean;
+  showCta?: boolean;
+  items?: Array<{
+    isActive?: boolean;
+    sortOrder?: number;
+    label?: string;
+    title?: string;
+    description?: string;
+    media?: unknown;
+    mediaAlt?: string;
+    accent?: "crimson" | "orange" | "yellow" | "teal" | "blue";
+    href?: string;
+    hrefLabel?: string;
+  }>;
+};
 
 const FORMAT_ACCENT_CLASSES = {
   crimson: "text-ms-apex-crimson",
@@ -87,24 +115,27 @@ export async function RallycrossCampaignPage() {
   if (!campaign) notFound();
   // Program presentation sections are the campaign's source of truth. Keep
   // route-page sections as a backwards-compatible fallback for older records.
-  const routeSections = [
-    ...(campaign.presentationSections ?? []).map((item) => ({
-      sectionKey: item.sectionKey,
-      eyebrow: item.eyebrow,
-      title: item.title,
-      body: item.body,
-      enabled: item.isActive,
-      indexLabel: item.indexLabel,
-      showIndex: item.showIndex,
-      showEyebrow: item.showEyebrow,
-      showTitle: item.showTitle,
-      showDescription: item.showBody,
-      showMedia: item.showMedia,
-      showCta: item.showCta,
-      items: item.items,
-    })),
-    ...(page?.sections ?? []),
-  ];
+  const presentationSections: CampaignRouteSection[] = (
+    campaign.presentationSections ?? []
+  ).map((item) => ({
+    sectionKey: item.sectionKey,
+    eyebrow: item.eyebrow,
+    title: item.title,
+    body: item.body,
+    enabled: item.isActive,
+    indexLabel: item.indexLabel,
+    showIndex: item.showIndex,
+    showEyebrow: item.showEyebrow,
+    showTitle: item.showTitle,
+    showDescription: item.showBody,
+    showMedia: item.showMedia,
+    showCta: item.showCta,
+    items: item.items,
+  }));
+  const routeSections = mergeAuthoritativeCmsSections(
+    presentationSections,
+    page?.sections ?? [],
+  );
   const sectionConfig = (key: string) =>
     routeSections.find((item) => item.sectionKey === key);
   const section = (key: string) => {

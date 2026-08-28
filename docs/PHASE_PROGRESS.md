@@ -92,6 +92,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | MS-CMS-MANUAL-1    | Sarga Motorsport CMS user manual (MD + PDF)                          | ✅ Done                  | 2026-08-24 |
 | MS-CMS-MANUAL-2    | CMS manual rebuilt as section-pair atlas (no badges)                 | ✅ Done                  | 2026-08-25 |
 | MSR-CMS-UAT-3      | IJTC presentation hero media wiring                                 | ✅ Done                  | 2026-08-25 |
+| MSR-CMS-UAT-10     | FIA campaign presentation section key normalization and visibility | 🟡 In progress           | 2026-08-28 |
 
 ### MS-CMS-MANUAL-1 — Sarga Motorsport CMS user manual
 
@@ -10974,3 +10975,45 @@ Status: ✅ Done — 2026-08-28
 - Legacy rundown and rule components keep a default of `true` without requiring
   the field, allowing older records to bootstrap while the repair code
   backfills their explicit value.
+
+## MSR-CMS-UAT-10 — FIA campaign presentation section key normalization and visibility
+
+Status: 🟡 In progress — 2026-08-28
+
+### What was done
+
+- Added the missing `sectionKey` attribute to the shared presentation-section
+  component so Strapi preserves the `format`, `rundown`, and `race-day-guide`
+  mapping used by the frontend.
+- Replaced the append-only FIA bootstrap update with direct repeatable-component
+  link normalization, removing duplicate presentation sections from both draft
+  and published records while preserving CMS order and an explicit hidden state.
+- Added a frontend defensive merge so duplicate legacy records cannot bypass a
+  section-level `isActive: false` value.
+
+### Files changed
+
+- `cms/src/components/motorsport/page-section.json`
+- `cms/src/migrations/motorsport-fia-presentation.ts`
+- `cms/types/generated/components.d.ts`
+- `frontend-motorsport/src/app/campaign/[slug]/page.tsx`
+- `frontend-motorsport/src/lib/cms-page-order.ts`
+- `frontend-motorsport/src/lib/cms-page-order.test.ts`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Local FIA campaign API returns exactly three presentation sections with keys
+  `format`, `rundown`, and `race-day-guide`.
+- Local database contains exactly three `presentationSections` links for both
+  the draft and published FIA program rows.
+- Frontend typecheck, focused section-order tests, CMS TypeScript check, CMS
+  admin build, Motorsport production build, and `git diff --check` passed.
+
+### Notes / caveats
+
+- `sectionKey` remains optional in the shared component schema for compatibility
+  with older page-section usages; the FIA repair migration backfills the three
+  canonical keys from their existing labels.
+- Staging deployment and authenticated draft visibility verification remain
+  pending for this phase.

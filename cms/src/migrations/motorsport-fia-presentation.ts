@@ -4,17 +4,8 @@ const PROGRAM_UID = "api::motorsport-program.motorsport-program";
 const PROGRAM_SLUG = "fia-rallycross-world-cup-indonesia-2026";
 
 type DocumentService = {
-  findFirst: (params?: Record<string, unknown>) => Promise<any>;
   update: (params: Record<string, unknown>) => Promise<any>;
 };
-
-function visibleItems(value: unknown) {
-  if (!Array.isArray(value)) return undefined;
-  return value.map((item: any) => ({
-    ...componentData(item),
-    isActive: item?.isActive !== false,
-  }));
-}
 
 const sectionDefaults = [
   {
@@ -90,26 +81,97 @@ const sectionDefaults = [
   },
 ] as const;
 
-function componentData(value: any): any {
-  if (Array.isArray(value)) return value.map(componentData);
-  if (!value || typeof value !== "object") return value;
-  if ("mime" in value && "id" in value) return value.id;
-  if ("documentId" in value && value.documentId) return value.documentId;
-  return Object.fromEntries(
-    Object.entries(value)
-      .filter(
-        ([key]) =>
-          ![
-            "id",
-            "documentId",
-            "createdAt",
-            "updatedAt",
-            "publishedAt",
-            "locale",
-          ].includes(key),
+const SECTION_KEYS_BY_LABEL: Record<string, string> = {
+  "RX / FORMAT": "format",
+  "RX / RUNDOWN": "rundown",
+  "RX / GUIDE": "race-day-guide",
+};
+
+/**
+ * Repeatable components are linked through a join table. Removing duplicate
+ * links directly is intentional here: sending id-less component arrays to a
+ * Strapi document update appends new components instead of replacing the old
+ * ones. The retained component is the first in CMS order, unless a duplicate
+ * is explicitly hidden; hidden wins so an editor's choice is never lost.
+ */
+async function normalizePresentationLinks(
+  strapi: Core.Strapi,
+  entityId: number,
+) {
+  const database = strapi.db.connection;
+  return database.transaction(async (transaction) => {
+    const links = await transaction("motorsport_programs_cmps")
+      .where({
+        entity_id: entityId,
+        field: "presentationSections",
+        component_type: "motorsport.page-section",
+      })
+      .orderBy([
+        { column: "order", order: "asc" },
+        { column: "id", order: "asc" },
+      ]);
+
+    if (!links.length) return { hasSections: false, removed: 0 };
+
+    const components = await transaction("components_motorsport_page_sections")
+      .whereIn(
+        "id",
+        links.map((link: any) => link.cmp_id),
       )
-      .map(([key, child]) => [key, componentData(child)]),
-  );
+      .select(["id", "section_key", "index_label", "is_active"]);
+    const componentsById = new Map(
+      components.map((component: any) => [component.id, component]),
+    );
+    const groups = new Map<string, any[]>();
+
+    for (const link of links) {
+      const component = componentsById.get(link.cmp_id);
+      if (!component) continue;
+      const sectionKey =
+        component.section_key ||
+        SECTION_KEYS_BY_LABEL[component.index_label] ||
+        `legacy-${component.id}`;
+      const group = groups.get(sectionKey) ?? [];
+      group.push({ link, component, sectionKey });
+      groups.set(sectionKey, group);
+    }
+
+    const groupsInOrder = [...groups.values()].sort(
+      (a, b) => Number(a[0].link.order) - Number(b[0].link.order),
+    );
+    const removeLinkIds: number[] = [];
+    const removeComponentIds: number[] = [];
+
+    for (const [index, group] of groupsInOrder.entries()) {
+      const selected =
+        group.find((item: any) => item.component.is_active === false) ??
+        group[0];
+      await transaction("components_motorsport_page_sections")
+        .where({ id: selected.component.id })
+        .update({ section_key: selected.sectionKey });
+      await transaction("motorsport_programs_cmps")
+        .where({ id: selected.link.id })
+        .update({ order: index + 1 });
+
+      for (const item of group) {
+        if (item.link.id !== selected.link.id) {
+          removeLinkIds.push(item.link.id);
+          removeComponentIds.push(item.component.id);
+        }
+      }
+    }
+
+    if (removeLinkIds.length) {
+      await transaction("motorsport_programs_cmps")
+        .whereIn("id", removeLinkIds)
+        .del();
+      await transaction("components_motorsport_page_sections")
+        .whereIn("id", removeComponentIds)
+        .del();
+    }
+
+    return { hasSections: true, removed: removeLinkIds.length };
+  });
 }
 
 /** Creates the editable campaign sections when an older FIA record has none. */
@@ -118,44 +180,35 @@ export async function ensureFiaPresentation(strapi: Core.Strapi) {
     uid: string,
   ) => DocumentService;
   const service = documents(PROGRAM_UID);
-  const program = await service.findFirst({
-    filters: { slug: { $eq: PROGRAM_SLUG } },
+  const programs = await strapi.db.connection("motorsport_programs").where({
+    slug: PROGRAM_SLUG,
     locale: "en",
-    status: "published",
-    populate: ["presentationSections", "rundown", "eventRules"],
   });
 
-  if (!program) return;
+  if (!programs.length) return;
 
-  const existingKeys = new Set(
-    (program.presentationSections ?? [])
-      .map((section: any) => section.sectionKey)
-      .filter(Boolean),
-  );
-  const missingSections = sectionDefaults.filter(
-    (section) => !existingKeys.has(section.sectionKey),
-  );
-  if (!missingSections.length) return;
+  for (const program of programs) {
+    const normalized = await normalizePresentationLinks(strapi, program.id);
+    if (normalized.hasSections) {
+      if (normalized.removed) {
+        strapi.log.info(
+          `[motorsport-fia] removed ${normalized.removed} duplicate presentation section links from ${program.published_at ? "published" : "draft"} content`,
+        );
+      }
+      continue;
+    }
 
-  await service.update({
-    documentId: program.documentId,
-    locale: "en",
-    status: "published",
-    data: {
-      presentationSections: [
-        ...(program.presentationSections ?? []).map(componentData),
-        ...missingSections,
-      ],
-      ...(visibleItems(program.rundown)
-        ? { rundown: visibleItems(program.rundown) }
-        : {}),
-      ...(visibleItems(program.eventRules)
-        ? { eventRules: visibleItems(program.eventRules) }
-        : {}),
-    },
-  });
+    await service.update({
+      documentId: program.document_id,
+      locale: "en",
+      status: program.published_at ? "published" : "draft",
+      data: {
+        presentationSections: sectionDefaults,
+      },
+    });
 
-  strapi.log.info(
-    `[motorsport-fia] created editable presentation sections: ${missingSections.map((section) => section.sectionKey).join(", ")}`,
-  );
+    strapi.log.info(
+      `[motorsport-fia] created editable presentation sections for ${program.published_at ? "published" : "draft"} content`,
+    );
+  }
 }

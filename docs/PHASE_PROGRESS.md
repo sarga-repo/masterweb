@@ -10813,6 +10813,8 @@ Status: ✅ Done — 2026-08-28
 ### Files changed
 
 - `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/types/design-system.ts`
+- `frontend-motorsport/src/components/layout/motorsport-footer.tsx`
 - `docs/PHASE_PROGRESS.md`
 
 ### How verified

@@ -72,8 +72,16 @@ export function MotorsportFooter({
                     <li key={`${column.title}-${item.href}`}>
                       <Link
                         href={item.href}
-                        target={item.external ? "_blank" : undefined}
-                        rel={item.external ? "noreferrer" : undefined}
+                        target={
+                          item.external || item.openInNewTab
+                            ? "_blank"
+                            : undefined
+                        }
+                        rel={
+                          item.external || item.openInNewTab
+                            ? "noreferrer"
+                            : undefined
+                        }
                         className="text-sm text-ms-warm-white/62 transition-colors hover:text-ms-warm-white"
                       >
                         {item.label}
@@ -102,11 +110,9 @@ export function MotorsportFooter({
                     alt=""
                     width={20}
                     height={20}
-                    unoptimized={
-                      /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?\//.test(
-                        item.iconUrl,
-                      )
-                    }
+                    unoptimized={/^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?::\d+)?\//.test(
+                      item.iconUrl,
+                    )}
                     className="size-5 object-contain"
                   />
                 ) : null}

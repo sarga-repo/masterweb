@@ -437,6 +437,7 @@ function mapFooterColumnLinks(links: CmsFooterLink[] | undefined) {
     label: link.label.trim(),
     href: link.href.trim(),
     external: link.linkType === "external",
+    openInNewTab: link.openInNewTab ?? false,
   }));
 }
 

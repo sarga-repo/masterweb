@@ -266,7 +266,7 @@ export default async function AboutPage() {
                   </p>
                 ) : null}
                 {profile?.showTitle !== false ? (
-                  <h2 className="ms-heading-section mt-6 max-w-[16ch] text-ms-warm-white lg:max-w-[30ch]">
+                  <h2 className="ms-heading-section mt-6 max-w-[16ch] text-ms-warm-white lg:max-w-[42ch] lg:text-[clamp(2rem,2.35vw,2.75rem)]">
                     {profile?.title ?? "A stage built for velocity."}
                   </h2>
                 ) : null}

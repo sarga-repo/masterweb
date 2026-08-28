@@ -61,7 +61,12 @@ function informationBand(page: any) {
       ].filter(([label, value]) => label != null && value != null && String(label).trim() && String(value).trim()).map(([label, value]) => ({ isActive: true, label: String(label), value: String(value) })),
     };
   }
-  return { isActive: true, title: page.heroTitle || page.title, showMetricGroup: false, metrics: [] };
+  return {
+    isActive: true,
+    title: page.heroTitle || page.title,
+    showMetricGroup: true,
+    metrics: [],
+  };
 }
 
 function singleData(page: any, definition: (typeof PAGE_DEFINITIONS)[number]) {

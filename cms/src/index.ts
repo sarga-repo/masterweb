@@ -21,6 +21,7 @@ import { ensureIjtcPresentation } from "./migrations/motorsport-ijtc-presentatio
 import { ensureFiaPresentation } from "./migrations/motorsport-fia-presentation";
 import { ensureMotorsportTicketsPage } from "./migrations/motorsport-tickets-page";
 import { migrateMotorsportProgramTicketCtas } from "./migrations/motorsport-program-ticket-cta";
+import { ensureMotorsportInformationBandMetrics } from "./migrations/motorsport-information-band-metrics";
 import { ensureFrontendApiTokenPermissions } from "./access-control/api-token-permissions";
 import {
   backfillMotorsportPageRoutes,
@@ -67,6 +68,7 @@ export default {
     await ensureIjtcPresentation(strapi);
     await ensureFiaPresentation(strapi);
     await ensureMotorsportTicketsPage(strapi);
+    await ensureMotorsportInformationBandMetrics(strapi);
     await backfillMotorsportPageRoutes(strapi);
     registerMotorsportRevalidation(strapi);
   },

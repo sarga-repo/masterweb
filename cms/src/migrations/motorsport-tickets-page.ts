@@ -42,10 +42,15 @@ const TICKETS_PAGE_DATA = {
   },
   informationBand: {
     isActive: true,
-    showMetricGroup: false,
+    showMetricGroup: true,
     title: "Your seat. Their secure checkout.",
     description:
       "Sarga Motorsport publishes approved destinations but never stores payment details or runs an internal ticket engine.",
+    metrics: [
+      { isActive: true, label: "Checkout", value: "Partner" },
+      { isActive: true, label: "Payment", value: "External" },
+      { isActive: true, label: "Support", value: "Available" },
+    ],
   },
   featuredTicketSection: section(
     "featured-ticket",

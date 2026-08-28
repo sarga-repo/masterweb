@@ -11061,3 +11061,44 @@ Status: ✅ Done — 2026-08-28
 - The local demo CTA still contains its existing example URL; staging content
   was previously corrected to the approved Loket URL and will retain that
   value after deployment.
+
+## MSR-CMS-UAT-12 — Information-band metrics and homepage editorial layout
+
+Status: ✅ Done — 2026-08-29
+
+### What was done
+
+- Repaired empty About and Tickets `informationBand.metrics` values in both
+  draft and published records without overwriting editor-managed metrics or
+  visibility settings.
+- Kept `showMetricGroup` as the single visibility control and changed new
+  Tickets information bands to default to visible metric data.
+- Changed Homepage Latest News to two large stacked cards on the left and two
+  smaller stacked cards on the right, with shared grid rows so both stacks
+  align vertically.
+- Widened the About `profileSection` title measure and reduced its desktop
+  responsive size so long titles use a more balanced line wrap.
+
+### Files changed
+
+- `cms/src/index.ts`
+- `cms/src/migrations/motorsport-information-band-metrics.ts`
+- `cms/src/migrations/motorsport-page-single-types.ts`
+- `cms/src/migrations/motorsport-tickets-page.ts`
+- `frontend-motorsport/src/app/about/page.tsx`
+- `frontend-motorsport/src/app/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Local Strapi restarted successfully and backfilled three metrics for the
+  English and Indonesian About and Tickets records.
+- Local published CMS API returns `showMetricGroup: true` with three metrics
+  for both pages.
+- Motorsport typecheck, production build, preview-context tests, Markdown
+  tests, CMS TypeScript check, Prettier, and `git diff --check` passed.
+
+### Notes / caveats
+
+- The metric repair is idempotent and only fills an empty metric array; it does
+  not replace non-empty CMS content or force a hidden toggle to visible.

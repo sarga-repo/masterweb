@@ -102,6 +102,10 @@ export default async function HomePage() {
   const eventChildren = buildEventMenuLinks(programs, isPreview);
   const pageAvailable = isCmsPageVisible(data.page.pageAvailability);
   const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
+  const latestNews = [
+    ...(data.featuredArticle ? [data.featuredArticle] : []),
+    ...data.articles,
+  ];
 
   return (
     <>
@@ -326,23 +330,31 @@ export default async function HomePage() {
                     tone="dark"
                   />
 
-                  <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.45fr)_minmax(18rem,.55fr)] lg:gap-6">
-                    {data.featuredArticle ? (
-                      <NewsCard
-                        article={data.featuredArticle}
-                        feature
-                        tone="dark"
-                      />
-                    ) : null}
-                    <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-1">
-                      {data.articles.slice(0, 2).map((article) => (
-                        <NewsCard
-                          key={article.href}
-                          article={article}
-                          tone="dark"
-                        />
-                      ))}
-                    </div>
+                  <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,.65fr)] lg:grid-rows-2 lg:items-start lg:gap-x-6 lg:gap-y-10">
+                    {latestNews.slice(0, 2).map((article, index) => (
+                      <div
+                        key={article.href}
+                        className={
+                          index === 0
+                            ? "lg:col-start-1 lg:row-start-1"
+                            : "lg:col-start-1 lg:row-start-2"
+                        }
+                      >
+                        <NewsCard article={article} feature tone="dark" />
+                      </div>
+                    ))}
+                    {latestNews.slice(2, 4).map((article, index) => (
+                      <div
+                        key={article.href}
+                        className={
+                          index === 0
+                            ? "lg:col-start-2 lg:row-start-1"
+                            : "lg:col-start-2 lg:row-start-2"
+                        }
+                      >
+                        <NewsCard article={article} tone="dark" />
+                      </div>
+                    ))}
                   </div>
 
                   <div className="mt-10 flex justify-end">

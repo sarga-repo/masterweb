@@ -11018,3 +11018,46 @@ Status: ✅ Done — 2026-08-28
 - Staging CMS and Motorsport services run the pushed commit; authenticated
   side-by-side preview verification confirmed that hiding `RX / GUIDE` removes
   it from the frontend iframe while `format` and `rundown` remain visible.
+
+## MSR-CMS-UAT-11 — Dedicated Motorsport Ticket CTA program ownership
+
+Status: ✅ Done — 2026-08-28
+
+### What was done
+
+- Added `Motorsport Ticket CTA.relatedProgram` and changed
+  `Motorsport Program.relatedTicketCtas` to use the dedicated Motorsport CTA
+  collection instead of the generic shared Ticket CTA collection.
+- Added a resilient migration that preserves legacy links when possible and
+  recovers program ownership by event/title identity after schema sync removes
+  the old join table.
+- Added the dedicated CTA to frontend read permissions and kept the public
+  campaign ticket lookup on the single dedicated source of truth.
+- Added a dedicated Content Manager layout with `relatedProgram` immediately
+  after `relatedEvent`.
+
+### Files changed
+
+- `cms/src/api/motorsport-program/content-types/motorsport-program/schema.json`
+- `cms/src/api/motorsport-ticket-cta/content-types/motorsport-ticket-cta/schema.json`
+- `cms/src/migrations/motorsport-program-ticket-cta.ts`
+- `cms/src/migrations/motorsport-program-editor-layout.ts`
+- `cms/src/seed.ts`
+- `cms/types/generated/contentTypes.d.ts`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/lib/preview/affected-routes.ts`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Local Strapi TypeScript check passed.
+- Local Strapi restarted successfully; the migration marker is version 2 and
+  the dedicated CTA relation table contains the FIA CTA-to-program links.
+- Local API returned the published FIA program with its dedicated
+  `relatedTicketCtas` record and returned the CTA with `relatedProgram`.
+
+### Notes / caveats
+
+- The local demo CTA still contains its existing example URL; staging content
+  was previously corrected to the approved Loket URL and will retain that
+  value after deployment.

@@ -3017,8 +3017,8 @@ export interface ApiMotorsportProgramMotorsportProgram
       'api::motorsport-event.motorsport-event'
     >;
     relatedTicketCtas: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::ticket-cta.ticket-cta'
+      'oneToMany',
+      'api::motorsport-ticket-cta.motorsport-ticket-cta'
     >;
     riders: Schema.Attribute.Relation<
       'oneToMany',
@@ -3444,6 +3444,10 @@ export interface ApiMotorsportTicketCtaMotorsportTicketCta
     relatedEvent: Schema.Attribute.Relation<
       'manyToOne',
       'api::motorsport-event.motorsport-event'
+    >;
+    relatedProgram: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::motorsport-program.motorsport-program'
     >;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &

@@ -48,6 +48,7 @@
     "backgroundImage": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
     "backgroundImageMobile": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
     "relatedEvent": { "type": "relation", "relation": "manyToOne", "target": "api::motorsport-event.motorsport-event", "inversedBy": "ticketCtas" },
+    "relatedProgram": { "type": "relation", "relation": "manyToOne", "target": "api::motorsport-program.motorsport-program", "inversedBy": "relatedTicketCtas" },
     "legacySourceDocumentId": { "type": "string", "private": true, "configurable": false }
   }
 }

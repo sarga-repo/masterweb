@@ -39,6 +39,8 @@ const PUBLIC_READ_ACTIONS = [
   "api::partner.partner.findOne",
   "api::ticket-cta.ticket-cta.find",
   "api::ticket-cta.ticket-cta.findOne",
+  "api::motorsport-ticket-cta.motorsport-ticket-cta.find",
+  "api::motorsport-ticket-cta.motorsport-ticket-cta.findOne",
   "api::media-gallery.media-gallery.find",
   "api::media-gallery.media-gallery.findOne",
   // Site pages and Motorsport revamp program content (MSR-2)
@@ -2972,21 +2974,23 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
     }
   }
 
-  // Motorsport ticket CTAs (idempotent by title), linked to their event.
-  const firstMotorsportEvent = (await documents("api::event.event").findFirst({
+  // Motorsport ticket CTAs (idempotent by title), linked to their dedicated
+  // Motorsport event. Generic Ticket CTA remains available for shared and
+  // legacy content, but Motorsport programs use the dedicated collection.
+  const firstMotorsportEvent = (await documents("api::motorsport-event.motorsport-event").findFirst({
     filters: { slug: { $eq: MOTORSPORT_EVENTS[0].slug } },
   })) as { documentId: string } | null;
 
   for (const cta of MOTORSPORT_TICKET_CTAS) {
-    const { relatedEventSlug, ...ctaData } = cta;
-    const existing = await documents("api::ticket-cta.ticket-cta").findFirst({
+    const { relatedEventSlug, siteScope: _siteScope, ...ctaData } = cta;
+    const existing = await documents("api::motorsport-ticket-cta.motorsport-ticket-cta").findFirst({
       filters: { title: { $eq: cta.title } },
     });
     if (!existing) {
-      const relatedEvent = (await documents("api::event.event").findFirst({
+      const relatedEvent = (await documents("api::motorsport-event.motorsport-event").findFirst({
         filters: { slug: { $eq: relatedEventSlug } },
       })) as { documentId: string } | null;
-      await documents("api::ticket-cta.ticket-cta").create({
+      await documents("api::motorsport-ticket-cta.motorsport-ticket-cta").create({
         data: {
           ...ctaData,
           ...(relatedEvent
@@ -3005,7 +3009,7 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
   // first Motorsport CTA with the existing daylight hero artwork only when no
   // artwork has been selected yet; editors can replace it from Media Library.
   const homepageTicketCta = (await documents(
-    "api::ticket-cta.ticket-cta",
+    "api::motorsport-ticket-cta.motorsport-ticket-cta",
   ).findFirst({
     filters: { title: { $eq: "FIA Rallycross World Cup Indonesia 2026 Tickets" } },
     populate: ["image"],
@@ -3017,7 +3021,7 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
       "Red touring race car accelerating through a warm daylight circuit",
     );
     if (ticketArtwork) {
-      await documents("api::ticket-cta.ticket-cta").update({
+      await documents("api::motorsport-ticket-cta.motorsport-ticket-cta").update({
         documentId: homepageTicketCta.documentId,
         data: { image: ticketArtwork.id },
         status: "published",
@@ -3309,7 +3313,7 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         })) as { documentId: string } | null)
       : null;
     const relatedTicket = relatedTicketTitle
-      ? ((await documents("api::ticket-cta.ticket-cta").findFirst({
+      ? ((await documents("api::motorsport-ticket-cta.motorsport-ticket-cta").findFirst({
           filters: { title: { $eq: relatedTicketTitle } },
         })) as { documentId: string } | null)
       : null;
@@ -3390,7 +3394,7 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         },
       })) as { documentId: string } | null;
       const relatedTicket = (await documents(
-        "api::ticket-cta.ticket-cta",
+        "api::motorsport-ticket-cta.motorsport-ticket-cta",
       ).findFirst({
         filters: {
           title: { $eq: fiaCampaignSeed.relatedTicketTitle },

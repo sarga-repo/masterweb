@@ -15,6 +15,8 @@ const NEWS_ARTICLE_KEY =
   "configuration_content_types::api::motorsport-news-article.motorsport-news-article";
 const RIDER_KEY =
   "configuration_content_types::api::motorsport-rider.motorsport-rider";
+const TICKET_CTA_KEY =
+  "configuration_content_types::api::motorsport-ticket-cta.motorsport-ticket-cta";
 const PAGE_SECTION_KEY = "configuration_components::motorsport.page-section";
 const PAGE_SECTION_ITEM_KEY =
   "configuration_components::motorsport.page-section-item";
@@ -279,6 +281,57 @@ const RIDER_EDIT_LAYOUT: LayoutRow[] = [
   [{ name: "seo", size: 12 }],
 ];
 
+// Keep the dedicated Motorsport CTA self-contained and make the ownership
+// fields adjacent: editors can see whether a CTA belongs to an event, a
+// program, or both without hunting through the form.
+const TICKET_CTA_EDIT_LAYOUT: LayoutRow[] = [
+  [
+    { name: "title", size: 6 },
+    { name: "label", size: 6 },
+  ],
+  [
+    { name: "provider", size: 6 },
+    { name: "eyebrow", size: 6 },
+  ],
+  [{ name: "description", size: 12 }],
+  [
+    { name: "eventLabel", size: 6 },
+    { name: "eventText", size: 6 },
+  ],
+  [
+    { name: "providerLabel", size: 6 },
+    { name: "providerText", size: 6 },
+  ],
+  [
+    { name: "partnerLabel", size: 6 },
+    { name: "footerText", size: 6 },
+  ],
+  [
+    { name: "ctaLabel", size: 6 },
+    { name: "ctaType", size: 6 },
+  ],
+  [{ name: "url", size: 12 }],
+  [
+    { name: "embedCode", size: 6 },
+    { name: "embedConfigJson", size: 6 },
+  ],
+  [{ name: "trackingParams", size: 12 }],
+  [
+    { name: "activeFrom", size: 6 },
+    { name: "activeUntil", size: 6 },
+  ],
+  [{ name: "isActive", size: 4 }],
+  [
+    { name: "image", size: 4 },
+    { name: "backgroundImage", size: 4 },
+    { name: "backgroundImageMobile", size: 4 },
+  ],
+  [
+    { name: "relatedEvent", size: 6 },
+    { name: "relatedProgram", size: 6 },
+  ],
+];
+
 function pageEditLayout(sectionNames: string[]): LayoutRow[] {
   return [
     [
@@ -470,6 +523,13 @@ export async function ensureMotorsportProgramEditorLayout(strapi: Core.Strapi) {
     RIDER_KEY,
     RIDER_EDIT_LAYOUT,
     RIDER_EDIT_LAYOUT.slice(0, 4),
+  );
+  await repairEditLayout(
+    strapi,
+    store,
+    TICKET_CTA_KEY,
+    TICKET_CTA_EDIT_LAYOUT,
+    TICKET_CTA_EDIT_LAYOUT,
   );
   for (const page of PAGE_EDIT_LAYOUTS) {
     await repairEditLayout(

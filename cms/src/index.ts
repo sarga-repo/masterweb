@@ -20,6 +20,7 @@ import { backfillMotorsportShowFieldDefaults } from "./migrations/motorsport-sho
 import { ensureIjtcPresentation } from "./migrations/motorsport-ijtc-presentation";
 import { ensureFiaPresentation } from "./migrations/motorsport-fia-presentation";
 import { ensureMotorsportTicketsPage } from "./migrations/motorsport-tickets-page";
+import { migrateMotorsportProgramTicketCtas } from "./migrations/motorsport-program-ticket-cta";
 import { ensureFrontendApiTokenPermissions } from "./access-control/api-token-permissions";
 import {
   backfillMotorsportPageRoutes,
@@ -56,6 +57,7 @@ export default {
     await seedDemoContent(strapi);
     await migrateMotorsportPageSingleTypes(strapi);
     await migrateMotorsportOwnership(strapi);
+    await migrateMotorsportProgramTicketCtas(strapi);
     await ensureMotorsportThemeSettings(strapi);
     await ensureMotorsportProgramEditorLayout(strapi);
     await repairMotorsportContentManagerConfiguration(strapi);

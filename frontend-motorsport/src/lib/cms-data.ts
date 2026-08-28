@@ -123,6 +123,11 @@ export type CmsTicketCta = {
     eventStatus?: string;
     showOnMotorsport?: boolean;
   } | null;
+  relatedProgram?: {
+    title?: string;
+    slug?: string;
+    programStatus?: string;
+  } | null;
 };
 
 export type CmsArticle = {

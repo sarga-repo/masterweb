@@ -6,22 +6,22 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 
 | Phase | Title                                          | Status  | Date       |
 | ----- | ---------------------------------------------- | ------- | ---------- |
-| 1     | Repository restructure                         | ✅ Done | 2026-07-04 |
-| 2     | Shared CMS multisite model                     | ✅ Done | 2026-07-04 |
-| 3     | Motorsport frontend bootstrap                  | ✅ Done | 2026-07-04 |
-| 4     | Motorsport design system                       | ✅ Done | 2026-07-04 |
-| 5     | Motorsport homepage                            | ✅ Done | 2026-07-04 |
-| 6     | Motorsport pages                               | ✅ Done | 2026-07-04 |
-| 7     | Gateway integration                            | ✅ Done | 2026-07-04 |
-| 8     | Forms, ticketing, SEO                          | ✅ Done | 2026-07-04 |
-| 9     | Quality & UAT                                  | ✅ Done | 2026-07-04 |
-| 10    | Deployment & handover                          | ✅ Done | 2026-07-04 |
+| 1     | Repository restructure        | ✅ Done | 2026-07-04 |
+| 2     | Shared CMS multisite model    | ✅ Done | 2026-07-04 |
+| 3     | Motorsport frontend bootstrap | ✅ Done | 2026-07-04 |
+| 4     | Motorsport design system      | ✅ Done | 2026-07-04 |
+| 5     | Motorsport homepage           | ✅ Done | 2026-07-04 |
+| 6     | Motorsport pages              | ✅ Done | 2026-07-04 |
+| 7     | Gateway integration           | ✅ Done | 2026-07-04 |
+| 8     | Forms, ticketing, SEO         | ✅ Done | 2026-07-04 |
+| 9     | Quality & UAT                 | ✅ Done | 2026-07-04 |
+| 10    | Deployment & handover         | ✅ Done | 2026-07-04 |
 | 11    | Ubuntu staging/production environment handover | ✅ Done | 2026-08-17 |
 
 ## Sarga.co Gateway revamp track (`docs/gateway/revamp/`)
 
-| Phase            | Title                                        | Status              | Date       |
-| ---------------- | -------------------------------------------- | ------------------- | ---------- |
+| Phase                 | Title                                                                             | Status              | Date       |
+| --------------------- | --------------------------------------------------------------------------------- | ------------------- | ---------- |
 | GWR-0            | Discovery and specification                  | ✅ Done             | 2026-08-10 |
 | GWR-1            | CMS and information architecture foundations | ✅ Done             | 2026-08-10 |
 | GWR-2            | Typography, tokens, and global shell         | ✅ Done             | 2026-08-10 |
@@ -49,49 +49,49 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 
 ## CMS content coverage and site isolation planning track
 
-| Phase                 | Title                                                                             | Status                  | Date       |
-| --------------------- | --------------------------------------------------------------------------------- | ----------------------- | ---------- |
-| CMS-COV-0             | Repository audit and phased implementation specification                          | ✅ Done                 | 2026-08-12 |
-| CMS-COV-2             | Site-specific Leadership ownership                                                | ✅ Done                 | 2026-08-12 |
-| CMS-COV-3             | Site-specific News root pages                                                     | ✅ Done                 | 2026-08-12 |
-| CMS-COV-4             | Motorsport Event Hub editorial coverage                                           | ✅ Done                 | 2026-08-12 |
-| CMS-COV-5             | Remaining root-page content coverage                                              | ✅ Done                 | 2026-08-12 |
-| CMS-COV-6             | Validation, migration, and handover                                               | 🟡 Awaiting staging     | 2026-08-12 |
-| CMS-COV-7             | Editorial completeness audit and phased specification                             | ✅ Done                 | 2026-08-12 |
-| CMS-COV-8             | Horse Sport editorial completeness implementation                                 | ✅ Done                 | 2026-08-12 |
-| CMS-COV-9             | Media, SEO, and fallback hardening                                                | ✅ Done                 | 2026-08-12 |
-| CMS-COV-10            | Migration, UAT, rollback rehearsal, and handover                                  | 🟡 Awaiting staging     | 2026-08-12 |
-| CMS-COV-11            | Motorsport About capability CMS schema                                            | ✅ Done                 | 2026-08-12 |
-| CMS-COV-12            | Motorsport About capability seed safety                                           | ✅ Done                 | 2026-08-12 |
-| CMS-COV-13            | Motorsport About capability frontend consumer                                     | ✅ Done                 | 2026-08-12 |
-| CMS-COV-14            | Motorsport About capability admin and UAT                                         | 🟡 Awaiting credentials | 2026-08-12 |
-| CMS-COV-15            | Motorsport leadership site-scope isolation                                        | ✅ Done                 | 2026-08-12 |
-| CMS-COV-16            | Motorsport page section seed backfill                                             | ✅ Done                 | 2026-08-12 |
-| CMS-COV-17            | Site Page editor UX and Motorsport SEO assessment                                 | ✅ Done                 | 2026-08-12 |
-| CMS-COV-18            | Motorsport About CMS SEO integration                                              | ✅ Done                 | 2026-08-12 |
-| CMS-COV-19            | Site Page editor guidance                                                         | ✅ Done                 | 2026-08-12 |
-| CMS-COV-20            | Site Page admin UAT and visibility decision                                       | ✅ Done                 | 2026-08-12 |
-| CMS-COV-21            | CMS site workspace UI refinement                                                  | ✅ Done                 | 2026-08-12 |
-| CMS-COV-22            | CMS workspace browser verification and Motorsport icon                            | ✅ Done                 | 2026-08-12 |
-| CMS-COV-23            | CMS workspace permission-render fix                                               | ✅ Done                 | 2026-08-13 |
-| CMS-MSR-UI-0          | Motorsport CMS workspace revamp baseline and specification                        | ✅ Done                 | 2026-08-13 |
-| CMS-MSR-UI-1          | Motorsport CMS workspace logo and visual foundation                               | ✅ Done                 | 2026-08-13 |
-| CMS-MSR-UI-2          | Motorsport CMS workspace hierarchy and task surface                               | ✅ Done                 | 2026-08-13 |
-| CMS-MSR-UI-3          | Motorsport CMS workspace guidance and editor assistance                           | ✅ Done                 | 2026-08-13 |
-| CMS-MSR-UI-4          | Motorsport CMS workspace shell and upgrade hardening                              | ✅ Done                 | 2026-08-13 |
-| CMS-MSR-UI-UX-1       | Motorsport CMS workspace disclosure, scroll, and active-card UX                   | ✅ Done                 | 2026-08-13 |
-| CMS-MSR-UI-UX-2       | Motorsport CMS workspace full-scroll canvas background                            | ✅ Done                 | 2026-08-13 |
-| CMS-MSR-UI-UX-3       | Motorsport CMS theme lock and disclosure icon refinement                          | ✅ Done                 | 2026-08-13 |
-| CMS-MSR-UI-UX-4       | Motorsport CMS direct Site Page workspace entries                                 | ✅ Done                 | 2026-08-13 |
-| MSR-RD6.1             | Motorsport CMS-managed header and footer chrome                                   | ✅ Done                 | 2026-08-13 |
-| CMS-WORKSPACE-UI-1    | Gateway, Horse Sport, and Shared workspace branding and page entries              | ✅ Done                 | 2026-08-13 |
-| CMS-WORKSPACE-UI-2    | Gateway, Horse Sport, and Shared workspace contrast correction                    | ✅ Done                 | 2026-08-13 |
-| MS-CONTACT-1          | Motorsport contact honeypot submission fix                                        | ✅ Done                 | 2026-08-13 |
-| MS-FOOTER-ICON-1      | Motorsport footer social link icons                                               | ✅ Done                 | 2026-08-24 |
-| MSR-VENDOR-2026-08-24 | Vendor meeting action items: chrome, logo, external CTA, i18n, and media guidance | ✅ Done                 | 2026-08-24 |
-| MS-CMS-MANUAL-1       | Sarga Motorsport CMS user manual (MD + PDF)                                       | ✅ Done                 | 2026-08-24 |
-| MS-CMS-MANUAL-2       | CMS manual rebuilt as section-pair atlas (no badges)                              | ✅ Done                 | 2026-08-25 |
-| MSR-CMS-UAT-3         | IJTC presentation hero media wiring                                               | ✅ Done                 | 2026-08-25 |
+| Phase              | Title                                                                | Status                  | Date       |
+| ------------------ | -------------------------------------------------------------------- | ----------------------- | ---------- |
+| CMS-COV-0          | Repository audit and phased implementation specification             | ✅ Done                 | 2026-08-12 |
+| CMS-COV-2          | Site-specific Leadership ownership                                   | ✅ Done                 | 2026-08-12 |
+| CMS-COV-3          | Site-specific News root pages                                        | ✅ Done                 | 2026-08-12 |
+| CMS-COV-4          | Motorsport Event Hub editorial coverage                              | ✅ Done                 | 2026-08-12 |
+| CMS-COV-5          | Remaining root-page content coverage                                 | ✅ Done                 | 2026-08-12 |
+| CMS-COV-6          | Validation, migration, and handover                                  | 🟡 Awaiting staging     | 2026-08-12 |
+| CMS-COV-7          | Editorial completeness audit and phased specification                | ✅ Done                 | 2026-08-12 |
+| CMS-COV-8          | Horse Sport editorial completeness implementation                    | ✅ Done                 | 2026-08-12 |
+| CMS-COV-9          | Media, SEO, and fallback hardening                                   | ✅ Done                 | 2026-08-12 |
+| CMS-COV-10         | Migration, UAT, rollback rehearsal, and handover                     | 🟡 Awaiting staging     | 2026-08-12 |
+| CMS-COV-11         | Motorsport About capability CMS schema                               | ✅ Done                 | 2026-08-12 |
+| CMS-COV-12         | Motorsport About capability seed safety                              | ✅ Done                 | 2026-08-12 |
+| CMS-COV-13         | Motorsport About capability frontend consumer                        | ✅ Done                 | 2026-08-12 |
+| CMS-COV-14         | Motorsport About capability admin and UAT                            | 🟡 Awaiting credentials | 2026-08-12 |
+| CMS-COV-15         | Motorsport leadership site-scope isolation                           | ✅ Done                 | 2026-08-12 |
+| CMS-COV-16         | Motorsport page section seed backfill                                | ✅ Done                 | 2026-08-12 |
+| CMS-COV-17         | Site Page editor UX and Motorsport SEO assessment                    | ✅ Done                 | 2026-08-12 |
+| CMS-COV-18         | Motorsport About CMS SEO integration                                 | ✅ Done                 | 2026-08-12 |
+| CMS-COV-19         | Site Page editor guidance                                            | ✅ Done                 | 2026-08-12 |
+| CMS-COV-20         | Site Page admin UAT and visibility decision                          | ✅ Done                 | 2026-08-12 |
+| CMS-COV-21         | CMS site workspace UI refinement                                     | ✅ Done                 | 2026-08-12 |
+| CMS-COV-22         | CMS workspace browser verification and Motorsport icon               | ✅ Done                 | 2026-08-12 |
+| CMS-COV-23         | CMS workspace permission-render fix                                  | ✅ Done                 | 2026-08-13 |
+| CMS-MSR-UI-0       | Motorsport CMS workspace revamp baseline and specification           | ✅ Done                 | 2026-08-13 |
+| CMS-MSR-UI-1       | Motorsport CMS workspace logo and visual foundation                  | ✅ Done                 | 2026-08-13 |
+| CMS-MSR-UI-2       | Motorsport CMS workspace hierarchy and task surface                  | ✅ Done                 | 2026-08-13 |
+| CMS-MSR-UI-3       | Motorsport CMS workspace guidance and editor assistance              | ✅ Done                 | 2026-08-13 |
+| CMS-MSR-UI-4       | Motorsport CMS workspace shell and upgrade hardening                 | ✅ Done                 | 2026-08-13 |
+| CMS-MSR-UI-UX-1    | Motorsport CMS workspace disclosure, scroll, and active-card UX      | ✅ Done                 | 2026-08-13 |
+| CMS-MSR-UI-UX-2    | Motorsport CMS workspace full-scroll canvas background               | ✅ Done                 | 2026-08-13 |
+| CMS-MSR-UI-UX-3    | Motorsport CMS theme lock and disclosure icon refinement             | ✅ Done                 | 2026-08-13 |
+| CMS-MSR-UI-UX-4    | Motorsport CMS direct Site Page workspace entries                    | ✅ Done                 | 2026-08-13 |
+| MSR-RD6.1          | Motorsport CMS-managed header and footer chrome                      | ✅ Done                 | 2026-08-13 |
+| CMS-WORKSPACE-UI-1 | Gateway, Horse Sport, and Shared workspace branding and page entries | ✅ Done                 | 2026-08-13 |
+| CMS-WORKSPACE-UI-2 | Gateway, Horse Sport, and Shared workspace contrast correction       | ✅ Done                 | 2026-08-13 |
+| MS-CONTACT-1       | Motorsport contact honeypot submission fix                           | ✅ Done                 | 2026-08-13 |
+| MS-FOOTER-ICON-1   | Motorsport footer social link icons                                  | ✅ Done                  | 2026-08-24 |
+| MSR-VENDOR-2026-08-24 | Vendor meeting action items: chrome, logo, external CTA, i18n, and media guidance | ✅ Done | 2026-08-24 |
+| MS-CMS-MANUAL-1    | Sarga Motorsport CMS user manual (MD + PDF)                          | ✅ Done                  | 2026-08-24 |
+| MS-CMS-MANUAL-2    | CMS manual rebuilt as section-pair atlas (no badges)                 | ✅ Done                  | 2026-08-25 |
+| MSR-CMS-UAT-3      | IJTC presentation hero media wiring                                 | ✅ Done                  | 2026-08-25 |
 
 ### MS-CMS-MANUAL-1 — Sarga Motorsport CMS user manual
 
@@ -1690,97 +1690,98 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 
 | Phase               | Title                                                     | Status  | Date       |
 | ------------------- | --------------------------------------------------------- | ------- | ---------- |
-| MSR-0               | Documentation and source alignment                        | ✅ Done | 2026-08-08 |
-| MSR-1               | Discovery and inventory                                   | ✅ Done | 2026-08-08 |
-| MSR-2               | CMS workspace and content model                           | ✅ Done | 2026-08-08 |
-| MSR-3               | Design system recalibration                               | ✅ Done | 2026-08-08 |
-| MSR-4               | Homepage revamp                                           | ✅ Done | 2026-08-08 |
-| MSR-5               | Core pages                                                | ✅ Done | 2026-08-09 |
-| MSR-6               | IJTC program pages                                        | ✅ Done | 2026-08-09 |
-| MSR-7               | FIA Rallycross campaign page                              | ✅ Done | 2026-08-09 |
-| MSR-8               | Migration, QA, and launch readiness                       | ✅ Done | 2026-08-10 |
-| MSR-RD1             | Warm visual redesign audit                                | ✅ Done | 2026-08-09 |
-| MSR-RD2             | Redesign foundations and templates                        | ✅ Done | 2026-08-09 |
-| MSR-RD3             | Global shell and homepage hero                            | ✅ Done | 2026-08-09 |
-| MSR-RD4             | Homepage editorial rebuild                                | ✅ Done | 2026-08-09 |
-| MSR-RD5             | Dedicated page redesign groups                            | ✅ Done | 2026-08-09 |
-| MSR-RD6             | Media, CMS, QA, and handover                              | ✅ Done | 2026-08-10 |
-| MSR-PREVIEW-0       | Preview enrichment feasibility and specification          | ✅ Done | 2026-08-13 |
-| MSR-PREVIEW-1       | Motorsport news draft preview foundation                  | ✅ Done | 2026-08-13 |
-| MSR-PREVIEW-2       | Motorsport Site Pages and Events preview                  | ✅ Done | 2026-08-13 |
-| MSR-PREVIEW-3A      | Motorsport Site chrome preview                            | ✅ Done | 2026-08-14 |
-| MSR-PREVIEW-3B      | Motorsport secondary collection preview                   | ✅ Done | 2026-08-14 |
-| MSR-PREVIEW-3C      | Motorsport cross-route preview validation                 | ✅ Done | 2026-08-14 |
-| MSR-MOCKUP-0        | Vendor mockup audit and specification baseline            | ✅ Done | 2026-08-14 |
-| MSR-MOCKUP-1        | Event dropdown and canonical route contract               | ✅ Done | 2026-08-14 |
-| MSR-MOCKUP-2        | Approved page composition and shared footer               | ✅ Done | 2026-08-14 |
-| MSR-MOCKUP-3        | CMS content, localization, and asset handover             | ✅ Done | 2026-08-14 |
-| MSR-MOCKUP-4        | QA, UAT, and launch handover                              | ✅ Done | 2026-08-14 |
-| MSR-MOCKUP-5        | CMS visibility and vendor gap closure                     | ✅ Done | 2026-08-14 |
-| MSR-MOCKUP-6        | Event dropdown labels and presentation                    | ✅ Done | 2026-08-14 |
-| MSR-MOCKUP-7        | Homepage ticket card CMS section                          | ✅ Done | 2026-08-14 |
-| MSR-MOCKUP-8        | Event dropdown fallback and nav visual fix                | ✅ Done | 2026-08-14 |
-| MSR-MOCKUP-9        | Homepage ticket artwork fetch fix                         | ✅ Done | 2026-08-14 |
-| MSR-CMS-UAT-0       | Preview/live consistency diagnosis and specification      | ✅ Done | 2026-08-15 |
-| MSR-CMS-UAT-1       | CMS credential and fetch-state hardening                  | ✅ Done | 2026-08-15 |
-| MSR-CMS-UAT-2       | Exact Preview document, locale, and status                | ✅ Done | 2026-08-15 |
-| MSR-CMS-UAT-3       | Motorsport route rendering and visibility parity          | ✅ Done | 2026-08-15 |
-| MSR-CMS-UAT-4       | Publish invalidation and live parity                      | ✅ Done | 2026-08-15 |
-| MSR-CMS-UAT-5       | Authenticated cross-page UAT and handover                 | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-0     | Page-model simplification assessment and specifications   | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-1     | Shared component and adapter foundation                   | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-3     | Gallery Single Type and hero cleanup                      | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-2     | Homepage Single Type pilot                                | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-4     | About Single Type                                         | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-5     | Events hub Single Type                                    | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-6     | News hub Single Type                                      | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-7     | Tickets and Merchandise Single Types                      | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-8     | Contact, Partners, and Experience Single Types            | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-9     | Common/detail template presentation contract              | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-10    | RBAC cutover and legacy retirement                        | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-11    | Full UAT and editor handover                              | ✅ Done | 2026-08-15 |
-| MSR-CMS-CLEAN-0A    | CMS/frontend alignment reassessment                       | ✅ Done | 2026-08-23 |
-| MSR-CMS-CLEAN-1A    | Ordered adapter and canonical Information Band follow-up  | ✅ Done | 2026-08-23 |
-| MSR-CMS-CLEAN-2A    | Homepage named CMS coverage follow-up                     | ✅ Done | 2026-08-23 |
-| MSR-CMS-CLEAN-3A    | Gallery legacy-field cleanup follow-up                    | ✅ Done | 2026-08-23 |
-| MSR-CMS-CLEAN-4A    | Canonical source enforcement follow-up                    | ✅ Done | 2026-08-23 |
-| MSR-CMS-CLEAN-5A    | Editorial coverage and strict audit closure               | ✅ Done | 2026-08-23 |
-| MSR-CMS-UAT-6       | Motorsport Single-Type workspace access repair            | ✅ Done | 2026-08-15 |
-| MSR-CMS-UAT-7       | Draft Mode API-token permission repair                    | ✅ Done | 2026-08-15 |
-| MSR-CMS-OWNERSHIP-0 | Motorsport CMS ownership audit and migration contract     | ✅ Done | 2026-08-16 |
-| MSR-CMS-OWNERSHIP-1 | Dedicated collection foundation                           | ✅ Done | 2026-08-16 |
-| MSR-CMS-OWNERSHIP-2 | Idempotent ownership migration                            | ✅ Done | 2026-08-16 |
-| MSR-CMS-OWNERSHIP-3 | Dedicated-first frontend cutover                          | ✅ Done | 2026-08-16 |
-| MSR-CMS-OWNERSHIP-4 | Constrained Single-Type routePath management              | ✅ Done | 2026-08-16 |
-| MSR-CMS-OWNERSHIP-5 | RBAC workspace UAT and editor handover                    | ✅ Done | 2026-08-16 |
-| MSR-CMS-OWNERSHIP-6 | Legacy Motorsport archive                                 | ✅ Done | 2026-08-16 |
-| MSR-CMS-OWNERSHIP-7 | Full ownership UAT and launch handover                    | ✅ Done | 2026-08-16 |
-| MSR-THEME-0         | Vendor palette and preset approval                        | ✅ Done | 2026-08-16 |
-| MSR-THEME-1         | Semantic token foundation                                 | ✅ Done | 2026-08-16 |
-| MSR-THEME-2         | Motorsport CMS theme settings and RBAC                    | ✅ Done | 2026-08-16 |
-| MSR-THEME-3         | Theme runtime, Preview, and live resolution               | ✅ Done | 2026-08-16 |
-| MSR-THEME-4         | Vendor Editorial and Vendor Night presets                 | ✅ Done | 2026-08-16 |
-| MSR-THEME-5         | Full UAT and editor handover                              | ✅ Done | 2026-08-16 |
-| MSR-THEME-REVIEW-1  | Vendor composition and preset differentiation review      | ✅ Done | 2026-08-16 |
-| MSR-THEME-REVIEW-2  | Vendor Editorial light-surface contrast correction        | ✅ Done | 2026-08-16 |
-| MSR-TICKET-CARD-2   | Background-adaptive ticket serration correction           | ✅ Done | 2026-08-21 |
-| MSR-TICKET-CARD-3   | Clean two-part ticket rollback                            | ✅ Done | 2026-08-21 |
-| MSR-MOBILE-NAV-1    | Mobile menu sizing and Event submenu navigation           | ✅ Done | 2026-08-21 |
-| MSR-SURFACE-1       | Vendor Editorial surface sequencer and contrast gate      | ✅ Done | 2026-08-22 |
-| MSR-SURFACE-2       | Vendor Editorial About route surface rhythm               | ✅ Done | 2026-08-22 |
-| MSR-SURFACE-3       | Vendor Editorial News hub and detail rhythm               | ✅ Done | 2026-08-22 |
-| MSR-SURFACE-4       | Vendor Editorial Gallery and Contact rhythm               | ✅ Done | 2026-08-22 |
-| MSR-SURFACE-5       | Vendor Editorial Tickets and FIA campaign rhythm          | ✅ Done | 2026-08-22 |
-| MSR-SURFACE-6       | Vendor Editorial cross-route UAT and handover             | ✅ Done | 2026-08-22 |
-| MSR-SURFACE-IJTC    | Vendor Editorial IJTC hub and programme sub-page rhythm   | ✅ Done | 2026-08-22 |
-| MSR-CMS-OPS-1       | Editorial show-toggle defaults and local operational gate | ✅ Done | 2026-08-23 |
-| MSR-CMS-LIVE-1      | Motorsport saved-draft live Preview MVP                   | ✅ Done | 2026-08-23 |
-| MSR-CMS-LIVE-2      | Motorsport side-by-side CMS and frontend Preview          | ✅ Done | 2026-08-23 |
-| MSR-CMS-LIVE-3      | Integrated Content Manager Preview action                 | ✅ Done | 2026-08-23 |
-| MSR-CMS-LIVE-4      | Dedicated popup preview and collection-entry support      | ✅ Done | 2026-08-23 |
-| MSR-CMS-LIVE-5      | Same-tab integrated Preview behavior                      | ✅ Done | 2026-08-23 |
-| MSR-CMS-LIVE-6      | Responsive mobile editor action toolbar                   | ✅ Done | 2026-08-23 |
-| MSR-CMS-OPS-3       | Staging Motorsport navigation data restoration            | ✅ Done | 2026-08-24 |
+| MSR-0            | Documentation and source alignment                      | ✅ Done        | 2026-08-08 |
+| MSR-1            | Discovery and inventory                                 | ✅ Done        | 2026-08-08 |
+| MSR-2            | CMS workspace and content model                         | ✅ Done        | 2026-08-08 |
+| MSR-3            | Design system recalibration                             | ✅ Done        | 2026-08-08 |
+| MSR-4            | Homepage revamp                                         | ✅ Done        | 2026-08-08 |
+| MSR-5            | Core pages                                              | ✅ Done        | 2026-08-09 |
+| MSR-6            | IJTC program pages                                      | ✅ Done        | 2026-08-09 |
+| MSR-7            | FIA Rallycross campaign page                            | ✅ Done        | 2026-08-09 |
+| MSR-8            | Migration, QA, and launch readiness                     | ✅ Done        | 2026-08-10 |
+| MSR-RD1          | Warm visual redesign audit                              | ✅ Done        | 2026-08-09 |
+| MSR-RD2          | Redesign foundations and templates                      | ✅ Done        | 2026-08-09 |
+| MSR-RD3          | Global shell and homepage hero                          | ✅ Done        | 2026-08-09 |
+| MSR-RD4          | Homepage editorial rebuild                              | ✅ Done        | 2026-08-09 |
+| MSR-RD5          | Dedicated page redesign groups                          | ✅ Done        | 2026-08-09 |
+| MSR-RD6          | Media, CMS, QA, and handover                            | ✅ Done        | 2026-08-10 |
+| MSR-PREVIEW-0    | Preview enrichment feasibility and specification        | ✅ Done        | 2026-08-13 |
+| MSR-PREVIEW-1    | Motorsport news draft preview foundation                | ✅ Done        | 2026-08-13 |
+| MSR-PREVIEW-2    | Motorsport Site Pages and Events preview                | ✅ Done        | 2026-08-13 |
+| MSR-PREVIEW-3A   | Motorsport Site chrome preview                          | ✅ Done        | 2026-08-14 |
+| MSR-PREVIEW-3B   | Motorsport secondary collection preview                 | ✅ Done        | 2026-08-14 |
+| MSR-PREVIEW-3C   | Motorsport cross-route preview validation               | ✅ Done        | 2026-08-14 |
+| MSR-MOCKUP-0     | Vendor mockup audit and specification baseline          | ✅ Done        | 2026-08-14 |
+| MSR-MOCKUP-1     | Event dropdown and canonical route contract             | ✅ Done        | 2026-08-14 |
+| MSR-MOCKUP-2     | Approved page composition and shared footer             | ✅ Done        | 2026-08-14 |
+| MSR-MOCKUP-3     | CMS content, localization, and asset handover           | ✅ Done        | 2026-08-14 |
+| MSR-MOCKUP-4     | QA, UAT, and launch handover                            | ✅ Done        | 2026-08-14 |
+| MSR-MOCKUP-5     | CMS visibility and vendor gap closure                   | ✅ Done        | 2026-08-14 |
+| MSR-MOCKUP-6     | Event dropdown labels and presentation                  | ✅ Done        | 2026-08-14 |
+| MSR-MOCKUP-7     | Homepage ticket card CMS section                        | ✅ Done        | 2026-08-14 |
+| MSR-MOCKUP-8     | Event dropdown fallback and nav visual fix              | ✅ Done        | 2026-08-14 |
+| MSR-MOCKUP-9     | Homepage ticket artwork fetch fix                       | ✅ Done        | 2026-08-14 |
+| MSR-CMS-UAT-0    | Preview/live consistency diagnosis and specification    | ✅ Done        | 2026-08-15 |
+| MSR-CMS-UAT-1    | CMS credential and fetch-state hardening                | ✅ Done        | 2026-08-15 |
+| MSR-CMS-UAT-2    | Exact Preview document, locale, and status              | ✅ Done        | 2026-08-15 |
+| MSR-CMS-UAT-3    | Motorsport route rendering and visibility parity        | ✅ Done        | 2026-08-15 |
+| MSR-CMS-UAT-4    | Publish invalidation and live parity                    | ✅ Done        | 2026-08-15 |
+| MSR-CMS-UAT-5    | Authenticated cross-page UAT and handover               | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-0  | Page-model simplification assessment and specifications | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-1  | Shared component and adapter foundation                 | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-3  | Gallery Single Type and hero cleanup                    | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-2  | Homepage Single Type pilot                              | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-4  | About Single Type                                       | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-5  | Events hub Single Type                                  | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-6  | News hub Single Type                                    | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-7  | Tickets and Merchandise Single Types                    | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-8  | Contact, Partners, and Experience Single Types          | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-9  | Common/detail template presentation contract            | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-10 | RBAC cutover and legacy retirement                      | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-11 | Full UAT and editor handover                            | ✅ Done        | 2026-08-15 |
+| MSR-CMS-CLEAN-0A | CMS/frontend alignment reassessment                    | ✅ Done        | 2026-08-23 |
+| MSR-CMS-CLEAN-1A | Ordered adapter and canonical Information Band follow-up | ✅ Done        | 2026-08-23 |
+| MSR-CMS-CLEAN-2A | Homepage named CMS coverage follow-up                  | ✅ Done        | 2026-08-23 |
+| MSR-CMS-CLEAN-3A | Gallery legacy-field cleanup follow-up                 | ✅ Done        | 2026-08-23 |
+| MSR-CMS-CLEAN-4A | Canonical source enforcement follow-up                 | ✅ Done        | 2026-08-23 |
+| MSR-CMS-CLEAN-5A | Editorial coverage and strict audit closure            | ✅ Done        | 2026-08-23 |
+| MSR-CMS-UAT-6    | Motorsport Single-Type workspace access repair         | ✅ Done        | 2026-08-15 |
+| MSR-CMS-UAT-7    | Draft Mode API-token permission repair                 | ✅ Done        | 2026-08-15 |
+| MSR-CMS-OWNERSHIP-0 | Motorsport CMS ownership audit and migration contract | ✅ Done        | 2026-08-16 |
+| MSR-CMS-OWNERSHIP-1 | Dedicated collection foundation                        | ✅ Done        | 2026-08-16 |
+| MSR-CMS-OWNERSHIP-2 | Idempotent ownership migration                         | ✅ Done        | 2026-08-16 |
+| MSR-CMS-OWNERSHIP-3 | Dedicated-first frontend cutover                      | ✅ Done        | 2026-08-16 |
+| MSR-CMS-OWNERSHIP-4 | Constrained Single-Type routePath management           | ✅ Done        | 2026-08-16 |
+| MSR-CMS-OWNERSHIP-5 | RBAC workspace UAT and editor handover                 | ✅ Done        | 2026-08-16 |
+| MSR-CMS-OWNERSHIP-6 | Legacy Motorsport archive                               | ✅ Done        | 2026-08-16 |
+| MSR-CMS-OWNERSHIP-7 | Full ownership UAT and launch handover                 | ✅ Done        | 2026-08-16 |
+| MSR-THEME-0          | Vendor palette and preset approval                    | ✅ Done        | 2026-08-16 |
+| MSR-THEME-1          | Semantic token foundation                             | ✅ Done        | 2026-08-16 |
+| MSR-THEME-2          | Motorsport CMS theme settings and RBAC                | ✅ Done        | 2026-08-16 |
+| MSR-THEME-3          | Theme runtime, Preview, and live resolution           | ✅ Done        | 2026-08-16 |
+| MSR-THEME-4          | Vendor Editorial and Vendor Night presets             | ✅ Done        | 2026-08-16 |
+| MSR-THEME-5          | Full UAT and editor handover                          | ✅ Done        | 2026-08-16 |
+| MSR-THEME-REVIEW-1   | Vendor composition and preset differentiation review  | ✅ Done        | 2026-08-16 |
+| MSR-THEME-REVIEW-2   | Vendor Editorial light-surface contrast correction    | ✅ Done        | 2026-08-16 |
+| MSR-TICKET-CARD-2    | Background-adaptive ticket serration correction       | ✅ Done        | 2026-08-21 |
+| MSR-TICKET-CARD-3    | Clean two-part ticket rollback                        | ✅ Done        | 2026-08-21 |
+| MSR-MOBILE-NAV-1     | Mobile menu sizing and Event submenu navigation      | ✅ Done        | 2026-08-21 |
+| MSR-SURFACE-1        | Vendor Editorial surface sequencer and contrast gate | ✅ Done        | 2026-08-22 |
+| MSR-SURFACE-2        | Vendor Editorial About route surface rhythm         | ✅ Done        | 2026-08-22 |
+| MSR-SURFACE-3        | Vendor Editorial News hub and detail rhythm         | ✅ Done        | 2026-08-22 |
+| MSR-SURFACE-4        | Vendor Editorial Gallery and Contact rhythm        | ✅ Done        | 2026-08-22 |
+| MSR-SURFACE-5        | Vendor Editorial Tickets and FIA campaign rhythm   | ✅ Done        | 2026-08-22 |
+| MSR-SURFACE-6        | Vendor Editorial cross-route UAT and handover      | ✅ Done        | 2026-08-22 |
+| MSR-SURFACE-IJTC     | Vendor Editorial IJTC hub and programme sub-page rhythm | ✅ Done     | 2026-08-22 |
+| MSR-CMS-OPS-1         | Editorial show-toggle defaults and local operational gate | ✅ Done | 2026-08-23 |
+| MSR-CMS-LIVE-1        | Motorsport saved-draft live Preview MVP                  | ✅ Done | 2026-08-23 |
+| MSR-CMS-LIVE-2        | Motorsport side-by-side CMS and frontend Preview         | ✅ Done | 2026-08-23 |
+| MSR-CMS-LIVE-3        | Integrated Content Manager Preview action                | ✅ Done | 2026-08-23 |
+| MSR-CMS-LIVE-4        | Dedicated popup preview and collection-entry support    | ✅ Done | 2026-08-23 |
+| MSR-CMS-LIVE-5        | Same-tab integrated Preview behavior                     | ✅ Done | 2026-08-23 |
+| MSR-CMS-LIVE-6        | Responsive mobile editor action toolbar                 | ✅ Done | 2026-08-23 |
+| MSR-CMS-OPS-3         | Staging Motorsport navigation data restoration          | ✅ Done | 2026-08-24 |
+| MSR-CMS-UAT-8         | Tickets preview, mobile hero, and News visibility       | ✅ Done | 2026-08-28 |
 
 ### MSR-THEME-REVIEW-1 — Vendor composition and preset differentiation review
 
@@ -10882,3 +10883,49 @@ Status: ✅ Done — 2026-08-28
   Motorsport Program record with slug `fia-rallycross-world-cup-indonesia-2026`.
 - Existing records with no nested Format section continue to use the existing
   frontend fallback cards until the section is added in Content Manager.
+
+## MSR-CMS-UAT-8 — Tickets preview, mobile hero, and News visibility
+
+Status: ✅ Done — 2026-08-28
+
+### What was done
+
+- Added an idempotent CMS bootstrap repair for the missing Motorsport Tickets
+  single-type document so its editor and native Preview action can resolve.
+- Kept the Tickets preview route mapped to `/tickets` and covered it with a
+  preview-path regression assertion.
+- Ensured a configured homepage `mobileImage` is the visible mobile hero
+  artwork and cannot be covered by the desktop video/poster layer.
+- Added canonical `isActive` handling to section visibility checks and legacy
+  migration mapping so News `galleryCtaSection` can be hidden reliably.
+- Added the News hero metric-group visibility control through
+  `hero.showMetricGroup`; the story count remains derived from the editorial
+  feed.
+
+### Files changed
+
+- `cms/src/index.ts`
+- `cms/src/migrations/motorsport-page-single-types.ts`
+- `cms/src/migrations/motorsport-tickets-page.ts`
+- `cms/src/preview/preview-path.test.ts`
+- `frontend-motorsport/src/app/news/page.tsx`
+- `frontend-motorsport/src/components/sections/motorsport-hero.tsx`
+- `frontend-motorsport/src/lib/cms-visibility.ts`
+- `frontend-motorsport/src/lib/cms-visibility.test.ts`
+- `docs/PHASE_PROGRESS.md`
+
+### How verified
+
+- Motorsport typecheck, focused visibility/foundation tests, Markdown tests,
+  and Preview context tests passed.
+- Motorsport production build passed.
+- CMS TypeScript check and Strapi admin build passed.
+- Targeted Prettier checks passed for the frontend changes.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- The Tickets document repair runs only when the English published document is
+  absent; it does not overwrite existing editorial content.
+- The News hero metric group is a single CMS show/hide control. Its number and
+  label remain intentionally derived from the current news feed.

@@ -22,10 +22,10 @@ const PAGE_DEFINITIONS = [
 
 const component = (value: any) => value && typeof value === "object" ? value : null;
 
-function namedSection(section: any) {
+export function namedSection(section: any) {
   if (!section || section.__component !== "shared.page-section") return null;
   return {
-    isActive: section.enabled !== false,
+    isActive: section.isActive !== false && section.enabled !== false,
     showIndex: section.showIndex !== false,
     indexLabel: section.indexLabel,
     showEyebrow: section.showEyebrow !== false,

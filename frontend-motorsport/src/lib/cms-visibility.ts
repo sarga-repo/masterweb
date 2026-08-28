@@ -1,4 +1,5 @@
 export type CmsVisibilitySection = {
+  isActive?: boolean;
   enabled?: boolean;
 };
 
@@ -13,7 +14,7 @@ export type CmsPageAvailabilityFlag = {
 export function isCmsSectionVisible(
   section?: CmsVisibilitySection | null,
 ): boolean {
-  return section?.enabled !== false;
+  return section?.isActive !== false && section?.enabled !== false;
 }
 
 /**

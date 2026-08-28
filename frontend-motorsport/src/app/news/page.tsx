@@ -141,17 +141,22 @@ export default async function NewsPage() {
                   page?.heroImageAlt || "Sarga Motorsport editorial scene"
                 }
               >
-                <div className="border-t border-ms-warm-white/20 pt-5 sm:max-w-xs sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0">
-                  <p className="ms-data-label text-ms-slipstream-teal">
-                    Published archive
-                  </p>
-                  <p className="ms-tabular mt-4 font-display text-6xl leading-none text-ms-warm-white sm:text-7xl">
-                    {String(articles.length).padStart(2, "0")}
-                  </p>
-                  <p className="mt-3 text-sm text-ms-warm-white/58">
-                    Motorsport stories
-                  </p>
-                </div>
+                {page?.hero?.showMetricGroup !== false ? (
+                  <div
+                    data-cms-element-key="news-hero-metric-group"
+                    className="border-t border-ms-warm-white/20 pt-5 sm:max-w-xs sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0"
+                  >
+                    <p className="ms-data-label text-ms-slipstream-teal">
+                      Published archive
+                    </p>
+                    <p className="ms-tabular mt-4 font-display text-6xl leading-none text-ms-warm-white sm:text-7xl">
+                      {String(articles.length).padStart(2, "0")}
+                    </p>
+                    <p className="mt-3 text-sm text-ms-warm-white/58">
+                      Motorsport stories
+                    </p>
+                  </div>
+                ) : null}
               </PageHero>
             </div>
           ) : null}

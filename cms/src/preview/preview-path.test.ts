@@ -86,6 +86,14 @@ test("maps approved Site Pages, canonical program routes, and global records", (
     ),
     "/about",
   );
+  assert.equal(
+    getMotorsportPreviewPath(
+      "api::motorsport-tickets-page.motorsport-tickets-page",
+      { routePath: "/tickets", siteScope: "motorsport" },
+      "en",
+    ),
+    "/tickets",
+  );
 });
 
 test("maps IJTC relation-owned records to their public consumers", () => {

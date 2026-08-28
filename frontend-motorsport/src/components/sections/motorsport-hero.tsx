@@ -138,6 +138,7 @@ export function MotorsportHero({ slides }: MotorsportHeroProps) {
         const anchorClass = ANCHOR_CLASS[slide.subjectAnchor];
         const poster = slide.video?.poster ?? slide.image;
         const mobilePoster = slide.video?.mobilePoster ?? slide.mobileImage;
+        const hasMobileArtwork = Boolean(mobilePoster);
 
         return (
           <div
@@ -158,7 +159,8 @@ export function MotorsportHero({ slides }: MotorsportHeroProps) {
               fill
               priority={index === 0}
               sizes="100vw"
-              className={`object-cover ${anchorClass} ${mobilePoster ? "hidden sm:block" : ""}`}
+              data-cms-image-variant="desktop"
+              className={`object-cover ${anchorClass} ${hasMobileArtwork ? "hidden sm:block" : ""}`}
             />
             {mobilePoster ? (
               <ResilientImage
@@ -167,7 +169,9 @@ export function MotorsportHero({ slides }: MotorsportHeroProps) {
                 fallbackSrc={slide.image}
                 fallbackAlt={slide.imageAlt}
                 fill
+                priority={index === 0}
                 sizes="100vw"
+                data-cms-image-variant="mobile"
                 className={`object-cover sm:hidden ${anchorClass}`}
               />
             ) : null}
@@ -177,7 +181,7 @@ export function MotorsportHero({ slides }: MotorsportHeroProps) {
                 webm={slide.video.webm}
                 poster={typeof poster === "string" ? poster : undefined}
                 paused={userPaused}
-                objectClassName={`object-contain bg-ms-charcoal sm:object-cover ${anchorClass}`}
+                objectClassName={`object-contain bg-ms-charcoal sm:object-cover ${anchorClass} ${hasMobileArtwork ? "hidden sm:block" : ""}`}
               />
             ) : null}
           </div>

@@ -8,6 +8,7 @@ import {
 } from "./cms-visibility.ts";
 
 test("explicit section false hides only that section", () => {
+  assert.equal(isCmsSectionVisible({ isActive: false }), false);
   assert.equal(isCmsSectionVisible({ enabled: false }), false);
   assert.equal(isCmsSectionVisible({ enabled: true }), true);
   assert.equal(isCmsSectionVisible(null), true);

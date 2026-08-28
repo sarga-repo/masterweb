@@ -9,6 +9,24 @@ type DocumentService = {
   update: (params: Record<string, unknown>) => Promise<any>;
 };
 
+function componentData(value: any): any {
+  if (Array.isArray(value)) return value.map(componentData);
+  if (!value || typeof value !== "object") return value;
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([key]) => !["id", "documentId", "createdAt", "updatedAt", "publishedAt", "locale"].includes(key))
+      .map(([key, child]) => [key, componentData(child)]),
+  );
+}
+
+function visibleItems(value: unknown) {
+  if (!Array.isArray(value)) return undefined;
+  return value.map((item) => ({
+    ...componentData(item),
+    isActive: (item as any)?.isActive !== false,
+  }));
+}
+
 /**
  * Restores the original IJTC demo presentation in environments where the
  * programme was seeded before its CMS presentation component was introduced.
@@ -21,7 +39,7 @@ export async function ensureIjtcPresentation(strapi: Core.Strapi) {
     filters: { slug: { $eq: PROGRAM_SLUG } },
     locale: "en",
     status: "published",
-    populate: ["motorsportPresentation"],
+    populate: ["motorsportPresentation", "rundown", "eventRules"],
   });
 
   if (!program || program.motorsportPresentation) return;
@@ -43,6 +61,12 @@ export async function ensureIjtcPresentation(strapi: Core.Strapi) {
     locale: "en",
     status: "published",
     data: {
+      ...(visibleItems(program.rundown)
+        ? { rundown: visibleItems(program.rundown) }
+        : {}),
+      ...(visibleItems(program.eventRules)
+        ? { eventRules: visibleItems(program.eventRules) }
+        : {}),
       motorsportPresentation: {
         routeKey: "ijtc",
         hero: {

@@ -8,6 +8,14 @@ type DocumentService = {
   update: (params: Record<string, unknown>) => Promise<any>;
 };
 
+function visibleItems(value: unknown) {
+  if (!Array.isArray(value)) return undefined;
+  return value.map((item: any) => ({
+    ...componentData(item),
+    isActive: item?.isActive !== false,
+  }));
+}
+
 const sectionDefaults = [
   {
     sectionKey: "format",
@@ -114,7 +122,7 @@ export async function ensureFiaPresentation(strapi: Core.Strapi) {
     filters: { slug: { $eq: PROGRAM_SLUG } },
     locale: "en",
     status: "published",
-    populate: ["presentationSections"],
+    populate: ["presentationSections", "rundown", "eventRules"],
   });
 
   if (!program) return;
@@ -138,6 +146,12 @@ export async function ensureFiaPresentation(strapi: Core.Strapi) {
         ...(program.presentationSections ?? []).map(componentData),
         ...missingSections,
       ],
+      ...(visibleItems(program.rundown)
+        ? { rundown: visibleItems(program.rundown) }
+        : {}),
+      ...(visibleItems(program.eventRules)
+        ? { eventRules: visibleItems(program.eventRules) }
+        : {}),
     },
   });
 

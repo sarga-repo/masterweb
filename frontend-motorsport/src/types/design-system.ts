@@ -186,6 +186,18 @@ export type MotorsportProgram = {
     title: string;
     body?: string;
     media?: MediaSource;
+    items?: Array<{
+      isActive: boolean;
+      sortOrder: number;
+      label?: string;
+      title: string;
+      description?: string;
+      media?: MediaSource;
+      mediaAlt?: string;
+      accent?: "crimson" | "orange" | "yellow" | "teal" | "blue";
+      href?: string;
+      hrefLabel?: string;
+    }>;
   }>;
   informationBand?: MotorsportPageInformationBand | null;
 };

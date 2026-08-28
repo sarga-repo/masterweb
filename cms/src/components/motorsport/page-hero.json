@@ -2,7 +2,7 @@
   "collectionName": "components_motorsport_page_heroes",
   "info": {
     "displayName": "Page Hero",
-    "description": "Reusable Motorsport page hero contract. Layout and overlays remain frontend-owned."
+    "description": "Reusable Motorsport page hero contract. Layout and overlays remain frontend-owned; optional primary and secondary actions are managed here."
   },
   "options": {},
   "config": {
@@ -41,6 +41,36 @@
         "edit": {
           "description": "Controls visibility of the hero metric group. When false, the complete group and its separators are hidden."
         }
+      },
+      "showPrimaryCta": {
+        "edit": {
+          "description": "Show the primary hero action. Set its label, URL, and target below."
+        }
+      },
+      "showSecondaryCta": {
+        "edit": {
+          "description": "Show the secondary hero action. Set its label, URL, and target below."
+        }
+      },
+      "primaryCtaLabel": {
+        "edit": {
+          "description": "Text shown on the primary hero action."
+        }
+      },
+      "primaryCtaUrl": {
+        "edit": {
+          "description": "Primary hero destination. Use a local path such as /tickets or an approved HTTPS URL."
+        }
+      },
+      "secondaryCtaLabel": {
+        "edit": {
+          "description": "Text shown on the secondary hero action."
+        }
+      },
+      "secondaryCtaUrl": {
+        "edit": {
+          "description": "Secondary hero destination. Use a local path, a #section anchor, or an approved HTTPS URL."
+        }
       }
     }
   },
@@ -54,6 +84,8 @@
     "showTitle": { "type": "boolean", "default": true },
     "showDescription": { "type": "boolean", "default": true },
     "showMedia": { "type": "boolean", "default": true },
+    "showPrimaryCta": { "type": "boolean", "default": true },
+    "showSecondaryCta": { "type": "boolean", "default": true },
     "eyebrow": {
       "type": "string",
       "maxLength": 100,
@@ -85,6 +117,28 @@
       "type": "string",
       "maxLength": 180,
       "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "primaryCtaLabel": {
+      "type": "string",
+      "maxLength": 80,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "primaryCtaUrl": { "type": "string" },
+    "primaryCtaTarget": {
+      "type": "enumeration",
+      "enum": ["sameWindow", "newWindow"],
+      "default": "sameWindow"
+    },
+    "secondaryCtaLabel": {
+      "type": "string",
+      "maxLength": 80,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "secondaryCtaUrl": { "type": "string" },
+    "secondaryCtaTarget": {
+      "type": "enumeration",
+      "enum": ["sameWindow", "newWindow"],
+      "default": "sameWindow"
     },
     "showMetricGroup": {
       "type": "boolean",

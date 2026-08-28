@@ -2,10 +2,25 @@
   "collectionName": "components_motorsport_rundown_items",
   "info": {
     "displayName": "Rundown Item",
-    "description": "Public campaign or program schedule item"
+    "description": "Public campaign or program schedule item. Each item can be shown or hidden independently and ordered with sortOrder."
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "isActive": {
+        "edit": {
+          "description": "Show this schedule item on the public campaign page."
+        }
+      },
+      "sortOrder": {
+        "edit": {
+          "description": "Lower numbers appear first in the rundown."
+        }
+      }
+    }
+  },
   "attributes": {
+    "isActive": { "type": "boolean", "default": true, "required": true },
     "dayLabel": { "type": "string", "required": true },
     "dateLabel": { "type": "string" },
     "venue": { "type": "string" },

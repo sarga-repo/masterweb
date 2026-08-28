@@ -2,11 +2,16 @@
   "collectionName": "components_motorsport_page_sections",
   "info": {
     "displayName": "Supporting Presentation Section",
-    "description": "03 — A named supporting section such as Format or Rundown. Use this for section copy, media, CTA, visibility, and order; do not use it for carousel slides."
+    "description": "03 — A named supporting section such as Format, Rundown, or Race-day Guide. Use this for section copy, media, CTA, visibility, and order; do not use it for carousel slides."
   },
   "options": {},
   "config": {
     "metadatas": {
+      "sectionKey": {
+        "edit": {
+          "description": "For the FIA campaign use format, rundown, or race-day-guide. This key connects the CMS section to its matching frontend section."
+        }
+      },
       "showIndex": {
         "edit": {
           "description": "Show the section index label."
@@ -66,14 +71,25 @@
       "required": true
     },
     "showIndex": { "type": "boolean", "default": true },
-    "indexLabel": { "type": "string", "maxLength": 80, "pluginOptions": { "i18n": { "localized": true } } },
+    "indexLabel": {
+      "type": "string",
+      "maxLength": 80,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "showEyebrow": { "type": "boolean", "default": true },
     "showTitle": { "type": "boolean", "default": true },
     "showBody": { "type": "boolean", "default": true },
     "showMedia": { "type": "boolean", "default": true },
     "showCta": { "type": "boolean", "default": true },
-    "supportLabel": { "type": "string", "maxLength": 100, "pluginOptions": { "i18n": { "localized": true } } },
-    "supportBody": { "type": "richtext", "pluginOptions": { "i18n": { "localized": true } } },
+    "supportLabel": {
+      "type": "string",
+      "maxLength": 100,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "supportBody": {
+      "type": "richtext",
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "legalText": {
       "type": "text",
       "maxLength": 300,

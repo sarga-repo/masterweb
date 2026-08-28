@@ -2764,6 +2764,41 @@ select {
 [data-ms-theme="theme-vendor-editorial"]
   .ms-reflected-light-surface
   .ms-rx-format-card
+  > p.text-ms-apex-crimson {
+  color: var(--color-ms-apex-crimson) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .ms-rx-format-card
+  > p.text-ms-ignition-orange {
+  color: var(--color-ms-ignition-orange) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .ms-rx-format-card
+  > p.text-ms-electric-yellow {
+  color: var(--color-ms-electric-yellow) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .ms-rx-format-card
+  > p.text-ms-slipstream-teal {
+  color: var(--color-ms-slipstream-teal) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .ms-rx-format-card
+  > p.text-ms-draftline-blue {
+  color: var(--color-ms-draftline-blue) !important;
+}
+
+[data-ms-theme="theme-vendor-editorial"]
+  .ms-reflected-light-surface
+  .ms-rx-format-card
   .ms-heading-card {
   color: var(--ms-theme-text-on-navy) !important;
 }

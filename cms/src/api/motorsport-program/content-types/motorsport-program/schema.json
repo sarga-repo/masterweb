@@ -5,7 +5,7 @@
     "singularName": "motorsport-program",
     "pluralName": "motorsport-programs",
     "displayName": "Motorsport Program",
-    "description": "Motorsport program and campaign hubs such as IJTC and FIA Rallycross"
+    "description": "Motorsport program and campaign hubs such as IJTC and FIA Rallycross. The FIA Rallycross event detail URL is managed by the program with slug fia-rallycross-world-cup-indonesia-2026."
   },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
@@ -28,7 +28,7 @@
       },
       "presentationSections": {
         "edit": {
-          "description": "04 — Supporting named sections such as Format and Rundown. These are not carousel slides; each item controls its own copy, media, visibility, and order."
+          "description": "04 — Supporting named sections for the FIA campaign. Add or expand sections with sectionKey format, rundown, or race-day-guide. Edit each section's isActive/show* controls and copy; Format cards are managed in the nested items list."
         }
       },
       "eventMenuLabel": {
@@ -38,12 +38,12 @@
       },
       "rundown": {
         "edit": {
-          "description": "05 — Race-day schedule items rendered in the programme rundown."
+          "description": "05 — Race-day schedule items rendered in the programme rundown. Each item has isActive and sortOrder, followed by its day, time, title, and description."
         }
       },
       "eventRules": {
         "edit": {
-          "description": "06 — Sporting rules and do/don't guidance for the programme."
+          "description": "06 — Sporting rules and Do/Do not guidance for the programme. Each item has isActive and sortOrder, followed by its type, title, and description."
         }
       }
     }

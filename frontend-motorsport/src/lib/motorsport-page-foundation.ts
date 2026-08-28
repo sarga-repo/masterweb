@@ -11,12 +11,20 @@ export type CmsPageHero = {
   showTitle?: boolean;
   showDescription?: boolean;
   showMedia?: boolean;
+  showPrimaryCta?: boolean;
+  showSecondaryCta?: boolean;
   eyebrow?: string | null;
   title?: string | null;
   description?: string | null;
   backgroundMedia?: StrapiMedia | null;
   mobileBackgroundMedia?: StrapiMedia | null;
   backgroundAlt?: string | null;
+  primaryCtaLabel?: string | null;
+  primaryCtaUrl?: string | null;
+  primaryCtaTarget?: "sameWindow" | "newWindow" | null;
+  secondaryCtaLabel?: string | null;
+  secondaryCtaUrl?: string | null;
+  secondaryCtaTarget?: "sameWindow" | "newWindow" | null;
   showMetricGroup?: boolean;
   metrics?: CmsInformationBandMetric[] | null;
 };
@@ -72,13 +80,24 @@ export type MotorsportPageHero = {
   showTitle: boolean;
   showDescription: boolean;
   showMedia: boolean;
+  showPrimaryCta: boolean;
+  showSecondaryCta: boolean;
   eyebrow?: string;
   title: string;
   description?: string;
   backgroundMedia?: MotorsportHeroMedia;
   mobileBackgroundMedia?: MotorsportHeroMedia;
+  primaryCta?: MotorsportHeroAction;
+  secondaryCta?: MotorsportHeroAction;
   showMetricGroup: boolean;
   metrics: MotorsportInformationBandMetric[];
+};
+
+export type MotorsportHeroAction = {
+  label: string;
+  href: string;
+  external?: boolean;
+  openInNewTab?: boolean;
 };
 
 export type MotorsportInformationBandMetric = {
@@ -142,6 +161,46 @@ function mapMedia(
     alt: clean(alt) ?? clean(media?.alternativeText),
   };
 }
+
+function mapAction(
+  label?: string | null,
+  href?: string | null,
+  target?: "sameWindow" | "newWindow" | null,
+): MotorsportHeroAction | undefined {
+  const cleanLabel = clean(label);
+  const cleanHref = clean(href);
+  if (!cleanLabel || !cleanHref || cleanHref.startsWith("//")) return undefined;
+  if (cleanHref.startsWith("#")) {
+    return {
+      label: cleanLabel,
+      href: cleanHref,
+      openInNewTab: false,
+    };
+  }
+  if (cleanHref.startsWith("/")) {
+    return {
+      label: cleanLabel,
+      href: cleanHref,
+      openInNewTab: target === "newWindow",
+    };
+  }
+  try {
+    const url = new URL(cleanHref);
+    const isLocalHttp =
+      process.env.NODE_ENV !== "production" &&
+      url.protocol === "http:" &&
+      ["localhost", "127.0.0.1"].includes(url.hostname);
+    if (url.protocol !== "https:" && !isLocalHttp) return undefined;
+    return {
+      label: cleanLabel,
+      href: url.toString(),
+      external: true,
+      openInNewTab: target === "newWindow",
+    };
+  } catch {
+    return undefined;
+  }
+}
 function mapMetrics(
   input?: CmsInformationBandMetric[] | null,
 ): MotorsportInformationBandMetric[] {
@@ -174,6 +233,8 @@ export function mapMotorsportPageHero(
     showTitle: input.showTitle !== false,
     showDescription: input.showDescription !== false,
     showMedia: input.showMedia !== false,
+    showPrimaryCta: input.showPrimaryCta !== false,
+    showSecondaryCta: input.showSecondaryCta !== false,
     eyebrow: clean(input.eyebrow),
     title: clean(input.title) ?? "",
     description: clean(input.description),
@@ -181,6 +242,16 @@ export function mapMotorsportPageHero(
     mobileBackgroundMedia: mapMedia(
       input.mobileBackgroundMedia,
       input.backgroundAlt,
+    ),
+    primaryCta: mapAction(
+      input.primaryCtaLabel,
+      input.primaryCtaUrl,
+      input.primaryCtaTarget,
+    ),
+    secondaryCta: mapAction(
+      input.secondaryCtaLabel,
+      input.secondaryCtaUrl,
+      input.secondaryCtaTarget,
     ),
     showMetricGroup: input.showMetricGroup !== false,
     metrics: input.showMetricGroup === false ? [] : mapMetrics(input.metrics),

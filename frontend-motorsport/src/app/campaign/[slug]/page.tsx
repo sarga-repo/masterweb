@@ -28,6 +28,14 @@ import { createSurfaceSequencer } from "@/lib/surface-sequencer";
 
 type Props = { params: Promise<{ slug: string }> };
 
+const FORMAT_ACCENT_CLASSES = {
+  crimson: "text-ms-apex-crimson",
+  orange: "text-ms-ignition-orange",
+  yellow: "text-ms-electric-yellow",
+  teal: "text-ms-slipstream-teal",
+  blue: "text-ms-draftline-blue",
+} as const;
+
 export function generateStaticParams() {
   return [{ slug: FIA_RALLYCROSS_SLUG }];
 }
@@ -93,6 +101,7 @@ export async function RallycrossCampaignPage() {
       showDescription: item.showBody,
       showMedia: item.showMedia,
       showCta: item.showCta,
+      items: item.items,
     })),
     ...(page?.sections ?? []),
   ];
@@ -112,6 +121,59 @@ export async function RallycrossCampaignPage() {
   const dos = campaign.rules.filter((rule) => rule.type === "do");
   const donts = campaign.rules.filter((rule) => rule.type === "dont");
   const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
+  const formatSection = section("format");
+  const formatItems = formatSection?.items
+    ?.filter((item) => item.isActive !== false && item.title?.trim())
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+  const formatCards = formatItems?.length
+    ? formatItems.map((item, index) => {
+        const title = item.title?.trim() ?? "Item";
+        return {
+          index: item.label?.trim() || String(index + 1).padStart(2, "0"),
+          title,
+          body: item.description?.trim(),
+          tone: FORMAT_ACCENT_CLASSES[item.accent ?? "crimson"],
+        };
+      })
+    : [
+        {
+          index: "01",
+          title: "Launch",
+          body: "Multiple cars attack the first corner together, turning reaction time into instant track position.",
+          tone: "text-ms-apex-crimson",
+        },
+        {
+          index: "02",
+          title: "Joker lap",
+          body: "Every driver must take the alternate route, creating a strategy window that can reverse the running order.",
+          tone: "text-ms-ignition-orange",
+        },
+        {
+          index: "03",
+          title: "Final",
+          body: "The fastest qualifiers advance through elimination races into one decisive World Cup showdown.",
+          tone: "text-ms-slipstream-teal",
+        },
+      ];
+  const primaryHeroCta =
+    hero?.showPrimaryCta !== false
+      ? (hero?.primaryCta ??
+        (ticketCta
+          ? {
+              label: ticketCta.label,
+              href: ticketCta.href,
+              external: ticketCta.external,
+              openInNewTab: ticketCta.external,
+            }
+          : undefined))
+      : undefined;
+  const secondaryHeroCta =
+    hero?.showSecondaryCta !== false
+      ? (hero?.secondaryCta ?? {
+          label: "View the rundown",
+          href: "#rundown",
+        })
+      : undefined;
 
   return (
     <PageShell spectrumSeparators>
@@ -142,23 +204,35 @@ export async function RallycrossCampaignPage() {
           grain
         >
           <div className="flex flex-wrap gap-4">
-            {ticketCta ? (
+            {primaryHeroCta ? (
               <Link
-                href={ticketCta.href}
-                target={ticketCta.external ? "_blank" : undefined}
-                rel={ticketCta.external ? "noopener noreferrer" : undefined}
+                href={primaryHeroCta.href}
+                target={primaryHeroCta.openInNewTab ? "_blank" : undefined}
+                rel={
+                  primaryHeroCta.openInNewTab
+                    ? "noopener noreferrer"
+                    : undefined
+                }
                 className="group inline-flex h-(--ms-control-height) items-center gap-5 bg-ms-apex-crimson px-7 text-[0.66rem] font-black uppercase tracking-[0.16em] text-white transition-colors hover:bg-ms-ignition-orange"
               >
-                {ticketCta.label}
+                {primaryHeroCta.label}
                 <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
               </Link>
             ) : null}
-            <Link
-              href="#rundown"
-              className="inline-flex h-(--ms-control-height) items-center border border-ms-warm-white/40 px-7 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white transition-colors hover:border-ms-warm-white hover:bg-ms-warm-white hover:text-ms-black"
-            >
-              View the rundown
-            </Link>
+            {secondaryHeroCta ? (
+              <Link
+                href={secondaryHeroCta.href}
+                target={secondaryHeroCta.openInNewTab ? "_blank" : undefined}
+                rel={
+                  secondaryHeroCta.openInNewTab
+                    ? "noopener noreferrer"
+                    : undefined
+                }
+                className="inline-flex h-(--ms-control-height) items-center border border-ms-warm-white/40 px-7 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white transition-colors hover:border-ms-warm-white hover:bg-ms-warm-white hover:text-ms-black"
+              >
+                {secondaryHeroCta.label}
+              </Link>
+            ) : null}
           </div>
         </PageHero>
       ) : null}
@@ -229,7 +303,7 @@ export async function RallycrossCampaignPage() {
         >
           <div className="ms-shell">
             <SectionHeader
-              index="RX / FORMAT"
+              index={formatSection?.indexLabel ?? "RX / FORMAT"}
               eyebrow={
                 section("format")?.eyebrow ?? "Mixed surface / Maximum pressure"
               }
@@ -246,26 +320,7 @@ export async function RallycrossCampaignPage() {
               }
             />
             <div className="mt-12 grid gap-px overflow-hidden border border-ms-warm-white/14 bg-ms-warm-white/14 md:grid-cols-3">
-              {[
-                {
-                  index: "01",
-                  title: "Launch",
-                  body: "Multiple cars attack the first corner together, turning reaction time into instant track position.",
-                  tone: "text-ms-apex-crimson",
-                },
-                {
-                  index: "02",
-                  title: "Joker lap",
-                  body: "Every driver must take the alternate route, creating a strategy window that can reverse the running order.",
-                  tone: "text-ms-ignition-orange",
-                },
-                {
-                  index: "03",
-                  title: "Final",
-                  body: "The fastest qualifiers advance through elimination races into one decisive World Cup showdown.",
-                  tone: "text-ms-slipstream-teal",
-                },
-              ].map((item) => (
+              {formatCards.map((item) => (
                 <article
                   key={item.index}
                   className="ms-rx-format-card min-h-72 bg-[#081a3a]/88 p-7 sm:p-9"
@@ -274,9 +329,11 @@ export async function RallycrossCampaignPage() {
                     {item.index}
                   </p>
                   <h3 className="ms-heading-card mt-20">{item.title}</h3>
-                  <p className="mt-4 text-sm leading-6 text-ms-warm-white/62">
-                    {item.body}
-                  </p>
+                  {item.body ? (
+                    <p className="mt-4 text-sm leading-6 text-ms-warm-white/62">
+                      {item.body}
+                    </p>
+                  ) : null}
                 </article>
               ))}
             </div>
@@ -293,7 +350,7 @@ export async function RallycrossCampaignPage() {
         >
           <div className="ms-shell">
             <SectionHeader
-              index="RX / RUNDOWN"
+              index={section("rundown")?.indexLabel ?? "RX / RUNDOWN"}
               eyebrow={section("rundown")?.eyebrow ?? "5-6 December 2026"}
               showIndex={section("rundown")?.showIndex ?? true}
               showEyebrow={section("rundown")?.showEyebrow ?? true}
@@ -323,7 +380,7 @@ export async function RallycrossCampaignPage() {
         >
           <div className="ms-shell">
             <SectionHeader
-              index="RX / GUIDE"
+              index={section("race-day-guide")?.indexLabel ?? "RX / GUIDE"}
               eyebrow={
                 section("race-day-guide")?.eyebrow ?? "Race-day essentials"
               }

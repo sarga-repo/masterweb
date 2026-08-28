@@ -2,10 +2,25 @@
   "collectionName": "components_motorsport_rule_items",
   "info": {
     "displayName": "Event Rule",
-    "description": "Campaign do or don't guidance"
+    "description": "Campaign do or don't guidance. Each item can be shown or hidden independently and ordered with sortOrder."
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "isActive": {
+        "edit": {
+          "description": "Show this guidance item on the public race-day guide."
+        }
+      },
+      "sortOrder": {
+        "edit": {
+          "description": "Lower numbers appear first within the Do or Do not group."
+        }
+      }
+    }
+  },
   "attributes": {
+    "isActive": { "type": "boolean", "default": true, "required": true },
     "ruleType": {
       "type": "enumeration",
       "enum": ["do", "dont"],

@@ -7,12 +7,16 @@ type DocumentService = {
   update: (params: Record<string, unknown>) => Promise<any>;
 };
 
+const PROGRAM_UID = "api::motorsport-program.motorsport-program";
+
 const PAGE_COMPONENTS: Record<string, string[]> = {
   hero: [
     "showEyebrow",
     "showTitle",
     "showDescription",
     "showMedia",
+    "showPrimaryCta",
+    "showSecondaryCta",
     "showMetricGroup",
   ],
   informationBand: [
@@ -29,12 +33,7 @@ const PAGE_COMPONENTS: Record<string, string[]> = {
     "showMedia",
     "showCta",
   ],
-  capabilities: [
-    "showIndex",
-    "showEyebrow",
-    "showTitle",
-    "showDescription",
-  ],
+  capabilities: ["showIndex", "showEyebrow", "showTitle", "showDescription"],
   pageAvailability: ["showNotifyCta"],
 };
 
@@ -165,9 +164,9 @@ function mode(): Mode {
 }
 
 function documentService(strapi: Core.Strapi, uid: string) {
-  return (strapi.documents as unknown as (contentType: string) => DocumentService)(
-    uid,
-  );
+  return (
+    strapi.documents as unknown as (contentType: string) => DocumentService
+  )(uid);
 }
 
 function componentData(value: any): any {
@@ -199,6 +198,31 @@ function missingShowFields(component: any, fields: readonly string[]) {
   );
 }
 
+function backfillProgramSectionDefaults(section: any) {
+  const nextSection = componentData(section);
+  let missing = 0;
+
+  for (const field of PAGE_COMPONENTS.pageSection) {
+    if (section[field] === null || section[field] === undefined) {
+      nextSection[field] = true;
+      missing += 1;
+    }
+  }
+
+  if (Array.isArray(section.items)) {
+    nextSection.items = section.items.map((item: any) => {
+      const nextItem = componentData(item);
+      if (item.isActive === null || item.isActive === undefined) {
+        nextItem.isActive = true;
+        missing += 1;
+      }
+      return nextItem;
+    });
+  }
+
+  return { value: nextSection, missing };
+}
+
 export async function backfillMotorsportShowFieldDefaults(strapi: Core.Strapi) {
   const executionMode = mode();
   if (executionMode === "off") return;
@@ -226,7 +250,10 @@ export async function backfillMotorsportShowFieldDefaults(strapi: Core.Strapi) {
 
       for (const [fieldName, componentName] of componentDefinitions) {
         const component = record[fieldName];
-        const missing = missingShowFields(component, PAGE_COMPONENTS[componentName]);
+        const missing = missingShowFields(
+          component,
+          PAGE_COMPONENTS[componentName],
+        );
         if (!missing.length) continue;
         missingInRecord += missing.length;
         const nextComponent = componentData(component);
@@ -256,6 +283,63 @@ export async function backfillMotorsportShowFieldDefaults(strapi: Core.Strapi) {
         });
         report.updated += 1;
       }
+    }
+  }
+
+  const programRecords = await documentService(strapi, PROGRAM_UID).findMany({
+    locale: "*",
+    status: "draft",
+    populate: "*",
+    limit: 1_000,
+  });
+
+  for (const record of programRecords) {
+    const data: Record<string, unknown> = {};
+    let missingInRecord = 0;
+
+    if (Array.isArray(record.presentationSections)) {
+      const nextSections = record.presentationSections.map((section: any) => {
+        const result = backfillProgramSectionDefaults(section);
+        missingInRecord += result.missing;
+        return result.value;
+      });
+      if (missingInRecord) data.presentationSections = nextSections;
+    }
+
+    for (const fieldName of ["rundown", "eventRules"] as const) {
+      const components = record[fieldName];
+      if (!Array.isArray(components)) continue;
+      const nextComponents = components.map((component: any) => {
+        const nextComponent = componentData(component);
+        if (component.isActive === null || component.isActive === undefined) {
+          nextComponent.isActive = true;
+          missingInRecord += 1;
+        }
+        return nextComponent;
+      });
+      if (
+        nextComponents.some(
+          (component: any, index: number) =>
+            component.isActive !== components[index].isActive,
+        )
+      ) {
+        data[fieldName] = nextComponents;
+      }
+    }
+
+    report.documents += 1;
+    if (!missingInRecord) continue;
+    report.documentsWithMissingValues += 1;
+    report.fieldsMissing += missingInRecord;
+
+    if (executionMode === "apply") {
+      await documentService(strapi, PROGRAM_UID).update({
+        documentId: record.documentId,
+        locale: record.locale || "en",
+        status: "draft",
+        data,
+      });
+      report.updated += 1;
     }
   }
 

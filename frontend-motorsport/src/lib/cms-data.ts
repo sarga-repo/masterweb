@@ -164,6 +164,7 @@ export type CmsAboutCapabilityCard = {
 export type CmsPageSection = {
   __component?: string;
   sectionKey: string;
+  isActive?: boolean;
   enabled?: boolean;
   showIndex?: boolean;
   indexLabel?: string;
@@ -273,6 +274,7 @@ type CmsCampaignSlide = {
 
 type CmsEventRule = {
   id?: number;
+  isActive?: boolean;
   ruleType: "do" | "dont";
   title: string;
   description: string;
@@ -291,6 +293,7 @@ export type CmsSeo = {
 
 type CmsRundownItem = {
   id?: number;
+  isActive?: boolean;
   dayLabel: string;
   dateLabel?: string;
   venue?: string;
@@ -1494,7 +1497,7 @@ function mapProgram(entry: CmsProgram): MotorsportProgram {
     presentationHero,
     presentationSections: (entry.presentationSections ?? []).map((section) => ({
       sectionKey: section.sectionKey,
-      isActive: section.enabled !== false,
+      isActive: section.isActive !== false && section.enabled !== false,
       indexLabel: section.indexLabel,
       showIndex: section.showIndex !== false,
       showEyebrow: section.showEyebrow !== false,
@@ -1506,6 +1509,18 @@ function mapProgram(entry: CmsProgram): MotorsportProgram {
       title: section.title ?? "Section",
       body: section.body,
       ...(section.media ? { media: mediaUrl(section.media.url) } : {}),
+      items: (section.items ?? []).map((item) => ({
+        isActive: item.isActive !== false,
+        sortOrder: item.sortOrder ?? 0,
+        label: item.label,
+        title: item.title ?? "Item",
+        description: item.description,
+        ...(item.media ? { media: mediaUrl(item.media.url) } : {}),
+        mediaAlt: item.mediaAlt,
+        accent: item.accent,
+        href: item.href,
+        hrefLabel: item.hrefLabel,
+      })),
     })),
     informationBand: mapMotorsportInformationBand(
       entry.motorsportPresentation?.informationBand,
@@ -1518,6 +1533,7 @@ function mapProgramSchedule(
   program: MotorsportProgram,
 ): ScheduleEntry[] {
   return [...(entry.rundown ?? [])]
+    .filter((item) => item.isActive !== false)
     .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
     .map((item, index) => {
       const sessions = [
@@ -1554,6 +1570,7 @@ export async function fetchPrograms(
     populate: [
       "heroMedia",
       "presentationSections.media",
+      "presentationSections.items.media",
       "motorsportPresentation.hero.backgroundMedia",
     ],
     filters: SITE_SCOPE_FILTERS,
@@ -1609,6 +1626,7 @@ export async function fetchProgramBySlug(
     populate: [
       "heroMedia",
       "presentationSections.media",
+      "presentationSections.items.media",
       "rundown",
       "motorsportPresentation.hero.backgroundMedia",
       "motorsportPresentation.informationBand.metrics",
@@ -1653,6 +1671,7 @@ export async function fetchCampaignProgramBySlug(
       "relatedTicketCtas.backgroundImageMobile",
       "seo.ogImage",
       "presentationSections.media",
+      "presentationSections.items.media",
       "motorsportPresentation.hero.backgroundMedia",
       "motorsportPresentation.informationBand.metrics",
     ],
@@ -1719,6 +1738,7 @@ export async function fetchCampaignProgramBySlug(
     schedule: mapProgramSchedule(entry, program),
     slides,
     rules: [...(entry.eventRules ?? [])]
+      .filter((rule) => rule.isActive !== false)
       .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
       .map((rule, index) => ({
         id: String(rule.id ?? `${slug}-rule-${index + 1}`),

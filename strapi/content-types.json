@@ -645,7 +645,15 @@
     "pageSection": {
       "fields": {
         "sectionKey": "string",
+        "isActive": "boolean",
         "enabled": "boolean",
+        "showIndex": "boolean",
+        "indexLabel": "string",
+        "showEyebrow": "boolean",
+        "showTitle": "boolean",
+        "showBody": "boolean",
+        "showMedia": "boolean",
+        "showCta": "boolean",
         "eyebrow": "string",
         "title": "string",
         "body": "richtext",
@@ -653,6 +661,7 @@
         "ctaLabel": "string",
         "ctaUrl": "string",
         "ctaTarget": ["sameWindow", "newWindow"],
+        "items": "repeatableComponent:pageSectionItem",
         "theme": ["default", "dark", "light", "accent"]
       }
     },
@@ -666,6 +675,20 @@
         "launchTargetLabel": "string",
         "showNotifyCta": "boolean",
         "noIndexWhileDisabled": "boolean"
+      }
+    },
+    "pageSectionItem": {
+      "fields": {
+        "isActive": "boolean",
+        "sortOrder": "integer",
+        "label": "string",
+        "title": "string",
+        "description": "richtext",
+        "media": "media",
+        "mediaAlt": "string",
+        "accent": ["crimson", "orange", "yellow", "teal", "blue"],
+        "href": "string",
+        "hrefLabel": "string"
       }
     },
     "campaignSlide": {
@@ -760,7 +783,11 @@
     },
     "rundownItem": {
       "fields": {
+        "isActive": "boolean",
         "dayLabel": "string",
+        "dateLabel": "string",
+        "venue": "string",
+        "status": ["upcoming", "live", "completed"],
         "startTime": "time",
         "endTime": "time",
         "title": "string",
@@ -770,6 +797,7 @@
     },
     "ruleItem": {
       "fields": {
+        "isActive": "boolean",
         "ruleType": ["do", "dont"],
         "title": "string",
         "description": "text",
@@ -788,7 +816,7 @@
     "GWR-CMS-5 enables English and Indonesian localization for approved editorial types, adds sourceLocale provenance to operational submissions, and adds a site-scoped localized Top Navigation Item collection. English remains the structural master for stable routes and navigation behavior.",
     "GWR-CMS-9 adds an optional shared Hero Video component to Gateway Homepage, scoped Site Page, and each of the maximum three Motorsport hero slides. MP4/WebM sources retain an image poster and reduced-motion fallback.",
     "GWR-CMS-10 moves the Motorsport homepage Race Control and World of Motorsport sections into the scoped Site Page, with an optional featured Event relation and up to six ordered managed discipline cards.",
-    "This file mirrors the Strapi schemas under cms/src/api and cms/src/components; it is documentation, not the source of truth."
-    ,"MSR-CMS-OWNERSHIP-1 adds dedicated unscoped Motorsport collections. Their source schemas live under cms/src/api/motorsport-*/content-types; their records are copied from legacy scoped collections by the flag-gated ownership migration before frontend cutover."
+    "This file mirrors the Strapi schemas under cms/src/api and cms/src/components; it is documentation, not the source of truth.",
+    "MSR-CMS-OWNERSHIP-1 adds dedicated unscoped Motorsport collections. Their source schemas live under cms/src/api/motorsport-*/content-types; their records are copied from legacy scoped collections by the flag-gated ownership migration before frontend cutover."
   ]
 }

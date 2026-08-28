@@ -10829,3 +10829,53 @@ Status: ✅ Done — 2026-08-28
 - A footer link must remain enabled and have both a label and href to render.
 - Public frontend output reflects the CMS entry after it is saved/published and
   the frontend cache has revalidated.
+
+## MSR-CMS-UAT-7 — Manage FIA Rallycross campaign sections and actions
+
+Status: ✅ Done — 2026-08-28
+
+### What was done
+
+- Connected the FIA Rallycross Format cards to the nested CMS
+  `presentationSections.items` records, including item order, copy, accent, and
+  visibility.
+- Added per-item `isActive` controls to programme rundown rows and race-day
+  guide rules, while retaining section-level `isActive` and `show*` controls.
+- Added CMS-managed primary and secondary hero actions with editable label,
+  URL, target, and show/hide controls; existing ticket and rundown actions
+  remain safe fallbacks for older records.
+- Fixed section `isActive` mapping and Vendor Editorial Format-number contrast.
+- Added metadata and default backfill support so admins can identify the exact
+  CMS fields for `format`, `rundown`, and `race-day-guide`.
+
+### Files changed
+
+- `cms/src/api/motorsport-program/content-types/motorsport-program/schema.json`
+- `cms/src/components/motorsport/page-hero.json`
+- `cms/src/components/motorsport/page-section.json`
+- `cms/src/components/motorsport/rule-item.json`
+- `cms/src/components/motorsport/rundown-item.json`
+- `cms/src/migrations/motorsport-show-field-defaults.ts`
+- `cms/types/generated/`
+- `frontend-motorsport/src/app/campaign/[slug]/page.tsx`
+- `frontend-motorsport/src/app/globals.css`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/lib/motorsport-page-foundation.ts`
+- `frontend-motorsport/src/types/design-system.ts`
+- `strapi/content-types.json`
+
+### How verified
+
+- Motorsport frontend typecheck and Markdown tests passed.
+- CMS TypeScript check and Strapi admin build passed.
+- Motorsport frontend production build passed.
+- Local FIA Rallycross route returned HTTP 200 and rendered the Format,
+  Rundown, and Race-day Guide section markers plus the fallback Format cards.
+- `git diff --check` passed.
+
+### Notes / caveats
+
+- The `/events/fia-rallycross-world-cup-indonesia-2026` route is backed by the
+  Motorsport Program record with slug `fia-rallycross-world-cup-indonesia-2026`.
+- Existing records with no nested Format section continue to use the existing
+  frontend fallback cards until the section is added in Content Manager.

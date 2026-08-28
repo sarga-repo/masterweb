@@ -477,7 +477,7 @@ export interface MotorsportInformationBandMetric
 export interface MotorsportPageHero extends Struct.ComponentSchema {
   collectionName: 'components_motorsport_page_heroes';
   info: {
-    description: 'Reusable Motorsport page hero contract. Layout and overlays remain frontend-owned.';
+    description: 'Reusable Motorsport page hero contract. Layout and overlays remain frontend-owned; optional primary and secondary actions are managed here.';
     displayName: 'Page Hero';
   };
   attributes: {
@@ -525,11 +525,42 @@ export interface MotorsportPageHero extends Struct.ComponentSchema {
         number
       >;
     mobileBackgroundMedia: Schema.Attribute.Media<'images' | 'videos'>;
+    primaryCtaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    primaryCtaTarget: Schema.Attribute.Enumeration<
+      ['sameWindow', 'newWindow']
+    > &
+      Schema.Attribute.DefaultTo<'sameWindow'>;
+    primaryCtaUrl: Schema.Attribute.String;
+    secondaryCtaLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    secondaryCtaTarget: Schema.Attribute.Enumeration<
+      ['sameWindow', 'newWindow']
+    > &
+      Schema.Attribute.DefaultTo<'sameWindow'>;
+    secondaryCtaUrl: Schema.Attribute.String;
     showDescription: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<true>;
     showEyebrow: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     showMedia: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     showMetricGroup: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
+    showPrimaryCta: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showSecondaryCta: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<true>;
     showTitle: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     title: Schema.Attribute.String &
@@ -608,7 +639,7 @@ export interface MotorsportPageInformationBand extends Struct.ComponentSchema {
 export interface MotorsportPageSection extends Struct.ComponentSchema {
   collectionName: 'components_motorsport_page_sections';
   info: {
-    description: '03 \u2014 A named supporting section such as Format or Rundown. Use this for section copy, media, CTA, visibility, and order; do not use it for carousel slides.';
+    description: '03 \u2014 A named supporting section such as Format, Rundown, or Race-day Guide. Use this for section copy, media, CTA, visibility, and order; do not use it for carousel slides.';
     displayName: 'Supporting Presentation Section';
   };
   attributes: {
@@ -779,11 +810,14 @@ export interface MotorsportPageSectionItem extends Struct.ComponentSchema {
 export interface MotorsportRuleItem extends Struct.ComponentSchema {
   collectionName: 'components_motorsport_rule_items';
   info: {
-    description: "Campaign do or don't guidance";
+    description: "Campaign do or don't guidance. Each item can be shown or hidden independently and ordered with sortOrder.";
     displayName: 'Event Rule';
   };
   attributes: {
     description: Schema.Attribute.Text & Schema.Attribute.Required;
+    isActive: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     ruleType: Schema.Attribute.Enumeration<['do', 'dont']> &
       Schema.Attribute.Required;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
@@ -794,7 +828,7 @@ export interface MotorsportRuleItem extends Struct.ComponentSchema {
 export interface MotorsportRundownItem extends Struct.ComponentSchema {
   collectionName: 'components_motorsport_rundown_items';
   info: {
-    description: 'Public campaign or program schedule item';
+    description: 'Public campaign or program schedule item. Each item can be shown or hidden independently and ordered with sortOrder.';
     displayName: 'Rundown Item';
   };
   attributes: {
@@ -802,6 +836,9 @@ export interface MotorsportRundownItem extends Struct.ComponentSchema {
     dayLabel: Schema.Attribute.String & Schema.Attribute.Required;
     description: Schema.Attribute.Text;
     endTime: Schema.Attribute.Time;
+    isActive: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     startTime: Schema.Attribute.Time;
     status: Schema.Attribute.Enumeration<['upcoming', 'live', 'completed']> &

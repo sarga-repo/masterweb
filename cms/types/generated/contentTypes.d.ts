@@ -2905,7 +2905,7 @@ export interface ApiMotorsportProgramMotorsportProgram
   extends Struct.CollectionTypeSchema {
   collectionName: 'motorsport_programs';
   info: {
-    description: 'Motorsport program and campaign hubs such as IJTC and FIA Rallycross';
+    description: 'Motorsport program and campaign hubs such as IJTC and FIA Rallycross. The FIA Rallycross event detail URL is managed by the program with slug fia-rallycross-world-cup-indonesia-2026.';
     displayName: 'Motorsport Program';
     pluralName: 'motorsport-programs';
     singularName: 'motorsport-program';

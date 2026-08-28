@@ -1,4 +1,5 @@
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
+import { MarkdownContent } from "@/components/content/markdown-content";
 
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { RiderPortrait } from "@/components/ui/rider-portrait";
@@ -90,9 +91,10 @@ export function RiderProfileCard({
             </div>
           </dl>
           {rider.bio && !compact ? (
-            <p className="mt-6 text-sm leading-7 text-ms-warm-white/58">
-              {rider.bio}
-            </p>
+            <MarkdownContent
+              value={rider.bio}
+              className="ms-rich-text mt-6 text-sm leading-7 text-ms-warm-white/58"
+            />
           ) : null}
           <span className="mt-auto flex items-center gap-3 pt-7 text-[0.62rem] font-black uppercase tracking-[0.14em] text-ms-electric-yellow">
             View profile

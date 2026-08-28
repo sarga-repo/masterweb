@@ -2274,183 +2274,183 @@ select {
   .ms-table tbody tr:hover {
     background: rgb(255 249 238 / 0.035);
   }
+}
 
-  .ms-rich-text {
-    display: flow-root;
-  }
+.ms-rich-text {
+  display: flow-root;
+}
 
-  .ms-rich-text > :first-child {
-    margin-top: 0;
-  }
+.ms-rich-text > :first-child {
+  margin-top: 0;
+}
 
-  .ms-rich-text > :last-child {
-    margin-bottom: 0;
-  }
+.ms-rich-text > :last-child {
+  margin-bottom: 0;
+}
 
-  .ms-rich-text :is(h1, h2, h3, h4, h5, h6) {
-    margin: 2.25rem 0 0.75rem;
-    color: inherit;
-    font-family: var(--font-display), sans-serif;
-    font-weight: 800;
-    line-height: 1.08;
-    letter-spacing: -0.025em;
-  }
+.ms-rich-text :is(h1, h2, h3, h4, h5, h6) {
+  margin: 2.25rem 0 0.75rem;
+  color: inherit;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
 
-  .ms-rich-text h1 {
-    font-size: clamp(2rem, 4vw, 3.75rem);
-  }
+.ms-rich-text h1 {
+  font-size: clamp(2rem, 4vw, 3.75rem);
+}
 
-  .ms-rich-text h2 {
-    font-size: clamp(1.75rem, 3vw, 3rem);
-  }
+.ms-rich-text h2 {
+  font-size: clamp(1.75rem, 3vw, 3rem);
+}
 
-  .ms-rich-text h3 {
-    font-size: clamp(1.4rem, 2.2vw, 2.25rem);
-  }
+.ms-rich-text h3 {
+  font-size: clamp(1.4rem, 2.2vw, 2.25rem);
+}
 
-  .ms-rich-text :is(h4, h5, h6) {
-    font-size: 1.35rem;
-  }
+.ms-rich-text :is(h4, h5, h6) {
+  font-size: 1.35rem;
+}
 
-  .ms-rich-text > p {
-    margin: 0 0 1.75rem;
-  }
+.ms-rich-text > p {
+  margin: 0 0 1.75rem;
+}
 
-  .ms-rich-text :is(ul, ol) {
-    margin: 0 0 1.75rem;
-    padding-left: 1.5rem;
-  }
+.ms-rich-text :is(ul, ol) {
+  margin: 0 0 1.75rem;
+  padding-left: 1.5rem;
+}
 
-  .ms-rich-text-table-wrap {
-    margin: 2rem 0;
-    overflow-x: auto;
-    border: 1px solid rgb(255 249 238 / 0.18);
-  }
+.ms-rich-text-table-wrap {
+  margin: 2rem 0;
+  overflow-x: auto;
+  border: 1px solid rgb(255 249 238 / 0.18);
+}
 
-  .ms-rich-text table {
-    width: 100%;
-    min-width: 38rem;
-    border-collapse: collapse;
-    font-size: 0.92em;
-    line-height: 1.5;
-  }
+.ms-rich-text table {
+  width: 100%;
+  min-width: 38rem;
+  border-collapse: collapse;
+  font-size: 0.92em;
+  line-height: 1.5;
+}
 
-  .ms-rich-text :is(th, td) {
-    border-bottom: 1px solid rgb(255 249 238 / 0.14);
-    padding: 0.85rem 1rem;
-    vertical-align: top;
-  }
+.ms-rich-text :is(th, td) {
+  border-bottom: 1px solid rgb(255 249 238 / 0.14);
+  padding: 0.85rem 1rem;
+  vertical-align: top;
+}
 
-  .ms-rich-text th {
-    background: #afaca4;
-    color: inherit;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-  }
+.ms-rich-text th {
+  background: #afaca4;
+  color: inherit;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
 
-  .ms-rich-text tbody tr:nth-child(even) {
-    background: #afaca438;
-  }
+.ms-rich-text tbody tr:nth-child(even) {
+  background: #afaca438;
+}
 
-  .ms-rich-text tbody tr:last-child td {
-    border-bottom: 0;
-  }
+.ms-rich-text tbody tr:last-child td {
+  border-bottom: 0;
+}
 
-  .ms-rich-text ul {
-    list-style: disc;
-  }
+.ms-rich-text ul {
+  list-style: disc;
+}
 
-  .ms-rich-text ol {
-    list-style: decimal;
-  }
+.ms-rich-text ol {
+  list-style: decimal;
+}
 
-  .ms-rich-text li {
-    padding-left: 0.35rem;
-  }
+.ms-rich-text li {
+  padding-left: 0.35rem;
+}
 
-  .ms-rich-text li + li {
-    margin-top: 0.4rem;
-  }
+.ms-rich-text li + li {
+  margin-top: 0.4rem;
+}
 
-  .ms-rich-text blockquote {
-    margin: 2rem 0;
-    border-left: 0.25rem solid var(--ms-theme-accent-orange, #ff6b00);
-    padding: 0.25rem 0 0.25rem 1.25rem;
-    color: inherit;
-    font-style: italic;
-  }
+.ms-rich-text blockquote {
+  margin: 2rem 0;
+  border-left: 0.25rem solid var(--ms-theme-accent-orange, #ff6b00);
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  color: inherit;
+  font-style: italic;
+}
 
-  .ms-rich-text blockquote > :last-child {
-    margin-bottom: 0;
-  }
+.ms-rich-text blockquote > :last-child {
+  margin-bottom: 0;
+}
 
-  .ms-rich-text a {
-    color: var(--ms-theme-accent-orange, #ff6b00);
-    text-decoration: underline;
-    text-decoration-thickness: 0.1em;
-    text-underline-offset: 0.2em;
-    transition: color 180ms ease;
-  }
+.ms-rich-text a {
+  color: var(--ms-theme-accent-orange, #ff6b00);
+  text-decoration: underline;
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.2em;
+  transition: color 180ms ease;
+}
 
-  .ms-rich-text a:hover {
-    color: var(--ms-theme-accent-crimson, #e8192c);
-  }
+.ms-rich-text a:hover {
+  color: var(--ms-theme-accent-crimson, #e8192c);
+}
 
-  .ms-rich-text :not(pre) > code {
-    border: 1px solid rgb(255 249 238 / 0.2);
-    border-radius: 0.25rem;
-    background: rgb(0 0 0 / 0.24);
-    padding: 0.12em 0.35em;
-    font-family:
-      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-      monospace;
-    font-size: 0.9em;
-  }
+.ms-rich-text :not(pre) > code {
+  border: 1px solid rgb(255 249 238 / 0.2);
+  border-radius: 0.25rem;
+  background: rgb(0 0 0 / 0.24);
+  padding: 0.12em 0.35em;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 0.9em;
+}
 
-  .ms-rich-text pre {
-    margin: 2rem 0;
-    overflow-x: auto;
-    border: 1px solid rgb(255 249 238 / 0.18);
-    border-radius: 0.25rem;
-    background: rgb(7 26 61 / 0.92);
-    padding: 1.25rem 1.5rem;
-    color: var(--ms-text-on-dark-primary, #fff9ee);
-    font-family:
-      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-      monospace;
-    font-size: 0.9em;
-    line-height: 1.65;
-    white-space: pre;
-  }
+.ms-rich-text pre {
+  margin: 2rem 0;
+  overflow-x: auto;
+  border: 1px solid rgb(255 249 238 / 0.18);
+  border-radius: 0.25rem;
+  background: rgb(7 26 61 / 0.92);
+  padding: 1.25rem 1.5rem;
+  color: var(--ms-text-on-dark-primary, #fff9ee);
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 0.9em;
+  line-height: 1.65;
+  white-space: pre;
+}
 
-  .ms-rich-text pre code {
-    font: inherit;
-  }
+.ms-rich-text pre code {
+  font: inherit;
+}
 
-  .ms-rich-text figure {
-    margin: 2rem 0;
-  }
+.ms-rich-text figure {
+  margin: 2rem 0;
+}
 
-  .ms-rich-text figure img {
-    display: block;
-    width: 100%;
-    height: auto;
-    border: 1px solid rgb(255 249 238 / 0.18);
-  }
+.ms-rich-text figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgb(255 249 238 / 0.18);
+}
 
-  .ms-rich-text figcaption {
-    margin-top: 0.6rem;
-    color: inherit;
-    font-size: 0.78em;
-    line-height: 1.5;
-    opacity: 0.7;
-  }
+.ms-rich-text figcaption {
+  margin-top: 0.6rem;
+  color: inherit;
+  font-size: 0.78em;
+  line-height: 1.5;
+  opacity: 0.7;
+}
 
-  .ms-rich-text > hr {
-    margin: 2.5rem 0;
-    border: 0;
-    border-top: 1px solid rgb(255 249 238 / 0.18);
-  }
+.ms-rich-text > hr {
+  margin: 2.5rem 0;
+  border: 0;
+  border-top: 1px solid rgb(255 249 238 / 0.18);
 }
 
 .ms-heat-field {

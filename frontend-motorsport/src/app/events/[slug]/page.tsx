@@ -12,6 +12,7 @@ import {
   StatusChip,
   TicketCtaPanel,
 } from "@/components";
+import { MarkdownContent } from "@/components/content/markdown-content";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import {
   fetchEventBySlug,
@@ -275,7 +276,10 @@ export default async function EventDetailPage({ params }: Props) {
             />
             <div className="mt-10 max-w-3xl space-y-6 text-lg leading-8 text-ms-warm-white/72">
               {event.description ? (
-                <p>{event.description}</p>
+                <MarkdownContent
+                  value={event.description}
+                  className="ms-rich-text"
+                />
               ) : (
                 <p>
                   Full event details, schedule, and visitor information will be

@@ -1,4 +1,5 @@
 import { LocaleLink } from "@/components/i18n/locale-link";
+import { MarkdownContent } from "@/components/content/markdown-content";
 import { ResilientImage } from "@/components/ui/resilient-image";
 import type { MotorsportNamedPageSection } from "@/lib/motorsport-page-foundation";
 
@@ -18,16 +19,23 @@ export function MotorsportPageSection({ section }: MotorsportPageSectionProps) {
       <div className="ms-shell grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,.6fr)] lg:items-center">
         <div>
           {section.showIndex && section.indexLabel ? (
-            <p className="ms-kicker text-ms-ignition-orange">{section.indexLabel}</p>
+            <p className="ms-kicker text-ms-ignition-orange">
+              {section.indexLabel}
+            </p>
           ) : null}
           {section.showEyebrow && section.eyebrow ? (
-            <p className="ms-kicker mt-4 text-ms-electric-yellow">{section.eyebrow}</p>
+            <p className="ms-kicker mt-4 text-ms-electric-yellow">
+              {section.eyebrow}
+            </p>
           ) : null}
           {section.showTitle ? (
             <h2 className="ms-heading-section mt-4">{section.title}</h2>
           ) : null}
           {section.showBody && section.body ? (
-            <p className="mt-5 max-w-2xl leading-7">{section.body}</p>
+            <MarkdownContent
+              value={section.body}
+              className="ms-rich-text mt-5 max-w-2xl leading-7"
+            />
           ) : null}
           {section.showCta && section.ctaLabel && section.ctaUrl ? (
             <LocaleLink

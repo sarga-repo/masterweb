@@ -1,4 +1,5 @@
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
+import { MarkdownContent } from "@/components/content/markdown-content";
 
 import { ArrowUpRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
@@ -52,9 +53,10 @@ export function MerchandiseCard({
       </div>
       <h2 className="ms-heading-card mt-6">{item.title}</h2>
       {item.description ? (
-        <p className="mt-4 text-sm leading-7 text-ms-warm-white/55">
-          {item.description}
-        </p>
+        <MarkdownContent
+          value={item.description}
+          className="ms-rich-text mt-4 text-sm leading-7 text-ms-warm-white/55"
+        />
       ) : null}
       {item.priceLabel ? (
         <p className="ms-data-label mt-5 text-ms-ignition-orange">

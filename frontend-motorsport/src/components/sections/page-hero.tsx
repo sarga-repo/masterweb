@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { MarkdownContent } from "@/components/content/markdown-content";
 import { ResilientImage } from "@/components/ui/resilient-image";
 import type { MediaSource } from "@/types/design-system";
 
@@ -166,9 +167,10 @@ export function PageHero({
           <h1 className="ms-heading-page ms-animate-stagger-2 mt-6">{title}</h1>
         ) : null}
         {showDescription && description ? (
-          <p className="ms-animate-stagger-3 mt-6 max-w-2xl text-lg leading-8 text-ms-warm-white/60">
-            {description}
-          </p>
+          <MarkdownContent
+            value={description}
+            className="ms-rich-text ms-animate-stagger-3 mt-6 max-w-2xl text-lg leading-8 text-ms-warm-white/60"
+          />
         ) : null}
         {children ? (
           <div className="ms-animate-stagger-4 mt-8">{children}</div>

@@ -10,6 +10,7 @@ import {
   SectionHeader,
   TicketCtaPanel,
 } from "@/components";
+import { MarkdownContent } from "@/components/content/markdown-content";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import {
   fetchEvents,
@@ -278,10 +279,13 @@ export default async function TicketsPage() {
                   <span className="ms-data-label text-ms-warm-white/42">
                     Ticket support
                   </span>
-                  <p className="mt-6 text-base leading-7 text-ms-warm-white/60">
-                    {info?.body ??
-                      "Need help with your ticket? Contact our support team for event-specific inquiries, group bookings, or accessibility requests."}
-                  </p>
+                  <MarkdownContent
+                    value={
+                      info?.body ??
+                      "Need help with your ticket? Contact our support team for event-specific inquiries, group bookings, or accessibility requests."
+                    }
+                    className="ms-rich-text mt-6 text-base leading-7 text-ms-warm-white/60"
+                  />
                   <Link
                     href={
                       info?.secondaryCtaUrl?.startsWith("/")

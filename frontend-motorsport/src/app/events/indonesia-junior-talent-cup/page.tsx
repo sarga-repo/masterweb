@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { InformationBand, PageHero, SectionHeader } from "@/components";
+import { MarkdownContent } from "@/components/content/markdown-content";
 import { ArrowRightIcon, ArrowUpRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
 import { notFound } from "next/navigation";
@@ -168,9 +169,10 @@ export default async function IjtcOverviewPage() {
                 </span>
                 <div className="mt-auto">
                   <h2 className="ms-heading-card">{item.title}</h2>
-                  <p className="mt-4 max-w-sm text-sm leading-6 text-ms-warm-white/55">
-                    {item.description}
-                  </p>
+                  <MarkdownContent
+                    value={item.description}
+                    className="ms-rich-text mt-4 max-w-sm text-sm leading-6 text-ms-warm-white/55"
+                  />
                   <ArrowUpRightIcon className="mt-6 size-5 text-ms-slipstream-teal transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                 </div>
               </Link>

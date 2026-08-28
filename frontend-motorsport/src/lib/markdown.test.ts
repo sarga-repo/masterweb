@@ -60,3 +60,10 @@ test("allows web and local URLs while rejecting executable protocols", () => {
   assert.equal(safeMarkdownUrl("javascript:alert(1)"), undefined);
   assert.equal(safeMarkdownUrl("data:text/html,<script>"), undefined);
 });
+
+test("keeps blank-line paragraphs as separate content blocks", () => {
+  assert.deepEqual(parseMarkdown("First paragraph.\n\nSecond paragraph."), [
+    { type: "paragraph", value: "First paragraph." },
+    { type: "paragraph", value: "Second paragraph." },
+  ]);
+});

@@ -1,3 +1,4 @@
+import { MarkdownContent } from "@/components/content/markdown-content";
 import type { ScheduleEntry } from "@/types/design-system";
 
 type ScheduleCardProps = {
@@ -32,9 +33,10 @@ export function ScheduleCard({ entry }: ScheduleCardProps) {
           </div>
           <h3 className="ms-heading-card mt-4">{entry.title}</h3>
           {entry.description ? (
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-ms-warm-white/58">
-              {entry.description}
-            </p>
+            <MarkdownContent
+              value={entry.description}
+              className="ms-rich-text mt-4 max-w-2xl text-sm leading-6 text-ms-warm-white/58"
+            />
           ) : null}
         </div>
         {entry.sessions?.length ? (

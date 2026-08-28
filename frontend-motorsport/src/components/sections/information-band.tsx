@@ -1,3 +1,5 @@
+import { MarkdownContent } from "@/components/content/markdown-content";
+
 type InformationBandItem = {
   label: string;
   value: string;
@@ -45,9 +47,10 @@ export function InformationBand({
             <h2 className="ms-heading-section mt-4 max-w-4xl">{title}</h2>
           ) : null}
           {showDescription && description ? (
-            <p className="mt-5 max-w-2xl leading-7 text-ms-warm-white/72">
-              {description}
-            </p>
+            <MarkdownContent
+              value={description}
+              className="ms-rich-text mt-5 max-w-2xl leading-7 text-ms-warm-white/72"
+            />
           ) : null}
         </div>
         {visibleItems.length > 0 ? (

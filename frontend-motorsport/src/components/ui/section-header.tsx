@@ -1,3 +1,5 @@
+import { MarkdownContent } from "@/components/content/markdown-content";
+
 type SectionHeaderProps = {
   eyebrow?: string;
   title?: string;
@@ -81,11 +83,10 @@ export function SectionHeader({
               {descriptionLabel}
             </span>
           ) : null}
-          <p
-            className={`mt-4 text-base leading-7 sm:text-lg ${warm ? "text-ms-charcoal" : light ? "text-ms-ink-700" : "text-ms-warm-white/62"}`}
-          >
-            {description}
-          </p>
+          <MarkdownContent
+            value={description}
+            className={`ms-rich-text mt-4 text-base leading-7 sm:text-lg ${warm ? "text-ms-charcoal" : light ? "text-ms-ink-700" : "text-ms-warm-white/62"}`}
+          />
         </div>
       ) : null}
     </header>

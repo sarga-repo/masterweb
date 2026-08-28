@@ -9,6 +9,7 @@ import {
   PageShell,
   SectionHeader,
 } from "@/components";
+import { MarkdownContent } from "@/components/content/markdown-content";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
 import {
@@ -267,13 +268,14 @@ export default async function AboutPage() {
                   </h2>
                 ) : null}
                 {profile?.showBody !== false ? (
-                  <p className="mt-8 max-w-3xl text-lg leading-8 text-ms-warm-white/72">
-                    {sectionBody(
+                  <MarkdownContent
+                    value={sectionBody(
                       page?.sections,
                       "profile",
                       "Sarga Motorsport is the dedicated racing property within the Sarga ecosystem. We unite professional racing, live-event production, community, hospitality, and editorial storytelling in one focused platform.",
                     )}
-                  </p>
+                    className="ms-rich-text mt-8 max-w-3xl text-lg leading-8 text-ms-warm-white/72"
+                  />
                 ) : null}
               </article>
 
@@ -281,9 +283,10 @@ export default async function AboutPage() {
                 <p className="ms-data-label text-ms-slipstream-teal">
                   {profile?.supportLabel ?? "Operating idea"}
                 </p>
-                <p className="mt-5 text-base leading-7 text-ms-warm-white/68">
-                  {operatingIdea}
-                </p>
+                <MarkdownContent
+                  value={operatingIdea}
+                  className="ms-rich-text mt-5 text-base leading-7 text-ms-warm-white/68"
+                />
                 <Link
                   href="#team"
                   className="group mt-8 inline-flex items-center gap-3 border-b border-ms-electric-yellow/45 pb-3 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-electric-yellow"
@@ -433,10 +436,13 @@ export default async function AboutPage() {
                   {contactCta?.title ??
                     "Start a conversation with race control."}
                 </h2>
-                <p className="mt-6 max-w-xl leading-7 text-ms-warm-white/72">
-                  {contactCta?.body ??
-                    "Partnerships, media, event support, talent pathways, and general Motorsport inquiries are routed through the contact desk."}
-                </p>
+                <MarkdownContent
+                  value={
+                    contactCta?.body ??
+                    "Partnerships, media, event support, talent pathways, and general Motorsport inquiries are routed through the contact desk."
+                  }
+                  className="ms-rich-text mt-6 max-w-xl leading-7 text-ms-warm-white/72"
+                />
                 <Link
                   href={
                     contactCta?.ctaUrl?.startsWith("/")
@@ -463,10 +469,13 @@ export default async function AboutPage() {
                   {ecosystemCta?.title ??
                     "One ecosystem. A dedicated racing home."}
                 </h2>
-                <p className="mt-6 max-w-xl leading-7 text-ms-warm-white/72">
-                  {ecosystemCta?.body ??
-                    "Sarga.co remains the group gateway. This dedicated site is where Motorsport programmes, events, stories, tickets, and fan culture live in full."}
-                </p>
+                <MarkdownContent
+                  value={
+                    ecosystemCta?.body ??
+                    "Sarga.co remains the group gateway. This dedicated site is where Motorsport programmes, events, stories, tickets, and fan culture live in full."
+                  }
+                  className="ms-rich-text mt-6 max-w-xl leading-7 text-ms-warm-white/72"
+                />
                 {ecosystemCta?.ctaUrl?.startsWith("/") ? (
                   <Link
                     href={ecosystemCta.ctaUrl}

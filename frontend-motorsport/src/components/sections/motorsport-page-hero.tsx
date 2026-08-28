@@ -1,3 +1,4 @@
+import { MarkdownContent } from "@/components/content/markdown-content";
 import { ResilientImage } from "@/components/ui/resilient-image";
 import { HeroVideo } from "@/components/ui/hero-video";
 import { MotorsportMetricGroup } from "@/components/sections/motorsport-metric-group";
@@ -67,9 +68,10 @@ export function MotorsportPageHero({ hero }: MotorsportPageHeroProps) {
             </h1>
           ) : null}
           {hero.showDescription && hero.description ? (
-            <p className="mt-6 max-w-2xl text-base leading-7 text-ms-warm-white/90 sm:text-lg sm:leading-8">
-              {hero.description}
-            </p>
+            <MarkdownContent
+              value={hero.description}
+              className="ms-rich-text mt-6 max-w-2xl text-base leading-7 text-ms-warm-white/90 sm:text-lg sm:leading-8"
+            />
           ) : null}
           {hero.showMetricGroup ? (
             <MotorsportMetricGroup

@@ -1,4 +1,5 @@
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
+import { MarkdownContent } from "@/components/content/markdown-content";
 
 import { ArrowUpRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
@@ -73,9 +74,10 @@ export function ProgramCard({
           </span>
         </div>
         <h3 className="ms-heading-feature mt-7">{program.title}</h3>
-        <p className="mt-5 text-sm leading-7 text-ms-warm-white/60">
-          {program.summary}
-        </p>
+        <MarkdownContent
+          value={program.summary}
+          className="ms-rich-text mt-5 text-sm leading-7 text-ms-warm-white/60"
+        />
         {program.dateLabel || program.venue ? (
           <dl className="mt-8 grid gap-4 border-t border-ms-warm-white/12 pt-5 sm:grid-cols-2">
             {program.dateLabel ? (

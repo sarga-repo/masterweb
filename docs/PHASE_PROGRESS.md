@@ -10729,3 +10729,38 @@ Status: ✅ Done — 2026-08-25
 - This was a frontend mapping defect, not a media URL transformation defect.
 - The deployment preserves the fallback image behavior for records where the
   presentation component is intentionally empty.
+
+## MSR-CMS-UAT-4 — Preserve CMS rich-text paragraphs on the frontend
+
+Status: ✅ Done — 2026-08-28
+
+### What was done
+
+- Routed CMS rich-text values through the existing safe Markdown renderer so
+  blank-line paragraphs and single-line breaks remain visible on the frontend.
+- Applied the fix to shared page sections, heroes, information bands, section
+  headers, event/programme/rider/merchandise content, and About/support copy.
+- Made rich-text layout rules responsive instead of limiting them to
+  hover-capable desktop devices.
+
+### Files changed
+
+- `frontend-motorsport/src/components/sections/`
+- `frontend-motorsport/src/components/ui/section-header.tsx`
+- `frontend-motorsport/src/components/cards/`
+- `frontend-motorsport/src/app/`
+- `frontend-motorsport/src/lib/markdown.test.ts`
+
+### How verified
+
+- Motorsport frontend TypeScript check passed.
+- Rich-text parser tests passed, including explicit blank-line paragraph
+  coverage.
+- Prettier and `git diff --check` passed.
+- Local About route returned HTTP 200 and rendered CMS-backed copy through
+  separate paragraph elements.
+
+### Notes / caveats
+
+- Staging deployment verification is recorded in the final handover after the
+  frontend build and service restart complete.

@@ -9,6 +9,7 @@ import {
   PageShell,
   type GalleryFilterKey,
 } from "@/components";
+import { MarkdownContent } from "@/components/content/markdown-content";
 import {
   fetchGalleryItems,
   fetchMotorsportTheme,
@@ -238,11 +239,14 @@ export default async function GalleryPage({ searchParams }: GalleryPageProps) {
                       </p>
                     ) : null}
                     {archive?.showBody !== false ? (
-                      <p className="mt-4 text-base leading-7 text-ms-warm-white/62">
-                        {archive?.supportBody ??
+                      <MarkdownContent
+                        value={
+                          archive?.supportBody ??
                           archive?.body ??
-                          "Filter the archive by discipline. Select any frame to open the full-screen viewer, then browse with the arrow controls."}
-                      </p>
+                          "Filter the archive by discipline. Select any frame to open the full-screen viewer, then browse with the arrow controls."
+                        }
+                        className="ms-rich-text mt-4 text-base leading-7 text-ms-warm-white/62"
+                      />
                     ) : null}
                   </div>
                 </div>

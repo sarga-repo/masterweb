@@ -10952,6 +10952,7 @@ Status: ✅ Done — 2026-08-28
 - `cms/src/migrations/motorsport-fia-presentation.ts`
 - `cms/src/components/motorsport/rundown-item.json`
 - `cms/src/components/motorsport/rule-item.json`
+- `cms/types/generated/components.d.ts`
 - `cms/src/migrations/motorsport-content-manager-layout.ts`
 - `cms/src/migrations/motorsport-program-editor-layout.ts`
 - `frontend-motorsport/src/app/about/page.tsx`

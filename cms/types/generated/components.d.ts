@@ -815,9 +815,7 @@ export interface MotorsportRuleItem extends Struct.ComponentSchema {
   };
   attributes: {
     description: Schema.Attribute.Text & Schema.Attribute.Required;
-    isActive: Schema.Attribute.Boolean &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<true>;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     ruleType: Schema.Attribute.Enumeration<['do', 'dont']> &
       Schema.Attribute.Required;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
@@ -836,9 +834,7 @@ export interface MotorsportRundownItem extends Struct.ComponentSchema {
     dayLabel: Schema.Attribute.String & Schema.Attribute.Required;
     description: Schema.Attribute.Text;
     endTime: Schema.Attribute.Time;
-    isActive: Schema.Attribute.Boolean &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<true>;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     startTime: Schema.Attribute.Time;
     status: Schema.Attribute.Enumeration<['upcoming', 'live', 'completed']> &

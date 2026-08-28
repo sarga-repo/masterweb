@@ -20,7 +20,7 @@
     }
   },
   "attributes": {
-    "isActive": { "type": "boolean", "default": true, "required": true },
+    "isActive": { "type": "boolean", "default": true },
     "ruleType": {
       "type": "enumeration",
       "enum": ["do", "dont"],

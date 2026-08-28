@@ -20,7 +20,7 @@
     }
   },
   "attributes": {
-    "isActive": { "type": "boolean", "default": true, "required": true },
+    "isActive": { "type": "boolean", "default": true },
     "dayLabel": { "type": "string", "required": true },
     "dateLabel": { "type": "string" },
     "venue": { "type": "string" },

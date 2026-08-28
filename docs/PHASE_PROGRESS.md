@@ -10948,6 +10948,10 @@ Status: ✅ Done — 2026-08-28
 ### Files changed
 
 - `cms/src/seed.ts`
+- `cms/src/migrations/motorsport-ijtc-presentation.ts`
+- `cms/src/migrations/motorsport-fia-presentation.ts`
+- `cms/src/components/motorsport/rundown-item.json`
+- `cms/src/components/motorsport/rule-item.json`
 - `cms/src/migrations/motorsport-content-manager-layout.ts`
 - `cms/src/migrations/motorsport-program-editor-layout.ts`
 - `frontend-motorsport/src/app/about/page.tsx`
@@ -10958,9 +10962,14 @@ Status: ✅ Done — 2026-08-28
 - Motorsport typecheck, focused visibility/foundation tests, and targeted
   Prettier checks passed.
 - CMS TypeScript check and Strapi admin build passed.
-- Staging CMS restart and browser verification completed after deployment.
+- Staging CMS restart completed with zero service restarts after deployment;
+  browser verification showed the named About page, `profileSection` controls,
+  and the Open preview action.
 
 ### Notes / caveats
 
 - The wider CMS title layout applies to the shared `motorsport.page-section`
   component because Strapi component layouts are shared across parent sections.
+- Legacy rundown and rule components keep a default of `true` without requiring
+  the field, allowing older records to bootstrap while the repair code
+  backfills their explicit value.

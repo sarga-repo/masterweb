@@ -1,8 +1,27 @@
 {
   "kind": "singleType",
-  "info": { "singularName": "motorsport-partners-page", "pluralName": "motorsport-partners-pages", "displayName": "Motorsport Partners Page" },
+  "info": {
+    "singularName": "motorsport-partners-page",
+    "pluralName": "motorsport-partners-pages",
+    "displayName": "Motorsport Partners Page",
+    "description": "CMS content for the public Sarga Motorsport Partners page. Edit the hero, partner network presentation, and partnership inquiry CTA."
+  },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "routePath": { "edit": { "description": "Canonical frontend path for this page. Keep this as /partners." } },
+      "routeAliases": { "edit": { "description": "Optional legacy paths that should resolve to this page during migration." } },
+      "title": { "edit": { "description": "Internal page name used in metadata and CMS identification." } },
+      "navigationLabel": { "edit": { "description": "Optional navigation label retained for page metadata; the header uses the Top Navigation collection." } },
+      "hero": { "edit": { "description": "Partners hero copy, media, visibility controls, and optional metrics." } },
+      "informationBand": { "edit": { "description": "Blue partner-control band displayed below the hero." } },
+      "partnerNetworkSection": { "edit": { "description": "Partner network heading and visibility controls. Partner cards come from Motorsport Partner records." } },
+      "finalCtaSection": { "edit": { "description": "Partnership inquiry CTA near the bottom of the Partners page." } },
+      "pageAvailability": { "edit": { "description": "Controls whether the public Partners page is available or shows Coming Soon." } },
+      "seo": { "edit": { "description": "Search and social metadata used by the Partners page." } }
+    }
+  },
   "attributes": {
     "siteScope": { "type": "enumeration", "enum": ["motorsport"], "default": "motorsport", "required": true, "private": true },
     "routePath": { "type": "string", "default": "/partners", "required": true, "pluginOptions": { "i18n": { "localized": false } } },
@@ -11,7 +30,6 @@
     "navigationLabel": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
     "hero": { "type": "component", "component": "motorsport.page-hero", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "informationBand": { "type": "component", "component": "motorsport.page-information-band", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "partnerControlSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "partnerNetworkSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "finalCtaSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "pageAvailability": { "type": "component", "component": "shared.page-availability", "repeatable": false, "pluginOptions": { "i18n": { "localized": true } } },

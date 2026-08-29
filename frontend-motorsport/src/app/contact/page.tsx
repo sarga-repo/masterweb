@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import {
@@ -16,6 +17,33 @@ import {
   isCmsSectionVisible,
 } from "@/lib/cms-visibility";
 import { createSurfaceSequencer } from "@/lib/surface-sequencer";
+import { createMetadata } from "@/lib/seo/metadata";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const page = await fetchSitePage("custom", "/contact", locale);
+  return createMetadata({
+    title: page?.title ?? "Contact",
+    description:
+      page?.heroDescription ??
+      "Partnership proposals, media requests, ticket support, or a question about Sarga Motorsport.",
+    path: "/contact",
+    image: page?.heroImage,
+    seo: page?.seo
+      ? {
+          metaTitle: page.seo.metaTitle,
+          metaDescription: page.seo.metaDescription,
+          ogTitle: page.seo.ogTitle,
+          ogDescription: page.seo.ogDescription,
+          ogImageUrl: page.seo.ogImage?.url,
+          canonicalUrl: page.seo.canonicalUrl,
+          noIndex: page.seo.noIndex,
+        }
+      : undefined,
+    locale,
+    isFallback: locale === "id" && !page,
+  });
+}
 
 export default async function ContactPage() {
   const locale = await getRequestLocale();
@@ -33,6 +61,24 @@ export default async function ContactPage() {
   const finalCtaEventsHref = finalCta?.ctaUrl?.startsWith("/")
     ? finalCta.ctaUrl
     : "/events";
+  const contactChannels =
+    form?.items
+      ?.filter((item) => item.isActive !== false)
+      .map((item) => ({
+        label: item.title || item.label || "Contact",
+        detail: item.description || item.href || "",
+        href: item.href?.startsWith("mailto:") ? item.href : undefined,
+      }))
+      .filter((item) => item.detail.trim()) || [];
+  const displayedContactChannels = contactChannels.length
+    ? contactChannels
+    : [
+        { label: "General", detail: "hello@sarga.co", href: "mailto:hello@sarga.co" },
+        { label: "Partnerships", detail: "partners@sarga.co", href: "mailto:partners@sarga.co" },
+        { label: "Media", detail: "media@sarga.co", href: "mailto:media@sarga.co" },
+        { label: "Ticket support", detail: "tickets@sarga.co", href: "mailto:tickets@sarga.co" },
+        { label: "Talent programme", detail: "Select IJTC / Become Riders in the form.", href: undefined },
+      ];
   const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
   return (
     <PageShell spectrumSeparators>
@@ -124,34 +170,25 @@ export default async function ContactPage() {
                       Race control
                     </span>
                     <div className="mt-8 space-y-6">
-                      {[
-                        ["General", "hello@sarga.co"],
-                        ["Partnerships", "partners@sarga.co"],
-                        ["Media", "media@sarga.co"],
-                        ["Ticket support", "tickets@sarga.co"],
-                      ].map(([label, email]) => (
-                        <div key={label}>
+                      {displayedContactChannels.map((channel) => (
+                        <div key={channel.label}>
                           <h3 className="ms-kicker text-ms-ignition-orange">
-                            {label}
+                            {channel.label}
                           </h3>
                           <p className="mt-2 text-sm text-ms-warm-white/60">
-                            <a
-                              className="hover:text-ms-electric-yellow"
-                              href={`mailto:${email}`}
-                            >
-                              {email}
-                            </a>
+                            {channel.href ? (
+                              <a
+                                className="hover:text-ms-electric-yellow"
+                                href={channel.href}
+                              >
+                                {channel.detail}
+                              </a>
+                            ) : (
+                              channel.detail
+                            )}
                           </p>
                         </div>
                       ))}
-                      <div>
-                        <h3 className="ms-kicker text-ms-ignition-orange">
-                          Talent programme
-                        </h3>
-                        <p className="mt-2 text-sm text-ms-warm-white/60">
-                          Select IJTC / Become Riders in the form.
-                        </p>
-                      </div>
                     </div>
                   </aside>
                 </div>
@@ -167,31 +204,64 @@ export default async function ContactPage() {
             >
               <div className="ms-shell grid gap-8 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
                 <div>
-                  <p className="ms-data-label text-ms-slipstream-teal">
-                    {finalCta?.eyebrow ?? "Race-day route"}
-                  </p>
-                  <h2 className="ms-heading-feature mt-4 max-w-[18ch]">
-                    {finalCta?.title ??
-                      "Looking for an event or ticket answer?"}
-                  </h2>
+                  {finalCta?.showEyebrow !== false ? (
+                    <p className="ms-data-label text-ms-slipstream-teal">
+                      {finalCta?.eyebrow ?? "Race-day route"}
+                    </p>
+                  ) : null}
+                  {finalCta?.showTitle !== false ? (
+                    <h2 className="ms-heading-feature mt-4 max-w-[18ch]">
+                      {finalCta?.title ??
+                        "Looking for an event or ticket answer?"}
+                    </h2>
+                  ) : null}
+                  {finalCta?.showBody !== false && finalCta?.body ? (
+                    <p className="mt-4 max-w-2xl leading-7 text-ms-warm-white/60">
+                      {finalCta.body}
+                    </p>
+                  ) : null}
                 </div>
                 <div className="flex flex-wrap gap-6">
-                  <Link
-                    href={finalCtaEventsHref}
-                    className="border-b border-ms-electric-yellow/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-electric-yellow"
-                  >
-                    {finalCta?.ctaLabel ?? "Browse events"}
-                  </Link>
-                  <Link
-                    href={
-                      finalCta?.secondaryCtaUrl?.startsWith("/")
-                        ? finalCta.secondaryCtaUrl
-                        : "/tickets"
-                    }
-                    className="border-b border-ms-slipstream-teal/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
-                  >
-                    {finalCta?.secondaryCtaLabel ?? "Ticket support"}
-                  </Link>
+                  {finalCta?.showCta !== false ? (
+                    <Link
+                      href={finalCtaEventsHref}
+                      target={
+                        finalCta?.ctaTarget === "newWindow"
+                          ? "_blank"
+                          : undefined
+                      }
+                      rel={
+                        finalCta?.ctaTarget === "newWindow"
+                          ? "noreferrer"
+                          : undefined
+                      }
+                      className="border-b border-ms-electric-yellow/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-electric-yellow"
+                    >
+                      {finalCta?.ctaLabel ?? "Browse events"}
+                    </Link>
+                  ) : null}
+                  {finalCta?.showCta !== false ? (
+                    <Link
+                      href={
+                        finalCta?.secondaryCtaUrl?.startsWith("/")
+                          ? finalCta.secondaryCtaUrl
+                          : "/tickets"
+                      }
+                      target={
+                        finalCta?.secondaryCtaTarget === "newWindow"
+                          ? "_blank"
+                          : undefined
+                      }
+                      rel={
+                        finalCta?.secondaryCtaTarget === "newWindow"
+                          ? "noreferrer"
+                          : undefined
+                      }
+                      className="border-b border-ms-slipstream-teal/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
+                    >
+                      {finalCta?.secondaryCtaLabel ?? "Ticket support"}
+                    </Link>
+                  ) : null}
                 </div>
               </div>
             </section>

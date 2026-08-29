@@ -21,8 +21,19 @@
         "edit": {
           "description": "Approved internal or HTTPS partner destination. No checkout/payment URL is processed by Sarga."
         }
+      },
+      "isActive": { "edit": { "description": "Show the homepage ticket card." } },
+      "eyebrow": { "edit": { "description": "Short context line above the ticket card title." } },
+      "title": { "edit": { "description": "Homepage ticket card heading." } },
+      "description": { "edit": { "description": "Ticket guidance shown before the external partner action." } },
+      "eventLabel": { "edit": { "description": "Label for the automatically populated event metadata." } },
+      "eventText": { "edit": { "description": "Event metadata shown in the homepage ticket card." } },
+      "providerLabel": { "edit": { "description": "Label for the ticket provider metadata." } },
+      "providerText": { "edit": { "description": "Provider text shown in the homepage ticket card." } },
+      "partnerLabel": { "edit": { "description": "Partner disclosure shown near the ticket action." } },
+      "footerText": { "edit": { "description": "Optional reassurance shown below the ticket action." } },
+      "ctaLabel": { "edit": { "description": "Homepage ticket action label." } }
       }
-    }
   },
   "attributes": {
     "isActive": {

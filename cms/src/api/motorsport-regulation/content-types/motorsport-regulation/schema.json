@@ -15,7 +15,15 @@
         "edit": {
           "description": "Regulation document: upload an accessible PDF. Use a source document sized for A4/Letter reading; do not upload scanned screenshots as images."
         }
-      }
+      },
+      "program": { "edit": { "description": "Programme that owns and publishes this regulation document." } },
+      "title": { "edit": { "description": "Public regulation document title." } },
+      "version": { "edit": { "description": "Controlled document version shown on the public regulation page." } },
+      "effectiveDate": { "edit": { "description": "Date on which this regulation version becomes effective." } },
+      "summary": { "edit": { "description": "Short public summary shown above the regulation download." } },
+      "isActive": { "edit": { "description": "Only the active approved document is eligible for public download." } },
+      "siteScope": { "edit": { "description": "Site visibility scope. Use motorsport for the dedicated Motorsport frontend." } },
+      "sites": { "edit": { "description": "Optional multisite assignments for this regulation." } }
     }
   },
   "attributes": {

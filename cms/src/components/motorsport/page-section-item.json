@@ -11,8 +11,17 @@
         "edit": {
           "description": "Card/item media: 1600 × 1000 px (8:5) recommended for image cards; use a consistent ratio within the section."
         }
+      },
+      "isActive": { "edit": { "description": "Show this item in its parent section." } },
+      "sortOrder": { "edit": { "description": "Item order within the parent section; lower numbers appear first." } },
+      "label": { "edit": { "description": "Optional item index or short label." } },
+      "title": { "edit": { "description": "Item heading shown in the parent section." } },
+      "description": { "edit": { "description": "Item description shown below the item heading." } },
+      "mediaAlt": { "edit": { "description": "Accessible description for item media." } },
+      "accent": { "edit": { "description": "Approved visual accent color for the item." } },
+      "href": { "edit": { "description": "Optional item destination URL." } },
+      "hrefLabel": { "edit": { "description": "Optional item link label." } }
       }
-    }
   },
   "attributes": {
     "isActive": { "type": "boolean", "default": true, "required": true },

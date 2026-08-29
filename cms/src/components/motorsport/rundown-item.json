@@ -16,8 +16,16 @@
         "edit": {
           "description": "Lower numbers appear first in the rundown."
         }
+      },
+      "dayLabel": { "edit": { "description": "Day or session group label shown above the schedule item." } },
+      "dateLabel": { "edit": { "description": "Public date text for this schedule item." } },
+      "venue": { "edit": { "description": "Venue shown for this schedule item." } },
+      "status": { "edit": { "description": "Schedule item state shown by the schedule card." } },
+      "startTime": { "edit": { "description": "Optional public start time." } },
+      "endTime": { "edit": { "description": "Optional public finish time." } },
+      "title": { "edit": { "description": "Schedule item title shown on the public rundown." } },
+      "description": { "edit": { "description": "Supporting schedule item description." } }
       }
-    }
   },
   "attributes": {
     "isActive": { "type": "boolean", "default": true },

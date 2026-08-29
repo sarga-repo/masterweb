@@ -32,13 +32,9 @@ type ContentManagerStore = {
   set: (params: { key: string; value: unknown }) => Promise<void>;
 };
 
-// Keep the editor in the same order as the public campaign page: presentation,
-// media, slides, sections, then identity and supporting campaign data.
+// Keep programme identity immediately visible to editors, then follow with the
+// public campaign presentation and programme-specific content groups.
 const PROGRAM_EDIT_LAYOUT: LayoutRow[] = [
-  [{ name: "motorsportPresentation", size: 12 }],
-  [{ name: "heroMedia", size: 6 }],
-  [{ name: "bannerSlides", size: 12 }],
-  [{ name: "presentationSections", size: 12 }],
   [
     { name: "title", size: 6 },
     { name: "slug", size: 6 },
@@ -61,8 +57,12 @@ const PROGRAM_EDIT_LAYOUT: LayoutRow[] = [
     { name: "eventEndDate", size: 6 },
     { name: "venue", size: 6 },
   ],
+  [{ name: "motorsportPresentation", size: 12 }],
+  [{ name: "heroMedia", size: 6 }],
+  [{ name: "bannerSlides", size: 12 }],
+  [{ name: "fiaRallycrossContent", size: 12 }],
+  [{ name: "presentationSections", size: 12 }],
   [{ name: "rundown", size: 12 }],
-  [{ name: "eventRules", size: 12 }],
   [
     { name: "primaryCtaLabel", size: 6 },
     { name: "primaryCtaUrl", size: 6 },
@@ -370,7 +370,7 @@ const PAGE_EDIT_LAYOUTS: Array<{
   {
     key: `${PAGE_LAYOUT_PREFIX}motorsport-events-page.motorsport-events-page`,
     layout: pageEditLayout(["programmesSection", "calendarSection"]),
-    legacyFields: ["eventControlSection"],
+    legacyFields: [],
   },
   {
     key: `${PAGE_LAYOUT_PREFIX}motorsport-news-page.motorsport-news-page`,
@@ -379,7 +379,7 @@ const PAGE_EDIT_LAYOUTS: Array<{
       "archiveIntroSection",
       "galleryCtaSection",
     ]),
-    legacyFields: ["newsControlSection"],
+    legacyFields: [],
   },
   {
     key: `${PAGE_LAYOUT_PREFIX}motorsport-gallery-page.motorsport-gallery-page`,
@@ -389,7 +389,7 @@ const PAGE_EDIT_LAYOUTS: Array<{
   {
     key: `${PAGE_LAYOUT_PREFIX}motorsport-merchandise-page.motorsport-merchandise-page`,
     layout: pageEditLayout(["catalogueSection", "finalCtaSection"]),
-    legacyFields: ["merchControlSection"],
+    legacyFields: [],
   },
   {
     key: `${PAGE_LAYOUT_PREFIX}motorsport-tickets-page.motorsport-tickets-page`,
@@ -398,17 +398,17 @@ const PAGE_EDIT_LAYOUTS: Array<{
       "ticketedEventsSection",
       "ticketInfoSection",
     ]),
-    legacyFields: ["ticketControlSection"],
+    legacyFields: [],
   },
   {
     key: `${PAGE_LAYOUT_PREFIX}motorsport-contact-page.motorsport-contact-page`,
     layout: pageEditLayout(["inquiryFormSection", "finalCtaSection"]),
-    legacyFields: ["inquiryControlSection"],
+    legacyFields: [],
   },
   {
     key: `${PAGE_LAYOUT_PREFIX}motorsport-partners-page.motorsport-partners-page`,
     layout: pageEditLayout(["partnerNetworkSection", "finalCtaSection"]),
-    legacyFields: ["partnerControlSection"],
+    legacyFields: [],
   },
   {
     key: `${PAGE_LAYOUT_PREFIX}motorsport-experience-page.motorsport-experience-page`,
@@ -417,7 +417,7 @@ const PAGE_EDIT_LAYOUTS: Array<{
       "trackSection",
       "finalCtaSection",
     ]),
-    legacyFields: ["experienceControlSection"],
+    legacyFields: [],
   },
 ];
 

@@ -3,12 +3,53 @@
   "info": {
     "singularName": "motorsport-home-page",
     "pluralName": "motorsport-home-pages",
-    "displayName": "Motorsport Home Page"
+    "displayName": "Motorsport Home Page",
+    "description": "CMS content for the public Sarga Motorsport homepage. Edit each named section in the same order it appears on the site."
   },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
   "config": {
     "metadatas": {
+      "routePath": {
+        "edit": {
+          "description": "Canonical frontend path for this page. Keep this as / for the Motorsport homepage."
+        }
+      },
+      "routeAliases": {
+        "edit": {
+          "description": "Optional legacy paths that should resolve to the Motorsport homepage during migration."
+        }
+      },
+      "title": {
+        "edit": {
+          "description": "Internal page name used to identify this single type in the CMS. It is not currently shown as homepage copy."
+        }
+      },
+      "navigationLabel": {
+        "edit": {
+          "description": "Optional navigation label retained for page metadata; the Motorsport header currently uses the Top Navigation collection."
+        }
+      },
+      "heroSlides": {
+        "edit": {
+          "description": "Homepage carousel slides. Up to three active slides are shown in sort order; each slide owns its copy, artwork, accessibility text, and CTA."
+        }
+      },
+      "hero": {
+        "edit": {
+          "description": "Legacy single-hero group retained for migration compatibility; the homepage currently renders heroSlides."
+        }
+      },
+      "informationBand": {
+        "edit": {
+          "description": "Blue race-control band immediately below the hero. Use its metric items for up to three displayed values."
+        }
+      },
+      "worldSection": {
+        "edit": {
+          "description": "Homepage racing-format section with its heading, CTA, and discipline tiles."
+        }
+      },
       "featuredEvent": {
         "edit": {
           "description": "Event card displayed first in the Upcoming Events section."
@@ -17,6 +58,56 @@
       "featuredProgram": {
         "edit": {
           "description": "Motorsport program displayed first in the Upcoming Events section."
+        }
+      },
+      "upcomingEventsSection": {
+        "edit": {
+          "description": "Homepage Upcoming Events presentation: section heading/media/CTA plus the automatically populated event-list labels."
+        }
+      },
+      "ticketSection": {
+        "edit": {
+          "description": "Homepage ticket card. Use an approved partner redirect or internal ticket destination; Sarga does not process checkout."
+        }
+      },
+      "latestNewsSection": {
+        "edit": {
+          "description": "Homepage Latest News presentation. Article cards are populated from the Motorsport News collection."
+        }
+      },
+      "connectedRecordsSection": {
+        "edit": {
+          "description": "Homepage Connected Records section linking publications, leadership, and active Sarga ecosystem sites."
+        }
+      },
+      "gallerySection": {
+        "edit": {
+          "description": "Homepage gallery presentation. Images are populated from Motorsport Media Gallery records."
+        }
+      },
+      "partnersSection": {
+        "edit": {
+          "description": "Homepage partner strip presentation. Logos and links are populated from Motorsport Partner records."
+        }
+      },
+      "newsletterSection": {
+        "edit": {
+          "description": "Homepage newsletter signup presentation, including the optional contact link and legal reassurance copy."
+        }
+      },
+      "showPartnersOnHomepage": {
+        "edit": {
+          "description": "Show the partner strip when the Partners section is active and active partner records exist."
+        }
+      },
+      "pageAvailability": {
+        "edit": {
+          "description": "Controls whether the public homepage is available or shows the branded Coming Soon experience."
+        }
+      },
+      "seo": {
+        "edit": {
+          "description": "Search and social metadata for the homepage. The current layout still uses default metadata; wire this before relying on these fields for publication."
         }
       }
     }

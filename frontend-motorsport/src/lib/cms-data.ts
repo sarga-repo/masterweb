@@ -9,6 +9,7 @@ import type {
   MotorsportEvent,
   MotorsportProgram,
   MotorsportProgramDetail,
+  MotorsportPresentationSection,
   MotorsportRegulation,
   MotorsportRider,
   MotorsportStatus,
@@ -256,7 +257,6 @@ type CmsProgram = {
   heroMedia?: StrapiMedia | null;
   bannerSlides?: CmsCampaignSlide[];
   rundown?: CmsRundownItem[];
-  eventRules?: CmsEventRule[];
   relatedTicketCtas?: CmsTicketCta[];
   seo?: CmsSeo | null;
   primaryCtaLabel?: string;
@@ -264,7 +264,42 @@ type CmsProgram = {
   becomeRidersLabel?: string;
   becomeRidersUrl?: string;
   presentationSections?: CmsPageSection[];
+  fiaRallycrossContent?: CmsFiaRallycrossContent | null;
   motorsportPresentation?: CmsDetailPresentation | null;
+};
+
+type CmsFiaSectionPresentation = {
+  isActive?: boolean;
+  showIndex?: boolean;
+  indexLabel?: string;
+  showEyebrow?: boolean;
+  eyebrow?: string;
+  showTitle?: boolean;
+  title?: string;
+  showBody?: boolean;
+  body?: string;
+};
+
+type CmsFiaFormatItem = {
+  id?: number;
+  isActive?: boolean;
+  sortOrder?: number;
+  label?: string;
+  title: string;
+  description?: string;
+  accent?: "crimson" | "orange" | "yellow" | "teal" | "blue";
+};
+
+type CmsFiaRallycrossContent = {
+  formatSection?: (CmsFiaSectionPresentation & {
+    formatItems?: CmsFiaFormatItem[];
+  }) | null;
+  rundownSection?: (CmsFiaSectionPresentation & {
+    rundownItems?: CmsRundownItem[];
+  }) | null;
+  raceDayGuideSection?: (CmsFiaSectionPresentation & {
+    ruleItems?: CmsEventRule[];
+  }) | null;
 };
 
 type CmsCampaignSlide = {
@@ -1469,6 +1504,48 @@ function mapProgram(entry: CmsProgram): MotorsportProgram {
   );
   const presentationImage = presentationHero?.backgroundMedia;
   const legacyImage = entry.heroMedia;
+  const fiaContent = entry.fiaRallycrossContent;
+  const mapFiaSection = (
+    section: CmsFiaSectionPresentation | null | undefined,
+    sectionKey: string,
+    items: NonNullable<MotorsportPresentationSection["items"]> = [],
+  ) =>
+    section
+      ? {
+          sectionKey,
+          isActive: section.isActive !== false,
+          indexLabel: section.indexLabel,
+          showIndex: section.showIndex !== false,
+          showEyebrow: section.showEyebrow !== false,
+          showTitle: section.showTitle !== false,
+          showBody: section.showBody !== false,
+          eyebrow: section.eyebrow,
+          title: section.title ?? "Section",
+          body: section.body,
+          items,
+        }
+      : null;
+  const mappedFiaContent = fiaContent
+    ? {
+        formatSection: mapFiaSection(
+          fiaContent.formatSection,
+          "format",
+          (fiaContent.formatSection?.formatItems ?? []).map((item) => ({
+            isActive: item.isActive !== false,
+            sortOrder: item.sortOrder ?? 0,
+            label: item.label,
+            title: item.title,
+            description: item.description,
+            accent: item.accent,
+          })),
+        ),
+        rundownSection: mapFiaSection(fiaContent.rundownSection, "rundown"),
+        raceDayGuideSection: mapFiaSection(
+          fiaContent.raceDayGuideSection,
+          "race-day-guide",
+        ),
+      }
+    : undefined;
   return {
     title: entry.title,
     slug: entry.slug,
@@ -1500,6 +1577,7 @@ function mapProgram(entry: CmsProgram): MotorsportProgram {
       ? "Explore event"
       : entry.primaryCtaLabel || "Explore programme",
     presentationHero,
+    fiaRallycrossContent: mappedFiaContent,
     presentationSections: (entry.presentationSections ?? []).map((section) => ({
       sectionKey: section.sectionKey,
       isActive: section.isActive !== false && section.enabled !== false,
@@ -1510,6 +1588,8 @@ function mapProgram(entry: CmsProgram): MotorsportProgram {
       showBody: section.showBody !== false,
       showMedia: section.showMedia !== false,
       showCta: section.showCta !== false,
+      ctaLabel: section.ctaLabel,
+      ctaUrl: section.ctaUrl,
       eyebrow: section.eyebrow,
       title: section.title ?? "Section",
       body: section.body,
@@ -1536,8 +1616,9 @@ function mapProgram(entry: CmsProgram): MotorsportProgram {
 function mapProgramSchedule(
   entry: CmsProgram,
   program: MotorsportProgram,
+  items: CmsRundownItem[] = entry.rundown ?? [],
 ): ScheduleEntry[] {
-  return [...(entry.rundown ?? [])]
+  return [...items]
     .filter((item) => item.isActive !== false)
     .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
     .map((item, index) => {
@@ -1576,6 +1657,12 @@ export async function fetchPrograms(
       "heroMedia",
       "presentationSections.media",
       "presentationSections.items.media",
+      "fiaRallycrossContent.formatSection",
+      "fiaRallycrossContent.formatSection.formatItems",
+      "fiaRallycrossContent.rundownSection",
+      "fiaRallycrossContent.rundownSection.rundownItems",
+      "fiaRallycrossContent.raceDayGuideSection",
+      "fiaRallycrossContent.raceDayGuideSection.ruleItems",
       "motorsportPresentation.hero.backgroundMedia",
     ],
     filters: SITE_SCOPE_FILTERS,
@@ -1648,7 +1735,13 @@ export async function fetchProgramBySlug(
   if (!entry) return null;
 
   const program = mapProgram(entry);
-  const schedule = mapProgramSchedule(entry, program);
+  const schedule = mapProgramSchedule(
+    entry,
+    program,
+    entry.fiaRallycrossContent?.rundownSection?.rundownItems?.length
+      ? entry.fiaRallycrossContent.rundownSection.rundownItems
+      : undefined,
+  );
 
   return {
     ...program,
@@ -1668,8 +1761,6 @@ export async function fetchCampaignProgramBySlug(
     populate: [
       "heroMedia",
       "bannerSlides.image",
-      "rundown",
-      "eventRules",
       "relatedTicketCtas",
       "relatedTicketCtas.image",
       "relatedTicketCtas.backgroundImage",
@@ -1677,6 +1768,12 @@ export async function fetchCampaignProgramBySlug(
       "seo.ogImage",
       "presentationSections.media",
       "presentationSections.items.media",
+      "fiaRallycrossContent.formatSection",
+      "fiaRallycrossContent.formatSection.formatItems",
+      "fiaRallycrossContent.rundownSection",
+      "fiaRallycrossContent.rundownSection.rundownItems",
+      "fiaRallycrossContent.raceDayGuideSection",
+      "fiaRallycrossContent.raceDayGuideSection.ruleItems",
       "motorsportPresentation.hero.backgroundMedia",
       "motorsportPresentation.informationBand.metrics",
     ],
@@ -1740,9 +1837,13 @@ export async function fetchCampaignProgramBySlug(
   return {
     ...program,
     dateLabel: campaignDate,
-    schedule: mapProgramSchedule(entry, program),
+    schedule: mapProgramSchedule(
+      entry,
+      program,
+      entry.fiaRallycrossContent?.rundownSection?.rundownItems ?? [],
+    ),
     slides,
-    rules: [...(entry.eventRules ?? [])]
+    rules: [...(entry.fiaRallycrossContent?.raceDayGuideSection?.ruleItems ?? [])]
       .filter((rule) => rule.isActive !== false)
       .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
       .map((rule, index) => ({

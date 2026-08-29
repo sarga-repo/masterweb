@@ -8,6 +8,12 @@
   },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": false } },
+  "config": {
+    "metadatas": {
+      "title": { "edit": { "description": "Internal name for the Motorsport visual theme settings record." } },
+      "themePreset": { "edit": { "description": "Allowlisted visual preset used by the Motorsport frontend surfaces." } }
+    }
+  },
   "attributes": {
     "title": {
       "type": "string",

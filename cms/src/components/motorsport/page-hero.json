@@ -71,8 +71,16 @@
         "edit": {
           "description": "Secondary hero destination. Use a local path, a #section anchor, or an approved HTTPS URL."
         }
+      },
+      "isActive": { "edit": { "description": "Show this page Hero." } },
+      "eyebrow": { "edit": { "description": "Short context line above the Hero title." } },
+      "title": { "edit": { "description": "Main page Hero heading." } },
+      "description": { "edit": { "description": "Supporting page Hero copy." } },
+      "backgroundAlt": { "edit": { "description": "Accessible description for the Hero background media." } },
+      "primaryCtaTarget": { "edit": { "description": "Choose whether the primary Hero action opens in the current window or a new window." } },
+      "secondaryCtaTarget": { "edit": { "description": "Choose whether the secondary Hero action opens in the current window or a new window." } },
+      "metrics": { "edit": { "description": "Optional ordered metric values shown in the Hero." } }
       }
-    }
   },
   "attributes": {
     "isActive": {

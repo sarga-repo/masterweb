@@ -12,6 +12,7 @@ import {
   getIjtcInformationBand,
   getIjtcProgram,
   getIjtcRiders,
+  getIjtcSection,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
 import { getRequestLocale } from "@/lib/i18n/request";
@@ -33,6 +34,8 @@ export default async function IjtcRidersPage() {
   if (!program) notFound();
   const theme = await fetchMotorsportTheme(locale);
   const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
+  const ridersSection = getIjtcSection(program, "riders");
+  const hero = program.presentationHero;
   const demoCount = riders.filter((rider) =>
     /demo|demonstration/i.test(`${rider.name} ${rider.bio ?? ""}`),
   ).length;
@@ -40,12 +43,19 @@ export default async function IjtcRidersPage() {
   return (
     <>
       <PageHero
-        kicker={`IJTC / ${program.seasonLabel}`}
+        kicker={hero?.eyebrow ?? `IJTC / ${program.seasonLabel}`}
         kickerColor="yellow"
-        title="The rider field."
-        description="Published rider profiles connect number, team, region, and development context in one programme view."
-        backgroundImage={program.image}
-        backgroundAlt={program.imageAlt}
+        title={hero?.title ?? "The rider field."}
+        description={
+          hero?.description ??
+          "Published rider profiles connect number, team, region, and development context in one programme view."
+        }
+        showKicker={hero?.showEyebrow}
+        showTitle={hero?.showTitle}
+        showDescription={hero?.showDescription}
+        showMedia={hero?.showMedia}
+        backgroundImage={hero?.backgroundMedia?.url ?? program.image}
+        backgroundAlt={hero?.backgroundMedia?.alt ?? program.imageAlt}
         accent="orange"
         accentPosition="bottom-left"
         surface="heat"
@@ -75,10 +85,17 @@ export default async function IjtcRidersPage() {
       >
         <div className="ms-shell">
           <SectionHeader
-            index="RIDERS"
-            eyebrow="Selected field"
-            title="Meet the programme."
-            description="Twelve riders appear per page in a responsive four-column catalogue. Editor-managed portraits fall back to a numbered silhouette when photography is not yet approved."
+            index={ridersSection?.indexLabel ?? "RIDERS"}
+            showIndex={ridersSection?.showIndex ?? true}
+            showEyebrow={ridersSection?.showEyebrow ?? true}
+            showTitle={ridersSection?.showTitle ?? true}
+            showDescription={ridersSection?.showBody ?? true}
+            eyebrow={ridersSection?.eyebrow ?? "Selected field"}
+            title={ridersSection?.title ?? "Meet the programme."}
+            description={
+              ridersSection?.body ??
+              "Twelve riders appear per page in a responsive four-column catalogue. Editor-managed portraits fall back to a numbered silhouette when photography is not yet approved."
+            }
           />
           <div className="mt-14">
             <RiderCatalog riders={riders} />

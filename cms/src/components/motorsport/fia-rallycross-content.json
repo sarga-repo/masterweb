@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_motorsport_fia_rallycross_contents",
+  "info": {
+    "displayName": "FIA Rallycross Content",
+    "description": "One logical editor group for FIA Rallycross Format, Rundown, and Race-day Guide content. Use only for Rallycross programmes."
+  },
+  "options": {},
+  "config": {
+    "metadatas": {
+      "formatSection": { "edit": { "description": "Format presentation and Format cards. This is the first section in the FIA Rallycross content group." } },
+      "rundownSection": { "edit": { "description": "Rundown presentation and race-day schedule items. This is the second section in the FIA Rallycross content group." } },
+      "raceDayGuideSection": { "edit": { "description": "Race-day Guide presentation and Do/Do not items. This is the third section in the FIA Rallycross content group." } }
+    }
+  },
+  "attributes": {
+    "formatSection": {
+      "type": "component",
+      "component": "motorsport.fia-rallycross-format-section",
+      "repeatable": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "rundownSection": {
+      "type": "component",
+      "component": "motorsport.fia-rallycross-rundown-section",
+      "repeatable": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "raceDayGuideSection": {
+      "type": "component",
+      "component": "motorsport.fia-rallycross-race-day-guide-section",
+      "repeatable": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    }
+  }
+}

@@ -70,7 +70,6 @@ const PAGE_DEFINITIONS = [
     [
       ["hero", "hero"],
       ["informationBand", "informationBand"],
-      ["eventControlSection", "pageSection"],
       ["programmesSection", "pageSection"],
       ["calendarSection", "pageSection"],
       ["pageAvailability", "pageAvailability"],
@@ -81,7 +80,6 @@ const PAGE_DEFINITIONS = [
     [
       ["hero", "hero"],
       ["informationBand", "informationBand"],
-      ["newsControlSection", "pageSection"],
       ["leadStorySection", "pageSection"],
       ["archiveIntroSection", "pageSection"],
       ["galleryCtaSection", "pageSection"],
@@ -102,7 +100,6 @@ const PAGE_DEFINITIONS = [
     [
       ["hero", "hero"],
       ["informationBand", "informationBand"],
-      ["merchControlSection", "pageSection"],
       ["catalogueSection", "pageSection"],
       ["finalCtaSection", "pageSection"],
       ["pageAvailability", "pageAvailability"],
@@ -113,7 +110,6 @@ const PAGE_DEFINITIONS = [
     [
       ["hero", "hero"],
       ["informationBand", "informationBand"],
-      ["ticketControlSection", "pageSection"],
       ["featuredTicketSection", "pageSection"],
       ["ticketedEventsSection", "pageSection"],
       ["ticketInfoSection", "pageSection"],
@@ -125,7 +121,6 @@ const PAGE_DEFINITIONS = [
     [
       ["hero", "hero"],
       ["informationBand", "informationBand"],
-      ["inquiryControlSection", "pageSection"],
       ["inquiryFormSection", "pageSection"],
       ["finalCtaSection", "pageSection"],
       ["pageAvailability", "pageAvailability"],
@@ -136,7 +131,6 @@ const PAGE_DEFINITIONS = [
     [
       ["hero", "hero"],
       ["informationBand", "informationBand"],
-      ["partnerControlSection", "pageSection"],
       ["partnerNetworkSection", "pageSection"],
       ["finalCtaSection", "pageSection"],
       ["pageAvailability", "pageAvailability"],
@@ -147,7 +141,6 @@ const PAGE_DEFINITIONS = [
     [
       ["hero", "hero"],
       ["informationBand", "informationBand"],
-      ["experienceControlSection", "pageSection"],
       ["pillarsSection", "pageSection"],
       ["trackSection", "pageSection"],
       ["finalCtaSection", "pageSection"],
@@ -306,7 +299,7 @@ export async function backfillMotorsportShowFieldDefaults(strapi: Core.Strapi) {
       if (missingInRecord) data.presentationSections = nextSections;
     }
 
-    for (const fieldName of ["rundown", "eventRules"] as const) {
+    for (const fieldName of ["rundown"] as const) {
       const components = record[fieldName];
       if (!Array.isArray(components)) continue;
       const nextComponents = components.map((component: any) => {

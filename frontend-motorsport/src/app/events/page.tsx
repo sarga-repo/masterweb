@@ -11,6 +11,7 @@ import {
   StatusChip,
 } from "@/components";
 import { fetchEvents, fetchPrograms, fetchSitePage } from "@/lib/cms-data";
+import { createMetadata } from "@/lib/seo/metadata";
 import type { MotorsportEvent, MotorsportProgram } from "@/types/design-system";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
@@ -20,11 +21,31 @@ import {
   isCmsSectionVisible,
 } from "@/lib/cms-visibility";
 
-export const metadata: Metadata = {
-  title: "Events",
-  description:
-    "Enter Sarga Motorsport programmes, international campaigns, and upcoming race weekends across Indonesia.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const page = await fetchSitePage("eventHub", undefined, locale);
+  return createMetadata({
+    title: page?.title ?? "Events",
+    description:
+      page?.heroDescription ??
+      "Enter Sarga Motorsport programmes, international campaigns, and upcoming race weekends across Indonesia.",
+    path: "/events",
+    image: page?.heroImage,
+    seo: page?.seo
+      ? {
+          metaTitle: page.seo.metaTitle,
+          metaDescription: page.seo.metaDescription,
+          ogTitle: page.seo.ogTitle,
+          ogDescription: page.seo.ogDescription,
+          ogImageUrl: page.seo.ogImage?.url,
+          canonicalUrl: page.seo.canonicalUrl,
+          noIndex: page.seo.noIndex,
+        }
+      : undefined,
+    locale,
+    isFallback: locale === "id" && !page,
+  });
+}
 
 const FALLBACK_PROGRAMS: MotorsportProgram[] = [
   {

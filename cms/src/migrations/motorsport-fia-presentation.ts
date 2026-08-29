@@ -4,6 +4,7 @@ const PROGRAM_UID = "api::motorsport-program.motorsport-program";
 const PROGRAM_SLUG = "fia-rallycross-world-cup-indonesia-2026";
 
 type DocumentService = {
+  findOne: (params: Record<string, unknown>) => Promise<any>;
   update: (params: Record<string, unknown>) => Promise<any>;
 };
 
@@ -188,6 +189,18 @@ export async function ensureFiaPresentation(strapi: Core.Strapi) {
   if (!programs.length) return;
 
   for (const program of programs) {
+    // FIA Rallycross now stores Format, Rundown, and Race-day Guide inside
+    // the grouped fiaRallycrossContent component. Once that canonical group
+    // exists, do not recreate the retired top-level presentationSections
+    // links on every Strapi restart.
+    const current = await service.findOne({
+      documentId: program.document_id,
+      locale: "en",
+      status: program.published_at ? "published" : "draft",
+      populate: ["fiaRallycrossContent"],
+    });
+    if (current?.fiaRallycrossContent) continue;
+
     const normalized = await normalizePresentationLinks(strapi, program.id);
     if (normalized.hasSections) {
       if (normalized.removed) {

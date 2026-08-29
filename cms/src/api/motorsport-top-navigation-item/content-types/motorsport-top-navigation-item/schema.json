@@ -4,6 +4,19 @@
   "info": { "singularName": "motorsport-top-navigation-item", "pluralName": "motorsport-top-navigation-items", "displayName": "Motorsport Top Navigation Item", "description": "Motorsport-only bilingual primary navigation configuration" },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "internalName": { "edit": { "description": "Internal editor label for this navigation item; not shown publicly." } },
+      "label": { "edit": { "description": "Navigation text shown in the Motorsport header." } },
+      "ariaLabel": { "edit": { "description": "Optional accessible label for the navigation link." } },
+      "href": { "edit": { "description": "Approved internal, cross-site, or external destination for this navigation item." } },
+      "linkType": { "edit": { "description": "Classify the destination so the frontend applies the correct link behavior." } },
+      "enabled": { "edit": { "description": "Show this navigation item in the public Motorsport header." } },
+      "displayOrder": { "edit": { "description": "Header order; lower numbers appear first." } },
+      "emphasis": { "edit": { "description": "Choose the standard or primary CTA visual treatment." } },
+      "openInNewTab": { "edit": { "description": "Open the destination in a new browser tab when enabled." } }
+    }
+  },
   "attributes": {
     "internalName": { "type": "string", "required": true, "minLength": 2, "maxLength": 80 },
     "label": { "type": "string", "required": true, "maxLength": 40, "pluginOptions": { "i18n": { "localized": true } } },

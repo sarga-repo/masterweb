@@ -21,7 +21,10 @@
         "edit": {
           "description": "Use an internal path beginning with / or an approved HTTPS external URL. External URLs open in a new tab."
         }
-      }
+      },
+      "title": { "edit": { "description": "Slide headline shown in the FIA Rallycross campaign carousel." } },
+      "description": { "edit": { "description": "Short slide introduction shown beside the campaign artwork." } },
+      "sortOrder": { "edit": { "description": "Carousel order; lower numbers appear first." } }
     }
   },
   "attributes": {

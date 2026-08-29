@@ -3276,10 +3276,18 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
 
   // IJTC and FIA Rallycross program/campaign hubs (idempotent by slug).
   for (const program of MOTORSPORT_PROGRAMS) {
-    const { relatedEventSlug, relatedTicketTitle, ...programData } =
+    const {
+      relatedEventSlug,
+      relatedTicketTitle,
+      eventRules: legacyEventRules,
+      rundown: legacyRundown,
+      ...programData
+    } =
       program as typeof program & {
         relatedEventSlug?: string;
         relatedTicketTitle?: string;
+        eventRules?: unknown[];
+        rundown?: unknown[];
       };
     const existing = await documents(
       "api::motorsport-program.motorsport-program",
@@ -3318,9 +3326,82 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         })) as { documentId: string } | null)
       : null;
 
+    const programPayload =
+      program.programType === "rallycross"
+        ? {
+            ...programData,
+            fiaRallycrossContent: {
+              formatSection: {
+                isActive: true,
+                showIndex: true,
+                indexLabel: "RX / FORMAT",
+                showEyebrow: true,
+                eyebrow: "Mixed surface / Maximum pressure",
+                showTitle: true,
+                title: "Every heat changes the order.",
+                showBody: true,
+                body: "Rallycross compresses starts, contact, strategy, and elimination into a format designed for immediate spectator energy.",
+                formatItems: [
+                  {
+                    isActive: true,
+                    sortOrder: 0,
+                    label: "01",
+                    title: "Launch",
+                    description:
+                      "Multiple cars attack the first corner together, turning reaction time into instant track position.",
+                    accent: "crimson",
+                  },
+                  {
+                    isActive: true,
+                    sortOrder: 1,
+                    label: "02",
+                    title: "Joker lap",
+                    description:
+                      "Every driver must take the alternate route, creating a strategy window that can reverse the running order.",
+                    accent: "orange",
+                  },
+                  {
+                    isActive: true,
+                    sortOrder: 2,
+                    label: "03",
+                    title: "Final",
+                    description:
+                      "The fastest qualifiers advance through elimination races into one decisive World Cup showdown.",
+                    accent: "teal",
+                  },
+                ],
+              },
+              rundownSection: {
+                isActive: true,
+                showIndex: true,
+                indexLabel: "RX / RUNDOWN",
+                showEyebrow: true,
+                eyebrow: "5-6 December 2026",
+                showTitle: true,
+                title: "Two days. One World Cup.",
+                showBody: true,
+                body: "Session times are managed in the Sarga CMS and remain subject to sporting or operational updates.",
+                rundownItems: legacyRundown ?? [],
+              },
+              raceDayGuideSection: {
+                isActive: true,
+                showIndex: true,
+                indexLabel: "RX / GUIDE",
+                showEyebrow: true,
+                eyebrow: "Race-day essentials",
+                showTitle: true,
+                title: "Know before you go.",
+                showBody: true,
+                body: "A practical spectator guide for a smooth arrival and a safe, high-energy weekend at the circuit.",
+                ruleItems: legacyEventRules ?? [],
+              },
+            },
+          }
+        : { ...programData, rundown: legacyRundown };
+
     await documents("api::motorsport-program.motorsport-program").create({
       data: {
-        ...programData,
+        ...programPayload,
         ...(relatedEvent ? { relatedEvents: [relatedEvent.documentId] } : {}),
         ...(relatedTicket
           ? { relatedTicketCtas: [relatedTicket.documentId] }
@@ -3345,20 +3426,22 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
       slug: { $eq: "fia-rallycross-world-cup-indonesia-2026" },
     },
     populate: [
-      "heroMedia",
       "bannerSlides.image",
-      "rundown",
-      "eventRules",
+      "motorsportPresentation.hero.backgroundMedia",
+      "fiaRallycrossContent.rundownSection.rundownItems",
+      "fiaRallycrossContent.raceDayGuideSection.ruleItems",
       "relatedEvents",
       "relatedTicketCtas",
       "seo",
     ],
   })) as {
     documentId: string;
-    heroMedia?: unknown;
+    motorsportPresentation?: { hero?: { backgroundMedia?: unknown } };
     bannerSlides?: Array<{ image?: unknown }>;
-    rundown?: unknown[];
-    eventRules?: unknown[];
+    fiaRallycrossContent?: {
+      rundownSection?: { rundownItems?: unknown[] };
+      raceDayGuideSection?: { ruleItems?: unknown[] };
+    };
     relatedEvents?: unknown[];
     relatedTicketCtas?: unknown[];
     seo?: unknown;
@@ -3366,12 +3449,12 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
 
   if (fiaCampaignSeed && fiaCampaign) {
     const needsCampaignCompletion =
-      !fiaCampaign.heroMedia ||
       (fiaCampaign.bannerSlides?.length ?? 0) <
         FIA_CAMPAIGN_MEDIA.slides.length ||
       fiaCampaign.bannerSlides?.some((slide) => !slide.image) ||
-      (fiaCampaign.rundown?.length ?? 0) < fiaCampaignSeed.rundown.length ||
-      (fiaCampaign.eventRules?.length ?? 0) <
+      (fiaCampaign.fiaRallycrossContent?.rundownSection?.rundownItems?.length ?? 0) <
+        fiaCampaignSeed.rundown.length ||
+      (fiaCampaign.fiaRallycrossContent?.raceDayGuideSection?.ruleItems?.length ?? 0) <
         fiaCampaignSeed.eventRules.length ||
       (fiaCampaign.relatedEvents?.length ?? 0) === 0 ||
       (fiaCampaign.relatedTicketCtas?.length ?? 0) === 0 ||
@@ -3403,6 +3486,8 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
       const {
         relatedEventSlug: _relatedEventSlug,
         relatedTicketTitle: _relatedTicketTitle,
+        rundown: _rundown,
+        eventRules: _eventRules,
         ...campaignData
       } = fiaCampaignSeed;
 
@@ -3410,11 +3495,48 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         documentId: fiaCampaign.documentId,
         data: {
           ...campaignData,
-          ...(heroMedia ? { heroMedia: heroMedia.id } : {}),
           bannerSlides: campaignData.bannerSlides.map((slide, index) => ({
             ...slide,
             ...(slideMedia[index] ? { image: slideMedia[index]!.id } : {}),
           })),
+          fiaRallycrossContent: {
+            formatSection: {
+              isActive: true,
+              showIndex: true,
+              indexLabel: "RX / FORMAT",
+              showEyebrow: true,
+              eyebrow: "Mixed surface / Maximum pressure",
+              showTitle: true,
+              title: "Every heat changes the order.",
+              showBody: true,
+              body: "Rallycross compresses starts, contact, strategy, and elimination into a format designed for immediate spectator energy.",
+              formatItems: [],
+            },
+            rundownSection: {
+              isActive: true,
+              showIndex: true,
+              indexLabel: "RX / RUNDOWN",
+              showEyebrow: true,
+              eyebrow: "5-6 December 2026",
+              showTitle: true,
+              title: "Two days. One World Cup.",
+              showBody: true,
+              body: "Session times are managed in the Sarga CMS and remain subject to sporting or operational updates.",
+              rundownItems: fiaCampaignSeed.rundown,
+            },
+            raceDayGuideSection: {
+              isActive: true,
+              showIndex: true,
+              indexLabel: "RX / GUIDE",
+              showEyebrow: true,
+              eyebrow: "Race-day essentials",
+              showTitle: true,
+              title: "Know before you go.",
+              showBody: true,
+              body: "A practical spectator guide for a smooth arrival and a safe, high-energy weekend at the circuit.",
+              ruleItems: fiaCampaignSeed.eventRules,
+            },
+          },
           seo: {
             ...campaignData.seo,
             ...(heroMedia ? { ogImage: heroMedia.id } : {}),

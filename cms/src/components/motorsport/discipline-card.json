@@ -11,8 +11,16 @@
         "edit": {
           "description": "Discipline card image: 1600 × 1000 px (8:5) recommended. Keep the action and vehicle/rider inside the crop-safe center area."
         }
+      },
+      "internalName": { "edit": { "description": "Internal editor label for this homepage discipline card." } },
+      "enabled": { "edit": { "description": "Show this discipline card on the Motorsport homepage." } },
+      "title": { "edit": { "description": "Public discipline name shown on the homepage card." } },
+      "shortLabel": { "edit": { "description": "Short label shown in compact discipline contexts." } },
+      "imageAlt": { "edit": { "description": "Accessible description of the discipline card image." } },
+      "href": { "edit": { "description": "Internal destination opened from the discipline card." } },
+      "accent": { "edit": { "description": "Approved visual accent color for the discipline card." } },
+      "sortOrder": { "edit": { "description": "Homepage card order; lower numbers appear first." } }
       }
-    }
   },
   "attributes": {
     "internalName": {

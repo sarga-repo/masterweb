@@ -1298,6 +1298,7 @@ export interface ApiMotorsportAboutPageMotorsportAboutPage
   extends Struct.SingleTypeSchema {
   collectionName: 'motorsport-about-page';
   info: {
+    description: 'CMS content for the public Sarga Motorsport About page. Edit the hero, profile, capabilities, team, and CTA sections in page order.';
     displayName: 'Motorsport About Page';
     pluralName: 'motorsport-about-pages';
     singularName: 'motorsport-about-page';
@@ -1434,6 +1435,7 @@ export interface ApiMotorsportContactPageMotorsportContactPage
   extends Struct.SingleTypeSchema {
   collectionName: 'motorsport-contact-page';
   info: {
+    description: 'CMS content for the public Sarga Motorsport Contact page. Edit inquiry copy, contact channels, and event/ticket support CTAs.';
     displayName: 'Motorsport Contact Page';
     pluralName: 'motorsport-contact-pages';
     singularName: 'motorsport-contact-page';
@@ -1467,15 +1469,6 @@ export interface ApiMotorsportContactPageMotorsportContactPage
       }>;
     informationBand: Schema.Attribute.Component<
       'motorsport.page-information-band',
-      false
-    > &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    inquiryControlSection: Schema.Attribute.Component<
-      'motorsport.page-section',
       false
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -1701,6 +1694,7 @@ export interface ApiMotorsportEventsPageMotorsportEventsPage
   extends Struct.SingleTypeSchema {
   collectionName: 'motorsport-events-page';
   info: {
+    description: 'CMS content for the public Sarga Motorsport Events hub. Edit the hero, event-control band, programme presentation, and calendar presentation in page order.';
     displayName: 'Motorsport Events Page';
     pluralName: 'motorsport-events-pages';
     singularName: 'motorsport-events-page';
@@ -1726,15 +1720,6 @@ export interface ApiMotorsportEventsPageMotorsportEventsPage
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    eventControlSection: Schema.Attribute.Component<
-      'motorsport.page-section',
-      false
-    > &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     hero: Schema.Attribute.Component<'motorsport.page-hero', false> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -1822,6 +1807,7 @@ export interface ApiMotorsportExperiencePageMotorsportExperiencePage
   extends Struct.SingleTypeSchema {
   collectionName: 'motorsport-experience-page';
   info: {
+    description: 'CMS content for the public Sarga Motorsport Experience page. Edit the hero, ecosystem pillars, track imagery, and programme CTAs.';
     displayName: 'Motorsport Experience Page';
     pluralName: 'motorsport-experience-pages';
     singularName: 'motorsport-experience-page';
@@ -1838,15 +1824,6 @@ export interface ApiMotorsportExperiencePageMotorsportExperiencePage
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    experienceControlSection: Schema.Attribute.Component<
-      'motorsport.page-section',
-      false
-    > &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     finalCtaSection: Schema.Attribute.Component<
       'motorsport.page-section',
       false
@@ -1949,6 +1926,7 @@ export interface ApiMotorsportGalleryPageMotorsportGalleryPage
   extends Struct.SingleTypeSchema {
   collectionName: 'motorsport-gallery-page';
   info: {
+    description: 'CMS content for the public Sarga Motorsport Gallery page. Edit the hero, information band, and archive guidance; images are managed in Media Gallery records.';
     displayName: 'Motorsport Gallery Page';
     pluralName: 'motorsport-gallery-pages';
     singularName: 'motorsport-gallery-page';
@@ -2052,6 +2030,7 @@ export interface ApiMotorsportHomePageMotorsportHomePage
   extends Struct.SingleTypeSchema {
   collectionName: 'motorsport-home-page';
   info: {
+    description: 'CMS content for the public Sarga Motorsport homepage. Edit each named section in the same order it appears on the site.';
     displayName: 'Motorsport Home Page';
     pluralName: 'motorsport-home-pages';
     singularName: 'motorsport-home-page';
@@ -2365,6 +2344,7 @@ export interface ApiMotorsportMerchandisePageMotorsportMerchandisePage
   extends Struct.SingleTypeSchema {
   collectionName: 'motorsport-merchandise-page';
   info: {
+    description: 'CMS content for the public Sarga Motorsport Merchandise showcase. Edit the hero, information band, catalogue presentation, and availability CTA.';
     displayName: 'Motorsport Merchandise Page';
     pluralName: 'motorsport-merchandise-pages';
     singularName: 'motorsport-merchandise-page';
@@ -2419,15 +2399,6 @@ export interface ApiMotorsportMerchandisePageMotorsportMerchandisePage
       'oneToMany',
       'api::motorsport-merchandise-page.motorsport-merchandise-page'
     >;
-    merchControlSection: Schema.Attribute.Component<
-      'motorsport.page-section',
-      false
-    > &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     navigationLabel: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -2596,6 +2567,7 @@ export interface ApiMotorsportNewsPageMotorsportNewsPage
   extends Struct.SingleTypeSchema {
   collectionName: 'motorsport-news-page';
   info: {
+    description: 'CMS content for the public Sarga Motorsport News hub. Edit the hero, editorial controls, lead story, archive, and gallery CTA in page order.';
     displayName: 'Motorsport News Page';
     pluralName: 'motorsport-news-pages';
     singularName: 'motorsport-news-page';
@@ -2660,15 +2632,6 @@ export interface ApiMotorsportNewsPageMotorsportNewsPage
       'api::motorsport-news-page.motorsport-news-page'
     >;
     navigationLabel: Schema.Attribute.String &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    newsControlSection: Schema.Attribute.Component<
-      'motorsport.page-section',
-      false
-    > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
@@ -2784,6 +2747,7 @@ export interface ApiMotorsportPartnersPageMotorsportPartnersPage
   extends Struct.SingleTypeSchema {
   collectionName: 'motorsport-partners-page';
   info: {
+    description: 'CMS content for the public Sarga Motorsport Partners page. Edit the hero, partner network presentation, and partnership inquiry CTA.';
     displayName: 'Motorsport Partners Page';
     pluralName: 'motorsport-partners-pages';
     singularName: 'motorsport-partners-page';
@@ -2837,15 +2801,6 @@ export interface ApiMotorsportPartnersPageMotorsportPartnersPage
       }>;
     pageAvailability: Schema.Attribute.Component<
       'shared.page-availability',
-      false
-    > &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
-    partnerControlSection: Schema.Attribute.Component<
-      'motorsport.page-section',
       false
     > &
       Schema.Attribute.SetPluginOptions<{
@@ -2947,13 +2902,16 @@ export interface ApiMotorsportProgramMotorsportProgram
           localized: true;
         };
       }>;
-    eventRules: Schema.Attribute.Component<'motorsport.rule-item', true> &
+    eventStartDate: Schema.Attribute.DateTime;
+    fiaRallycrossContent: Schema.Attribute.Component<
+      'motorsport.fia-rallycross-content',
+      false
+    > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
         };
       }>;
-    eventStartDate: Schema.Attribute.DateTime;
     heroMedia: Schema.Attribute.Media<'images' | 'videos'>;
     locale: Schema.Attribute.String;
     localizations: Schema.Attribute.Relation<
@@ -3468,6 +3426,7 @@ export interface ApiMotorsportTicketsPageMotorsportTicketsPage
   extends Struct.SingleTypeSchema {
   collectionName: 'motorsport-tickets-page';
   info: {
+    description: 'CMS content for the public Sarga Motorsport Tickets page. Edit partner ticket destinations, event listings, ticket information, and support copy without adding checkout logic.';
     displayName: 'Motorsport Tickets Page';
     pluralName: 'motorsport-tickets-pages';
     singularName: 'motorsport-tickets-page';
@@ -3554,15 +3513,6 @@ export interface ApiMotorsportTicketsPageMotorsportTicketsPage
       Schema.Attribute.Required &
       Schema.Attribute.Private &
       Schema.Attribute.DefaultTo<'motorsport'>;
-    ticketControlSection: Schema.Attribute.Component<
-      'motorsport.page-section',
-      false
-    > &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: true;
-        };
-      }>;
     ticketedEventsSection: Schema.Attribute.Component<
       'motorsport.page-section',
       false

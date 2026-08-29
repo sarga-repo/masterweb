@@ -39,7 +39,7 @@ export async function ensureIjtcPresentation(strapi: Core.Strapi) {
     filters: { slug: { $eq: PROGRAM_SLUG } },
     locale: "en",
     status: "published",
-    populate: ["motorsportPresentation", "rundown", "eventRules"],
+    populate: ["motorsportPresentation", "rundown"],
   });
 
   if (!program || program.motorsportPresentation) return;
@@ -63,9 +63,6 @@ export async function ensureIjtcPresentation(strapi: Core.Strapi) {
     data: {
       ...(visibleItems(program.rundown)
         ? { rundown: visibleItems(program.rundown) }
-        : {}),
-      ...(visibleItems(program.eventRules)
-        ? { eventRules: visibleItems(program.eventRules) }
         : {}),
       motorsportPresentation: {
         routeKey: "ijtc",

@@ -17,14 +17,41 @@ import {
   isCmsPageVisible,
   isCmsSectionVisible,
 } from "@/lib/cms-visibility";
+import { createMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "Experience",
-  description:
-    "Sarga Motorsport is more than racing - it's a 360° experience of professional competition, lifestyle culture, media coverage, and community energy.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const page = await fetchSitePage("custom", "/experience", locale);
+  return createMetadata({
+    title: page?.title ?? "Experience",
+    description:
+      page?.heroDescription ??
+      "Sarga Motorsport is more than racing - it's a 360° experience of professional competition, lifestyle culture, media coverage, and community energy.",
+    path: "/experience",
+    image: page?.heroImage,
+    seo: page?.seo
+      ? {
+          metaTitle: page.seo.metaTitle,
+          metaDescription: page.seo.metaDescription,
+          ogTitle: page.seo.ogTitle,
+          ogDescription: page.seo.ogDescription,
+          ogImageUrl: page.seo.ogImage?.url,
+          canonicalUrl: page.seo.canonicalUrl,
+          noIndex: page.seo.noIndex,
+        }
+      : undefined,
+    locale,
+    isFallback: locale === "id" && !page,
+  });
+}
 
-const PILLARS = [
+const PILLARS: Array<{
+  index: string;
+  title: string;
+  description: string;
+  accent: "crimson" | "orange" | "yellow" | "teal" | "blue";
+  href?: string;
+}> = [
   {
     index: "01",
     title: "Professional car racing",
@@ -214,6 +241,7 @@ export default async function ExperiencePage() {
                       title={pillar.title}
                       description={pillar.description}
                       accent={pillar.accent}
+                      href={pillar.href}
                       className={
                         [
                           "lg:col-span-7",
@@ -288,30 +316,63 @@ export default async function ExperiencePage() {
             >
               <div className="ms-shell grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
                 <div>
-                  <p className="ms-data-label text-ms-slipstream-teal">
-                    {finalCta?.eyebrow ?? "Enter the programme"}
-                  </p>
-                  <h2 className="ms-heading-section mt-5 max-w-[15ch]">
-                    {finalCta?.title ?? "Find the next race weekend."}
-                  </h2>
+                  {finalCta?.showEyebrow !== false ? (
+                    <p className="ms-data-label text-ms-slipstream-teal">
+                      {finalCta?.eyebrow ?? "Enter the programme"}
+                    </p>
+                  ) : null}
+                  {finalCta?.showTitle !== false ? (
+                    <h2 className="ms-heading-section mt-5 max-w-[15ch]">
+                      {finalCta?.title ?? "Find the next race weekend."}
+                    </h2>
+                  ) : null}
+                  {finalCta?.showBody !== false && finalCta?.body ? (
+                    <p className="mt-4 max-w-2xl leading-7 text-ms-warm-white/60">
+                      {finalCta.body}
+                    </p>
+                  ) : null}
                 </div>
                 <div className="flex flex-wrap gap-6">
-                  <Link
-                    href={finalCtaHref}
-                    className="border-b border-ms-electric-yellow/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-electric-yellow"
-                  >
-                    {finalCta?.ctaLabel ?? "Explore events"}
-                  </Link>
-                  <Link
-                    href={
-                      finalCta?.secondaryCtaUrl?.startsWith("/")
-                        ? finalCta.secondaryCtaUrl
-                        : "/contact"
-                    }
-                    className="border-b border-ms-slipstream-teal/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
-                  >
-                    {finalCta?.secondaryCtaLabel ?? "Experience inquiries"}
-                  </Link>
+                  {finalCta?.showCta !== false ? (
+                    <Link
+                      href={finalCtaHref}
+                      target={
+                        finalCta?.ctaTarget === "newWindow"
+                          ? "_blank"
+                          : undefined
+                      }
+                      rel={
+                        finalCta?.ctaTarget === "newWindow"
+                          ? "noreferrer"
+                          : undefined
+                      }
+                      className="border-b border-ms-electric-yellow/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-electric-yellow"
+                    >
+                      {finalCta?.ctaLabel ?? "Explore events"}
+                    </Link>
+                  ) : null}
+                  {finalCta?.showCta !== false ? (
+                    <Link
+                      href={
+                        finalCta?.secondaryCtaUrl?.startsWith("/")
+                          ? finalCta.secondaryCtaUrl
+                          : "/contact"
+                      }
+                      target={
+                        finalCta?.secondaryCtaTarget === "newWindow"
+                          ? "_blank"
+                          : undefined
+                      }
+                      rel={
+                        finalCta?.secondaryCtaTarget === "newWindow"
+                          ? "noreferrer"
+                          : undefined
+                      }
+                      className="border-b border-ms-slipstream-teal/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
+                    >
+                      {finalCta?.secondaryCtaLabel ?? "Experience inquiries"}
+                    </Link>
+                  ) : null}
                 </div>
               </div>
             </section>

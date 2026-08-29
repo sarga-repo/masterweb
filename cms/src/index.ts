@@ -19,6 +19,8 @@ import { retireMotorsportLegacyContent } from "./migrations/motorsport-legacy-re
 import { backfillMotorsportShowFieldDefaults } from "./migrations/motorsport-show-field-defaults";
 import { ensureIjtcPresentation } from "./migrations/motorsport-ijtc-presentation";
 import { ensureFiaPresentation } from "./migrations/motorsport-fia-presentation";
+import { migrateFiaRallycrossContent } from "./migrations/motorsport-fia-rallycross-content";
+import { retireMotorsportLegacyFields } from "./migrations/motorsport-legacy-field-retirement";
 import { ensureMotorsportTicketsPage } from "./migrations/motorsport-tickets-page";
 import { migrateMotorsportProgramTicketCtas } from "./migrations/motorsport-program-ticket-cta";
 import { ensureMotorsportInformationBandMetrics } from "./migrations/motorsport-information-band-metrics";
@@ -67,6 +69,8 @@ export default {
     await backfillMotorsportShowFieldDefaults(strapi);
     await ensureIjtcPresentation(strapi);
     await ensureFiaPresentation(strapi);
+    await migrateFiaRallycrossContent(strapi);
+    await retireMotorsportLegacyFields(strapi);
     await ensureMotorsportTicketsPage(strapi);
     await ensureMotorsportInformationBandMetrics(strapi);
     await backfillMotorsportPageRoutes(strapi);

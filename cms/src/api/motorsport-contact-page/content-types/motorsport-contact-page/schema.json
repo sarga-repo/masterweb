@@ -1,8 +1,27 @@
 {
   "kind": "singleType",
-  "info": { "singularName": "motorsport-contact-page", "pluralName": "motorsport-contact-pages", "displayName": "Motorsport Contact Page" },
+  "info": {
+    "singularName": "motorsport-contact-page",
+    "pluralName": "motorsport-contact-pages",
+    "displayName": "Motorsport Contact Page",
+    "description": "CMS content for the public Sarga Motorsport Contact page. Edit inquiry copy, contact channels, and event/ticket support CTAs."
+  },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "routePath": { "edit": { "description": "Canonical frontend path for this page. Keep this as /contact." } },
+      "routeAliases": { "edit": { "description": "Optional legacy paths that should resolve to this page during migration." } },
+      "title": { "edit": { "description": "Internal page name used in metadata and CMS identification." } },
+      "navigationLabel": { "edit": { "description": "Optional navigation label retained for page metadata; the header uses the Top Navigation collection." } },
+      "hero": { "edit": { "description": "Contact hero copy, media, visibility controls, and optional metrics." } },
+      "informationBand": { "edit": { "description": "Blue inquiry-control band displayed below the hero." } },
+      "inquiryFormSection": { "edit": { "description": "Inquiry form heading and CMS-managed contact channel items." } },
+      "finalCtaSection": { "edit": { "description": "Event and ticket support CTA block near the bottom of the Contact page." } },
+      "pageAvailability": { "edit": { "description": "Controls whether the public Contact page is available or shows Coming Soon." } },
+      "seo": { "edit": { "description": "Search and social metadata used by the Contact page." } }
+    }
+  },
   "attributes": {
     "siteScope": { "type": "enumeration", "enum": ["motorsport"], "default": "motorsport", "required": true, "private": true },
     "routePath": { "type": "string", "default": "/contact", "required": true, "pluginOptions": { "i18n": { "localized": false } } },
@@ -11,7 +30,6 @@
     "navigationLabel": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
     "hero": { "type": "component", "component": "motorsport.page-hero", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "informationBand": { "type": "component", "component": "motorsport.page-information-band", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "inquiryControlSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "inquiryFormSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "finalCtaSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "pageAvailability": { "type": "component", "component": "shared.page-availability", "repeatable": false, "pluginOptions": { "i18n": { "localized": true } } },

@@ -12,6 +12,7 @@ import {
   formatProgramStatus,
   getIjtcInformationBand,
   getIjtcProgram,
+  getIjtcSection,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
 import { getRequestLocale } from "@/lib/i18n/request";
@@ -32,16 +33,25 @@ export default async function IjtcSchedulePage() {
   ]);
   if (!program) notFound();
   const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
+  const scheduleSection = getIjtcSection(program, "race-schedule");
+  const hero = program.presentationHero;
 
   return (
     <>
       <PageHero
-        kicker={`IJTC / ${program.seasonLabel}`}
+        kicker={hero?.eyebrow ?? `IJTC / ${program.seasonLabel}`}
         kickerColor="orange"
-        title="Race schedule."
-        description="Published rounds, sessions, and venue status for the Indonesia Junior Talent Cup programme."
-        backgroundImage={program.image}
-        backgroundAlt={program.imageAlt}
+        title={hero?.title ?? "Race schedule."}
+        description={
+          hero?.description ??
+          "Published rounds, sessions, and venue status for the Indonesia Junior Talent Cup programme."
+        }
+        showKicker={hero?.showEyebrow}
+        showTitle={hero?.showTitle}
+        showDescription={hero?.showDescription}
+        showMedia={hero?.showMedia}
+        backgroundImage={hero?.backgroundMedia?.url ?? program.image}
+        backgroundAlt={hero?.backgroundMedia?.alt ?? program.imageAlt}
         accent="blue"
         accentPosition="bottom-right"
         surface="heat"
@@ -71,10 +81,17 @@ export default async function IjtcSchedulePage() {
       >
         <div className="ms-shell">
           <SectionHeader
-            index="SCHEDULE"
-            eyebrow="Race calendar"
-            title="Every published session."
-            description="The CMS controls round order, timing, description, and venue information. Placeholder dates remain clearly identified."
+            index={scheduleSection?.indexLabel ?? "SCHEDULE"}
+            showIndex={scheduleSection?.showIndex ?? true}
+            showEyebrow={scheduleSection?.showEyebrow ?? true}
+            showTitle={scheduleSection?.showTitle ?? true}
+            showDescription={scheduleSection?.showBody ?? true}
+            eyebrow={scheduleSection?.eyebrow ?? "Race calendar"}
+            title={scheduleSection?.title ?? "Every published session."}
+            description={
+              scheduleSection?.body ??
+              "The CMS controls round order, timing, description, and venue information. Placeholder dates remain clearly identified."
+            }
           />
           <div className="mt-14 space-y-5">
             {program.schedule.map((entry) => (

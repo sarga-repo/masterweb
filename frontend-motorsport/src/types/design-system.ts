@@ -125,6 +125,42 @@ export type ProgramNavItem = LinkItem & {
   exact?: boolean;
 };
 
+export type MotorsportPresentationSection = {
+  sectionKey: string;
+  isActive: boolean;
+  indexLabel?: string;
+  showIndex: boolean;
+  showEyebrow: boolean;
+  showTitle: boolean;
+  showBody: boolean;
+  showMedia?: boolean;
+  showCta?: boolean;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  eyebrow?: string;
+  title: string;
+  body?: string;
+  media?: MediaSource;
+  items?: Array<{
+    isActive: boolean;
+    sortOrder: number;
+    label?: string;
+    title: string;
+    description?: string;
+    media?: MediaSource;
+    mediaAlt?: string;
+    accent?: "crimson" | "orange" | "yellow" | "teal" | "blue";
+    href?: string;
+    hrefLabel?: string;
+  }>;
+};
+
+export type MotorsportFiaRallycrossContent = {
+  formatSection?: MotorsportPresentationSection | null;
+  rundownSection?: MotorsportPresentationSection | null;
+  raceDayGuideSection?: MotorsportPresentationSection | null;
+};
+
 export type ScheduleEntry = {
   id: string;
   roundLabel: string;
@@ -172,33 +208,8 @@ export type MotorsportProgram = {
   imageAlt: string;
   ctaLabel: string;
   presentationHero?: MotorsportPageHero | null;
-  presentationSections?: Array<{
-    sectionKey: string;
-    isActive: boolean;
-    indexLabel?: string;
-    showIndex: boolean;
-    showEyebrow: boolean;
-    showTitle: boolean;
-    showBody: boolean;
-    showMedia?: boolean;
-    showCta?: boolean;
-    eyebrow?: string;
-    title: string;
-    body?: string;
-    media?: MediaSource;
-    items?: Array<{
-      isActive: boolean;
-      sortOrder: number;
-      label?: string;
-      title: string;
-      description?: string;
-      media?: MediaSource;
-      mediaAlt?: string;
-      accent?: "crimson" | "orange" | "yellow" | "teal" | "blue";
-      href?: string;
-      hrefLabel?: string;
-    }>;
-  }>;
+  presentationSections?: MotorsportPresentationSection[];
+  fiaRallycrossContent?: MotorsportFiaRallycrossContent;
   informationBand?: MotorsportPageInformationBand | null;
 };
 export type MotorsportProgramDetail = MotorsportProgram & {

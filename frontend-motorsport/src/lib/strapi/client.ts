@@ -77,7 +77,18 @@ export function mediaUrl(url?: string): string {
 function populateParam(populate: string | string[]): string {
   if (populate === "*") return "populate=*";
   if (Array.isArray(populate)) {
-    return populate
+    const fields = [...new Set(populate)];
+    // Strapi 5 rejects a relation being requested both as a scalar populate
+    // and as a nested populate object. A nested request already includes the
+    // relation itself, so omit the redundant parent entry.
+    return fields
+      .filter(
+        (field) =>
+          !fields.some(
+            (candidate) =>
+              candidate !== field && candidate.startsWith(`${field}.`),
+          ),
+      )
       .map((field) => {
         const [root, ...children] = field.split(".");
         const nested = children.map((child) => `[populate][${child}]`).join("");
@@ -134,6 +145,9 @@ export class StrapiPreviewFetchError extends Error {
     this.collection = collection;
   }
 }
+
+const PUBLISHED_CMS_TIMEOUT_MS = 4_000;
+const PREVIEW_CMS_TIMEOUT_MS = 15_000;
 
 export async function isStrapiPreviewEnabled() {
   const { isEnabled } = await draftMode();
@@ -224,7 +238,10 @@ export async function fetchStrapiListResult<T>(
     const documentId = requestOptions.filters?.["filters[documentId][$eq]"];
     const fetchWithAuth = async (useToken: boolean) => {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 4_000);
+      const timeout = setTimeout(
+        () => controller.abort(),
+        preview.status ? PREVIEW_CMS_TIMEOUT_MS : PUBLISHED_CMS_TIMEOUT_MS,
+      );
       try {
         return await fetch(url, {
           signal: controller.signal,
@@ -397,7 +414,10 @@ export async function fetchStrapiSingleResult<T>(
       : undefined;
     const fetchWithAuth = async (useToken: boolean) => {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 4_000);
+      const timeout = setTimeout(
+        () => controller.abort(),
+        preview.status ? PREVIEW_CMS_TIMEOUT_MS : PUBLISHED_CMS_TIMEOUT_MS,
+      );
       try {
         return await fetch(url, {
           signal: controller.signal,

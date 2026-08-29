@@ -20,7 +20,29 @@
         "edit": {
           "description": "Event gallery: images at 2000 × 1333 px (3:2) recommended; use consistent orientation within one gallery."
         }
-      }
+      },
+      "motorsportPresentation": { "edit": { "description": "Hero and Information Band presentation shown on the event detail page." } },
+      "title": { "edit": { "description": "Public event name used in cards, detail headings, and metadata." } },
+      "slug": { "edit": { "description": "Stable event URL identifier. Change only with a redirect plan." } },
+      "description": { "edit": { "description": "Rich event description shown in the event overview." } },
+      "eventDate": { "edit": { "description": "Event start date shown in event cards and detail metrics." } },
+      "endDate": { "edit": { "description": "Optional event end date used to form the public date range." } },
+      "eventStatus": { "edit": { "description": "Lifecycle state controlling public event visibility and status labels." } },
+      "racingCategory": { "edit": { "description": "Racing class shown in event metadata and cards." } },
+      "seriesName": { "edit": { "description": "Series name shown in event metadata." } },
+      "venue": { "edit": { "description": "Primary public venue name." } },
+      "venueAddress": { "edit": { "description": "Optional visitor-facing venue address for future event detail use." } },
+      "circuitName": { "edit": { "description": "Optional circuit name used when no primary venue is available." } },
+      "schedule": { "edit": { "description": "Ordered event sessions for schedule-aware detail integrations." } },
+      "ticketCtas": { "edit": { "description": "Approved ticket destinations related to this event; checkout remains external." } },
+      "sponsors": { "edit": { "description": "Partners displayed in the event sponsor strip." } },
+      "ticketCtaLabel": { "edit": { "description": "Legacy ticket action label retained for older event records." } },
+      "ticketUrl": { "edit": { "description": "Legacy ticket destination retained for migration compatibility; prefer related Ticket CTA records." } },
+      "ticketIntegrationType": { "edit": { "description": "Legacy ticket behavior retained for migration compatibility; prefer related Ticket CTA records." } },
+      "broadcastUrl": { "edit": { "description": "Optional approved broadcast destination for future event integrations." } },
+      "embedUrl": { "edit": { "description": "Optional approved embed destination for future event integrations." } },
+      "business": { "edit": { "description": "Optional ecosystem business relation for event ownership context." } },
+      "seo": { "edit": { "description": "Search and social metadata for the event detail page." } }
     }
   },
   "attributes": {

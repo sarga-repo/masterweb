@@ -9,6 +9,20 @@
   },
   "options": { "draftAndPublish": true },
   "pluginOptions": {},
+  "config": {
+    "metadatas": {
+      "program": { "edit": { "description": "Programme whose public classification contains this standing record." } },
+      "seasonLabel": { "edit": { "description": "Season label shown in the classification context." } },
+      "roundLabel": { "edit": { "description": "Latest classified round label for this result." } },
+      "rider": { "edit": { "description": "Rider relation used to display name, number, team, region, and portrait." } },
+      "position": { "edit": { "description": "Current classification position; use a positive whole number." } },
+      "points": { "edit": { "description": "Championship points for the selected rider." } },
+      "resultSummary": { "edit": { "description": "Short latest-result context shown beside the points total." } },
+      "resultDate": { "edit": { "description": "Date associated with the latest result summary." } },
+      "siteScope": { "edit": { "description": "Site visibility scope. Use motorsport for the dedicated Motorsport frontend." } },
+      "sites": { "edit": { "description": "Optional multisite assignments for this standing record." } }
+    }
+  },
   "attributes": {
     "program": {
       "type": "relation",

@@ -5,6 +5,13 @@
     "description": "One editable label/value item in a Motorsport metric group."
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "isActive": { "edit": { "description": "Show this metric in the information band." } },
+      "label": { "edit": { "description": "Short metric label shown above the value." } },
+      "value": { "edit": { "description": "Metric value shown in the information band." } }
+    }
+  },
   "attributes": {
     "isActive": {
       "type": "boolean",

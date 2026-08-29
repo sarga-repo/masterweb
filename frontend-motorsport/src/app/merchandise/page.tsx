@@ -11,6 +11,7 @@ import {
 } from "@/components";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { fetchMerchandise, fetchSitePage } from "@/lib/cms-data";
+import { createMetadata } from "@/lib/seo/metadata";
 import type { MerchandiseItem } from "@/types/design-system";
 import { getRequestLocale } from "@/lib/i18n/request";
 import { isStrapiPreviewEnabled } from "@/lib/strapi/client";
@@ -20,11 +21,31 @@ import {
   isCmsSectionVisible,
 } from "@/lib/cms-visibility";
 
-export const metadata: Metadata = {
-  title: "Merchandise",
-  description:
-    "Preview official Sarga Motorsport merchandise. Availability is handled through approved partners or direct inquiry-no internal checkout.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const page = await fetchSitePage("merchandise", undefined, locale);
+  return createMetadata({
+    title: page?.title ?? "Merchandise",
+    description:
+      page?.heroDescription ??
+      "Preview official Sarga Motorsport merchandise. Availability is handled through approved partners or direct inquiry-no internal checkout.",
+    path: "/merchandise",
+    image: page?.heroImage,
+    seo: page?.seo
+      ? {
+          metaTitle: page.seo.metaTitle,
+          metaDescription: page.seo.metaDescription,
+          ogTitle: page.seo.ogTitle,
+          ogDescription: page.seo.ogDescription,
+          ogImageUrl: page.seo.ogImage?.url,
+          canonicalUrl: page.seo.canonicalUrl,
+          noIndex: page.seo.noIndex,
+        }
+      : undefined,
+    locale,
+    isFallback: locale === "id" && !page,
+  });
+}
 
 const FALLBACK_ITEMS: MerchandiseItem[] = [
   {
@@ -218,28 +239,46 @@ export default async function MerchandisePage() {
               <div className="ms-shell">
                 <div className="ms-panel grid gap-8 bg-transparent p-8 sm:p-12 lg:grid-cols-[1fr_auto] lg:items-end">
                   <div>
-                    <p className="ms-kicker text-ms-slipstream-teal">
-                      {finalCta?.eyebrow ?? "Availability desk"}
-                    </p>
-                    <h2 className="ms-heading-section mt-5 max-w-[12ch]">
-                      {finalCta?.title ?? "Need release or sizing information?"}
-                    </h2>
-                    <p className="mt-5 max-w-2xl leading-7 text-ms-warm-white/58">
-                      {finalCta?.body ??
-                        "Send a merchandise inquiry. The team can confirm whether an item is pending, inquiry-only, or available through an approved store."}
-                    </p>
+                    {finalCta?.showEyebrow !== false ? (
+                      <p className="ms-kicker text-ms-slipstream-teal">
+                        {finalCta?.eyebrow ?? "Availability desk"}
+                      </p>
+                    ) : null}
+                    {finalCta?.showTitle !== false ? (
+                      <h2 className="ms-heading-section mt-5 max-w-[12ch]">
+                        {finalCta?.title ?? "Need release or sizing information?"}
+                      </h2>
+                    ) : null}
+                    {finalCta?.showBody !== false ? (
+                      <p className="mt-5 max-w-2xl leading-7 text-ms-warm-white/58">
+                        {finalCta?.body ??
+                          "Send a merchandise inquiry. The team can confirm whether an item is pending, inquiry-only, or available through an approved store."}
+                      </p>
+                    ) : null}
                   </div>
-                  <Link
-                    href={
-                      finalCta?.ctaUrl?.startsWith("/")
-                        ? finalCta.ctaUrl
-                        : "/contact"
-                    }
-                    className="group inline-flex min-h-14 items-center gap-4 bg-ms-apex-crimson px-7 text-[0.64rem] font-black uppercase tracking-[0.16em] transition-colors hover:bg-ms-ignition-orange"
-                  >
-                    {finalCta?.ctaLabel ?? "Contact merchandise desk"}
-                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
+                  {finalCta?.showCta !== false ? (
+                    <Link
+                      href={
+                        finalCta?.ctaUrl?.startsWith("/")
+                          ? finalCta.ctaUrl
+                          : "/contact"
+                      }
+                      target={
+                        finalCta?.ctaTarget === "newWindow"
+                          ? "_blank"
+                          : undefined
+                      }
+                      rel={
+                        finalCta?.ctaTarget === "newWindow"
+                          ? "noreferrer"
+                          : undefined
+                      }
+                      className="group inline-flex min-h-14 items-center gap-4 bg-ms-apex-crimson px-7 text-[0.64rem] font-black uppercase tracking-[0.16em] transition-colors hover:bg-ms-ignition-orange"
+                    >
+                      {finalCta?.ctaLabel ?? "Contact merchandise desk"}
+                      <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                  ) : null}
                 </div>
               </div>
             </section>

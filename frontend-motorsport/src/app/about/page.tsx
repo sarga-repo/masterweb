@@ -236,10 +236,12 @@ export default async function AboutPage() {
               >
                 <ResilientImage
                   src={
+                    profile?.media?.url ||
                     page?.heroImage ||
                     "/media/hero/sarga-motorsport-hero-paddock-ready.jpg"
                   }
                   alt={
+                    profile?.media?.alternativeText ||
                     page?.heroImageAlt ||
                     "Driver and pit crew preparing a touring car in a warm daylight paddock"
                   }
@@ -437,31 +439,49 @@ export default async function AboutPage() {
                 data-cms-section-key="contact-cta"
                 data-cms-enabled="true"
               >
-                <p className="ms-kicker text-ms-ignition-orange">
-                  {contactCta?.eyebrow ?? "Contact us"}
-                </p>
-                <h2 className="ms-heading-section mt-6 max-w-[11ch]">
-                  {contactCta?.title ??
-                    "Start a conversation with race control."}
-                </h2>
-                <MarkdownContent
-                  value={
-                    contactCta?.body ??
-                    "Partnerships, media, event support, talent pathways, and general Motorsport inquiries are routed through the contact desk."
-                  }
-                  className="ms-rich-text mt-6 max-w-xl leading-7 text-ms-warm-white/72"
-                />
-                <Link
-                  href={
-                    contactCta?.ctaUrl?.startsWith("/")
-                      ? contactCta.ctaUrl
-                      : "/contact"
-                  }
-                  className="group mt-8 inline-flex items-center gap-4 border-b border-ms-warm-white/55 pb-3 text-[0.65rem] font-black uppercase tracking-[0.16em]"
-                >
-                  {contactCta?.ctaLabel ?? "Contact Sarga Motorsport"}
-                  <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-                </Link>
+                {contactCta?.showEyebrow !== false ? (
+                  <p className="ms-kicker text-ms-ignition-orange">
+                    {contactCta?.eyebrow ?? "Contact us"}
+                  </p>
+                ) : null}
+                {contactCta?.showTitle !== false ? (
+                  <h2 className="ms-heading-section mt-6 max-w-[11ch]">
+                    {contactCta?.title ??
+                      "Start a conversation with race control."}
+                  </h2>
+                ) : null}
+                {contactCta?.showBody !== false ? (
+                  <MarkdownContent
+                    value={
+                      contactCta?.body ??
+                      "Partnerships, media, event support, talent pathways, and general Motorsport inquiries are routed through the contact desk."
+                    }
+                    className="ms-rich-text mt-6 max-w-xl leading-7 text-ms-warm-white/72"
+                  />
+                ) : null}
+                {contactCta?.showCta !== false ? (
+                  <Link
+                    href={
+                      contactCta?.ctaUrl?.startsWith("/")
+                        ? contactCta.ctaUrl
+                        : "/contact"
+                    }
+                    target={
+                      contactCta?.ctaTarget === "newWindow"
+                        ? "_blank"
+                        : undefined
+                    }
+                    rel={
+                      contactCta?.ctaTarget === "newWindow"
+                        ? "noreferrer"
+                        : undefined
+                    }
+                    className="group mt-8 inline-flex items-center gap-4 border-b border-ms-warm-white/55 pb-3 text-[0.65rem] font-black uppercase tracking-[0.16em]"
+                  >
+                    {contactCta?.ctaLabel ?? "Contact Sarga Motorsport"}
+                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                ) : null}
               </article>
             ) : null}
             {isCmsSectionVisible(ecosystemCta) ? (
@@ -470,23 +490,40 @@ export default async function AboutPage() {
                 data-cms-enabled="true"
                 className="border-t border-ms-warm-white/18 pt-10 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0"
               >
-                <p className="ms-kicker text-ms-slipstream-teal">
-                  {ecosystemCta?.eyebrow ?? "Part of Sarga.co"}
-                </p>
-                <h2 className="ms-heading-section mt-6 max-w-[11ch]">
-                  {ecosystemCta?.title ??
-                    "One ecosystem. A dedicated racing home."}
-                </h2>
-                <MarkdownContent
-                  value={
-                    ecosystemCta?.body ??
-                    "Sarga.co remains the group gateway. This dedicated site is where Motorsport programmes, events, stories, tickets, and fan culture live in full."
-                  }
-                  className="ms-rich-text mt-6 max-w-xl leading-7 text-ms-warm-white/72"
-                />
-                {ecosystemCta?.ctaUrl?.startsWith("/") ? (
+                {ecosystemCta?.showEyebrow !== false ? (
+                  <p className="ms-kicker text-ms-slipstream-teal">
+                    {ecosystemCta?.eyebrow ?? "Part of Sarga.co"}
+                  </p>
+                ) : null}
+                {ecosystemCta?.showTitle !== false ? (
+                  <h2 className="ms-heading-section mt-6 max-w-[11ch]">
+                    {ecosystemCta?.title ??
+                      "One ecosystem. A dedicated racing home."}
+                  </h2>
+                ) : null}
+                {ecosystemCta?.showBody !== false ? (
+                  <MarkdownContent
+                    value={
+                      ecosystemCta?.body ??
+                      "Sarga.co remains the group gateway. This dedicated site is where Motorsport programmes, events, stories, tickets, and fan culture live in full."
+                    }
+                    className="ms-rich-text mt-6 max-w-xl leading-7 text-ms-warm-white/72"
+                  />
+                ) : null}
+                {ecosystemCta?.showCta !== false &&
+                ecosystemCta?.ctaUrl?.startsWith("/") ? (
                   <Link
                     href={ecosystemCta.ctaUrl}
+                    target={
+                      ecosystemCta.ctaTarget === "newWindow"
+                        ? "_blank"
+                        : undefined
+                    }
+                    rel={
+                      ecosystemCta.ctaTarget === "newWindow"
+                        ? "noreferrer"
+                        : undefined
+                    }
                     className="group mt-8 inline-flex items-center gap-4 border-b border-ms-slipstream-teal/55 pb-3 text-[0.65rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
                   >
                     {ecosystemCta.ctaLabel ?? "Visit Sarga.co"}

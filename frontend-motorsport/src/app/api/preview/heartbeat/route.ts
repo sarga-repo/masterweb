@@ -56,7 +56,9 @@ export async function GET() {
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 4_000);
+  // Deeply populated preview documents can take longer while Strapi is
+  // serving the editor and the preview frame concurrently.
+  const timeout = setTimeout(() => controller.abort(), 15_000);
   try {
     const cmsResponse = await fetch(
       `${strapiConfig.apiUrl}/api/${collection}?${params.toString()}`,

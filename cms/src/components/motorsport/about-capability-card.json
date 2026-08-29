@@ -12,6 +12,13 @@
           "description": "Optional label shown above the card title. Defaults to 01, 02, 03… if empty."
         }
       }
+      ,
+      "internalName": { "edit": { "description": "Internal editor key for this capability card; it is not shown publicly." } },
+      "enabled": { "edit": { "description": "Show this capability card." } },
+      "title": { "edit": { "description": "Capability card heading shown in the About grid." } },
+      "description": { "edit": { "description": "Short capability explanation shown below the card heading." } },
+      "sortOrder": { "edit": { "description": "Lower numbers appear first in the capability grid." } },
+      "accent": { "edit": { "description": "Approved Motorsport accent treatment for this capability card." } }
     }
   },
   "attributes": {

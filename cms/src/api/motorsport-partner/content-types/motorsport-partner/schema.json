@@ -10,7 +10,13 @@
         "edit": {
           "description": "Partner logo: SVG preferred; otherwise transparent PNG at 800 × 400 px (2:1) with generous clear space."
         }
-      }
+      },
+      "name": { "edit": { "description": "Partner name shown beside the logo and in accessible text." } },
+      "slug": { "edit": { "description": "Stable partner identifier for internal linking and content management." } },
+      "websiteUrl": { "edit": { "description": "Optional HTTPS destination opened when the partner logo is selected." } },
+      "partnerType": { "edit": { "description": "Partner classification used for editorial organization." } },
+      "sortOrder": { "edit": { "description": "Logo order in partner strips; lower numbers appear first." } },
+      "isActive": { "edit": { "description": "Show this partner in public Motorsport partner queries." } }
     }
   },
   "attributes": {

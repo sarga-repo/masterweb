@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
 
 import { InformationBand, PageHero, SectionHeader } from "@/components";
+import { MarkdownContent } from "@/components/content/markdown-content";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { ResilientImage } from "@/components/ui/resilient-image";
 import { fetchMotorsportTheme } from "@/lib/cms-data";
 import {
   getIjtcInformationBand,
   getIjtcProgram,
+  getIjtcSection,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
 import { getRequestLocale } from "@/lib/i18n/request";
@@ -46,16 +48,34 @@ export default async function AboutIjtcPage() {
   ]);
   if (!program) notFound();
   const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
+  const purposeSection = getIjtcSection(program, "purpose");
+  const modelSection = getIjtcSection(program, "model");
+  const entrySection = getIjtcSection(program, "become-riders");
+  const hero = program.presentationHero;
+  const principles = modelSection?.items?.length
+    ? modelSection.items
+        .filter((item) => item.isActive !== false)
+        .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+        .map((item, index) => ({
+          index: item.label ?? String(index + 1).padStart(2, "0"),
+          title: item.title,
+          body: item.description ?? "",
+        }))
+    : PRINCIPLES;
 
   return (
     <>
       <PageHero
-        kicker={`About IJTC / ${program.seasonLabel}`}
+        kicker={hero?.eyebrow ?? `About IJTC / ${program.seasonLabel}`}
         kickerColor="yellow"
-        title="Built for progression."
-        description={program.summary}
-        backgroundImage={program.image}
-        backgroundAlt={program.imageAlt}
+        title={hero?.title ?? "Built for progression."}
+        description={hero?.description ?? program.summary}
+        showKicker={hero?.showEyebrow}
+        showTitle={hero?.showTitle}
+        showDescription={hero?.showDescription}
+        showMedia={hero?.showMedia}
+        backgroundImage={hero?.backgroundMedia?.url ?? program.image}
+        backgroundAlt={hero?.backgroundMedia?.alt ?? program.imageAlt}
         accent="orange"
         accentPosition="bottom-left"
         surface="heat"
@@ -83,7 +103,10 @@ export default async function AboutIjtcPage() {
         <div className="ms-shell grid gap-12 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,.92fr)] lg:items-center">
           <div className="ms-panel relative aspect-[16/11] overflow-hidden">
             <ResilientImage
-              src="/media/sarga-motorsport-discipline-motorcycle-daylight.jpg"
+              src={
+                purposeSection?.media ??
+                "/media/sarga-motorsport-discipline-motorcycle-daylight.jpg"
+              }
               alt="Motorcycle riders developing race craft on a daylight circuit"
               fallbackSrc="/media/motorcycle-racing-dusk.png"
               fallbackAlt="Motorcycle riders on circuit"
@@ -98,21 +121,24 @@ export default async function AboutIjtcPage() {
           </div>
           <div>
             <SectionHeader
-              index="PURPOSE"
-              eyebrow="Why IJTC exists"
-              title="A bridge to professional race craft."
+              index={purposeSection?.indexLabel ?? "PURPOSE"}
+              showIndex={purposeSection?.showIndex ?? true}
+              showEyebrow={purposeSection?.showEyebrow ?? true}
+              showTitle={purposeSection?.showTitle ?? true}
+              showDescription={purposeSection?.showBody ?? false}
+              eyebrow={purposeSection?.eyebrow ?? "Why IJTC exists"}
+              title={
+                purposeSection?.title ?? "A bridge to professional race craft."
+              }
               align="left"
             />
-            <p className="mt-8 text-lg leading-8 text-ms-warm-white/66">
-              Young riders need more than isolated track time. IJTC creates a
-              programme environment where coaching, competition, standards, and
-              public progress reinforce each other throughout the season.
-            </p>
-            <p className="mt-5 text-base leading-8 text-ms-warm-white/56">
-              Selection and participation remain managed by the programme team.
-              A public inquiry starts the conversation but does not create an
-              account, confirm acceptance, or replace sporting eligibility.
-            </p>
+            <MarkdownContent
+              value={
+                purposeSection?.body ??
+                "Young riders need more than isolated track time. IJTC creates a programme environment where coaching, competition, standards, and public progress reinforce each other throughout the season."
+              }
+              className="ms-rich-text mt-8 text-lg leading-8 text-ms-warm-white/66"
+            />
           </div>
         </div>
       </section>
@@ -122,13 +148,20 @@ export default async function AboutIjtcPage() {
       >
         <div className="ms-shell">
           <SectionHeader
-            index="MODEL"
-            eyebrow="Development principles"
-            title="How progression is built."
-            description="Three connected principles shape the public programme and the rider experience behind it."
+            index={modelSection?.indexLabel ?? "MODEL"}
+            showIndex={modelSection?.showIndex ?? true}
+            showEyebrow={modelSection?.showEyebrow ?? true}
+            showTitle={modelSection?.showTitle ?? true}
+            showDescription={modelSection?.showBody ?? true}
+            eyebrow={modelSection?.eyebrow ?? "Development principles"}
+            title={modelSection?.title ?? "How progression is built."}
+            description={
+              modelSection?.body ??
+              "Three connected principles shape the public programme and the rider experience behind it."
+            }
           />
           <div className="mt-14 grid gap-4 lg:grid-cols-[1.05fr_.95fr_1fr]">
-            {PRINCIPLES.map((principle) => (
+            {principles.map((principle) => (
               <article
                 key={principle.index}
                 className="ms-blue-panel ms-panel min-h-72 p-7"
@@ -152,10 +185,10 @@ export default async function AboutIjtcPage() {
         <div className="ms-shell grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>
             <p className="ms-data-label text-ms-slipstream-teal">
-              Programme entry
+              {entrySection?.eyebrow ?? "Programme entry"}
             </p>
             <h2 className="ms-heading-section mt-5 max-w-[15ch]">
-              Start with a direct rider inquiry.
+              {entrySection?.title ?? "Start with a direct rider inquiry."}
             </h2>
           </div>
           <Link

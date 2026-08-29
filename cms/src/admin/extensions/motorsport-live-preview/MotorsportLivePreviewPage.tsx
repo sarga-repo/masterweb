@@ -29,7 +29,9 @@ type PageOption = {
   uid: string;
 };
 
-const SUPPORTED_PREVIEW_UIDS = new Set(APPROVED_MOTORSPORT_PREVIEW_UIDS);
+const SUPPORTED_PREVIEW_UIDS: ReadonlySet<string> = new Set(
+  APPROVED_MOTORSPORT_PREVIEW_UIDS,
+);
 
 const PAGE_OPTIONS: PageOption[] = [
   {

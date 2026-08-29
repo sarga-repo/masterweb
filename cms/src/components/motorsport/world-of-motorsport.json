@@ -5,6 +5,18 @@
     "description": "CMS-managed homepage racing-format heading, CTA, and discipline cards"
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "enabled": { "edit": { "description": "Show the World of Motorsport section on the homepage." } },
+      "eyebrow": { "edit": { "description": "Short context line above the section title." } },
+      "titlePrefix": { "edit": { "description": "First part of the split homepage section title." } },
+      "titleAccent": { "edit": { "description": "Accent part of the split homepage section title." } },
+      "description": { "edit": { "description": "Supporting copy for the homepage racing-format section." } },
+      "ctaLabel": { "edit": { "description": "Primary action label for the racing-format section." } },
+      "ctaUrl": { "edit": { "description": "Primary action destination for the racing-format section." } },
+      "disciplines": { "edit": { "description": "Ordered discipline cards shown in the racing-format section." } }
+    }
+  },
   "attributes": {
     "enabled": {
       "type": "boolean",

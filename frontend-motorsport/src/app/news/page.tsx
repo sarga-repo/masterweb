@@ -36,6 +36,17 @@ export async function generateMetadata(): Promise<Metadata> {
     path: "/news",
     locale,
     image: page?.heroImage,
+    seo: page?.seo
+      ? {
+          metaTitle: page.seo.metaTitle,
+          metaDescription: page.seo.metaDescription,
+          ogTitle: page.seo.ogTitle,
+          ogDescription: page.seo.ogDescription,
+          ogImageUrl: page.seo.ogImage?.url,
+          canonicalUrl: page.seo.canonicalUrl,
+          noIndex: page.seo.noIndex,
+        }
+      : undefined,
     isFallback: locale === "id" && !page,
   });
 }
@@ -147,13 +158,13 @@ export default async function NewsPage() {
                     className="border-t border-ms-warm-white/20 pt-5 sm:max-w-xs sm:border-l sm:border-t-0 sm:pl-8 sm:pt-0"
                   >
                     <p className="ms-data-label text-ms-slipstream-teal">
-                      Published archive
+                      {page?.hero?.metrics?.[0]?.label || "Published archive"}
                     </p>
                     <p className="ms-tabular mt-4 font-display text-6xl leading-none text-ms-warm-white sm:text-7xl">
                       {String(articles.length).padStart(2, "0")}
                     </p>
                     <p className="mt-3 text-sm text-ms-warm-white/58">
-                      Motorsport stories
+                      {page?.hero?.metrics?.[1]?.label || "Motorsport stories"}
                     </p>
                   </div>
                 ) : null}
@@ -234,13 +245,29 @@ export default async function NewsPage() {
                           </p>
                         ) : null}
                       </div>
-                      <Link
-                        href={featured.href}
-                        className="group mt-12 flex items-center justify-between border-t border-ms-warm-white/18 pt-5 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
-                      >
-                        Read lead story
-                        <ArrowUpRightIcon className="size-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                      </Link>
+                      {leadSection?.showCta !== false ? (
+                        <Link
+                          href={
+                            leadSection?.ctaUrl?.startsWith("/")
+                              ? leadSection.ctaUrl
+                              : featured.href
+                          }
+                          target={
+                            leadSection?.ctaTarget === "newWindow"
+                              ? "_blank"
+                              : undefined
+                          }
+                          rel={
+                            leadSection?.ctaTarget === "newWindow"
+                              ? "noreferrer"
+                              : undefined
+                          }
+                          className="group mt-12 flex items-center justify-between border-t border-ms-warm-white/18 pt-5 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
+                        >
+                          {leadSection?.ctaLabel || "Read lead story"}
+                          <ArrowUpRightIcon className="size-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        </Link>
+                      ) : null}
                     </div>
                   </article>
                 ) : null}
@@ -253,16 +280,22 @@ export default async function NewsPage() {
                   >
                     <div className="grid gap-5 border-t border-ms-warm-white/18 pt-5 sm:grid-cols-[1fr_auto] sm:items-end">
                       <div>
-                        <p className="ms-news-archive-eyebrow ms-kicker text-ms-electric-yellow">
-                          {archiveSection?.eyebrow ?? "Latest dispatches"}
-                        </p>
-                        <h2 className="ms-news-archive-heading ms-heading-section mt-5 text-ms-warm-white">
-                          {archiveSection?.title ?? "The archive."}
-                        </h2>
+                        {archiveSection?.showEyebrow !== false ? (
+                          <p className="ms-news-archive-eyebrow ms-kicker text-ms-electric-yellow">
+                            {archiveSection?.eyebrow ?? "Latest dispatches"}
+                          </p>
+                        ) : null}
+                        {archiveSection?.showTitle !== false ? (
+                          <h2 className="ms-news-archive-heading ms-heading-section mt-5 text-ms-warm-white">
+                            {archiveSection?.title ?? "The archive."}
+                          </h2>
+                        ) : null}
                       </div>
-                      <p className="ms-news-archive-order ms-data-label text-ms-slipstream-teal">
-                        {archiveSection?.body ?? "Ordered by publication date"}
-                      </p>
+                      {archiveSection?.showBody !== false ? (
+                        <p className="ms-news-archive-order ms-data-label text-ms-slipstream-teal">
+                          {archiveSection?.body ?? "Ordered by publication date"}
+                        </p>
+                      ) : null}
                     </div>
 
                     <ol className="mt-10 border-b border-ms-warm-white/18">
@@ -329,25 +362,41 @@ export default async function NewsPage() {
             >
               <div className="ms-shell flex flex-col gap-7 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <p className="ms-kicker text-ms-slipstream-teal">
-                    {galleryCta?.eyebrow ?? "Visual archive"}
-                  </p>
-                  <h2 className="ms-heading-feature mt-5 max-w-[14ch]">
-                    {galleryCta?.title ??
-                      "See the machines behind the stories."}
-                  </h2>
+                  {galleryCta?.showEyebrow !== false ? (
+                    <p className="ms-kicker text-ms-slipstream-teal">
+                      {galleryCta?.eyebrow ?? "Visual archive"}
+                    </p>
+                  ) : null}
+                  {galleryCta?.showTitle !== false ? (
+                    <h2 className="ms-heading-feature mt-5 max-w-[14ch]">
+                      {galleryCta?.title ??
+                        "See the machines behind the stories."}
+                    </h2>
+                  ) : null}
                 </div>
-                <Link
-                  href={
-                    galleryCta?.ctaUrl?.startsWith("/")
-                      ? galleryCta.ctaUrl
-                      : "/gallery"
-                  }
-                  className="group inline-flex items-center gap-4 border-b border-ms-warm-white/35 pb-3 text-[0.66rem] font-black uppercase tracking-[0.16em]"
-                >
-                  {galleryCta?.ctaLabel ?? "Open gallery"}
-                  <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-                </Link>
+                {galleryCta?.showCta !== false ? (
+                  <Link
+                    href={
+                      galleryCta?.ctaUrl?.startsWith("/")
+                        ? galleryCta.ctaUrl
+                        : "/gallery"
+                    }
+                    target={
+                      galleryCta?.ctaTarget === "newWindow"
+                        ? "_blank"
+                        : undefined
+                    }
+                    rel={
+                      galleryCta?.ctaTarget === "newWindow"
+                        ? "noreferrer"
+                        : undefined
+                    }
+                    className="group inline-flex items-center gap-4 border-b border-ms-warm-white/35 pb-3 text-[0.66rem] font-black uppercase tracking-[0.16em]"
+                  >
+                    {galleryCta?.ctaLabel ?? "Open gallery"}
+                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                ) : null}
               </div>
             </section>
           ) : null}

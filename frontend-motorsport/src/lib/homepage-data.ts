@@ -85,6 +85,9 @@ export type HomepageData = {
 
 export type HomepageInformationBand = {
   enabled: boolean;
+  showEyebrow: boolean;
+  showTitle: boolean;
+  showDescription: boolean;
   showMetricGroup: boolean;
   metrics: Array<{ label: string; value: string }>;
   eyebrow: string;
@@ -122,6 +125,11 @@ type HomepageSectionCopy = {
   supportLabel?: string;
   supportBody?: string;
   legalText?: string;
+  listLabel?: string;
+  itemCountLabel?: string;
+  publicationTabLabel?: string;
+  leadershipTabLabel?: string;
+  ecosystemTabLabel?: string;
   media?: { url: string; alt?: string };
   ctaLabel?: string;
   ctaUrl?: string;
@@ -244,6 +252,11 @@ type CmsPageSection = {
   supportLabel?: string;
   supportBody?: string;
   legalText?: string;
+  listLabel?: string;
+  itemCountLabel?: string;
+  publicationTabLabel?: string;
+  leadershipTabLabel?: string;
+  ecosystemTabLabel?: string;
   eyebrow?: string;
   title?: string;
   body?: string;
@@ -314,6 +327,9 @@ type CmsHomeSinglePage = {
 
 type CmsInformationBand = {
   isActive?: boolean;
+  showEyebrow?: boolean;
+  showTitle?: boolean;
+  showDescription?: boolean;
   showMetricGroup?: boolean;
   metrics?: Array<{ isActive?: boolean; label?: string; value?: string }>;
   enabled?: boolean;
@@ -544,6 +560,11 @@ function sectionCopy(
     description: section?.body || fallback.description,
     supportLabel: section?.supportLabel,
     supportBody: section?.supportBody,
+    listLabel: section?.listLabel,
+    itemCountLabel: section?.itemCountLabel,
+    publicationTabLabel: section?.publicationTabLabel,
+    leadershipTabLabel: section?.leadershipTabLabel,
+    ecosystemTabLabel: section?.ecosystemTabLabel,
     media: section?.media
       ? {
           url: mediaUrl(section.media.url),
@@ -575,6 +596,11 @@ function mapNamedSection(
         supportLabel: section.supportLabel,
         supportBody: section.supportBody,
         legalText: section.legalText,
+        listLabel: section.listLabel,
+        itemCountLabel: section.itemCountLabel,
+        publicationTabLabel: section.publicationTabLabel,
+        leadershipTabLabel: section.leadershipTabLabel,
+        ecosystemTabLabel: section.ecosystemTabLabel,
         eyebrow: section.eyebrow,
         title: section.title,
         body: section.body,
@@ -657,6 +683,9 @@ function mapInformationBand(
   }));
   return {
     enabled: band.isActive !== false && band.enabled !== false,
+    showEyebrow: band.showEyebrow !== false,
+    showTitle: band.showTitle !== false,
+    showDescription: band.showDescription !== false,
     showMetricGroup: band.showMetricGroup !== false,
     metrics: metricValues,
     eyebrow: band.eyebrow?.trim() || PLACEHOLDER_INFORMATION_BAND.eyebrow,
@@ -985,6 +1014,9 @@ const PLACEHOLDER_DISCIPLINES: Array<
 
 const PLACEHOLDER_INFORMATION_BAND: HomepageInformationBand = {
   enabled: true,
+  showEyebrow: true,
+  showTitle: true,
+  showDescription: true,
   showMetricGroup: true,
   metrics: [
     { label: "Next event", value: "TBA" },

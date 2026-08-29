@@ -19,12 +19,33 @@ import {
   isCmsPageVisible,
   isCmsSectionVisible,
 } from "@/lib/cms-visibility";
+import { createMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "Partners",
-  description:
-    "Official partners and sponsors of Sarga Motorsport - the brands fuelling Indonesia's premier racing ecosystem.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const page = await fetchSitePage("custom", "/partners", locale);
+  return createMetadata({
+    title: page?.title ?? "Partners",
+    description:
+      page?.heroDescription ??
+      "Official partners and sponsors of Sarga Motorsport - the brands fuelling Indonesia's premier racing ecosystem.",
+    path: "/partners",
+    image: page?.heroImage,
+    seo: page?.seo
+      ? {
+          metaTitle: page.seo.metaTitle,
+          metaDescription: page.seo.metaDescription,
+          ogTitle: page.seo.ogTitle,
+          ogDescription: page.seo.ogDescription,
+          ogImageUrl: page.seo.ogImage?.url,
+          canonicalUrl: page.seo.canonicalUrl,
+          noIndex: page.seo.noIndex,
+        }
+      : undefined,
+    locale,
+    isFallback: locale === "id" && !page,
+  });
+}
 
 const PLACEHOLDER: PartnerItem[] = [
   {
@@ -213,24 +234,42 @@ export default async function PartnersPage() {
             >
               <div className="ms-shell grid gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
                 <div>
-                  <span className="ms-data-label text-ms-slipstream-teal">
-                    {finalCta?.eyebrow ?? "Partnership inquiries"}
-                  </span>
-                  <h2 className="ms-heading-section mt-6 max-w-[12ch]">
-                    {finalCta?.title ?? "Join the grid."}
-                  </h2>
-                  <p className="mt-6 max-w-xl text-base leading-7 text-ms-warm-white/64">
-                    {finalCta?.body ??
-                      "We work with brands that share our commitment to performance, responsible event delivery, and meaningful community access."}
-                  </p>
+                  {finalCta?.showEyebrow !== false ? (
+                    <span className="ms-data-label text-ms-slipstream-teal">
+                      {finalCta?.eyebrow ?? "Partnership inquiries"}
+                    </span>
+                  ) : null}
+                  {finalCta?.showTitle !== false ? (
+                    <h2 className="ms-heading-section mt-6 max-w-[12ch]">
+                      {finalCta?.title ?? "Join the grid."}
+                    </h2>
+                  ) : null}
+                  {finalCta?.showBody !== false ? (
+                    <p className="mt-6 max-w-xl text-base leading-7 text-ms-warm-white/64">
+                      {finalCta?.body ??
+                        "We work with brands that share our commitment to performance, responsible event delivery, and meaningful community access."}
+                    </p>
+                  ) : null}
                 </div>
-                <Link
-                  href={finalCtaHref}
-                  className="group inline-flex h-(--ms-control-height) items-center gap-3 bg-ms-apex-crimson px-8 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white transition-colors hover:bg-ms-ignition-orange"
-                >
-                  {finalCta?.ctaLabel ?? "Partnership inquiry"}
-                  <ArrowUpRightIcon className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </Link>
+                {finalCta?.showCta !== false ? (
+                  <Link
+                    href={finalCtaHref}
+                    target={
+                      finalCta?.ctaTarget === "newWindow"
+                        ? "_blank"
+                        : undefined
+                    }
+                    rel={
+                      finalCta?.ctaTarget === "newWindow"
+                        ? "noreferrer"
+                        : undefined
+                    }
+                    className="group inline-flex h-(--ms-control-height) items-center gap-3 bg-ms-apex-crimson px-8 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white transition-colors hover:bg-ms-ignition-orange"
+                  >
+                    {finalCta?.ctaLabel ?? "Partnership inquiry"}
+                    <ArrowUpRightIcon className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </Link>
+                ) : null}
               </div>
             </section>
           ) : null}

@@ -10,7 +10,13 @@
         "edit": {
           "description": "Leadership portrait: 1000 × 1250 px (4:5) recommended. Keep the face and shoulders inside the center safe area."
         }
-      }
+      },
+      "name": { "edit": { "description": "Person name shown in the Motorsport About leadership section." } },
+      "role": { "edit": { "description": "Leadership role shown below the person name." } },
+      "summary": { "edit": { "description": "Short leadership profile summary shown in the About page team area." } },
+      "group": { "edit": { "description": "Leadership grouping used to organize the About page team list." } },
+      "site": { "edit": { "description": "Optional site relation for multisite ownership." } },
+      "order": { "edit": { "description": "Display order in the About page team list; lower numbers appear first." } }
     }
   },
   "attributes": {

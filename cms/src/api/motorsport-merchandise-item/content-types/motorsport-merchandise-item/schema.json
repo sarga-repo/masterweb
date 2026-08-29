@@ -10,7 +10,15 @@
         "edit": {
           "description": "Merchandise image: 1200 × 1200 px (1:1) recommended with the product centered and transparent or neutral background."
         }
-      }
+      },
+      "title": { "edit": { "description": "Product or merchandise item name shown in the showcase." } },
+      "slug": { "edit": { "description": "Stable merchandise item identifier for future external detail linking." } },
+      "description": { "edit": { "description": "Short product description shown in the merchandise showcase." } },
+      "priceLabel": { "edit": { "description": "Optional display price or price-from label; no checkout is processed here." } },
+      "availabilityStatus": { "edit": { "description": "Controls whether the item is coming soon, externally available, inquiry-only, or hidden." } },
+      "externalUrl": { "edit": { "description": "Optional approved external product destination." } },
+      "sortOrder": { "edit": { "description": "Merchandise display order; lower numbers appear first." } },
+      "seo": { "edit": { "description": "Optional search and social metadata for the merchandise item." } }
     }
   },
   "attributes": {

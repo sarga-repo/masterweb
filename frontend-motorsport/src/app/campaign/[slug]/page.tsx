@@ -113,9 +113,10 @@ export async function RallycrossCampaignPage() {
     fetchMotorsportTheme(locale),
   ]);
   if (!campaign) notFound();
-  // Program presentation sections are the campaign's source of truth. Keep
-  // route-page sections as a backwards-compatible fallback for older records.
-  const presentationSections: CampaignRouteSection[] = (
+  // The grouped FIA content is the campaign's source of truth after the local
+  // migration. Keep the legacy presentation sections as a per-section
+  // fallback so older or partially migrated records remain renderable.
+  const legacyPresentationSections: CampaignRouteSection[] = (
     campaign.presentationSections ?? []
   ).map((item) => ({
     sectionKey: item.sectionKey,
@@ -132,6 +133,36 @@ export async function RallycrossCampaignPage() {
     showCta: item.showCta,
     items: item.items,
   }));
+  const groupedPresentationSections: CampaignRouteSection[] = [
+    campaign.fiaRallycrossContent?.formatSection,
+    campaign.fiaRallycrossContent?.rundownSection,
+    campaign.fiaRallycrossContent?.raceDayGuideSection,
+  ]
+    .filter((item): item is NonNullable<typeof item> => Boolean(item))
+    .map((item) => ({
+      sectionKey: item.sectionKey,
+      eyebrow: item.eyebrow,
+      title: item.title,
+      body: item.body,
+      enabled: item.isActive,
+      indexLabel: item.indexLabel,
+      showIndex: item.showIndex,
+      showEyebrow: item.showEyebrow,
+      showTitle: item.showTitle,
+      showDescription: item.showBody,
+      items: item.items,
+    }));
+  const groupedByKey = new Map(
+    groupedPresentationSections.map((item) => [item.sectionKey, item]),
+  );
+  const legacyByKey = new Map(
+    legacyPresentationSections.map((item) => [item.sectionKey, item]),
+  );
+  const presentationSections: CampaignRouteSection[] = groupedPresentationSections.length
+    ? (["format", "rundown", "race-day-guide"]
+        .map((key) => groupedByKey.get(key) ?? legacyByKey.get(key))
+        .filter((item): item is CampaignRouteSection => Boolean(item)))
+    : legacyPresentationSections;
   const routeSections = mergeAuthoritativeCmsSections(
     presentationSections,
     page?.sections ?? [],

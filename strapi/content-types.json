@@ -458,7 +458,7 @@
         "heroMedia": "media",
         "bannerSlides": "repeatableComponent:campaignSlide",
         "rundown": "repeatableComponent:rundownItem",
-        "eventRules": "repeatableComponent:ruleItem",
+        "fiaRallycrossContent": "component:fiaRallycrossContent",
         "primaryCtaLabel": "string",
         "primaryCtaUrl": "string",
         "becomeRidersLabel": "string",

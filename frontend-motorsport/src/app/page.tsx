@@ -140,6 +140,9 @@ export default async function HomePage() {
                 data-cms-enabled="true"
               >
                 <InformationBand
+                  showEyebrow={data.page.informationBand.showEyebrow}
+                  showTitle={data.page.informationBand.showTitle}
+                  showDescription={data.page.informationBand.showDescription}
                   showMetricGroup={data.page.informationBand.showMetricGroup}
                   eyebrow={data.page.informationBand.eyebrow}
                   title={data.page.informationBand.title}
@@ -235,11 +238,13 @@ export default async function HomePage() {
                     <div className="mt-12 border-b border-ms-warm-white/15">
                       <div className="mb-5 flex items-center justify-between gap-6">
                         <p className="ms-kicker text-ms-ignition-orange">
-                          Also on the calendar
+                          {data.page.sections.events.listLabel ||
+                            "Also on the calendar"}
                         </p>
                         <span className="ms-data-label text-ms-warm-white/52">
                           {String(data.upcomingEvents.length).padStart(2, "0")}{" "}
-                          entries
+                          {data.page.sections.events.itemCountLabel ||
+                            "entries"}
                         </span>
                       </div>
                       {data.upcomingEvents.slice(0, 3).map((event, index) => (
@@ -359,8 +364,15 @@ export default async function HomePage() {
 
                   <div className="mt-10 flex justify-end">
                     <SectionLink
-                      href="/news"
-                      label="Read all stories"
+                      href={data.page.sections.news.ctaUrl || "/news"}
+                      label={
+                        data.page.sections.news.ctaLabel || "Read all stories"
+                      }
+                      target={
+                        data.page.sections.news.ctaTarget === "newWindow"
+                          ? "_blank"
+                          : undefined
+                      }
                       tone="dark"
                     />
                   </div>
@@ -378,6 +390,18 @@ export default async function HomePage() {
                   publications={publications}
                   leadership={leadership}
                   ecosystemSites={ecosystemSites}
+                  eyebrow={data.page.sections.connectedRecords.eyebrow}
+                  title={data.page.sections.connectedRecords.title}
+                  description={data.page.sections.connectedRecords.description}
+                  publicationTabLabel={
+                    data.page.sections.connectedRecords.publicationTabLabel
+                  }
+                  leadershipTabLabel={
+                    data.page.sections.connectedRecords.leadershipTabLabel
+                  }
+                  ecosystemTabLabel={
+                    data.page.sections.connectedRecords.ecosystemTabLabel
+                  }
                 />
               </div>
             ) : null}
@@ -390,7 +414,11 @@ export default async function HomePage() {
               >
                 <div className="ms-shell">
                   <SectionHeader
-                    index="GALLERY"
+                    index={data.page.sections.gallery.indexLabel}
+                    showIndex={data.page.sections.gallery.showIndex}
+                    showEyebrow={data.page.sections.gallery.showEyebrow}
+                    showTitle={data.page.sections.gallery.showTitle}
+                    showDescription={data.page.sections.gallery.showDescription}
                     eyebrow={data.page.sections.gallery.eyebrow}
                     title={data.page.sections.gallery.title}
                     description={data.page.sections.gallery.description}
@@ -399,7 +427,20 @@ export default async function HomePage() {
                     <GalleryMosaic items={data.gallery.slice(0, 6)} />
                   </div>
                   <div className="mt-8 flex justify-end">
-                    <SectionLink href="/gallery" label="Open full gallery" />
+                    {data.page.sections.gallery.showCta ? (
+                      <SectionLink
+                        href={data.page.sections.gallery.ctaUrl || "/gallery"}
+                        label={
+                          data.page.sections.gallery.ctaLabel ||
+                          "Open full gallery"
+                        }
+                        target={
+                          data.page.sections.gallery.ctaTarget === "newWindow"
+                            ? "_blank"
+                            : undefined
+                        }
+                      />
+                    ) : null}
                   </div>
                 </div>
               </section>

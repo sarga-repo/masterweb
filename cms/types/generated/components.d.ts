@@ -231,6 +231,241 @@ export interface MotorsportDisciplineCard extends Struct.ComponentSchema {
   };
 }
 
+export interface MotorsportFiaRallycrossContent extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_fia_rallycross_contents';
+  info: {
+    description: 'One logical editor group for FIA Rallycross Format, Rundown, and Race-day Guide content. Use only for Rallycross programmes.';
+    displayName: 'FIA Rallycross Content';
+  };
+  attributes: {
+    formatSection: Schema.Attribute.Component<
+      'motorsport.fia-rallycross-format-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    raceDayGuideSection: Schema.Attribute.Component<
+      'motorsport.fia-rallycross-race-day-guide-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    rundownSection: Schema.Attribute.Component<
+      'motorsport.fia-rallycross-rundown-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+  };
+}
+
+export interface MotorsportFiaRallycrossFormatItem
+  extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_fia_rallycross_format_items';
+  info: {
+    description: 'One format card shown in the FIA Rallycross Format section. Use a short label, title, explanation, and approved accent colour.';
+    displayName: 'FIA Rallycross Format Item';
+  };
+  attributes: {
+    accent: Schema.Attribute.Enumeration<
+      ['crimson', 'orange', 'yellow', 'teal', 'blue']
+    > &
+      Schema.Attribute.DefaultTo<'crimson'>;
+    description: Schema.Attribute.Text;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    label: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+      }>;
+    sortOrder: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 120;
+      }>;
+  };
+}
+
+export interface MotorsportFiaRallycrossFormatSection
+  extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_fia_rallycross_format_sections';
+  info: {
+    description: 'Presentation copy and ordered format cards for the FIA Rallycross Format section.';
+    displayName: 'FIA Rallycross Format Section';
+  };
+  attributes: {
+    body: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    eyebrow: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    formatItems: Schema.Attribute.Component<
+      'motorsport.fia-rallycross-format-item',
+      true
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    indexLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showBody: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showEyebrow: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showIndex: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showTitle: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+  };
+}
+
+export interface MotorsportFiaRallycrossRaceDayGuideSection
+  extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_fia_rallycross_race_day_guide_sections';
+  info: {
+    description: 'Presentation copy and Do/Do not guidance for the FIA Rallycross Race-day Guide section.';
+    displayName: 'FIA Rallycross Race-day Guide Section';
+  };
+  attributes: {
+    body: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    eyebrow: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    indexLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    ruleItems: Schema.Attribute.Component<'motorsport.rule-item', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    showBody: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showEyebrow: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showIndex: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showTitle: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+  };
+}
+
+export interface MotorsportFiaRallycrossRundownSection
+  extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_fia_rallycross_rundown_sections';
+  info: {
+    description: 'Presentation copy and schedule items for the FIA Rallycross Rundown section.';
+    displayName: 'FIA Rallycross Rundown Section';
+  };
+  attributes: {
+    body: Schema.Attribute.RichText &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    eyebrow: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    indexLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+      }>;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    rundownItems: Schema.Attribute.Component<'motorsport.rundown-item', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    showBody: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showEyebrow: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showIndex: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    showTitle: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+  };
+}
+
 export interface MotorsportHeroSlide extends Struct.ComponentSchema {
   collectionName: 'components_motorsport_hero_slides';
   info: {
@@ -661,6 +896,15 @@ export interface MotorsportPageSection extends Struct.ComponentSchema {
     ctaTarget: Schema.Attribute.Enumeration<['sameWindow', 'newWindow']> &
       Schema.Attribute.DefaultTo<'sameWindow'>;
     ctaUrl: Schema.Attribute.String;
+    ecosystemTabLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
     eyebrow: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -682,7 +926,25 @@ export interface MotorsportPageSection extends Struct.ComponentSchema {
     isActive: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<true>;
+    itemCountLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+      }>;
     items: Schema.Attribute.Component<'motorsport.page-section-item', true>;
+    leadershipTabLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
     legalText: Schema.Attribute.Text &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -692,7 +954,25 @@ export interface MotorsportPageSection extends Struct.ComponentSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 300;
       }>;
+    listLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
     media: Schema.Attribute.Media<'images' | 'videos'>;
+    publicationTabLabel: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
     secondaryCtaLabel: Schema.Attribute.String &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -1081,6 +1361,11 @@ declare module '@strapi/strapi' {
       'motorsport.campaign-slide': MotorsportCampaignSlide;
       'motorsport.detail-presentation': MotorsportDetailPresentation;
       'motorsport.discipline-card': MotorsportDisciplineCard;
+      'motorsport.fia-rallycross-content': MotorsportFiaRallycrossContent;
+      'motorsport.fia-rallycross-format-item': MotorsportFiaRallycrossFormatItem;
+      'motorsport.fia-rallycross-format-section': MotorsportFiaRallycrossFormatSection;
+      'motorsport.fia-rallycross-race-day-guide-section': MotorsportFiaRallycrossRaceDayGuideSection;
+      'motorsport.fia-rallycross-rundown-section': MotorsportFiaRallycrossRundownSection;
       'motorsport.hero-slide': MotorsportHeroSlide;
       'motorsport.home-information-band': MotorsportHomeInformationBand;
       'motorsport.home-ticket-section': MotorsportHomeTicketSection;

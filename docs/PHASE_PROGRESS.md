@@ -11102,3 +11102,1263 @@ Status: ✅ Done — 2026-08-29
 
 - The metric repair is idempotent and only fills an empty metric array; it does
   not replace non-empty CMS content or force a hidden toggle to visible.
+
+## Motorsport CMS ↔ Frontend cleanup track
+
+| Phase | Title | Status | Date |
+| --- | --- | --- | --- |
+| MS-CMS-CLEAN-HOME | Home audit, wiring cleanup, and local validation | ✅ Done | 2026-08-29 |
+| MS-CMS-CLEAN-ABOUT | About audit and cleanup | ✅ Done | 2026-08-29 |
+| MS-CMS-CLEAN-EVENTS | Events audit and cleanup | ✅ Done | 2026-08-29 |
+| MS-CMS-CLEAN-NEWS | News audit and cleanup | ✅ Done | 2026-08-29 |
+| MS-CMS-CLEAN-GALLERY | Gallery audit and cleanup | ✅ Done | 2026-08-29 |
+| MS-CMS-CLEAN-MERCHANDISE | Merchandise audit and cleanup | ✅ Done | 2026-08-29 |
+| MS-CMS-CLEAN-TICKETS | Tickets audit and cleanup | ✅ Done | 2026-08-29 |
+| MS-CMS-CLEAN-CONTACT | Contact audit and cleanup | ✅ Done | 2026-08-29 |
+| MS-CMS-CLEAN-PARTNERS | Partners audit and cleanup | ✅ Done | 2026-08-29 |
+| MS-CMS-CLEAN-EXPERIENCE | Experience audit and cleanup | ✅ Done | 2026-08-29 |
+| MS-CMS-CLEAN-DETAILS | Event/news/program/detail-route audits and cleanup | ✅ Done | 2026-08-29 |
+| MS-CMS-CLEAN-FIA-GROUPING | Inventory, FIA grouped content migration, and rehearsal | ✅ Done | 2026-08-29 |
+
+### MS-CMS-CLEAN-ABOUT — About audit and cleanup
+
+#### What was done
+
+- Traced the dedicated About single type, its section mapping, leadership
+  collection, and rendered About sections.
+- Wired Profile section media and respected Contact/Ecosystem CTA visibility
+  and target controls.
+- Added editor help text to the About single type and capability components.
+
+#### Files changed
+
+- `docs/motorsport/audit/about.md`
+- `cms/src/api/motorsport-about-page/content-types/motorsport-about-page/schema.json`
+- `cms/src/components/motorsport/about-capabilities.json`
+- `cms/src/components/motorsport/about-capability-card.json`
+- `frontend-motorsport/src/app/about/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck and production build passed.
+- CMS TypeScript check passed.
+- JSON schema validation and `git diff --check` passed.
+
+#### Notes / caveats
+
+- Generic unused fields on the shared presentation component remain until all
+  Motorsport pages using that component are audited.
+- No staging environment, remote CMS, or deployment/migration command was run.
+
+### MS-CMS-CLEAN-DETAILS — Detail routes, IJTC pages, and program collection audit
+
+#### What was done
+
+- Audited event detail, news detail, FIA Rallycross, and every IJTC route.
+- Wired IJTC overview, schedule, riders, standings, regulation, about, and
+  inquiry presentation copy to the existing program `presentationSections`
+  contract with safe fallbacks.
+- Added editor help text to the canonical Program, Rider, Standing,
+  Regulation, Ticket CTA, and Partner schemas.
+- Documented the safe program segregation recommendation: retain one canonical
+  Program collection and use program-type conditional editor guidance before
+  considering any additive migration or collection split.
+
+#### Files changed
+
+- `docs/motorsport/audit/event-detail.md`
+- `docs/motorsport/audit/news-detail.md`
+- `docs/motorsport/audit/fia-rallycross.md`
+- `docs/motorsport/audit/ijtc-overview.md`
+- `docs/motorsport/audit/ijtc-race-schedule.md`
+- `docs/motorsport/audit/ijtc-about.md`
+- `docs/motorsport/audit/ijtc-riders.md`
+- `docs/motorsport/audit/ijtc-rider-detail.md`
+- `docs/motorsport/audit/ijtc-standings.md`
+- `docs/motorsport/audit/ijtc-regulation.md`
+- `docs/motorsport/audit/ijtc-become-riders.md`
+- `docs/motorsport/audit/program-collections.md`
+- `frontend-motorsport/src/app/events/indonesia-junior-talent-cup/`
+- `frontend-motorsport/src/lib/ijtc-data.ts`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/types/design-system.ts`
+- Motorsport Program and supporting collection schemas under `cms/src/api/`
+
+#### How verified
+
+- Motorsport typecheck passed.
+- CMS TypeScript check passed.
+- JSON schema validation and `git diff --check` passed.
+
+#### Notes / caveats
+
+- No collection or field was deleted: legacy/future-facing fields remain
+  recoverable until stored records and repository-wide consumers are checked.
+- Stable navigation, product-policy, and publication-safety copy remains
+  code-owned by design.
+- No staging environment, remote CMS, or deployment/migration command was run.
+
+### MS-CMS-CLEAN-EXPERIENCE — Experience audit and cleanup
+
+#### What was done
+
+- Traced the Experience single type, pillar/track section items, and final
+  programme CTA.
+- Wired dedicated SEO metadata, CMS pillar destinations, and Final CTA
+  body/visibility/target controls.
+- Added Experience single-type help text.
+
+#### Files changed
+
+- `docs/motorsport/audit/experience.md`
+- `cms/src/api/motorsport-experience-page/content-types/motorsport-experience-page/schema.json`
+- `frontend-motorsport/src/app/experience/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck passed.
+- CMS TypeScript check passed.
+- JSON schema validation and `git diff --check` passed.
+
+#### Notes / caveats
+
+- Pillar fallback content remains available when CMS content is empty.
+- No staging environment, remote CMS, or deployment/migration command was run.
+
+### MS-CMS-CLEAN-PARTNERS — Partners audit and cleanup
+
+#### What was done
+
+- Traced the Partners single type, partner collection, network cards, and
+  final inquiry CTA.
+- Wired dedicated SEO metadata and Final CTA show/target controls.
+- Added Partners single-type help text.
+
+#### Files changed
+
+- `docs/motorsport/audit/partners.md`
+- `cms/src/api/motorsport-partners-page/content-types/motorsport-partners-page/schema.json`
+- `frontend-motorsport/src/app/partners/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck passed.
+- CMS TypeScript check passed.
+- JSON schema validation and `git diff --check` passed.
+
+#### Notes / caveats
+
+- Partner names, logos, and websites remain collection-backed; fixed card
+  state labels are UI copy.
+- No staging environment, remote CMS, or deployment/migration command was run.
+
+### MS-CMS-CLEAN-CONTACT — Contact audit and cleanup
+
+#### What was done
+
+- Traced the Contact single type, inquiry form, section items, and final CTAs.
+- Added CMS SEO metadata, CMS-managed contact channel items, and Final CTA
+  visibility/target/body wiring.
+- Preserved existing channel values as fallback content when the CMS list is
+  empty.
+
+#### Files changed
+
+- `docs/motorsport/audit/contact.md`
+- `cms/src/api/motorsport-contact-page/content-types/motorsport-contact-page/schema.json`
+- `frontend-motorsport/src/app/contact/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck passed.
+- CMS TypeScript check passed.
+- JSON schema validation and `git diff --check` passed.
+
+#### Notes / caveats
+
+- Form labels, validation, routing options, and status messages remain
+  application UI; contact channel editorial data is now CMS-backed.
+- No staging environment, remote CMS, or deployment/migration command was run.
+
+### MS-CMS-CLEAN-TICKETS — Tickets audit and cleanup
+
+#### What was done
+
+- Traced the Tickets single type, dedicated Ticket CTA collection, Event
+  relations, embed safety, and ticket information items.
+- Wired dedicated SEO metadata and Ticket Info presentation/CTA controls.
+- Documented dedicated CTA ownership and preserved partner-redirect-only
+  behavior.
+
+#### Files changed
+
+- `docs/motorsport/audit/tickets.md`
+- `cms/src/api/motorsport-tickets-page/content-types/motorsport-tickets-page/schema.json`
+- `frontend-motorsport/src/app/tickets/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck passed.
+- CMS TypeScript check passed.
+- JSON schema validation and `git diff --check` passed.
+
+#### Notes / caveats
+
+- Ticket CTA collection remains the dedicated owner; no payment or checkout
+  logic was introduced.
+- No staging environment, remote CMS, or deployment/migration command was run.
+
+### MS-CMS-CLEAN-MERCHANDISE — Merchandise audit and cleanup
+
+#### What was done
+
+- Traced the Merchandise single type, product collection, adapter, catalogue,
+  and final availability CTA.
+- Wired dedicated SEO metadata and Final CTA visibility/target controls.
+- Added Merchandise single-type help text and documented the intentional
+  no-checkout architecture.
+
+#### Files changed
+
+- `docs/motorsport/audit/merchandise.md`
+- `cms/src/api/motorsport-merchandise-page/content-types/motorsport-merchandise-page/schema.json`
+- `frontend-motorsport/src/app/merchandise/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck passed.
+- CMS TypeScript check passed.
+- JSON schema validation and `git diff --check` passed.
+
+#### Notes / caveats
+
+- Product fields remain collection-backed and external/direct inquiry only.
+- No staging environment, remote CMS, or deployment/migration command was run.
+
+### MS-CMS-CLEAN-GALLERY — Gallery audit and cleanup
+
+#### What was done
+
+- Traced the Gallery single type, media-gallery source, pagination/filter
+  adapter, and rendered archive/viewer.
+- Wired the dedicated SEO component and removed an unused page-size constant.
+- Added Gallery single-type help text and documented collection-backed versus
+  fallback content.
+
+#### Files changed
+
+- `docs/motorsport/audit/gallery.md`
+- `cms/src/api/motorsport-gallery-page/content-types/motorsport-gallery-page/schema.json`
+- `frontend-motorsport/src/app/gallery/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck passed.
+- CMS TypeScript check passed.
+- JSON schema validation and `git diff --check` passed.
+
+#### Notes / caveats
+
+- Gallery collection media remains the source of archive imagery; the page
+  single type intentionally owns presentation copy only.
+- No staging environment, remote CMS, or deployment/migration command was run.
+
+### MS-CMS-CLEAN-NEWS — News audit and cleanup
+
+#### What was done
+
+- Traced the News single type, article collection, gallery collection, adapter,
+  and rendered News hub sections.
+- Wired the dedicated SEO component, lead-story CTA controls, archive/gallery
+  show flags, and CMS-provided hero archive labels.
+- Added editor help text and documented the legacy News control section.
+
+#### Files changed
+
+- `docs/motorsport/audit/news.md`
+- `cms/src/api/motorsport-news-page/content-types/motorsport-news-page/schema.json`
+- `frontend-motorsport/src/app/news/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck passed.
+- CMS TypeScript check passed.
+- JSON schema validation and `git diff --check` passed.
+
+#### Notes / caveats
+
+- Curated article placeholders and fixed interaction labels remain fallback/UI
+  copy when the CMS has no content.
+- No staging environment, remote CMS, or deployment/migration command was run.
+
+### MS-CMS-CLEAN-EVENTS — Events audit and cleanup
+
+#### What was done
+
+- Traced the Events single type, page adapter, Program/Event collections, and
+  rendered programme/calendar sections.
+- Wired Events page metadata to the dedicated single type and SEO component.
+- Confirmed the legacy `eventControlSection` is not rendered and retained it
+  only for migration/editor-layout compatibility pending stored-content review.
+- Documented the safest program-schema strategy: preserve one canonical
+  program record and defer any segregation until all detail-route consumers are
+  audited.
+
+#### Files changed
+
+- `docs/motorsport/audit/events.md`
+- `cms/src/api/motorsport-events-page/content-types/motorsport-events-page/schema.json`
+- `frontend-motorsport/src/app/events/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck and lint passed.
+- CMS TypeScript check passed.
+- JSON schema validation and `git diff --check` passed.
+
+#### Notes / caveats
+
+- Production build verification was already completed in the preceding page
+  phase and will be rerun after the remaining route cleanups.
+- No staging environment, remote CMS, or deployment/migration command was run.
+
+### MS-CMS-CLEAN-HOME — Home audit, wiring cleanup, and local validation
+
+#### What was done
+
+- Traced the dedicated Motorsport Home single type, its components, adapters,
+  collections, and rendered Home sections.
+- Wired information-band display flags, News CTA fields, Gallery index/show
+  flags and CTA fields, and CMS-driven Connected Records heading/copy/tab
+  labels.
+- Added `listLabel` and `itemCountLabel` to the presentation-section component
+  for the automatically populated Home event list.
+- Added editor help text to the Home single type and presentation-section
+  fields.
+- Preserved shared hero compatibility fields and documented their
+  migration-era fallback status rather than deleting content-bearing schema
+  without a migration.
+
+#### Files changed
+
+- `docs/motorsport/audit/home.md`
+- `cms/src/api/motorsport-home-page/content-types/motorsport-home-page/schema.json`
+- `cms/src/components/motorsport/page-section.json`
+- `cms/types/generated/components.d.ts`
+- `frontend-motorsport/src/app/page.tsx`
+- `frontend-motorsport/src/components/sections/sarga-timeline.tsx`
+- `frontend-motorsport/src/lib/homepage-data.ts`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport typecheck, ESLint, production build, and Markdown tests passed.
+- CMS TypeScript check and admin build completed successfully.
+- JSON schema validation and `git diff --check` passed.
+
+#### Notes / caveats
+
+- Existing hero control fields that are shared with other page templates remain
+  as compatibility fields; they are explicitly marked in the Home audit.
+- Curated placeholder copy and fixed interaction/accessibility strings remain
+  as resilience/UI defaults when CMS content is empty or unavailable.
+- No staging environment, remote CMS, or deployment/migration command was run.
+
+### MS-CMS-CLEAN-FIA-GROUPING — Inventory, FIA grouped content migration, and rehearsal
+
+#### What was done
+
+- Created a verified local PostgreSQL backup and a read-only inventory covering
+  all 22 dedicated Motorsport CMS surfaces, including protected collections via
+  direct local database fallback.
+- Added the FIA-only `fiaRallycrossContent` logical component with
+  `formatSection`, `rundownSection`, and `raceDayGuideSection`.
+- Added focused Format item fields and reused the existing specialized Rundown
+  and Rule item components.
+- Added an opt-in, idempotent migration gated by
+  `MOTORSPORT_FIA_GROUPING_MODE=off|dry-run|apply|verify`. It migrated both
+  draft and published FIA records without deleting legacy fields.
+- Converted the three known FIA Format fallback cards into CMS content because
+  the legacy Format item links were empty.
+- Updated the FIA frontend and data adapter to prefer grouped content with
+  legacy per-section fallback.
+- Restored the pre-grouping backup into the isolated
+  `sarga_strapi_i18n_rehearsal` database and completed the migration rehearsal.
+
+#### Files changed
+
+- `cms/src/components/motorsport/fia-rallycross-*.json`
+- `cms/src/api/motorsport-program/content-types/motorsport-program/schema.json`
+- `cms/src/migrations/motorsport-fia-rallycross-content.ts`
+- `cms/src/index.ts`
+- `cms/scripts/motorsport-content-inventory.mjs`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/types/design-system.ts`
+- `frontend-motorsport/src/app/campaign/[slug]/page.tsx`
+- `docs/motorsport/audit/fia-rallycross.md`
+- `docs/motorsport/audit/field-inventory-2026-08-29.{json,md}`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Backup checksums verified in `/tmp/sarga-motorsport-cleanup-20260829`.
+- CMS schema JSON validation passed for 39 schema files.
+- CMS TypeScript check and admin build passed.
+- FIA migration dry-run passed, apply passed on source, apply passed on
+  rehearsal, and a second source apply created no duplicates.
+- Source and rehearsal each contain 2 grouped FIA parents, 6 Format items, 2
+  Rundown sections, and 2 Race-day Guide sections.
+- Motorsport frontend typecheck passed; lint passed with one pre-existing
+  unused `ImageProps` warning.
+- Production-mode Motorsport build passed.
+- Markdown tests, preview-context tests, and the 88-route localized crawl plus
+  legacy FIA redirect passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- No CMS field or component was physically deleted. Populated or shared legacy
+  fields remain until a separately verified retirement migration is designed.
+- The canonical `motorsport-program` collection was not split; the FIA-only
+  grouped component gives editors program-specific structure with lower data
+  migration risk.
+- Staging deployment, staging migration, and remote CMS changes remain on hold
+  pending explicit confirmation.
+
+### MS-CMS-CLEAN-EDITOR-VISIBILITY — Program-type editor cleanup and legacy retirement
+
+#### What was done
+
+- Added native Strapi field conditions keyed by `programType`: FIA editors see
+  `bannerSlides` and `fiaRallycrossContent`; IJTC editors see shared
+  `presentationSections`, `rundown`, rider CTA fields, and IJTC relations.
+- Removed top-level `eventRules` from the program schema, editor layout, API
+  population, and frontend fallback path.
+- Retired FIA top-level `rundown` links only after grouped content counts
+  matched; preserved IJTC `rundown` because its race schedule still consumes it.
+- Retired unconsumed IJTC `bannerSlides` rows and seven confirmed-unused
+  single-type control sections. Shared component rows were deleted only when
+  no remaining join table referenced them.
+- Ran the read-only inventory again after cleanup and rehearsed the same
+  retirement against `sarga_strapi_i18n_rehearsal`.
+
+#### Files changed
+
+- `cms/src/api/motorsport-program/content-types/motorsport-program/schema.json`
+- `cms/src/migrations/motorsport-legacy-field-retirement.ts`
+- `cms/src/migrations/motorsport-fia-rallycross-content.ts`
+- `cms/src/migrations/motorsport-show-field-defaults.ts`
+- `cms/src/migrations/motorsport-page-single-types.ts`
+- `cms/src/index.ts`
+- `docker-compose.yml`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `strapi/content-types.json`
+- `docs/motorsport/audit/*.md` and `field-inventory-2026-08-29.json`
+
+#### How verified
+
+- Local dry-run identified 46 links; local apply removed 46 links and 31
+  orphaned component rows; source verify reported zero targeted links.
+- Rehearsal apply against the isolated PostgreSQL database removed the same 46
+  links and rehearsal queries confirmed grouped FIA counts of 6 Format, 10
+  Rundown, and 12 Guide item links across draft/published records.
+- CMS generated types and TypeScript compilation passed after the migration
+  helper typing fix; the CMS restarted successfully.
+- No staging deployment, staging migration, or remote CMS change was run.
+
+#### Notes / caveats
+
+- `bannerSlides` remains intentionally visible for FIA because it is the live
+  campaign slider and has a current frontend consumer; it is not a duplicate
+  Format/Rundown/Guide section.
+- The physical `motorsport-program` collection split remains deferred; native
+  conditional visibility provides program-specific editor organization without
+  migrating localized records and relations.
+- The local container currently uses the verify gate; set the retirement mode
+  back to `off` for ordinary local development after review. Staging remains
+  blocked pending explicit confirmation.
+
+### MS-CMS-CLEAN-FIA-LEGACY-DATA — FIA presentation and hero cleanup
+
+#### What was done
+
+- Kept shared `presentationSections`, `heroMedia`, `rundown`, `riders`,
+  `standings`, and `regulations` schema fields available only to their real
+  non-FIA consumers, with native `programType` conditions hiding them from FIA
+  editors.
+- Retired the remaining FIA top-level `presentationSections` links and
+  `heroMedia` relations after confirming `fiaRallycrossContent` and the grouped
+  Hero media were canonical.
+- Changed the FIA compatibility bootstrap so it no longer recreates retired
+  `presentationSections` on Strapi restart when grouped FIA content exists.
+- Refreshed the read-only local field inventory and updated the FIA/program
+  audit documents with the final stored-data disposition.
+
+#### Files changed
+
+- `cms/src/migrations/motorsport-fia-presentation.ts`
+- `cms/src/migrations/motorsport-legacy-field-retirement.ts`
+- `cms/src/api/motorsport-program/content-types/motorsport-program/schema.json`
+- `cms/src/seed.ts`
+- `docs/motorsport/audit/fia-rallycross.md`
+- `docs/motorsport/audit/program-collections.md`
+- `docs/motorsport/audit/field-inventory-2026-08-29.{json,md}`
+- `docs/motorsport/audit/README.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Source verify after restart reported zero targeted legacy links and did not
+  recreate FIA `presentationSections`.
+- Isolated rehearsal apply removed 6 FIA `presentationSections` links, 2 FIA
+  top-level `heroMedia` relations, and 6 orphaned page-section rows; grouped
+  FIA content and IJTC shared rundown links remained intact.
+- Final local inventory reports FIA: 3 banner slides, 0 legacy rundown rows,
+  0 top-level legacy guide-rule rows, 0 top-level presentation links, 0
+  top-level hero-media links, and grouped content of 3 Format, 5 Rundown, and
+  6 Race-day Guide items.
+- CMS restart completed TypeScript compilation and regenerated types.
+
+#### Notes / caveats
+
+- `presentationSections` and `heroMedia` are hidden for FIA but are not
+  globally deleted because non-FIA compatibility consumers still exist.
+- The authenticated Strapi editor UI was not available for visual browser
+  verification in this local session; the schema conditions and persisted
+  layout were verified from source and the local database.
+- Staging deployment and staging migration remain blocked pending explicit
+  confirmation.
+
+### MS-CMS-CLEAN-EDITOR-CONDITIONS — Runtime visibility correction
+
+#### What was done
+
+- Replaced the unsupported shorthand visibility objects with direct Strapi
+  Content Manager JSON Logic conditions.
+- Kept the same intended editor policy: FIA sees FIA content and banner slides;
+  IJTC sees rider CTA fields and rider/standing/regulation relations; shared
+  non-FIA fields remain available only where applicable.
+
+#### Files changed
+
+- `cms/src/api/motorsport-program/content-types/motorsport-program/schema.json`
+- `docs/motorsport/audit/program-collections.md`
+- `docs/motorsport/audit/README.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Confirmed against the installed Strapi 5.49 Content Manager
+  `InputRenderer`: `conditions.visible` is evaluated directly as JSON Logic.
+- Confirmed all program conditions now use `==` / `!=` with `var: programType`.
+- Local Strapi admin rebuilt successfully after the schema change.
+
+#### Notes / caveats
+
+- The terminal browser session was unauthenticated, so the existing user CMS
+  session could not be used for a final visual editor screenshot. Reopen the
+  FIA record after the admin rebuild; the five IJTC-only fields should now be
+  absent rather than merely empty.
+- No staging deployment or staging migration was run.
+
+### MS-CMS-CLEAN-PROGRAM-ORDER — Programme editor field order
+
+#### What was done
+
+- Reordered the persisted Motorsport Program edit layout so programme identity
+  fields appear first: title, slug, navigation, type/status, season, summary,
+  headline, dates, and venue.
+- Placed `motorsportPresentation` immediately after those identity fields,
+  followed by media and the conditional programme content groups.
+
+#### Files changed
+
+- `cms/src/migrations/motorsport-program-editor-layout.ts`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Strapi restarted and repaired the persisted Content Manager layout.
+- PostgreSQL layout verification reports the requested order with
+  `motorsportPresentation` after `venue`.
+- CMS TypeScript compilation and `git diff --check` passed.
+
+#### Notes / caveats
+
+- This changes editor presentation order only; it does not change CMS data,
+  frontend rendering, or staging.
+
+### CMS-DOC-PROMPT-COVERAGE — Exhaustive Motorsport editor inventory wording
+
+#### What was done
+
+- Updated the CMS User Manual prompt to require discovery and coverage of every
+  Sarga Motorsport editor entry under both Collection Types and Single Types.
+- Added an explicit coverage matrix requirement so entries are documented or
+  classified even when they are unused, shared, operational, legacy, or not
+  currently rendered.
+- Added validation checks preventing omissions caused by relying on an initial
+  or manually named menu list.
+
+#### Files changed
+
+- `prompts/Prompt - Sarga Motorsport CMS User Manual.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Confirmed the prompt contains dynamic CMS inventory instructions, coverage
+  matrix requirements, and omission checks.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- This changes documentation-generation instructions only; it does not alter
+  CMS schemas, content, frontend behavior, or deployment state.
+
+### CMS-ADMIN-UI-MODERNIZATION — Shared Collection Type and Single Type editor
+
+#### What was done
+
+- Audited the current Strapi Admin architecture and confirmed Strapi 5.49.0,
+  the existing `src/admin/app.tsx` extension, and 39 registered content types
+  (27 Collection Types and 12 Single Types).
+- Added a shared `Sarga Content Studio` stylesheet for the native Content
+  Manager. It covers scalar fields, helper/error text, validation, buttons,
+  component groups, repeatables, dynamic-zone structure, relations, media
+  dialogs, status surfaces, and responsive/reduced-motion behavior.
+- Added a route-aware document marker for native `/content-manager/` routes so
+  all current and future Collection Type and Single Type editors inherit the
+  treatment without UID/menu-specific branches.
+- Updated Strapi Admin light/dark tokens to the current Sarga palette while
+  preserving native Strapi behavior and existing workspace extensions.
+- Added the complete architecture, coverage inventory, design token contract,
+  testing guidance, and known limitations to `docs/strapi-admin-modernization.md`.
+- Tightened two existing preview UID set annotations exposed by the Admin
+  typecheck without changing preview behavior.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/extensions/motorsport-live-preview/MotorsportLivePreviewPage.tsx`
+- `cms/src/admin/styles/admin.css`
+- `cms/src/admin/vite.config.ts`
+- `docs/strapi-admin-modernization.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- `docker compose exec -T strapi pnpm build` passed; Strapi compiled TypeScript
+  and built the production Admin panel successfully.
+- Content type inventory confirmed 27 Collection Types and 12 Single Types.
+- `git diff --check` passed.
+- Admin TypeScript verification reports only pre-existing baseline issues in
+  preview nullability, Vite config type resolution, and the unavailable
+  `document` narrowing; no new diagnostic remains in the modernization code.
+
+#### Notes / caveats
+
+- Authenticated browser CRUD/UAT was completed in the follow-up
+  `CMS-ADMIN-UI-MODERNIZATION-LIVE-UAT` phase using the local Motorsport Admin
+  account.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-BOOLEAN-MOBILE — Responsive boolean switch
+
+#### What was done
+
+- Added a narrow-screen override for native Strapi boolean controls.
+- Forced the FALSE/TRUE segments to remain a compact horizontal switch with
+  consistent rounded geometry, instead of allowing the responsive layout to
+  stack them into a tall oval.
+- Preserved the native hidden checkbox, keyboard focus behavior, checked state,
+  and existing crimson active-state treatment.
+
+#### Files changed
+
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Inspected the authenticated local Motorsport Program editor at a 320px
+  viewport.
+- Confirmed the boolean wrapper remains 48px high with `flex-direction: row`,
+  `flex-wrap: nowrap`, and rounded 999px state segments.
+- Confirmed the checked state remains crimson with white text and the inactive
+  state remains neutral.
+- Local Strapi production admin build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- The responsive rule uses the native checkbox semantic structure and does not
+  depend on generated styled-component class names.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-MEDIA-PAGINATION — Media picker page indicator
+
+#### What was done
+
+- Added a visible crimson selected-page state to the native media picker
+  pagination.
+- Tracked the selected page through Strapi’s asset-grid re-render so the
+  indicator can follow page changes without relying on generated classes.
+- Preserved native pagination controls, keyboard behavior, and modal actions.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Confirmed the initial media picker page receives the crimson background,
+  white text, and stronger border treatment.
+- Confirmed the pagination implementation uses the stable
+  `nav[aria-label="pagination"]` landmark and a semantic data hook.
+- Local CMS production build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- The final browser reload attempt was blocked by the local browser URL policy,
+  so the post-reload page-two interaction was not re-run in that session.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-DARK-RAIL — Dark navigation rail contrast pass
+
+#### What was done
+
+- Replaced the shared admin rail’s dotted light background with a softer deep
+  slate-blue surface.
+- Preserved a warm-white inactive contrast, crimson active state, and lighter
+  blue focus/hover treatment without changing native navigation behavior.
+- Normalized the custom SMTP mail icon stroke so it remains visible inside its
+  native light icon tile.
+- Kept the logo area light so the existing brand mark remains legible.
+
+#### Files changed
+
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Checked the authenticated local Content Manager editor and confirmed the
+  rail has no background pattern, while the selected Content Manager tile and
+  inactive controls remain readable.
+- Local CMS production build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Native Strapi icon tiles remain light for reliable icon contrast; only the
+  rail surface is darkened.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-CM-SUBNAV — Content Manager submenu polish
+
+#### What was done
+
+- Applied the shared rounded selected, hover, and focus treatment to the
+  Content Manager’s secondary navigation without changing its information
+  architecture.
+- Added an accessible collapse/expand control to the native Content Manager
+  panel so editors can widen the main editing/list workspace when needed.
+- Kept the control generic for Collection Types and Single Types and retained
+  native navigation links and permissions.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Local Content Manager submenu opened with the new collapse control.
+- Confirmed expanded state uses a 232px panel and the selected entry has a
+  rounded 10px crimson border.
+- Confirmed collapsed state reduces the panel to 54px and shifts the editor
+  workspace wider while keeping an accessible expand control visible.
+
+#### Notes / caveats
+
+- The implementation uses the stable native `nav[aria-label="Content Manager"]`
+  landmark and does not target generated Strapi class names.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-DROPDOWN-TYPOGRAPHY — Dropdown and form readability refinement
+
+#### What was done
+
+- Corrected the shared Content Manager selector so native comboboxes are styled
+  as controls rather than accidentally styling their entire field wrapper as a
+  large card.
+- Increased shared editor control typography to readable fixed sizes: 15px
+  inputs, 14px labels/options, and 13px helper descriptions. This avoids the
+  project admin root scale making rem-based text appear too small.
+- Added semantic listbox and option styling for readable dropdown menus while
+  preserving Strapi's native selection behavior.
+- Kept the change generic for Collection Types and Single Types; no content
+  type-specific editor or data mutation was introduced.
+
+#### Files changed
+
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Authenticated local Collection Type editor checked on Motorsport Program,
+  including the secondary CTA dropdown and its option list.
+- Authenticated local Single Type editor checked on Motorsport About Page.
+- Local Strapi production admin build passed with `docker compose exec -T
+  strapi pnpm build`.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- The selectors intentionally target semantic native form elements and ARIA
+  roles so future content types inherit the treatment. Highly custom plugin
+  fields with unrelated markup may still need a focused adapter.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-LIVE-UAT — Authenticated local smoke test
+
+#### What was done
+
+- Signed into the local Admin using the supplied Motorsport Admin account.
+- Opened a Motorsport Program Collection Type, the FIA Rallycross record, the
+  IJTC record, and the Motorsport About Page Single Type.
+- Confirmed the FIA record renders only FIA content groups: banner slides,
+  grouped Format, grouped Rundown, and grouped Race-day Guide. Legacy
+  `heroMedia`, `presentationSections`, top-level `rundown`, and IJTC rider
+  fields were not rendered.
+- Confirmed the IJTC record renders the shared fallback fields and IJTC-only
+  rider CTA/relations, while the Single Type renders its component, media,
+  repeatable, rich-text, and validation-capable controls.
+
+#### How verified
+
+- Local Content Manager route marker was `content-manager` on both editor
+  families.
+- Computed live styles confirmed the warm editor canvas, Noto Sans body font,
+  tokenized input border, and six-pixel field radius.
+- Untouched FIA record reported Save and Publish disabled, preserving the
+  native no-change action state.
+- No content was edited, saved, published, deleted, reordered, uploaded, or
+  otherwise mutated during the browser test.
+
+#### Notes / caveats
+
+- This account is role-scoped and exposes 14 Collection Types and 11 Single
+  Types in its Content Manager navigation; source registration remains 27 and
+  12 respectively. This is expected RBAC behavior, not an omission from the
+  shared implementation.
+- The browser console also reported a native Strapi `Failed to fetch` event
+  and a DocumentRBAC hook dependency warning during navigation; the editor
+  remained usable and these traces are outside the new stylesheet/route-marker
+  code. They should be treated as separate Strapi baseline follow-up items.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-FORM-POLISH — Shared editor form refinement
+
+#### What was done
+
+- Refined the shared Content Manager form surface for all Collection Types and
+  Single Types using semantic selectors instead of content-type-specific
+  branches.
+- Added consistent premium control surfaces for text inputs, textareas,
+  selects, comboboxes, date/time controls, rich text editors, helper text,
+  validation states, media regions, repeatable blocks, and dynamic-zone
+  containers.
+- Preserved native Strapi save, publish, relation, media, component,
+  localization, validation, and permission behavior.
+
+#### Files changed
+
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Authenticated local Collection Type review: Motorsport Program / FIA
+  Rallycross.
+- Authenticated local Single Type review: Motorsport About Page.
+- Both rendered the shared warm canvas, rounded control surfaces, helper-text
+  hierarchy, and component styling.
+- `docker compose exec -T strapi pnpm build` passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Styling intentionally remains shared and semantic so newly added content
+  types inherit it where Strapi exposes the same native editor structures.
+- The implementation does not replace Strapi controls or use generated
+  styled-component class names.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-FIA-PREVIEW-404-FIX — Local preview query and timeout repair
+
+#### What was done
+
+- Fixed the shared Strapi 5 populate query builder so parent and nested
+  populate paths are not sent together, including the nested FIA content
+  sections.
+- Kept the published CMS timeout unchanged and increased only draft-preview
+  reads/heartbeat checks to tolerate the deep populated document while the
+  editor and preview load concurrently.
+- Restarted only the local Motorsport frontend container so the corrected
+  server module was active.
+
+#### Files changed
+
+- `frontend-motorsport/src/lib/strapi/client.ts`
+- `frontend-motorsport/src/app/api/preview/heartbeat/route.ts`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- The exact FIA draft query with document ID and nested grouped content now
+  returns HTTP 200 with the expected record.
+- Authenticated local side-by-side CMS preview now renders the FIA Rallycross
+  page instead of the custom 404 page.
+- The public FIA route remains functional; `git diff --check` passes.
+- The frontend production build was attempted and reached TypeScript
+  completion, but remains blocked by the pre-existing Next.js
+  `/_global-error` prerender `useContext` failure and unrelated missing-key
+  warnings.
+
+#### Notes / caveats
+
+- The 404 was preview-specific: published mode had been masking the invalid
+  query with fallback content, while draft mode correctly failed closed.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-RELATION-ROUNDING — Relation control border refinement
+
+#### What was done
+
+- Rounded Strapi's nested relation search shells consistently with scalar
+  controls.
+- Rounded selected relation entries, including draggable rows for related
+  events, ticket CTAs, and site assignments.
+- Kept the implementation shared and semantic, with native relation search,
+  reorder, remove, and selection behavior unchanged.
+
+#### Files changed
+
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Authenticated local Motorsport Program Collection Type checked for relation
+  search shells and selected relation rows.
+- Visual browser validation confirmed consistent rounded corners across the
+  marked relation fields and rows.
+- Local Strapi production admin build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- The rules target Strapi's semantic relation input and draggable row
+  attributes rather than generated class names.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-BOOLEAN-SWITCH — Boolean control refinement
+
+#### What was done
+
+- Restyled Strapi's native true/false controls as compact pill-shaped on/off
+  switches with clear active and inactive states.
+- Preserved the hidden native checkbox as the accessible interactive element,
+  including keyboard focus, disabled state, validation, and form semantics.
+- Applied the treatment generically to boolean fields across Collection Types
+  and Single Types without content-type-specific conditions.
+
+#### Files changed
+
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Authenticated local Motorsport Program Collection Type checked with active
+  true state and multiple boolean fields.
+- Live computed styles confirmed pill geometry, 14px labels, crimson active
+  state, neutral inactive state, and white active-state text.
+- Local Strapi production admin build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- The styling uses the native checkbox structure and semantic attributes, so
+  future boolean fields inherit the switch treatment automatically.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-REPEATABLE-LISTS — Repeatable list refinement
+
+#### What was done
+
+- Restyled native repeatable-component lists as composed rounded surfaces with
+  clean separators between entries.
+- Improved item hierarchy with larger titles, circular expand controls,
+  clearer action spacing, and consistent drag/delete affordances.
+- Styled the native add-entry footer as a full-width editorial action while
+  preserving Strapi's add, collapse, reorder, duplicate, and delete behavior.
+- Applied the treatment generically to repeatable list structures in both
+  Collection Types and Single Types.
+
+#### Files changed
+
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Authenticated local Motorsport Program Collection Type checked on the
+  `rundownItems` repeatable list with five entries.
+- Verified the rounded list shell, item separators, circular expand controls,
+  action area, and add-entry footer visually in the browser.
+- Confirmed the same semantic list styling is inherited by a representative
+  Motorsport About Page Single Type.
+- Local Strapi production admin build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Selectors use Strapi's native `data-size`, `data-state`, and orientation
+  attributes rather than generated class names.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-TIME-PICKER — Time picker refinement
+
+#### What was done
+
+- Restyled native Strapi time inputs as spacious rounded controls matching the
+  shared scalar and relation field language.
+- Improved time value readability, clock icon alignment, clear action spacing,
+  and picker dropdown affordance.
+- Preserved the native time input, keyboard interaction, clear behavior,
+  validation, and option picker semantics.
+- Applied the treatment generically to time portions of date-time fields across
+  Collection Types and Single Types.
+
+#### Files changed
+
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Authenticated local Motorsport Program Collection Type checked on
+  `eventStartDate` and `eventEndDate` time controls.
+- Opened and closed the native time picker without changing content; its
+  rounded listbox and readable options were confirmed.
+- Live computed styles confirmed 60px control height, 10px radius, 18px time
+  value text, and aligned clear/dropdown controls.
+- Local Strapi production admin build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- The styling targets the semantic `Choose time` label and native combobox
+  structure rather than generated class names.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-MEDIA-LIBRARY — Media controls and selector refinement
+
+#### What was done
+
+- Restyled native media-selector actions, toolbar controls, modal footer
+  actions, and asset selection controls with the shared rounded Sarga admin
+  surface language.
+- Added clear primary/secondary hierarchy for `Add more assets`, `Add folder`,
+  `Finish`, and `Cancel` while preserving native Strapi behavior.
+- Improved media-card surfaces, preview backgrounds, metadata hierarchy,
+  selection checkboxes, focus states, and hover feedback without using
+  generated Strapi class names.
+- Restyled selected-media previews in editor forms so their container,
+  controls, and metadata use the same rounded border and shadow treatment.
+- Fixed the native carousel grid so selected thumbnails render at a stable
+  aspect-safe height and the action rail sits below the image instead of
+  covering its bottom edge.
+- Added a clean empty-media state with horizontal prompt layout and separated
+  asset-card preview windows from their filename and metadata areas.
+- Refined the native Entry and Preview action cards with larger rounded
+  controls, clearer typography, and consistent disabled-state contrast.
+
+#### Files changed
+
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Authenticated local Motorsport Program Collection Type checked in the native
+  media selector Browse tab.
+- Visually checked the modal header, Browse/Selected Files tabs, upload
+  actions, sort/filter/search controls, media-card grid, selection controls,
+  and Cancel/Finish footer.
+- Confirmed selected media fields for `backgroundMedia`,
+  `mobileBackgroundMedia`, and `ogImage` receive the shared 10px rounded
+  surface styling without changing content; empty media prompts remain
+  readable and horizontal.
+- Confirmed long media filenames no longer overlap the preview thumbnail and
+  the Entry/Preview buttons use the shared 50px rounded control treatment.
+- Local Strapi production admin build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- The media treatment uses semantic roles, dialog structure, and accessibility
+  attributes so native Collection Type and Single Type media fields inherit it
+  automatically.
+- Custom third-party media fields with a different DOM contract may need a
+  narrowly scoped adapter.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-GROUPED-COMPONENTS — Grouped component separators
+
+#### What was done
+
+- Added reusable visual boundaries for native non-repeatable component groups:
+  rounded surfaces, section headers, divider lines, and deliberate spacing.
+- Added nested white sub-surfaces inside grouped components so members such as
+  `formatSection`, `rundownSection`, and `raceDayGuideSection` read as three
+  distinct editor sections inside `fiaRallycrossContent`.
+- Kept component reset actions, localization indicators, field controls,
+  repeatable lists, and native Strapi behavior unchanged.
+
+#### Files changed
+
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Authenticated local FIA Rallycross Motorsport Program editor inspected at
+  `fiaRallycrossContent`.
+- Visually confirmed the parent group surface and distinct nested Format,
+  Rundown, and Race-day Guide surfaces with separated headers and content.
+- Confirmed the same semantic component treatment is reusable for other native
+  component groups rather than being tied to a content-type name.
+- Local Strapi production admin build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- The grouping treatment targets the native component-header/reset-action DOM
+  pattern instead of generated Strapi class names.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-SHELL — Admin shell, homepage, media library, and login accents
+
+#### What was done
+
+- Added a restrained Sarga dotted pattern with a soft gradient accent to the
+  native Content Manager canvas and shared admin shell.
+- Refined the native left navigation with warm surfaces, rounded active state,
+  clearer hover/focus feedback, and the same crimson/blue admin accents.
+- Applied the same shared rail styling on Content Manager routes as on
+  standalone shell routes; the selected collection row remains a deliberate
+  second-level highlight for editor context.
+- Applied raised widget surfaces and table-row hover treatment to the CMS
+  homepage.
+- Extended the shared card language to full-page Media Library asset cards.
+- Refined the existing Strapi login surface with the dotted background,
+  layered gradient, rounded inputs, focus treatment, and primary sign-in
+  action styling while retaining the native authentication flow.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/styles/admin.css`
+- `docs/strapi-admin-modernization.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Checked the local CMS homepage, Content Manager editor, and full-page Media
+  Library in the authenticated browser.
+- Confirmed the dotted canvas and gradient accent render on the editor and
+  homepage header, sidebar active state remains readable, and Media Library
+  cards retain native asset actions.
+- Compared the authenticated Home and Content Manager routes and confirmed
+  their active rail items now share the same rounded crimson treatment.
+- Confirmed the local admin production build passed.
+- `git diff --check` passed.
+- The standalone admin TypeScript check was run and still reports existing
+  errors in `MotorsportLivePreviewPage.tsx`, `vite.config.ts`, and
+  `preview-path.ts`; the admin production build remains green.
+
+#### Notes / caveats
+
+- Login was not forced through a logout during validation because the local
+  browser session was authenticated; the login treatment is implemented
+  against Strapi's existing `.AuthBody` and `.AuthBox` surfaces.
+- The shell styling is intentionally additive and does not alter navigation
+  information architecture, permissions, or native plugin behavior.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
+### CMS-ADMIN-UI-MODERNIZATION-LOGIN-ROUNDING — Login form surface refinement
+
+#### What was done
+
+- Added semantic Strapi v5 login selectors for the native layout card, inputs,
+  labels, remember-me checkbox, submit button, and forgot-password link.
+- Applied the shared rounded border, focus, crimson action, and restrained
+  elevation treatment to the white login form surface.
+- Removed the duplicate login-page dot and gradient layers by keeping the
+  background texture on the page body and clearing it from the nested Main.
+- Kept the native authentication flow, validation, and password visibility
+  control unchanged.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Verified the Strapi v5 login component structure from the installed local
+  admin package source map and targeted the semantic `main`/`form` structure.
+- Local CMS production build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- The authenticated browser session was not logged out, so the login page was
+  not submitted or visually re-entered during this pass.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.

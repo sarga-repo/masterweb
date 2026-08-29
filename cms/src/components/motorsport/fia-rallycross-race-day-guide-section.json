@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_motorsport_fia_rallycross_race_day_guide_sections",
+  "info": {
+    "displayName": "FIA Rallycross Race-day Guide Section",
+    "description": "Presentation copy and Do/Do not guidance for the FIA Rallycross Race-day Guide section."
+  },
+  "options": {},
+  "config": {
+    "metadatas": {
+      "isActive": { "edit": { "description": "Show the Race-day Guide section on the FIA Rallycross page." } },
+      "showIndex": { "edit": { "description": "Show the section index label above the heading." } },
+      "indexLabel": { "edit": { "description": "Short section identifier shown above the guide heading, for example RX / GUIDE." } },
+      "showEyebrow": { "edit": { "description": "Show the short context line above the guide heading." } },
+      "eyebrow": { "edit": { "description": "Short context line shown above the guide heading." } },
+      "showTitle": { "edit": { "description": "Show the Race-day Guide heading." } },
+      "title": { "edit": { "description": "Main Race-day Guide heading shown on the public page." } },
+      "showBody": { "edit": { "description": "Show the explanatory copy below the guide heading." } },
+      "body": { "edit": { "description": "Short practical introduction to the race-day guidance." } },
+      "ruleItems": { "edit": { "description": "Ordered Do and Do not guidance items shown in the Race-day Guide." } }
+    }
+  },
+  "attributes": {
+    "isActive": { "type": "boolean", "default": true },
+    "showIndex": { "type": "boolean", "default": true },
+    "indexLabel": { "type": "string", "maxLength": 80, "pluginOptions": { "i18n": { "localized": true } } },
+    "showEyebrow": { "type": "boolean", "default": true },
+    "eyebrow": { "type": "string", "maxLength": 100, "pluginOptions": { "i18n": { "localized": true } } },
+    "showTitle": { "type": "boolean", "default": true },
+    "title": { "type": "string", "required": true, "maxLength": 180, "pluginOptions": { "i18n": { "localized": true } } },
+    "showBody": { "type": "boolean", "default": true },
+    "body": { "type": "richtext", "pluginOptions": { "i18n": { "localized": true } } },
+    "ruleItems": {
+      "type": "component",
+      "component": "motorsport.rule-item",
+      "repeatable": true,
+      "pluginOptions": { "i18n": { "localized": true } }
+    }
+  }
+}

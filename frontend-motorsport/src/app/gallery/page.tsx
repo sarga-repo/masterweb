@@ -24,12 +24,33 @@ import {
   isCmsSectionVisible,
 } from "@/lib/cms-visibility";
 import { createSurfaceSequencer } from "@/lib/surface-sequencer";
+import { createMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "Gallery",
-  description:
-    "Trackside photography from Sarga Motorsport—racing, paddock, people, and fan energy captured in motion.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const page = await fetchSitePage("custom", "/gallery", locale);
+  return createMetadata({
+    title: page?.title ?? "Gallery",
+    description:
+      page?.heroDescription ??
+      "Trackside photography from Sarga Motorsport—racing, paddock, people, and fan energy captured in motion.",
+    path: "/gallery",
+    image: page?.heroImage,
+    seo: page?.seo
+      ? {
+          metaTitle: page.seo.metaTitle,
+          metaDescription: page.seo.metaDescription,
+          ogTitle: page.seo.ogTitle,
+          ogDescription: page.seo.ogDescription,
+          ogImageUrl: page.seo.ogImage?.url,
+          canonicalUrl: page.seo.canonicalUrl,
+          noIndex: page.seo.noIndex,
+        }
+      : undefined,
+    locale,
+    isFallback: locale === "id" && !page,
+  });
+}
 
 const FALLBACK: GalleryItem[] = [
   {
@@ -83,7 +104,6 @@ type GalleryPageProps = {
   }>;
 };
 
-const GALLERY_PAGE_SIZE = 1;
 const GALLERY_CATEGORIES = [
   "race-day",
   "stable-life",

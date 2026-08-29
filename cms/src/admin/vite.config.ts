@@ -7,17 +7,15 @@ export default (config: UserConfig) => {
         "@": "/src",
       },
     },
-    // Inject brand-level CSS that goes beyond theme tokens.
-    // These styles target the Strapi admin login page, sidebar,
-    // and global chrome for a premium Sarga gateway feel.
+    // Keep the Admin bundle ready for shared CSS imports from app.tsx. The
+    // Content Manager modernization lives in src/admin/styles/admin.css.
     css: {
       preprocessorOptions: {
         // If you add SCSS later, configure it here.
       },
     },
-    // NOTE: For deeper runtime CSS injection (e.g. login page
-    // background, custom scrollbars, font overrides), add a
-    // <style> tag in the bootstrap() function inside app.tsx
-    // or serve a custom CSS file from cms/public/.
+    // Runtime DOM work remains limited to existing supported integrations;
+    // shared editor styling should stay in imported CSS rather than being
+    // injected into the page from bootstrap().
   });
 };

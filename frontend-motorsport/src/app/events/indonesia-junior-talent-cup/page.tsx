@@ -10,6 +10,7 @@ import {
   formatProgramStatus,
   getIjtcInformationBand,
   getIjtcProgram,
+  getIjtcSection,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
 import { fetchMotorsportTheme } from "@/lib/cms-data";
@@ -50,6 +51,20 @@ export default async function IjtcOverviewPage() {
   if (!program) notFound();
   const status = formatProgramStatus(program.status);
   const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
+  const overviewSection = getIjtcSection(program, "overview");
+  const routesSection = getIjtcSection(program, "routes");
+  const intakeSection = getIjtcSection(program, "become-riders");
+  const programmePaths = routesSection?.items?.length
+    ? routesSection.items
+        .filter((item) => item.isActive !== false && item.href)
+        .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+        .map((item, index) => ({
+          index: item.label ?? String(index + 1).padStart(2, "0"),
+          title: item.title ?? "Programme route",
+          description: item.description ?? "",
+          href: item.href!,
+        }))
+    : PROGRAMME_PATHS;
 
   return (
     <>
@@ -107,29 +122,40 @@ export default async function IjtcOverviewPage() {
         <div className="ms-shell grid gap-12 lg:grid-cols-[minmax(0,.86fr)_minmax(0,1.14fr)] lg:items-center">
           <div>
             <SectionHeader
-              index="OVERVIEW"
-              eyebrow="Indonesia Junior Talent Cup"
-              title="Built for progression."
+              index={overviewSection?.indexLabel ?? "OVERVIEW"}
+              showIndex={overviewSection?.showIndex ?? true}
+              showEyebrow={overviewSection?.showEyebrow ?? true}
+              showTitle={overviewSection?.showTitle ?? true}
+              eyebrow={
+                overviewSection?.eyebrow ?? "Indonesia Junior Talent Cup"
+              }
+              title={overviewSection?.title ?? "Built for progression."}
               align="left"
             />
-            <p className="mt-8 max-w-xl text-lg leading-8 text-ms-warm-white/66">
-              The programme is designed for young Indonesian riders who need a
-              disciplined bridge between raw pace and professional race craft.
-              Every published round connects preparation, coaching, competition,
-              and measurable development.
-            </p>
+            <MarkdownContent
+              value={
+                overviewSection?.body ??
+                "The programme is designed for young Indonesian riders who need a disciplined bridge between raw pace and professional race craft. Every published round connects preparation, coaching, competition, and measurable development."
+              }
+              className="ms-rich-text mt-8 max-w-xl text-lg leading-8 text-ms-warm-white/66"
+            />
             <Link
-              href={`${IJTC_BASE_PATH}/about`}
+              href={overviewSection?.ctaUrl ?? `${IJTC_BASE_PATH}/about`}
               className="group mt-8 inline-flex items-center gap-3 border-b border-ms-electric-yellow/55 pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-electric-yellow"
             >
-              How IJTC works
+              {overviewSection?.ctaLabel ?? "How IJTC works"}
               <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
           <div className="ms-panel relative aspect-[16/11] overflow-hidden">
             <ResilientImage
-              src="/media/sarga-motorsport-discipline-motorcycle-daylight.jpg"
-              alt="Young motorcycle racers training together on a daylight circuit"
+              src={
+                overviewSection?.media ??
+                "/media/sarga-motorsport-discipline-motorcycle-daylight.jpg"
+              }
+              alt={
+                "Young motorcycle racers training together on a daylight circuit"
+              }
               fallbackSrc="/media/motorcycle-racing-dusk.png"
               fallbackAlt="Motorcycle racers training on circuit"
               fill
@@ -152,13 +178,20 @@ export default async function IjtcOverviewPage() {
       >
         <div className="ms-shell">
           <SectionHeader
-            index="ROUTES"
-            eyebrow="Programme directory"
-            title="Follow the season."
-            description="Move from the calendar to the published rider field and current classification without leaving the IJTC programme."
+            index={routesSection?.indexLabel ?? "ROUTES"}
+            showIndex={routesSection?.showIndex ?? true}
+            showEyebrow={routesSection?.showEyebrow ?? true}
+            showTitle={routesSection?.showTitle ?? true}
+            showDescription={routesSection?.showBody ?? true}
+            eyebrow={routesSection?.eyebrow ?? "Programme directory"}
+            title={routesSection?.title ?? "Follow the season."}
+            description={
+              routesSection?.body ??
+              "Move from the calendar to the published rider field and current classification without leaving the IJTC programme."
+            }
           />
           <div className="mt-14 grid gap-4 lg:grid-cols-[1.15fr_.85fr_1fr]">
-            {PROGRAMME_PATHS.map((item) => (
+            {programmePaths.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -186,20 +219,25 @@ export default async function IjtcOverviewPage() {
       >
         <div className="ms-shell grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>
-            <p className="ms-data-label text-ms-slipstream-teal">Next intake</p>
+              <p className="ms-data-label text-ms-slipstream-teal">
+                {intakeSection?.eyebrow ?? "Next intake"}
+              </p>
             <h2 className="ms-heading-section mt-5 max-w-[16ch]">
-              Ready to introduce your racing journey?
+              {intakeSection?.title ?? "Ready to introduce your racing journey?"}
             </h2>
-            <p className="mt-5 max-w-xl text-base leading-7 text-ms-warm-white/64">
-              The first step is an inquiry, not an account or automatic entry.
-              The programme team reviews every submission directly.
-            </p>
+            <MarkdownContent
+              value={
+                intakeSection?.body ??
+                "The first step is an inquiry, not an account or automatic entry. The programme team reviews every submission directly."
+              }
+              className="ms-rich-text mt-5 max-w-xl text-base leading-7 text-ms-warm-white/64"
+            />
           </div>
           <Link
-            href={`${IJTC_BASE_PATH}/become-riders`}
+            href={intakeSection?.ctaUrl ?? `${IJTC_BASE_PATH}/become-riders`}
             className="group inline-flex h-(--ms-control-height) items-center gap-4 bg-ms-apex-crimson px-8 text-[0.66rem] font-black uppercase tracking-[0.16em] text-ms-warm-white transition-colors hover:bg-ms-ignition-orange"
           >
-            Become Riders
+            {intakeSection?.ctaLabel ?? "Become Riders"}
             <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>

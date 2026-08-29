@@ -5,6 +5,20 @@
     "description": "CMS-managed capability grid for the Motorsport About page"
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "enabled": { "edit": { "description": "Show the capability grid on the About page." } },
+      "showIndex": { "edit": { "description": "Show the capability section index label." } },
+      "indexLabel": { "edit": { "description": "Short label shown above the capability section title." } },
+      "showEyebrow": { "edit": { "description": "Show the capability section eyebrow." } },
+      "showTitle": { "edit": { "description": "Show the capability section title." } },
+      "showDescription": { "edit": { "description": "Show the capability section description." } },
+      "eyebrow": { "edit": { "description": "Short context line above the capability section title." } },
+      "title": { "edit": { "description": "Main heading for the capability grid." } },
+      "description": { "edit": { "description": "Introductory copy shown beside the capability heading." } },
+      "cards": { "edit": { "description": "Ordered capability cards shown in the grid." } }
+    }
+  },
   "attributes": {
     "enabled": {
       "type": "boolean",

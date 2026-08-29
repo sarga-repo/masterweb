@@ -15,7 +15,21 @@
         "edit": {
           "description": "Rider portrait: 1000 × 1250 px (4:5) recommended. Keep helmet/face and shoulders within the center safe area."
         }
-      }
+      },
+      "motorsportPresentation": { "edit": { "description": "Optional shared detail presentation retained for future rider-profile variants; the current rider route uses rider fields directly." } },
+      "name": { "edit": { "description": "Rider name shown in the catalogue, profile hero, and metadata." } },
+      "slug": { "edit": { "description": "Stable rider profile URL identifier. Change only with a redirect plan." } },
+      "bio": { "edit": { "description": "Approved rider biography shown on the rider profile page." } },
+      "program": { "edit": { "description": "Programme that owns this rider record. IJTC rider pages only show records related to the selected programme." } },
+      "number": { "edit": { "description": "Competition number shown beside the rider name and portrait." } },
+      "team": { "edit": { "description": "Rider team or academy shown in profile metadata and standings." } },
+      "region": { "edit": { "description": "Rider region shown in the profile and catalogue." } },
+      "nationality": { "edit": { "description": "Rider nationality shown in the profile metadata." } },
+      "isActive": { "edit": { "description": "Show this rider in the public catalogue and related programme queries." } },
+      "sortOrder": { "edit": { "description": "Catalogue order within the selected programme; lower numbers appear first." } },
+      "siteScope": { "edit": { "description": "Site visibility scope. Use motorsport for the dedicated Motorsport frontend." } },
+      "sites": { "edit": { "description": "Optional multisite assignments for this rider record." } },
+      "seo": { "edit": { "description": "Optional search and social metadata for the rider profile." } }
     }
   },
   "attributes": {

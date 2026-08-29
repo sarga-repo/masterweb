@@ -13,6 +13,7 @@ import {
   getIjtcProgram,
   getIjtcInformationBand,
   getIjtcRegulation,
+  getIjtcSection,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
 import { getRequestLocale } from "@/lib/i18n/request";
@@ -53,16 +54,25 @@ export default async function IjtcRegulationPage() {
   const theme = await fetchMotorsportTheme(locale);
   const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
   const isPublished = Boolean(regulation?.fileHref);
+  const regulationSection = getIjtcSection(program, "regulation");
+  const hero = program.presentationHero;
 
   return (
     <>
       <PageHero
-        kicker={`IJTC / ${program.seasonLabel}`}
+        kicker={hero?.eyebrow ?? `IJTC / ${program.seasonLabel}`}
         kickerColor="yellow"
-        title="Sporting regulation."
-        description="One controlled source for the programme rules, document version, and effective date."
-        backgroundImage={program.image}
-        backgroundAlt={program.imageAlt}
+        title={hero?.title ?? "Sporting regulation."}
+        description={
+          hero?.description ??
+          "One controlled source for the programme rules, document version, and effective date."
+        }
+        showKicker={hero?.showEyebrow}
+        showTitle={hero?.showTitle}
+        showDescription={hero?.showDescription}
+        showMedia={hero?.showMedia}
+        backgroundImage={hero?.backgroundMedia?.url ?? program.image}
+        backgroundAlt={hero?.backgroundMedia?.alt ?? program.imageAlt}
         accent="orange"
         accentPosition="bottom-left"
         surface="heat"
@@ -89,10 +99,19 @@ export default async function IjtcRegulationPage() {
       >
         <div className="ms-shell">
           <SectionHeader
-            index="RULEBOOK"
-            eyebrow="Official publication"
-            title="The current controlled document."
-            description="Publication is CMS-managed. When an approved file is activated, the download control appears automatically."
+            index={regulationSection?.indexLabel ?? "RULEBOOK"}
+            showIndex={regulationSection?.showIndex ?? true}
+            showEyebrow={regulationSection?.showEyebrow ?? true}
+            showTitle={regulationSection?.showTitle ?? true}
+            showDescription={regulationSection?.showBody ?? true}
+            eyebrow={regulationSection?.eyebrow ?? "Official publication"}
+            title={
+              regulationSection?.title ?? "The current controlled document."
+            }
+            description={
+              regulationSection?.body ??
+              "Publication is CMS-managed. When an approved file is activated, the download control appears automatically."
+            }
           />
           <div className="mt-14">
             <RegulationDownloadPanel

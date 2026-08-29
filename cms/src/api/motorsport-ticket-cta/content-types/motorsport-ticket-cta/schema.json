@@ -20,7 +20,28 @@
         "edit": {
           "description": "Optional mobile ticket background: 1080 × 1350 px (4:5) recommended. Falls back to backgroundImage when empty."
         }
-      }
+      },
+      "title": { "edit": { "description": "Ticket panel title shown for the related event or programme." } },
+      "label": { "edit": { "description": "Primary ticket action label shown on cards and ticket panels." } },
+      "provider": { "edit": { "description": "Ticketing provider name shown as partner attribution." } },
+      "eyebrow": { "edit": { "description": "Short context label above the ticket panel title." } },
+      "description": { "edit": { "description": "Ticket guidance shown before the external partner action." } },
+      "eventLabel": { "edit": { "description": "Label for the event metadata line in the ticket panel." } },
+      "eventText": { "edit": { "description": "Event/date/venue text shown in the ticket panel metadata." } },
+      "providerLabel": { "edit": { "description": "Label used for the ticket provider metadata row." } },
+      "providerText": { "edit": { "description": "Provider text shown in the ticket panel; falls back to provider." } },
+      "partnerLabel": { "edit": { "description": "Partner disclosure text shown near the ticket action." } },
+      "footerText": { "edit": { "description": "Optional reassurance or partner note shown below the ticket panel." } },
+      "ctaLabel": { "edit": { "description": "Label for the external ticket action." } },
+      "ctaType": { "edit": { "description": "Choose redirect, deep link, or approved embed behavior. Checkout remains external." } },
+      "url": { "edit": { "description": "Approved ticket destination URL. Use HTTPS for external destinations." } },
+      "embedConfigJson": { "edit": { "description": "Optional approved embed configuration used only when CTA type is embed." } },
+      "trackingParams": { "edit": { "description": "Optional partner tracking parameters applied to the approved ticket destination." } },
+      "activeFrom": { "edit": { "description": "Optional start time for showing this ticket destination." } },
+      "activeUntil": { "edit": { "description": "Optional end time for showing this ticket destination." } },
+      "isActive": { "edit": { "description": "Enable this ticket destination for public use." } },
+      "relatedEvent": { "edit": { "description": "Event that owns this ticket destination." } },
+      "relatedProgram": { "edit": { "description": "Programme that owns this ticket destination." } }
     }
   },
   "attributes": {

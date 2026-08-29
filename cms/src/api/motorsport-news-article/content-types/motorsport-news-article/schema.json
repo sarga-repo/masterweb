@@ -10,7 +10,20 @@
         "edit": {
           "description": "News cover image: 1600 × 1000 px (8:5) recommended. Keep the editorial subject inside the central safe area for card crops."
         }
-      }
+      },
+      "motorsportPresentation": { "edit": { "description": "Hero and Information Band presentation shown on the article detail page." } },
+      "title": { "edit": { "description": "Article headline shown in archive cards, detail pages, and metadata." } },
+      "slug": { "edit": { "description": "Stable article URL identifier. Change only with a redirect plan." } },
+      "excerpt": { "edit": { "description": "Short article introduction shown in archive cards, hero fallback copy, and metadata." } },
+      "body": { "edit": { "description": "Approved rich editorial body shown on the article detail page." } },
+      "category": { "edit": { "description": "Editorial category shown with the article date." } },
+      "publishedDate": { "edit": { "description": "Publication date shown in cards, detail metadata, and article context." } },
+      "isHotTopic": { "edit": { "description": "Editorial flag reserved for hot-topic filtering; not currently rendered on the public page." } },
+      "author": { "edit": { "description": "Optional author name retained for future byline presentation; not currently rendered." } },
+      "relatedEvent": { "edit": { "description": "Optional related event for future article cross-linking." } },
+      "relatedGallery": { "edit": { "description": "Optional related gallery for future article cross-linking." } },
+      "relatedBusinesses": { "edit": { "description": "Optional related ecosystem businesses for future article cross-linking." } },
+      "seo": { "edit": { "description": "Search and social metadata for the article detail page." } }
     }
   },
   "attributes": {

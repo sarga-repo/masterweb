@@ -12,6 +12,16 @@
           "description": "For the FIA campaign use format, rundown, or race-day-guide. This key connects the CMS section to its matching frontend section."
         }
       },
+      "isActive": {
+        "edit": {
+          "description": "Show this named presentation section on the public page."
+        }
+      },
+      "indexLabel": {
+        "edit": {
+          "description": "Short index or section identifier shown above the section title."
+        }
+      },
       "showIndex": {
         "edit": {
           "description": "Show the section index label."
@@ -42,6 +52,41 @@
           "description": "Show the section CTA."
         }
       },
+      "supportLabel": {
+        "edit": {
+          "description": "Optional label shown beside supporting section copy or list metadata."
+        }
+      },
+      "supportBody": {
+        "edit": {
+          "description": "Optional supporting rich text shown in the section header."
+        }
+      },
+      "listLabel": {
+        "edit": {
+          "description": "Optional label shown above an automatically populated list inside this section, such as the Home event list."
+        }
+      },
+      "itemCountLabel": {
+        "edit": {
+          "description": "Optional suffix shown after the automatically calculated item count, such as entries."
+        }
+      },
+      "publicationTabLabel": {
+        "edit": {
+          "description": "Optional publications tab label for the Home Connected Records section."
+        }
+      },
+      "leadershipTabLabel": {
+        "edit": {
+          "description": "Optional leadership tab label for the Home Connected Records section."
+        }
+      },
+      "ecosystemTabLabel": {
+        "edit": {
+          "description": "Optional ecosystem tab label for the Home Connected Records section."
+        }
+      },
       "legalText": {
         "edit": {
           "description": "Optional legal or reassurance copy shown below the section actions."
@@ -62,7 +107,45 @@
           "description": "Optional ordered cards, bullets, or media items. Each item has its own show/hide control."
         }
       }
-    }
+      ,
+      "eyebrow": {
+        "edit": {
+          "description": "Short context line shown above the section title."
+        }
+      },
+      "title": {
+        "edit": {
+          "description": "Main section heading shown on the public page."
+        }
+      },
+      "body": {
+        "edit": {
+          "description": "Main rich text shown beneath the section heading."
+        }
+      },
+      "ctaLabel": {
+        "edit": {
+          "description": "Text shown on the section's primary action link."
+        }
+      },
+      "ctaUrl": {
+        "edit": {
+          "description": "Destination for the primary section action. Use a local path or approved HTTPS URL."
+        }
+      },
+      "ctaTarget": {
+        "edit": {
+          "description": "Choose whether the primary section action opens in the current window or a new window."
+        }
+      },
+      "theme": {
+        "edit": {
+          "description": "Select the approved visual surface treatment for this section."
+        }
+      },
+      "secondaryCtaUrl": { "edit": { "description": "Optional secondary action destination. Use a local path or approved HTTPS URL." } },
+      "secondaryCtaTarget": { "edit": { "description": "Choose whether the secondary action opens in the current window or a new window." } }
+      }
   },
   "attributes": {
     "sectionKey": {
@@ -85,6 +168,31 @@
     "showBody": { "type": "boolean", "default": true },
     "showMedia": { "type": "boolean", "default": true },
     "showCta": { "type": "boolean", "default": true },
+    "listLabel": {
+      "type": "string",
+      "maxLength": 100,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "itemCountLabel": {
+      "type": "string",
+      "maxLength": 40,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "publicationTabLabel": {
+      "type": "string",
+      "maxLength": 60,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "leadershipTabLabel": {
+      "type": "string",
+      "maxLength": 60,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "ecosystemTabLabel": {
+      "type": "string",
+      "maxLength": 60,
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
     "supportLabel": {
       "type": "string",
       "maxLength": 100,

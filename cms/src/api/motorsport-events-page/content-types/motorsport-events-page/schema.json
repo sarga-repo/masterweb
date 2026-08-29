@@ -1,8 +1,27 @@
 {
   "kind": "singleType",
-  "info": { "singularName": "motorsport-events-page", "pluralName": "motorsport-events-pages", "displayName": "Motorsport Events Page" },
+  "info": {
+    "singularName": "motorsport-events-page",
+    "pluralName": "motorsport-events-pages",
+    "displayName": "Motorsport Events Page",
+    "description": "CMS content for the public Sarga Motorsport Events hub. Edit the hero, event-control band, programme presentation, and calendar presentation in page order."
+  },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "routePath": { "edit": { "description": "Canonical frontend path for this page. Keep this as /events." } },
+      "routeAliases": { "edit": { "description": "Optional legacy paths that should resolve to this page during migration." } },
+      "title": { "edit": { "description": "Internal page name used in metadata and CMS identification." } },
+      "navigationLabel": { "edit": { "description": "Optional navigation label retained for page metadata; the header uses the Top Navigation collection." } },
+      "hero": { "edit": { "description": "Events hub hero copy, media, visibility controls, and optional metrics." } },
+      "informationBand": { "edit": { "description": "Blue event-control band displayed below the Events hero." } },
+      "programmesSection": { "edit": { "description": "Programmes section heading and visibility controls. Programme cards come from Motorsport Program records." } },
+      "calendarSection": { "edit": { "description": "Calendar section heading and visibility controls. Event rows come from Motorsport Event records." } },
+      "pageAvailability": { "edit": { "description": "Controls whether the public Events page is available or shows Coming Soon." } },
+      "seo": { "edit": { "description": "Search and social metadata used by the Events page." } }
+    }
+  },
   "attributes": {
     "siteScope": { "type": "enumeration", "enum": ["motorsport"], "default": "motorsport", "required": true, "private": true },
     "routePath": { "type": "string", "default": "/events", "required": true, "pluginOptions": { "i18n": { "localized": false } } },
@@ -11,7 +30,6 @@
     "navigationLabel": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
     "hero": { "type": "component", "component": "motorsport.page-hero", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "informationBand": { "type": "component", "component": "motorsport.page-information-band", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "eventControlSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "programmesSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "calendarSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "pageAvailability": { "type": "component", "component": "shared.page-availability", "repeatable": false, "pluginOptions": { "i18n": { "localized": true } } },

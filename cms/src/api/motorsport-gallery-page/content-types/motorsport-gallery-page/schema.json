@@ -1,8 +1,26 @@
 {
   "kind": "singleType",
-  "info": { "singularName": "motorsport-gallery-page", "pluralName": "motorsport-gallery-pages", "displayName": "Motorsport Gallery Page" },
+  "info": {
+    "singularName": "motorsport-gallery-page",
+    "pluralName": "motorsport-gallery-pages",
+    "displayName": "Motorsport Gallery Page",
+    "description": "CMS content for the public Sarga Motorsport Gallery page. Edit the hero, information band, and archive guidance; images are managed in Media Gallery records."
+  },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "routePath": { "edit": { "description": "Canonical frontend path for this page. Keep this as /gallery." } },
+      "routeAliases": { "edit": { "description": "Optional legacy paths that should resolve to this page during migration." } },
+      "title": { "edit": { "description": "Internal page name used in metadata and CMS identification." } },
+      "navigationLabel": { "edit": { "description": "Optional navigation label retained for page metadata; the header uses the Top Navigation collection." } },
+      "hero": { "edit": { "description": "Gallery hero copy, media, visibility controls, and optional archive metrics." } },
+      "informationBand": { "edit": { "description": "Blue gallery information band displayed below the hero." } },
+      "archiveSection": { "edit": { "description": "Archive heading and filter/viewer guidance. Gallery images come from Media Gallery records." } },
+      "pageAvailability": { "edit": { "description": "Controls whether the public Gallery page is available or shows Coming Soon." } },
+      "seo": { "edit": { "description": "Search and social metadata used by the Gallery page." } }
+    }
+  },
   "attributes": {
     "siteScope": { "type": "enumeration", "enum": ["motorsport"], "default": "motorsport", "required": true, "private": true },
     "routePath": { "type": "string", "default": "/gallery", "required": true, "pluginOptions": { "i18n": { "localized": false } } },

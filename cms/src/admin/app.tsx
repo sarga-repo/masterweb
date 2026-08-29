@@ -1,5 +1,6 @@
 import type { StrapiApp } from "@strapi/strapi/admin";
 import { APPROVED_MOTORSPORT_PREVIEW_UIDS } from "../preview/preview-path";
+import "./styles/admin.css";
 
 function WorkspaceIcon() {
   return (
@@ -104,39 +105,38 @@ export default {
     },
 
     // ── Design system theme tokens ───────────────────────────────
-    // Sarga gateway brand colors:
-    //   Red       #E2321E    Orange    #FF5032    Gold      #D9A441
-    //   Black     #000B1D    Dark      #07111F    Dark-soft #434343
-    //   White     #FFFFFF    Light     #F3F3F3    Muted     #CCCCCC
+    // Shared Sarga admin palette: neutral CMS surfaces with restrained
+    // Motorsport accents. The Content Studio stylesheet adds the semantic
+    // editor tokens used by both Collection Types and Single Types.
     theme: {
       light: {
         colors: {
           // Primary: Sarga Red / Orange accent
-          primary100: "#fce8e6",
-          primary200: "#f4c3bd",
-          primary500: "#e2321e",
-          primary600: "#c42b1a",
-          primary700: "#8a1308",
+          primary100: "#fde8eb",
+          primary200: "#f5b8c0",
+          primary500: "#e8192c",
+          primary600: "#c41427",
+          primary700: "#8f0d1b",
 
           // Secondary: Sarga Gold accent
-          secondary100: "#fbf3e2",
-          secondary200: "#f4dfb5",
-          secondary500: "#d9a441",
-          secondary600: "#b8892a",
-          secondary700: "#805e1c",
+          secondary100: "#e8eefb",
+          secondary200: "#b8c8ec",
+          secondary500: "#0033a0",
+          secondary600: "#00277d",
+          secondary700: "#001a52",
 
           // Neutral: Sarga dark/light scale
           neutral0: "#ffffff",
-          neutral100: "#f3f3f3",
-          neutral150: "#e8e8e8",
-          neutral200: "#d9d9d9",
-          neutral300: "#cccccc",
-          neutral400: "#999999",
-          neutral500: "#666666",
-          neutral600: "#434343",
-          neutral700: "#07111f",
-          neutral800: "#000b1d",
-          neutral900: "#000914",
+          neutral100: "#f7f3ec",
+          neutral150: "#eee7dc",
+          neutral200: "#e6ddd0",
+          neutral300: "#d1c6b8",
+          neutral400: "#a69b8e",
+          neutral500: "#756d63",
+          neutral600: "#4a4640",
+          neutral700: "#2b2926",
+          neutral800: "#1b1b1b",
+          neutral900: "#111111",
           neutral1000: "#000000",
 
           // Semantic colors
@@ -146,17 +146,17 @@ export default {
           success600: "#236b23",
           success700: "#184a18",
 
-          danger100: "#fce8e6",
-          danger200: "#f4c3bd",
-          danger500: "#e2321e",
-          danger600: "#c42b1a",
-          danger700: "#8a1308",
+          danger100: "#fde8eb",
+          danger200: "#f5b8c0",
+          danger500: "#e8192c",
+          danger600: "#c41427",
+          danger700: "#8f0d1b",
 
-          warning100: "#fef3e2",
-          warning200: "#fde0b5",
-          warning500: "#d9a441",
-          warning600: "#b8892a",
-          warning700: "#805e1c",
+          warning100: "#fff4d1",
+          warning200: "#f9dc7c",
+          warning500: "#f5c800",
+          warning600: "#c79f00",
+          warning700: "#7a6100",
 
           // Alternative: Sarga dark-soft
           alternative100: "#e8e8ea",
@@ -166,8 +166,8 @@ export default {
           alternative700: "#222222",
 
           // Button overrides for brand consistency
-          buttonPrimary500: "#e2321e",
-          buttonPrimary600: "#c42b1a",
+          buttonPrimary500: "#e8192c",
+          buttonPrimary600: "#c41427",
           buttonNeutral0: "#ffffff",
           buttonNeutral100: "#f3f3f3",
           buttonNeutral200: "#d9d9d9",
@@ -176,30 +176,30 @@ export default {
           buttonNeutral600: "#333333",
           buttonNeutral700: "#07111f",
           buttonNeutral800: "#000b1d",
-          buttonDanger500: "#e2321e",
-          buttonDanger600: "#c42b1a",
+          buttonDanger500: "#e8192c",
+          buttonDanger600: "#c41427",
           buttonSuccess500: "#2e8b2e",
           buttonSuccess600: "#236b23",
-          buttonSecondary500: "#07111f",
-          buttonSecondary600: "#000b1d",
+          buttonSecondary500: "#0033a0",
+          buttonSecondary600: "#00277d",
         },
       },
 
       dark: {
         colors: {
           // Primary: Sarga Red / Orange - glow brighter on dark
-          primary100: "#2a1513",
-          primary200: "#3d1a16",
-          primary500: "#e2321e",
-          primary600: "#ff5032",
-          primary700: "#f4c3bd",
+          primary100: "#35131a",
+          primary200: "#541a25",
+          primary500: "#e8192c",
+          primary600: "#ff4b5b",
+          primary700: "#f5b8c0",
 
           // Secondary: Sarga Gold - warmer on dark
-          secondary100: "#2a2415",
-          secondary200: "#3d3318",
-          secondary500: "#d9a441",
-          secondary600: "#e8b94d",
-          secondary700: "#f4dfb5",
+          secondary100: "#101e40",
+          secondary200: "#17316b",
+          secondary500: "#4c7bd9",
+          secondary600: "#82a5f0",
+          secondary700: "#b8c8ec",
 
           // Neutral: inverted for dark surfaces
           neutral0: "#ffffff",
@@ -222,17 +222,17 @@ export default {
           success600: "#4fc84f",
           success700: "#b5e8b5",
 
-          danger100: "#2a1513",
-          danger200: "#3d1a16",
-          danger500: "#e2321e",
-          danger600: "#ff5032",
-          danger700: "#f4c3bd",
+          danger100: "#35131a",
+          danger200: "#541a25",
+          danger500: "#e8192c",
+          danger600: "#ff4b5b",
+          danger700: "#f5b8c0",
 
-          warning100: "#2a2415",
-          warning200: "#3d3318",
-          warning500: "#d9a441",
-          warning600: "#e8b94d",
-          warning700: "#f4dfb5",
+          warning100: "#3a3110",
+          warning200: "#5c4c12",
+          warning500: "#f5c800",
+          warning600: "#ffdc38",
+          warning700: "#f9dc7c",
 
           // Alternative
           alternative100: "#1a1d24",
@@ -242,8 +242,8 @@ export default {
           alternative700: "#cccccc",
 
           // Button overrides for dark
-          buttonPrimary500: "#e2321e",
-          buttonPrimary600: "#ff5032",
+          buttonPrimary500: "#e8192c",
+          buttonPrimary600: "#ff4b5b",
           buttonNeutral0: "#ffffff",
           buttonNeutral100: "#cccccc",
           buttonNeutral200: "#666666",
@@ -252,12 +252,12 @@ export default {
           buttonNeutral600: "#000b1d",
           buttonNeutral700: "#ffffff",
           buttonNeutral800: "#f3f3f3",
-          buttonDanger500: "#e2321e",
-          buttonDanger600: "#ff5032",
+          buttonDanger500: "#e8192c",
+          buttonDanger600: "#ff4b5b",
           buttonSuccess500: "#3da63d",
           buttonSuccess600: "#4fc84f",
-          buttonSecondary500: "#f3f3f3",
-          buttonSecondary600: "#ffffff",
+          buttonSecondary500: "#82a5f0",
+          buttonSecondary600: "#b8c8ec",
         },
       },
     },
@@ -338,10 +338,109 @@ export default {
   },
 
   bootstrap(app: StrapiApp) {
+    // Mark the active native Content Manager surface so the shared stylesheet
+    // can target editor UX without leaking into custom admin pages or plugins.
+    const updateAdminSurface = () => {
+      document.documentElement.dataset.sargaAdminSurface =
+        window.location.pathname.includes("/content-manager/")
+          ? "content-manager"
+          : "shell";
+    };
+    updateAdminSurface();
+    if (!document.documentElement.dataset.sargaAdminSurfaceNavigationBound) {
+      const historyMethods = ["pushState", "replaceState"] as const;
+      historyMethods.forEach((method) => {
+        const original = window.history[method];
+        window.history[method] = function (...args) {
+          const result = original.apply(this, args);
+          window.dispatchEvent(new Event("sarga-admin-navigation"));
+          return result;
+        };
+      });
+      window.addEventListener("sarga-admin-navigation", updateAdminSurface);
+      window.addEventListener("popstate", updateAdminSurface);
+      document.documentElement.dataset.sargaAdminSurfaceNavigationBound =
+        "true";
+    }
+
+    // Add a compact, native-layout-aware control for the Content Manager's
+    // secondary navigation. It keeps the editor usable on smaller screens
+    // without replacing Strapi's collection/single-type navigation.
+    let contentManagerSidebarCollapsed = false;
+    let contentManagerSidebarFrame: number | null = null;
+    const syncContentManagerSidebar = () => {
+      contentManagerSidebarFrame = null;
+      const isContentManager =
+        document.documentElement.dataset.sargaAdminSurface ===
+        "content-manager";
+      const contentManagerNav = document.querySelector<HTMLElement>(
+        'nav[aria-label="Content Manager"]',
+      );
+      if (!isContentManager || !contentManagerNav) {
+        if (document.documentElement.dataset.sargaContentManagerSidebar) {
+          document.documentElement.dataset.sargaContentManagerSidebar = "";
+        }
+        return;
+      }
+
+      const header = contentManagerNav.firstElementChild;
+      if (!(header instanceof HTMLElement)) return;
+
+      let toggle = header.querySelector<HTMLButtonElement>(
+        '[data-sarga-content-manager-toggle="true"]',
+      );
+      if (!toggle) {
+        toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.dataset.sargaContentManagerToggle = "true";
+        toggle.className = "sarga-content-manager-toggle";
+        toggle.innerHTML = '<span aria-hidden="true">‹</span>';
+        header.append(toggle);
+        toggle.addEventListener("click", () => {
+          contentManagerSidebarCollapsed = !contentManagerSidebarCollapsed;
+          syncContentManagerSidebar();
+        });
+      }
+
+      const state = contentManagerSidebarCollapsed ? "collapsed" : "expanded";
+      if (
+        document.documentElement.dataset.sargaContentManagerSidebar !== state
+      ) {
+        document.documentElement.dataset.sargaContentManagerSidebar = state;
+      }
+      const label = contentManagerSidebarCollapsed
+        ? "Expand Content Manager navigation"
+        : "Collapse Content Manager navigation";
+      if (toggle.getAttribute("aria-label") !== label) {
+        toggle.setAttribute("aria-label", label);
+      }
+      if (toggle.title !== label) toggle.title = label;
+      const glyph = contentManagerSidebarCollapsed ? "›" : "‹";
+      if (toggle.textContent !== glyph) {
+        toggle.innerHTML = `<span aria-hidden="true">${glyph}</span>`;
+      }
+    };
+    const scheduleContentManagerSidebarSync = () => {
+      if (contentManagerSidebarFrame !== null) return;
+      contentManagerSidebarFrame = window.requestAnimationFrame(
+        syncContentManagerSidebar,
+      );
+    };
+    scheduleContentManagerSidebarSync();
+    const contentManagerSidebarObserver = new MutationObserver(
+      scheduleContentManagerSidebarSync,
+    );
+    contentManagerSidebarObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
     // Strapi's native Preview card remains the entry point. Supported
     // Motorsport Single Types and collection entries open the dedicated
     // split-view workspace in a separate window, leaving the editor intact.
-    const motorsportPreviewUids = new Set(APPROVED_MOTORSPORT_PREVIEW_UIDS);
+    const motorsportPreviewUids: ReadonlySet<string> = new Set(
+      APPROVED_MOTORSPORT_PREVIEW_UIDS,
+    );
     const getPreviewTarget = (href: string | null) => {
       if (!href) return null;
 
@@ -590,16 +689,126 @@ export default {
       subtree: true,
     });
 
+    // Strapi v5 does not expose aria-current on the Media Library page
+    // buttons. Track the page button selected by the editor and add a stable
+    // semantic hook so the current page remains visually obvious after the
+    // picker re-renders its asset grid.
+    const mediaPaginationPages = new WeakMap<HTMLElement, string>();
+    let mediaPaginationCurrentPage: string | null = null;
+    const getMediaPageKey = (button: HTMLButtonElement) => {
+      const label =
+        button.querySelector("span:first-child")?.textContent?.trim() ??
+        button.textContent?.trim() ??
+        "";
+      const match = label.match(/go to page\s+(.+)/i);
+      return match?.[1]?.trim() ?? null;
+    };
+    const markMediaPagination = () => {
+      const paginations = Array.from(
+        document.querySelectorAll<HTMLElement>(
+          '[role="dialog"] nav[aria-label="pagination"]',
+        ),
+      );
+      if (paginations.length === 0) {
+        if (!document.querySelector('[role="dialog"]')) {
+          mediaPaginationCurrentPage = null;
+        }
+        return;
+      }
+
+      paginations.forEach((pagination) => {
+          const buttons = Array.from(
+            pagination.querySelectorAll<HTMLButtonElement>("button"),
+          ).filter((button) => getMediaPageKey(button) !== null);
+          if (buttons.length === 0) return;
+
+          const rememberedPage =
+            mediaPaginationCurrentPage ?? mediaPaginationPages.get(pagination);
+          const activePage =
+            rememberedPage &&
+            buttons.some((button) => getMediaPageKey(button) === rememberedPage)
+              ? rememberedPage
+              : getMediaPageKey(buttons[0]);
+          if (!activePage) return;
+          mediaPaginationPages.set(pagination, activePage);
+          mediaPaginationCurrentPage = activePage;
+
+          buttons.forEach((button) => {
+            if (!button.dataset.sargaMediaPaginationHandler) {
+              button.dataset.sargaMediaPaginationHandler = "true";
+              button.addEventListener(
+                "click",
+                () => {
+                  const page = getMediaPageKey(button);
+                  if (!page) return;
+                  mediaPaginationPages.set(pagination, page);
+                  mediaPaginationCurrentPage = page;
+                  scheduleMediaPagination();
+                },
+                true,
+              );
+            }
+            if (getMediaPageKey(button) === activePage) {
+              button.dataset.sargaMediaCurrentPage = "true";
+            } else {
+              delete button.dataset.sargaMediaCurrentPage;
+            }
+          });
+        });
+    };
+    let mediaPaginationFrame: number | null = null;
+    const scheduleMediaPagination = () => {
+      if (mediaPaginationFrame !== null) return;
+      mediaPaginationFrame = window.requestAnimationFrame(() => {
+        mediaPaginationFrame = null;
+        markMediaPagination();
+      });
+    };
+    document.addEventListener(
+      "click",
+      (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const button = target.closest<HTMLButtonElement>(
+          '[role="dialog"] nav[aria-label="pagination"] button',
+        );
+        if (!button) return;
+        const page = getMediaPageKey(button);
+        const pagination = button.closest<HTMLElement>(
+          'nav[aria-label="pagination"]',
+        );
+        if (!page || !pagination) return;
+        mediaPaginationPages.set(pagination, page);
+        mediaPaginationCurrentPage = page;
+        scheduleMediaPagination();
+      },
+      true,
+    );
+    scheduleMediaPagination();
+    new MutationObserver(scheduleMediaPagination).observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
     // Inject brand CSS for surfaces theme tokens can't reach
     // (login page background, scrollbars, typography refinements).
     const style = document.createElement("style");
     style.textContent = `
       /* ── Login page: dark premium background ─────────────── */
       [data-strapi-header="true"] {
-        background: #07111f !important;
+        background-color: #07111f !important;
+        background-image:
+          radial-gradient(circle at 1px 1px, rgba(255, 249, 238, 0.13) 1px, transparent 1.5px),
+          linear-gradient(118deg, transparent 0 64%, rgba(232, 25, 44, 0.2) 100%) !important;
+        background-size: 22px 22px, 100% 100%;
       }
       .AuthBody {
-        background: linear-gradient(135deg, #000b1d 0%, #07111f 40%, #0d1a2d 100%) !important;
+        background-color: #000b1d !important;
+        background-image:
+          radial-gradient(circle at 1px 1px, rgba(255, 249, 238, 0.14) 1px, transparent 1.5px),
+          linear-gradient(135deg, transparent 0%, rgba(232, 25, 44, 0.18) 100%),
+          linear-gradient(135deg, #000b1d 0%, #07111f 40%, #0d1a2d 100%) !important;
+        background-size: 22px 22px, 100% 100%, 100% 100%;
       }
 
       /* ── Login card: dark surface with subtle border ──────── */
@@ -609,6 +818,102 @@ export default {
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
         border-radius: 16px !important;
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 249, 238, 0.06);
+        overflow: hidden;
+        position: relative;
+      }
+      .AuthBox::before {
+        background-image: radial-gradient(circle at 1px 1px, rgba(255, 249, 238, 0.11) 1px, transparent 1.5px);
+        background-size: 18px 18px;
+        content: "";
+        inset: 0;
+        opacity: 0.7;
+        pointer-events: none;
+        position: absolute;
+      }
+      .AuthBox > * {
+        position: relative;
+        z-index: 1;
+      }
+      .AuthBox input {
+        background: rgba(255, 255, 255, 0.96) !important;
+        border: 1px solid rgba(255, 249, 238, 0.22) !important;
+        border-radius: 10px !important;
+        color: #1b1b1b !important;
+        font-size: 15px !important;
+        min-height: 48px !important;
+      }
+      .AuthBox input:focus {
+        border-color: #f5c800 !important;
+        box-shadow: 0 0 0 3px rgba(245, 200, 0, 0.2) !important;
+        outline: none !important;
+      }
+      .AuthBox button[type="submit"] {
+        border-radius: 10px !important;
+        box-shadow: 0 10px 22px rgba(232, 25, 44, 0.24);
+        font-size: 15px !important;
+        font-weight: 800 !important;
+        min-height: 48px !important;
+      }
+      .AuthBox a {
+        color: #f5b8c0 !important;
+      }
+
+      /* ── Strapi v5 login layout: use semantic structure rather than
+         generated styled-component class names. The first child of Main is
+         the native LayoutContent card that contains the login form. */
+      body:has(main input[type="password"]) main > div:first-child {
+        background: #ffffff !important;
+        border: 1px solid #e6ddd0 !important;
+        border-radius: 20px !important;
+        box-shadow: 0 18px 44px rgba(27, 27, 27, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+        overflow: hidden;
+      }
+      body:has(main input[type="password"]) main > div:first-child input:not([type="checkbox"]) {
+        min-height: 54px !important;
+        border: 1px solid #e6ddd0 !important;
+        border-radius: 12px !important;
+        background: #ffffff !important;
+        color: #1b1b1b !important;
+        font-size: 16px !important;
+      }
+      body:has(main input[type="password"]) main > div:first-child input:not([type="checkbox"]):focus {
+        border-color: #0033a0 !important;
+        box-shadow: 0 0 0 3px rgba(0, 51, 160, 0.14) !important;
+        outline: none !important;
+      }
+      body:has(main input[type="password"]) main > div:first-child label {
+        color: #1b1b1b !important;
+        font-size: 14px !important;
+        font-weight: 700 !important;
+      }
+      body:has(main input[type="password"]) main > div:first-child input[type="checkbox"] {
+        width: 22px !important;
+        height: 22px !important;
+        border: 1px solid #b9ae9f !important;
+        border-radius: 7px !important;
+        accent-color: #e8192c;
+      }
+      body:has(main input[type="password"]) main > div:first-child button[type="submit"] {
+        min-height: 52px !important;
+        border: 1px solid #e8192c !important;
+        border-radius: 12px !important;
+        background: #e8192c !important;
+        box-shadow: 0 12px 24px rgba(232, 25, 44, 0.2) !important;
+        font-size: 16px !important;
+        font-weight: 800 !important;
+        transition: background-color 140ms ease, box-shadow 140ms ease,
+          transform 140ms ease;
+      }
+      body:has(main input[type="password"]) main > div:first-child button[type="submit"]:hover {
+        background: #c41427 !important;
+        box-shadow: 0 14px 28px rgba(232, 25, 44, 0.28) !important;
+        transform: translateY(-1px);
+      }
+      body:has(main input[type="password"]) main > div:last-child a {
+        color: #c41427 !important;
+        font-weight: 700 !important;
       }
 
       /* ── Admin sidebar: dark surface with light text ───────── */

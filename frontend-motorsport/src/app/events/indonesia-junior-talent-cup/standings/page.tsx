@@ -12,6 +12,7 @@ import {
   getIjtcProgram,
   getIjtcInformationBand,
   getIjtcStandings,
+  getIjtcSection,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
 import { getRequestLocale } from "@/lib/i18n/request";
@@ -37,16 +38,25 @@ export default async function IjtcStandingsPage() {
   const demoData = standings.some((entry) =>
     /demo|demonstration/i.test(`${entry.rider} ${entry.resultSummary ?? ""}`),
   );
+  const standingsSection = getIjtcSection(program, "standings");
+  const hero = program.presentationHero;
 
   return (
     <>
       <PageHero
-        kicker={`IJTC / ${program.seasonLabel}`}
+        kicker={hero?.eyebrow ?? `IJTC / ${program.seasonLabel}`}
         kickerColor="orange"
-        title="Standings & results."
-        description="One accessible classification for position, rider, team, latest result context, and championship points."
-        backgroundImage={program.image}
-        backgroundAlt={program.imageAlt}
+        title={hero?.title ?? "Standings & results."}
+        description={
+          hero?.description ??
+          "One accessible classification for position, rider, team, latest result context, and championship points."
+        }
+        showKicker={hero?.showEyebrow}
+        showTitle={hero?.showTitle}
+        showDescription={hero?.showDescription}
+        showMedia={hero?.showMedia}
+        backgroundImage={hero?.backgroundMedia?.url ?? program.image}
+        backgroundAlt={hero?.backgroundMedia?.alt ?? program.imageAlt}
         accent="teal"
         accentPosition="bottom-right"
         surface="heat"
@@ -81,10 +91,17 @@ export default async function IjtcStandingsPage() {
       >
         <div className="ms-shell">
           <SectionHeader
-            index="STANDINGS"
-            eyebrow="Points and results"
-            title="Official classification."
-            description="Rider relations, position, points, region, and result summaries are sourced from the shared Motorsport CMS."
+            index={standingsSection?.indexLabel ?? "STANDINGS"}
+            showIndex={standingsSection?.showIndex ?? true}
+            showEyebrow={standingsSection?.showEyebrow ?? true}
+            showTitle={standingsSection?.showTitle ?? true}
+            showDescription={standingsSection?.showBody ?? true}
+            eyebrow={standingsSection?.eyebrow ?? "Points and results"}
+            title={standingsSection?.title ?? "Official classification."}
+            description={
+              standingsSection?.body ??
+              "Rider relations, position, points, region, and result summaries are sourced from the shared Motorsport CMS."
+            }
           />
           <div className="mt-14">
             <StandingsTable

@@ -26,12 +26,33 @@ import {
   isCmsSectionVisible,
 } from "@/lib/cms-visibility";
 import { createSurfaceSequencer } from "@/lib/surface-sequencer";
+import { createMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "Tickets",
-  description:
-    "Secure your seat at Sarga Motorsport events. Curated ticket journey with partner redirects - no internal payment processing.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const page = await fetchSitePage("custom", "/tickets", locale);
+  return createMetadata({
+    title: page?.title ?? "Tickets",
+    description:
+      page?.heroDescription ??
+      "Secure your seat at Sarga Motorsport events. Curated ticket journey with partner redirects - no internal payment processing.",
+    path: "/tickets",
+    image: page?.heroImage,
+    seo: page?.seo
+      ? {
+          metaTitle: page.seo.metaTitle,
+          metaDescription: page.seo.metaDescription,
+          ogTitle: page.seo.ogTitle,
+          ogDescription: page.seo.ogDescription,
+          ogImageUrl: page.seo.ogImage?.url,
+          canonicalUrl: page.seo.canonicalUrl,
+          noIndex: page.seo.noIndex,
+        }
+      : undefined,
+    locale,
+    isFallback: locale === "id" && !page,
+  });
+}
 
 const PLACEHOLDER_CTAS: Array<{
   label: string;
@@ -261,9 +282,11 @@ export default async function TicketsPage() {
             >
               <div className="ms-shell grid gap-10 lg:grid-cols-2">
                 <div>
-                  <h2 className="ms-heading-feature">
-                    {info?.title ?? "How it works."}
-                  </h2>
+                  {info?.showTitle !== false ? (
+                    <h2 className="ms-heading-feature">
+                      {info?.title ?? "How it works."}
+                    </h2>
+                  ) : null}
                   <ul className="mt-8 space-y-5 text-base leading-7 text-ms-warm-white/60">
                     {displayedTicketInfoItems.map((item, index) => (
                       <li key={item} className="flex gap-4">
@@ -279,24 +302,38 @@ export default async function TicketsPage() {
                   <span className="ms-data-label text-ms-warm-white/42">
                     Ticket support
                   </span>
-                  <MarkdownContent
-                    value={
-                      info?.body ??
-                      "Need help with your ticket? Contact our support team for event-specific inquiries, group bookings, or accessibility requests."
-                    }
-                    className="ms-rich-text mt-6 text-base leading-7 text-ms-warm-white/60"
-                  />
-                  <Link
-                    href={
-                      info?.secondaryCtaUrl?.startsWith("/")
-                        ? info.secondaryCtaUrl
-                        : "/contact"
-                    }
-                    className="group mt-8 inline-flex items-center gap-3 border-b border-ms-apex-crimson pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] transition-colors hover:text-ms-ignition-orange"
-                  >
-                    {info?.secondaryCtaLabel ?? "Contact support"}
-                    <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
+                  {info?.showBody !== false ? (
+                    <MarkdownContent
+                      value={
+                        info?.body ??
+                        "Need help with your ticket? Contact our support team for event-specific inquiries, group bookings, or accessibility requests."
+                      }
+                      className="ms-rich-text mt-6 text-base leading-7 text-ms-warm-white/60"
+                    />
+                  ) : null}
+                  {info?.showCta !== false ? (
+                    <Link
+                      href={
+                        info?.secondaryCtaUrl?.startsWith("/")
+                          ? info.secondaryCtaUrl
+                          : "/contact"
+                      }
+                      target={
+                        info?.secondaryCtaTarget === "newWindow"
+                          ? "_blank"
+                          : undefined
+                      }
+                      rel={
+                        info?.secondaryCtaTarget === "newWindow"
+                          ? "noreferrer"
+                          : undefined
+                      }
+                      className="group mt-8 inline-flex items-center gap-3 border-b border-ms-apex-crimson pb-2 text-[0.66rem] font-black uppercase tracking-[0.16em] transition-colors hover:text-ms-ignition-orange"
+                    >
+                      {info?.secondaryCtaLabel ?? "Contact support"}
+                      <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                  ) : null}
                 </div>
               </div>
             </section>

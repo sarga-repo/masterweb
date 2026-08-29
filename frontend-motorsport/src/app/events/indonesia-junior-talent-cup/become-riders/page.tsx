@@ -12,6 +12,7 @@ import { fetchMotorsportTheme } from "@/lib/cms-data";
 import {
   getIjtcInformationBand,
   getIjtcProgram,
+  getIjtcSection,
   IJTC_BASE_PATH,
 } from "@/lib/ijtc-data";
 import { getRequestLocale } from "@/lib/i18n/request";
@@ -50,16 +51,36 @@ export default async function BecomeIjtcRiderPage() {
   ]);
   if (!program) notFound();
   const nextAlternatingSurface = createSurfaceSequencer(theme).nextClass;
+  const inquirySection = getIjtcSection(program, "inquiry");
+  const processSection = getIjtcSection(program, "process");
+  const hero = program.presentationHero;
+  const processSteps = processSection?.items?.length
+    ? processSection.items
+        .filter((item) => item.isActive !== false)
+        .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+        .map((item, index) => ({
+          index: item.label ?? String(index + 1).padStart(2, "0"),
+          title: item.title,
+          body: item.description ?? "",
+        }))
+    : PROCESS;
 
   return (
     <>
       <PageHero
-        kicker={`IJTC / ${program.seasonLabel}`}
+        kicker={hero?.eyebrow ?? `IJTC / ${program.seasonLabel}`}
         kickerColor="orange"
-        title="Start your rider inquiry."
-        description="Introduce your background to the Indonesia Junior Talent Cup programme team."
-        backgroundImage={program.image}
-        backgroundAlt={program.imageAlt}
+        title={hero?.title ?? "Start your rider inquiry."}
+        description={
+          hero?.description ??
+          "Introduce your background to the Indonesia Junior Talent Cup programme team."
+        }
+        showKicker={hero?.showEyebrow}
+        showTitle={hero?.showTitle}
+        showDescription={hero?.showDescription}
+        showMedia={hero?.showMedia}
+        backgroundImage={hero?.backgroundMedia?.url ?? program.image}
+        backgroundAlt={hero?.backgroundMedia?.alt ?? program.imageAlt}
         accent="crimson"
         accentPosition="bottom-right"
         surface="heat"
@@ -87,10 +108,19 @@ export default async function BecomeIjtcRiderPage() {
         <div className="ms-shell grid gap-12 lg:grid-cols-[minmax(0,1.12fr)_minmax(20rem,.88fr)]">
           <div>
             <SectionHeader
-              index="INQUIRY"
-              eyebrow="Become Riders"
-              title="Put your experience on the radar."
-              description="Complete the fields below with enough context for a meaningful programme review."
+              index={inquirySection?.indexLabel ?? "INQUIRY"}
+              showIndex={inquirySection?.showIndex ?? true}
+              showEyebrow={inquirySection?.showEyebrow ?? true}
+              showTitle={inquirySection?.showTitle ?? true}
+              showDescription={inquirySection?.showBody ?? true}
+              eyebrow={inquirySection?.eyebrow ?? "Become Riders"}
+              title={
+                inquirySection?.title ?? "Put your experience on the radar."
+              }
+              description={
+                inquirySection?.body ??
+                "Complete the fields below with enough context for a meaningful programme review."
+              }
               align="left"
             />
             <div className="mt-12">
@@ -133,13 +163,20 @@ export default async function BecomeIjtcRiderPage() {
       >
         <div className="ms-shell">
           <SectionHeader
-            index="PROCESS"
-            eyebrow="What happens next"
-            title="A clear path after send."
-            description="The inquiry is reviewed by people, not converted into an automatic account or acceptance decision."
+            index={processSection?.indexLabel ?? "PROCESS"}
+            showIndex={processSection?.showIndex ?? true}
+            showEyebrow={processSection?.showEyebrow ?? true}
+            showTitle={processSection?.showTitle ?? true}
+            showDescription={processSection?.showBody ?? true}
+            eyebrow={processSection?.eyebrow ?? "What happens next"}
+            title={processSection?.title ?? "A clear path after send."}
+            description={
+              processSection?.body ??
+              "The inquiry is reviewed by people, not converted into an automatic account or acceptance decision."
+            }
           />
           <div className="mt-14 grid gap-4 lg:grid-cols-3">
-            {PROCESS.map((step) => (
+            {processSteps.map((step) => (
               <article
                 key={step.index}
                 className="ms-blue-panel ms-panel min-h-72 p-7"

@@ -1,0 +1,1661 @@
+/*
+ * Sarga Content Studio
+ *
+ * Shared admin tokens and Content Manager surface refinements. These styles
+ * intentionally use semantic HTML, ARIA roles, and Strapi's documented data
+ * attributes rather than generated styled-components class names, so every
+ * Collection Type and Single Type can inherit the same treatment.
+ */
+:root {
+  --sarga-admin-canvas: #f7f3ec;
+  --sarga-admin-surface: #ffffff;
+  --sarga-admin-surface-subtle: #fbf8f2;
+  --sarga-admin-ink: #1b1b1b;
+  --sarga-admin-muted: #625e56;
+  --sarga-admin-border: #e6ddd0;
+  --sarga-admin-border-strong: #b9ae9f;
+  --sarga-admin-primary: #e8192c;
+  --sarga-admin-primary-hover: #c41427;
+  --sarga-admin-secondary: #0033a0;
+  --sarga-admin-focus: #f5c800;
+  --sarga-admin-teal: #00c4cc;
+  --sarga-admin-orange: #ff6b00;
+  --sarga-admin-danger: #b42318;
+  --sarga-admin-success: #147d46;
+  --sarga-admin-radius-sm: 6px;
+  --sarga-admin-radius-md: 10px;
+  --sarga-admin-radius-lg: 14px;
+  --sarga-admin-shadow-sm: 0 2px 8px rgb(27 27 27 / 5%);
+  --sarga-admin-shadow-md: 0 12px 30px rgb(27 27 27 / 8%);
+  --sarga-admin-font-body: "Noto Sans", "Plus Jakarta Sans", system-ui,
+    -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --sarga-admin-font-display: "Owners Wide", "Zalando Sans Expanded",
+    "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+html[data-sarga-admin-surface="content-manager"] body {
+  background: var(--sarga-admin-canvas);
+  color: var(--sarga-admin-ink);
+  font-family: var(--sarga-admin-font-body);
+}
+
+html[data-sarga-admin-surface="content-manager"] main {
+  background-color: var(--sarga-admin-canvas);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgb(0 51 160 / 8%) 1px, transparent 1.5px),
+    linear-gradient(118deg, transparent 0 70%, rgb(232 25 44 / 3%) 100%);
+  background-size: 24px 24px, 100% 100%;
+}
+
+html[data-sarga-admin-surface="shell"] main {
+  background-color: transparent;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgb(0 51 160 / 7%) 1px, transparent 1.5px),
+    linear-gradient(118deg, transparent 0 70%, rgb(232 25 44 / 3%) 100%);
+  background-size: 24px 24px, 100% 100%;
+}
+
+/* The unauthenticated page renders its own full-height Main inside the shell
+ * root. Keep the login background on one layer only so dots do not stack and
+ * the crimson accent does not become visibly darker at the Main boundary. */
+html[data-sarga-admin-surface="shell"] body:has(main input[type="password"]) {
+  background-color: var(--sarga-admin-canvas);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgb(0 51 160 / 8%) 1px, transparent 1.5px),
+    linear-gradient(118deg, transparent 0 70%, rgb(232 25 44 / 3%) 100%);
+  background-size: 24px 24px, 100% 100%;
+}
+
+html[data-sarga-admin-surface="shell"] body:has(main input[type="password"]) main {
+  background-color: transparent;
+  background-image: none;
+}
+
+/* Shared Sarga shell: a quiet dotted field gives the admin workspace a
+ * recognizable identity without competing with editor content. */
+html[data-sarga-admin-surface="shell"] body {
+  background-color: var(--sarga-admin-canvas);
+  background-image:
+    radial-gradient(circle at 1px 1px, rgb(0 51 160 / 10%) 1px, transparent 1.5px),
+    linear-gradient(118deg, transparent 0 68%, rgb(232 25 44 / 4%) 100%);
+  background-size: 24px 24px, 100% 100%;
+  color: var(--sarga-admin-ink);
+  font-family: var(--sarga-admin-font-body);
+}
+
+html #strapi > div > div > nav {
+  overflow: hidden;
+  border-right: 1px solid #526174;
+  background: #2b394b;
+}
+
+html #strapi > div > div > nav > div:first-child {
+  border-bottom: 1px solid #526174;
+  background: #fffdf8;
+}
+
+html #strapi > div > div > nav li {
+  margin-block: 3px;
+}
+
+html #strapi > div > div > nav a {
+  border: 1px solid transparent;
+  border-radius: var(--sarga-admin-radius-md);
+  color: #fff9ee;
+  transition: background-color 140ms ease, border-color 140ms ease,
+    color 140ms ease, transform 140ms ease;
+}
+
+html #strapi > div > div > nav a:hover:not(.active),
+html #strapi > div > div > nav a:focus-visible {
+  border-color: #8ca0ba;
+  background: #405268;
+  color: #fff9ee;
+  transform: translateX(2px);
+}
+
+html #strapi > div > div > nav a.active {
+  border-color: #f3b8c0;
+  background: #fff1f3;
+  box-shadow: inset 3px 0 0 var(--sarga-admin-primary);
+  color: var(--sarga-admin-primary);
+}
+
+html #strapi > div > div > nav a.active svg {
+  fill: currentColor;
+}
+
+/* Custom rail icons may use strokes rather than Strapi's filled SVG icons.
+ * Keep them visible inside the native light icon tile, then restore the
+ * warm-white contrast when the tile is hovered or focused. */
+html #strapi > div > div > nav a svg[stroke="currentColor"] {
+  stroke: var(--sarga-admin-muted);
+}
+
+html #strapi > div > div > nav a:hover:not(.active) svg[stroke="currentColor"],
+html #strapi > div > div > nav a:focus-visible svg[stroke="currentColor"],
+html #strapi > div > div > nav a.active svg[stroke="currentColor"] {
+  stroke: currentColor;
+}
+
+/* Content Manager secondary navigation: keep the native panel, but give its
+ * selected entry a clearer editor-friendly surface and provide a compact
+ * collapse control for wider editing space. */
+html #strapi nav[aria-label="Content Manager"] > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-inline: 14px 10px;
+}
+
+html #strapi nav[aria-label="Content Manager"] > div:first-child h2 {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html #strapi nav[aria-label="Content Manager"] a {
+  border: 1px solid transparent;
+  border-radius: var(--sarga-admin-radius-md);
+  color: var(--sarga-admin-ink);
+  margin-inline: 10px;
+  transition: background-color 140ms ease, border-color 140ms ease,
+    color 140ms ease, transform 140ms ease;
+}
+
+html #strapi nav[aria-label="Content Manager"] a:hover,
+html #strapi nav[aria-label="Content Manager"] a:focus-visible {
+  border-color: #f0cbd0;
+  background: #fff7f7;
+  color: var(--sarga-admin-primary);
+  transform: translateX(2px);
+}
+
+html #strapi nav[aria-label="Content Manager"] a.active {
+  border-color: #e8192c;
+  background: #fff1f3;
+  box-shadow: inset 3px 0 0 var(--sarga-admin-primary);
+  color: #a51222;
+}
+
+html #strapi nav[aria-label="Content Manager"] a.active:hover,
+html #strapi nav[aria-label="Content Manager"] a.active:focus-visible {
+  border-color: var(--sarga-admin-primary);
+  background: #ffe7eb;
+  color: var(--sarga-admin-primary-hover);
+}
+
+html #strapi nav[aria-label="Content Manager"]
+  [data-sarga-content-manager-toggle="true"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: 999px;
+  background: var(--sarga-admin-surface-subtle);
+  color: var(--sarga-admin-muted);
+  cursor: pointer;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+  transition: background-color 140ms ease, border-color 140ms ease,
+    color 140ms ease, transform 140ms ease;
+}
+
+html #strapi nav[aria-label="Content Manager"]
+  [data-sarga-content-manager-toggle="true"]:hover,
+html #strapi nav[aria-label="Content Manager"]
+  [data-sarga-content-manager-toggle="true"]:focus-visible {
+  border-color: #b9c9e4;
+  background: #edf3ff;
+  color: var(--sarga-admin-secondary);
+  outline: none;
+  transform: scale(1.04);
+}
+
+html #strapi nav[aria-label="Content Manager"]
+  [data-sarga-content-manager-toggle="true"]:focus-visible {
+  box-shadow: 0 0 0 3px rgb(245 200 0 / 28%);
+}
+
+html[data-sarga-content-manager-sidebar="collapsed"]
+  #strapi nav[aria-label="Content Manager"] {
+  width: 54px !important;
+  min-width: 54px !important;
+  flex: 0 0 54px !important;
+}
+
+html[data-sarga-content-manager-sidebar="collapsed"]
+  #strapi nav[aria-label="Content Manager"] > div:first-child {
+  justify-content: center;
+  padding-inline: 8px;
+}
+
+html[data-sarga-content-manager-sidebar="collapsed"]
+  #strapi nav[aria-label="Content Manager"] > div:first-child h2,
+html[data-sarga-content-manager-sidebar="collapsed"]
+  #strapi nav[aria-label="Content Manager"] > [role="separator"],
+html[data-sarga-content-manager-sidebar="collapsed"]
+  #strapi nav[aria-label="Content Manager"] > div:nth-child(3) {
+  display: none;
+}
+
+html[data-sarga-admin-surface="shell"] [data-strapi-header="true"] {
+  background-color: #07111f;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgb(255 249 238 / 13%) 1px, transparent 1.5px),
+    linear-gradient(118deg, transparent 0 64%, rgb(232 25 44 / 20%) 100%);
+  background-size: 22px 22px, 100% 100%;
+}
+
+html[data-sarga-admin-surface="shell"] main [data-strapi-widget-id] {
+  overflow: hidden;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-lg);
+  background: rgb(255 255 255 / 96%);
+  box-shadow: var(--sarga-admin-shadow-sm);
+}
+
+html[data-sarga-admin-surface="shell"] main [data-strapi-widget-id] > header {
+  border-bottom: 1px solid var(--sarga-admin-border);
+  background: var(--sarga-admin-surface-subtle);
+}
+
+html[data-sarga-admin-surface="shell"] main [data-strapi-widget-id] tbody tr {
+  transition: background-color 140ms ease;
+}
+
+html[data-sarga-admin-surface="shell"] main [data-strapi-widget-id] tbody tr:hover {
+  background: #fff6f7;
+}
+
+html[data-sarga-admin-surface="shell"] main [data-strapi-widget-id] button,
+html[data-sarga-admin-surface="shell"] main [data-strapi-widget-id] a {
+  border-radius: var(--sarga-admin-radius-sm);
+}
+
+/* The Media Library is a native plugin page, so keep its full-page asset
+ * cards in the same visual family as the editor picker cards. */
+html[data-sarga-admin-surface="shell"] main article[role="button"] {
+  overflow: hidden;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  box-shadow: var(--sarga-admin-shadow-sm);
+  color: var(--sarga-admin-ink);
+  transition: border-color 140ms ease, box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+html[data-sarga-admin-surface="shell"] main article[role="button"]:hover,
+html[data-sarga-admin-surface="shell"] main article[role="button"]:focus-visible {
+  border-color: var(--sarga-admin-border-strong);
+  box-shadow: var(--sarga-admin-shadow-md);
+  outline: 2px solid var(--sarga-admin-focus);
+  outline-offset: 2px;
+  transform: translateY(-2px);
+}
+
+html[data-sarga-admin-surface="shell"] main article[role="button"] img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+html[data-sarga-admin-surface="shell"] main article[role="button"] [id$="-title"] {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--sarga-admin-ink);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+/* Native editor page structure: more breathing room, less visual noise. */
+html[data-sarga-admin-surface="content-manager"] main > div {
+  min-height: 100%;
+}
+
+html[data-sarga-admin-surface="content-manager"] main h1,
+html[data-sarga-admin-surface="content-manager"] main h2,
+html[data-sarga-admin-surface="content-manager"] main h3 {
+  color: var(--sarga-admin-ink);
+  font-family: var(--sarga-admin-font-display);
+  letter-spacing: 0.015em;
+}
+
+html[data-sarga-admin-surface="content-manager"] main h1 {
+  letter-spacing: 0.02em;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form {
+  color: var(--sarga-admin-ink);
+}
+
+/* Keep the editor canvas quiet while giving each native control a deliberate
+ * surface. `:has()` is used only with semantic descendants, so the treatment
+ * continues to work when Strapi generates different component class names. */
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] {
+  color: var(--sarga-admin-ink);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> input:not([type="checkbox"]):not([type="radio"]), > textarea, > select) {
+  min-height: 44px;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  box-shadow: var(--sarga-admin-shadow-sm);
+  transition: border-color 140ms ease, box-shadow 140ms ease,
+    background-color 140ms ease;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> input:not([type="checkbox"]):not([type="radio"]):hover, > textarea:hover, > select:hover) {
+  border-color: var(--sarga-admin-border-strong);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> input:not([type="checkbox"]):not([type="radio"]):focus-visible, > textarea:focus-visible, > select:focus-visible),
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> input:not([type="checkbox"]):not([type="radio"]):focus, > textarea:focus, > select:focus) {
+  border-color: var(--sarga-admin-secondary);
+  box-shadow: 0 0 0 3px rgb(0 51 160 / 14%), var(--sarga-admin-shadow-sm);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  input:not([type="checkbox"]):not([type="radio"]),
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  textarea,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  select {
+  min-height: 42px;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  box-shadow: none;
+  outline: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  input:not([type="checkbox"]):not([type="radio"]):focus,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  textarea:focus,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  select:focus,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [role="combobox"]:focus {
+  border-color: transparent;
+  box-shadow: none;
+  outline: 0;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [role="combobox"] {
+  min-height: 44px;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  box-shadow: var(--sarga-admin-shadow-sm);
+  transition: border-color 140ms ease, box-shadow 140ms ease,
+    background-color 140ms ease;
+  font-size: 15px;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [role="combobox"]:hover {
+  border-color: var(--sarga-admin-border-strong);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [role="combobox"]:focus,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [role="combobox"]:focus-visible {
+  border-color: var(--sarga-admin-secondary);
+  box-shadow: 0 0 0 3px rgb(0 51 160 / 14%), var(--sarga-admin-shadow-sm);
+  outline: 2px solid var(--sarga-admin-focus);
+  outline-offset: 1px;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  margin-bottom: 7px;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  label > span[aria-hidden="true"] {
+  margin-left: 3px;
+  color: var(--sarga-admin-primary);
+  font-weight: 800;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [id$="-hint"] {
+  margin-top: 7px;
+  color: var(--sarga-admin-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* Radix/Strapi option popovers use ARIA listbox semantics. Keep them crisp
+ * and high-contrast without depending on generated popover class names. */
+html[data-sarga-admin-surface="content-manager"] [role="listbox"] {
+  z-index: 20;
+  padding: 6px;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  box-shadow: var(--sarga-admin-shadow-md);
+  color: var(--sarga-admin-ink);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="option"] {
+  min-height: 38px;
+  padding: 9px 11px;
+  border-radius: var(--sarga-admin-radius-sm);
+  font-family: var(--sarga-admin-font-body);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="option"]:hover,
+html[data-sarga-admin-surface="content-manager"] [role="option"][data-highlighted] {
+  background: var(--sarga-admin-secondary);
+  color: var(--sarga-admin-surface);
+}
+
+/* Rich text editors retain their toolbar and keyboard behavior, but read as
+ * one composed control instead of a loose toolbar plus blank canvas. */
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> [contenteditable="true"], > textarea) {
+  overflow: hidden;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [contenteditable="true"] {
+  min-height: 132px;
+  color: var(--sarga-admin-ink);
+  font-family: var(--sarga-admin-font-body);
+  line-height: 1.65;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [contenteditable="true"]:focus {
+  outline: 0;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Bold"],
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Italic"],
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Underline"],
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Strikethrough"],
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Bulleted list"],
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Numbered list"],
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Code"],
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Image"],
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Link"],
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Quote"] {
+  min-width: 32px;
+  min-height: 32px;
+  border: 1px solid transparent;
+  border-radius: var(--sarga-admin-radius-md);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Bold"]:hover,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Italic"]:hover,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Underline"]:hover,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Strikethrough"]:hover,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Bulleted list"]:hover,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Numbered list"]:hover,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Code"]:hover,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Image"]:hover,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Link"]:hover,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  button[aria-label="Quote"]:hover {
+  border-color: var(--sarga-admin-border);
+  background: var(--sarga-admin-surface-subtle);
+  color: var(--sarga-admin-secondary);
+  transform: none;
+}
+
+/* Media, repeatable component, and dynamic-zone blocks become calm cards;
+ * their native add, reorder, collapse, and delete actions remain untouched. */
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [role="region"] {
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-lg);
+  background: var(--sarga-admin-surface-subtle);
+  box-shadow: var(--sarga-admin-shadow-sm);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [role="region"] [role="group"] {
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [role="region"] button:hover:not(:disabled) {
+  transform: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  input[type="checkbox"] {
+  accent-color: var(--sarga-admin-primary);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [aria-invalid="true"] {
+  border-color: var(--sarga-admin-danger);
+}
+
+/* Field labels and helper/error text retain Strapi semantics while gaining a
+ * clearer editorial hierarchy. */
+html[data-sarga-admin-surface="content-manager"] main form label {
+  color: var(--sarga-admin-ink);
+  font-family: var(--sarga-admin-font-body);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form label span {
+  color: inherit;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form p,
+html[data-sarga-admin-surface="content-manager"] main form small {
+  color: var(--sarga-admin-muted);
+  font-family: var(--sarga-admin-font-body);
+  line-height: 1.5;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [id$="-error"],
+html[data-sarga-admin-surface="content-manager"] main form [role="alert"] {
+  color: var(--sarga-admin-danger);
+  font-weight: 600;
+}
+
+/* Inputs cover scalar fields and the fallback DOM used by custom fields. */
+html[data-sarga-admin-surface="content-manager"] main form input:not([type="checkbox"]):not([type="radio"]),
+html[data-sarga-admin-surface="content-manager"] main form textarea,
+html[data-sarga-admin-surface="content-manager"] main form select {
+  border-color: var(--sarga-admin-border-strong);
+  border-radius: inherit;
+  color: var(--sarga-admin-ink);
+  font-family: var(--sarga-admin-font-body);
+  transition: border-color 140ms ease, box-shadow 140ms ease,
+    background-color 140ms ease;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form input:not([type="checkbox"]):not([type="radio"]):hover,
+html[data-sarga-admin-surface="content-manager"] main form textarea:hover,
+html[data-sarga-admin-surface="content-manager"] main form select:hover {
+  border-color: var(--sarga-admin-secondary);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form input:not([type="checkbox"]):not([type="radio"]):focus-visible,
+html[data-sarga-admin-surface="content-manager"] main form textarea:focus-visible,
+html[data-sarga-admin-surface="content-manager"] main form select:focus-visible,
+html[data-sarga-admin-surface="content-manager"] main form [role="combobox"]:focus-visible {
+  border-color: var(--sarga-admin-secondary);
+  box-shadow: 0 0 0 3px rgb(0 51 160 / 18%);
+  outline: 2px solid var(--sarga-admin-focus);
+  outline-offset: 1px;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form input[aria-invalid="true"],
+html[data-sarga-admin-surface="content-manager"] main form textarea[aria-invalid="true"],
+html[data-sarga-admin-surface="content-manager"] main form select[aria-invalid="true"] {
+  border-color: var(--sarga-admin-danger);
+  box-shadow: 0 0 0 3px rgb(180 35 24 / 12%);
+}
+
+/* Component, repeatable, and dynamic-zone containers. The selectors use
+ * native structural roles and remain independent of the component name. */
+html[data-sarga-admin-surface="content-manager"] main form [role="group"],
+html[data-sarga-admin-surface="content-manager"] main form [role="region"] {
+  border-radius: var(--sarga-admin-radius-md);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="group"] > [role="heading"],
+html[data-sarga-admin-surface="content-manager"] main form [role="region"] > [role="heading"] {
+  color: var(--sarga-admin-ink);
+  font-family: var(--sarga-admin-font-display);
+  font-size: 0.875rem;
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [aria-expanded="true"] {
+  border-color: var(--sarga-admin-border-strong);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [aria-expanded="false"] {
+  border-color: var(--sarga-admin-border);
+}
+
+/* Relations, media selectors, and native comboboxes read as raised controls
+ * without changing their interaction model or selection semantics. */
+html[data-sarga-admin-surface="content-manager"] main form [role="combobox"],
+html[data-sarga-admin-surface="content-manager"] main form [aria-haspopup="listbox"],
+html[data-sarga-admin-surface="content-manager"] main form [data-strapi-field="media"] {
+  border-radius: var(--sarga-admin-radius-md);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] {
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-lg);
+  box-shadow: var(--sarga-admin-shadow-md);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="tablist"] {
+  border-bottom: 1px solid var(--sarga-admin-border);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="status"],
+html[data-sarga-admin-surface="content-manager"] [role="alert"] {
+  border-radius: var(--sarga-admin-radius-sm);
+}
+
+/* Keep action areas visually obvious while leaving Strapi's save/publish
+ * state machine and permissions entirely native. */
+html[data-sarga-admin-surface="content-manager"] main button {
+  border-radius: var(--sarga-admin-radius-sm);
+  font-family: var(--sarga-admin-font-body);
+  font-weight: 700;
+  transition: background-color 140ms ease, border-color 140ms ease,
+    box-shadow 140ms ease, transform 140ms ease;
+}
+
+html[data-sarga-admin-surface="content-manager"] main button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+html[data-sarga-admin-surface="content-manager"] main button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+html[data-sarga-admin-surface="content-manager"] main button:focus-visible,
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] button:focus-visible {
+  outline: 2px solid var(--sarga-admin-focus);
+  outline-offset: 2px;
+}
+
+/* Empty states and loading surfaces get a calm editorial canvas. */
+html[data-sarga-admin-surface="content-manager"] main [data-testid*="empty"],
+html[data-sarga-admin-surface="content-manager"] main [data-testid*="loading"] {
+  border-radius: var(--sarga-admin-radius-md);
+}
+
+/* Relation fields have a nested search shell rather than a direct scalar
+ * input wrapper. Round that native shell and its draggable selected entries
+ * after Strapi's relation styles, without relying on generated class names. */
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> span > input[type="relation"]) {
+  border-radius: var(--sarga-admin-radius-md);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> span > input[type="relation"]) > span,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div[draggable="true"][data-handler-id] {
+  border-radius: var(--sarga-admin-radius-md);
+}
+
+/* Strapi renders booleans as a hidden checkbox with two visible state
+ * segments. Present that native control as a calm, pill-shaped on/off switch
+ * while keeping the original checkbox as the interactive and accessible
+ * element. */
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> input[type="checkbox"]) {
+  min-height: 48px;
+  padding: 4px;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: 999px;
+  background: var(--sarga-admin-surface-subtle);
+  box-shadow: var(--sarga-admin-shadow-sm);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> input[type="checkbox"]) > div {
+  min-height: 38px;
+  flex: 1 1 50%;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sarga-admin-muted);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  transition: background-color 140ms ease, box-shadow 140ms ease,
+    color 140ms ease;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> input[type="checkbox"]) > div > span {
+  color: inherit;
+  font: inherit;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> input[type="checkbox"]):not(:has(> input[type="checkbox"]:checked))
+  > div:first-child,
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> input[type="checkbox"]:checked) > div:nth-child(2) {
+  background: var(--sarga-admin-primary);
+  box-shadow: 0 3px 8px rgb(232 25 44 / 20%);
+  color: var(--sarga-admin-surface);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> input[type="checkbox"]:focus-visible) {
+  border-color: var(--sarga-admin-secondary);
+  box-shadow: 0 0 0 3px rgb(0 51 160 / 14%), var(--sarga-admin-shadow-sm);
+  outline: 2px solid var(--sarga-admin-focus);
+  outline-offset: 1px;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> input[type="checkbox"][aria-disabled="true"]) {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Repeatable components use Strapi's native accordion/list semantics. Give
+ * the list one composed surface, then use quiet separators so each item is
+ * easy to scan without turning the editor into nested cards. */
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> [data-size="S"]) {
+  overflow: hidden;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  box-shadow: var(--sarga-admin-shadow-sm);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [data-size="S"] + [data-size="S"] {
+  border-top: 1px solid var(--sarga-admin-border);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [data-size="S"] > h3 {
+  display: flex;
+  min-height: 60px;
+  align-items: center;
+  background: var(--sarga-admin-surface);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [data-size="S"] > h3 > button:first-child {
+  min-height: 60px;
+  flex: 1 1 auto;
+  gap: 14px;
+  padding: 11px 18px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--sarga-admin-ink);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.3;
+  text-align: left;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [data-size="S"] > h3 > button:first-child > span:first-child {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--sarga-admin-canvas);
+  color: var(--sarga-admin-ink);
+  transition: background-color 140ms ease, color 140ms ease,
+    transform 140ms ease;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [data-size="S"] > h3 > button:first-child > span:first-child svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 140ms ease;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [data-size="S"] > h3 > button:first-child[aria-expanded="true"]
+  > span:first-child {
+  background: var(--sarga-admin-primary);
+  color: var(--sarga-admin-surface);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [data-size="S"] > h3 > button:first-child[aria-expanded="true"]
+  > span:first-child svg {
+  transform: rotate(180deg);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [data-size="S"] > h3 > span:last-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 14px;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [data-size="S"] > h3 > span:last-child button {
+  min-width: 34px;
+  min-height: 34px;
+  padding: 7px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sarga-admin-muted);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  [data-size="S"] > h3 > span:last-child button:hover:not(:disabled) {
+  background: var(--sarga-admin-canvas);
+  color: var(--sarga-admin-primary);
+  transform: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> [data-size="S"]) > button:last-child {
+  width: 100%;
+  min-height: 58px;
+  justify-content: center;
+  padding: 12px 20px;
+  border: 0;
+  border-top: 1px solid var(--sarga-admin-border);
+  border-radius: 0;
+  background: var(--sarga-admin-surface);
+  color: var(--sarga-admin-primary);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> [data-size="S"]) > button:last-child:hover:not(:disabled) {
+  background: var(--sarga-admin-surface-subtle);
+  color: var(--sarga-admin-primary-hover);
+  transform: none;
+}
+
+/* Date-time fields render the time portion as a nested clock input. Treat the
+ * time portion as one composed control so its icon, value, clear action, and
+ * picker affordance share the same rounded input language. */
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> span > input[aria-label="Choose time"]) {
+  min-height: 60px;
+  align-items: center;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  box-shadow: var(--sarga-admin-shadow-sm);
+  transition: border-color 140ms ease, box-shadow 140ms ease,
+    background-color 140ms ease;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> span > input[aria-label="Choose time"]) > span:first-child {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  border-radius: inherit;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> span > input[aria-label="Choose time"]) > span:first-child
+  > span[aria-hidden="true"] {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  align-items: center;
+  justify-content: center;
+  color: var(--sarga-admin-muted);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> span > input[aria-label="Choose time"]) > span:first-child
+  > span[aria-hidden="true"] svg {
+  width: 18px;
+  height: 18px;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> span > input[aria-label="Choose time"]) input[aria-label="Choose time"] {
+  min-height: 42px;
+  flex: 1 1 auto;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: var(--sarga-admin-ink);
+  font-size: 18px;
+  line-height: 1.4;
+  outline: 0;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> span > input[aria-label="Choose time"]) > span:last-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: inherit;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> span > input[aria-label="Choose time"]) > span:last-child button {
+  min-width: 34px;
+  min-height: 34px;
+  padding: 7px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sarga-admin-muted);
+  transform: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> span > input[aria-label="Choose time"]) > span:last-child
+  button:hover:not(:disabled) {
+  background: var(--sarga-admin-canvas);
+  color: var(--sarga-admin-primary);
+  transform: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> span > input[aria-label="Choose time"]:focus-visible) {
+  border-color: var(--sarga-admin-secondary);
+  box-shadow: 0 0 0 3px rgb(0 51 160 / 14%), var(--sarga-admin-shadow-sm);
+  outline: 2px solid var(--sarga-admin-focus);
+  outline-offset: 1px;
+}
+
+/* Media Library surfaces use their own dialog and card primitives. Keep the
+ * native picker, selection model, and upload workflow intact while bringing
+ * its controls into the same warm, rounded Content Studio system. */
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] {
+  overflow: hidden;
+  background: var(--sarga-admin-surface);
+  color: var(--sarga-admin-ink);
+  font-family: var(--sarga-admin-font-body);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] h2 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] header > button {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 9px;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  color: var(--sarga-admin-ink);
+  transform: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] header > button:hover:not(:disabled) {
+  background: var(--sarga-admin-canvas);
+  color: var(--sarga-admin-primary);
+  transform: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="tablist"] {
+  gap: 4px;
+  padding-inline: 20px;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="tab"] {
+  min-height: 56px;
+  padding: 16px 14px;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--sarga-admin-muted);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transform: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="tab"][aria-selected="true"] {
+  border-bottom-color: var(--sarga-admin-primary);
+  color: var(--sarga-admin-primary);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="tab"]:hover:not(:disabled) {
+  background: var(--sarga-admin-surface-subtle);
+  transform: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="tab"] [data-state] {
+  min-width: 24px;
+  min-height: 24px;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: var(--sarga-admin-canvas);
+  color: var(--sarga-admin-ink);
+  font-size: 12px;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] button,
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="combobox"] {
+  font-family: var(--sarga-admin-font-body);
+  font-size: 14px;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="combobox"] {
+  min-height: 44px;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  box-shadow: var(--sarga-admin-shadow-sm);
+  color: var(--sarga-admin-ink);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="combobox"]:hover,
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="combobox"]:focus-visible {
+  border-color: var(--sarga-admin-secondary);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="checkbox"] {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--sarga-admin-border-strong);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  box-shadow: var(--sarga-admin-shadow-sm);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="checkbox"][aria-checked="true"] {
+  border-color: var(--sarga-admin-primary);
+  background: var(--sarga-admin-primary);
+  color: var(--sarga-admin-surface);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"] {
+  overflow: hidden;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  box-shadow: var(--sarga-admin-shadow-sm);
+  color: var(--sarga-admin-ink);
+  font-size: 14px;
+  transition: border-color 140ms ease, box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"]:hover {
+  border-color: var(--sarga-admin-border-strong);
+  box-shadow: var(--sarga-admin-shadow-md);
+  transform: translateY(-2px);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"]:focus-visible {
+  border-color: var(--sarga-admin-secondary);
+  outline: 2px solid var(--sarga-admin-focus);
+  outline-offset: 2px;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"] img {
+  display: block;
+  width: 100%;
+  min-height: 120px;
+  object-fit: contain;
+  background: var(--sarga-admin-surface-subtle);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"] [id$="-title"] {
+  color: var(--sarga-admin-ink);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] > div:last-child button,
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] button[aria-haspopup="dialog"] {
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: var(--sarga-admin-radius-md);
+  transform: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] button:hover:not(:disabled) {
+  transform: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] button:focus-visible,
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="checkbox"]:focus-visible,
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] [role="combobox"]:focus-visible {
+  outline: 2px solid var(--sarga-admin-focus);
+  outline-offset: 2px;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] button:not([role="tab"]):not([role="checkbox"]) {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  color: var(--sarga-admin-ink);
+  font-size: 14px;
+  font-weight: 700;
+  transform: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] header > button {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 9px;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] > div:first-of-type > div:first-child > div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-inline: 20px;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] > div:first-of-type > div:first-child > div:last-child > button:first-child {
+  border-color: #f3b8c0;
+  background: #fff1f3;
+  color: #9e1122;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] > div:first-of-type > div:first-child > div:last-child > button:last-child,
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] footer > button:last-child {
+  border-color: var(--sarga-admin-primary);
+  background: var(--sarga-admin-primary);
+  box-shadow: 0 8px 18px rgba(232, 25, 44, 0.16);
+  color: var(--sarga-admin-surface);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] > div:first-of-type > div:first-child > div:last-child > button:hover:not(:disabled),
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] footer > button:last-child:hover:not(:disabled) {
+  border-color: #c91427;
+  background: #c91427;
+  color: var(--sarga-admin-surface);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] footer > button[type="button"]:last-of-type {
+  border-color: var(--sarga-admin-primary);
+  background-color: var(--sarga-admin-primary);
+  color: var(--sarga-admin-surface);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid var(--sarga-admin-border);
+  background: var(--sarga-admin-surface);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] footer > button:first-child {
+  background: var(--sarga-admin-surface);
+  color: var(--sarga-admin-ink);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] footer > button:first-child:hover:not(:disabled) {
+  border-color: var(--sarga-admin-border-strong);
+  background: var(--sarga-admin-canvas);
+  color: var(--sarga-admin-ink);
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"] button {
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 7px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"] button:hover:not(:disabled) {
+  border-color: var(--sarga-admin-border-strong);
+  background: var(--sarga-admin-canvas);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] section[aria-roledescription="carousel"] {
+  overflow: hidden;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  box-shadow: var(--sarga-admin-shadow-sm);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] section[aria-roledescription="carousel"] > div[role="group"] {
+  border-radius: inherit;
+  background: var(--sarga-admin-surface-subtle);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] section[aria-roledescription="carousel"] > div:last-child:has(> button) {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--sarga-admin-border);
+  background: var(--sarga-admin-surface);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] section[aria-roledescription="carousel"] > div:last-child:has(> button) button {
+  width: 42px;
+  height: 42px;
+  min-width: 34px;
+  min-height: 42px;
+  padding: 7px;
+  border-radius: 999px;
+}
+
+/* Keep the selected-media action rail in normal flow. Strapi positions it
+ * over the thumbnail by default, which can expose the bottom edge of a
+ * landscape image behind the controls. */
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] section[aria-roledescription="carousel"] {
+  display: block;
+  min-height: 0;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] section[aria-roledescription="carousel"] > div:first-child {
+  width: 100%;
+  height: 124px;
+  min-height: 124px;
+  overflow: hidden;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] section[aria-roledescription="carousel"] > div:first-child > [role="group"] {
+  width: 100%;
+  height: 124px;
+  min-height: 124px;
+  overflow: hidden;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] section[aria-roledescription="carousel"] > div:first-child img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] section[aria-roledescription="carousel"] > div:last-child:has(> button) {
+  position: static;
+  width: 100%;
+  min-height: 58px;
+  box-sizing: border-box;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] section[aria-roledescription="carousel"] > div:first-child > [role="group"]:has(> button) {
+  display: block;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] section[aria-roledescription="carousel"] > div:first-child > [role="group"] > button {
+  display: flex;
+  width: 100%;
+  height: 124px;
+  min-height: 124px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  border: 1px dashed var(--sarga-admin-border-strong);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface-subtle);
+  color: var(--sarga-admin-muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"] section[aria-roledescription="carousel"] > div:first-child > [role="group"] > button span {
+  width: auto;
+  height: auto;
+  color: inherit;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+/* Asset cards get a fixed preview window and an independent metadata area so
+ * long filenames can wrap without being covered by the image. */
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"] > div:first-child {
+  height: 120px;
+  min-height: 120px;
+  overflow: hidden;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"] > div:first-child img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"] > div:nth-child(2) {
+  min-height: 160px;
+  overflow: hidden;
+  padding: 12px;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"] h2 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"] [id$="-title"] {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--sarga-admin-ink);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+html[data-sarga-admin-surface="content-manager"] [role="dialog"] article[role="button"] h2 + div {
+  color: var(--sarga-admin-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* Media picker pagination: use the stable pagination landmark and the
+ * semantic hook added by the admin bootstrap to make the current page clear. */
+html[data-sarga-admin-surface="content-manager"]
+  [role="dialog"]
+  nav[aria-label="pagination"] {
+  padding: 8px 0;
+}
+
+html[data-sarga-admin-surface="content-manager"]
+  [role="dialog"]
+  nav[aria-label="pagination"]
+  button {
+  min-width: 42px;
+  min-height: 44px;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  color: var(--sarga-admin-ink);
+  font-weight: 700;
+}
+
+html[data-sarga-admin-surface="content-manager"]
+  [role="dialog"]
+  nav[aria-label="pagination"]
+  button:hover:not(:disabled),
+html[data-sarga-admin-surface="content-manager"]
+  [role="dialog"]
+  nav[aria-label="pagination"]
+  button:focus-visible {
+  border-color: #e8192c;
+  background: #fff1f3;
+  color: #a51222;
+  outline: none;
+}
+
+html[data-sarga-admin-surface="content-manager"]
+  [role="dialog"]
+  nav[aria-label="pagination"]
+  button[data-sarga-media-current-page="true"],
+html[data-sarga-admin-surface="content-manager"]
+  [role="dialog"]
+  nav[aria-label="pagination"]
+  button[aria-current="page"] {
+  border-color: var(--sarga-admin-primary) !important;
+  background: var(--sarga-admin-primary) !important;
+  box-shadow: 0 6px 14px rgb(232 25 44 / 22%);
+  color: #ffffff !important;
+}
+
+html[data-sarga-admin-surface="content-manager"]
+  [role="dialog"]
+  nav[aria-label="pagination"]
+  button[data-sarga-media-current-page="true"]:hover:not(:disabled),
+html[data-sarga-admin-surface="content-manager"]
+  [role="dialog"]
+  nav[aria-label="pagination"]
+  button[data-sarga-media-current-page="true"]:focus-visible {
+  border-color: var(--sarga-admin-primary-hover) !important;
+  background: var(--sarga-admin-primary-hover) !important;
+  color: #ffffff !important;
+}
+
+/* Entry and Preview cards use stable semantic hooks from the native editor,
+ * keeping the action treatment consistent across Collection and Single Types. */
+html[data-sarga-admin-surface="content-manager"] main aside:has(button[type="submit"]),
+html[data-sarga-admin-surface="content-manager"] main aside:has([data-sarga-integrated-preview]) {
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-md);
+  background: var(--sarga-admin-surface);
+  box-shadow: var(--sarga-admin-shadow-sm);
+}
+
+html[data-sarga-admin-surface="content-manager"] main aside:has(button[type="submit"]) button:not([aria-haspopup="menu"]),
+html[data-sarga-admin-surface="content-manager"] main aside:has([data-sarga-integrated-preview]) button[data-sarga-integrated-preview] {
+  min-height: 50px;
+  border-radius: var(--sarga-admin-radius-md);
+  font-size: 15px;
+  font-weight: 800;
+  transform: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] main aside:has(button[type="submit"]) button[type="submit"],
+html[data-sarga-admin-surface="content-manager"] main aside:has(button[type="submit"]) button[aria-haspopup="menu"] {
+  min-height: 50px;
+  border-radius: var(--sarga-admin-radius-md);
+}
+
+html[data-sarga-admin-surface="content-manager"] main aside:has(button[type="submit"]) button[aria-haspopup="menu"] {
+  width: 50px;
+  min-width: 50px;
+  padding: 0;
+}
+
+html[data-sarga-admin-surface="content-manager"] main aside:has(button[type="submit"]) button:disabled {
+  opacity: 1;
+  border-color: #dfd3c3;
+  background: #eee7dc;
+  color: #4a4640;
+}
+
+html[data-sarga-admin-surface="content-manager"] main aside:has([data-sarga-integrated-preview]) button[data-sarga-integrated-preview] {
+  width: 100%;
+  border: 1px solid var(--sarga-admin-border);
+  background: var(--sarga-admin-surface);
+  color: var(--sarga-admin-ink);
+}
+
+html[data-sarga-admin-surface="content-manager"] main aside:has([data-sarga-integrated-preview]) button[data-sarga-integrated-preview]:hover:not(:disabled) {
+  border-color: var(--sarga-admin-secondary);
+  background: var(--sarga-admin-surface-subtle);
+  color: var(--sarga-admin-secondary);
+}
+
+/* Non-repeatable component fields have a native header with a reset action
+ * followed by a component body. Treat that semantic structure as a section
+ * boundary so grouped fields such as FIA Rallycross Content are easy to scan. */
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> div:first-child > button):has(> div:nth-child(2) > div):not(:has(> :nth-child(3))) {
+  margin-block: 18px;
+  padding: 18px 20px 20px;
+  border: 1px solid var(--sarga-admin-border);
+  border-radius: var(--sarga-admin-radius-lg);
+  background: var(--sarga-admin-surface-subtle);
+  box-shadow: var(--sarga-admin-shadow-sm);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> div:first-child > button):has(> div:nth-child(2) > div):not(:has(> :nth-child(3)))
+  > div:first-child {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--sarga-admin-border);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> div:first-child > button):has(> div:nth-child(2) > div):not(:has(> :nth-child(3)))
+  > div:first-child label {
+  margin-bottom: 0;
+  color: var(--sarga-admin-ink);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.015em;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> div:first-child > button):has(> div:nth-child(2) > div):not(:has(> :nth-child(3)))
+  > div:first-child > button {
+  min-width: 34px;
+  min-height: 34px;
+  padding: 7px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sarga-admin-muted);
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> div:first-child > button):has(> div:nth-child(2) > div):not(:has(> :nth-child(3)))
+  > div:first-child > button:hover:not(:disabled) {
+  background: var(--sarga-admin-canvas);
+  color: var(--sarga-admin-primary);
+  transform: none;
+}
+
+/* Nested components become distinct white sub-surfaces inside their parent
+ * group, with a slightly stronger divider to make the sequence explicit. */
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> div:first-child > button):has(> div:nth-child(2) > div):not(:has(> :nth-child(3)))
+  div:has(> div:first-child > button):has(> div:nth-child(2) > div):not(:has(> :nth-child(3))) {
+  margin-top: 18px;
+  background: var(--sarga-admin-surface);
+  box-shadow: none;
+}
+
+html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+  div:has(> div:first-child > button):has(> div:nth-child(2) > div):not(:has(> :nth-child(3)))
+  div:has(> div:first-child > button):has(> div:nth-child(2) > div):not(:has(> :nth-child(3)))
+  > div:first-child {
+  border-bottom-color: #d9cdbd;
+}
+
+@media (max-width: 760px) {
+  html[data-sarga-admin-surface="content-manager"] main {
+    overflow-x: hidden;
+  }
+
+  html[data-sarga-admin-surface="content-manager"] main form label {
+    font-size: 0.75rem;
+  }
+
+  /* Keep native boolean controls horizontal on small screens. Strapi's
+   * responsive field layout can otherwise wrap the two state segments into a
+   * tall oval, which makes the control look like a broken radio group. */
+  html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+    div:has(> input[type="checkbox"]) {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    height: 48px;
+    min-height: 48px;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+    div:has(> input[type="checkbox"]) > div {
+    display: flex;
+    width: 50%;
+    min-width: 0;
+    height: 38px;
+    min-height: 38px;
+    flex: 1 1 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    white-space: nowrap;
+  }
+
+  html[data-sarga-admin-surface="content-manager"] main form [role="tabpanel"]
+    div:has(> input[type="checkbox"]) > div > span {
+    overflow: hidden;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-sarga-admin-surface="content-manager"] *,
+  html[data-sarga-admin-surface="content-manager"] *::before,
+  html[data-sarga-admin-surface="content-manager"] *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

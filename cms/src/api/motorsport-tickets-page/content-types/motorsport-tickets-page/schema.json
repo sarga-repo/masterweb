@@ -1,8 +1,28 @@
 {
   "kind": "singleType",
-  "info": { "singularName": "motorsport-tickets-page", "pluralName": "motorsport-tickets-pages", "displayName": "Motorsport Tickets Page" },
+  "info": {
+    "singularName": "motorsport-tickets-page",
+    "pluralName": "motorsport-tickets-pages",
+    "displayName": "Motorsport Tickets Page",
+    "description": "CMS content for the public Sarga Motorsport Tickets page. Edit partner ticket destinations, event listings, ticket information, and support copy without adding checkout logic."
+  },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "routePath": { "edit": { "description": "Canonical frontend path for this page. Keep this as /tickets." } },
+      "routeAliases": { "edit": { "description": "Optional legacy paths that should resolve to this page during migration." } },
+      "title": { "edit": { "description": "Internal page name used in metadata and CMS identification." } },
+      "navigationLabel": { "edit": { "description": "Optional navigation label retained for page metadata; the header uses the Top Navigation collection." } },
+      "hero": { "edit": { "description": "Tickets hero copy, media, visibility controls, and optional metrics." } },
+      "informationBand": { "edit": { "description": "Blue ticket-control band displayed below the hero." } },
+      "featuredTicketSection": { "edit": { "description": "Featured partner ticket CTA presentation. Destinations are managed in Motorsport Ticket CTA records." } },
+      "ticketedEventsSection": { "edit": { "description": "Ticketed events list presentation. Rows are populated from Motorsport Event records with active ticket links." } },
+      "ticketInfoSection": { "edit": { "description": "How-it-works instructions and ticket support CTA." } },
+      "pageAvailability": { "edit": { "description": "Controls whether the public Tickets page is available or shows Coming Soon." } },
+      "seo": { "edit": { "description": "Search and social metadata used by the Tickets page." } }
+    }
+  },
   "attributes": {
     "siteScope": { "type": "enumeration", "enum": ["motorsport"], "default": "motorsport", "required": true, "private": true },
     "routePath": { "type": "string", "default": "/tickets", "required": true, "pluginOptions": { "i18n": { "localized": false } } },
@@ -11,7 +31,6 @@
     "navigationLabel": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
     "hero": { "type": "component", "component": "motorsport.page-hero", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "informationBand": { "type": "component", "component": "motorsport.page-information-band", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "ticketControlSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "featuredTicketSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "ticketedEventsSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "ticketInfoSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },

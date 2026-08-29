@@ -1,8 +1,28 @@
 {
   "kind": "singleType",
-  "info": { "singularName": "motorsport-experience-page", "pluralName": "motorsport-experience-pages", "displayName": "Motorsport Experience Page" },
+  "info": {
+    "singularName": "motorsport-experience-page",
+    "pluralName": "motorsport-experience-pages",
+    "displayName": "Motorsport Experience Page",
+    "description": "CMS content for the public Sarga Motorsport Experience page. Edit the hero, ecosystem pillars, track imagery, and programme CTAs."
+  },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "routePath": { "edit": { "description": "Canonical frontend path for this page. Keep this as /experience." } },
+      "routeAliases": { "edit": { "description": "Optional legacy paths that should resolve to this page during migration." } },
+      "title": { "edit": { "description": "Internal page name used in metadata and CMS identification." } },
+      "navigationLabel": { "edit": { "description": "Optional navigation label retained for page metadata; the header uses the Top Navigation collection." } },
+      "hero": { "edit": { "description": "Experience hero copy, media, visibility controls, and optional metrics." } },
+      "informationBand": { "edit": { "description": "Blue experience-control band displayed below the hero." } },
+      "pillarsSection": { "edit": { "description": "Ecosystem pillars heading and ordered pillar cards." } },
+      "trackSection": { "edit": { "description": "Track imagery and caption section showing the four-wheel and two-wheel experience." } },
+      "finalCtaSection": { "edit": { "description": "Programme and experience inquiry CTA near the bottom of the page." } },
+      "pageAvailability": { "edit": { "description": "Controls whether the public Experience page is available or shows Coming Soon." } },
+      "seo": { "edit": { "description": "Search and social metadata used by the Experience page." } }
+    }
+  },
   "attributes": {
     "siteScope": { "type": "enumeration", "enum": ["motorsport"], "default": "motorsport", "required": true, "private": true },
     "routePath": { "type": "string", "default": "/experience", "required": true, "pluginOptions": { "i18n": { "localized": false } } },
@@ -11,7 +31,6 @@
     "navigationLabel": { "type": "string", "pluginOptions": { "i18n": { "localized": true } } },
     "hero": { "type": "component", "component": "motorsport.page-hero", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "informationBand": { "type": "component", "component": "motorsport.page-information-band", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
-    "experienceControlSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "pillarsSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "trackSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "finalCtaSection": { "type": "component", "component": "motorsport.page-section", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },

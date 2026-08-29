@@ -18,17 +18,22 @@
       },
       "heroMedia": {
         "edit": {
-          "description": "02 — Legacy programme fallback image. Recommended 2400 × 1200 px (2:1). For the campaign hero, edit Motorsport Presentation > Hero instead. This field remains as a safe fallback for older records."
+          "description": "02 — Legacy programme fallback image for IJTC and other non-Rallycross programmes. Recommended 2400 × 1200 px (2:1). FIA Rallycross uses Motorsport Presentation > Hero instead; this field is hidden for FIA programmes."
         }
       },
       "bannerSlides": {
         "edit": {
-          "description": "03 — Campaign carousel slides, shown after the hero and information band. Set image, title, description, CTA, and sort order per slide."
+          "description": "03 — FIA Rallycross campaign slides shown after the hero and information band. Add the image, title, description, CTA, and order for each slide. This field is shown only for Rallycross programmes."
         }
       },
       "presentationSections": {
         "edit": {
-          "description": "04 — Supporting named sections for the FIA campaign. Add or expand sections with sectionKey format, rundown, or race-day-guide. Edit each section's isActive/show* controls and copy; Format cards are managed in the nested items list."
+          "description": "Shared programme sections used by IJTC and non-Rallycross programme pages. FIA Rallycross editors should use FIA Rallycross Content instead."
+        }
+      },
+      "fiaRallycrossContent": {
+        "edit": {
+          "description": "03 — FIA Rallycross content group. Edit Format, Rundown, and Race-day Guide only in their matching sections; each section contains its own presentation copy and items. Shown only for Rallycross programmes."
         }
       },
       "eventMenuLabel": {
@@ -38,12 +43,122 @@
       },
       "rundown": {
         "edit": {
-          "description": "05 — Race-day schedule items rendered in the programme rundown. Each item has isActive and sortOrder, followed by its day, time, title, and description."
+          "description": "Shared schedule rows used by IJTC and non-Rallycross programme pages. FIA Rallycross editors should use FIA Rallycross Content > Rundown instead."
         }
       },
-      "eventRules": {
+      "title": {
         "edit": {
-          "description": "06 — Sporting rules and Do/Do not guidance for the programme. Each item has isActive and sortOrder, followed by its type, title, and description."
+          "description": "Public programme name used in page headings, navigation, cards, and metadata."
+        }
+      },
+      "slug": {
+        "edit": {
+          "description": "Stable URL identifier for this programme. Change only with a redirect/migration plan."
+        }
+      },
+      "eventMenuEnabled": {
+        "edit": {
+          "description": "Show this programme in the Motorsport Event navigation menu."
+        }
+      },
+      "programType": {
+        "edit": {
+          "description": "Choose the programme family. This controls the documented field guidance for Rallycross, IJTC, race weekends, and other programmes."
+        }
+      },
+      "programStatus": {
+        "edit": {
+          "description": "Public visibility and lifecycle state. Hidden programmes are excluded from Motorsport routes and menus."
+        }
+      },
+      "seasonLabel": {
+        "edit": {
+          "description": "Short season label shown beside the programme name, for example 2026 Season."
+        }
+      },
+      "summary": {
+        "edit": {
+          "description": "Primary programme introduction used in the hero and programme summaries."
+        }
+      },
+      "mainHeadline": {
+        "edit": {
+          "description": "Optional campaign headline shown as the main programme hero title."
+        }
+      },
+      "eventStartDate": {
+        "edit": {
+          "description": "Programme start date used for date ranges and campaign metadata."
+        }
+      },
+      "eventEndDate": {
+        "edit": {
+          "description": "Programme end date used with the start date for public date ranges."
+        }
+      },
+      "venue": {
+        "edit": {
+          "description": "Primary venue shown in programme metrics and campaign ticket context."
+        }
+      },
+      "primaryCtaLabel": {
+        "edit": {
+          "description": "Fallback primary action label used when a presentation Hero or ticket CTA does not provide one."
+        }
+      },
+      "primaryCtaUrl": {
+        "edit": {
+          "description": "Fallback primary action destination. Use a local route or approved HTTPS URL."
+        }
+      },
+      "becomeRidersLabel": {
+        "edit": {
+          "description": "IJTC inquiry action label shown on programme pages. Leave empty for the standard label. This field is shown only for IJTC programmes."
+        }
+      },
+      "becomeRidersUrl": {
+        "edit": {
+          "description": "IJTC inquiry action destination. Use the programme-relative become-riders route unless an approved alternative is required. This field is shown only for IJTC programmes."
+        }
+      },
+      "relatedEvents": {
+        "edit": {
+          "description": "Optional events related to this programme for future cross-linking and editorial context."
+        }
+      },
+      "relatedTicketCtas": {
+        "edit": {
+          "description": "Approved ticket destinations for this programme. Add one active partner CTA; checkout remains external."
+        }
+      },
+      "riders": {
+        "edit": {
+          "description": "IJTC rider records shown in the rider catalogue and linked standings. Not used by FIA Rallycross pages."
+        }
+      },
+      "standings": {
+        "edit": {
+          "description": "IJTC classification records shown on the standings page. Not used by FIA Rallycross pages."
+        }
+      },
+      "regulations": {
+        "edit": {
+          "description": "IJTC approved sporting regulation records shown on the regulation page. Not used by FIA Rallycross pages."
+        }
+      },
+      "siteScope": {
+        "edit": {
+          "description": "Site visibility scope. Use motorsport for the dedicated Motorsport frontend; hidden excludes the record from public queries."
+        }
+      },
+      "sites": {
+        "edit": {
+          "description": "Optional site assignments used by shared multisite filtering."
+        }
+      },
+      "seo": {
+        "edit": {
+          "description": "Search and social metadata for this programme. Leave blank to use the mapped title, summary, and hero image."
         }
       }
     }
@@ -60,18 +175,28 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images", "videos"]
+      "allowedTypes": ["images", "videos"],
+      "conditions": { "visible": { "!=": [{ "var": "programType" }, "rallycross"] } }
     },
     "bannerSlides": {
       "type": "component",
       "component": "motorsport.campaign-slide",
       "repeatable": true,
+      "conditions": { "visible": { "==": [{ "var": "programType" }, "rallycross"] } },
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "presentationSections": {
       "type": "component",
       "component": "motorsport.page-section",
       "repeatable": true,
+      "conditions": { "visible": { "!=": [{ "var": "programType" }, "rallycross"] } },
+      "pluginOptions": { "i18n": { "localized": true } }
+    },
+    "fiaRallycrossContent": {
+      "type": "component",
+      "component": "motorsport.fia-rallycross-content",
+      "repeatable": false,
+      "conditions": { "visible": { "==": [{ "var": "programType" }, "rallycross"] } },
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "title": {
@@ -120,12 +245,7 @@
       "type": "component",
       "component": "motorsport.rundown-item",
       "repeatable": true,
-      "pluginOptions": { "i18n": { "localized": true } }
-    },
-    "eventRules": {
-      "type": "component",
-      "component": "motorsport.rule-item",
-      "repeatable": true,
+      "conditions": { "visible": { "!=": [{ "var": "programType" }, "rallycross"] } },
       "pluginOptions": { "i18n": { "localized": true } }
     },
     "primaryCtaLabel": {
@@ -135,9 +255,13 @@
     "primaryCtaUrl": { "type": "string" },
     "becomeRidersLabel": {
       "type": "string",
+      "conditions": { "visible": { "==": [{ "var": "programType" }, "juniorTalentCup"] } },
       "pluginOptions": { "i18n": { "localized": true } }
     },
-    "becomeRidersUrl": { "type": "string" },
+    "becomeRidersUrl": {
+      "type": "string",
+      "conditions": { "visible": { "==": [{ "var": "programType" }, "juniorTalentCup"] } }
+    },
     "relatedEvents": {
       "type": "relation",
       "relation": "manyToMany",
@@ -153,18 +277,21 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::motorsport-rider.motorsport-rider",
+      "conditions": { "visible": { "==": [{ "var": "programType" }, "juniorTalentCup"] } },
       "mappedBy": "program"
     },
     "standings": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::motorsport-standing.motorsport-standing",
+      "conditions": { "visible": { "==": [{ "var": "programType" }, "juniorTalentCup"] } },
       "mappedBy": "program"
     },
     "regulations": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::motorsport-regulation.motorsport-regulation",
+      "conditions": { "visible": { "==": [{ "var": "programType" }, "juniorTalentCup"] } },
       "mappedBy": "program"
     },
     "siteScope": {

@@ -26,8 +26,17 @@
         "edit": {
           "description": "Use an internal path beginning with / or an approved HTTPS external URL. External URLs open in a new tab."
         }
+      },
+      "internalName": { "edit": { "description": "Internal editor label for this homepage Hero slide." } },
+      "eyebrow": { "edit": { "description": "Short context line shown above the Hero title." } },
+      "title": { "edit": { "description": "Main homepage Hero headline." } },
+      "description": { "edit": { "description": "Supporting homepage Hero copy." } },
+      "video": { "edit": { "description": "Optional approved Hero video with a poster image." } },
+      "imageAlt": { "edit": { "description": "Accessible description of the Hero artwork." } },
+      "subjectAnchor": { "edit": { "description": "Focal position used when cropping the Hero artwork." } },
+      "isActive": { "edit": { "description": "Include this slide in the homepage carousel." } },
+      "sortOrder": { "edit": { "description": "Homepage carousel order; lower numbers appear first." } }
       }
-    }
   },
   "attributes": {
     "internalName": {

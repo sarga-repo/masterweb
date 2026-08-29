@@ -16,8 +16,11 @@
         "edit": {
           "description": "Lower numbers appear first within the Do or Do not group."
         }
+      },
+      "ruleType": { "edit": { "description": "Choose whether the item appears in the Do or Do not group." } },
+      "title": { "edit": { "description": "Short race-day guidance title." } },
+      "description": { "edit": { "description": "Race-day guidance detail shown below the rule title." } }
       }
-    }
   },
   "attributes": {
     "isActive": { "type": "boolean", "default": true },

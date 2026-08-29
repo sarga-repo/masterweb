@@ -26,8 +26,13 @@
         "edit": {
           "description": "Hides the complete right-bottom metric group and all of its separators when false."
         }
+      },
+      "isActive": { "edit": { "description": "Show this information band." } },
+      "eyebrow": { "edit": { "description": "Short context line above the band title." } },
+      "title": { "edit": { "description": "Information band heading." } },
+      "description": { "edit": { "description": "Supporting information band copy." } },
+      "metrics": { "edit": { "description": "Up to three ordered label/value metrics shown in the band." } }
       }
-    }
   },
   "attributes": {
     "isActive": {

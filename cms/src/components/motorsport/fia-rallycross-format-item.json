@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_motorsport_fia_rallycross_format_items",
+  "info": {
+    "displayName": "FIA Rallycross Format Item",
+    "description": "One format card shown in the FIA Rallycross Format section. Use a short label, title, explanation, and approved accent colour."
+  },
+  "options": {},
+  "config": {
+    "metadatas": {
+      "isActive": { "edit": { "description": "Show this format card on the FIA Rallycross page." } },
+      "sortOrder": { "edit": { "description": "Lower numbers appear first in the Format section." } },
+      "label": { "edit": { "description": "Short card number or identifier, for example 01 or Heat 1." } },
+      "title": { "edit": { "description": "Short format step title shown on the card." } },
+      "description": { "edit": { "description": "One or two sentences explaining this format step to spectators." } },
+      "accent": { "edit": { "description": "Approved Motorsport accent colour used for the card label." } }
+    }
+  },
+  "attributes": {
+    "isActive": { "type": "boolean", "default": true },
+    "sortOrder": { "type": "integer", "default": 0 },
+    "label": { "type": "string", "maxLength": 40 },
+    "title": { "type": "string", "required": true, "maxLength": 120 },
+    "description": { "type": "text" },
+    "accent": {
+      "type": "enumeration",
+      "enum": ["crimson", "orange", "yellow", "teal", "blue"],
+      "default": "crimson"
+    }
+  }
+}

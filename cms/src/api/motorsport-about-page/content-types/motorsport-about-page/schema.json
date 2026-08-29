@@ -1,8 +1,30 @@
 {
   "kind": "singleType",
-  "info": { "singularName": "motorsport-about-page", "pluralName": "motorsport-about-pages", "displayName": "Motorsport About Page" },
+  "info": {
+    "singularName": "motorsport-about-page",
+    "pluralName": "motorsport-about-pages",
+    "displayName": "Motorsport About Page",
+    "description": "CMS content for the public Sarga Motorsport About page. Edit the hero, profile, capabilities, team, and CTA sections in page order."
+  },
   "options": { "draftAndPublish": true },
   "pluginOptions": { "i18n": { "localized": true } },
+  "config": {
+    "metadatas": {
+      "routePath": { "edit": { "description": "Canonical frontend path for this page. Keep this as /about." } },
+      "routeAliases": { "edit": { "description": "Optional legacy paths that should resolve to this page during migration." } },
+      "title": { "edit": { "description": "Internal page name used in metadata and CMS identification." } },
+      "navigationLabel": { "edit": { "description": "Optional navigation label retained for page metadata; the header uses the Top Navigation collection." } },
+      "hero": { "edit": { "description": "About page hero copy, media, visibility controls, and optional metrics." } },
+      "informationBand": { "edit": { "description": "Blue information band displayed below the About hero." } },
+      "profileSection": { "edit": { "description": "Profile story section with image, copy, operating idea, and CTA." } },
+      "capabilities": { "edit": { "description": "Capability grid section and its ordered capability cards." } },
+      "teamSection": { "edit": { "description": "Team section heading and visibility controls; people are managed in Motorsport Leadership." } },
+      "contactCtaSection": { "edit": { "description": "Contact CTA block near the bottom of the About page." } },
+      "ecosystemCtaSection": { "edit": { "description": "Sarga ecosystem CTA block near the bottom of the About page." } },
+      "pageAvailability": { "edit": { "description": "Controls whether the public About page is available or shows Coming Soon." } },
+      "seo": { "edit": { "description": "Search and social metadata used by the About page." } }
+    }
+  },
   "attributes": {
     "siteScope": { "type": "enumeration", "enum": ["motorsport"], "default": "motorsport", "required": true, "private": true },
     "routePath": { "type": "string", "default": "/about", "required": true, "pluginOptions": { "i18n": { "localized": false } } },

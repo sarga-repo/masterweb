@@ -5,6 +5,13 @@
     "description": "01 — The first presentation group in a Motorsport Program. Edit Hero first, then Information Band. This component is also reused by event/news detail records."
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "hero": { "edit": { "description": "Hero copy, media, visibility controls, metrics, and CTAs for the related detail page." } },
+      "informationBand": { "edit": { "description": "Information Band copy, visibility controls, and metrics shown below the Hero." } },
+      "routeKey": { "edit": { "description": "Internal presentation key used during content migration; it is not rendered as public copy." } }
+    }
+  },
   "attributes": {
     "hero": { "type": "component", "component": "motorsport.page-hero", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },
     "informationBand": { "type": "component", "component": "motorsport.page-information-band", "repeatable": false, "required": false, "pluginOptions": { "i18n": { "localized": true } } },

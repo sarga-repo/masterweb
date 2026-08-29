@@ -75,6 +75,15 @@ export function getIjtcInformationBand(
   };
 }
 
+export function getIjtcSection(
+  program: MotorsportProgramDetail,
+  sectionKey: string,
+) {
+  return program.presentationSections?.find(
+    (section) => section.sectionKey === sectionKey,
+  );
+}
+
 const FALLBACK_PROGRAM: MotorsportProgramDetail = {
   title: "Indonesia Junior Talent Cup",
   slug: IJTC_SLUG,

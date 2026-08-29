@@ -23,13 +23,19 @@ type SargaTimelineProps = {
   publications: MotorsportArticle[];
   leadership: TeamMember[];
   ecosystemSites: EcosystemSite[];
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  publicationTabLabel?: string;
+  leadershipTabLabel?: string;
+  ecosystemTabLabel?: string;
 };
 
-const TABS: Array<{ id: PanelId; label: string }> = [
-  { id: "publications", label: "History timeline" },
-  { id: "leadership", label: "Leadership council" },
-  { id: "ecosystem", label: "Sarga ecosystem" },
-];
+const DEFAULT_TAB_LABELS: Record<PanelId, string> = {
+  publications: "History timeline",
+  leadership: "Leadership council",
+  ecosystem: "Sarga ecosystem",
+};
 
 const PUBLICATION_FALLBACKS = [
   "/media/motorsport-design-hero.png",
@@ -41,7 +47,28 @@ export function SargaTimeline({
   publications,
   leadership,
   ecosystemSites,
+  eyebrow = "Part of Sarga.co / Connected records",
+  title = "Explore the Sarga network.",
+  description =
+    "Browse published stories, meet the leadership council, and move directly between the active Sarga websites.",
+  publicationTabLabel,
+  leadershipTabLabel,
+  ecosystemTabLabel,
 }: SargaTimelineProps) {
+  const tabs: Array<{ id: PanelId; label: string }> = [
+    {
+      id: "publications",
+      label: publicationTabLabel || DEFAULT_TAB_LABELS.publications,
+    },
+    {
+      id: "leadership",
+      label: leadershipTabLabel || DEFAULT_TAB_LABELS.leadership,
+    },
+    {
+      id: "ecosystem",
+      label: ecosystemTabLabel || DEFAULT_TAB_LABELS.ecosystem,
+    },
+  ];
   const baseId = useId();
   const viewportRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<Record<PanelId, HTMLButtonElement | null>>({
@@ -65,8 +92,8 @@ export function SargaTimeline({
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
     event.preventDefault();
     const direction = event.key === "ArrowDown" ? 1 : -1;
-    const nextIndex = (index + direction + TABS.length) % TABS.length;
-    const next = TABS[nextIndex];
+    const nextIndex = (index + direction + tabs.length) % tabs.length;
+    const next = tabs[nextIndex];
     selectPanel(next.id);
     tabRefs.current[next.id]?.focus();
   }
@@ -85,14 +112,13 @@ export function SargaTimeline({
       <div className="ms-shell">
         <div className="mb-12 max-w-3xl">
           <p className="ms-kicker text-ms-ignition-orange">
-            Part of Sarga.co / Connected records
+            {eyebrow}
           </p>
           <h2 className="ms-heading-section mt-4">
-            Explore the Sarga network.
+            {title}
           </h2>
           <p className="mt-5 max-w-2xl leading-7 text-ms-warm-white/58">
-            Browse published stories, meet the leadership council, and move
-            directly between the active Sarga websites.
+            {description}
           </p>
         </div>
 
@@ -103,7 +129,7 @@ export function SargaTimeline({
             aria-orientation="vertical"
             className="space-y-2"
           >
-            {TABS.map((tab, index) => {
+            {tabs.map((tab, index) => {
               const selected = activeId === tab.id;
               return (
                 <button

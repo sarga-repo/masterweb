@@ -5,6 +5,18 @@
     "description": "CMS-managed Motorsport homepage information band with live featured-event values"
   },
   "options": {},
+  "config": {
+    "metadatas": {
+      "enabled": { "edit": { "description": "Show the homepage race-control band." } },
+      "eyebrow": { "edit": { "description": "Short context line above the race-control title." } },
+      "title": { "edit": { "description": "Homepage race-control band heading." } },
+      "description": { "edit": { "description": "Supporting copy shown in the race-control band." } },
+      "nextEventLabel": { "edit": { "description": "Label for the automatically populated next-event value." } },
+      "ticketStatusLabel": { "edit": { "description": "Label for the automatically populated ticket status value." } },
+      "regionLabel": { "edit": { "description": "Label for the configured region value." } },
+      "regionValue": { "edit": { "description": "Region value shown in the race-control band." } }
+    }
+  },
   "attributes": {
     "enabled": {
       "type": "boolean",

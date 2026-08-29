@@ -11773,6 +11773,44 @@ Status: ✅ Done — 2026-08-29
 - No staging build, deployment, migration, database operation, or content
   mutation was performed.
 
+### STAGING-DEPLOYMENT-A372ADCF8 — CMS and Motorsport staging rollout
+
+#### What was done
+
+- Committed and pushed the reviewed CMS cleanup, schema migrations, grouped FIA
+  content model, frontend wiring, audit documentation, and shared Strapi admin
+  modernization as `a372adcf8ea98eeedfd378b012f171173061c270`.
+- Created a paired staging PostgreSQL and CMS uploads backup before changing
+  the staging checkout.
+- Checked out the exact release on staging and rebuilt the CMS and Motorsport
+  applications.
+- Ran the additive FIA grouped-content migration for draft and published
+  records while leaving legacy-field retirement disabled.
+
+#### Files changed
+
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Staging checkout resolved to `a372adcf8ea98eeedfd378b012f171173061c270`.
+- `sarga-cms` and `sarga-motorsport` are active.
+- Local CMS admin and Motorsport health endpoints returned success.
+- Public staging CMS and Motorsport endpoints returned success.
+- `https://staging-motorsport.sarga.co/events/fia-rallycross-world-cup-indonesia-2026`
+  returned HTTP 200.
+- The temporary FIA migration environment flag was cleared after restart.
+
+#### Notes / caveats
+
+- The documented guarded staging wrapper was absent on the host, so the
+  repository manual SSH procedure was used with an explicit pre-deploy backup.
+- Legacy-field retirement remains disabled; no destructive CMS field or content
+  deletion was performed.
+- This record is documentation-only after the runtime release; the deployed
+  application revision remains `a372adcf8ea98eeedfd378b012f171173061c270`.
+- No production or other environment was changed.
+
 ### CMS-ADMIN-UI-MODERNIZATION-BOOLEAN-MOBILE — Responsive boolean switch
 
 #### What was done

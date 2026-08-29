@@ -11773,6 +11773,39 @@ Status: ✅ Done — 2026-08-29
 - No staging build, deployment, migration, database operation, or content
   mutation was performed.
 
+### CMS-ADMIN-UI-STAGING-CSS — Production admin stylesheet delivery fix
+
+#### What was done
+
+- Diagnosed staging Content Manager styling as a production asset-loading issue:
+  the generated CSS asset contained the Sarga rules but was not referenced by
+  the dynamically loaded Strapi admin document.
+- Changed the shared admin stylesheet import to an inline bundled CSS string
+  and install it once at admin bootstrap, covering Content Manager and shell
+  routes in production.
+- Kept the existing semantic selectors, native Strapi controls, and route
+  behavior unchanged.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Local Strapi production build passed after the bundled stylesheet change.
+- Confirmed the generated admin entry contains the Sarga admin tokens and
+  shared editor rules.
+- Staging inspection confirmed the prior symptom: the CSS file existed but no
+  stylesheet was loaded, while runtime login styles were present.
+
+#### Notes / caveats
+
+- The fix requires a fresh CMS admin build and service restart on staging;
+  browser refresh alone cannot load the missing production asset.
+- No staging deployment or content mutation has been performed for this fix
+  yet.
+
 ### STAGING-DEPLOYMENT-A372ADCF8 — CMS and Motorsport staging rollout
 
 #### What was done

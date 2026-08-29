@@ -1,6 +1,6 @@
 import type { StrapiApp } from "@strapi/strapi/admin";
 import { APPROVED_MOTORSPORT_PREVIEW_UIDS } from "../preview/preview-path";
-import "./styles/admin.css";
+import adminStyles from "./styles/admin.css?inline";
 
 function WorkspaceIcon() {
   return (
@@ -338,6 +338,18 @@ export default {
   },
 
   bootstrap(app: StrapiApp) {
+    // Strapi's production admin entry is loaded dynamically, so a normal CSS
+    // side-effect import can be emitted as an unreferenced split asset. Install
+    // the shared stylesheet from the bundled string to keep every editor route
+    // consistently styled in production as well as development.
+    const adminStyleId = "sarga-admin-shared-styles";
+    if (!document.getElementById(adminStyleId)) {
+      const style = document.createElement("style");
+      style.id = adminStyleId;
+      style.textContent = adminStyles;
+      document.head.appendChild(style);
+    }
+
     // Mark the active native Content Manager surface so the shared stylesheet
     // can target editor UX without leaking into custom admin pages or plugins.
     const updateAdminSurface = () => {

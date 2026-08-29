@@ -11801,10 +11801,11 @@ Status: ✅ Done — 2026-08-29
 
 #### Notes / caveats
 
-- The fix requires a fresh CMS admin build and service restart on staging;
-  browser refresh alone cannot load the missing production asset.
-- No staging deployment or content mutation has been performed for this fix
-  yet.
+- The fix required a fresh CMS admin build and service restart on staging;
+  browser refresh alone could not load the missing production asset.
+- Deployed to staging at `03fd6f13b2f21089008b04bdf0c470a781e78ce9` and verified
+  in the authenticated Content Manager editor.
+- No content mutation or legacy-field retirement was performed for this fix.
 
 ### STAGING-DEPLOYMENT-A372ADCF8 — CMS and Motorsport staging rollout
 

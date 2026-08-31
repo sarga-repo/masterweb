@@ -34,7 +34,7 @@ export function CampaignBannerSlider({
 
   return (
     <section
-      className="relative isolate w-full min-h-0 aspect-[4/5] overflow-hidden bg-ms-charcoal sm:aspect-auto sm:min-h-[42rem]"
+      className="relative isolate w-full min-h-[42rem] overflow-hidden bg-ms-charcoal"
       aria-label={label}
     >
       {slides.map((slide, index) => (
@@ -64,7 +64,7 @@ export function CampaignBannerSlider({
               fill
               priority={index === 0}
               sizes="100vw"
-              className="object-cover sm:hidden"
+              className="object-contain bg-ms-charcoal sm:hidden"
             />
           ) : null}
         </div>
@@ -80,7 +80,7 @@ export function CampaignBannerSlider({
         </>
       ) : null}
 
-      <div className="ms-shell relative flex min-h-0 flex-col justify-end py-12 sm:min-h-[42rem] sm:py-16 lg:justify-center">
+      <div className="ms-shell relative flex min-h-[42rem] flex-col justify-end py-12 sm:py-16 lg:justify-center">
         <div className="max-w-5xl" aria-live="polite">
           {activeSlide.eyebrow ? (
             <p className="ms-kicker text-ms-ignition-orange">

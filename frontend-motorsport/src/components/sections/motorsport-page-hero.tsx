@@ -19,7 +19,7 @@ export function MotorsportPageHero({ hero }: MotorsportPageHeroProps) {
 
   return (
     <section
-      className="ms-page-hero relative isolate w-full min-h-0 aspect-[4/5] overflow-hidden bg-ms-charcoal text-ms-warm-white sm:aspect-auto sm:min-h-[32rem]"
+      className="ms-page-hero relative isolate w-full min-h-[26rem] overflow-hidden bg-ms-charcoal text-ms-warm-white sm:min-h-[32rem]"
       data-cms-section-key="hero"
       data-cms-enabled="true"
     >
@@ -50,14 +50,14 @@ export function MotorsportPageHero({ hero }: MotorsportPageHeroProps) {
           fill
           priority
           sizes="100vw"
-          className="object-cover sm:hidden"
+          className="object-contain bg-ms-charcoal sm:hidden"
         />
       ) : null}
       <div
         className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,.28)_0%,rgba(5,5,5,.08)_42%,rgba(5,5,5,.72)_100%)]"
         aria-hidden="true"
       />
-      <div className="ms-shell relative z-10 flex min-h-0 items-end py-14 sm:min-h-[32rem] sm:py-20">
+      <div className="ms-shell relative z-10 flex min-h-[26rem] items-end py-14 sm:min-h-[32rem] sm:py-20">
         <div className="max-w-4xl">
           {hero.showEyebrow && hero.eyebrow ? (
             <p className="ms-kicker text-ms-electric-yellow">{hero.eyebrow}</p>

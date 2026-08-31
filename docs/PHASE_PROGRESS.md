@@ -12665,10 +12665,10 @@ Status: ✅ Done — 2026-08-29
 
 - Wired `motorsportPresentation.hero.mobileBackgroundMedia` into standard
   event and news detail heroes, not only the campaign route.
-- Applied the full-width 4:5 mobile frame to the reusable event/news hero
-  fallback component as well as the campaign slider.
-- Applied the same 4:5 mobile frame to the homepage hero slider when mobile
-  slide artwork is available; desktop hero sizing remains unchanged.
+- Applied the full-width 4:5 mobile frame to page heroes and standard
+  event/news detail heroes.
+- Kept content-driven sliders at their existing viewport/content heights while
+  containing dedicated mobile artwork so a 4:5 asset is not cropped.
 - Preserved native mobile/desktop asset switching and existing slider controls.
 
 #### Files changed
@@ -12690,7 +12690,8 @@ Status: ✅ Done — 2026-08-29
 
 - Mobile artwork should continue to use the CMS-recommended 1080 × 1350 px
   (4:5) composition. Desktop artwork remains the fallback when no mobile
-  asset is configured.
+  asset is configured. Sliders use containment because their copy and control
+  area is taller than a strict 4:5 frame on small screens.
 
 ### MSR-VENDOR-MOBILE-HERO-FRAME — Mobile hero crop correction
 

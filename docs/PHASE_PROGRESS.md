@@ -12658,3 +12658,30 @@ Status: ✅ Done — 2026-08-29
 
 - No CMS content or media records were changed.
 - The frontend must be rebuilt after this query-contract change.
+
+### MSR-VENDOR-MOBILE-HERO-FRAME — Mobile hero crop correction
+
+#### What was done
+
+- Removed the responsive hero's fixed `36rem` minimum height.
+- Kept the mobile frame full-width at 4:5 and the desktop frame at 2:1.
+- This prevents a narrow mobile viewport from expanding the hero beyond the
+  viewport and cropping the right side of an exact 4:5 mobile asset.
+
+#### Files changed
+
+- `frontend-motorsport/src/components/sections/page-hero.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Local Motorsport TypeScript check passed.
+- Local Motorsport production build passed.
+- `git diff --check` passed.
+- Staging measurement identified the original overflow: a 390px viewport
+  produced a 460.8px-wide hero because of the fixed minimum height.
+
+#### Notes / caveats
+
+- The recommended mobile source ratio remains 4:5; `4500 × 5625` is a valid
+  4:5 source. The correction addresses the rendered frame, not the asset.

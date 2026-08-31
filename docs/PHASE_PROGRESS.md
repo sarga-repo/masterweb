@@ -12630,3 +12630,31 @@ Status: ✅ Done — 2026-08-29
   until editors add optional mobile artwork.
 - The mobile campaign image field is additive and does not remove or alter
   existing media content.
+
+### MSR-VENDOR-MOBILE-HERO-FETCH — Rallycross mobile hero population fix
+
+#### What was done
+
+- Confirmed the staging Rallycross record already contains a mobile hero asset.
+- Added `motorsportPresentation.hero.mobileBackgroundMedia` to every relevant
+  Motorsport program/event frontend population contract.
+- This ensures the existing CMS mobile asset reaches the responsive PageHero
+  renderer instead of silently falling back to the desktop artwork.
+
+#### Files changed
+
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Read-only staging CMS API inspection confirmed both desktop and mobile hero
+  media URLs are present on the Rallycross record.
+- Motorsport TypeScript check passed.
+- Motorsport production build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- No CMS content or media records were changed.
+- The frontend must be rebuilt after this query-contract change.

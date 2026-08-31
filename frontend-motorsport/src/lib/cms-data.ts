@@ -1219,6 +1219,7 @@ export async function fetchEventBySlug(
       "sponsors.logo",
       "seo.ogImage",
       "motorsportPresentation.hero.backgroundMedia",
+      "motorsportPresentation.hero.mobileBackgroundMedia",
       "motorsportPresentation.hero.metrics",
       "motorsportPresentation.informationBand.metrics",
     ],
@@ -1277,6 +1278,7 @@ export async function fetchArticleBySlug(
     populate: [
       "coverImage",
       "motorsportPresentation.hero.backgroundMedia",
+      "motorsportPresentation.hero.mobileBackgroundMedia",
       "motorsportPresentation.hero.metrics",
       "motorsportPresentation.informationBand.metrics",
     ],
@@ -1669,6 +1671,7 @@ export async function fetchPrograms(
       "fiaRallycrossContent.raceDayGuideSection",
       "fiaRallycrossContent.raceDayGuideSection.ruleItems",
       "motorsportPresentation.hero.backgroundMedia",
+      "motorsportPresentation.hero.mobileBackgroundMedia",
     ],
     filters: SITE_SCOPE_FILTERS,
     locale,
@@ -1726,6 +1729,7 @@ export async function fetchProgramBySlug(
       "presentationSections.items.media",
       "rundown",
       "motorsportPresentation.hero.backgroundMedia",
+      "motorsportPresentation.hero.mobileBackgroundMedia",
       "motorsportPresentation.informationBand.metrics",
     ],
     filters: {
@@ -1781,6 +1785,7 @@ export async function fetchCampaignProgramBySlug(
       "fiaRallycrossContent.raceDayGuideSection",
       "fiaRallycrossContent.raceDayGuideSection.ruleItems",
       "motorsportPresentation.hero.backgroundMedia",
+      "motorsportPresentation.hero.mobileBackgroundMedia",
       "motorsportPresentation.informationBand.metrics",
     ],
     filters: {

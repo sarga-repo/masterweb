@@ -118,6 +118,7 @@ export type CampaignSlide = {
   venue?: string;
   image?: MediaSource;
   imageAlt?: string;
+  mobileImage?: MediaSource;
   cta?: LinkItem;
 };
 

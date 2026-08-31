@@ -17,6 +17,7 @@ import {
   fetchLeadership,
   fetchSitePage,
   mapAboutCapabilities,
+  safeCmsCtaUrl,
   type AboutCapability,
   type SitePageContent,
 } from "@/lib/cms-data";
@@ -142,6 +143,7 @@ export default async function AboutPage() {
   const ecosystemCta = page?.sections.find(
     (section) => section.sectionKey === "ecosystem-cta",
   );
+  const ecosystemCtaHref = safeCmsCtaUrl(ecosystemCta?.ctaUrl);
   const capabilities = mapAboutCapabilities(page?.sections);
   const capabilityCards: AboutCapability[] = capabilities
     ? capabilities.cards
@@ -510,23 +512,22 @@ export default async function AboutPage() {
                     className="ms-rich-text mt-6 max-w-xl leading-7 text-ms-warm-white/72"
                   />
                 ) : null}
-                {ecosystemCta?.showCta !== false &&
-                ecosystemCta?.ctaUrl?.startsWith("/") ? (
+                {ecosystemCta?.showCta !== false && ecosystemCtaHref ? (
                   <Link
-                    href={ecosystemCta.ctaUrl}
+                    href={ecosystemCtaHref}
                     target={
-                      ecosystemCta.ctaTarget === "newWindow"
+                      ecosystemCta?.ctaTarget === "newWindow"
                         ? "_blank"
                         : undefined
                     }
                     rel={
-                      ecosystemCta.ctaTarget === "newWindow"
+                      ecosystemCta?.ctaTarget === "newWindow"
                         ? "noreferrer"
                         : undefined
                     }
                     className="group mt-8 inline-flex items-center gap-4 border-b border-ms-slipstream-teal/55 pb-3 text-[0.65rem] font-black uppercase tracking-[0.16em] text-ms-slipstream-teal"
                   >
-                    {ecosystemCta.ctaLabel ?? "Visit Sarga.co"}
+                    {ecosystemCta?.ctaLabel ?? "Visit Sarga.co"}
                     <ArrowRightIcon className="size-4 transition-transform group-hover:translate-x-1" />
                   </Link>
                 ) : null}

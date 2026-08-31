@@ -25,6 +25,8 @@ type PageHeroProps = {
   showMedia?: boolean;
   /** Optional background image path */
   backgroundImage?: MediaSource;
+  /** Optional portrait/mobile artwork; desktop artwork remains the fallback. */
+  mobileBackgroundImage?: MediaSource;
   backgroundAlt?: string;
   /** Accent color for radial gradient bloom */
   accent?: AccentColor;
@@ -41,6 +43,11 @@ type PageHeroProps = {
   grain?: boolean;
   /** Branded blue/heat canvas instead of the legacy black hero canvas */
   surface?: "default" | "heat";
+  /** Keep editorial image treatment clean when the source artwork already has its own grading. */
+  mediaOverlay?: "default" | "none";
+  /** Preserve source artwork framing with a 2:1 desktop and 4:5 mobile frame. */
+  mediaFrame?: "default" | "responsive";
+  animateMedia?: boolean;
 };
 
 const POSITION_MAP: Record<string, string> = {
@@ -61,6 +68,7 @@ export function PageHero({
   showDescription = true,
   showMedia = true,
   backgroundImage,
+  mobileBackgroundImage,
   backgroundAlt = "",
   accent = "crimson",
   accentPosition = "top-right",
@@ -69,6 +77,9 @@ export function PageHero({
   speedLines = false,
   grain = false,
   surface = "default",
+  mediaOverlay = "default",
+  mediaFrame = "default",
+  animateMedia = true,
 }: PageHeroProps) {
   const accentHex = ACCENT_MAP[accent] ?? accent;
   const kickerStyle = kickerColor
@@ -77,14 +88,17 @@ export function PageHero({
   const gradientPos = POSITION_MAP[accentPosition] ?? "ellipse_at_top_right";
   const hasBackgroundImage = showMedia && Boolean(backgroundImage);
   const useHeatSurface = surface === "heat" && !hasBackgroundImage;
+  const hasMobileBackgroundImage = showMedia && Boolean(mobileBackgroundImage);
+  const sectionFrameClass =
+    mediaFrame === "responsive"
+      ? "min-h-[36rem] aspect-[4/5] sm:aspect-[2/1] sm:min-h-0"
+      : compact
+        ? "py-20 sm:py-28"
+        : "min-h-[60vh] flex items-end py-20 sm:py-28";
 
   return (
     <section
-      className={`relative isolate overflow-hidden bg-ms-charcoal text-ms-warm-white border-b border-ms-warm-white/12 ${
-        compact
-          ? "py-20 sm:py-28"
-          : "min-h-[60vh] flex items-end py-20 sm:py-28"
-      } ${grain ? "ms-grain" : ""} ${useHeatSurface ? "ms-page-hero-heat" : ""}`}
+      className={`relative isolate overflow-hidden bg-ms-charcoal text-ms-warm-white border-b border-ms-warm-white/12 ${sectionFrameClass} ${grain ? "ms-grain" : ""} ${useHeatSurface ? "ms-page-hero-heat" : ""}`}
     >
       {/* Background image (optional cinematic layer) */}
       {showMedia && backgroundImage ? (
@@ -96,21 +110,35 @@ export function PageHero({
           fill
           sizes="100vw"
           priority
-          className="absolute inset-0 object-cover object-center ms-animate-zoom"
+          className={`absolute inset-0 object-cover object-center ${hasMobileBackgroundImage ? "hidden sm:block" : ""} ${animateMedia ? "ms-animate-zoom" : ""}`}
+        />
+      ) : null}
+      {showMedia && mobileBackgroundImage ? (
+        <ResilientImage
+          src={mobileBackgroundImage}
+          alt={backgroundAlt}
+          fallbackSrc={backgroundImage ?? "/media/motorsport-design-hero.png"}
+          fallbackAlt="Sarga Motorsport race action"
+          fill
+          sizes="100vw"
+          priority
+          className="absolute inset-0 object-cover object-center sm:hidden"
         />
       ) : null}
 
       {/* Multi-layer gradient stack */}
-      <div
-        aria-hidden="true"
-        className={`ms-page-hero-scrim absolute inset-0 ${useHeatSurface ? "ms-page-hero-scrim--heat" : ""}`}
-        style={{
-          background:
-            hasBackgroundImage || useHeatSurface
-              ? undefined
-              : `radial-gradient(${gradientPos.replace(/_/g, " ")}, ${accentHex}18, transparent 60%)`,
-        }}
-      />
+      {mediaOverlay !== "none" ? (
+        <div
+          aria-hidden="true"
+          className={`ms-page-hero-scrim absolute inset-0 ${useHeatSurface ? "ms-page-hero-scrim--heat" : ""}`}
+          style={{
+            background:
+              hasBackgroundImage || useHeatSurface
+                ? undefined
+                : `radial-gradient(${gradientPos.replace(/_/g, " ")}, ${accentHex}18, transparent 60%)`,
+          }}
+        />
+      ) : null}
       {!hasBackgroundImage ? (
         <>
           {/* Accent blooms stay on text-only heroes; image heroes use a neutral scrim. */}

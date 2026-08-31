@@ -54,7 +54,17 @@ export function CampaignBannerSlider({
               fill
               priority={index === 0}
               sizes="100vw"
-              className="object-cover"
+              className={`object-cover ${slide.mobileImage ? "hidden sm:block" : ""}`}
+            />
+          ) : null}
+          {slide.mobileImage ? (
+            <Image
+              src={slide.mobileImage}
+              alt={index === activeIndex ? (slide.imageAlt ?? "") : ""}
+              fill
+              priority={index === 0}
+              sizes="100vw"
+              className="object-cover sm:hidden"
             />
           ) : null}
         </div>

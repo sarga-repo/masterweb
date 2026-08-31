@@ -12590,3 +12590,43 @@ Status: ✅ Done — 2026-08-29
 - No CMS content or database records were changed.
 - Future frontend-only changes require `--motorsport --restart`; rebuilding
   only `--cms` does not update the Motorsport frontend bundle.
+
+### MSR-VENDOR-HERO-CTA — Rallycross hero responsiveness and About CTA
+
+#### What was done
+
+- Added an optional mobile artwork field to reusable FIA campaign carousel
+  slides, including the CMS description and frontend population contract.
+- Wired mobile artwork rendering for the campaign carousel and reusable page
+  hero, with desktop artwork retained as the fallback.
+- Added a responsive 2:1 desktop / 4:5 mobile frame for the Rallycross hero,
+  disabled its decorative zoom animation, and removed its darkening overlay.
+- Fixed the About ecosystem CTA to accept safe internal routes and approved
+  HTTPS URLs such as `https://sarga.co`.
+
+#### Files changed
+
+- `cms/src/components/motorsport/campaign-slide.json`
+- `cms/types/generated/components.d.ts`
+- `frontend-motorsport/src/app/about/page.tsx`
+- `frontend-motorsport/src/app/campaign/[slug]/page.tsx`
+- `frontend-motorsport/src/components/sections/campaign-banner-slider.tsx`
+- `frontend-motorsport/src/components/sections/page-hero.tsx`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/types/design-system.ts`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport production build passed locally.
+- CMS production build passed locally.
+- Motorsport and CMS TypeScript checks passed.
+- Lint passed with one existing unused-import warning in
+  `components/ui/brand-logo.tsx`.
+
+#### Notes / caveats
+
+- Existing campaign slides remain valid and fall back to their desktop image
+  until editors add optional mobile artwork.
+- The mobile campaign image field is additive and does not remove or alter
+  existing media content.

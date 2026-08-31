@@ -307,6 +307,7 @@ type CmsCampaignSlide = {
   title: string;
   description?: string;
   image?: StrapiMedia | null;
+  mobileImage?: StrapiMedia | null;
   ctaLabel?: string;
   ctaUrl?: string;
   sortOrder?: number;
@@ -858,14 +859,14 @@ function formatTime(value?: string): string | undefined {
   return hours && minutes ? `${hours}:${minutes}` : value;
 }
 
-function safeInternalRoute(value?: string): string | undefined {
+export function safeInternalRoute(value?: string): string | undefined {
   if (!value || !value.startsWith("/") || value.startsWith("//")) {
     return undefined;
   }
   return value;
 }
 
-function safeExternalUrl(value?: string): string | undefined {
+export function safeExternalUrl(value?: string): string | undefined {
   if (!value) return undefined;
   try {
     const url = new URL(value);
@@ -881,6 +882,10 @@ function safeExternalUrl(value?: string): string | undefined {
     return undefined;
   }
   return undefined;
+}
+
+export function safeCmsCtaUrl(value?: string): string | undefined {
+  return safeInternalRoute(value) ?? safeExternalUrl(value);
 }
 
 function mapTicketCard(
@@ -1761,6 +1766,7 @@ export async function fetchCampaignProgramBySlug(
     populate: [
       "heroMedia",
       "bannerSlides.image",
+      "bannerSlides.mobileImage",
       "relatedTicketCtas",
       "relatedTicketCtas.image",
       "relatedTicketCtas.backgroundImage",
@@ -1823,6 +1829,7 @@ export async function fetchCampaignProgramBySlug(
         image: mediaUrl(slide.image?.url),
         imageAlt:
           slide.image?.alternativeText ?? `${slide.title} — ${program.title}`,
+        mobileImage: mediaUrl(slide.mobileImage?.url) || undefined,
         cta:
           slide.ctaLabel && slideHref
             ? {

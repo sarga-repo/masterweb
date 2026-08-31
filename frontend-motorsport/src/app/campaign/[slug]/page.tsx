@@ -258,10 +258,14 @@ export async function RallycrossCampaignPage() {
           showDescription={hero?.showDescription ?? true}
           showMedia={hero?.showMedia ?? true}
           backgroundImage={hero?.backgroundMedia?.url ?? campaign.image}
+          mobileBackgroundImage={hero?.mobileBackgroundMedia?.url}
           backgroundAlt={hero?.backgroundMedia?.alt ?? campaign.imageAlt}
           accent="crimson"
           accentPosition="bottom-left"
           surface="heat"
+          mediaOverlay="none"
+          mediaFrame="responsive"
+          animateMedia={false}
           speedLines
           grain
         >

@@ -12561,3 +12561,32 @@ Status: ✅ Done — 2026-08-29
 
 - No manual CMS content deletion or database cleanup was performed.
 - The one-time page single-types migration was intentionally not rerun.
+
+### MSR-STAGING-NEWS-CTA — Staging News gallery CTA build correction
+
+#### What was done
+
+- Confirmed the staging CMS record has `galleryCtaSection.isActive: false`.
+- Identified that staging Motorsport was still running a frontend build from
+  August 29, before the News gallery CTA mapper fix was deployed.
+- Rebuilt and restarted the staging Motorsport frontend from the current
+  repository revision.
+
+#### Files changed
+
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Staging Motorsport frontend build completed successfully.
+- Staging `/news` returned HTTP 200.
+- Rendered staging `/news` contained zero
+  `data-cms-section-key="news-gallery-cta"` elements while the CMS flag was
+  false.
+- Motorsport service restart count remained zero after deployment.
+
+#### Notes / caveats
+
+- No CMS content or database records were changed.
+- Future frontend-only changes require `--motorsport --restart`; rebuilding
+  only `--cms` does not update the Motorsport frontend bundle.

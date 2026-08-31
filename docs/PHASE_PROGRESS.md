@@ -12532,3 +12532,32 @@ Status: ✅ Done — 2026-08-29
   Gateway consume the same components.
 - No staging deployment, schema mutation, database operation, or content change
   was performed.
+
+### CMS-DEPLOY-INFO-BAND-REPAIR — Staging CMS restart-loop repair
+
+#### What was done
+
+- Fixed the always-running Information Band repair check by loading the nested
+  `informationBand.metrics` component before testing whether metrics already
+  exist.
+- Deployed the corrected CMS build to staging without the unnecessary,
+  one-time `--motorsport-page-single-types-migrate` flag.
+
+#### Files changed
+
+- `cms/src/migrations/motorsport-information-band-metrics.ts`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Local CMS TypeScript check passed.
+- Staging build completed at commit `b783d17`.
+- `sarga-cms`, `sarga-motorsport`, and `sarga-gateway` are active.
+- CMS `/admin` and Motorsport `/` returned HTTP 200.
+- CMS restart count remained unchanged at zero during a 20-second stability
+  check.
+
+#### Notes / caveats
+
+- No manual CMS content deletion or database cleanup was performed.
+- The one-time page single-types migration was intentionally not rerun.

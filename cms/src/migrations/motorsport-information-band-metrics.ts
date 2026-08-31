@@ -69,7 +69,10 @@ export async function ensureMotorsportInformationBandMetrics(strapi: Core.Strapi
       const records = await service.findMany({
         locale: "*",
         status,
-        populate: ["informationBand"],
+        // Metrics are a nested repeatable component relation. Populate them
+        // before checking whether the band needs a repair; otherwise every
+        // restart sees an empty metrics array and writes the same data again.
+        populate: ["informationBand.metrics"],
       });
 
       for (const record of records) {

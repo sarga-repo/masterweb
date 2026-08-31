@@ -43,6 +43,19 @@ test("does not let an unrelated page field change Events order", () => {
   );
 });
 
+test("maps the News gallery CTA to its renderer key and preserves visibility", () => {
+  const sections = mapMotorsportSinglePageSections({
+    routePath: "/news",
+    galleryCtaSection: {
+      isActive: false,
+      title: "Hidden gallery CTA",
+    },
+  });
+
+  assert.equal(sections[0]?.sectionKey, "news-gallery-cta");
+  assert.equal(sections[0]?.enabled, false);
+});
+
 test("deduplicates campaign sections and keeps an explicit hidden state", () => {
   const sections = mergeAuthoritativeCmsSections(
     [

@@ -93,6 +93,8 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | MS-CMS-MANUAL-2    | CMS manual rebuilt as section-pair atlas (no badges)                 | ✅ Done                  | 2026-08-25 |
 | MSR-CMS-UAT-3      | IJTC presentation hero media wiring                                 | ✅ Done                  | 2026-08-25 |
 | MSR-CMS-UAT-10     | FIA campaign presentation section key normalization and visibility | ✅ Done                  | 2026-08-28 |
+| MSR-CMS-UAT-11     | News gallery CTA visibility wiring correction | ✅ Done | 2026-08-31 |
+| CMS-ADMIN-UI-MODERNIZATION-SECONDARY-NAV | Shared secondary navigation charcoal shell and Sarga logo | ✅ Done | 2026-08-30 |
 
 ### MS-CMS-MANUAL-1 — Sarga Motorsport CMS user manual
 
@@ -11773,6 +11775,40 @@ Status: ✅ Done — 2026-08-29
 - No staging build, deployment, migration, database operation, or content
   mutation was performed.
 
+### CMS-ADMIN-UI-MODERNIZATION-SECONDARY-NAV — Shared secondary navigation charcoal shell and Sarga logo
+
+#### What was done
+
+- Applied the Sarga charcoal navigation surface to the native secondary
+  navigation region.
+- Added the `/uploads/logo-sarga-reverse.png` white brand header without replacing Strapi's
+  native menu structure.
+- Added shared rounded active, hover, focus, search, and collapse-control
+  treatments for Content Manager and other full-height secondary navigations.
+- Preserved native collection-type, single-type, plugin navigation, and
+  collapse behavior.
+
+#### Files changed
+
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/styles/admin.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Local authenticated Content Manager navigation was checked after the
+  change: logo source loaded, charcoal surfaces and crimson active state were
+  applied, and the collapse control reduced the panel to 54px while hiding
+  the menu content.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- The shared marker targets full-height, non-pagination Strapi side
+  navigations; pagination and in-content navigation remain native.
+- No staging build, deployment, migration, database operation, or content
+  mutation was performed.
+
 ### CMS-ADMIN-UI-STAGING-CSS — Production admin stylesheet delivery fix
 
 #### What was done
@@ -12434,3 +12470,65 @@ Status: ✅ Done — 2026-08-29
   not submitted or visually re-entered during this pass.
 - No staging build, deployment, migration, database operation, or content
   mutation was performed.
+
+### MSR-CMS-UAT-11 — News gallery CTA visibility wiring correction
+
+#### What was done
+
+- Aligned the `galleryCtaSection` mapper key with the News page renderer's
+  canonical `news-gallery-cta` key.
+- Preserved the explicit CMS `isActive: false` value as `enabled: false` in
+  the mapped section.
+- Added a regression test proving the hidden News gallery CTA remains hidden.
+
+#### Files changed
+
+- `frontend-motorsport/src/lib/cms-page-order.ts`
+- `frontend-motorsport/src/lib/cms-page-order.test.ts`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Focused section-order regression test passed.
+- The mapping now produces `news-gallery-cta` with `enabled: false` for a
+  CMS section whose `isActive` value is false.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- The frontend must be rebuilt/restarted after this code change for the
+  running local or staging process to load the corrected mapper.
+- No staging deployment or CMS content mutation was performed.
+
+### MSR-CMS-AUDIT-NEWS-FIELDS — News single-type field-level consumer audit
+
+#### What was done
+
+- Traced every top-level News single-type field, Hero field, Information Band
+  field, shared Page Section field, Page Availability field, and SEO field
+  against the dedicated `/news` route and shared frontend adapters.
+- Confirmed the core News presentation fields are wired and documented the
+  remaining shared fields that are not consumed by `/news`.
+- Confirmed the News Article collection, rather than generic section items,
+  supplies the visible lead and archive rows.
+- Refreshed `docs/motorsport/audit/news.md` with field-level status,
+  hardcoded/fallback notes, and a safe editor-hiding versus migration proposal.
+
+#### Files changed
+
+- `docs/motorsport/audit/news.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Read-only repository trace across the News schema, shared component schemas,
+  dedicated page mapper, News route, metadata builder, and visibility helpers.
+- Focused mapping test and Motorsport typecheck passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Shared unused fields were not removed because other Motorsport pages and
+  Gateway consume the same components.
+- No staging deployment, schema mutation, database operation, or content change
+  was performed.

@@ -375,74 +375,105 @@ export default {
         "true";
     }
 
-    // Add a compact, native-layout-aware control for the Content Manager's
-    // secondary navigation. It keeps the editor usable on smaller screens
-    // without replacing Strapi's collection/single-type navigation.
-    let contentManagerSidebarCollapsed = false;
-    let contentManagerSidebarFrame: number | null = null;
-    const syncContentManagerSidebar = () => {
-      contentManagerSidebarFrame = null;
-      const isContentManager =
-        document.documentElement.dataset.sargaAdminSurface ===
-        "content-manager";
-      const contentManagerNav = document.querySelector<HTMLElement>(
-        'nav[aria-label="Content Manager"]',
+    // Add a compact, native-layout-aware control for Strapi's secondary
+    // navigation. It keeps the editor usable on smaller screens without
+    // replacing Content Manager or plugin-provided navigation.
+    let secondaryNavigationCollapsed = false;
+    let secondaryNavigationFrame: number | null = null;
+    const getSecondaryNavigations = () =>
+      [...document.querySelectorAll<HTMLElement>("#strapi nav[aria-label]")].filter(
+        (nav) => {
+          if (nav.getAttribute("aria-label") === "Pagination") return false;
+          const rect = nav.getBoundingClientRect();
+          return rect.top <= 12 && rect.height >= window.innerHeight - 50;
+        },
       );
-      if (!isContentManager || !contentManagerNav) {
-        if (document.documentElement.dataset.sargaContentManagerSidebar) {
-          document.documentElement.dataset.sargaContentManagerSidebar = "";
-        }
+    const syncSecondaryNavigation = () => {
+      secondaryNavigationFrame = null;
+      const secondaryNavigations = getSecondaryNavigations();
+      if (!secondaryNavigations.length) {
+        document.documentElement.dataset.sargaSecondaryNavigation = "";
+        document.documentElement.dataset.sargaContentManagerSidebar = "";
         return;
       }
 
-      const header = contentManagerNav.firstElementChild;
-      if (!(header instanceof HTMLElement)) return;
+      secondaryNavigations.forEach((secondaryNavigation) => {
+        secondaryNavigation.classList.add("sarga-secondary-navigation");
+        secondaryNavigation.dataset.sargaSecondaryNavigation = "true";
+        const navigationName =
+          secondaryNavigation.getAttribute("aria-label") || "secondary";
+        let header = secondaryNavigation.querySelector<HTMLElement>(
+          ':scope > [data-sarga-secondary-navigation-header="true"]',
+        );
+        if (!header) {
+          const firstChild = secondaryNavigation.firstElementChild;
+          if (!(firstChild instanceof HTMLElement)) return;
+          header = firstChild;
+          header.dataset.sargaSecondaryNavigationHeader = "true";
+        }
 
-      let toggle = header.querySelector<HTMLButtonElement>(
-        '[data-sarga-content-manager-toggle="true"]',
-      );
-      if (!toggle) {
-        toggle = document.createElement("button");
-        toggle.type = "button";
-        toggle.dataset.sargaContentManagerToggle = "true";
-        toggle.className = "sarga-content-manager-toggle";
-        toggle.innerHTML = '<span aria-hidden="true">‹</span>';
-        header.append(toggle);
-        toggle.addEventListener("click", () => {
-          contentManagerSidebarCollapsed = !contentManagerSidebarCollapsed;
-          syncContentManagerSidebar();
-        });
-      }
+        let brand = secondaryNavigation.querySelector<HTMLElement>(
+          ':scope > [data-sarga-secondary-navigation-brand="true"]',
+        );
+        if (!brand) {
+          brand = document.createElement("div");
+          brand.className = "sarga-secondary-navigation-brand";
+          brand.dataset.sargaSecondaryNavigationBrand = "true";
+          const logo = document.createElement("img");
+          logo.src = "/uploads/logo-sarga-reverse.png";
+          logo.alt = "Sarga.co";
+          logo.width = 132;
+          logo.height = 40;
+          logo.decoding = "async";
+          brand.append(logo);
+          secondaryNavigation.insertBefore(brand, header);
+        }
 
-      const state = contentManagerSidebarCollapsed ? "collapsed" : "expanded";
-      if (
-        document.documentElement.dataset.sargaContentManagerSidebar !== state
-      ) {
-        document.documentElement.dataset.sargaContentManagerSidebar = state;
-      }
-      const label = contentManagerSidebarCollapsed
-        ? "Expand Content Manager navigation"
-        : "Collapse Content Manager navigation";
-      if (toggle.getAttribute("aria-label") !== label) {
+        let toggle = header.querySelector<HTMLButtonElement>(
+          '[data-sarga-secondary-navigation-toggle="true"]',
+        );
+        if (!toggle) {
+          toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.dataset.sargaSecondaryNavigationToggle = "true";
+          toggle.className = "sarga-secondary-navigation-toggle";
+          toggle.innerHTML = '<span aria-hidden="true">‹</span>';
+          header.append(toggle);
+          toggle.addEventListener("click", () => {
+            secondaryNavigationCollapsed = !secondaryNavigationCollapsed;
+            syncSecondaryNavigation();
+          });
+        }
+
+        const state = secondaryNavigationCollapsed ? "collapsed" : "expanded";
+        const label = secondaryNavigationCollapsed
+          ? `Expand ${navigationName} navigation`
+          : `Collapse ${navigationName} navigation`;
         toggle.setAttribute("aria-label", label);
-      }
-      if (toggle.title !== label) toggle.title = label;
-      const glyph = contentManagerSidebarCollapsed ? "›" : "‹";
-      if (toggle.textContent !== glyph) {
-        toggle.innerHTML = `<span aria-hidden="true">${glyph}</span>`;
-      }
+        toggle.title = label;
+        const glyph = secondaryNavigationCollapsed ? "›" : "‹";
+        if (toggle.textContent !== glyph) {
+          toggle.innerHTML = `<span aria-hidden="true">${glyph}</span>`;
+        }
+        secondaryNavigation.dataset.sargaSecondaryNavigationState = state;
+      });
+
+      document.documentElement.dataset.sargaSecondaryNavigation =
+        secondaryNavigationCollapsed ? "collapsed" : "expanded";
+      document.documentElement.dataset.sargaContentManagerSidebar =
+        secondaryNavigationCollapsed ? "collapsed" : "expanded";
     };
-    const scheduleContentManagerSidebarSync = () => {
-      if (contentManagerSidebarFrame !== null) return;
-      contentManagerSidebarFrame = window.requestAnimationFrame(
-        syncContentManagerSidebar,
+    const scheduleSecondaryNavigationSync = () => {
+      if (secondaryNavigationFrame !== null) return;
+      secondaryNavigationFrame = window.requestAnimationFrame(
+        syncSecondaryNavigation,
       );
     };
-    scheduleContentManagerSidebarSync();
-    const contentManagerSidebarObserver = new MutationObserver(
-      scheduleContentManagerSidebarSync,
+    scheduleSecondaryNavigationSync();
+    const secondaryNavigationObserver = new MutationObserver(
+      scheduleSecondaryNavigationSync,
     );
-    contentManagerSidebarObserver.observe(document.body, {
+    secondaryNavigationObserver.observe(document.body, {
       childList: true,
       subtree: true,
     });

@@ -138,58 +138,225 @@ html #strapi > div > div > nav a.active svg[stroke="currentColor"] {
   stroke: currentColor;
 }
 
-/* Content Manager secondary navigation: keep the native panel, but give its
- * selected entry a clearer editor-friendly surface and provide a compact
- * collapse control for wider editing space. */
-html #strapi nav[aria-label="Content Manager"] > div:first-child {
+/* Shared secondary navigation: keep Strapi's native panel and navigation
+ * semantics, while giving every side menu the same Sarga Content Studio
+ * surface. The aria-label fallback keeps the first paint styled before the
+ * shared bootstrap marker is attached. */
+html #strapi nav.sarga-secondary-navigation,
+html #strapi nav[aria-label="Content Manager"] {
+  overflow: hidden;
+  border-right: 1px solid #343434;
+  background: var(--sarga-admin-ink);
+  color: var(--sarga-admin-surface-subtle);
+  color-scheme: dark;
+}
+
+html #strapi nav.sarga-secondary-navigation
+  > [data-sarga-secondary-navigation-brand="true"],
+html #strapi nav[aria-label="Content Manager"]
+  > [data-sarga-secondary-navigation-brand="true"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70px;
+  padding: 12px 18px;
+  border-bottom: 1px solid #343434;
+  background: #202020;
+}
+
+html #strapi nav.sarga-secondary-navigation
+  > [data-sarga-secondary-navigation-brand="true"] img,
+html #strapi nav[aria-label="Content Manager"]
+  > [data-sarga-secondary-navigation-brand="true"] img {
+  display: block;
+  width: 132px;
+  height: 40px;
+  object-fit: contain;
+  object-position: center;
+}
+
+html #strapi nav.sarga-secondary-navigation
+  > [data-sarga-secondary-navigation-header="true"],
+html #strapi nav[aria-label="Content Manager"]
+  > [data-sarga-secondary-navigation-header="true"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding-inline: 14px 10px;
+  min-height: 54px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #343434;
+  background: #272727;
 }
 
-html #strapi nav[aria-label="Content Manager"] > div:first-child h2 {
+html #strapi nav.sarga-secondary-navigation
+  > [data-sarga-secondary-navigation-header="true"] h2,
+html #strapi nav[aria-label="Content Manager"]
+  > [data-sarga-secondary-navigation-header="true"] h2 {
   min-width: 0;
   overflow: hidden;
+  margin: 0;
   font-size: 15px;
   font-weight: 800;
   letter-spacing: 0.01em;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--sarga-admin-surface-subtle);
 }
 
+html #strapi nav.sarga-secondary-navigation > [role="separator"],
+html #strapi nav[aria-label="Content Manager"] > [role="separator"] {
+  height: 1px;
+  background: #343434;
+}
+
+html #strapi nav.sarga-secondary-navigation > div[dir="ltr"],
+html #strapi nav[aria-label="Content Manager"] > div[dir="ltr"] {
+  background: var(--sarga-admin-ink);
+}
+
+html #strapi nav.sarga-secondary-navigation input[type="search"],
+html #strapi nav[aria-label="Content Manager"] input[type="search"] {
+  border: 1px solid #4a4a4a;
+  border-radius: var(--sarga-admin-radius-md);
+  background: #2a2a2a;
+  color: var(--sarga-admin-surface-subtle);
+  caret-color: var(--sarga-admin-focus);
+}
+
+html #strapi nav.sarga-secondary-navigation input[type="search"]::placeholder,
+html #strapi nav[aria-label="Content Manager"]
+  input[type="search"]::placeholder {
+  color: #b9b2a7;
+}
+
+html #strapi nav.sarga-secondary-navigation a,
 html #strapi nav[aria-label="Content Manager"] a {
   border: 1px solid transparent;
   border-radius: var(--sarga-admin-radius-md);
-  color: var(--sarga-admin-ink);
+  color: #eee8de;
   margin-inline: 10px;
   transition: background-color 140ms ease, border-color 140ms ease,
     color 140ms ease, transform 140ms ease;
 }
 
+html #strapi nav.sarga-secondary-navigation a:hover,
+html #strapi nav.sarga-secondary-navigation a:focus-visible,
 html #strapi nav[aria-label="Content Manager"] a:hover,
 html #strapi nav[aria-label="Content Manager"] a:focus-visible {
-  border-color: #f0cbd0;
-  background: #fff7f7;
-  color: var(--sarga-admin-primary);
+  border-color: #8e4650 !important;
+  background: #3b2a30 !important;
+  color: #fff9ee !important;
   transform: translateX(2px);
 }
 
-html #strapi nav[aria-label="Content Manager"] a.active {
+html #strapi nav.sarga-secondary-navigation a:hover *,
+html #strapi nav.sarga-secondary-navigation a:focus-visible *,
+html #strapi nav[aria-label="Content Manager"] a:hover *,
+html #strapi nav[aria-label="Content Manager"] a:focus-visible * {
+  color: inherit !important;
+}
+
+/* Strapi paints the native menu surface on the link's first child rather
+ * than on the anchor itself. Override that layer as well or a light native
+ * surface can sit over the dark hover text. */
+html #strapi nav.sarga-secondary-navigation a:hover > div,
+html #strapi nav.sarga-secondary-navigation a:focus-visible > div,
+html #strapi nav[aria-label="Content Manager"] a:hover > div,
+html #strapi nav[aria-label="Content Manager"] a:focus-visible > div {
+  background-color: #3b2a30 !important;
+  color: #fff9ee !important;
+}
+
+html #strapi nav.sarga-secondary-navigation a.active > div,
+html #strapi nav.sarga-secondary-navigation a[aria-current="page"] > div,
+html #strapi nav[aria-label="Content Manager"] a.active > div,
+html #strapi nav[aria-label="Content Manager"] a[aria-current="page"] > div {
+  background-color: var(--sarga-admin-primary) !important;
+  color: #fff9ee !important;
+}
+
+html #strapi nav.sarga-secondary-navigation a:hover > div *,
+html #strapi nav.sarga-secondary-navigation a:focus-visible > div *,
+html #strapi nav.sarga-secondary-navigation a.active > div *,
+html #strapi nav.sarga-secondary-navigation a[aria-current="page"] > div *,
+html #strapi nav[aria-label="Content Manager"] a:hover > div *,
+html #strapi nav[aria-label="Content Manager"] a:focus-visible > div *,
+html #strapi nav[aria-label="Content Manager"] a.active > div *,
+html #strapi nav[aria-label="Content Manager"]
+  a[aria-current="page"] > div * {
+  color: inherit !important;
+}
+
+html #strapi nav.sarga-secondary-navigation
+  > div[dir="ltr"]
+  ul
+  > li
+  > div
+  > div
+  > div:first-child
+  span,
+html #strapi nav[aria-label="Content Manager"]
+  > div[dir="ltr"]
+  ul
+  > li
+  > div
+  > div
+  > div:first-child
+  span {
+  color: #d8d1c6 !important;
+}
+
+/* The Collection Types and Single Types totals use a light native pill. Keep
+ * their numerals dark for contrast instead of inheriting the navigation text
+ * color. */
+html #strapi nav.sarga-secondary-navigation
+  > div[dir="ltr"]
+  ul
+  > li
+  > div
+  > div
+  > div
+  > div:last-child
+  span,
+html #strapi nav[aria-label="Content Manager"]
+  > div[dir="ltr"]
+  ul
+  > li
+  > div
+  > div
+  > div
+  > div:last-child
+  span {
+  color: #4a4640 !important;
+}
+
+html #strapi nav.sarga-secondary-navigation a.active,
+html #strapi nav.sarga-secondary-navigation a[aria-current="page"],
+html #strapi nav[aria-label="Content Manager"] a.active,
+html #strapi nav[aria-label="Content Manager"] a[aria-current="page"] {
   border-color: #e8192c;
-  background: #fff1f3;
+  background: var(--sarga-admin-primary);
   box-shadow: inset 3px 0 0 var(--sarga-admin-primary);
-  color: #a51222;
+  color: #fff9ee;
 }
 
+html #strapi nav.sarga-secondary-navigation a.active:hover,
+html #strapi nav.sarga-secondary-navigation a.active:focus-visible,
+html #strapi nav.sarga-secondary-navigation a[aria-current="page"]:hover,
+html #strapi nav.sarga-secondary-navigation a[aria-current="page"]:focus-visible,
 html #strapi nav[aria-label="Content Manager"] a.active:hover,
-html #strapi nav[aria-label="Content Manager"] a.active:focus-visible {
+html #strapi nav[aria-label="Content Manager"] a.active:focus-visible,
+html #strapi nav[aria-label="Content Manager"] a[aria-current="page"]:hover,
+html #strapi nav[aria-label="Content Manager"]
+  a[aria-current="page"]:focus-visible {
   border-color: var(--sarga-admin-primary);
-  background: #ffe7eb;
-  color: var(--sarga-admin-primary-hover);
+  background: var(--sarga-admin-primary-hover);
+  color: #fff9ee;
 }
 
+html #strapi nav.sarga-secondary-navigation
+  [data-sarga-secondary-navigation-toggle="true"],
 html #strapi nav[aria-label="Content Manager"]
   [data-sarga-content-manager-toggle="true"] {
   display: inline-flex;
@@ -199,10 +366,10 @@ html #strapi nav[aria-label="Content Manager"]
   width: 30px;
   height: 30px;
   padding: 0;
-  border: 1px solid var(--sarga-admin-border);
+  border: 1px solid #5a5a5a;
   border-radius: 999px;
-  background: var(--sarga-admin-surface-subtle);
-  color: var(--sarga-admin-muted);
+  background: #f7f3ec;
+  color: var(--sarga-admin-ink);
   cursor: pointer;
   font-size: 22px;
   font-weight: 500;
@@ -211,41 +378,83 @@ html #strapi nav[aria-label="Content Manager"]
     color 140ms ease, transform 140ms ease;
 }
 
+html #strapi nav.sarga-secondary-navigation
+  [data-sarga-secondary-navigation-toggle="true"]:hover,
+html #strapi nav.sarga-secondary-navigation
+  [data-sarga-secondary-navigation-toggle="true"]:focus-visible,
 html #strapi nav[aria-label="Content Manager"]
   [data-sarga-content-manager-toggle="true"]:hover,
 html #strapi nav[aria-label="Content Manager"]
   [data-sarga-content-manager-toggle="true"]:focus-visible {
-  border-color: #b9c9e4;
-  background: #edf3ff;
-  color: var(--sarga-admin-secondary);
+  border-color: var(--sarga-admin-focus);
+  background: #fff9ee;
+  color: var(--sarga-admin-primary);
   outline: none;
   transform: scale(1.04);
 }
 
+html #strapi nav.sarga-secondary-navigation
+  [data-sarga-secondary-navigation-toggle="true"]:focus-visible,
 html #strapi nav[aria-label="Content Manager"]
   [data-sarga-content-manager-toggle="true"]:focus-visible {
   box-shadow: 0 0 0 3px rgb(245 200 0 / 28%);
 }
 
-html[data-sarga-content-manager-sidebar="collapsed"]
+html[data-sarga-secondary-navigation="collapsed"]
+  #strapi nav.sarga-secondary-navigation,
+html[data-sarga-secondary-navigation="collapsed"]
   #strapi nav[aria-label="Content Manager"] {
   width: 54px !important;
   min-width: 54px !important;
   flex: 0 0 54px !important;
 }
 
-html[data-sarga-content-manager-sidebar="collapsed"]
-  #strapi nav[aria-label="Content Manager"] > div:first-child {
+html[data-sarga-secondary-navigation="collapsed"]
+  #strapi nav.sarga-secondary-navigation
+  > [data-sarga-secondary-navigation-brand="true"],
+html[data-sarga-secondary-navigation="collapsed"]
+  #strapi nav[aria-label="Content Manager"]
+  > [data-sarga-secondary-navigation-brand="true"] {
+  justify-content: center;
+  min-height: 54px;
+  padding: 8px;
+}
+
+html[data-sarga-secondary-navigation="collapsed"]
+  #strapi nav.sarga-secondary-navigation
+  > [data-sarga-secondary-navigation-brand="true"] img,
+html[data-sarga-secondary-navigation="collapsed"]
+  #strapi nav[aria-label="Content Manager"]
+  > [data-sarga-secondary-navigation-brand="true"] img {
+  width: 32px;
+  height: 32px;
+  object-position: center;
+}
+
+html[data-sarga-secondary-navigation="collapsed"]
+  #strapi nav.sarga-secondary-navigation
+  > [data-sarga-secondary-navigation-header="true"],
+html[data-sarga-secondary-navigation="collapsed"]
+  #strapi nav[aria-label="Content Manager"]
+  > [data-sarga-secondary-navigation-header="true"] {
   justify-content: center;
   padding-inline: 8px;
 }
 
-html[data-sarga-content-manager-sidebar="collapsed"]
-  #strapi nav[aria-label="Content Manager"] > div:first-child h2,
-html[data-sarga-content-manager-sidebar="collapsed"]
+html[data-sarga-secondary-navigation="collapsed"]
+  #strapi nav.sarga-secondary-navigation
+  > [data-sarga-secondary-navigation-header="true"] h2,
+html[data-sarga-secondary-navigation="collapsed"]
+  #strapi nav[aria-label="Content Manager"]
+  > [data-sarga-secondary-navigation-header="true"] h2,
+html[data-sarga-secondary-navigation="collapsed"]
+  #strapi nav.sarga-secondary-navigation > [role="separator"],
+html[data-sarga-secondary-navigation="collapsed"]
   #strapi nav[aria-label="Content Manager"] > [role="separator"],
-html[data-sarga-content-manager-sidebar="collapsed"]
-  #strapi nav[aria-label="Content Manager"] > div:nth-child(3) {
+html[data-sarga-secondary-navigation="collapsed"]
+  #strapi nav.sarga-secondary-navigation > div[dir="ltr"],
+html[data-sarga-secondary-navigation="collapsed"]
+  #strapi nav[aria-label="Content Manager"] > div[dir="ltr"] {
   display: none;
 }
 

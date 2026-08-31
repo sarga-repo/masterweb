@@ -94,6 +94,11 @@ to the CMS.
   widget surfaces.
 - Extended the same visual language to full-page Media Library cards and
   authentication inputs/actions.
+- Added a shared charcoal treatment to full-height secondary side navigation,
+  including the `/uploads/logo-sarga-reverse.png` white brand header, rounded active/hover
+  states, dark search control, and native collapse affordance. This applies
+  to Content Manager and other qualifying Strapi side navigations without
+  hardcoding content-type names.
 
 ## Collection Type and Single Type behavior
 
@@ -140,6 +145,9 @@ changes were not triggered; native Strapi action semantics remain untouched.
   The customization avoids depending on those classes and uses semantic/ARIA
   structure, which is more upgrade-resistant but cannot restyle every deeply
   encapsulated plugin surface.
+- Secondary navigation enhancement is intentionally limited to full-height,
+  non-pagination side navigation nodes so in-content pagination and toolbar
+  navigation remain native.
 - Some third-party custom fields may expose no stable semantic wrapper and will
   retain more native styling.
 - The persisted Content Manager field order/layout remains controlled by the

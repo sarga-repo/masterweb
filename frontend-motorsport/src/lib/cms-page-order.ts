@@ -122,6 +122,7 @@ const MOTORSPORT_PAGE_SECTION_ORDER: Record<string, string[]> = {
 
 const MOTORSPORT_PAGE_SECTION_KEYS: Record<string, string> = {
   teamSection: "team-intro",
+  galleryCtaSection: "news-gallery-cta",
 };
 
 function fallbackPageSectionOrder(page: OrderedCmsSinglePage): string[] {

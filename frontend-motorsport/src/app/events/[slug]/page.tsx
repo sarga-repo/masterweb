@@ -190,9 +190,13 @@ export default async function EventDetailPage({ params }: Props) {
             backgroundAlt={
               presentationHero?.backgroundMedia?.alt || event.imageAlt
             }
+            mobileBackgroundImage={
+              presentationHero?.mobileBackgroundMedia?.url
+            }
             accent="orange"
             accentPosition="bottom-left"
             surface="heat"
+            mediaFrame="responsive"
             speedLines
             grain
           >

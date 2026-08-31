@@ -146,10 +146,14 @@ export default async function ArticleDetailPage({ params }: Props) {
             showDescription={presentationHero?.showDescription}
             showMedia={presentationHero?.showMedia}
             backgroundImage={presentationHero?.backgroundMedia?.url}
+            mobileBackgroundImage={
+              presentationHero?.mobileBackgroundMedia?.url
+            }
             backgroundAlt={
               presentationHero?.backgroundMedia?.alt ||
               `${article.title} - Sarga Motorsport`
             }
+            mediaFrame="responsive"
           />
         </div>
       ) : null}

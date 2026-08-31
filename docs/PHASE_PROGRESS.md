@@ -12659,6 +12659,39 @@ Status: ✅ Done — 2026-08-29
 - No CMS content or media records were changed.
 - The frontend must be rebuilt after this query-contract change.
 
+### MSR-MOBILE-MEDIA-CONSISTENCY — Responsive artwork across Motorsport heroes and sliders
+
+#### What was done
+
+- Wired `motorsportPresentation.hero.mobileBackgroundMedia` into standard
+  event and news detail heroes, not only the campaign route.
+- Applied the full-width 4:5 mobile frame to the reusable event/news hero
+  fallback component as well as the campaign slider.
+- Applied the same 4:5 mobile frame to the homepage hero slider when mobile
+  slide artwork is available; desktop hero sizing remains unchanged.
+- Preserved native mobile/desktop asset switching and existing slider controls.
+
+#### Files changed
+
+- `frontend-motorsport/src/app/events/[slug]/page.tsx`
+- `frontend-motorsport/src/app/news/[slug]/page.tsx`
+- `frontend-motorsport/src/components/sections/campaign-banner-slider.tsx`
+- `frontend-motorsport/src/components/sections/motorsport-page-hero.tsx`
+- `frontend-motorsport/src/components/sections/motorsport-hero.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Motorsport TypeScript check passed.
+- Motorsport production build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- Mobile artwork should continue to use the CMS-recommended 1080 × 1350 px
+  (4:5) composition. Desktop artwork remains the fallback when no mobile
+  asset is configured.
+
 ### MSR-VENDOR-MOBILE-HERO-FRAME — Mobile hero crop correction
 
 #### What was done

@@ -114,7 +114,7 @@ export function MotorsportHero({ slides }: MotorsportHeroProps) {
 
   return (
     <section
-      className="ms-home-hero relative isolate overflow-hidden bg-ms-charcoal text-ms-warm-white [touch-action:pan-y]"
+      className="ms-home-hero relative isolate w-full max-sm:aspect-[4/5] max-sm:min-h-0 overflow-hidden bg-ms-charcoal text-ms-warm-white [touch-action:pan-y]"
       aria-label="Featured Sarga Motorsport stories"
       aria-roledescription="carousel"
       onMouseEnter={() => setInteractionPaused(true)}

@@ -28,6 +28,7 @@ import {
 
 import {
   fetchStrapiList,
+  fetchStrapiListResult,
   fetchStrapiSingle,
   mediaUrl,
   isStrapiPreviewEnabled,
@@ -1286,7 +1287,7 @@ export async function fetchHomepageData(
       locale: requestLocale,
       revalidate: 0,
     }),
-    fetchStrapiList<CmsEvent>("motorsport-events", {
+    fetchStrapiListResult<CmsEvent>("motorsport-events", {
       populate: [
         "coverImage",
         "heroMedia",
@@ -1485,7 +1486,9 @@ export async function fetchHomepageData(
     : PLACEHOLDER_PAGE;
 
   /* ---- Events ---- */
-  const cmsEvents = resolvePreviewCollection(eventsRes?.data, [], isPreview)
+  const eventResponse =
+    eventsRes.state === "success" ? eventsRes.response : undefined;
+  const cmsEvents = resolvePreviewCollection(eventResponse?.data, [], isPreview)
     .filter(isHomepageEventVisible)
     .map(mapEvent);
   const manuallyFeaturedEvent =
@@ -1514,9 +1517,9 @@ export async function fetchHomepageData(
     manuallyFeaturedEvent ??
     cmsEvents.find((e) => e.status === "tickets-open") ??
     cmsEvents[0] ??
-    (isPreview ? null : PLACEHOLDER_EVENT);
+    (isPreview || eventsRes.state === "empty" ? null : PLACEHOLDER_EVENT);
   const upcomingEvents =
-    cmsEvents.length >= 2
+    eventsRes.state === "success" || eventsRes.state === "empty"
       ? cmsEvents.filter((e) => e.href !== featuredEvent?.href).slice(0, 4)
       : isPreview
         ? cmsEvents.filter((e) => e.href !== featuredEvent?.href).slice(0, 4)

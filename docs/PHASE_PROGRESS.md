@@ -12743,3 +12743,30 @@ Status: ✅ Done — 2026-08-29
 
 - The recommended mobile source ratio remains 4:5; `4500 × 5625` is a valid
   4:5 source. The correction addresses the rendered frame, not the asset.
+
+### MSR-HOMEPAGE-EMPTY-EVENTS — Prevent deleted demo events from returning
+
+#### What was done
+
+- Changed the homepage event read to preserve Strapi’s `empty` result state.
+- An intentionally empty Motorsport Event collection now produces no featured
+  or upcoming event cards.
+- Curated placeholder events remain available only when the CMS request is
+  unavailable, preserving the outage fallback behavior.
+
+#### Files changed
+
+- `frontend-motorsport/src/lib/homepage-data.ts`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Reviewed the CMS client result contract to distinguish `empty` from
+  `unavailable`.
+- Motorsport TypeScript check and production build are required before
+  deployment.
+
+#### Notes / caveats
+
+- Existing CMS events, including manually featured events or programs, still
+  render when they are present and visible for Motorsport.

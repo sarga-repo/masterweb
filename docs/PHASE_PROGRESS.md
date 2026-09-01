@@ -12770,3 +12770,29 @@ Status: ✅ Done — 2026-08-29
 
 - Existing CMS events, including manually featured events or programs, still
   render when they are present and visible for Motorsport.
+
+### MSR-NEWS-FEATURED-HEADING — Prevent lead story headline crop
+
+#### What was done
+
+- Added a dedicated responsive type rule for the News lead story heading.
+- Allowed unusually wide headline words to wrap safely within the blue feature
+  panel instead of extending past its content column.
+
+#### Files changed
+
+- `frontend-motorsport/src/app/news/page.tsx`
+- `frontend-motorsport/src/app/globals.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Reproduced the issue at a wide desktop viewport: the headline's rendered
+  content width exceeded its column width.
+- Verified the fix keeps the title within the lead story panel at the affected
+  desktop breakpoint.
+
+#### Notes / caveats
+
+- The adjustment is scoped to the News lead story and does not change other
+  Motorsport feature headings.

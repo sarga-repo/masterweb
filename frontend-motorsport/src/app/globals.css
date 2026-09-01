@@ -600,6 +600,14 @@ select {
   text-transform: uppercase;
 }
 
+/* The lead story has a narrow editorial copy column. Keep its display
+ * headline fluid so wide words such as "MOTORSPORT" never run past the
+ * panel edge at large desktop widths. */
+.ms-news-featured-title {
+  font-size: clamp(1.75rem, 2.4vw, 2.25rem);
+  overflow-wrap: break-word;
+}
+
 .ms-heading-card {
   font-family: var(--font-display);
   font-size: var(--ms-type-card);

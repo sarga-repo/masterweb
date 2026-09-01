@@ -236,7 +236,7 @@ export default async function NewsPage() {
                             {featured.publishedLabel}
                           </time>
                         </div>
-                        <h2 className="ms-heading-feature mt-8 text-ms-warm-white">
+                        <h2 className="ms-news-featured-title ms-heading-feature mt-8 text-ms-warm-white">
                           <Link href={featured.href}>{featured.title}</Link>
                         </h2>
                         {featured.excerpt ? (

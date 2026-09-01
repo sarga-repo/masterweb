@@ -91,7 +91,7 @@ export function PageHero({
   const hasMobileBackgroundImage = showMedia && Boolean(mobileBackgroundImage);
   const sectionFrameClass =
     mediaFrame === "responsive"
-      ? "w-full aspect-[4/5] sm:aspect-[2/1]"
+      ? "w-full aspect-[4/5] flex items-end py-12 sm:aspect-[2/1] sm:py-20"
       : compact
         ? "py-20 sm:py-28"
         : "min-h-[60vh] flex items-end py-20 sm:py-28";

@@ -12693,6 +12693,30 @@ Status: ✅ Done — 2026-08-29
   asset is configured. Sliders use containment because their copy and control
   area is taller than a strict 4:5 frame on small screens.
 
+### MSR-MOBILE-HERO-CTA — Restore responsive hero CTA placement
+
+#### What was done
+
+- Restored bottom-aligned content on the responsive PageHero frame.
+- This returns Rallycross hero CTAs to the lower-left position on desktop and
+  mobile while retaining the full-width 4:5 mobile frame.
+
+#### Files changed
+
+- `frontend-motorsport/src/components/sections/page-hero.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Local Motorsport TypeScript check passed.
+- Local Motorsport production build passed.
+- `git diff --check` passed.
+
+#### Notes / caveats
+
+- The CTA is frontend-rendered and remains driven by the existing CMS CTA
+  fields; the source artwork is unchanged.
+
 ### MSR-VENDOR-MOBILE-HERO-FRAME — Mobile hero crop correction
 
 #### What was done

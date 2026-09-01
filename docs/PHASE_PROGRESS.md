@@ -95,6 +95,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | MSR-CMS-UAT-10     | FIA campaign presentation section key normalization and visibility | ✅ Done                  | 2026-08-28 |
 | MSR-CMS-UAT-11     | News gallery CTA visibility wiring correction | ✅ Done | 2026-08-31 |
 | CMS-ADMIN-UI-MODERNIZATION-SECONDARY-NAV | Shared secondary navigation charcoal shell and Sarga logo | ✅ Done | 2026-08-30 |
+| MSR-NEWS-FEATURED-HEADING | News lead story heading crop correction | ✅ Done | 2026-09-01 |
 
 ### MS-CMS-MANUAL-1 — Sarga Motorsport CMS user manual
 

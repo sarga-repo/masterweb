@@ -86,6 +86,12 @@
       "allowedTypes": ["images"]
     },
     "themeKey": { "type": "string" },
+    "showLanguageSelector": {
+      "type": "boolean",
+      "default": true,
+      "required": false,
+      "description": "Show the language selector in the public site header and mobile navigation."
+    },
     "order": { "type": "integer", "default": 0 },
     "isActive": { "type": "boolean", "default": true }
   }

@@ -1151,6 +1151,46 @@ export interface ApiLeadershipPersonLeadershipPerson
   };
 }
 
+export interface ApiLocalizedPresentationConfigLocalizedPresentationConfig
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'localized_presentation_configs';
+  info: {
+    description: 'Internal locale inheritance state for shared presentation controls.';
+    displayName: 'Localized Presentation Config';
+    pluralName: 'localized-presentation-configs';
+    singularName: 'localized-presentation-config';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    i18n: {
+      localized: false;
+    };
+  };
+  attributes: {
+    contentTypeUid: Schema.Attribute.String & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    documentIdRef: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::localized-presentation-config.localized-presentation-config'
+    > &
+      Schema.Attribute.Private;
+    mode: Schema.Attribute.Enumeration<['local', 'global', 'inherit']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'local'>;
+    publishedAt: Schema.Attribute.DateTime;
+    sourceLocale: Schema.Attribute.Enumeration<['en', 'id']>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiMediaGalleryMediaGallery
   extends Struct.CollectionTypeSchema {
   collectionName: 'media_galleries';
@@ -4040,6 +4080,8 @@ export interface ApiSiteSite extends Struct.CollectionTypeSchema {
     name: Schema.Attribute.String & Schema.Attribute.Required;
     order: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     publishedAt: Schema.Attribute.DateTime;
+    showLanguageSelector: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     themeKey: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
@@ -4772,6 +4814,7 @@ declare module '@strapi/strapi' {
       'api::inquiry-submission.inquiry-submission': ApiInquirySubmissionInquirySubmission;
       'api::job-vacancy.job-vacancy': ApiJobVacancyJobVacancy;
       'api::leadership-person.leadership-person': ApiLeadershipPersonLeadershipPerson;
+      'api::localized-presentation-config.localized-presentation-config': ApiLocalizedPresentationConfigLocalizedPresentationConfig;
       'api::media-gallery.media-gallery': ApiMediaGalleryMediaGallery;
       'api::merchandise-item.merchandise-item': ApiMerchandiseItemMerchandiseItem;
       'api::motorsport-about-page.motorsport-about-page': ApiMotorsportAboutPageMotorsportAboutPage;

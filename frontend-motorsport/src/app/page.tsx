@@ -117,6 +117,7 @@ export default async function HomePage() {
         locale={locale}
         dictionary={dictionary}
         navigationSource={navigation.source}
+        showLanguageSelector={chrome.showLanguageSelector}
         logoSrc={chrome.headerLogo}
         logoAlt={chrome.headerLogoAlt}
       />

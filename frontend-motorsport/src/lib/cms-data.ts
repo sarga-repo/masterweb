@@ -404,6 +404,7 @@ type CmsSite = {
   description?: string;
   themeKey?: string;
   isActive?: boolean;
+  showLanguageSelector?: boolean;
   order?: number;
   logo?: StrapiMedia | null;
   headerLogo?: StrapiMedia | null;
@@ -441,6 +442,7 @@ export type CmsFooterSocialLink = {
 };
 
 export type MotorsportChrome = {
+  showLanguageSelector?: boolean;
   headerLogo?: string;
   headerLogoAlt?: string;
   footerLogo?: string;
@@ -515,6 +517,7 @@ export async function fetchMotorsportChrome(
     .filter((column) => column.links.length);
 
   return {
+    showLanguageSelector: site?.showLanguageSelector ?? true,
     headerLogo:
       mediaUrl(site?.headerLogo?.url) ||
       "/brand/logo-sarga-motorsport-symbol-sport.png",

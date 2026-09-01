@@ -24,6 +24,7 @@ import { retireMotorsportLegacyFields } from "./migrations/motorsport-legacy-fie
 import { ensureMotorsportTicketsPage } from "./migrations/motorsport-tickets-page";
 import { migrateMotorsportProgramTicketCtas } from "./migrations/motorsport-program-ticket-cta";
 import { ensureMotorsportInformationBandMetrics } from "./migrations/motorsport-information-band-metrics";
+import { ensureMotorsportLanguageSelectorSetting } from "./migrations/motorsport-language-selector";
 import { ensureFrontendApiTokenPermissions } from "./access-control/api-token-permissions";
 import {
   backfillMotorsportPageRoutes,
@@ -73,6 +74,7 @@ export default {
     await retireMotorsportLegacyFields(strapi);
     await ensureMotorsportTicketsPage(strapi);
     await ensureMotorsportInformationBandMetrics(strapi);
+    await ensureMotorsportLanguageSelectorSetting(strapi);
     await backfillMotorsportPageRoutes(strapi);
     registerMotorsportRevalidation(strapi);
   },

@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "localized_presentation_configs",
+  "info": {
+    "singularName": "localized-presentation-config",
+    "pluralName": "localized-presentation-configs",
+    "displayName": "Localized Presentation Config",
+    "description": "Internal locale inheritance state for shared presentation controls."
+  },
+  "options": { "draftAndPublish": false },
+  "pluginOptions": { "i18n": { "localized": false } },
+  "attributes": {
+    "contentTypeUid": {
+      "type": "string",
+      "required": true
+    },
+    "documentIdRef": {
+      "type": "string",
+      "required": true
+    },
+    "locale": {
+      "type": "enumeration",
+      "enum": ["en", "id"],
+      "required": true
+    },
+    "mode": {
+      "type": "enumeration",
+      "enum": ["local", "global", "inherit"],
+      "default": "local",
+      "required": true
+    },
+    "sourceLocale": {
+      "type": "enumeration",
+      "enum": ["en", "id"]
+    }
+  }
+}

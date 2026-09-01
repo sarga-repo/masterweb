@@ -10,11 +10,21 @@ import { APPROVED_MOTORSPORT_PREVIEW_UIDS } from "../../../preview/preview-path"
 type Locale = "en" | "id";
 type PreviewStatus = "draft" | "published";
 type EditorAction = "Save" | "Publish";
-type BusyAction = EditorAction | "status" | null;
+type PresentationAction = "set-global" | "use-global" | "reset-local";
+type BusyAction = EditorAction | "presentation" | null;
 
 type EditorActionState = {
   saveDisabled: boolean;
   publishDisabled: boolean;
+};
+
+type PresentationActionState = {
+  controls: Array<{
+    action: PresentationAction;
+    label: string;
+    disabled: boolean;
+  }>;
+  mode: "local" | "global" | "inherit" | null;
 };
 
 type ToastState = {
@@ -86,6 +96,12 @@ const PREVIEW_ZOOM_STEP = 0.05;
 const PREVIEW_DEVICE_WIDTHS: Record<PreviewDevice, number> = {
   desktop: 1440,
   mobile: 390,
+};
+
+const PRESENTATION_ACTION_LABELS: Record<PresentationAction, string> = {
+  "set-global": "Set as global config",
+  "use-global": "Use global config",
+  "reset-local": "Use local config",
 };
 
 const ENTRY_TITLES: Record<string, string> = {
@@ -189,7 +205,7 @@ const styles: Record<string, CSSProperties> = {
     height: 31,
     padding: "0 34px 0 10px",
     border: "1px solid #c5cbd1",
-    borderRadius: 6,
+    borderRadius: 0,
     background: "#ffffff",
     color: "rgb(40 51 64)",
     font: "inherit",
@@ -205,7 +221,7 @@ const styles: Record<string, CSSProperties> = {
     boxSizing: "border-box",
     padding: "10px 12px",
     border: "1px solid rgb(168 217 158)",
-    borderRadius: 6,
+    borderRadius: 0,
     color: "rgb(60 139 57)",
     background: "#eef9eb",
     fontSize: 12,
@@ -221,7 +237,7 @@ const styles: Record<string, CSSProperties> = {
     boxSizing: "border-box",
     padding: "10px 12px",
     border: "1px solid rgb(168 217 158)",
-    borderRadius: 6,
+    borderRadius: 0,
     background: "rgb(238 249 235)",
     color: "rgb(60 139 57)",
     cursor: "pointer",
@@ -280,7 +296,7 @@ const styles: Record<string, CSSProperties> = {
     borderBottom: "1px solid #d9dde2",
     background: "#ffffff",
     color: "#273340",
-    overflow: "hidden",
+    overflow: "visible",
   },
   editorToolbarNarrow: {
     display: "grid",
@@ -329,7 +345,7 @@ const styles: Record<string, CSSProperties> = {
     marginRight: 16,
     padding: "5px 8px",
     border: "1px solid #a8d99f",
-    borderRadius: 5,
+    borderRadius: 0,
     background: "#eef9eb",
     color: "#3c8c39",
     fontSize: 12,
@@ -393,7 +409,7 @@ const styles: Record<string, CSSProperties> = {
     placeItems: "center",
     marginRight: 8,
     border: "1px solid #d5d9dd",
-    borderRadius: 5,
+    borderRadius: 0,
     background: "#ffffff",
     color: "#69737d",
     cursor: "pointer",
@@ -403,7 +419,7 @@ const styles: Record<string, CSSProperties> = {
     height: 31,
     marginRight: 8,
     border: "1px solid #d5d9dd",
-    borderRadius: 5,
+    borderRadius: 0,
     background: "#eceeef",
     color: "#59636e",
     cursor: "pointer",
@@ -414,6 +430,82 @@ const styles: Record<string, CSSProperties> = {
     borderColor: "#e2321e",
     background: "#fce8e6",
     color: "#a82a1d",
+  },
+  presentationMenu: {
+    position: "relative",
+    flex: "0 0 auto",
+    marginRight: 8,
+  },
+  presentationMenuNarrow: {
+    marginRight: 6,
+  },
+  presentationMenuTrigger: {
+    display: "flex",
+    minWidth: 118,
+    height: 31,
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 8,
+    marginRight: 0,
+    padding: "0 11px",
+    border: "1px solid #d5d9dd",
+    borderRadius: 0,
+    background: "#f8f9fa",
+    color: "#59636e",
+    cursor: "pointer",
+    fontSize: 12,
+    fontWeight: 800,
+  },
+  presentationMenuTriggerActive: {
+    borderColor: "#e2321e",
+    background: "#fce8e6",
+    color: "#a82a1d",
+  },
+  presentationMenuChevron: {
+    fontSize: 14,
+    lineHeight: 1,
+    marginTop: "1px"
+  },
+  presentationMenuPanel: {
+    position: "absolute",
+    top: "calc(100% + 6px)",
+    right: 0,
+    zIndex: 20,
+    display: "grid",
+    minWidth: 204,
+    gap: 3,
+    padding: 6,
+    border: "1px solid #d9dde2",
+    borderRadius: 0,
+    background: "#ffffff",
+    boxShadow: "0 12px 28px rgba(7, 17, 31, 0.18)",
+  },
+  presentationMenuItem: {
+    display: "flex",
+    width: "100%",
+    minHeight: 34,
+    alignItems: "center",
+    padding: "0 10px",
+    border: 0,
+    borderRadius: 0,
+    background: "#ffffff",
+    color: "#273340",
+    cursor: "pointer",
+    fontSize: 12,
+    fontWeight: 700,
+    textAlign: "left",
+  },
+  presentationMenuTriggerNarrow: {
+    minWidth: 104,
+    padding: "0 9px",
+  },
+  presentationMenuItemActive: {
+    background: "#fce8e6",
+    color: "#a82a1d",
+  },
+  presentationMenuItemDisabled: {
+    color: "#98a0a8",
+    cursor: "not-allowed",
   },
   actionSpinner: {
     display: "inline-block",
@@ -433,7 +525,7 @@ const styles: Record<string, CSSProperties> = {
     maxWidth: 360,
     padding: "12px 16px",
     border: "1px solid #d5d9dd",
-    borderRadius: 6,
+    borderRadius: 0,
     background: "#ffffff",
     boxShadow: "0 8px 24px rgba(7, 17, 31, 0.16)",
     color: "#273340",
@@ -470,7 +562,7 @@ const styles: Record<string, CSSProperties> = {
     height: 31,
     padding: "0 30px 0 10px",
     border: "1px solid #c5cbd2",
-    borderRadius: 5,
+    borderRadius: 0,
     background: "#ffffff",
     color: "#273340",
     font: "inherit",
@@ -494,7 +586,7 @@ const styles: Record<string, CSSProperties> = {
     flex: "0 0 auto",
     overflow: "hidden",
     border: "1px solid #c5cbd2",
-    borderRadius: 6,
+    borderRadius: 0,
     background: "#ffffff",
     boxShadow: "0 10px 28px rgba(7, 17, 31, 0.12)",
   },
@@ -516,7 +608,7 @@ const styles: Record<string, CSSProperties> = {
     padding: 0,
     placeItems: "center",
     border: "1px solid #d5d9dd",
-    borderRadius: 5,
+    borderRadius: 0,
     background: "#ffffff",
     color: "#59636e",
     cursor: "pointer",
@@ -529,7 +621,7 @@ const styles: Record<string, CSSProperties> = {
     height: 30,
     padding: "0 8px",
     border: "1px solid #d5d9dd",
-    borderRadius: 5,
+    borderRadius: 0,
     background: "#ffffff",
     color: "#59636e",
     cursor: "pointer",
@@ -788,6 +880,12 @@ function compactEmbeddedEditor(frame: HTMLIFrameElement) {
     [role="dialog"] [role="complementary"] {
       display: revert !important;
     }
+    /* The split workspace mirrors this action in its own toolbar. Keep the
+       native card out of the left iframe while retaining its real buttons so
+       the outer action can trigger the same editor behavior. */
+    [data-sarga-presentation-config="true"] {
+      display: none !important;
+    }
     @media (max-width: 600px) {
       /* Keep the media-picker tabs and actions inside a phone-width dialog. */
       [role="dialog"] div:has(> [role="tablist"]) {
@@ -886,6 +984,43 @@ function readEmbeddedActionState(
   };
 }
 
+function readEmbeddedPresentationActionState(
+  frame: HTMLIFrameElement | null,
+): PresentationActionState {
+  const buttons = Array.from(
+    frame?.contentDocument?.querySelectorAll<HTMLButtonElement>(
+      "[data-sarga-presentation-action]",
+    ) ?? [],
+  );
+  const controls = buttons.flatMap((button) => {
+    const action = button.dataset.sargaPresentationAction;
+    if (
+      action !== "set-global" &&
+      action !== "use-global" &&
+      action !== "reset-local"
+    ) {
+      return [];
+    }
+
+    return [{ action, label: PRESENTATION_ACTION_LABELS[action], disabled: button.disabled }];
+  });
+  const status = frame?.contentDocument?.querySelector<HTMLElement>(
+    ".sarga-presentation-config-status",
+  );
+  const mode = status?.classList.contains("is-global")
+    ? "global"
+    : status?.classList.contains("is-inherit")
+      ? "inherit"
+      : status?.classList.contains("is-local")
+        ? "local"
+        : null;
+
+  return {
+    controls,
+    mode,
+  };
+}
+
 function observeEmbeddedEditorActions(
   frame: HTMLIFrameElement,
   onChange: () => void,
@@ -977,6 +1112,65 @@ function triggerEmbeddedEditorAction(
   if (!button || button.disabled) return false;
   button.click();
   return true;
+}
+
+function triggerEmbeddedPresentationAction(
+  frame: HTMLIFrameElement | null,
+  action: PresentationAction,
+) {
+  const button = frame?.contentDocument?.querySelector<HTMLButtonElement>(
+    `[data-sarga-presentation-action="${action}"]`,
+  );
+  if (!button || button.disabled) return false;
+  button.click();
+  return true;
+}
+
+function waitForEmbeddedPresentationAction(
+  frame: HTMLIFrameElement | null,
+  previousMode: PresentationActionState["mode"],
+) {
+  return new Promise<boolean>((resolve) => {
+    const startedAt = Date.now();
+    const cleanup = () => {
+      window.removeEventListener("message", onMessage);
+      window.clearInterval(timer);
+    };
+    const onMessage = (event: MessageEvent) => {
+      if (
+        event.origin !== window.location.origin ||
+        event.source !== frame?.contentWindow ||
+        event.data?.type !== "sarga-presentation-config-updated"
+      ) {
+        return;
+      }
+      cleanup();
+      resolve(true);
+    };
+    window.addEventListener("message", onMessage);
+    const timer = window.setInterval(() => {
+      if (embeddedActionError(frame)) {
+        cleanup();
+        resolve(false);
+        return;
+      }
+
+      const state = readEmbeddedPresentationActionState(frame);
+      if (
+        Date.now() - startedAt > 350 &&
+        state.mode !== previousMode
+      ) {
+        cleanup();
+        resolve(true);
+        return;
+      }
+
+      if (Date.now() - startedAt > 10000) {
+        cleanup();
+        resolve(false);
+      }
+    }, 100);
+  });
 }
 
 function triggerEmbeddedStatusTab(
@@ -1080,6 +1274,11 @@ export default function MotorsportLivePreviewPage() {
     saveDisabled: true,
     publishDisabled: true,
   });
+  const [presentationActionState, setPresentationActionState] =
+    useState<PresentationActionState>({
+      controls: [],
+      mode: null,
+    });
   const [busyAction, setBusyAction] = useState<BusyAction>(null);
   const [toast, setToast] = useState<ToastState | null>(null);
   const [previewReloadKey, setPreviewReloadKey] = useState(0);
@@ -1087,12 +1286,14 @@ export default function MotorsportLivePreviewPage() {
   const [previewLoading, setPreviewLoading] = useState(true);
   const [previewError, setPreviewError] = useState<string | null>(null);
   const [isEditorDialogOpen, setIsEditorDialogOpen] = useState(false);
+  const [isPresentationMenuOpen, setIsPresentationMenuOpen] = useState(false);
   const selectedPage = {
     label: entryLabel(uid),
     uid,
   };
   const editorFrameRef = useRef<HTMLIFrameElement>(null);
   const previewFrameRef = useRef<HTMLIFrameElement>(null);
+  const presentationMenuRef = useRef<HTMLDivElement>(null);
   const previewStageRef = useRef<HTMLDivElement>(null);
   const zoomInitializedRef = useRef(false);
   const previousPreviewDeviceRef = useRef<PreviewDevice>(previewDevice);
@@ -1247,6 +1448,9 @@ export default function MotorsportLivePreviewPage() {
   useEffect(() => {
     const refreshActionState = () => {
       setActionState(readEmbeddedActionState(editorFrameRef.current));
+      setPresentationActionState(
+        readEmbeddedPresentationActionState(editorFrameRef.current),
+      );
     };
 
     const frame = editorFrameRef.current;
@@ -1268,6 +1472,33 @@ export default function MotorsportLivePreviewPage() {
     const timer = window.setTimeout(() => setToast(null), 4500);
     return () => window.clearTimeout(timer);
   }, [toast]);
+
+  useEffect(() => {
+    setIsPresentationMenuOpen(false);
+  }, [editorSrc]);
+
+  useEffect(() => {
+    if (!isPresentationMenuOpen) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (target && !presentationMenuRef.current?.contains(target)) {
+        setIsPresentationMenuOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsPresentationMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isPresentationMenuOpen]);
 
   const handleStatusChange = (status: PreviewStatus) => {
     if (busyAction) return;
@@ -1317,6 +1548,54 @@ export default function MotorsportLivePreviewPage() {
         kind: "error",
         message: `${action} failed or timed out.`,
       });
+    }
+  };
+
+  const handlePresentationAction = async (action: PresentationAction) => {
+    if (busyAction || presentationActionState.controls.length === 0) return;
+
+    const control = presentationActionState.controls.find(
+      (candidate) => candidate.action === action,
+    );
+    if (!control || control.disabled) return;
+
+    const { label } = control;
+    const previousMode = presentationActionState.mode;
+    setIsPresentationMenuOpen(false);
+    setBusyAction("presentation");
+    setToast({ kind: "info", message: `${label}…` });
+
+    const triggered = triggerEmbeddedPresentationAction(
+      editorFrameRef.current,
+      action,
+    );
+    if (!triggered) {
+      setBusyAction(null);
+      setToast({
+        kind: "error",
+        message: "Presentation configuration could not be updated.",
+      });
+      return;
+    }
+
+    const success = await waitForEmbeddedPresentationAction(
+      editorFrameRef.current,
+      previousMode,
+    );
+    setBusyAction(null);
+    setPresentationActionState(
+      readEmbeddedPresentationActionState(editorFrameRef.current),
+    );
+    setToast({
+      kind: success ? "success" : "error",
+      message: success
+        ? "Presentation configuration updated."
+        : "Presentation configuration failed or timed out.",
+    });
+    if (success) {
+      // Presentation actions update the shared config sidecar, so refresh the
+      // right-hand frontend preview just like Save and Publish do.
+      setPreviewReloadKey((current) => current + 1);
     }
   };
 
@@ -1482,6 +1761,77 @@ export default function MotorsportLivePreviewPage() {
               >
                 <LinkIcon />
               </button>
+              {presentationActionState.controls.length > 0 ? (
+                <div
+                  ref={presentationMenuRef}
+                  style={{
+                    ...styles.presentationMenu,
+                    ...(isNarrow ? styles.presentationMenuNarrow : {}),
+                  }}
+                >
+                  <button
+                    type="button"
+                    aria-haspopup="menu"
+                    aria-expanded={isPresentationMenuOpen}
+                    aria-controls="sarga-presentation-actions-menu"
+                    aria-label="Presentation settings"
+                    title="Presentation settings"
+                    disabled={busyAction !== null}
+                    style={{
+                      ...styles.presentationMenuTrigger,
+                      ...(isNarrow ? styles.presentationMenuTriggerNarrow : {}),
+                      ...(isPresentationMenuOpen
+                        ? styles.presentationMenuTriggerActive
+                        : {}),
+                    }}
+                    onClick={() => setIsPresentationMenuOpen((open) => !open)}
+                  >
+                    <span>
+                      {busyAction === "presentation"
+                        ? "Syncing…"
+                        : "Presentation"}
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      style={styles.presentationMenuChevron}
+                    >
+                      {isPresentationMenuOpen ? "▲" : "▼"}
+                    </span>
+                  </button>
+                  {isPresentationMenuOpen ? (
+                    <div
+                      id="sarga-presentation-actions-menu"
+                      role="menu"
+                      aria-label="Presentation configuration actions"
+                      style={styles.presentationMenuPanel}
+                    >
+                      {presentationActionState.controls.map((control) => (
+                        <button
+                          key={control.action}
+                          type="button"
+                          role="menuitem"
+                          data-sarga-presentation-action={control.action}
+                          aria-label={control.label}
+                          title={control.label}
+                          disabled={control.disabled || busyAction !== null}
+                          aria-busy={busyAction === "presentation"}
+                          style={{
+                            ...styles.presentationMenuItem,
+                            ...(control.disabled
+                              ? styles.presentationMenuItemDisabled
+                              : styles.presentationMenuItemActive),
+                          }}
+                          onClick={() =>
+                            void handlePresentationAction(control.action)
+                          }
+                        >
+                          {PRESENTATION_ACTION_LABELS[control.action]}
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
               <button
                 type="button"
                 disabled={actionState.saveDisabled || busyAction !== null}

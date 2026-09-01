@@ -107,6 +107,7 @@ const SITES = [
     baseUrl: "http://localhost:3001",
     description: "Dedicated Sarga Motorsport website.",
     themeKey: "motorsport",
+    showLanguageSelector: true,
     order: 2,
     isActive: true,
   },

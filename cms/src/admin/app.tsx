@@ -478,6 +478,254 @@ export default {
       subtree: true,
     });
 
+    // Add locale-aware presentation controls to existing Content Manager
+    // editor pages. The controls intentionally live outside the native form:
+    // they change inheritance metadata, never translated field values.
+    const adminJsonHeaders = () => {
+      const headers: Record<string, string> = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      };
+      try {
+        const storedToken = window.localStorage.getItem("jwtToken");
+        const token = storedToken ? JSON.parse(storedToken) : null;
+        if (typeof token === "string" && token.length > 0) {
+          headers.Authorization = `Bearer ${token}`;
+        }
+      } catch {
+        // The cookie-backed admin session is still sent below.
+      }
+      return headers;
+    };
+
+    const adminFetchJson = async (url: string, init: RequestInit = {}) => {
+      let headers = { ...adminJsonHeaders(), ...(init.headers ?? {}) };
+      let response = await fetch(url, {
+        ...init,
+        credentials: "include",
+        headers,
+      });
+      if (response.status === 401) {
+        const refreshResponse = await fetch("/admin/access-token", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+        const refreshPayload = (await refreshResponse
+          .json()
+          .catch(() => null)) as { data?: { token?: unknown } | null } | null;
+        const token = refreshPayload?.data?.token;
+        if (
+          refreshResponse.ok &&
+          typeof token === "string" &&
+          token.length > 0
+        ) {
+          headers = { ...headers, Authorization: `Bearer ${token}` };
+          try {
+            window.localStorage.setItem("jwtToken", JSON.stringify(token));
+          } catch {
+            // Ignore storage restrictions; the current request is enough.
+          }
+          response = await fetch(url, {
+            ...init,
+            credentials: "include",
+            headers,
+          });
+        }
+      }
+      const payload = (await response.json().catch(() => null)) as unknown;
+      if (!response.ok) {
+        const message =
+          payload && typeof payload === "object" && "error" in payload
+            ? String((payload as { error?: { message?: unknown } }).error?.message ?? "Request failed")
+            : "Request failed";
+        throw new Error(message);
+      }
+      return payload;
+    };
+
+    const getEditorContext = async () => {
+      const match = window.location.pathname.match(
+        /\/content-manager\/(single-types|collection-types)\/([^/]+)(?:\/([^/]+))?$/,
+      );
+      if (!match || window.location.pathname.endsWith("/create")) return null;
+
+      const contentTypeUid = decodeURIComponent(match[2]);
+      const localeParam = new URLSearchParams(window.location.search).get(
+        "plugins[i18n][locale]",
+      );
+      const locale = localeParam === "id" ? "id" : "en";
+      let documentId = match[3] ? decodeURIComponent(match[3]) : null;
+
+      if (!documentId) {
+        const params = new URLSearchParams({ locale });
+        const endpoint =
+          match[1] === "single-types"
+            ? `/content-manager/single-types/${encodeURIComponent(contentTypeUid)}?${params.toString()}`
+            : `/content-manager/collection-types/${encodeURIComponent(contentTypeUid)}?${params.toString()}`;
+        try {
+          const payload = await adminFetchJson(endpoint);
+          const visit = (value: unknown): string | null => {
+            if (!value || typeof value !== "object") return null;
+            if (Array.isArray(value)) {
+              for (const item of value) {
+                const found = visit(item);
+                if (found) return found;
+              }
+              return null;
+            }
+            const record = value as Record<string, unknown>;
+            if (typeof record.documentId === "string") return record.documentId;
+            for (const child of Object.values(record)) {
+              const found = visit(child);
+              if (found) return found;
+            }
+            return null;
+          };
+          documentId = visit(payload);
+        } catch {
+          return null;
+        }
+      }
+
+      return documentId ? { contentTypeUid, documentId, locale } : null;
+    };
+
+    let presentationConfigFrame: number | null = null;
+    const syncPresentationConfigControls = async () => {
+      presentationConfigFrame = null;
+      if (!window.location.pathname.includes("/content-manager/")) return;
+      const context = await getEditorContext();
+      if (!context) return;
+
+      let status: {
+        mode: "local" | "global" | "inherit";
+        sourceLocale: "en" | "id" | null;
+        globalLocale: "en" | "id" | null;
+      };
+      try {
+        const params = new URLSearchParams(context);
+        const payload = (await adminFetchJson(
+          `/users-permissions/sarga-presentation-config?${params.toString()}`,
+        )) as { data?: typeof status };
+        if (!payload.data) return;
+        status = payload.data;
+      } catch {
+        // Unsupported/non-localized editor pages simply have no control bar.
+        return;
+      }
+
+      const main = document.querySelector<HTMLElement>("main");
+      if (!main) return;
+      let bar = document.querySelector<HTMLElement>(
+        '[data-sarga-presentation-config="true"]',
+      );
+      if (!bar) {
+        bar = document.createElement("section");
+        bar.className = "sarga-presentation-config-bar";
+        bar.dataset.sargaPresentationConfig = "true";
+      }
+
+      // Keep the controls at the top of the normal editor. The split-view
+      // workspace hides this native card and mirrors its action in its own
+      // toolbar instead.
+      bar.classList.remove("is-sidebar");
+      if (bar.parentElement !== main || main.firstElementChild !== bar) {
+        main.prepend(bar);
+      }
+
+      const modeLabel =
+        status.mode === "global"
+          ? `Global source · ${context.locale.toUpperCase()}`
+          : status.mode === "inherit"
+            ? `Using global config · ${status.sourceLocale?.toUpperCase() ?? "—"}`
+            : "Using locale-specific presentation";
+      const badgeClass = `sarga-presentation-config-status is-${status.mode}`;
+      const signature = `${context.contentTypeUid}:${context.documentId}:${context.locale}:${status.mode}:${status.globalLocale ?? ""}:${status.sourceLocale ?? ""}`;
+      if (bar.dataset.sargaPresentationConfigSignature === signature) return;
+      bar.dataset.sargaPresentationConfigSignature = signature;
+      bar.innerHTML = `
+          <div class="sarga-presentation-config-copy">
+            <span class="sarga-presentation-config-kicker">Presentation sync</span>
+            <strong>Shared visual settings</strong>
+            <span class="${badgeClass}">${modeLabel}</span>
+            <small>Visibility, media, and CTA destinations can follow one locale. Translated copy stays local.</small>
+          </div>
+          <div class="sarga-presentation-config-actions">
+            ${status.mode !== "global" ? '<button type="button" data-sarga-presentation-action="set-global">Set as global config</button>' : ""}
+            ${status.mode !== "global" && status.globalLocale ? '<button type="button" data-sarga-presentation-action="use-global">Use global config</button>' : ""}
+            ${status.mode === "inherit" ? '<button type="button" class="is-quiet" data-sarga-presentation-action="reset-local">Use local config</button>' : ""}
+          </div>`;
+
+      bar.querySelectorAll<HTMLButtonElement>("button").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const action = button.dataset.sargaPresentationAction;
+          if (!action) return;
+          button.disabled = true;
+          try {
+            await adminFetchJson(`/users-permissions/sarga-presentation-config/${action}`, {
+              method: "POST",
+              body: JSON.stringify({ data: context }),
+            });
+            window.dispatchEvent(new Event("sarga-presentation-config-updated"));
+
+            // The Content Manager form is controlled by Strapi's React state,
+            // so changing the entry through the side endpoint does not update
+            // its inputs automatically. Refresh a clean editor to show the
+            // persisted shared values immediately. Never discard unsaved
+            // translated copy; a dirty editor stays in place and can be
+            // refreshed after its own changes are saved.
+            const saveButton = [...document.querySelectorAll<HTMLButtonElement>("button")].find(
+              (candidate) => candidate.textContent?.trim() === "Save",
+            );
+            if (!saveButton || saveButton.disabled) {
+              window.setTimeout(() => window.location.reload(), 0);
+            }
+
+            if (window.parent !== window) {
+              window.parent.postMessage(
+                { type: "sarga-presentation-config-updated", action },
+                window.location.origin,
+              );
+            }
+          } catch (error) {
+            window.alert(
+              error instanceof Error
+                ? error.message
+                : "The presentation configuration could not be updated.",
+            );
+          } finally {
+            button.disabled = false;
+          }
+        });
+      });
+    };
+    const schedulePresentationConfigSync = () => {
+      if (presentationConfigFrame !== null) return;
+      presentationConfigFrame = window.requestAnimationFrame(() => {
+        void syncPresentationConfigControls();
+      });
+    };
+    const schedulePresentationConfigAfterNavigation = () => {
+      schedulePresentationConfigSync();
+      // The Content Manager route changes before Strapi mounts the new editor
+      // tree. Retry while the responsive Entry/Preview layout is mounting;
+      // narrow layouts move the Preview aside outside the main element.
+      [250, 750, 1500, 3000].forEach((delay) => {
+        window.setTimeout(schedulePresentationConfigSync, delay);
+      });
+    };
+    window.addEventListener(
+      "sarga-admin-navigation",
+      schedulePresentationConfigAfterNavigation,
+    );
+    window.addEventListener("popstate", schedulePresentationConfigAfterNavigation);
+    window.addEventListener("sarga-presentation-config-updated", schedulePresentationConfigSync);
+    schedulePresentationConfigAfterNavigation();
+
     // Strapi's native Preview card remains the entry point. Supported
     // Motorsport Single Types and collection entries open the dedicated
     // split-view workspace in a separate window, leaving the editor intact.
@@ -707,7 +955,7 @@ export default {
             "padding: 0.85rem 1rem",
             "border: 1px solid #f4c3bd",
             "border-left: 4px solid #e2321e",
-            "border-radius: 0.5rem",
+            "border-radius: 0px",
             "background: #fff7f5",
             "color: #32324d",
             "font-size: 0.875rem",
@@ -860,7 +1108,7 @@ export default {
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 16px !important;
+        border-radius: 0px !important;
         box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 249, 238, 0.06);
         overflow: hidden;
         position: relative;
@@ -881,7 +1129,7 @@ export default {
       .AuthBox input {
         background: rgba(255, 255, 255, 0.96) !important;
         border: 1px solid rgba(255, 249, 238, 0.22) !important;
-        border-radius: 10px !important;
+        border-radius: 0px !important;
         color: #1b1b1b !important;
         font-size: 15px !important;
         min-height: 48px !important;
@@ -892,7 +1140,7 @@ export default {
         outline: none !important;
       }
       .AuthBox button[type="submit"] {
-        border-radius: 10px !important;
+        border-radius: 0px !important;
         box-shadow: 0 10px 22px rgba(232, 25, 44, 0.24);
         font-size: 15px !important;
         font-weight: 800 !important;
@@ -905,43 +1153,43 @@ export default {
       /* ── Strapi v5 login layout: use semantic structure rather than
          generated styled-component class names. The first child of Main is
          the native LayoutContent card that contains the login form. */
-      body:has(main input[type="password"]) main > div:first-child {
+      body:has(main input[type="password"]):not(:has(main[data-sarga-mail-settings="motorsport"])) main > div:first-child {
         background: #ffffff !important;
         border: 1px solid #e6ddd0 !important;
-        border-radius: 20px !important;
+        border-radius: 0px !important;
         box-shadow: 0 18px 44px rgba(27, 27, 27, 0.08),
           inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
         overflow: hidden;
       }
-      body:has(main input[type="password"]) main > div:first-child input:not([type="checkbox"]) {
+      body:has(main input[type="password"]):not(:has(main[data-sarga-mail-settings="motorsport"])) main > div:first-child input:not([type="checkbox"]) {
         min-height: 54px !important;
         border: 1px solid #e6ddd0 !important;
-        border-radius: 12px !important;
+        border-radius: 0px !important;
         background: #ffffff !important;
         color: #1b1b1b !important;
         font-size: 16px !important;
       }
-      body:has(main input[type="password"]) main > div:first-child input:not([type="checkbox"]):focus {
+      body:has(main input[type="password"]):not(:has(main[data-sarga-mail-settings="motorsport"])) main > div:first-child input:not([type="checkbox"]):focus {
         border-color: #0033a0 !important;
         box-shadow: 0 0 0 3px rgba(0, 51, 160, 0.14) !important;
         outline: none !important;
       }
-      body:has(main input[type="password"]) main > div:first-child label {
+      body:has(main input[type="password"]):not(:has(main[data-sarga-mail-settings="motorsport"])) main > div:first-child label {
         color: #1b1b1b !important;
         font-size: 14px !important;
         font-weight: 700 !important;
       }
-      body:has(main input[type="password"]) main > div:first-child input[type="checkbox"] {
+      body:has(main input[type="password"]):not(:has(main[data-sarga-mail-settings="motorsport"])) main > div:first-child input[type="checkbox"] {
         width: 22px !important;
         height: 22px !important;
         border: 1px solid #b9ae9f !important;
-        border-radius: 7px !important;
+        border-radius: 0px !important;
         accent-color: #e8192c;
       }
-      body:has(main input[type="password"]) main > div:first-child button[type="submit"] {
+      body:has(main input[type="password"]):not(:has(main[data-sarga-mail-settings="motorsport"])) main > div:first-child button[type="submit"] {
         min-height: 52px !important;
         border: 1px solid #e8192c !important;
-        border-radius: 12px !important;
+        border-radius: 0px !important;
         background: #e8192c !important;
         box-shadow: 0 12px 24px rgba(232, 25, 44, 0.2) !important;
         font-size: 16px !important;
@@ -949,12 +1197,12 @@ export default {
         transition: background-color 140ms ease, box-shadow 140ms ease,
           transform 140ms ease;
       }
-      body:has(main input[type="password"]) main > div:first-child button[type="submit"]:hover {
+      body:has(main input[type="password"]):not(:has(main[data-sarga-mail-settings="motorsport"])) main > div:first-child button[type="submit"]:hover {
         background: #c41427 !important;
         box-shadow: 0 14px 28px rgba(232, 25, 44, 0.28) !important;
         transform: translateY(-1px);
       }
-      body:has(main input[type="password"]) main > div:last-child a {
+      body:has(main input[type="password"]):not(:has(main[data-sarga-mail-settings="motorsport"])) main > div:last-child a {
         color: #c41427 !important;
         font-weight: 700 !important;
       }
@@ -998,7 +1246,7 @@ export default {
       }
       ::-webkit-scrollbar-thumb {
         background: rgba(226, 50, 30, 0.3);
-        border-radius: 3px;
+        border-radius: 0px;
       }
       ::-webkit-scrollbar-thumb:hover {
         background: rgba(226, 50, 30, 0.6);
@@ -1017,7 +1265,7 @@ export default {
 
       /* ── Button polish ─────────────────────────────────────── */
       [data-strapi-button] {
-        border-radius: 8px !important;
+        border-radius: 0px !important;
         font-weight: 600 !important;
       }
 
@@ -1054,7 +1302,7 @@ export default {
         gap: 16px;
         min-height: 92px;
         padding: 16px 20px;
-        border-radius: 10px;
+        border-radius: 0px;
         background: var(--ms-workspace-inverse);
         color: var(--ms-workspace-inverse-text);
         box-shadow: inset 0 -3px 0 var(--ms-workspace-action);

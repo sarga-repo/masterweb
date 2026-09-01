@@ -21,6 +21,7 @@ type MotorsportHeaderProps = {
   locale: Locale;
   dictionary: MotorsportDictionary;
   navigationSource: "cms" | "repository";
+  showLanguageSelector?: boolean;
   logoSrc?: string;
   logoAlt?: string;
   eventChildren?: LinkItem[];
@@ -34,6 +35,7 @@ export function MotorsportHeader({
   locale,
   dictionary,
   navigationSource,
+  showLanguageSelector = true,
   logoSrc,
   logoAlt,
   eventChildren = [],
@@ -210,19 +212,26 @@ export function MotorsportHeader({
           })}
         </nav>
 
-        <div className="hidden justify-self-end gap-3 xl:flex xl:items-center">
-          <MotorsportLanguageSelector locale={locale} dictionary={dictionary} />
-          {gatewayLink ? (
-            <a
-              href={localizeExternalSiteHref(gatewayLink.href, locale)}
-              target={gatewayLink.external ? "_blank" : undefined}
-              rel={gatewayLink.external ? "noreferrer" : undefined}
-              className="border-l border-ms-warm-white/14 pl-4 text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-ms-warm-white/55 transition-colors hover:text-ms-warm-white"
-            >
-              {gatewayLink.label}
-            </a>
-          ) : null}
-        </div>
+        {showLanguageSelector || gatewayLink ? (
+          <div className="hidden justify-self-end gap-3 xl:flex xl:items-center">
+            {showLanguageSelector ? (
+              <MotorsportLanguageSelector
+                locale={locale}
+                dictionary={dictionary}
+              />
+            ) : null}
+            {gatewayLink ? (
+              <a
+                href={localizeExternalSiteHref(gatewayLink.href, locale)}
+                target={gatewayLink.external ? "_blank" : undefined}
+                rel={gatewayLink.external ? "noreferrer" : undefined}
+                className="border-l border-ms-warm-white/14 pl-4 text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-ms-warm-white/55 transition-colors hover:text-ms-warm-white"
+              >
+                {gatewayLink.label}
+              </a>
+            ) : null}
+          </div>
+        ) : null}
 
         <button
           ref={menuButtonRef}
@@ -342,21 +351,25 @@ export function MotorsportHeader({
               );
             })}
           </div>
-          <div className="mt-auto flex flex-col gap-3 pt-5 sm:flex-row">
-            <MotorsportLanguageSelector
-              locale={locale}
-              dictionary={dictionary}
-              mobile
-            />
-            {gatewayLink ? (
-              <a
-                href={localizeExternalSiteHref(gatewayLink.href, locale)}
-                className="border border-ms-warm-white/20 px-6 py-4 text-center text-xs font-bold uppercase tracking-[0.16em]"
-              >
-                {gatewayLink.label}
-              </a>
-            ) : null}
-          </div>
+          {showLanguageSelector || gatewayLink ? (
+            <div className="mt-auto flex flex-col gap-3 pt-5 sm:flex-row">
+              {showLanguageSelector ? (
+                <MotorsportLanguageSelector
+                  locale={locale}
+                  dictionary={dictionary}
+                  mobile
+                />
+              ) : null}
+              {gatewayLink ? (
+                <a
+                  href={localizeExternalSiteHref(gatewayLink.href, locale)}
+                  className="border border-ms-warm-white/20 px-6 py-4 text-center text-xs font-bold uppercase tracking-[0.16em]"
+                >
+                  {gatewayLink.label}
+                </a>
+              ) : null}
+            </div>
+          ) : null}
         </nav>
       </div>
     </header>

@@ -7,6 +7,12 @@ import {
   resolveMotorsportMailEnvironment,
   updateMotorsportMailSettings,
 } from "../../email/motorsport-mail-settings";
+import {
+  getPresentationStatus,
+  resetPresentationLocale,
+  setGlobalPresentationLocale,
+  useGlobalPresentationLocale,
+} from "../../presentation-config/store";
 
 const SUPER_ADMIN_CODE = "strapi-super-admin";
 const MOTORSPORT_ADMIN_CODE = "sarga-motorsport-admin";
@@ -27,6 +33,14 @@ async function requireMotorsportAdmin(ctx: any) {
   const roleCodes = (user?.roles ?? []).map((role: { code?: string }) => role.code);
   if (!roleCodes.includes(SUPER_ADMIN_CODE) && !roleCodes.includes(MOTORSPORT_ADMIN_CODE)) {
     ctx.throw(403, "Motorsport mail settings are restricted to Motorsport Admin and Super Admin.");
+  }
+  return strapi;
+}
+
+function requireAuthenticatedAdmin(ctx: any) {
+  const strapi = currentStrapi();
+  if (!strapi || !ctx.state?.user?.id) {
+    ctx.throw(401, "Admin authentication is required.");
   }
   return strapi;
 }
@@ -85,6 +99,75 @@ export default (plugin: any) => {
           ctx.throw(400, safeError(error));
         } finally {
           provider?.close();
+        }
+      },
+    },
+    {
+      method: "GET",
+      path: "/sarga-presentation-config",
+      handler: async (ctx: any) => {
+        const strapi = requireAuthenticatedAdmin(ctx);
+        try {
+          ctx.body = {
+            data: await getPresentationStatus(strapi, {
+              contentTypeUid: ctx.query?.contentTypeUid,
+              documentId: ctx.query?.documentId,
+              locale: ctx.query?.locale,
+            }),
+          };
+        } catch (error) {
+          ctx.throw(400, error instanceof Error ? error.message : "Invalid request.");
+        }
+      },
+    },
+    {
+      method: "POST",
+      path: "/sarga-presentation-config/set-global",
+      handler: async (ctx: any) => {
+        const strapi = requireAuthenticatedAdmin(ctx);
+        try {
+          ctx.body = {
+            data: await setGlobalPresentationLocale(
+              strapi,
+              ctx.request.body?.data ?? ctx.request.body ?? {},
+            ),
+          };
+        } catch (error) {
+          ctx.throw(400, error instanceof Error ? error.message : "Invalid request.");
+        }
+      },
+    },
+    {
+      method: "POST",
+      path: "/sarga-presentation-config/use-global",
+      handler: async (ctx: any) => {
+        const strapi = requireAuthenticatedAdmin(ctx);
+        try {
+          ctx.body = {
+            data: await useGlobalPresentationLocale(
+              strapi,
+              ctx.request.body?.data ?? ctx.request.body ?? {},
+            ),
+          };
+        } catch (error) {
+          ctx.throw(400, error instanceof Error ? error.message : "Invalid request.");
+        }
+      },
+    },
+    {
+      method: "POST",
+      path: "/sarga-presentation-config/reset-local",
+      handler: async (ctx: any) => {
+        const strapi = requireAuthenticatedAdmin(ctx);
+        try {
+          ctx.body = {
+            data: await resetPresentationLocale(
+              strapi,
+              ctx.request.body?.data ?? ctx.request.body ?? {},
+            ),
+          };
+        } catch (error) {
+          ctx.throw(400, error instanceof Error ? error.message : "Invalid request.");
         }
       },
     },

@@ -97,6 +97,10 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | CMS-ADMIN-UI-MODERNIZATION-SECONDARY-NAV | Shared secondary navigation charcoal shell and Sarga logo | ✅ Done | 2026-08-30 |
 | MSR-NEWS-FEATURED-HEADING | News lead story heading crop correction | ✅ Done | 2026-09-01 |
 | MSR-NEWS-FEATURED-IMAGE | News lead story full-image framing | ✅ Done | 2026-09-01 |
+| CMS-I18N-PRESENTATION-1 | Shared presentation config contract and sidecar model | ✅ Done | 2026-09-01 |
+| CMS-I18N-PRESENTATION-2 | Locale editor actions and inheritance status UI | ✅ Done | 2026-09-01 |
+| CMS-I18N-PRESENTATION-3 | Read-time API inheritance and cache invalidation | ✅ Done | 2026-09-01 |
+| CMS-I18N-PRESENTATION-4 | Persist shared values when using global config | ✅ Done | 2026-09-02 |
 
 ### MS-CMS-MANUAL-1 — Sarga Motorsport CMS user manual
 
@@ -12825,3 +12829,148 @@ Status: ✅ Done — 2026-08-29
 
 - Tall desktop cards may show intentional navy letterboxing above and below
   the source image to preserve the full artwork without distortion.
+
+### CMS-I18N-PRESENTATION-1 — Shared presentation config contract and sidecar
+
+#### What was done
+
+- Added an internal locale configuration sidecar keyed by content type,
+  document, and locale.
+- Defined `local`, `global`, and `inherit` states.
+- Allowlisted only presentation visibility, media, video, and CTA destination
+  values; translated copy, SEO, dates, relationships, and ordering remain
+  locale-specific.
+
+#### Files changed
+
+- `cms/src/presentation-config/contract.ts`
+- `cms/src/presentation-config/store.ts`
+- `cms/src/api/localized-presentation-config/`
+- `docs/localization/shared-presentation-config.md`
+
+#### How verified
+
+- CMS TypeScript compilation passed.
+- CMS production admin build passed.
+- Pure merge smoke test confirmed local title/body values remain untouched.
+
+#### Notes / caveats
+
+- Repeatable presentation items are matched by existing array position; the
+  feature never creates, deletes, or reorders locale items.
+
+### CMS-I18N-PRESENTATION-2 — Locale editor actions and inheritance status UI
+
+#### What was done
+
+- Added authenticated editor actions for setting a global locale, using global
+  configuration, and returning to local configuration.
+- Added a compact status bar to localized Content Manager editor routes.
+- Kept the status bar at the top of the normal editor and mirrored its active
+  action in the side-by-side preview toolbar, while hiding the duplicate card
+  inside the embedded editor on desktop and narrow layouts.
+- Grouped multiple mirrored presentation actions behind a compact toolbar menu
+  so the split-preview header remains usable when all actions are available.
+- Refresh the right-hand frontend preview after a presentation action completes,
+  keeping locale configuration changes visible immediately in split view.
+- Single Types resolve their document ID through the existing Content Manager
+  data endpoint; Collection Types use the document ID in their route.
+- Clean editor refreshes after a successful presentation action so the
+  controlled Strapi form shows the persisted values immediately; dirty forms
+  are left untouched to protect unsaved translated copy.
+
+#### Files changed
+
+- `cms/src/extensions/users-permissions/strapi-server.ts`
+- `cms/src/admin/app.tsx`
+- `cms/src/admin/styles/admin.css`
+
+#### How verified
+
+- Unauthenticated admin action request correctly returns `401`.
+- CMS admin production build passed.
+- UI injection is signature-guarded to avoid MutationObserver render loops.
+- Live local verification confirmed the mirrored action triggers the embedded
+  editor action and reports the update state.
+
+#### Notes / caveats
+
+- The status bar appears only on existing localized documents, not create
+  forms or non-localized models.
+
+### CMS-I18N-PRESENTATION-3 — Read-time API inheritance and cache invalidation
+
+#### What was done
+
+- Added a public Content API middleware that resolves inherited presentation
+  values at read time.
+- Added the sidecar to Motorsport revalidation mapping so config changes expire
+  affected frontend paths and locale tags immediately.
+- Supports published reads and authorized draft-preview reads.
+
+#### Files changed
+
+- `cms/config/middlewares.ts`
+- `cms/src/middlewares/sarga-presentation-inheritance.ts`
+- `cms/src/revalidation/motorsport-revalidation.ts`
+
+#### How verified
+
+- Local published API request with temporary EN-global/ID-inherit state returned
+  the EN presentation flag while retaining the Indonesian title.
+- Temporary test sidecar rows were removed after verification.
+- CMS build, CMS typecheck, Motorsport typecheck, and `git diff --check`
+  passed.
+
+#### Notes / caveats
+
+- The current rollout is CMS-wide at the API contract level, with the
+  Motorsport frontend covered transparently by the shared Content API. Gateway
+  and Horse Sport adoption can be enabled without changing their translated
+  content consumers.
+
+### CMS-I18N-PRESENTATION-4 — Persist shared values when using global config
+
+#### What was done
+
+- Updated `Use global config` to copy the global locale’s shared presentation
+  values into the current locale’s draft entry.
+- The persisted copy includes visibility/active flags, `pageEnabled`, `show*`
+  flags, `hide*` flags, `*Enabled`/`*Active`/`*Visible` flags, media/video
+  fields (including mobile variants and `mediaItems`), and `*CtaUrl`/
+  `*CtaTarget` fields, including root-level presentation flags.
+- Locale-owned copy remains sourced from the current locale while the shared
+  presentation values are overwritten as requested.
+- Replaced the incomplete exact-name list with constrained schema naming
+  rules, while keeping labels, alt text, generic URLs, SEO, dates, and
+  relationships locale-specific.
+
+#### Files changed
+
+- `cms/src/presentation-config/contract.ts`
+- `cms/src/presentation-config/store.ts`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Live local CMS verification on Motorsport Home Page: EN hero `show*` values
+  were false; after ID used global config, the ID draft stored the same false
+  values.
+- Confirmed the Indonesian hero title remained `Rasakan gesekannya.` while
+  the shared hero flags changed.
+- Audited all current API and component schema field names: no current
+  `show*`, `hide*`, active/enabled/visible, media/image/video, or CTA URL/target
+  field is uncovered by the matcher.
+- Live-tested Motorsport About Page EN → ID: `pageEnabled` changed from false
+  to true in the ID draft after `Use global config`; the UI showed
+  `Using global config · EN` and the database draft row confirmed the value.
+- CMS typecheck and diff validation passed.
+
+#### Notes / caveats
+
+- The action updates the current locale’s draft entry. Editors still need to
+  save/publish that locale for the copied values to become publicly published.
+- `Use local config` detaches the locale from the global sidecar state; it does
+  not restore presentation values that were intentionally overwritten earlier.
+- Repeatable arrays still merge by existing position; inheritance does not
+  create, delete, or reorder entries.

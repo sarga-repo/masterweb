@@ -1,4 +1,5 @@
 import type { Core } from "@strapi/strapi";
+import { PRESENTATION_CONFIG_UID } from "../presentation-config/contract";
 
 const MOTORSPORT_MODELS = [
   "api::motorsport-theme-settings.motorsport-theme-settings",
@@ -34,6 +35,7 @@ const MOTORSPORT_MODELS = [
   "api::motorsport-partner.motorsport-partner",
   "api::motorsport-ticket-cta.motorsport-ticket-cta",
   "api::motorsport-top-navigation-item.motorsport-top-navigation-item",
+  PRESENTATION_CONFIG_UID,
 ] as const;
 
 type LifecycleResult = Record<string, unknown> | undefined;
@@ -49,11 +51,22 @@ function payloadFor(
   event: { model: { uid: string }; result?: LifecycleResult },
 ) {
   const result = event.result ?? {};
+  const isPresentationConfig = event.model.uid === PRESENTATION_CONFIG_UID;
   return {
-    contentType: event.model.uid,
+    // Presentation metadata is stored in a sidecar row, but the frontend
+    // cache must be invalidated as if the underlying localized document had
+    // changed.
+    contentType:
+      isPresentationConfig && typeof result.contentTypeUid === "string"
+        ? result.contentTypeUid
+        : event.model.uid,
     action,
     documentId:
-      typeof result.documentId === "string" ? result.documentId : undefined,
+      isPresentationConfig && typeof result.documentIdRef === "string"
+        ? result.documentIdRef
+        : typeof result.documentId === "string"
+          ? result.documentId
+          : undefined,
     locale:
       result.locale === "en" || result.locale === "id"
         ? result.locale

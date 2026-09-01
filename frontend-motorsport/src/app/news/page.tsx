@@ -213,7 +213,7 @@ export default async function NewsPage() {
                   >
                     <Link
                       href={featured.href}
-                      className="group relative aspect-[16/10] overflow-hidden bg-ms-cream-200 lg:aspect-auto lg:min-h-[38rem]"
+                      className="group relative aspect-[16/10] overflow-hidden bg-[#071a3d] lg:aspect-auto lg:min-h-[38rem]"
                     >
                       <ResilientImage
                         src={featured.image}
@@ -223,7 +223,7 @@ export default async function NewsPage() {
                         fill
                         priority
                         sizes="(max-width: 1024px) 100vw, 68vw"
-                        className="object-cover transition-transform duration-700 ease-(--ease-ms-out) group-hover:scale-[1.02]"
+                        className="object-contain transition-opacity duration-700 ease-(--ease-ms-out) group-hover:opacity-95"
                       />
                     </Link>
                     <div className="ms-blue-panel flex flex-col justify-between p-7 sm:p-10 lg:p-12">

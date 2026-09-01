@@ -96,6 +96,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | MSR-CMS-UAT-11     | News gallery CTA visibility wiring correction | ✅ Done | 2026-08-31 |
 | CMS-ADMIN-UI-MODERNIZATION-SECONDARY-NAV | Shared secondary navigation charcoal shell and Sarga logo | ✅ Done | 2026-08-30 |
 | MSR-NEWS-FEATURED-HEADING | News lead story heading crop correction | ✅ Done | 2026-09-01 |
+| MSR-NEWS-FEATURED-IMAGE | News lead story full-image framing | ✅ Done | 2026-09-01 |
 
 ### MS-CMS-MANUAL-1 — Sarga Motorsport CMS user manual
 
@@ -12797,3 +12798,30 @@ Status: ✅ Done — 2026-08-29
 
 - The adjustment is scoped to the News lead story and does not change other
   Motorsport feature headings.
+
+### MSR-NEWS-FEATURED-IMAGE — Preserve full lead story artwork
+
+#### What was done
+
+- Changed the News lead-story artwork from cover cropping to contain framing.
+- Added a deep navy presentation surface around the image where the desktop
+  copy panel is taller than the source artwork.
+- Removed the lead image hover zoom so the full artwork remains visible during
+  interaction.
+
+#### Files changed
+
+- `frontend-motorsport/src/app/news/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Confirmed the source asset is approximately 16:10 while the desktop lead
+  card is taller because of its editorial copy.
+- Verified the image now uses contain framing and retains its full intrinsic
+  aspect ratio at desktop and mobile widths.
+
+#### Notes / caveats
+
+- Tall desktop cards may show intentional navy letterboxing above and below
+  the source image to preserve the full artwork without distortion.

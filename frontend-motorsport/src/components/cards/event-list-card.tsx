@@ -38,7 +38,7 @@ export function EventListCard({
           fallbackAlt="Motorsport race car under circuit lights"
           fill
           sizes="12rem"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="bg-ms-charcoal object-contain transition-transform duration-500 group-hover:scale-105 sm:object-cover"
         />
       </Link>
       <div className="mt-5 min-w-0 sm:mt-0">

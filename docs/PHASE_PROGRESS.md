@@ -13044,5 +13044,40 @@ Status: ✅ Done — 2026-08-29
 
 #### Notes / caveats
 
-- The change is local and verified but has not yet been committed, pushed, or
+- The change is committed as `24e80918423638dde5b2cf60d83aaea88d05db3b` and
   deployed to staging.
+
+### MSR-CMS-UAT-14 — Mobile media previews preserve complete artwork
+
+#### What was done
+
+- Removed the decorative frame, fill, shadow, section padding, shell gutter,
+  and reflected-light background from the FIA ticket-map image so the artwork
+  displays edge-to-edge across the viewport.
+- Changed home-page news, featured-event, and event-list card media to use
+  `object-contain` on mobile, preserving the complete source image.
+- Kept the existing `object-cover` editorial crop from the `sm` breakpoint
+  upward.
+
+#### Files changed
+
+- `frontend-motorsport/src/app/campaign/[slug]/page.tsx`
+- `frontend-motorsport/src/components/cards/news-card.tsx`
+- `frontend-motorsport/src/components/cards/event-feature-card.tsx`
+- `frontend-motorsport/src/components/cards/event-list-card.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Confirmed the affected mobile card components used `object-cover` before the
+  change.
+- Confirmed the ticket-map image already uses intrinsic height and now has no
+  card frame or background styling.
+
+#### Notes / caveats
+
+- The mobile media areas retain their existing aspect-ratio/min-height boxes;
+  `object-contain` may show the card background around source images with a
+  different aspect ratio.
+- The full-bleed ticket-map correction is implemented locally and is ready for
+  staging deployment.

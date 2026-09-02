@@ -36,7 +36,7 @@ export function EventFeatureCard({
           fill
           priority={priority}
           sizes="(max-width: 1024px) 100vw, 68vw"
-          className="object-cover transition-transform duration-700 ease-(--ease-ms-out) group-hover:scale-[1.025]"
+          className="bg-ms-charcoal object-contain transition-transform duration-700 ease-(--ease-ms-out) group-hover:scale-[1.025] sm:object-cover"
         />
         <div
           aria-hidden="true"

@@ -36,7 +36,7 @@ export function NewsCard({
               ? "(max-width: 1024px) 100vw, 66vw"
               : "(max-width: 768px) 100vw, 33vw"
           }
-          className="object-cover transition duration-700 ease-(--ease-ms-out) group-hover:scale-[1.03] group-hover:saturate-125"
+          className="bg-ms-charcoal object-contain transition duration-700 ease-(--ease-ms-out) group-hover:scale-[1.03] group-hover:saturate-125 sm:object-cover"
         />
         <span className="absolute bottom-0 right-0 grid size-14 place-items-center bg-ms-apex-crimson transition-colors group-hover:bg-ms-ignition-orange">
           <ArrowUpRightIcon className="size-5" />

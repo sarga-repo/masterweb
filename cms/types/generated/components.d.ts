@@ -1129,6 +1129,29 @@ export interface MotorsportRundownItem extends Struct.ComponentSchema {
   };
 }
 
+export interface MotorsportTicketMapSection extends Struct.ComponentSchema {
+  collectionName: 'components_motorsport_ticket_map_sections';
+  info: {
+    description: 'Optional ticket map shown immediately before the ticket CTA on a Motorsport programme page.';
+    displayName: 'Ticket Map Section';
+  };
+  attributes: {
+    image: Schema.Attribute.Media<'images'>;
+    imageAlt: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }> &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+    isActive: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+  };
+}
+
 export interface MotorsportWorldOfMotorsport extends Struct.ComponentSchema {
   collectionName: 'components_motorsport_world_of_motorsports';
   info: {
@@ -1377,6 +1400,7 @@ declare module '@strapi/strapi' {
       'motorsport.page-section-item': MotorsportPageSectionItem;
       'motorsport.rule-item': MotorsportRuleItem;
       'motorsport.rundown-item': MotorsportRundownItem;
+      'motorsport.ticket-map-section': MotorsportTicketMapSection;
       'motorsport.world-of-motorsport': MotorsportWorldOfMotorsport;
       'shared.event-session': SharedEventSession;
       'shared.footer-column': SharedFooterColumn;

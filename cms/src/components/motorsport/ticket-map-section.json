@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_motorsport_ticket_map_sections",
+  "info": {
+    "displayName": "Ticket Map Section",
+    "description": "Optional ticket map shown immediately before the ticket CTA on a Motorsport programme page."
+  },
+  "options": {},
+  "config": {
+    "metadatas": {
+      "isActive": {
+        "edit": {
+          "description": "Show this ticket map section on the public programme page."
+        }
+      },
+      "image": {
+        "edit": {
+          "description": "Ticket map artwork. The full image is preserved on desktop and mobile; the supplied artwork is 1280 × 941 px."
+        }
+      },
+      "imageAlt": {
+        "edit": {
+          "description": "Accessible description for the ticket map image."
+        }
+      }
+    }
+  },
+  "attributes": {
+    "isActive": { "type": "boolean", "default": true, "required": true },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "imageAlt": {
+      "type": "string",
+      "maxLength": 180,
+      "pluginOptions": { "i18n": { "localized": true } }
+    }
+  }
+}

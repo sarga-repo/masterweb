@@ -131,6 +131,11 @@
           "description": "Approved ticket destinations for this programme. Add one active partner CTA; checkout remains external."
         }
       },
+      "ticketMapSection": {
+        "edit": {
+          "description": "Ticket map shown immediately before the ticket card on the FIA Rallycross programme page. Set Show ticket map to false to hide it without removing the artwork."
+        }
+      },
       "riders": {
         "edit": {
           "description": "IJTC rider records shown in the rider catalogue and linked standings. Not used by FIA Rallycross pages."
@@ -272,6 +277,13 @@
       "relation": "oneToMany",
       "target": "api::motorsport-ticket-cta.motorsport-ticket-cta",
       "mappedBy": "relatedProgram"
+    },
+    "ticketMapSection": {
+      "type": "component",
+      "component": "motorsport.ticket-map-section",
+      "repeatable": false,
+      "required": false,
+      "pluginOptions": { "i18n": { "localized": true } }
     },
     "riders": {
       "type": "relation",

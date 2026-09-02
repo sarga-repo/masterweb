@@ -101,6 +101,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | CMS-I18N-PRESENTATION-2 | Locale editor actions and inheritance status UI | ✅ Done | 2026-09-01 |
 | CMS-I18N-PRESENTATION-3 | Read-time API inheritance and cache invalidation | ✅ Done | 2026-09-01 |
 | CMS-I18N-PRESENTATION-4 | Persist shared values when using global config | ✅ Done | 2026-09-02 |
+| MSR-CMS-UAT-12 | FIA Rallycross ticket map section and ordered ticket presentation | ✅ Done | 2026-09-02 |
 
 ### MS-CMS-MANUAL-1 — Sarga Motorsport CMS user manual
 
@@ -12974,3 +12975,46 @@ Status: ✅ Done — 2026-08-29
   not restore presentation values that were intentionally overwritten earlier.
 - Repeatable arrays still merge by existing position; inheritance does not
   create, delete, or reorder entries.
+
+### MSR-CMS-UAT-12 — FIA Rallycross ticket map section and ordered ticket presentation
+
+#### What was done
+
+- Added a localized `Ticket Map Section` component to Motorsport Program with
+  an explicit `isActive` show/hide control, accessible alt text, and image media.
+- Placed the component immediately before the related ticket CTA in the
+  Motorsport Program CMS editor layout.
+- Rendered the ticket map before the ticket card on the FIA Rallycross page,
+  preserving the complete image with responsive, uncropped sizing.
+- Added the supplied 1280 × 941 ticket-map artwork to seed media and made the
+  seed attachment idempotent.
+
+#### Files changed
+
+- `cms/src/components/motorsport/ticket-map-section.json`
+- `cms/src/api/motorsport-program/content-types/motorsport-program/schema.json`
+- `cms/src/migrations/motorsport-program-editor-layout.ts`
+- `cms/src/seed.ts`
+- `frontend-motorsport/src/lib/cms-data.ts`
+- `frontend-motorsport/src/types/design-system.ts`
+- `frontend-motorsport/src/app/campaign/[slug]/page.tsx`
+- `cms/data/seed-media/fia-rallycross-ticket-map.png`
+
+#### How verified
+
+- Local CMS editor showed `ticketMapSection` with the image and `isActive`
+  control directly before `relatedTicketCtas`.
+- Local frontend DOM contained one ticket-map section and one ticket-card
+  section in that order.
+- Captured the local page at desktop and 390 px mobile width; the complete
+  map image rendered above the ticket card without cropping.
+- CMS typecheck, CMS build, Motorsport typecheck, Motorsport build, and
+  `git diff --check` passed.
+
+#### Notes / caveats
+
+- The image is attached automatically by the demo seed only when the FIA
+  programme has no ticket map yet. Editors can replace the image or switch
+  `isActive` off without the seed overwriting those choices.
+- This change has not been committed, pushed, or deployed to staging because
+  the request only asked for the implementation and local verification.

@@ -162,6 +162,12 @@ export type MotorsportFiaRallycrossContent = {
   raceDayGuideSection?: MotorsportPresentationSection | null;
 };
 
+export type MotorsportTicketMapSection = {
+  isActive: boolean;
+  image: MediaSource;
+  imageAlt?: string;
+};
+
 export type ScheduleEntry = {
   id: string;
   roundLabel: string;
@@ -211,6 +217,7 @@ export type MotorsportProgram = {
   presentationHero?: MotorsportPageHero | null;
   presentationSections?: MotorsportPresentationSection[];
   fiaRallycrossContent?: MotorsportFiaRallycrossContent;
+  ticketMapSection?: MotorsportTicketMapSection | null;
   informationBand?: MotorsportPageInformationBand | null;
 };
 export type MotorsportProgramDetail = MotorsportProgram & {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { LocaleLink as Link } from "@/components/i18n/locale-link";
 import { notFound } from "next/navigation";
 import { permanentRedirect } from "next/navigation";
@@ -505,6 +506,32 @@ export async function RallycrossCampaignPage() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+      ) : null}
+
+      {campaign.ticketMapSection?.image &&
+      campaign.ticketMapSection.isActive !== false ? (
+        <section
+          data-cms-section-key="ticket-map"
+          data-cms-enabled="true"
+          aria-label="Ticket map"
+          className={`ms-reflected-light-surface ms-section ${nextAlternatingSurface()}`}
+        >
+          <div className="ms-shell">
+            <figure className="overflow-hidden border border-ms-charcoal/12 bg-ms-warm-white shadow-[0_18px_50px_rgba(8,26,58,0.12)]">
+              <Image
+                src={campaign.ticketMapSection.image}
+                alt={
+                  campaign.ticketMapSection.imageAlt ||
+                  "FIA Rallycross World Cup Indonesia 2026 ticket map"
+                }
+                width={1280}
+                height={941}
+                sizes="(max-width: 1280px) calc(100vw - 2rem), 1200px"
+                className="h-auto w-full object-contain"
+              />
+            </figure>
           </div>
         </section>
       ) : null}

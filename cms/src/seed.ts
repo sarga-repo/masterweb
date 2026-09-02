@@ -1749,6 +1749,10 @@ const FIA_CAMPAIGN_MEDIA = {
     file: "fia-rallycross-campaign-hero.jpg",
     alt: "Two rallycross cars racing side by side on a dusty tropical circuit in Indonesia",
   },
+  ticketMap: {
+    file: "fia-rallycross-ticket-map.png",
+    alt: "FIA Rallycross World Cup Indonesia 2026 ticket map showing spectator areas and circuit zones",
+  },
   slides: [
     {
       file: "fia-rallycross-campaign-first-time.jpg",
@@ -3431,12 +3435,14 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
       "motorsportPresentation.hero.backgroundMedia",
       "fiaRallycrossContent.rundownSection.rundownItems",
       "fiaRallycrossContent.raceDayGuideSection.ruleItems",
+      "ticketMapSection.image",
       "relatedEvents",
       "relatedTicketCtas",
       "seo",
     ],
   })) as {
     documentId: string;
+    ticketMapSection?: { image?: unknown };
     motorsportPresentation?: { hero?: { backgroundMedia?: unknown } };
     bannerSlides?: Array<{ image?: unknown }>;
     fiaRallycrossContent?: {
@@ -3459,6 +3465,7 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         fiaCampaignSeed.eventRules.length ||
       (fiaCampaign.relatedEvents?.length ?? 0) === 0 ||
       (fiaCampaign.relatedTicketCtas?.length ?? 0) === 0 ||
+      !fiaCampaign.ticketMapSection?.image ||
       !fiaCampaign.seo;
 
     if (needsCampaignCompletion) {
@@ -3471,6 +3478,11 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
         FIA_CAMPAIGN_MEDIA.slides.map((slide) =>
           uploadIfMissing(strapi, slide.file, slide.alt),
         ),
+      );
+      const ticketMapMedia = await uploadIfMissing(
+        strapi,
+        FIA_CAMPAIGN_MEDIA.ticketMap.file,
+        FIA_CAMPAIGN_MEDIA.ticketMap.alt,
       );
       const relatedEvent = (await documents("api::motorsport-event.motorsport-event").findFirst({
         filters: {
@@ -3545,6 +3557,15 @@ export default async function seedDemoContent(strapi: Core.Strapi) {
           ...(relatedEvent ? { relatedEvents: [relatedEvent.documentId] } : {}),
           ...(relatedTicket
             ? { relatedTicketCtas: [relatedTicket.documentId] }
+            : {}),
+          ...(ticketMapMedia && !fiaCampaign.ticketMapSection?.image
+            ? {
+                ticketMapSection: {
+                  isActive: true,
+                  image: ticketMapMedia.id,
+                  imageAlt: FIA_CAMPAIGN_MEDIA.ticketMap.alt,
+                },
+              }
             : {}),
           ...(motorsportSite ? { sites: [motorsportSite.documentId] } : {}),
         },

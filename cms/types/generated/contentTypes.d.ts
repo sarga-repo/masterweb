@@ -3053,6 +3053,15 @@ export interface ApiMotorsportProgramMotorsportProgram
           localized: true;
         };
       }>;
+    ticketMapSection: Schema.Attribute.Component<
+      'motorsport.ticket-map-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     title: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{

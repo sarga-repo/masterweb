@@ -20,6 +20,8 @@ const TICKET_CTA_KEY =
 const PAGE_SECTION_KEY = "configuration_components::motorsport.page-section";
 const PAGE_SECTION_ITEM_KEY =
   "configuration_components::motorsport.page-section-item";
+const TICKET_MAP_SECTION_KEY =
+  "configuration_components::motorsport.ticket-map-section";
 const PAGE_LAYOUT_PREFIX = "configuration_content_types::api::";
 
 type LayoutRow = Array<{ name: string; size: number }>;
@@ -71,6 +73,7 @@ const PROGRAM_EDIT_LAYOUT: LayoutRow[] = [
     { name: "becomeRidersLabel", size: 6 },
     { name: "becomeRidersUrl", size: 6 },
   ],
+  [{ name: "ticketMapSection", size: 12 }],
   [
     { name: "relatedEvents", size: 6 },
     { name: "relatedTicketCtas", size: 6 },
@@ -85,6 +88,14 @@ const PROGRAM_EDIT_LAYOUT: LayoutRow[] = [
   ],
   [{ name: "sites", size: 6 }],
   [{ name: "seo", size: 12 }],
+];
+
+const TICKET_MAP_SECTION_EDIT_LAYOUT: LayoutRow[] = [
+  [{ name: "isActive", size: 4 }],
+  [
+    { name: "image", size: 8 },
+    { name: "imageAlt", size: 4 },
+  ],
 ];
 
 const PAGE_SECTION_EDIT_LAYOUT: LayoutRow[] = [
@@ -494,7 +505,7 @@ export async function ensureMotorsportProgramEditorLayout(strapi: Core.Strapi) {
     store,
     PROGRAM_KEY,
     PROGRAM_EDIT_LAYOUT,
-    PROGRAM_EDIT_LAYOUT.slice(0, 4),
+    PROGRAM_EDIT_LAYOUT.slice(0, 16),
   );
   await repairEditLayout(
     strapi,
@@ -554,5 +565,12 @@ export async function ensureMotorsportProgramEditorLayout(strapi: Core.Strapi) {
     PAGE_SECTION_ITEM_KEY,
     PAGE_SECTION_ITEM_EDIT_LAYOUT,
     PAGE_SECTION_ITEM_EDIT_LAYOUT.slice(0, 1),
+  );
+  await repairEditLayout(
+    strapi,
+    store,
+    TICKET_MAP_SECTION_KEY,
+    TICKET_MAP_SECTION_EDIT_LAYOUT,
+    TICKET_MAP_SECTION_EDIT_LAYOUT,
   );
 }

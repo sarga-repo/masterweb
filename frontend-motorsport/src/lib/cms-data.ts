@@ -13,6 +13,7 @@ import type {
   MotorsportRegulation,
   MotorsportRider,
   MotorsportStatus,
+  MotorsportTicketMapSection,
   MotorsportTicketCard,
   PartnerItem,
   ScheduleEntry,
@@ -266,6 +267,11 @@ type CmsProgram = {
   presentationSections?: CmsPageSection[];
   fiaRallycrossContent?: CmsFiaRallycrossContent | null;
   motorsportPresentation?: CmsDetailPresentation | null;
+  ticketMapSection?: {
+    isActive?: boolean;
+    image?: StrapiMedia | null;
+    imageAlt?: string;
+  } | null;
 };
 
 type CmsFiaSectionPresentation = {
@@ -1587,6 +1593,16 @@ function mapProgram(entry: CmsProgram): MotorsportProgram {
       ? "Explore event"
       : entry.primaryCtaLabel || "Explore programme",
     presentationHero,
+    ticketMapSection: entry.ticketMapSection?.image?.url
+      ? ({
+          isActive: entry.ticketMapSection.isActive !== false,
+          image: mediaUrl(entry.ticketMapSection.image.url),
+          imageAlt:
+            entry.ticketMapSection.imageAlt ||
+            entry.ticketMapSection.image.alternativeText ||
+            "FIA Rallycross ticket map",
+        } satisfies MotorsportTicketMapSection)
+      : null,
     fiaRallycrossContent: mappedFiaContent,
     presentationSections: (entry.presentationSections ?? []).map((section) => ({
       sectionKey: section.sectionKey,
@@ -1734,6 +1750,7 @@ export async function fetchProgramBySlug(
       "motorsportPresentation.hero.backgroundMedia",
       "motorsportPresentation.hero.mobileBackgroundMedia",
       "motorsportPresentation.informationBand.metrics",
+      "ticketMapSection.image",
     ],
     filters: {
       ...SITE_SCOPE_FILTERS,
@@ -1790,6 +1807,7 @@ export async function fetchCampaignProgramBySlug(
       "motorsportPresentation.hero.backgroundMedia",
       "motorsportPresentation.hero.mobileBackgroundMedia",
       "motorsportPresentation.informationBand.metrics",
+      "ticketMapSection.image",
     ],
     filters: {
       ...SITE_SCOPE_FILTERS,

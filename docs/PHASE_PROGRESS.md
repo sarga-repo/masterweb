@@ -13016,5 +13016,33 @@ Status: ✅ Done — 2026-08-29
 - The image is attached automatically by the demo seed only when the FIA
   programme has no ticket map yet. Editors can replace the image or switch
   `isActive` off without the seed overwriting those choices.
-- This change has not been committed, pushed, or deployed to staging because
-  the request only asked for the implementation and local verification.
+- Committed as `50f6256aa03b3b7bccbd3c21867763b06c094578`, pushed, and deployed
+  to staging. The staging image was attached manually through the CMS because
+  `SEED_DEMO_CONTENT=false` is intentional there.
+
+### MSR-CMS-UAT-13 — Top-safe homepage hero video framing
+
+#### What was done
+
+- Preserved each hero slide's existing horizontal subject anchor while
+  top-aligning the video crop for wide viewports.
+- Prevented the 2:1 hero video from center-cropping important campaign logos
+  near the top edge when the hero container is wider than the source video.
+
+#### Files changed
+
+- `frontend-motorsport/src/components/sections/motorsport-hero.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Confirmed staging hero video source is 1440 × 720 (2:1) and the wide-screen
+  hero container is capped at 50rem, which caused the vertical crop.
+- Local browser verification reports `object-fit: cover` with the new
+  top-safe positions (`100% 0%` for the active right-anchored slide).
+- Motorsport typecheck, lint, production build, and `git diff --check` passed.
+
+#### Notes / caveats
+
+- The change is local and verified but has not yet been committed, pushed, or
+  deployed to staging.

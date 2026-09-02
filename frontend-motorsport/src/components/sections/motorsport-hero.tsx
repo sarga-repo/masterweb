@@ -33,6 +33,15 @@ const ANCHOR_CLASS: Record<HomepageHeroSlide["subjectAnchor"], string> = {
   right: "object-right",
 };
 
+// Hero videos carry important campaign marks near their top edge. Keep the
+// existing horizontal subject anchor, but protect that top-safe area when a
+// wider viewport forces object-cover to crop vertically.
+const VIDEO_ANCHOR_CLASS: Record<HomepageHeroSlide["subjectAnchor"], string> = {
+  left: "[object-position:0%_0%]",
+  center: "[object-position:50%_0%]",
+  right: "[object-position:100%_0%]",
+};
+
 type MotorsportHeroProps = {
   slides: HomepageHeroSlide[];
 };
@@ -136,6 +145,7 @@ export function MotorsportHero({ slides }: MotorsportHeroProps) {
       {items.map((slide, index) => {
         const active = index === activeIndex;
         const anchorClass = ANCHOR_CLASS[slide.subjectAnchor];
+        const videoAnchorClass = VIDEO_ANCHOR_CLASS[slide.subjectAnchor];
         const poster = slide.video?.poster ?? slide.image;
         const mobilePoster = slide.video?.mobilePoster ?? slide.mobileImage;
         const hasMobileArtwork = Boolean(mobilePoster);
@@ -181,7 +191,7 @@ export function MotorsportHero({ slides }: MotorsportHeroProps) {
                 webm={slide.video.webm}
                 poster={typeof poster === "string" ? poster : undefined}
                 paused={userPaused}
-                objectClassName={`object-contain bg-ms-charcoal sm:object-cover ${anchorClass} ${hasMobileArtwork ? "hidden sm:block" : ""}`}
+                objectClassName={`object-contain bg-ms-charcoal sm:object-cover ${videoAnchorClass} ${hasMobileArtwork ? "hidden sm:block" : ""}`}
               />
             ) : null}
           </div>

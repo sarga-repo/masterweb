@@ -91,16 +91,16 @@ type FeatureProps = {
 
 function Feature({ id, className, logo, backgroundImage, title, children, href, label, badgeLogo, partnerLogos }: FeatureProps) {
   return (
-    <a id={id} className={`feature ${className}`} href={href} target="_blank" rel="noreferrer" aria-label={label}>
+    <div id={id} className={`feature ${className}`}>
       {backgroundImage && <Image src={backgroundImage} fill sizes="(max-width: 900px) 500vw, 100vw" alt="" className="featureBackground" />}
       <div className="featureContent">
         {logo ? <Image src={logo} width={250} height={100} alt="" className="featureLogo" /> : <h3 className="featureWordmark">{title}</h3>}
         <div className="featureCopy">{children}</div>
-        <span className="seeMore">See more →</span>
+        <a className="seeMore" href={href} target="_blank" rel="noreferrer" aria-label={label}>See more →</a>
         {partnerLogos && <div className="partnerLogos">{partnerLogos.map((partner) => <Image key={partner.alt} src={partner.src} width={220} height={110} alt={partner.alt} className={partner.className} />)}</div>}
         {badgeLogo && <Image src={badgeLogo} width={180} height={90} alt="Indonesian Junior Talent Cup" className="badgeLogo" />}
       </div>
-    </a>
+    </div>
   );
 }
 

@@ -242,17 +242,18 @@ button { font: inherit; }
   content: "";
   position: absolute;
   inset: 0 auto 0 0;
-  width: 100%;
-  background: url("/ecosystem-band-source.png?v=2") center / 100% 100% no-repeat;
+  z-index: 0;
+  width: 58vw;
+  background: linear-gradient(90deg, rgba(255,255,255,.19) 0%, rgba(255,255,255,.14) 42%, rgba(255,255,255,.04) 88%, rgba(255,255,255,0) 100%);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 810 280' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='white'%3E%3Cpath opacity='.2' d='M130 0h72l-81 140H49L130 0Z'/%3E%3Cpath opacity='.43' d='M265 0h72l-81 140h-72L265 0Z'/%3E%3Cpath opacity='.82' d='M400 0h72l-81 140h-72L400 0Z'/%3E%3Cpath d='M535 0h72l-81 140h-72L535 0Z'/%3E%3Cpath opacity='.2' d='M117 140h72l-81 140H36l81-140Z'/%3E%3Cpath opacity='.43' d='M252 140h72l-81 140h-72l81-140Z'/%3E%3Cpath opacity='.82' d='M387 140h72l-81 140h-72l81-140Z'/%3E%3Cpath d='M522 140h72l-81 140h-72l81-140Z'/%3E%3C/g%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 810 280' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='white'%3E%3Cpath opacity='.2' d='M130 0h72l-81 140H49L130 0Z'/%3E%3Cpath opacity='.43' d='M265 0h72l-81 140h-72L265 0Z'/%3E%3Cpath opacity='.82' d='M400 0h72l-81 140h-72L400 0Z'/%3E%3Cpath d='M535 0h72l-81 140h-72L535 0Z'/%3E%3Cpath opacity='.2' d='M117 140h72l-81 140H36l81-140Z'/%3E%3Cpath opacity='.43' d='M252 140h72l-81 140h-72l81-140Z'/%3E%3Cpath opacity='.82' d='M387 140h72l-81 140h-72l81-140Z'/%3E%3Cpath d='M522 140h72l-81 140h-72l81-140Z'/%3E%3C/g%3E%3C/svg%3E");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
 }
-.ecosystemBand h2 { position: relative; margin: 0; display: flex; flex-direction: column; transform: translate(-.16vw, -.31vw); font-family: var(--font-zalando), sans-serif; line-height: .78; letter-spacing: -.04em; }
+.ecosystemBand h2 { position: relative; z-index: 1; margin: 0; display: flex; flex-direction: column; transform: translate(-.16vw, -.31vw); font-family: var(--font-zalando), sans-serif; line-height: .78; letter-spacing: -.04em; }
 .ecosystemBand strong { font-size: 4.18vw; font-weight: 650; }
 .ecosystemBand span { margin-top: .45vw; font-size: 1.68vw; font-weight: 600; }
-.ecosystemBand p { position: relative; width: 28.1vw; margin: 0 1.04vw 0 0; transform: translateY(-.21vw); font-size: 1.0417vw; line-height: 1.2; letter-spacing: -.016em; }
-@media (min-width: 901px) {
-  .ecosystemBand h2,
-  .ecosystemBand > p { opacity: 0; }
-}
+.ecosystemBand p { position: relative; z-index: 1; width: 28.1vw; margin: 0 1.04vw 0 0; transform: translateY(-.21vw); font-size: 1.0417vw; line-height: 1.2; letter-spacing: -.016em; }
 
 .feature {
   position: relative;
@@ -386,8 +387,7 @@ button { font: inherit; }
   .directorDetail { min-height: 36px; margin: 10px 2px 0; font-size: 11px; line-height: 1.25; }
 
   .ecosystemBand { height: auto; min-height: 240px; padding: 36px var(--gutter); align-items: flex-start; flex-direction: column; justify-content: center; gap: 32px; }
-  .ecosystemBand::before { width: 100%; background: none; }
-  .ecosystemBand h2, .ecosystemBand > p { opacity: 1; }
+  .ecosystemBand::before { width: 100%; }
   .ecosystemBand strong { font-size: 58px; }
   .ecosystemBand span { margin-top: 7px; font-size: 23px; }
   .ecosystemBand p { width: auto; margin: 0; font-size: 12px; line-height: 1.5; }

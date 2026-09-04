@@ -150,7 +150,7 @@ export default function Home() {
             <p>SARGA.CO’s dedicated horse sport business unit, building a sustainable ecosystem through proprietary IP, events, partnerships, and experiences.</p>
             <p>At its core is Indonesia’s Horse Racing, SARGA.CO’s flagship IP developed with PP PORDASI to bring Indonesia’s horse racing heritage into a modern sportainment experience.</p>
           </Feature>
-          <Feature className="motorsport" logo={logoMotorsport} backgroundImage={motorsportBanner} badgeLogo={logoIjct} href="https://staging-motorsport.sarga.co/" label="Open Sarga Motorsport website">
+          <Feature className="motorsport" logo={logoMotorsport} backgroundImage={motorsportBanner} badgeLogo={logoIjct} href="https://sargamotorsport.co/" label="Open Sarga Motorsport website">
             <p>Our motorsport division and IP engine, focus on developing and commercialising motorsport properties across sport, entertainment, and business.</p>
             <p>Its portfolio includes strategic global IP, the FIA Rallycross World Cup Indonesia 2026, and owned IP, Indonesian Junior Talent Cup (IJTC), bringing world-class motorsport to Indonesia while strengthening the ecosystem and nurturing future racing talent.</p>
           </Feature>

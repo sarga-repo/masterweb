@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import faviconImage from "../../assets/images/logos/sarga_co_secondary_full_square.png";
 
 const zalando = localFont({
   src: "../../assets/fonts/ZalandoSansExpanded-VariableFont_wght.ttf",
@@ -20,6 +21,9 @@ export const metadata: Metadata = {
   title: "Sarga.co | 360° Sports & Entertainment Ecosystem",
   description:
     "Sarga.co is Indonesia's premier integrated sports and entertainment ecosystem.",
+  icons: {
+    icon: faviconImage.src,
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

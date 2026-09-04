@@ -33,7 +33,7 @@ Client-supplied or Cloudflare origin certificates:
 Options:
   --gateway-host HOST      Optional Gateway hostname (port 3000).
   --gateway-onepage-host HOST
-                           Optional one-page Gateway hostname (port 3003).
+Optional one-page Gateway hostname (port 3004).
   --motorsport-host HOST   Required Motorsport hostname.
   --horsesport-host HOST   Optional Horse Sport hostname (port 3002).
   --cms-host HOST          Required CMS hostname.
@@ -367,7 +367,7 @@ EOF
     fi
     if [[ -n "$gateway_onepage_host" ]]; then
       write_redirect_server "$gateway_onepage_host"
-      write_tls_server "$gateway_onepage_host" "127.0.0.1:3003" \
+  write_tls_server "$gateway_onepage_host" "127.0.0.1:3004" \
         "$gateway_onepage_cert" "$gateway_onepage_key" "60s"
     fi
     write_redirect_server "$motorsport_host"
@@ -386,7 +386,7 @@ EOF
       write_http_server "$gateway_host" "127.0.0.1:3000" "60s"
     fi
     if [[ -n "$gateway_onepage_host" ]]; then
-      write_http_server "$gateway_onepage_host" "127.0.0.1:3003" "60s"
+  write_http_server "$gateway_onepage_host" "127.0.0.1:3004" "60s"
     fi
     write_http_server "$motorsport_host" "127.0.0.1:3001" "60s"
     if [[ -n "$horsesport_host" ]]; then
@@ -447,7 +447,7 @@ if [[ -n "$gateway_host" ]]; then
   printf 'Gateway: %s -> 127.0.0.1:3000\n' "$gateway_host"
 fi
 if [[ -n "$gateway_onepage_host" ]]; then
-  printf 'Gateway one-page: %s -> 127.0.0.1:3003\n' "$gateway_onepage_host"
+printf 'Gateway one-page: %s -> 127.0.0.1:3004\n' "$gateway_onepage_host"
 fi
 printf 'Motorsport: %s -> 127.0.0.1:3001\n' "$motorsport_host"
 if [[ -n "$horsesport_host" ]]; then

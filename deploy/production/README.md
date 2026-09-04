@@ -125,7 +125,7 @@ sudo deploy/production/build_applications.sh --motorsport --restart
 
 To deploy the static one-page Gateway presentation separately, create
 `/etc/sarga/gateway-onepage.env` with `NODE_ENV=production`, then build it and
-add an optional Nginx hostname for port 3003:
+add an optional Nginx hostname for port 3004:
 
 ```bash
 sudo deploy/production/build_applications.sh --gateway-onepage

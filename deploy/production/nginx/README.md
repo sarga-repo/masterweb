@@ -65,7 +65,7 @@ sudo deploy/production/nginx/install-sarga-stack.sh \
 ```
 
 Gateway maps to loopback port 3000, the one-page Gateway presentation maps to
-port 3003, and Horse Sport maps to port 3002. With `--tls`, also pass the
+port 3004, and Horse Sport maps to port 3002. With `--tls`, also pass the
 matching certificate/key options for every configured optional host. A
 wildcard certificate may reuse the same absolute paths for multiple hosts if it
 covers every configured hostname.

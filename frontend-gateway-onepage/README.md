@@ -9,7 +9,7 @@ pnpm install
 pnpm dev
 ```
 
-The app runs on `http://localhost:3003` so it can coexist with the existing gateway, motorsport, and horse sport frontends.
+The app runs on `http://localhost:3004` so it can coexist with the existing gateway, motorsport, and horse sport frontends.
 
 ## Production
 

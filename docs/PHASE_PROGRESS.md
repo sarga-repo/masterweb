@@ -117,7 +117,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
   and Venue artwork renders from ~2K sources instead of low-resolution viewport
   thumbnails; desktop source sizing remains unchanged.
 - Added the static one-page Gateway to the production deployment path with its
-  own build target, systemd unit, loopback port 3003, optional Nginx hostname,
+  own build target, systemd unit, loopback port 3004, optional Nginx hostname,
   TLS flags, staging workflow target, and CI quality gate.
 
 #### Files changed
@@ -157,11 +157,11 @@ brand revamp tracks. Update this file at the end of **every** completed phase
   one line while the 1920 px computed desktop values remain unchanged.
 - Validated the deployment shell helpers with `bash -n`, checked all workflow
   YAML files parse successfully, and verified the new one-page target is wired
-  to its port 3003 systemd/Nginx route.
+  to its port 3004 systemd/Nginx route.
 
 #### Notes / caveats
 
-- Phase 1 is intentionally static and runs on port 3003 beside the existing apps.
+- Phase 1 is intentionally static and runs on port 3004 beside the existing apps.
 - The OFF THE GAME and Sarga Festival vendor file is a single combined artwork;
   it is intentionally rendered as one full-section background so its upper and
   lower compositions remain aligned across the media pair. Mobile uses a

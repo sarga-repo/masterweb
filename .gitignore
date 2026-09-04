@@ -39,6 +39,9 @@ sarga_multisite_codex_ready_package/
 .claude/
 .agents/
 .serena/
+.codex/
+.github/
+.analysis/
 sarga_multisite_horsesport_codex_ready_package/
 supporting-docs/
 

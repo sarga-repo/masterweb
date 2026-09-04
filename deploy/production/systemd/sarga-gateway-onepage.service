@@ -1,0 +1,21 @@
+[Unit]
+Description=Sarga.co one-page gateway presentation frontend
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=sarga
+Group=sarga
+WorkingDirectory=/srv/sarga-website/frontend-gateway-onepage
+EnvironmentFile=/etc/sarga/gateway-onepage.env
+ExecStart=/usr/local/bin/pnpm exec next start --hostname 127.0.0.1 --port 3003
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+KillSignal=SIGINT
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

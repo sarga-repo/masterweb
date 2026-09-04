@@ -34,6 +34,8 @@ Usage:
 Targets:
   cms          Build and restart the shared Strapi CMS.
   gateway      Build and restart the Gateway frontend.
+  gateway-onepage
+               Build and restart the static one-page Gateway presentation frontend.
   motorsport   Build and restart the Motorsport frontend.
   all-active   Build and restart CMS, Gateway, and Motorsport sequentially.
 
@@ -93,6 +95,11 @@ case "$target" in
     build_flags=(--gateway)
     services=(sarga-gateway)
     health_urls=(http://127.0.0.1:3000/)
+    ;;
+  gateway-onepage)
+    build_flags=(--gateway-onepage)
+    services=(sarga-gateway-onepage)
+    health_urls=(http://127.0.0.1:3003/)
     ;;
   motorsport)
     build_flags=(--motorsport)

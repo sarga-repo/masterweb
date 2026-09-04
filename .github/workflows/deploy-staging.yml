@@ -11,6 +11,7 @@ on:
         options:
           - all-active
           - gateway
+          - gateway-onepage
           - motorsport
           - cms
       confirmation:
@@ -68,12 +69,20 @@ jobs:
       - name: Verify public staging routes
         env:
           DEPLOY_TARGET: ${{ inputs.target }}
+          GATEWAY_ONEPAGE_URL: ${{ vars.SARGA_GATEWAY_ONEPAGE_URL }}
         run: |
           set -Eeuo pipefail
 
           case "$DEPLOY_TARGET" in
             gateway)
               urls=(https://staging.sarga.co/)
+              ;;
+            gateway-onepage)
+              if [[ ! "$GATEWAY_ONEPAGE_URL" =~ ^https://[^/]+/?$ ]]; then
+                echo "SARGA_GATEWAY_ONEPAGE_URL must be configured as an HTTPS origin." >&2
+                exit 1
+              fi
+              urls=("${GATEWAY_ONEPAGE_URL%/}/")
               ;;
             motorsport)
               urls=(https://staging-motorsport.sarga.co/)

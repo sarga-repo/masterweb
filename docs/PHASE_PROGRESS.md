@@ -47,6 +47,126 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | GWR-6            | Publications and Ticket Hub                  | ⬜ Todo             | —          |
 | GWR-7            | Cross-route QA and launch readiness          | ⬜ Todo             | —          |
 
+## Sarga.co one-page presentation track (`frontend-gateway-onepage/`)
+
+| Phase | Title                                  | Status  | Date       |
+| ----- | -------------------------------------- | ------- | ---------- |
+| GWO-1 | Static one-page gateway implementation | ✅ Done | 2026-09-04 |
+
+### GWO-1 — Static one-page gateway implementation
+
+#### What was done
+
+- Built a standalone static Next.js frontend from the client-supplied one-page PDF.
+- Recreated the hero, About and leadership content, 360° ecosystem banners,
+  patterned media/festival area, and contact footer with responsive mobile layouts.
+- Added in-page navigation and all supplied external CTA destinations; no CMS or
+  runtime API dependency was introduced.
+- Expanded the presentation canvas from a centered 1080 px shell to true
+  viewport width while preserving the Illustrator artboard proportions.
+- Re-extracted the Horse Sport, Motorsport, IJTC, Venues, OFF THE GAME, Sarga
+  Festival, Instagram, and LinkedIn marks directly from the Illustrator PDF and
+  added a reproducible extraction script.
+- Replaced available presentation crops with the vendor's original hero, Horse
+  Sport, Venue, ecosystem-logo, partner-logo, and leadership artwork.
+- Corrected the hero to a localized lower-left orange glow and replaced the
+  simplified diagonal band with the Gateway racing-pattern mask.
+- Rebuilt the leadership rows, 360° banner, and footer against the 1920 px
+  Illustrator coordinates, including the left-to-right pattern fade and exact
+  footer logo, flag, social, contact, divider, and copyright alignment.
+- Matched the About statement's PDF red-to-orange text gradient with sampled
+  multi-stop colors while preserving the responsive typography rules.
+- Replaced the remaining temporary OFF THE GAME, IJCT, and Podcast Pacuan Kuda
+  marks with the vendor-supplied original PNG artwork.
+- Rebuilt the 360° motif in a 1920 × 266 coordinate system from the final
+  exact-aspect crop: 78 px flags on a 162 px repeat, an 84 px half-row slant,
+  aligned checker rows, sampled multi-stop gradient colors, flat contrast, and
+  stepped left-to-right fade. Applied the PDF's separate stepped opacity build
+  to the footer flag motif.
+- Completed the final artboard audit: About copy now uses the PDF measure,
+  20 px body rhythm, four-line statement composition, and exact 377 px section
+  height; leadership names and role labels use the PDF's explicit line breaks
+  and baselines. The desktop 360° band now uses an exact 1920 × 266 PDF
+  extraction as its visual background while retaining live accessible copy.
+- Completed a content-only ecosystem-panel audit against the Illustrator crops:
+  Horse Sport, Motorsport, Venues, OFF THE GAME, and Sarga Festival now use the
+  reference logo bounds, paragraph measures, explicit PDF line breaks, line
+  spacing, CTA baselines, and Motorsport badge position. Mobile hides only the
+  desktop-only manual breaks so copy remains fluid at narrow widths.
+- Matched the supplied image backgrounds to the PDF crops: Hero uses the
+  reference vertical crop, Horse Sport uses the right-edge horizontal crop from
+  the vendor banner, and Venues uses the measured vertical perspective crop;
+  mobile restores centered image positioning for fluid handheld framing.
+- Added the vendor-supplied Motorsport composite background and the combined
+  OFF THE GAME / Sarga Festival composite background as full-bleed responsive
+  image layers, replacing the temporary placeholder surfaces. Replaced Aseanto
+  Oudang's portrait with the supplied `anto@2x_hd.png` artwork and checked the
+  crops at desktop and mobile widths.
+- Corrected the media pair's mobile layout: OFF THE GAME and Festival copy now
+  use the full content measure instead of collapsing into narrow vertical
+  columns, CTA arrows stay inline, and the Festival mark is scaled to match the
+  neighboring logo. Desktop sizing remains unchanged.
+- Swapped the footer Instagram and LinkedIn marks to the vendor-supplied
+  high-resolution white logo assets while preserving the existing link targets,
+  icon sizing, and responsive footer layout.
+- Rebalanced the supplied social artwork's internal whitespace so the Instagram
+  and LinkedIn marks match the PDF's visual scale on desktop and mobile while
+  remaining clipped cleanly inside their existing touch targets.
+- Increased mobile background image fetch density for the feature and media
+  layers (`500vw` responsive source sizing) so cover-cropped horse, Motorsport,
+  and Venue artwork renders from ~2K sources instead of low-resolution viewport
+  thumbnails; desktop source sizing remains unchanged.
+- Added the static one-page Gateway to the production deployment path with its
+  own build target, systemd unit, loopback port 3003, optional Nginx hostname,
+  TLS flags, staging workflow target, and CI quality gate.
+
+#### Files changed
+
+- `frontend-gateway-onepage/src/app/**`
+- `frontend-gateway-onepage/public/**`
+- `frontend-gateway-onepage/scripts/extract_source_logos.py`
+- `frontend-gateway-onepage/public/ecosystem-band-source.png`
+- `frontend-gateway-onepage/assets/images/banners/banner motorsport.png`
+- `frontend-gateway-onepage/assets/images/banners/banners otg dan sf.png`
+- `frontend-gateway-onepage/assets/images/photo_leaders/anto@2x_hd.png`
+- `frontend-gateway-onepage/assets/images/logos/instagram_white.png`
+- `frontend-gateway-onepage/assets/images/logos/linkedin_white.png`
+- `frontend-gateway-onepage/{package.json,pnpm-lock.yaml,tsconfig.json,next.config.ts,postcss.config.mjs,eslint.config.mjs,README.md}`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- TypeScript, ESLint, and the production Next.js build passed.
+- Browser inspection covered the 1920 px Illustrator reference canvas, a 2560 px
+  full-bleed viewport, and a 390 px mobile viewport. All three had no horizontal
+  overflow; the eight supplied external CTA destinations were also verified.
+- Confirmed the three replacement vendor assets resolved through Next Image and
+  retained their original intrinsic proportions.
+- Final 1920 px audit measured the section stack at 1050 / 377 / 1080 / 3013 /
+  321 px with a 1920 px scroll width and no horizontal overflow; CTA hrefs
+  were re-read from the rendered DOM.
+- Re-captured all four ecosystem panels at the 1920 px artboard width and
+  compared content bounds and line wraps to the PDF crops; rechecked 390 px
+  mobile width for fluid copy and no overflow. TypeScript, ESLint, and the
+  production build pass after the final calibration.
+- Re-captured Hero, Horse Sport, and Venues at 1920 px and visually compared
+  background landmarks against the PDF source crops; confirmed 390 px mobile
+  rendering remains overflow-free.
+- Rechecked the media pair at 390 px after the mobile-only width, wrapping, and
+  logo adjustments; both paragraphs render horizontally and both CTAs remain on
+  one line while the 1920 px computed desktop values remain unchanged.
+- Validated the deployment shell helpers with `bash -n`, checked all workflow
+  YAML files parse successfully, and verified the new one-page target is wired
+  to its port 3003 systemd/Nginx route.
+
+#### Notes / caveats
+
+- Phase 1 is intentionally static and runs on port 3003 beside the existing apps.
+- The OFF THE GAME and Sarga Festival vendor file is a single combined artwork;
+  it is intentionally rendered as one full-section background so its upper and
+  lower compositions remain aligned across the media pair. Mobile uses a
+  responsive crop because no separate mobile artwork was provided.
+
 ## CMS content coverage and site isolation planning track
 
 | Phase              | Title                                                                | Status                  | Date       |

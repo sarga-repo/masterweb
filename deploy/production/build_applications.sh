@@ -12,9 +12,11 @@ Usage:
 Applications (select at least one):
   --cms          Build the shared Strapi CMS.
   --gateway      Build the Gateway frontend.
+  --gateway-onepage
+                 Build the static one-page Gateway presentation frontend.
   --motorsport   Build the Motorsport frontend.
   --horsesport   Build the Horse Sport frontend.
-  --all          Build CMS, Gateway, Motorsport, then Horse Sport.
+  --all          Build CMS, Gateway, Gateway one-page, Motorsport, then Horse Sport.
 
 Options:
   --repo PATH       Repository path (default: /srv/sarga-website).
@@ -69,6 +71,10 @@ while (($#)); do
       add_selected gateway
       shift
       ;;
+    --gateway-onepage)
+      add_selected gateway-onepage
+      shift
+      ;;
     --motorsport)
       add_selected motorsport
       shift
@@ -80,6 +86,7 @@ while (($#)); do
     --all)
       add_selected cms
       add_selected gateway
+      add_selected gateway-onepage
       add_selected motorsport
       add_selected horsesport
       shift
@@ -144,6 +151,7 @@ application_path() {
   case "$1" in
     cms) printf '%s/cms' "$repo_path" ;;
     gateway) printf '%s/frontend-gateway' "$repo_path" ;;
+    gateway-onepage) printf '%s/frontend-gateway-onepage' "$repo_path" ;;
     motorsport) printf '%s/frontend-motorsport' "$repo_path" ;;
     horsesport) printf '%s/frontend-horsesport' "$repo_path" ;;
   esac

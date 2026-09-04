@@ -14,6 +14,7 @@ HTTP-only setup (useful before certificates are supplied):
 Add the other sites whenever they are deployed:
   sudo ./install-sarga-stack.sh \
     --gateway-host www.example.com \
+    --gateway-onepage-host presentation.example.com \
     --motorsport-host motorsport.example.com \
     --horsesport-host horsesport.example.com \
     --cms-host cms.example.com
@@ -31,12 +32,18 @@ Client-supplied or Cloudflare origin certificates:
 
 Options:
   --gateway-host HOST      Optional Gateway hostname (port 3000).
+  --gateway-onepage-host HOST
+                           Optional one-page Gateway hostname (port 3003).
   --motorsport-host HOST   Required Motorsport hostname.
   --horsesport-host HOST   Optional Horse Sport hostname (port 3002).
   --cms-host HOST          Required CMS hostname.
   --tls                    Configure HTTPS and redirect HTTP to HTTPS.
   --gateway-cert PATH      Gateway certificate/full-chain path.
   --gateway-key PATH       Gateway private-key path.
+  --gateway-onepage-cert PATH
+                           One-page Gateway certificate/full-chain path.
+  --gateway-onepage-key PATH
+                           One-page Gateway private-key path.
   --motorsport-cert PATH   Motorsport certificate/full-chain path.
   --motorsport-key PATH    Motorsport private-key path.
   --horsesport-cert PATH   Horse Sport certificate/full-chain path.
@@ -72,6 +79,7 @@ validate_hostname() {
 }
 
 gateway_host=""
+gateway_onepage_host=""
 motorsport_host=""
 horsesport_host=""
 cms_host=""
@@ -79,6 +87,8 @@ tls_enabled=false
 start_services=false
 gateway_cert=""
 gateway_key=""
+gateway_onepage_cert=""
+gateway_onepage_key=""
 motorsport_cert=""
 motorsport_key=""
 horsesport_cert=""
@@ -91,6 +101,11 @@ while (($#)); do
     --gateway-host)
       require_value "$1" "${2:-}"
       gateway_host="$2"
+      shift 2
+      ;;
+    --gateway-onepage-host)
+      require_value "$1" "${2:-}"
+      gateway_onepage_host="$2"
       shift 2
       ;;
     --motorsport-host)
@@ -120,6 +135,16 @@ while (($#)); do
     --gateway-key)
       require_value "$1" "${2:-}"
       gateway_key="$2"
+      shift 2
+      ;;
+    --gateway-onepage-cert)
+      require_value "$1" "${2:-}"
+      gateway_onepage_cert="$2"
+      shift 2
+      ;;
+    --gateway-onepage-key)
+      require_value "$1" "${2:-}"
+      gateway_onepage_key="$2"
       shift 2
       ;;
     --motorsport-cert)
@@ -172,10 +197,12 @@ done
 validate_hostname "$motorsport_host"
 validate_hostname "$cms_host"
 [[ -z "$gateway_host" ]] || validate_hostname "$gateway_host"
+[[ -z "$gateway_onepage_host" ]] || validate_hostname "$gateway_onepage_host"
 [[ -z "$horsesport_host" ]] || validate_hostname "$horsesport_host"
 
 configured_hosts=("$motorsport_host" "$cms_host")
 [[ -z "$gateway_host" ]] || configured_hosts+=("$gateway_host")
+[[ -z "$gateway_onepage_host" ]] || configured_hosts+=("$gateway_onepage_host")
 [[ -z "$horsesport_host" ]] || configured_hosts+=("$horsesport_host")
 for ((host_index = 0; host_index < ${#configured_hosts[@]}; host_index++)); do
   for ((other_index = host_index + 1; other_index < ${#configured_hosts[@]}; other_index++)); do
@@ -193,6 +220,9 @@ if [[ "$tls_enabled" == true ]]; then
   if [[ -n "$gateway_host" ]]; then
     tls_paths+=("$gateway_cert" "$gateway_key")
   fi
+  if [[ -n "$gateway_onepage_host" ]]; then
+    tls_paths+=("$gateway_onepage_cert" "$gateway_onepage_key")
+  fi
   if [[ -n "$horsesport_host" ]]; then
     tls_paths+=("$horsesport_cert" "$horsesport_key")
   fi
@@ -208,6 +238,7 @@ if [[ "$start_services" == true ]]; then
   [[ -f /etc/sarga/cms.env ]] || fail "missing /etc/sarga/cms.env"
   [[ -f /etc/sarga/motorsport.env ]] || fail "missing /etc/sarga/motorsport.env"
   [[ -z "$gateway_host" || -f /etc/sarga/gateway.env ]] || fail "missing /etc/sarga/gateway.env"
+  [[ -z "$gateway_onepage_host" || -f /etc/sarga/gateway-onepage.env ]] || fail "missing /etc/sarga/gateway-onepage.env"
   [[ -z "$horsesport_host" || -f /etc/sarga/horsesport.env ]] ||
     fail "missing /etc/sarga/horsesport.env"
 fi
@@ -222,6 +253,7 @@ legacy_nginx_enabled="/etc/nginx/sites-enabled/sarga-motorsport-stack.conf"
 
 configured_units=(sarga-cms.service sarga-motorsport.service)
 [[ -z "$gateway_host" ]] || configured_units+=(sarga-gateway.service)
+[[ -z "$gateway_onepage_host" ]] || configured_units+=(sarga-gateway-onepage.service)
 [[ -z "$horsesport_host" ]] || configured_units+=(sarga-horsesport.service)
 for unit in "${configured_units[@]}"; do
   [[ -f "$systemd_source/$unit" ]] || fail "missing repository service unit: $systemd_source/$unit"
@@ -333,6 +365,11 @@ EOF
       write_tls_server "$gateway_host" "127.0.0.1:3000" \
         "$gateway_cert" "$gateway_key" "60s"
     fi
+    if [[ -n "$gateway_onepage_host" ]]; then
+      write_redirect_server "$gateway_onepage_host"
+      write_tls_server "$gateway_onepage_host" "127.0.0.1:3003" \
+        "$gateway_onepage_cert" "$gateway_onepage_key" "60s"
+    fi
     write_redirect_server "$motorsport_host"
     write_tls_server "$motorsport_host" "127.0.0.1:3001" \
       "$motorsport_cert" "$motorsport_key" "60s"
@@ -347,6 +384,9 @@ EOF
   else
     if [[ -n "$gateway_host" ]]; then
       write_http_server "$gateway_host" "127.0.0.1:3000" "60s"
+    fi
+    if [[ -n "$gateway_onepage_host" ]]; then
+      write_http_server "$gateway_onepage_host" "127.0.0.1:3003" "60s"
     fi
     write_http_server "$motorsport_host" "127.0.0.1:3001" "60s"
     if [[ -n "$horsesport_host" ]]; then
@@ -405,6 +445,9 @@ fi
 printf 'Installed Nginx configuration: %s\n' "$nginx_available"
 if [[ -n "$gateway_host" ]]; then
   printf 'Gateway: %s -> 127.0.0.1:3000\n' "$gateway_host"
+fi
+if [[ -n "$gateway_onepage_host" ]]; then
+  printf 'Gateway one-page: %s -> 127.0.0.1:3003\n' "$gateway_onepage_host"
 fi
 printf 'Motorsport: %s -> 127.0.0.1:3001\n' "$motorsport_host"
 if [[ -n "$horsesport_host" ]]; then

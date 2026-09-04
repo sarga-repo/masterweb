@@ -123,6 +123,19 @@ service only after fetching/checking out the reviewed revision:
 sudo deploy/production/build_applications.sh --motorsport --restart
 ```
 
+To deploy the static one-page Gateway presentation separately, create
+`/etc/sarga/gateway-onepage.env` with `NODE_ENV=production`, then build it and
+add an optional Nginx hostname for port 3003:
+
+```bash
+sudo deploy/production/build_applications.sh --gateway-onepage
+sudo deploy/production/nginx/install-sarga-stack.sh \
+  --gateway-onepage-host presentation.example.com \
+  --motorsport-host staging-motorsport.example.com \
+  --cms-host staging-cms.example.com \
+  --start-services
+```
+
 ### 6. Add client-managed TLS later
 
 Re-run `install-sarga-stack.sh` with `--tls` and the supplied certificate/key
@@ -176,7 +189,9 @@ Create these environments under **Settings → Environments**:
 
 1. Add at least one required reviewer who is not the workflow author.
 2. Restrict deployment branches to `main`.
-3. After staging runner installation, add its generated authorization as the
+3. Add `SARGA_GATEWAY_ONEPAGE_URL` when the one-page target is enabled; set it
+   to the HTTPS origin configured for the one-page Nginx host.
+4. After staging runner installation, add its generated authorization as the
    environment secret `SARGA_STAGING_DEPLOY_AUTHORIZATION`.
 
 #### `production`
@@ -274,6 +289,7 @@ target, type `DEPLOY-STAGING`, and submit. The workflow refuses every ref except
 | --- | --- |
 | `cms` | `sarga-cms` |
 | `gateway` | `sarga-gateway` |
+| `gateway-onepage` | `sarga-gateway-onepage` |
 | `motorsport` | `sarga-motorsport` |
 | `all-active` | CMS, Gateway, then Motorsport |
 

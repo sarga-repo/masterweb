@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { type StaticImageData } from "next/image";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import heroImage from "../../assets/images/banners/Hero Image.png";
 import horseBanner from "../../assets/images/banners/WEB BANNER_sarga horse-1.jpg";
 import motorsportBanner from "../../assets/images/banners/banner motorsport.png";
@@ -26,8 +26,27 @@ import leaderFelix from "../../assets/images/photo_leaders/felix@2x.png";
 import leaderNugdha from "../../assets/images/photo_leaders/nugdha@2x.png";
 import leaderSamsul from "../../assets/images/photo_leaders/samsul@2x.png";
 import leaderZaki from "../../assets/images/photo_leaders/zaki@2x.png";
+import venueGallery01 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.19.56 (1).jpeg";
+import venueGallery02 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.19.56.jpeg";
+import venueGallery03 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.19.57 (1).jpeg";
+import venueGallery04 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.19.57.jpeg";
+import venueGallery05 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.19.58.jpeg";
+import venueGallery06 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.19.59 (1).jpeg";
+import venueGallery07 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.19.59.jpeg";
+import venueGallery08 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.20.00.jpeg";
+import venueGallery09 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.20.02.jpeg";
+import venueGallery10 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.20.03.jpeg";
+import venueGallery11 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.20.04 (1).jpeg";
+import venueGallery12 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.20.04.jpeg";
+import venueGallery13 from "../../assets/images/sarga_venues_gallery/WhatsApp Image 2026-09-04 at 13.20.22.jpeg";
 
 const VIDEO_URL = "https://drive.google.com/file/d/1JnsBGaF3aeUbebUAvvG2vuycrt1Ber47/view?usp=drive_link";
+const VIDEO_EMBED_URL = VIDEO_URL.replace("/view?usp=drive_link", "/preview");
+const venueGallery = [
+  venueGallery01, venueGallery02, venueGallery03, venueGallery04, venueGallery05,
+  venueGallery06, venueGallery07, venueGallery08, venueGallery09, venueGallery10,
+  venueGallery11, venueGallery12, venueGallery13,
+];
 
 const leaders = [
   { name: "ARYO DJOJOHADIKUSUMO", image: leaderAryo, role: "FOUNDER", detail: "Chairman, Indonesia Horse Sport Federation", featured: true },
@@ -76,6 +95,128 @@ function LeaderCard({ leader }: { leader: (typeof leaders)[number] }) {
   );
 }
 
+function Chevron({ direction }: { direction: "left" | "right" }) {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+      <path d={direction === "left" ? "M14.5 5 7.5 12l7 7" : "m9.5 5 7 7-7 7"} />
+    </svg>
+  );
+}
+
+function WindowIcon({ expanded }: { expanded: boolean }) {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+      <path d={expanded ? "M8 8h8v8M16 8l-9 9M6 6h5M6 6v5M18 18h-5M18 18v-5" : "M8 4H4v4M4 4l7 7M16 20h4v-4M20 20l-7-7"} />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+      <path d="m6 6 12 12M18 6 6 18" />
+    </svg>
+  );
+}
+
+type MediaModalProps = {
+  kind: "video" | "gallery";
+  onClose: () => void;
+};
+
+function MediaModal({ kind, onClose }: MediaModalProps) {
+  const [expanded, setExpanded] = useState(true);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const isGallery = kind === "gallery";
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+      if (isGallery && event.key === "ArrowLeft") setGalleryIndex((index) => (index - 1 + venueGallery.length) % venueGallery.length);
+      if (isGallery && event.key === "ArrowRight") setGalleryIndex((index) => (index + 1) % venueGallery.length);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isGallery, onClose]);
+
+  const previousImage = () => setGalleryIndex((index) => (index - 1 + venueGallery.length) % venueGallery.length);
+  const nextImage = () => setGalleryIndex((index) => (index + 1) % venueGallery.length);
+  const currentImage = venueGallery[galleryIndex];
+
+  return (
+    <div
+      className="mediaModalBackdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="media-modal-title"
+      onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}
+    >
+      <div className={`mediaModalPanel${expanded ? " is-expanded" : ""}`} onMouseDown={(event) => event.stopPropagation()}>
+        <header className="mediaModalHeader">
+          <h2 id="media-modal-title">{isGallery ? "SARGA VENUES" : "SEE WHAT DRIVES US"}</h2>
+          <div className="mediaModalActions">
+            <button
+              type="button"
+              className="mediaModalButton"
+              onClick={() => setExpanded((value) => !value)}
+              aria-label={expanded ? "Restore media window size" : "Maximize media window"}
+            >
+              <span className="mediaModalButtonIcon"><WindowIcon expanded={expanded} /></span>
+              <span className="mediaModalButtonLabel">{expanded ? "Minimize" : "Maximize"}</span>
+            </button>
+            <button type="button" className="mediaModalButton" onClick={onClose} ref={closeButtonRef} aria-label="Close media window">
+              <span className="mediaModalButtonIcon"><CloseIcon /></span>
+              <span className="mediaModalButtonLabel">Close</span>
+            </button>
+          </div>
+        </header>
+
+        <div className="mediaModalViewport">
+          {isGallery ? (
+            <Image
+              src={currentImage}
+              alt={`Sarga Venues gallery image ${galleryIndex + 1} of ${venueGallery.length}`}
+              fill
+              sizes="(max-width: 900px) calc(100vw - 32px), 90vw"
+              className="mediaModalImage"
+              priority
+            />
+          ) : (
+            <iframe
+              title="Sarga.co video"
+              src={VIDEO_EMBED_URL}
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+            />
+          )}
+        </div>
+
+        {isGallery && (
+          <footer className="mediaModalFooter">
+            <button type="button" className="mediaModalNav" onClick={previousImage} aria-label="Previous gallery image">
+              <Chevron direction="left" />
+              <span>Previous</span>
+            </button>
+            <span className="mediaModalCounter" aria-live="polite">{galleryIndex + 1} / {venueGallery.length}</span>
+            <button type="button" className="mediaModalNav" onClick={nextImage} aria-label="Next gallery image">
+              <span>Next</span>
+              <Chevron direction="right" />
+            </button>
+          </footer>
+        )}
+      </div>
+    </div>
+  );
+}
+
 type FeatureProps = {
   id?: string;
   className: string;
@@ -83,20 +224,25 @@ type FeatureProps = {
   backgroundImage?: StaticImageData;
   title?: string;
   children: React.ReactNode;
-  href: string;
+  href?: string;
   label: string;
+  onSeeMore?: () => void;
   badgeLogo?: string | StaticImageData;
   partnerLogos?: Array<{ src: string | StaticImageData; alt: string; className?: string }>;
 };
 
-function Feature({ id, className, logo, backgroundImage, title, children, href, label, badgeLogo, partnerLogos }: FeatureProps) {
+function Feature({ id, className, logo, backgroundImage, title, children, href, label, onSeeMore, badgeLogo, partnerLogos }: FeatureProps) {
   return (
     <div id={id} className={`feature ${className}`}>
       {backgroundImage && <Image src={backgroundImage} fill sizes="(max-width: 900px) 500vw, 100vw" alt="" className="featureBackground" />}
       <div className="featureContent">
         {logo ? <Image src={logo} width={250} height={100} alt="" className="featureLogo" /> : <h3 className="featureWordmark">{title}</h3>}
         <div className="featureCopy">{children}</div>
-        <a className="seeMore" href={href} target="_blank" rel="noreferrer" aria-label={label}>See more →</a>
+        {onSeeMore ? (
+          <button className="seeMore" type="button" onClick={onSeeMore} aria-label={label}>See more →</button>
+        ) : (
+          <a className="seeMore" href={href} target="_blank" rel="noreferrer" aria-label={label}>See more →</a>
+        )}
         {partnerLogos && <div className="partnerLogos">{partnerLogos.map((partner) => <Image key={partner.alt} src={partner.src} width={220} height={110} alt={partner.alt} className={partner.className} />)}</div>}
         {badgeLogo && <Image src={badgeLogo} width={180} height={90} alt="Indonesian Junior Talent Cup" className="badgeLogo" />}
       </div>
@@ -105,6 +251,9 @@ function Feature({ id, className, logo, backgroundImage, title, children, href, 
 }
 
 export default function Home() {
+  const [activeMedia, setActiveMedia] = useState<"video" | "gallery" | null>(null);
+  const closeMedia = useCallback(() => setActiveMedia(null), []);
+
   return (
     <main id="home">
       <div className="siteShell">
@@ -115,7 +264,7 @@ export default function Home() {
           <div className="heroOverlay" />
           <div className="heroInner">
             <h1 id="hero-title">PIONEERING INDONESIA’S<br />PREMIER 360° SPORTS<br />&amp; ENTERTAINMENT<br />ECOSYSTEM</h1>
-            <a className="heroCta" href={VIDEO_URL} target="_blank" rel="noreferrer">SEE WHAT DRIVES US</a>
+            <button className="heroCta" type="button" onClick={() => setActiveMedia("video")}>SEE WHAT DRIVES US</button>
           </div>
         </section>
 
@@ -154,7 +303,7 @@ export default function Home() {
             <p>Our motorsport division and IP engine, focus on developing and commercialising motorsport properties across sport, entertainment, and business.</p>
             <p>Its portfolio includes strategic global IP, the FIA Rallycross World Cup Indonesia 2026, and owned IP, Indonesian Junior Talent Cup (IJTC), bringing world-class motorsport to Indonesia while strengthening the ecosystem and nurturing future racing talent.</p>
           </Feature>
-          <Feature className="venue" logo={logoVenues} backgroundImage={venueBanner} href="https://kudapacu-my.sharepoint.com/:f:/g/personal/shinta_sarga_co_id/IgCfKVDwqzxIQqn1-j3OaYjAAQ0MRWCY8wIQ2er_HRhzlBw?e=j4TQK9" label="Open Sarga Venue photo gallery">
+          <Feature className="venue" logo={logoVenues} backgroundImage={venueBanner} onSeeMore={() => setActiveMedia("gallery")} label="Open Sarga Venue photo gallery">
             <p>The venue business unit, aim to developing<br />{" "}and managing sports and entertainment<br />{" "}venues as destinations for competition,<br />{" "}entertainment, and experiences.</p>
             <p>Through strategic programming,<br />{" "}partnerships, and activations, it maximises<br />{" "}venue value within the SARGA.CO ecosystem.</p>
           </Feature>
@@ -181,6 +330,7 @@ export default function Home() {
           </div>
           <p className="copyright">© 2026 SARGA.CO all rights reserved. All trademarks are property of their respective owners.</p>
         </footer>
+        {activeMedia && <MediaModal key={activeMedia} kind={activeMedia} onClose={closeMedia} />}
       </div>
     </main>
   );

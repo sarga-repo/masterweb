@@ -86,6 +86,8 @@ button { font: inherit; }
   place-items: center;
   background: var(--red);
   color: #fff;
+  border: 0;
+  cursor: pointer;
   font-size: 1.1458vw;
   font-weight: 650;
   line-height: 1;
@@ -273,6 +275,8 @@ button { font: inherit; }
 .featureLogo { display: block; height: auto; object-fit: contain; object-position: left center; }
 .featureCopy p { margin: 0 0 .72vw; font-size: 1.0417vw; font-weight: 400; line-height: 1.2; letter-spacing: -.016em; }
 .seeMore { display: block; color: var(--red); font-size: 1.0417vw; font-weight: 600; line-height: 1.2; }
+.seeMore { padding: 0; border: 0; background: transparent; cursor: pointer; text-align: left; }
+.seeMore:focus-visible, .heroCta:focus-visible { outline: .15vw solid #fff; outline-offset: .25vw; }
 .partnerLogos { margin-top: 2.65vw; display: flex; align-items: center; gap: 1.05vw; }
 .partnerLogos img { display: block; width: auto; height: 2.55vw; object-fit: contain; }
 .partnerLogos .podcastLogo { height: 3.2vw; }
@@ -348,6 +352,68 @@ button { font: inherit; }
 .contact strong { display: block; color: #fff; font-weight: 650; }
 .contact a { display: block; }
 .copyright { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 2.13vw; margin: 0; padding-top: 1.82vw; border-top: .052vw solid rgba(255,255,255,.42); color: #a6aab1; text-align: center; font-size: .9375vw; line-height: 1; }
+
+.mediaModalBackdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+  background: rgba(5, 8, 13, .62);
+  backdrop-filter: blur(7px);
+}
+.mediaModalPanel {
+  width: min(920px, 100%);
+  height: min(78vh, 650px);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 0;
+  background: #0b1018;
+  box-shadow: 0 24px 80px rgba(0,0,0,.55);
+  transition: width .24s ease, height .24s ease;
+}
+.mediaModalPanel.is-expanded { width: min(1400px, 100%); height: min(92vh, 900px); }
+.mediaModalHeader {
+  min-height: 58px;
+  padding: 0 18px 0 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #fff;
+  background: rgba(15,20,28,.96);
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.mediaModalHeader h2 { margin: 0; font-family: var(--font-zalando), sans-serif; font-size: 14px; font-weight: 650; letter-spacing: .02em; }
+.mediaModalActions { display: flex; align-items: center; gap: 8px; }
+.mediaModalButton, .mediaModalNav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 0;
+  color: #fff;
+  background: var(--red);
+  border-color: var(--red);
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease;
+}
+.mediaModalButton { min-height: 32px; padding: 0 11px; font-size: 11px; }
+.mediaModalButton:hover, .mediaModalButton:focus-visible, .mediaModalNav:hover, .mediaModalNav:focus-visible { border-color: #fff7ed; background: #e9230f; }
+.mediaModalButton:focus-visible, .mediaModalNav:focus-visible { outline: 2px solid #ff6b4a; outline-offset: 2px; }
+.mediaModalButtonIcon, .mediaModalNav svg { width: 16px; height: 16px; display: inline-grid; place-items: center; }
+.mediaModalButtonIcon svg { width: 100%; height: 100%; }
+.mediaModalButtonIcon svg, .mediaModalNav svg { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+.mediaModalViewport { position: relative; min-height: 0; margin: 14px; overflow: hidden; display: grid; place-items: center; border-radius: 0; background: #05080d; }
+.mediaModalViewport iframe { width: 100%; height: 100%; border: 0; }
+.mediaModalImage { object-fit: contain; padding: 12px; }
+.mediaModalFooter { min-height: 58px; padding: 0 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px; color: #fff; }
+.mediaModalNav { min-height: 32px; padding: 0 12px; font-size: 11px; }
+.mediaModalCounter { color: rgba(255,255,255,.68); font-size: 11px; font-variant-numeric: tabular-nums; }
 
 @media (max-width: 900px) {
   :root { --gutter: 20px; }
@@ -432,6 +498,17 @@ button { font: inherit; }
   .contact > div { margin-top: 20px; grid-template-columns: 1fr; gap: 20px; }
   .contact p { font-size: 10px; line-height: 1.35; }
   .copyright { grid-column: 1 / -1; margin: 8px 0 0; padding-top: 20px; font-size: 9px; line-height: 1.5; text-align: left; }
+
+  .mediaModalBackdrop { padding: 12px; }
+  .mediaModalPanel, .mediaModalPanel.is-expanded { width: 100%; height: min(84vh, 720px); border-radius: 0; }
+  .mediaModalHeader { min-height: 54px; padding: 0 12px 0 16px; }
+  .mediaModalHeader h2 { font-size: 12px; }
+  .mediaModalButton { min-height: 30px; padding: 0 9px; }
+  .mediaModalButtonLabel { display: none; }
+  .mediaModalViewport { margin: 10px; }
+  .mediaModalImage { padding: 6px; }
+  .mediaModalFooter { min-height: 54px; padding: 0 10px; }
+  .mediaModalNav { padding: 0 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

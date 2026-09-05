@@ -155,8 +155,8 @@ export default function Home() {
             <p>Its portfolio includes strategic global IP, the FIA Rallycross World Cup Indonesia 2026, and owned IP, Indonesian Junior Talent Cup (IJTC), bringing world-class motorsport to Indonesia while strengthening the ecosystem and nurturing future racing talent.</p>
           </Feature>
           <Feature className="venue" logo={logoVenues} backgroundImage={venueBanner} href="https://kudapacu-my.sharepoint.com/:f:/g/personal/shinta_sarga_co_id/IgCfKVDwqzxIQqn1-j3OaYjAAQ0MRWCY8wIQ2er_HRhzlBw?e=j4TQK9" label="Open Sarga Venue photo gallery">
-            <p>The venue business unit, aim to developing<br />and managing sports and entertainment<br />venues as destinations for competition,<br />entertainment, and experiences.</p>
-            <p>Through strategic programming,<br />partnerships, and activations, it maximises<br />venue value within the SARGA.CO ecosystem.</p>
+            <p>The venue business unit, aim to developing<br />{" "}and managing sports and entertainment<br />{" "}venues as destinations for competition,<br />{" "}entertainment, and experiences.</p>
+            <p>Through strategic programming,<br />{" "}partnerships, and activations, it maximises<br />{" "}venue value within the SARGA.CO ecosystem.</p>
           </Feature>
           <div className="mediaPair">
             <Image src={mediaBanner} fill sizes="(max-width: 900px) 500vw, 100vw" alt="" className="mediaPairBackground" />
@@ -164,7 +164,7 @@ export default function Home() {
               <p>OFF THE GAME is an IP under SARGA Media &amp; Lifestyle business unit, built as an integrated, community-first platform connecting content, events, venues, talent, brands, and audiences to create meaningful experiences and lasting commercial value.</p>
             </Feature>
             <Feature className="festival" logo={logoFestival} href="https://www.instagram.com/sargafestival/" label="Open Sarga Festival on Instagram">
-              <p>A signature event by SARGA Media &amp; Lifestyle<br />business unit, create to celebrate Indonesia’s culture,<br />creativity, and community through music, local talent,<br />brands, and immersive experiences.</p>
+              <p>A signature event by SARGA Media &amp; Lifestyle<br />{" "}business unit, create to celebrate Indonesia’s culture,<br />{" "}creativity, and community through music, local talent,<br />{" "}brands, and immersive experiences.</p>
             </Feature>
           </div>
         </section>

@@ -31,7 +31,7 @@ The environment templates assume these hostnames:
 
 | Environment | Gateway | Motorsport | Horse Sport | CMS |
 | --- | --- | --- | --- | --- |
-| Staging | `staging.sarga.co` | `staging-motorsport.sarga.co` | `staging-horsesport.sarga.co` | `staging-cms.sarga.co` |
+| Staging | `staging.sarga.co` | `sargamotorsport.co` | `staging-horsesport.sarga.co` | `staging-cms.sarga.co` |
 | Production | `sarga.co` | `motorsport.sarga.co` | `horsesport.sarga.co` | `cms.sarga.co` |
 
 If DNS uses different names, update every matching URL in the four environment
@@ -295,7 +295,7 @@ Nginx and TLS, then validate:
 sudo nginx -t
 sudo systemctl reload nginx
 curl --fail --silent --show-error https://staging.sarga.co/ >/dev/null
-curl --fail --silent --show-error https://staging-motorsport.sarga.co/ >/dev/null
+curl --fail --silent --show-error https://sargamotorsport.co/ >/dev/null
 curl --fail --silent --show-error https://staging-horsesport.sarga.co/ >/dev/null
 curl --fail --silent --show-error https://staging-cms.sarga.co/admin >/dev/null
 ```

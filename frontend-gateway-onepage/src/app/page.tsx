@@ -6,7 +6,7 @@ import heroDesktopImage from "../../assets/images/banners/banner_hero_v2.png";
 import heroDesktopComposite from "../../assets/images/banners/Hero Image.png";
 import horseBanner from "../../assets/images/banners/banner horse sport.png";
 import horseMobileBanner from "../../assets/images/banners_mobile/Mobile_WEB_HORSERACE.png";
-import motorsportBanner from "../../assets/images/banners/sarga co motorsport [one page].png";
+import motorsportBanner from "../../assets/images/banners/sarga-motorsport-one-page.png";
 import mediaBanner from "../../assets/images/banners/banners otg dan sf.png";
 import venueBanner from "../../assets/images/banners/banner sarga venues.png";
 import motorsportMobileBanner from "../../assets/images/banners_mobile/Mobile_WEB_MOTORSPORT.png";

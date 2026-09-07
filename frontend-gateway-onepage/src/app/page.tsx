@@ -2,11 +2,17 @@
 
 import Image, { type StaticImageData } from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import heroImage from "../../assets/images/banners/Hero Image.png";
-import horseBanner from "../../assets/images/banners/WEB BANNER_sarga horse-1.jpg";
-import motorsportBanner from "../../assets/images/banners/banner motorsport.png";
+import heroDesktopImage from "../../assets/images/banners/banner_hero_v2.png";
+import heroDesktopComposite from "../../assets/images/banners/Hero Image.png";
+import horseBanner from "../../assets/images/banners/banner horse sport.png";
+import horseMobileBanner from "../../assets/images/banners_mobile/Mobile_WEB_HORSERACE.png";
+import motorsportBanner from "../../assets/images/banners/sarga co motorsport [one page].png";
 import mediaBanner from "../../assets/images/banners/banners otg dan sf.png";
-import venueBanner from "../../assets/images/banners/Banner Sarga Venue.jpeg";
+import venueBanner from "../../assets/images/banners/banner sarga venues.png";
+import motorsportMobileBanner from "../../assets/images/banners_mobile/Mobile_WEB_MOTORSPORT.png";
+import venueMobileBanner from "../../assets/images/banners_mobile/Mobile_WEB_VENUES.png";
+import offgameMobileBanner from "../../assets/images/banners_mobile/Mobile_WEB_OFFTHEGAME.png";
+import festivalMobileBanner from "../../assets/images/banners_mobile/Mobile_WEB_FESTIVAL.png";
 import logoIcr from "../../assets/images/logos/ICR.png";
 import logoIhr from "../../assets/images/logos/IHR.png";
 import logoIjct from "../../assets/images/logos/IJCT.png";
@@ -222,6 +228,7 @@ type FeatureProps = {
   className: string;
   logo?: string | StaticImageData;
   backgroundImage?: StaticImageData;
+  mobileBackgroundImage?: StaticImageData;
   title?: string;
   children: React.ReactNode;
   href?: string;
@@ -231,10 +238,11 @@ type FeatureProps = {
   partnerLogos?: Array<{ src: string | StaticImageData; alt: string; className?: string }>;
 };
 
-function Feature({ id, className, logo, backgroundImage, title, children, href, label, onSeeMore, badgeLogo, partnerLogos }: FeatureProps) {
+function Feature({ id, className, logo, backgroundImage, mobileBackgroundImage, title, children, href, label, onSeeMore, badgeLogo, partnerLogos }: FeatureProps) {
   return (
     <div id={id} className={`feature ${className}`}>
-      {backgroundImage && <Image src={backgroundImage} fill sizes="(max-width: 900px) 500vw, 100vw" alt="" className="featureBackground" />}
+      {backgroundImage && <Image src={backgroundImage} fill sizes="(max-width: 900px) 500vw, 100vw" alt="" className={mobileBackgroundImage ? "featureBackground featureBackgroundDesktop hasMobileBackground" : "featureBackground featureBackgroundDesktop"} />}
+      {mobileBackgroundImage && <Image src={mobileBackgroundImage} fill sizes="100vw" alt="" className="featureBackground featureBackgroundMobile" />}
       <div className="featureContent">
         {logo ? <Image src={logo} width={250} height={100} alt="" className="featureLogo" /> : <h3 className="featureWordmark">{title}</h3>}
         <div className="featureCopy">{children}</div>
@@ -260,10 +268,12 @@ export default function Home() {
         <Header />
 
         <section className="hero" aria-labelledby="hero-title">
-          <Image src={heroImage} fill priority sizes="100vw" alt="Sarga sports and entertainment ecosystem" />
+          <Image src={heroDesktopComposite} fill priority sizes="100vw" alt="Sarga sports and entertainment ecosystem" className="heroBackground heroBackgroundDesktop" />
+          <Image src={heroDesktopImage} fill priority sizes="100vw" alt="" className="heroBackground heroBackgroundMobile" />
+          <div className="heroGradient" aria-hidden="true" />
           <div className="heroOverlay" />
           <div className="heroInner">
-            <h1 id="hero-title">PIONEERING INDONESIA’S<br />PREMIER 360° SPORTS<br />&amp; ENTERTAINMENT<br />ECOSYSTEM</h1>
+            <h1 id="hero-title">PIONEERING INDONESIA’S<br />PREMIER 360° SPORTS<br />&amp; ENTERTAINMENT<span className="heroTitleDesktopBreak"><br /></span> ECOSYSTEM</h1>
             <button className="heroCta" type="button" onClick={() => setActiveMedia("video")}>SEE WHAT DRIVES US</button>
           </div>
         </section>
@@ -272,7 +282,7 @@ export default function Home() {
           <div className="aboutIntro">
             <div>
               <h2>ABOUT</h2>
-              <p>SARGA.CO is a leading 360° sports and entertainment ecosystem company in Indonesia, integrating IPs, media rights, venues operation, and life event experiences. Founded in 2023, we build and own sports and entertainment properties that create lasting value for audiences, athletes, brands, and partners, while shaping the industry for global growth.</p>
+              <p>SARGA.CO is a premier 360° sports and entertainment ecosystem company in Indonesia, integrating IPs, media rights, venues operation, and life event experiences. Founded in 2023, we build and own sports and entertainment properties that create lasting value for audiences, athletes, brands, and partners, while shaping the industry for global growth.</p>
             </div>
             <p className="aboutStatement">FROM INDONESIAN PIONEER TO INDONESIA’S PREMIER 360° SPORTS &amp; ENTERTAINMENT ECOSYSTEM BUILT TO SCALE GLOBALLY</p>
           </div>
@@ -295,24 +305,24 @@ export default function Home() {
             <h2><strong>360°</strong><span>ECOSYSTEM</span></h2>
             <p>SARGA.CO builds an integrated platform that owns its IP, creates original content, operates venues, and develops lasting audience relationships.</p>
           </div>
-          <Feature className="horse" logo={logoHorseSport} backgroundImage={horseBanner} partnerLogos={[{ src: logoIhr, alt: "Indonesia's Horse Racing" }, { src: logoIcr, alt: "Indonesia's COS Race" }, { src: logoPodcastPacuanKuda, alt: "Podcast Pacuan Kuda", className: "podcastLogo" }]} href="https://sarga.co/" label="Open Sarga Horse Sport website">
-            <p>SARGA.CO’s dedicated horse sport business unit, building a sustainable ecosystem through proprietary IP, events, partnerships, and experiences.</p>
-            <p>At its core is Indonesia’s Horse Racing, SARGA.CO’s flagship IP developed with PP PORDASI to bring Indonesia’s horse racing heritage into a modern sportainment experience.</p>
+          <Feature className="horse" logo={logoHorseSport} backgroundImage={horseBanner} mobileBackgroundImage={horseMobileBanner} partnerLogos={[{ src: logoIhr, alt: "Indonesia's Horse Racing" }, { src: logoIcr, alt: "Indonesia's COS Race" }, { src: logoPodcastPacuanKuda, alt: "Podcast Pacuan Kuda", className: "podcastLogo" }]} href="https://sarga.co/" label="Open Sarga Horse Sport website">
+            <p>SARGA.CO&apos;s dedicated horse sport business unit, building a sustainable ecosystem through proprietary IP, events, partnerships, and experiences.</p>
+            <p>At its core is Indonesia&apos;s Horse Racing, SARGA.CO&apos;s flagship IP in collaboration with PP PORDASI to bring Indonesia&apos;s horse racing heritage into a modern sportainment experience.</p>
           </Feature>
-          <Feature className="motorsport" logo={logoMotorsport} backgroundImage={motorsportBanner} badgeLogo={logoIjct} href="https://sargamotorsport.co/" label="Open Sarga Motorsport website">
+          <Feature className="motorsport" logo={logoMotorsport} backgroundImage={motorsportBanner} mobileBackgroundImage={motorsportMobileBanner} badgeLogo={logoIjct} href="https://sargamotorsport.co/" label="Open Sarga Motorsport website">
             <p>Our motorsport division and IP engine, focus on developing and commercialising motorsport properties across sport, entertainment, and business.</p>
             <p>Its portfolio includes strategic global IP, the FIA Rallycross World Cup Indonesia 2026, and owned IP, Indonesian Junior Talent Cup (IJTC), bringing world-class motorsport to Indonesia while strengthening the ecosystem and nurturing future racing talent.</p>
           </Feature>
-          <Feature className="venue" logo={logoVenues} backgroundImage={venueBanner} onSeeMore={() => setActiveMedia("gallery")} label="Open Sarga Venue photo gallery">
+          <Feature className="venue" logo={logoVenues} backgroundImage={venueBanner} mobileBackgroundImage={venueMobileBanner} onSeeMore={() => setActiveMedia("gallery")} label="Open Sarga Venue photo gallery">
             <p>The venue business unit, aim to developing<br />{" "}and managing sports and entertainment<br />{" "}venues as destinations for competition,<br />{" "}entertainment, and experiences.</p>
             <p>Through strategic programming,<br />{" "}partnerships, and activations, it maximises<br />{" "}venue value within the SARGA.CO ecosystem.</p>
           </Feature>
           <div className="mediaPair">
             <Image src={mediaBanner} fill sizes="(max-width: 900px) 500vw, 100vw" alt="" className="mediaPairBackground" />
-            <Feature className="offgame" logo={logoOffTheGame} href="https://www.instagram.com/offthe__game/" label="Open OFF THE GAME on Instagram">
+            <Feature className="offgame" logo={logoOffTheGame} mobileBackgroundImage={offgameMobileBanner} href="https://www.instagram.com/offthe__game/" label="Open OFF THE GAME on Instagram">
               <p>OFF THE GAME is an IP under SARGA Media &amp; Lifestyle business unit, built as an integrated, community-first platform connecting content, events, venues, talent, brands, and audiences to create meaningful experiences and lasting commercial value.</p>
             </Feature>
-            <Feature className="festival" logo={logoFestival} href="https://www.instagram.com/sargafestival/" label="Open Sarga Festival on Instagram">
+            <Feature className="festival" logo={logoFestival} mobileBackgroundImage={festivalMobileBanner} href="https://www.instagram.com/sargafestival/" label="Open Sarga Festival on Instagram">
               <p>A signature event by SARGA Media &amp; Lifestyle<br />{" "}business unit, create to celebrate Indonesia’s culture,<br />{" "}creativity, and community through music, local talent,<br />{" "}brands, and immersive experiences.</p>
             </Feature>
           </div>
@@ -326,7 +336,7 @@ export default function Home() {
           </div>
           <div className="contact">
             <h2>CONTACT US</h2>
-            <div><p><strong>EMAIL</strong><a href="mailto:corcom@sarga.co.id">corcom@sarga.co.id</a></p><p><strong>ADDRESS</strong>PT. Kuda Pacu Indonesia<br />18 Parc Place, Building E, 11th Fl<br />SCBD Jakarta, 12190</p></div>
+            <div><p><strong>EMAIL</strong><a href="mailto:info@sarga.co.id">info@sarga.co.id</a></p><p><strong>ADDRESS</strong>PT. Kuda Pacu Indonesia<br />18 Parc Place, Building E, 11th Fl<br />SCBD Jakarta, 12190</p></div>
           </div>
           <p className="copyright">© 2026 SARGA.CO all rights reserved. All trademarks are property of their respective owners.</p>
         </footer>

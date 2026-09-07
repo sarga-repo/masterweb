@@ -310,8 +310,8 @@ export default function Home() {
             <p>At its core is Indonesia&apos;s Horse Racing, SARGA.CO&apos;s flagship IP in collaboration with PP PORDASI to bring Indonesia&apos;s horse racing heritage into a modern sportainment experience.</p>
           </Feature>
           <Feature className="motorsport" logo={logoMotorsport} backgroundImage={motorsportBanner} mobileBackgroundImage={motorsportMobileBanner} badgeLogo={logoIjct} href="https://sargamotorsport.co/" label="Open Sarga Motorsport website">
-            <p>Our motorsport division and IP engine, focus on developing and commercialising motorsport properties across sport, entertainment, and business.</p>
-            <p>Its portfolio includes strategic global IP, the FIA Rallycross World Cup Indonesia 2026, and owned IP, Indonesian Junior Talent Cup (IJTC), bringing world-class motorsport to Indonesia while strengthening the ecosystem and nurturing future racing talent.</p>
+            <p>SARGA MOTORSPORT is our motorsport division and IP engine, focused on developing and commercialising motorsport properties across sport, entertainment, and business.</p>
+            <p>Currently, its portfolio includes strategic global IP, the FIA Rallycross World Cup Indonesia 2026, and owned IP the Indonesian Junior Talent Cup (IJTC), bringing world-class motorsport to Indonesia while strengthening the ecosystem and nurturing future racing talent.</p>
           </Feature>
           <Feature className="venue" logo={logoVenues} backgroundImage={venueBanner} mobileBackgroundImage={venueMobileBanner} onSeeMore={() => setActiveMedia("gallery")} label="Open Sarga Venue photo gallery">
             <p>The venue business unit, aim to developing<br />{" "}and managing sports and entertainment<br />{" "}venues as destinations for competition,<br />{" "}entertainment, and experiences.</p>

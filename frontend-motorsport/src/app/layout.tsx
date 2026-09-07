@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "@fontsource-variable/noto-sans/wght.css";
 import { createMetadata } from "@/lib/seo/metadata";
 import { getRequestLocale, getRequestPathname } from "@/lib/i18n/request";
@@ -66,6 +67,16 @@ export default async function RootLayout({
       className={ownersWide.variable}
     >
       <body>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-XE9P5PDJZ2"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag-config" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XE9P5PDJZ2');`}
+        </Script>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

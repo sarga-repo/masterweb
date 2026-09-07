@@ -241,7 +241,7 @@ type FeatureProps = {
 function Feature({ id, className, logo, backgroundImage, mobileBackgroundImage, title, children, href, label, onSeeMore, badgeLogo, partnerLogos }: FeatureProps) {
   return (
     <div id={id} className={`feature ${className}`}>
-      {backgroundImage && <Image src={backgroundImage} fill sizes="(max-width: 900px) 500vw, 100vw" alt="" className={mobileBackgroundImage ? "featureBackground featureBackgroundDesktop hasMobileBackground" : "featureBackground featureBackgroundDesktop"} />}
+      {backgroundImage && <Image src={backgroundImage} fill sizes="(max-width: 900px) 500vw, 100vw" alt="" unoptimized={className === "motorsport"} className={mobileBackgroundImage ? "featureBackground featureBackgroundDesktop hasMobileBackground" : "featureBackground featureBackgroundDesktop"} />}
       {mobileBackgroundImage && <Image src={mobileBackgroundImage} fill sizes="100vw" alt="" className="featureBackground featureBackgroundMobile" />}
       <div className="featureContent">
         {logo ? <Image src={logo} width={250} height={100} alt="" className="featureLogo" /> : <h3 className="featureWordmark">{title}</h3>}

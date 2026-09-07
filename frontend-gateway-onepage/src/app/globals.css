@@ -304,7 +304,7 @@ button { font: inherit; }
 }
 .motorsport::before, .mediaPair::before { background-image: none; }
 .motorsport .featureContent { top: 3.59vw; right: 5.47vw; width: 28.1vw; }
-.motorsport .featureLogo { width: 12.1vw; margin-bottom: 1.67vw; }
+.motorsport .featureLogo { width: 12.1vw; margin-bottom: 1.67vw; margin-left: -0.7vw; }
 .motorsport .featureCopy p:first-child { margin-bottom: .88vw; }
 .motorsport .badgeLogo { width: 6.54vw; margin-top: 1.42vw; }
 .motorsport .seeMore { transform: none; }

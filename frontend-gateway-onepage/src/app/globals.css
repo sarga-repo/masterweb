@@ -490,7 +490,7 @@ button { font: inherit; }
   .featureContent, .horse .featureContent, .motorsport .featureContent, .venue .featureContent { position: relative; inset: auto; width: auto; padding: 265px var(--gutter) 38px; }
   .featureLogo, .horse .featureLogo, .motorsport .featureLogo { width: 200px; }
   .horse .featureLogo { margin-bottom: 24px;}
-  .motorsport .featureLogo { margin-left: -12px; margin-bottom: 24px;}
+  .motorsport .featureLogo { margin-left: -12px; margin-bottom: 18px;}
   .venue .featureLogo { width: 150px; margin-bottom: 24px; }
 
   .featureCopy { max-width: 430px; }
@@ -515,7 +515,7 @@ button { font: inherit; }
   .offgame .featureCopy, .festival .featureCopy { width: 100%; }
   .offgame .seeMore, .festival .seeMore { white-space: nowrap; }
   .offgame .featureLogo { width: 200px; margin-bottom: 24px; }
-  .festival .featureLogo { width: 210px; margin-bottom: 24px; transform: none;}
+  .festival .featureLogo { width: 210px; margin-bottom: 8px; transform: none;}
 
   .footer { height: auto; min-height: 520px; padding: 54px var(--gutter) 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 42px 24px; }
   .footer::before { left: 100px; width: 320px; height: 150px; }

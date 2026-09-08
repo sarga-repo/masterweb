@@ -328,7 +328,7 @@ button { font: inherit; }
 .festival .featureLogo { width: 12.35vw; margin-bottom: .75vw; transform: translateX(-.9vw); }
 .festival .seeMore { transform: translateY(.31vw); }
 .offgame .featureCopy { width: 27.5vw; }
-.offgame .featureCopy p { margin-bottom: 1.03vw; }
+.offgame .featureCopy p { margin-bottom: 4.03vw; }
 
 .footer { position: relative; height: 16.7188vw; overflow: hidden; color: #fff; background: var(--ink); }
 .footer::before {
@@ -433,9 +433,9 @@ button { font: inherit; }
   .nav.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
   .nav a, .nav a:nth-child(1), .nav a:nth-child(2), .nav a:nth-child(3) { width: auto; padding: 15px 0; border: 0; border-bottom: 1px solid rgba(255,255,255,.18); text-align: left; color: #fff; font-size: 14px; place-items: center start; }
 
-  .hero { height: min(100vw, 620px); }
+  .hero { height: min(105vw, 620px); }
   .heroBackgroundDesktop { display: none; }
-  .heroBackgroundMobile { display: block; inset: 0 0 auto 0 !important; width: 100% !important; height: 63% !important; object-fit: cover; object-position: right center; }
+  .heroBackgroundMobile { display: block; inset: 0 0 auto 0 !important; width: 100% !important; height: 60% !important; object-fit: cover; object-position: right center; }
   .heroGradient {
     display: block;
     position: absolute;
@@ -452,7 +452,7 @@ button { font: inherit; }
       linear-gradient(to bottom, transparent 0 63%, #050000 63%);
     pointer-events: none;
   }
-  .heroInner { padding: 0 var(--gutter) 16px; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; gap: 20px; }
+  .heroInner { padding: 0 var(--gutter) 42px; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; gap: 20px; }
   .hero h1 { font-size: clamp(18px, 4.6vw, 26px); line-height: .94; }
   .heroTitleDesktopBreak { display: none; }
   .heroCta { align-self: flex-start; min-width: 0; height: auto; padding: 16px 20px; font-size: 12px; }
@@ -478,7 +478,7 @@ button { font: inherit; }
   .directorDetail { min-height: 36px; margin: 10px 2px 0; font-size: 11px; line-height: 1.25; }
 
   .ecosystemBand { height: auto; min-height: 240px; padding: 36px var(--gutter); align-items: flex-start; flex-direction: column; justify-content: center; gap: 32px; }
-  .ecosystemBand::before { width: 100%; }
+  .ecosystemBand::before { width: 206%; left: -81% }
   .ecosystemBand strong { font-size: 58px; }
   .ecosystemBand span { margin-top: 7px; font-size: 23px; }
   .ecosystemBand p { width: auto; margin: 0; font-size: 12px; line-height: 1.5; }
@@ -491,7 +491,7 @@ button { font: inherit; }
   .featureLogo, .horse .featureLogo, .motorsport .featureLogo { width: 200px; }
   .horse .featureLogo { margin-bottom: 24px;}
   .motorsport .featureLogo { margin-left: -12px; margin-bottom: 18px;}
-  .venue .featureLogo { width: 150px; margin-bottom: 24px; }
+  .venue .featureLogo { width: 100px; margin-bottom: 24px; }
 
   .featureCopy { max-width: 430px; }
   .venue .featureCopy br, .festival .featureCopy br { display: none; }
@@ -511,14 +511,14 @@ button { font: inherit; }
   .mediaPairBackground { display: none; }
   .mediaPair .feature { position: relative; inset: auto; width: 100%; min-height: 360px; padding-top: 8vw; overflow: hidden; background: linear-gradient(to top, rgb(0 0 0 / 74%) 0%, rgb(0 0 0 / 26%) 80%);}
   .mediaPair .festival { width: 100% !important; }
-  .mediaPair .featureContent { width: 100%; padding: 110px var(--gutter) 35px; }
+  .mediaPair .featureContent { width: 100%; padding: 129px var(--gutter) 35px; }
   .offgame .featureCopy, .festival .featureCopy { width: 100%; }
   .offgame .seeMore, .festival .seeMore { white-space: nowrap; }
-  .offgame .featureLogo { width: 200px; margin-bottom: 24px; }
-  .festival .featureLogo { width: 210px; margin-bottom: 8px; transform: none;}
+  .offgame .featureLogo { width: 141px; margin-bottom: 24px; }
+  .festival .featureLogo { width: 150px; margin-bottom: 24px; transform: none;}
 
   .footer { height: auto; min-height: 520px; padding: 54px var(--gutter) 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 42px 24px; }
-  .footer::before { left: 100px; width: 320px; height: 150px; }
+  .footer::before { left: -81px; width: 300px; height: 133px; mask-size: auto 133px; }
   .footerMark, .social, .contact, .copyright { position: relative; inset: auto; }
   .footerMark { grid-column: 1 / -1; }
   .footerMark img { width: 150px; }

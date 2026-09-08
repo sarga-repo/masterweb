@@ -11,7 +11,7 @@ import mediaBanner from "../../assets/images/banners/banners otg dan sf.png";
 import venueBanner from "../../assets/images/banners/banner sarga venues.png";
 import motorsportMobileBanner from "../../assets/images/banners_mobile/Mobile_WEB_MOTORSPORT.png";
 import venueMobileBanner from "../../assets/images/banners_mobile/Mobile_WEB_VENUES.png";
-import offgameMobileBanner from "../../assets/images/banners_mobile/Mobile_WEB_OFFTHEGAME.png";
+import offgameMobileBanner from "../../assets/images/banners_mobile/Mobile_WEB_OFFTHEGAME_v2.png";
 import festivalMobileBanner from "../../assets/images/banners_mobile/Mobile_WEB_FESTIVAL.png";
 import logoIcr from "../../assets/images/logos/ICR.png";
 import logoIhr from "../../assets/images/logos/IHR.png";
@@ -19,7 +19,7 @@ import logoIjct from "../../assets/images/logos/IJCT.png";
 import logoOffTheGame from "../../assets/images/logos/off_the_game_primary_inverse_red.png";
 import logoPodcastPacuanKuda from "../../assets/images/logos/podcast_pacuan_kuda_main_white.png";
 import logoSarga from "../../assets/images/logos/sarga_co_primary_negative.png";
-import logoFestival from "../../assets/images/logos/sarga_festival.png";
+import logoFestival from "../../assets/images/logos/Logo_Sarga_Fest_2026_Blue.png";
 import instagramWhite from "../../assets/images/logos/instagram_white.png";
 import linkedinWhite from "../../assets/images/logos/linkedin_white.png";
 import logoHorseSport from "../../assets/images/logos/sarga_horse_sport_main_inverse.png";
@@ -282,7 +282,7 @@ export default function Home() {
           <div className="aboutIntro">
             <div>
               <h2>ABOUT</h2>
-              <p>SARGA.CO is a premier 360° sports and entertainment ecosystem company in Indonesia, integrating IPs, media rights, venues operation, and life event experiences. Founded in 2023, we build and own sports and entertainment properties that create lasting value for audiences, athletes, brands, and partners, while shaping the industry for global growth.</p>
+              <p>SARGA.CO is a premier 360° sports and entertainment ecosystem company in Indonesia, integrating IPs, media rights, venues operation, and <b>life event experiences.</b> Founded in 2023, we build and own sports and entertainment properties that create lasting value for audiences, athletes, brands, and partners, while shaping the industry for global growth.</p>
             </div>
             <p className="aboutStatement">FROM INDONESIAN PIONEER TO INDONESIA’S PREMIER 360° SPORTS &amp; ENTERTAINMENT ECOSYSTEM BUILT TO SCALE GLOBALLY</p>
           </div>
@@ -310,8 +310,8 @@ export default function Home() {
             <p>At its core is Indonesia&apos;s Horse Racing, SARGA.CO&apos;s flagship IP in collaboration with PP PORDASI to bring Indonesia&apos;s horse racing heritage into a modern sportainment experience.</p>
           </Feature>
           <Feature className="motorsport" logo={logoMotorsport} backgroundImage={motorsportBanner} mobileBackgroundImage={motorsportMobileBanner} badgeLogo={logoIjct} href="https://sargamotorsport.co/" label="Open Sarga Motorsport website">
-            <p>SARGA MOTORSPORT is our motorsport division and IP engine, focused on developing and commercialising motorsport properties across sport, entertainment, and business.</p>
-            <p>Currently, its portfolio includes strategic global IP, the FIA Rallycross World Cup Indonesia 2026, and owned IP the Indonesian Junior Talent Cup (IJTC), bringing world-class motorsport to Indonesia while strengthening the ecosystem and nurturing future racing talent.</p>
+            <p>SARGA MOTORSPORT is our motorsport division and IP engine, <b>focused</b> on developing and commercialising motorsport properties across sport, entertainment, and business.</p>
+            <p><b>Currently</b>, its portfolio includes strategic global IP, the FIA Rallycross World Cup Indonesia 2026, and owned IP the Indonesian Junior Talent Cup (IJTC), bringing world-class motorsport to Indonesia while strengthening the ecosystem and nurturing future racing talent.</p>
           </Feature>
           <Feature className="venue" logo={logoVenues} backgroundImage={venueBanner} mobileBackgroundImage={venueMobileBanner} onSeeMore={() => setActiveMedia("gallery")} label="Open Sarga Venue photo gallery">
             <p>The venue business unit, aim to developing<br />{" "}and managing sports and entertainment<br />{" "}venues as destinations for competition,<br />{" "}entertainment, and experiences.</p>

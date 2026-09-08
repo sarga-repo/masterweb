@@ -478,7 +478,7 @@ button { font: inherit; }
   .directorDetail { min-height: 36px; margin: 10px 2px 0; font-size: 11px; line-height: 1.25; }
 
   .ecosystemBand { height: auto; min-height: 240px; padding: 36px var(--gutter); align-items: flex-start; flex-direction: column; justify-content: center; gap: 32px; }
-  .ecosystemBand::before { width: 206%; left: -81% }
+  .ecosystemBand::before { width: 219vw; left: -90vw; }
   .ecosystemBand strong { font-size: 58px; }
   .ecosystemBand span { margin-top: 7px; font-size: 23px; }
   .ecosystemBand p { width: auto; margin: 0; font-size: 12px; line-height: 1.5; }

@@ -320,7 +320,7 @@ export default function Home() {
           <div className="mediaPair">
             <Image src={mediaBanner} fill sizes="(max-width: 900px) 500vw, 100vw" alt="" className="mediaPairBackground" />
             <Feature className="offgame" logo={logoOffTheGame} mobileBackgroundImage={offgameMobileBanner} href="https://www.instagram.com/offthe__game/" label="Open OFF THE GAME on Instagram">
-              <p>OFF THE GAME is an IP under SARGA Media &amp; Lifestyle business unit, built as an integrated, community-first platform connecting content, events, venues, talent, brands, and audiences to create meaningful experiences and lasting commercial value.</p>
+              <p>OFF THE GAME is an IP under Sarga Media &amp; Lifestyle business unit, built as an integrated, community-first platform connecting content, events, venues, talent, brands, and audiences to create meaningful experiences and lasting commercial value.</p>
             </Feature>
             <Feature className="festival" logo={logoFestival} mobileBackgroundImage={festivalMobileBanner} href="https://www.instagram.com/sargafestival/" label="Open Sarga Festival on Instagram">
               <p>A signature event by the Sarga Media &amp; Lifestyle<br />{" "}business unit, created to celebrate Indonesia’s culture,<br />{" "}creativity, and community through music, local talent,<br />{" "}brands, and immersive experiences.</p>

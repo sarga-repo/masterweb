@@ -310,11 +310,11 @@ export default function Home() {
             <p>At its core is Indonesia&apos;s Horse Racing, SARGA.CO&apos;s flagship IP in collaboration with PP PORDASI to bring Indonesia&apos;s horse racing heritage into a modern sportainment experience.</p>
           </Feature>
           <Feature className="motorsport" logo={logoMotorsport} backgroundImage={motorsportBanner} mobileBackgroundImage={motorsportMobileBanner} badgeLogo={logoIjct} href="https://sargamotorsport.co/" label="Open Sarga Motorsport website">
-            <p>SARGA MOTORSPORT is our motorsport division and IP engine, focused on developing and commercialising motorsport properties across sport, entertainment, and business.</p>
-            <p>Currently, its portfolio includes strategic global IP, the FIA Rallycross World Cup Indonesia 2026, and owned IP the Indonesian Junior Talent Cup (IJTC), bringing world-class motorsport to Indonesia while strengthening the ecosystem and nurturing future racing talent.</p>
+            <p>SARGA.CO’s dedicated motorsport business unit, building an integrated ecosystem through strategic IP, events, partnerships, and experiences.</p>
+            <p>Currently, its portfolio includes a five-year contract with the FIA Rallycross World Cup, making its first-ever appearance in Indonesia in 2026, and owned IP, the Indonesia Junior Talent Cup (IJTC), bringing world-class motorsport to Indonesia while strengthening the ecosystem and nurturing future racing talent.</p>
           </Feature>
           <Feature className="venue" logo={logoVenues} backgroundImage={venueBanner} mobileBackgroundImage={venueMobileBanner} onSeeMore={() => setActiveMedia("gallery")} label="Open Sarga Venue photo gallery">
-            <p>SARGA.CO`s dedicated venue business unit, aims in<br />{" "}developing and managing sports and entertainment<br />{" "}venues as destinations for competition,<br />{" "}entertainment, and experiences.</p>
+            <p>SARGA.CO`s dedicated venue business unit, aims in developing and managing<br />{" "} sports &amp; entertainment venues as destinations for competition, entertainment, and experiences.</p>
             <p>Through strategic programming,<br />{" "}partnerships, and activations, it maximises<br />{" "}venue value within the SARGA.CO ecosystem.</p>
           </Feature>
           <div className="mediaPair">

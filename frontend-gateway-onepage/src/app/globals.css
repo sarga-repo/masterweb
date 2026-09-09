@@ -496,6 +496,7 @@ button { font: inherit; }
   .featureCopy { max-width: 430px; }
   .venue .featureCopy br, .festival .featureCopy br { display: none; }
   .featureCopy p { margin-bottom: 14px; font-size: 12px; line-height: 1.5; letter-spacing: 0; }
+  .venue .featureContent .featureCopy p { max-width: 95%;  }
   .seeMore { font-size: 12px; }
   .partnerLogos { margin-top: 28px; gap: 14px; }
   .partnerLogos img { height: 42px; }

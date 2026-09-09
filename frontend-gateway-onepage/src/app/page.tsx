@@ -288,7 +288,7 @@ export default function Home() {
           </div>
           <div className="leaders">
             <div className="leadersIntro">
-              <h2>THE PEOPLE<br />BEHIND SARGA</h2>
+              <h2>THE PEOPLE<br />BEHIND SARGA.CO</h2>
               <p>United by a shared vision, our leaders bring together industry experience, entrepreneurial thinking, and a passion for creating experiences that shape the future of Indonesia’s sports and entertainment ecosystem.</p>
             </div>
             <div className="featuredGrid">
@@ -303,7 +303,7 @@ export default function Home() {
         <section className="ecosystem" id="ecosystem">
           <div className="ecosystemBand">
             <h2><strong>360°</strong><span>ECOSYSTEM</span></h2>
-            <p>SARGA.CO builds an integrated platform that owns its IP, creates original content, operates venues, and develops lasting audience relationships.</p>
+            <p>SARGA.CO builds an integrated platform that owns its IPs, creates original content, operates venues, and develops lasting audience relationships.</p>
           </div>
           <Feature className="horse" logo={logoHorseSport} backgroundImage={horseBanner} mobileBackgroundImage={horseMobileBanner} partnerLogos={[{ src: logoIhr, alt: "Indonesia's Horse Racing" }, { src: logoIcr, alt: "Indonesia's COS Race" }, { src: logoPodcastPacuanKuda, alt: "Podcast Pacuan Kuda", className: "podcastLogo" }]} href="https://sarga.co/" label="Open Sarga Horse Sport website">
             <p>SARGA.CO&apos;s dedicated horse sport business unit, building a sustainable ecosystem through proprietary IP, events, partnerships, and experiences.</p>
@@ -314,7 +314,7 @@ export default function Home() {
             <p>Currently, its portfolio includes strategic global IP, the FIA Rallycross World Cup Indonesia 2026, and owned IP the Indonesian Junior Talent Cup (IJTC), bringing world-class motorsport to Indonesia while strengthening the ecosystem and nurturing future racing talent.</p>
           </Feature>
           <Feature className="venue" logo={logoVenues} backgroundImage={venueBanner} mobileBackgroundImage={venueMobileBanner} onSeeMore={() => setActiveMedia("gallery")} label="Open Sarga Venue photo gallery">
-            <p>The venue business unit, aim to developing<br />{" "}and managing sports and entertainment<br />{" "}venues as destinations for competition,<br />{" "}entertainment, and experiences.</p>
+            <p>SARGA.CO`s dedicated venue business unit, aims in<br />{" "}developing and managing sports and entertainment<br />{" "}venues as destinations for competition,<br />{" "}entertainment, and experiences.</p>
             <p>Through strategic programming,<br />{" "}partnerships, and activations, it maximises<br />{" "}venue value within the SARGA.CO ecosystem.</p>
           </Feature>
           <div className="mediaPair">
@@ -323,7 +323,7 @@ export default function Home() {
               <p>OFF THE GAME is an IP under SARGA Media &amp; Lifestyle business unit, built as an integrated, community-first platform connecting content, events, venues, talent, brands, and audiences to create meaningful experiences and lasting commercial value.</p>
             </Feature>
             <Feature className="festival" logo={logoFestival} mobileBackgroundImage={festivalMobileBanner} href="https://www.instagram.com/sargafestival/" label="Open Sarga Festival on Instagram">
-              <p>A signature event by SARGA Media &amp; Lifestyle<br />{" "}business unit, create to celebrate Indonesia’s culture,<br />{" "}creativity, and community through music, local talent,<br />{" "}brands, and immersive experiences.</p>
+              <p>A signature event by the Sarga Media &amp; Lifestyle<br />{" "}business unit, created to celebrate Indonesia’s culture,<br />{" "}creativity, and community through music, local talent,<br />{" "}brands, and immersive experiences.</p>
             </Feature>
           </div>
         </section>

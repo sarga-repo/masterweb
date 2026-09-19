@@ -25,7 +25,7 @@
   --color-ms-orange-800: #b94700;
 
   --font-display:
-    var(--font-owners-wide), "Owners Wide", var(--font-noto-sans),
+    "owners-wide", "Owners Wide", var(--font-noto-sans),
     "Arial Black", sans-serif;
   --font-body:
     var(--font-noto-sans), "Noto Sans Display", "Noto Sans", Arial, system-ui,

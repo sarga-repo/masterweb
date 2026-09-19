@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import Script from "next/script";
 import "@fontsource-variable/noto-sans/wght.css";
 import { createMetadata } from "@/lib/seo/metadata";
@@ -12,13 +11,6 @@ import PreviewLiveRefresh from "@/components/preview-live-refresh";
 import { draftMode } from "next/headers";
 import "./globals.css";
 
-const ownersWide = localFont({
-  src: "./fonts/owners-wide-black.ttf",
-  display: "swap",
-  variable: "--font-owners-wide",
-  weight: "900",
-  style: "normal",
-});
 const defaultSocialImage = resolveSiteUrl("/media/motorsport-design-hero.png");
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -64,8 +56,10 @@ export default async function RootLayout({
       lang={locale}
       data-ms-theme={motorsportThemeAttribute(theme)}
       data-scroll-behavior="smooth"
-      className={ownersWide.variable}
     >
+      <head>
+        <link rel="stylesheet" href="https://use.typekit.net/fum1jht.css" />
+      </head>
       <body>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-XE9P5PDJZ2"

@@ -217,6 +217,16 @@
   }
 }
 
+/* Keep About text copy left-aligned on mobile regardless of the wider-layout rules above. */
+@media (max-width: 759px) {
+  .gateway-about .about-lede p,
+  .gateway-about .about-vision .about-copy-block p,
+  .gateway-about .about-structure .about-structure-copy p,
+  .gateway-about .about-section-intro p {
+    text-align: left;
+  }
+}
+
 /* About Us desktop composition. The mobile layout and leader carousel remain
    unchanged below the shared desktop breakpoint. */
 @media (min-width: 1024px) {

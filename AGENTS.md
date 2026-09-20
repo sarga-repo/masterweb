@@ -93,6 +93,20 @@ For dedicated frontends, use the premium/frontend UI skill to produce internatio
 - Ticketing must use partner redirect/deep link first; optional embed support must be configurable from CMS.
 - Do not commit secrets.
 
+## Mandatory development flow
+
+For every code, content, styling, or asset change—regardless of size—follow this order before marking the work complete:
+
+1. Make the change in the relevant frontend or shared code.
+2. Run the affected local checks (at minimum typecheck/lint/build when applicable).
+3. Start the local production build or development server and test the affected route in a real browser at the target viewport(s), including a mobile viewport for responsive changes.
+4. Verify the rendered result and interaction behavior in the browser, not only the source or build output. For CSS changes, inspect the actual computed style or visible layout when relevant.
+5. Fix any local issues and repeat the local browser test until the result is correct.
+6. Only after local browser verification passes may changes be committed, pushed, or deployed to staging/production.
+7. Report the local browser route/viewport and checks performed in the completion response.
+
+Local browser verification is mandatory even for a one-line or otherwise small change; never deploy an unverified frontend change.
+
 ## Sarga.co gateway design rules
 
 - Sarga.co remains the group gateway and corporate ecosystem entry point.

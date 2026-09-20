@@ -14016,3 +14016,30 @@ Status: ✅ Done — 2026-08-29
 
 - The runtime deployment is commit `8d704f69`; the follow-up documentation
   commit only records the completed phase.
+
+### GWR-DEPLOY-4 — Verified About mobile alignment and development flow
+
+#### What was done
+
+- Added a scoped mobile-only About alignment rule with explicit selectors for
+  the lede, Vision, Structure, and People intro paragraphs.
+- Added a mandatory local-browser verification workflow to `AGENTS.md` for
+  every change, including small frontend changes.
+
+#### Files changed
+
+- `AGENTS.md`
+- `frontend-gateway-static/src/app/globals.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Local typecheck, lint, and production build passed.
+- Local production app was opened in a real browser at `430x932` on
+  `/about-us`; the affected copy was visually verified left-aligned before
+  staging deployment.
+
+#### Notes / caveats
+
+- The mobile rule is limited to widths below `760px`; desktop layout rules are
+  unchanged.

@@ -60,7 +60,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | GWR-HTML-13      | Static desktop News refinement              | 🟡 Awaiting approval | 2026-09-20 |
 | GWR-HTML-14      | Static desktop Get In Touch refinement     | 🟡 Awaiting approval | 2026-09-20 |
 | GWR-HTML-15      | Static desktop hero banner replacement    | 🟡 Awaiting approval | 2026-09-20 |
-| GWR-DEPLOY-1     | Static Gateway staging deployment wiring  | 🟡 Awaiting staging rollout | 2026-09-20 |
+| GWR-DEPLOY-1     | Static Gateway staging deployment wiring  | ✅ Done                    | 2026-09-20 |
 | GWR-DEPLOY-2     | Static Gateway Next.js security patch     | ✅ Done                    | 2026-09-20 |
 | GWR-6            | Publications and Ticket Hub                  | ⬜ Todo             | —          |
 | GWR-7            | Cross-route QA and launch readiness          | ⬜ Todo             | —          |
@@ -13961,8 +13961,11 @@ Status: ✅ Done — 2026-08-29
 - The staging switch is deliberately separate from `all-active`; it must be
   enabled with `--temporary-gateway-static` so a routine Gateway deployment
   cannot replace the normal route accidentally.
-- The actual commit/push and staging rollout remain operational release steps;
-  this phase records the repository wiring and preflight checks.
+- Commits `939089178` and `1f7096ac7` were pushed to
+  `feature/sarga-major-revamp`. Commit `1f7096ac7` was deployed manually to
+  the staging host because its GitHub runner wrapper is not installed yet.
+- The live Nginx route is temporary by design and can be restored by rerunning
+  the installer without `--temporary-gateway-static`.
 
 ### GWR-DEPLOY-2 — Static Gateway Next.js security patch
 

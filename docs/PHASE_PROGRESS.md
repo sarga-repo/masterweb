@@ -61,6 +61,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | GWR-HTML-14      | Static desktop Get In Touch refinement     | 🟡 Awaiting approval | 2026-09-20 |
 | GWR-HTML-15      | Static desktop hero banner replacement    | 🟡 Awaiting approval | 2026-09-20 |
 | GWR-DEPLOY-1     | Static Gateway staging deployment wiring  | 🟡 Awaiting staging rollout | 2026-09-20 |
+| GWR-DEPLOY-2     | Static Gateway Next.js security patch     | ✅ Done                    | 2026-09-20 |
 | GWR-6            | Publications and Ticket Hub                  | ⬜ Todo             | —          |
 | GWR-7            | Cross-route QA and launch readiness          | ⬜ Todo             | —          |
 
@@ -13962,3 +13963,28 @@ Status: ✅ Done — 2026-08-29
   cannot replace the normal route accidentally.
 - The actual commit/push and staging rollout remain operational release steps;
   this phase records the repository wiring and preflight checks.
+
+### GWR-DEPLOY-2 — Static Gateway Next.js security patch
+
+#### What was done
+
+- Upgraded the static Gateway frontend from `next@16.2.11` to the fixed
+  `next@16.3.3` release for CVE-2026-75604.
+- Aligned `eslint-config-next` to `16.3.3` and refreshed the frozen lockfile.
+
+#### Files changed
+
+- `frontend-gateway-static/package.json`
+- `frontend-gateway-static/pnpm-lock.yaml`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Static frontend typecheck, lint, and production build passed on Next.js
+  `16.3.3`.
+
+#### Notes / caveats
+
+- The security hook reported the original `16.2.11` package as affected and
+  allowed the initial push as a soft block; the follow-up patch moves the
+  package and its lint configuration to the fixed release before staging.

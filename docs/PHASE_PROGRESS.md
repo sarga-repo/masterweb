@@ -62,6 +62,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | GWR-HTML-15      | Static desktop hero banner replacement    | 🟡 Awaiting approval | 2026-09-20 |
 | GWR-DEPLOY-1     | Static Gateway staging deployment wiring  | ✅ Done                    | 2026-09-20 |
 | GWR-DEPLOY-2     | Static Gateway Next.js security patch     | ✅ Done                    | 2026-09-20 |
+| GWR-DEPLOY-3     | About mobile paragraph alignment          | ✅ Done                    | 2026-09-20 |
 | GWR-6            | Publications and Ticket Hub                  | ⬜ Todo             | —          |
 | GWR-7            | Cross-route QA and launch readiness          | ⬜ Todo             | —          |
 
@@ -13991,3 +13992,27 @@ Status: ✅ Done — 2026-08-29
 - The security hook reported the original `16.2.11` package as affected and
   allowed the initial push as a soft block; the follow-up patch moves the
   package and its lint configuration to the fixed release before staging.
+
+### GWR-DEPLOY-3 — About mobile paragraph alignment
+
+#### What was done
+
+- Set the mobile About page paragraphs in `about-lede`, `about-vision`,
+  `about-structure`, and `about-section-intro` to left alignment.
+- Kept the approved desktop alignment and all other layout rules unchanged.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/globals.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Impeccable layout detector returned no findings for the About page styles.
+- Static frontend typecheck, lint, production build, and diff checks passed.
+- Staging serves commit `8d704f69` successfully at `/about-us`.
+
+#### Notes / caveats
+
+- The runtime deployment is commit `8d704f69`; the follow-up documentation
+  commit only records the completed phase.

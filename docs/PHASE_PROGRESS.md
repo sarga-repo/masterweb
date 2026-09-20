@@ -44,6 +44,23 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | GWR-CMS-9        | Multisite CMS hero video                     | ✅ Done             | 2026-08-11 |
 | GWR-CMS-10       | Motorsport homepage managed sections         | ✅ Done             | 2026-08-11 |
 | GWR-CMS-11       | Motorsport media and News refinement         | ✅ Done             | 2026-08-11 |
+| GWR-FIGMA-1      | Gateway visual prototype and click-through | ✅ Done             | 2026-09-19 |
+| GWR-HTML-1       | Static mobile Home baseline                  | 🟡 Awaiting approval | 2026-09-19 |
+| GWR-HTML-2       | Static mobile About Us baseline              | 🟡 Awaiting approval | 2026-09-19 |
+| GWR-HTML-3       | Static 360 Ecosystem baseline               | 🟡 Awaiting approval | 2026-09-19 |
+| GWR-HTML-4       | Static Investor Relation draft              | 🟡 Awaiting approval | 2026-09-20 |
+| GWR-HTML-5       | Static News page baseline                   | 🟡 Awaiting approval | 2026-09-20 |
+| GWR-HTML-6       | Static Get In Touch baseline                | 🟡 Awaiting approval | 2026-09-20 |
+| GWR-HTML-7       | Static Ticket page baseline                | 🟡 Awaiting approval | 2026-09-20 |
+| GWR-HTML-8       | Static desktop layout direction             | 🟡 Awaiting approval | 2026-09-20 |
+| GWR-HTML-9       | Static desktop Home refinement              | 🟡 Awaiting approval | 2026-09-20 |
+| GWR-HTML-10      | Static desktop About Us refinement          | 🟡 Awaiting approval | 2026-09-20 |
+| GWR-HTML-11      | Static desktop Ecosystem refinement         | 🟡 Awaiting approval | 2026-09-20 |
+| GWR-HTML-12      | Static desktop Investor Relations refinement | 🟡 Awaiting approval | 2026-09-20 |
+| GWR-HTML-13      | Static desktop News refinement              | 🟡 Awaiting approval | 2026-09-20 |
+| GWR-HTML-14      | Static desktop Get In Touch refinement     | 🟡 Awaiting approval | 2026-09-20 |
+| GWR-HTML-15      | Static desktop hero banner replacement    | 🟡 Awaiting approval | 2026-09-20 |
+| GWR-DEPLOY-1     | Static Gateway staging deployment wiring  | 🟡 Awaiting staging rollout | 2026-09-20 |
 | GWR-6            | Publications and Ticket Hub                  | ⬜ Todo             | —          |
 | GWR-7            | Cross-route QA and launch readiness          | ⬜ Todo             | —          |
 
@@ -52,6 +69,702 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | Phase | Title                                  | Status  | Date       |
 | ----- | -------------------------------------- | ------- | ---------- |
 | GWO-1 | Static one-page gateway implementation | ✅ Done | 2026-09-04 |
+
+### GWR-FIGMA-1 — Gateway visual prototype and click-through
+
+#### What was done
+
+- Created the `SARGA.CO Gateway Revamp — Prototype` Figma file with separate
+  mobile reference and desktop responsive-direction pages.
+- Translated the supplied Illustrator mobile artboards into seven navigable
+  Figma screens and preserved the source compositions as editable reference
+  surfaces.
+- Reused the one-page gateway logo, approved hero/ecosystem artwork, and BOD
+  portraits for the People Behind SARGA section.
+- Built desktop Home, About Us, 360 Ecosystem, News, and Get In Touch frames
+  with shared header/footer components and the supplied Zalando Sans Expanded
+  and Plus Jakarta Sans typography direction.
+- Added prototype navigation flows for both mobile and desktop review paths.
+
+#### Files changed
+
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Opened the Figma prototype in the desktop Figma client.
+- Verified the mobile flow reaches Menu, About Us, 360 Ecosystem, News, and
+  Get In Touch, then returns to Home.
+- Verified the desktop flow reaches the populated Home, About Us, and 360
+  Ecosystem screens and continues through the News and Get In Touch frames.
+
+#### Notes / caveats
+
+- No frontend or CMS code was changed; the deliverable is the Figma file at
+  `https://www.figma.com/design/AqUEzanWjzVDcIy9oPkQ8o`.
+- The Figma Starter MCP quota was reached while assembling the desktop
+  direction, so desktop News and Get In Touch currently retain their shared
+  shell with content to be refined in the next design iteration.
+- The editable mobile About Us artboard contains the one-page BOD portrait
+  overlays; the current Figma prototype viewer may still show the original
+  Illustrator placeholder layer until that viewer snapshot refreshes.
+
+### GWR-HTML-1 — Static mobile Home baseline
+
+#### What was done
+
+- Replaced the flattened Home reference with a real static Next.js page made of
+  semantic header, navigation, hero, intro, ecosystem, and News components.
+- Matched the supplied mobile hamburger layout, including the inset menu rules,
+  close state, and full-width gradient Ticket band.
+- Reused the one-page Gateway logo and hero collage, plus the supplied News
+  image and existing Motorsport/Venues artwork.
+- Added an accessible three-story News slider with arrow controls, selectable
+  dots, side peeks, and the supplied spreadsheet titles/dates.
+- Set the News slider previous/next button backgrounds to the shared SARGA
+  Ignition Orange accent.
+- Added the Illustrator-style diagonal hero bands and the slate Contact Us
+  footer with the reused zigzag pattern, social marks, address, email, and
+  legal links.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/page.tsx`
+- `frontend-gateway-static/src/app/globals.css`
+- `frontend-gateway-static/src/app/layout.tsx`
+- `frontend-gateway-static/public/media/sraya-recognition.jpg`
+- `frontend-gateway-static/assets/images/banners/ecosystem-motion.jpg`
+- `frontend-gateway-static/assets/images/news/**`
+- `frontend-gateway-static/assets/images/logos/instagram_white.png`
+- `frontend-gateway-static/assets/images/logos/linkedin_white.png`
+- `frontend-gateway-static/package.json`
+- `frontend-gateway-static/README.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- `pnpm typecheck`, `pnpm lint`, and `pnpm build` pass in
+  `frontend-gateway-onepage/`.
+- Browser QA at 390 × 844 verified the Home layout, menu geometry, slider side
+  peeks, arrow movement, and dot selection.
+
+#### Notes / caveats
+
+- This is intentionally Home-only and static; no CMS or route content was
+  introduced.
+- `frontend-gateway-onepage/` was restored and remains the reference/source
+  asset project only.
+- Investor Relation, Get In Touch, Ticket, and News detail links remain
+  placeholders until the Home direction is approved.
+- Figma will be updated only after approval of this HTML baseline.
+
+### GWR-HTML-2 — Static mobile About Us baseline
+
+#### What was done
+
+- Added the static `/about-us` route using the supplied Illustrator page 4
+  composition as the mobile reference: image-led hero, About copy, Vision,
+  Structure, People Behind SARGA, Our Journey, and the shared Contact Us
+  footer.
+- Generated and added four placeholder-replacement visuals for the hero,
+  Vision, Structure, and Our Journey sections under the static project's
+  `assets/images/banners_mobile/` directory.
+- Reused the supplied leader portraits in the requested order: Aryo
+  Djojohadikusumo, Aseanto Oudang, then the profile carousel in the workbook
+  order Nugdha Achadie, Zaki Maulani, Diana Airin, Samsul Purba, and Felix
+  Effendi.
+- Added clickable leader portraits with profile dialogs populated from the
+  workbook's `leaders profile` sheet, accessible carousel dots, and matching
+  previous/next controls.
+- Centered the active People Behind SARGA carousel card at both mobile and
+  desktop widths, including after previous/next transitions.
+- Applied the shared SARGA Ignition Orange accent to the leader carousel
+  previous/next button backgrounds.
+- Refreshed the four generated About Us visuals with the supplied SARGA banner
+  language: navy/red/orange motion graphics, event-scale sports composites,
+  checker motifs, and subtle approved SARGA/product signage references.
+- Extracted the Home header/footer into a shared static component so About Us
+  uses the same hamburger navigation, social links, legal copy, and footer
+  zigzag treatment.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/about-us/page.tsx`
+- `frontend-gateway-static/src/components/site-chrome.tsx`
+- `frontend-gateway-static/src/app/page.tsx`
+- `frontend-gateway-static/src/app/globals.css`
+- `frontend-gateway-static/assets/images/banners_mobile/about-hero-ecosystem.png`
+- `frontend-gateway-static/assets/images/banners_mobile/about-vision-track.png`
+- `frontend-gateway-static/assets/images/banners_mobile/about-structure-venue.png`
+- `frontend-gateway-static/assets/images/banners_mobile/about-journey-dawn.png`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- `pnpm typecheck`, `pnpm lint`, and `pnpm build` pass in
+  `frontend-gateway-static/`.
+- Browser QA verified `/about-us` returns HTTP 200 at 390 × 844 and 1280 ×
+  900, with no console errors or horizontal overflow observed.
+- Verified the active leader card center aligns with the viewport midpoint at
+  both widths before and after advancing the carousel.
+- Verified the mobile hamburger menu, carousel dot selection, leader profile
+  dialog, generated image sections, and shared footer rendering.
+- Confirmed `frontend-gateway-onepage/` remains untouched.
+
+#### Notes / caveats
+
+- The generated visuals are deliberate placeholder replacements for the
+  Illustrator artboard's empty image boxes and can be swapped for approved
+  SARGA.CO photography later without changing the layout contract.
+- The About Us route is static and does not yet connect to CMS data.
+
+### GWR-HTML-3 — Static 360 Ecosystem baseline
+
+#### What was done
+
+- Added the static `/ecosystem` route using page 5 of the supplied Illustrator
+  reference: full-bleed hero, category tabs, editorial category description,
+  ecosystem property sections, supporting property marks, and the shared
+  Contact Us footer.
+- Added real tab switching for Sports, Media & Lifestyle, and Venues. The
+  active tab now controls which property sections are rendered: Horse Sport
+  and Motorsport; Off The Game and SARGA Festival; or SARGA Venues.
+- Reused the approved SARGA mobile banner assets for every property section
+  and the refreshed SARGA ecosystem hero visual.
+- Added workbook-backed copy from the three `360 ECOSYSTEM` sheets and reused
+  the available property logos for the section and supporting-property marks.
+- Updated the Horse Sport card to use the supplied inverse lockup and contained
+  the Podcast Pacuan Kuda and SARGA Venues marks within their logo tiles.
+- Refined the ecosystem mobile composition with consistent platform lockup
+  sizing, inset rounded tabs, and a regenerated Venues banner without the
+  original lower grey fade.
+- Swapped the Festival main/supporting marks to the supplied 2026 logo and
+  reduced the square Venues lockup height to match the other platform marks.
+- Replaced the About Us journey image with a generated extra-wide panorama and
+  made the banner horizontally scrollable above the existing 2023–2026 copy.
+- Extended the journey scroll distance and added a visible scrollbar-style
+  track and thumb at the bottom of the image.
+- Updated the shared menu and Home ecosystem CTA to navigate to `/ecosystem`.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/ecosystem/page.tsx`
+- `frontend-gateway-static/src/components/site-chrome.tsx`
+- `frontend-gateway-static/src/app/page.tsx`
+- `frontend-gateway-static/src/app/globals.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- `pnpm typecheck`, `pnpm lint`, and `pnpm build` pass in
+  `frontend-gateway-static/`.
+- Browser QA verified `/ecosystem` at 390 × 844 and 1280 × 900, including tab
+  switching, expected section counts, no horizontal overflow, and no console
+  errors.
+- Verified the shared header navigation and footer render on the new route.
+
+#### Notes / caveats
+
+- The workbook references the COS Race mark; the available repository asset is
+  named `ICR.png`, so that supplied file is used for the COS supporting mark.
+- Read more links currently point to the shared contact section until approved
+  dedicated property destinations are supplied.
+- The route remains static and does not yet connect to CMS data.
+
+### GWR-HTML-4 — Static Investor Relation draft
+
+#### What was done
+
+- Added the static `/investor-relations` route based on the approved simple
+  Option 3 direction: Investor Relations hero, Why SARGA, Own / Operate /
+  Amplify platform pillars, Governance and Responsibility, and Investor
+  Contact.
+- Reused the existing SARGA mobile banner assets for the hero and platform
+  visuals instead of introducing unapproved financial or stock imagery.
+- Reused the shared header, hamburger navigation, typography, and Contact Us
+  footer. Updated the shared Investor Relation menu item to point to the new
+  route.
+- Added expandable commitment rows and a mailto contact CTA for a simple,
+  reviewable draft interaction model.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/investor-relations/page.tsx`
+- `frontend-gateway-static/src/components/site-chrome.tsx`
+- `frontend-gateway-static/src/app/globals.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- `pnpm typecheck`, `pnpm lint`, and `pnpm build` pass in
+  `frontend-gateway-static/`.
+- Browser QA verified `/investor-relations` at 390 × 844 and 1280 × 900,
+  including the hamburger menu, route link, expandable commitment rows, and
+  shared footer.
+- Verified the mobile page has no horizontal overflow and no browser console
+  errors.
+
+#### Notes / caveats
+
+- Copy and sections are a draft information architecture only. No financial
+  performance, stock data, annual reports, or disclosure content has been
+  invented.
+- The route remains static and does not yet connect to CMS data. The official
+  `info@sarga.co.id` address is reused for the provisional contact CTA until
+  Sarga supplies a dedicated investor-relations address.
+
+### GWR-HTML-5 — Static News page baseline
+
+#### What was done
+
+- Added the static `/news` route using the supplied News artboard direction:
+  hero banner, shared News slider, transition banner, press-release list, and
+  shared Contact Us footer.
+- Reused the exact Home News slider content, images, dates, controls, dots, and
+  external read-more destinations through a shared `NewsSlider` component.
+- Added the workbook-backed Sraya press release and three clearly provisional
+  mock press-release rows with DD/MM/YYYY dates.
+- Refined the Press Release section to match the supplied artboard: centered
+  heading, orange uppercase titles, muted dates, separators, and compact ID
+  download controls with active red and inactive grey states.
+- Generated and added a portrait News hero visual and a wide sports transition
+  banner under the static project's `assets/images/banners_mobile/` directory.
+- Updated the shared hamburger menu's News item to navigate to `/news`.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/news/page.tsx`
+- `frontend-gateway-static/src/components/news-slider.tsx`
+- `frontend-gateway-static/src/app/page.tsx`
+- `frontend-gateway-static/src/components/site-chrome.tsx`
+- `frontend-gateway-static/src/app/globals.css`
+- `frontend-gateway-static/assets/images/banners_mobile/news-hero.png`
+- `frontend-gateway-static/assets/images/banners_mobile/news-press-banner.png`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- `pnpm typecheck`, `pnpm lint`, and `pnpm build` pass in
+  `frontend-gateway-static/`.
+- Browser QA verified `/news` at 390 × 844 and 1280 × 900, including the
+  shared slider controls, press-release layout, hamburger route, no horizontal
+  overflow, and no console warnings.
+
+#### Notes / caveats
+
+- Three press-release rows are intentionally mock content until the Sarga team
+  supplies the approved titles, dates, destinations, and artwork.
+- The route remains static and does not yet connect to CMS data.
+
+### GWR-HTML-6 — Static Get In Touch baseline
+
+#### What was done
+
+- Added the static `/get-in-touch` route using the supplied Get In Touch
+  content: shared intro, Send Email action, Follow LinkedIn action, and the
+  shared Contact Us footer.
+- Generated and added separate SARGA-style venue and live-event visuals for
+  the two contact sections under `assets/images/banners_mobile/`.
+- Added the requested orange CTA treatment with an envelope icon, a reused
+  LinkedIn mark, `mailto:info@sarga.co.id`, and the SARGA LinkedIn URL opening
+  in a new tab.
+- Reworked both contact actions as full-width image panels with the heading and
+  CTA overlaid inside each banner, matching the supplied mobile layout.
+- Standardized the site's orange controls to the sampled `#e53f24` accent and
+  enlarged the LinkedIn mark to match the envelope icon visually.
+- Reduced the contact-panel heading scale for mobile and tablet-sized layouts
+  so the copy remains legible without dominating the banner imagery.
+- Added a 100px text-free orange patterned divider between the email and
+  LinkedIn panels using the same inline SVG mask treatment as the one-page
+  ecosystem band artwork.
+- Kept the orange gradient separate from the SVG mask so the zigzag opacity
+  and contrast can be tuned independently.
+- Updated the shared hamburger menu's Get In Touch item to navigate to
+  `/get-in-touch`.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/get-in-touch/page.tsx`
+- `frontend-gateway-static/src/components/site-chrome.tsx`
+- `frontend-gateway-static/src/app/globals.css`
+- `frontend-gateway-static/assets/images/banners_mobile/get-in-touch-email.png`
+- `frontend-gateway-static/assets/images/banners_mobile/get-in-touch-linkedin.png`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- `pnpm typecheck`, `pnpm lint`, and `pnpm build` pass in
+  `frontend-gateway-static/`.
+- Browser QA verified `/get-in-touch` at 390 × 844 and 1280 × 900, including
+  CTA destinations, shared header/footer, no horizontal overflow, and no
+  console warnings.
+
+#### Notes / caveats
+
+- The route remains static and does not yet connect to CMS data.
+- The generated visuals are replaceable placeholders for the artboard's empty
+  image areas and can be swapped for approved SARGA photography later.
+
+### GWR-HTML-7 — Static Ticket page baseline
+
+#### What was done
+
+- Added the static `/ticket` route based on the current live Sarga ticket page,
+  including its two-slide hero carousel, four responsive event ticket cards,
+  ticket destinations, and English FAQ content.
+- Reused the live Sarga ticket artwork with desktop and mobile variants so the
+  layout follows the source site's two-column desktop and stacked mobile
+  presentation.
+- Translated the FAQ copy into English and matched the FAQ accordion to the
+  Investor Relations commitment pattern with a mist background, grey rules,
+  and red plus/minus controls.
+- Kept the gateway's existing shared header and footer, updated the hamburger
+  TICKET item to navigate to `/ticket`, and intentionally omitted the live
+  `SARGA.CO'S GALLERY` section as requested.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/ticket/page.tsx`
+- `frontend-gateway-static/src/components/site-chrome.tsx`
+- `frontend-gateway-static/src/app/globals.css`
+- `frontend-gateway-static/assets/images/tickets/`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- `pnpm typecheck`, `pnpm lint`, `pnpm build`, and `git diff --check` pass in
+  `frontend-gateway-static/`.
+- Browser QA verified the mobile breakpoint uses the horizontal ticket artwork,
+  the desktop breakpoint uses the tall two-column artwork, the hero dots switch
+  slides, FAQ rows expand/collapse, and the three live ticket destinations are
+  present.
+
+#### Notes / caveats
+
+- The route remains a static baseline and does not yet connect to CMS data.
+- Ticket artwork is copied from the live Sarga page and should be refreshed if
+  the live event dates, ticket URLs, or promotional artwork change.
+- The poster images remain source-provided artwork; only the HTML FAQ copy was
+  translated.
+- The Yogyakarta card is intentionally non-clickable because the source page
+  currently renders it without a link.
+
+### GWR-HTML-8 — Static desktop layout direction
+
+#### What was done
+
+- Added a desktop-only visual system across Home, About Us, 360 Ecosystem,
+  Investor Relations, News, Get In Touch, and Ticket.
+- Refined the desktop header/menu panel, editorial hero compositions, content
+  spacing, sliders, ecosystem cards, accordions, contact cards, ticket cards,
+  and the shared zigzag footer.
+- Centered the desktop leadership carousel active slide and preserved the
+  horizontal Our Journey image with its scrollbar indicator.
+- Added a warm-orange active-page underline to the desktop top navigation while
+  preserving the Ticket pill and mobile hamburger navigation.
+- Scoped all new rules to `min-width: 1024px`; the approved mobile layout and
+  breakpoint rules remain unchanged.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/globals.css`
+- `frontend-gateway-static/src/components/site-chrome.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- `pnpm typecheck`, `pnpm lint`, `pnpm build`, and `git diff --check` pass in
+  `frontend-gateway-static/`.
+- The production build includes all seven static routes after the desktop
+  overrides.
+
+#### Notes / caveats
+
+- This is a desktop design direction for stakeholder review; it remains a
+  static frontend and is not connected to CMS data.
+- The desktop refinements begin at 1024px so tablet/mobile behavior remains
+  governed by the previously approved layout.
+
+### GWR-HTML-9 — Static desktop Home refinement
+
+#### What was done
+
+- Replaced the desktop Home hamburger with a horizontal top-bar navigation and
+  retained the existing hamburger behavior below 1024px.
+- Rebuilt the desktop Home hero as a full-width image banner with the headline
+  anchored in the lower-left corner.
+- Reworked the desktop Home intro into the supplied warm-orange split band:
+  `360° ECOSYSTEM` anchors the left rail while the description and square
+  read-more action sit in the right column.
+- Replaced the desktop Home news carousel with three stacked image-and-copy
+  cards, while preserving the mobile slider.
+- Unified the desktop Home content rail across the hero, intro, ecosystem
+  teaser, News cards, and footer.
+- Added a Home-only desktop footer composition based on the supplied
+  `360.sarga.co` reference: logo and zigzag motif at left, Social Media and
+  Contact Us columns at right, a heading divider, full-width lower rule, and
+  centered copyright, while retaining the existing grey background.
+- Matched the desktop intro and footer proportions to the one-page reference
+  geometry, including the intro mask offset, 13.8542vw intro height,
+  16.7188vw footer height, and proportional footer typography/icon placement.
+- Promoted the approved desktop horizontal navigation and reference footer to
+  the shared shell so About Us, 360 Ecosystem, Investor Relation, News, Get In
+  Touch, and Ticket use the same desktop header/footer as Home.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/page.tsx`
+- `frontend-gateway-static/src/components/news-slider.tsx`
+- `frontend-gateway-static/src/components/site-chrome.tsx`
+- `frontend-gateway-static/src/app/globals.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Captured the Home route at desktop and mobile viewport sizes in a real
+  browser.
+- Confirmed the desktop navigation, hero overlay, two-column intro band,
+  shared content rail, stacked news cards, and reference-style footer visually
+  at 1440 × 1000.
+- Confirmed the desktop intro CTA is right-aligned beneath the description and
+  the SVG zigzag pattern begins at the requested reference offset.
+- Confirmed representative inner routes use the horizontal desktop nav and
+  proportional grey footer, while the 390px mobile About Us shell still uses
+  the hamburger navigation and original footer.
+- Confirmed the existing mobile hero, intro, ecosystem section, news slider,
+  and footer remain in their approved mobile arrangement.
+- `pnpm typecheck`, `pnpm lint`, `pnpm build`, and `git diff --check` pass in
+  `frontend-gateway-static/`.
+
+#### Notes / caveats
+
+- The Home desktop direction is a static prototype for review and does not yet
+  connect to CMS data.
+- Desktop-specific behavior begins at 1024px; the mobile breakpoint remains
+  unchanged.
+
+### GWR-HTML-10 — Static desktop About Us refinement
+
+#### What was done
+
+- Rebuilt the desktop About Us composition on the same shared content rail as
+  Home, including hero heading scale, About copy, Structure, Our Journey, and
+  the shared desktop shell.
+- Styled Vision as a rounded editorial card with a restrained neutral surface
+  and image/text split.
+- Converted Structure into a matching rounded editorial card with copy on the
+  left and the venue image on the right.
+- Made the desktop Our Journey panorama full viewport width with no rounded
+  frame, horizontal interaction, or custom scrollbar; the mobile scroller and
+  indicator remain unchanged.
+- Normalized the shared desktop footer contact columns across Home and all
+  secondary routes so EMAIL and ADDRESS labels use the same stacked layout and
+  social icons load consistently.
+- Added calm neutral section backgrounds and clearer text/image hierarchy to
+  prevent text-only sections from reading as flat white blocks.
+- Replaced the desktop People Behind SARGA slider with a one-page-style
+  leadership layout: two featured cards followed by a five-card leadership
+  grid. The mobile slider remains unchanged.
+- Eager-loaded desktop leadership and journey artwork so full-page review
+  captures show the supplied images instead of lazy placeholders.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/about-us/page.tsx`
+- `frontend-gateway-static/src/app/globals.css`
+- `frontend-gateway-static/src/components/site-chrome.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Captured the About Us route at desktop size and confirmed the hero, Vision
+  card, Structure card, People grid, full-bleed Our Journey panorama, and
+  shared footer composition.
+- Confirmed at 390px that the approved mobile About Us slider, hamburger menu,
+  mobile footer, and original text flow remain active.
+- `pnpm typecheck`, `pnpm lint`, `pnpm build`, `git diff --check`, and the
+  layout scan pass.
+
+#### Notes / caveats
+
+- The desktop About Us layout is a static stakeholder-review direction and is
+  not connected to CMS data.
+- The desktop leadership grid removes interaction controls visually, but the
+  existing profile dialog behavior remains available through each portrait.
+
+### GWR-HTML-11 — Static desktop Ecosystem refinement
+
+#### What was done
+
+- Aligned the Ecosystem tabs, description, and platform card stack to the same
+  desktop content rail used by Home and About Us.
+- Left-aligned the active tab description and matched the desktop body scale to
+  the established gateway typography rhythm.
+- Converted ecosystem platform cards into rounded editorial image/text cards
+  matching the About Us card language.
+- Added the visible desktop hero title `360 ECOSYSTEM`, aligned to the shared
+  desktop rail while keeping the mobile title visually hidden.
+- Added the shared desktop hero treatment with the `SARGA.CO` eyebrow and a
+  concise ecosystem description above the tab section.
+- Added deliberate desktop bottom spacing before the shared footer; mobile card
+  stacking and tab behavior remain unchanged.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/globals.css`
+- `frontend-gateway-static/src/app/ecosystem/page.tsx`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Captured the desktop Ecosystem route and confirmed rail alignment, left-copy
+  treatment, rounded platform cards, and footer separation.
+- Confirmed at 390px that the mobile tab/card cascade remains active.
+- `pnpm typecheck`, `pnpm lint`, `pnpm build`, `git diff --check`, and the
+  layout scan pass.
+
+#### Notes / caveats
+
+- This remains a static stakeholder-review direction and is not connected to
+  CMS data.
+
+### GWR-HTML-12 — Static desktop Investor Relations refinement
+
+#### What was done
+
+- Aligned the Investor Relations hero, section headings, descriptions, cards,
+  and contact area to the shared Home desktop rail and typography scale.
+- Left-aligned desktop description paragraphs and added restrained neutral
+  surfaces to the text-led Why SARGA, Governance, and Investor Contact areas.
+- Converted the platform pillars into rounded image/text cards matching the
+  About Us editorial card language while preserving the original red copy and
+  horizontal separator treatment.
+- Eager-loaded platform artwork for consistent stakeholder-review captures;
+  mobile layout behavior remains unchanged.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/investor-relations/page.tsx`
+- `frontend-gateway-static/src/app/globals.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Captured the desktop Investor Relations route and confirmed rail alignment,
+  card composition, left-aligned copy, neutral section surfaces, and shared
+  footer spacing.
+- Confirmed at 390px that the mobile centered copy, stacked content, and
+  hamburger shell remain active.
+- `pnpm typecheck`, `pnpm lint`, `pnpm build`, `git diff --check`, and the
+  layout scan pass.
+
+#### Notes / caveats
+
+- This remains a static stakeholder-review direction and is not connected to
+  CMS data.
+
+### GWR-HTML-13 — Static desktop News refinement
+
+#### What was done
+
+- Aligned the News hero, section headings, editorial news cards, banner, and
+  Press Release area to the shared desktop content rail and heading scale.
+- Reused Home's three-card desktop News list with left imagery, editorial copy,
+  dates, and external read-more links; the mobile slider remains active.
+- Left-aligned desktop descriptions and added restrained neutral surfaces to the
+  News and Press Release sections.
+- Preserved the existing Press Release download buttons, language labels, and
+  horizontal separators.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/globals.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Captured the desktop News route and confirmed rail alignment, stacked Home
+  cards, left-aligned copy, Press Release styling, and shared footer.
+- Confirmed at 390px that the News slider, dots, centered Press Release title,
+  hamburger shell, and mobile footer behavior remain active.
+- `pnpm typecheck`, `pnpm lint`, `pnpm build`, `git diff --check`, and the
+  layout scan pass.
+
+#### Notes / caveats
+
+- This remains a static stakeholder-review direction and is not connected to
+  CMS data.
+
+### GWR-HTML-14 — Static desktop Get In Touch refinement
+
+#### What was done
+
+- Aligned the Get In Touch desktop content to the shared gateway rail and
+  desktop typography direction.
+- Reworked Send Email and Follow LinkedIn into stacked rounded image/text cards
+  consistent with the desktop platform card language.
+- Left-aligned desktop copy, added a restrained neutral card surface, and
+  removed the orange zigzag separator only at desktop widths.
+- Preserved the approved mobile card composition, separator, hamburger shell,
+  and footer behavior.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/globals.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Captured the desktop Get In Touch route and confirmed the two horizontal
+  editorial cards, shared rail, orange actions, and shared footer.
+- Confirmed at 390px that the mobile overlay cards, orange separator, centered
+  copy, hamburger shell, and mobile footer behavior remain active.
+- `pnpm typecheck`, `pnpm lint`, `pnpm build`, `git diff --check`, and the
+  layout scan pass.
+
+#### Notes / caveats
+
+- This remains a static stakeholder-review direction and is not connected to
+  CMS data.
+
+### GWR-HTML-15 — Static desktop hero banner replacement
+
+#### What was done
+
+- Generated new cinematic desktop hero banners for About Us, 360 Ecosystem,
+  Investor Relations, and News using a coordinated SARGA sports,
+  entertainment, venue, and editorial visual direction.
+- Added responsive desktop image variants while preserving the existing mobile
+  hero assets and compositions.
+- Kept the existing page copy, overlays, shared navigation, and footer intact.
+
+#### Files changed
+
+- `frontend-gateway-static/assets/images/banners/about-hero-desktop.png`
+- `frontend-gateway-static/assets/images/banners/ecosystem-hero-desktop.png`
+- `frontend-gateway-static/assets/images/banners/investor-relations-hero-desktop.png`
+- `frontend-gateway-static/assets/images/banners/news-hero-desktop.png`
+- `frontend-gateway-static/src/app/about-us/page.tsx`
+- `frontend-gateway-static/src/app/ecosystem/page.tsx`
+- `frontend-gateway-static/src/app/investor-relations/page.tsx`
+- `frontend-gateway-static/src/app/news/page.tsx`
+- `frontend-gateway-static/src/app/globals.css`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Confirmed desktop routes load the new banner variants and hide the mobile
+  variants at the desktop breakpoint.
+- Confirmed the mobile Ecosystem hero remains hidden for desktop-only copy and
+  continues to use its existing mobile presentation.
+- `pnpm typecheck`, `pnpm lint`, `pnpm build`, and `git diff --check` pass.
+
+#### Notes / caveats
+
+- Generated assets are static stakeholder-review artwork and are not connected
+  to CMS media management.
+- The built-in Image Generation skill was used; source outputs remain in the
+  Codex generated-images directory in addition to the project copies.
 
 ### GWO-1 — Static one-page gateway implementation
 
@@ -13201,3 +13914,51 @@ Status: ✅ Done — 2026-08-29
   different aspect ratio.
 - The full-bleed ticket-map correction is implemented locally and is ready for
   staging deployment.
+
+### GWR-DEPLOY-1 — Static Gateway staging deployment wiring
+
+#### What was done
+
+- Added `frontend-gateway-static` to the shared CI quality matrix and the
+  production build/deployment helpers.
+- Added the `sarga-gateway-static` systemd unit on loopback port `3005` and
+  protected staging/production environment templates.
+- Added an explicit `gateway-static` staging target with public verification.
+- Added a staging-only Nginx switch that routes `staging.sarga.co` to port
+  `3005` while retaining the normal Gateway `3000` proxy as a commented
+  rollback line.
+- Added port-availability guards so the temporary switch fails if `3005` is
+  occupied by another service.
+
+#### Files changed
+
+- `.github/workflows/ci.yml`
+- `.github/workflows/deploy-staging.yml`
+- `README.md`
+- `deploy/environments/production/gateway-static.env.example`
+- `deploy/environments/staging/gateway-static.env.example`
+- `deploy/production/build_applications.sh`
+- `deploy/production/deploy_github_revision.sh`
+- `deploy/production/nginx/README.md`
+- `deploy/production/nginx/install-sarga-stack.sh`
+- `deploy/production/nginx/sarga-stack.conf`
+- `deploy/production/README.md`
+- `deploy/production/systemd/sarga-gateway-static.service`
+- `docs/17_ubuntu_staging_production_deployment_playbook.md`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- Static frontend typecheck, lint, and production build passed.
+- Deployment helper shell syntax checks and `git diff --check` passed.
+- Read-only staging checks confirmed Nginx is active, `staging.sarga.co`
+  currently proxies to `127.0.0.1:3000`, the static service is inactive, and
+  port `3005` is free.
+
+#### Notes / caveats
+
+- The staging switch is deliberately separate from `all-active`; it must be
+  enabled with `--temporary-gateway-static` so a routine Gateway deployment
+  cannot replace the normal route accidentally.
+- The actual commit/push and staging rollout remain operational release steps;
+  this phase records the repository wiring and preflight checks.

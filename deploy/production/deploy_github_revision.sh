@@ -36,6 +36,8 @@ Targets:
   gateway      Build and restart the Gateway frontend.
   gateway-onepage
                Build and restart the static one-page Gateway presentation frontend.
+  gateway-static
+               Build and restart the static Gateway website frontend.
   motorsport   Build and restart the Motorsport frontend.
   all-active   Build and restart CMS, Gateway, and Motorsport sequentially.
 
@@ -101,6 +103,11 @@ case "$target" in
     services=(sarga-gateway-onepage)
     health_urls=(http://127.0.0.1:3004/)
     ;;
+  gateway-static)
+    build_flags=(--gateway-static)
+    services=(sarga-gateway-static)
+    health_urls=(http://127.0.0.1:3005/)
+    ;;
   motorsport)
     build_flags=(--motorsport)
     services=(sarga-motorsport)
@@ -121,9 +128,16 @@ case "$target" in
     ;;
 esac
 
-for command in curl flock git install pg_dump sudo systemctl tar; do
+for command in curl flock git install pg_dump sudo systemctl tar ss; do
   command -v "$command" >/dev/null || fail "required command is not installed: $command"
 done
+
+if [[ "$target" == "gateway-static" ]]; then
+  if [[ -n "$(ss -ltnH 'sport = :3005')" ]] &&
+    ! systemctl is-active --quiet sarga-gateway-static; then
+    fail "loopback port 3005 is already in use by a service other than sarga-gateway-static"
+  fi
+fi
 
 id "$app_user" >/dev/null 2>&1 || fail "application user does not exist: $app_user"
 [[ -d "$repo_path/.git" ]] || fail "repository checkout was not found: $repo_path"

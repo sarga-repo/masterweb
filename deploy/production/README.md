@@ -136,6 +136,29 @@ sudo deploy/production/nginx/install-sarga-stack.sh \
   --start-services
 ```
 
+To share the approved static Gateway website on staging, create
+`/etc/sarga/gateway-static.env` from
+`deploy/environments/staging/gateway-static.env.example`, install its systemd
+unit, and enable the explicitly temporary Gateway-host switch:
+
+```bash
+sudo deploy/production/build_applications.sh --gateway-static
+sudo deploy/production/nginx/install-sarga-stack.sh \
+  --gateway-host staging.sarga.co \
+  --motorsport-host staging-motorsport.sarga.co \
+  --cms-host cms-staging.sarga.co \
+  --temporary-gateway-static \
+  --start-services
+```
+
+The static service listens only on `127.0.0.1:3005`. The installer refuses the
+temporary switch if that port is occupied by anything other than the static
+service, and keeps the original Gateway `proxy_pass` commented in the generated
+Nginx file for a deliberate rollback. The GitHub staging workflow also exposes
+the `gateway-static` target and verifies `https://staging.sarga.co/` after
+deployment. This target is intentionally separate from `all-active` so a
+routine Gateway deployment cannot silently replace the normal Gateway route.
+
 ### 6. Add client-managed TLS later
 
 Re-run `install-sarga-stack.sh` with `--tls` and the supplied certificate/key
@@ -290,6 +313,7 @@ target, type `DEPLOY-STAGING`, and submit. The workflow refuses every ref except
 | `cms` | `sarga-cms` |
 | `gateway` | `sarga-gateway` |
 | `gateway-onepage` | `sarga-gateway-onepage` |
+| `gateway-static` | `sarga-gateway-static` |
 | `motorsport` | `sarga-motorsport` |
 | `all-active` | CMS, Gateway, then Motorsport |
 

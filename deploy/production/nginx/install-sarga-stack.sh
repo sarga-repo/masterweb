@@ -37,6 +37,10 @@ Optional one-page Gateway hostname (port 3004).
   --motorsport-host HOST   Required Motorsport hostname.
   --horsesport-host HOST   Optional Horse Sport hostname (port 3002).
   --cms-host HOST          Required CMS hostname.
+  --temporary-gateway-static
+                           Temporarily route the staging Gateway hostname to
+                           the static frontend on port 3005. The generated
+                           file keeps the Gateway upstream commented for rollback.
   --tls                    Configure HTTPS and redirect HTTP to HTTPS.
   --gateway-cert PATH      Gateway certificate/full-chain path.
   --gateway-key PATH       Gateway private-key path.
@@ -83,6 +87,7 @@ gateway_onepage_host=""
 motorsport_host=""
 horsesport_host=""
 cms_host=""
+temporary_gateway_static=false
 tls_enabled=false
 start_services=false
 gateway_cert=""
@@ -122,6 +127,10 @@ while (($#)); do
       require_value "$1" "${2:-}"
       cms_host="$2"
       shift 2
+      ;;
+    --temporary-gateway-static)
+      temporary_gateway_static=true
+      shift
       ;;
     --tls)
       tls_enabled=true
@@ -199,6 +208,12 @@ validate_hostname "$cms_host"
 [[ -z "$gateway_host" ]] || validate_hostname "$gateway_host"
 [[ -z "$gateway_onepage_host" ]] || validate_hostname "$gateway_onepage_host"
 [[ -z "$horsesport_host" ]] || validate_hostname "$horsesport_host"
+if [[ "$temporary_gateway_static" == true ]]; then
+  [[ -n "$gateway_host" ]] ||
+    fail "--temporary-gateway-static requires --gateway-host"
+  [[ "$gateway_host" == *staging* ]] ||
+    fail "--temporary-gateway-static is restricted to a staging Gateway hostname"
+fi
 
 configured_hosts=("$motorsport_host" "$cms_host")
 [[ -z "$gateway_host" ]] || configured_hosts+=("$gateway_host")
@@ -214,6 +229,13 @@ done
 for command_name in nginx systemctl install mktemp; do
   command -v "$command_name" >/dev/null || fail "required command not found: $command_name"
 done
+if [[ "$temporary_gateway_static" == true ]]; then
+  command -v ss >/dev/null || fail "required command not found: ss"
+  if [[ -n "$(ss -ltnH 'sport = :3005')" ]] &&
+    ! systemctl is-active --quiet sarga-gateway-static; then
+    fail "loopback port 3005 is already in use by a service other than sarga-gateway-static"
+  fi
+fi
 
 if [[ "$tls_enabled" == true ]]; then
   tls_paths=("$motorsport_cert" "$motorsport_key" "$cms_cert" "$cms_key")
@@ -239,6 +261,8 @@ if [[ "$start_services" == true ]]; then
   [[ -f /etc/sarga/motorsport.env ]] || fail "missing /etc/sarga/motorsport.env"
   [[ -z "$gateway_host" || -f /etc/sarga/gateway.env ]] || fail "missing /etc/sarga/gateway.env"
   [[ -z "$gateway_onepage_host" || -f /etc/sarga/gateway-onepage.env ]] || fail "missing /etc/sarga/gateway-onepage.env"
+  [[ "$temporary_gateway_static" != true || -f /etc/sarga/gateway-static.env ]] ||
+    fail "missing /etc/sarga/gateway-static.env"
   [[ -z "$horsesport_host" || -f /etc/sarga/horsesport.env ]] ||
     fail "missing /etc/sarga/horsesport.env"
 fi
@@ -254,6 +278,7 @@ legacy_nginx_enabled="/etc/nginx/sites-enabled/sarga-motorsport-stack.conf"
 configured_units=(sarga-cms.service sarga-motorsport.service)
 [[ -z "$gateway_host" ]] || configured_units+=(sarga-gateway.service)
 [[ -z "$gateway_onepage_host" ]] || configured_units+=(sarga-gateway-onepage.service)
+[[ "$temporary_gateway_static" != true ]] || configured_units+=(sarga-gateway-static.service)
 [[ -z "$horsesport_host" ]] || configured_units+=(sarga-horsesport.service)
 for unit in "${configured_units[@]}"; do
   [[ -f "$systemd_source/$unit" ]] || fail "missing repository service unit: $systemd_source/$unit"
@@ -279,11 +304,28 @@ write_proxy_headers() {
 EOF
 }
 
+write_proxy_pass() {
+  local upstream="$1"
+  local temporary_static_route="${2:-false}"
+  if [[ "$temporary_static_route" == true ]]; then
+    cat <<'EOF'
+        # TEMPORARY STAGING REVIEW ROUTE: this intentionally serves the
+        # static Gateway frontend from staging.sarga.co.
+        # Roll back by commenting the 3005 line and uncommenting this Gateway route:
+        # proxy_pass http://127.0.0.1:3000;
+        proxy_pass http://127.0.0.1:3005;
+EOF
+  else
+    printf '        proxy_pass http://%s;\n' "$upstream"
+  fi
+}
+
 write_http_server() {
   local hostname="$1"
   local upstream="$2"
   local read_timeout="$3"
   local max_body="${4:-}"
+  local temporary_static_route="${5:-false}"
 
   cat <<EOF
 server {
@@ -297,8 +339,8 @@ EOF
   cat <<EOF
 
     location / {
-        proxy_pass http://$upstream;
 EOF
+  write_proxy_pass "$upstream" "$temporary_static_route"
   write_proxy_headers
   cat <<EOF
         proxy_read_timeout $read_timeout;
@@ -328,6 +370,7 @@ write_tls_server() {
   local key="$4"
   local read_timeout="$5"
   local max_body="${6:-}"
+  local temporary_static_route="${7:-false}"
 
   cat <<EOF
 server {
@@ -344,8 +387,8 @@ EOF
   cat <<EOF
 
     location / {
-        proxy_pass http://$upstream;
 EOF
+  write_proxy_pass "$upstream" "$temporary_static_route"
   write_proxy_headers
   cat <<EOF
         proxy_read_timeout $read_timeout;
@@ -363,7 +406,7 @@ EOF
     if [[ -n "$gateway_host" ]]; then
       write_redirect_server "$gateway_host"
       write_tls_server "$gateway_host" "127.0.0.1:3000" \
-        "$gateway_cert" "$gateway_key" "60s"
+        "$gateway_cert" "$gateway_key" "60s" "" "$temporary_gateway_static"
     fi
     if [[ -n "$gateway_onepage_host" ]]; then
       write_redirect_server "$gateway_onepage_host"
@@ -383,7 +426,7 @@ EOF
       "$cms_cert" "$cms_key" "300s" "100m"
   else
     if [[ -n "$gateway_host" ]]; then
-      write_http_server "$gateway_host" "127.0.0.1:3000" "60s"
+      write_http_server "$gateway_host" "127.0.0.1:3000" "60s" "" "$temporary_gateway_static"
     fi
     if [[ -n "$gateway_onepage_host" ]]; then
   write_http_server "$gateway_onepage_host" "127.0.0.1:3004" "60s"
@@ -448,6 +491,9 @@ if [[ -n "$gateway_host" ]]; then
 fi
 if [[ -n "$gateway_onepage_host" ]]; then
 printf 'Gateway one-page: %s -> 127.0.0.1:3004\n' "$gateway_onepage_host"
+fi
+if [[ "$temporary_gateway_static" == true ]]; then
+  printf 'Static Gateway (temporary Gateway hostname route): %s -> 127.0.0.1:3005\n' "$gateway_host"
 fi
 printf 'Motorsport: %s -> 127.0.0.1:3001\n' "$motorsport_host"
 if [[ -n "$horsesport_host" ]]; then

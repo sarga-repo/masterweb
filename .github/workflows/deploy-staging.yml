@@ -12,6 +12,7 @@ on:
           - all-active
           - gateway
           - gateway-onepage
+          - gateway-static
           - motorsport
           - cms
       confirmation:
@@ -83,6 +84,11 @@ jobs:
                 exit 1
               fi
               urls=("${GATEWAY_ONEPAGE_URL%/}/")
+              ;;
+            gateway-static)
+              # The static review frontend temporarily occupies the Gateway
+              # hostname while the staging Nginx switch is enabled.
+              urls=(https://staging.sarga.co/)
               ;;
             motorsport)
               urls=(https://staging-motorsport.sarga.co/)

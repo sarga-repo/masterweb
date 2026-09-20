@@ -1,8 +1,9 @@
 # Ubuntu Staging and Production Deployment Playbook
 
-This playbook is the handover for deploying the Sarga Gateway, Motorsport,
-Horse Sport, and shared Strapi CMS applications on Ubuntu with systemd and a
-single VM per environment. Nginx is intentionally out of scope: DevOps owns
+This playbook is the handover for deploying the Sarga Gateway, the optional
+static Gateway review frontend, Motorsport, Horse Sport, and shared Strapi CMS
+applications on Ubuntu with systemd and a single VM per environment. Nginx is
+intentionally out of scope: DevOps owns
 DNS, TLS, virtual hosts, proxy headers, upload limits, and reloads.
 
 Use this document together with:
@@ -22,6 +23,7 @@ The supported native Ubuntu topology is:
 | Service | systemd unit | Loopback listener |
 | --- | --- | --- |
 | Gateway | `sarga-gateway` | `127.0.0.1:3000` |
+| Static Gateway review frontend | `sarga-gateway-static` | `127.0.0.1:3005` |
 | Motorsport | `sarga-motorsport` | `127.0.0.1:3001` |
 | Horse Sport | `sarga-horsesport` | `127.0.0.1:3002` |
 | Strapi CMS | `sarga-cms` | `127.0.0.1:1337` |
@@ -51,11 +53,13 @@ deploy/environments/staging/cms.env.example
 deploy/environments/staging/gateway.env.example
 deploy/environments/staging/motorsport.env.example
 deploy/environments/staging/horsesport.env.example
+deploy/environments/staging/gateway-static.env.example
 
 deploy/environments/production/cms.env.example
 deploy/environments/production/gateway.env.example
 deploy/environments/production/motorsport.env.example
 deploy/environments/production/horsesport.env.example
+deploy/environments/production/gateway-static.env.example
 ```
 
 They are safe templates only. They contain no usable credentials. DevOps must:

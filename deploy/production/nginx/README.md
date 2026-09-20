@@ -65,10 +65,39 @@ sudo deploy/production/nginx/install-sarga-stack.sh \
 ```
 
 Gateway maps to loopback port 3000, the one-page Gateway presentation maps to
-port 3004, and Horse Sport maps to port 3002. With `--tls`, also pass the
+port 3004, Horse Sport maps to port 3002, and the static Gateway website maps
+to port 3005 when its temporary staging switch is enabled. With `--tls`, also pass the
 matching certificate/key options for every configured optional host. A
 wildcard certificate may reuse the same absolute paths for multiple hosts if it
 covers every configured hostname.
+
+## Temporary staging static Gateway review
+
+The approved static Gateway website can temporarily occupy the existing Gateway
+staging hostname without deleting the Gateway route from the generated config. First
+create `/etc/sarga/gateway-static.env` from
+`deploy/environments/staging/gateway-static.env.example`, then install the
+static service and switch only the staging CMS hostname:
+
+```bash
+sudo deploy/production/nginx/install-sarga-stack.sh \
+  --gateway-host staging.sarga.co \
+  --motorsport-host staging-motorsport.sarga.co \
+  --cms-host cms-staging.sarga.co \
+  --temporary-gateway-static \
+  --start-services
+```
+
+The installer checks that loopback port `3005` is either free or already owned
+by `sarga-gateway-static`, installs that systemd unit, and writes the active
+`proxy_pass http://127.0.0.1:3005;` with the Gateway upstream retained as a
+nearby commented rollback line. The regular Gateway service remains installed;
+its hostname route is simply not public while this review switch is active.
+
+To restore the normal Gateway, rerun the installer with the same staging host
+arguments but without `--temporary-gateway-static`. Nginx validates the replacement before reload
+and keeps a timestamped backup of the previous `/etc/nginx/sites-available/
+sarga-stack.conf`.
 
 The script validates that all certificate paths are absolute and readable,
 tests the complete Nginx configuration before reload, and keeps a timestamped

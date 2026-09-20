@@ -7,6 +7,7 @@ Single-repository multisite web platform for the **Sarga** ecosystem - a group g
 ```text
 sarga-website/
 ├── frontend-gateway/       # Sarga.co - group gateway (Next.js, port 3000)
+├── frontend-gateway-static/ # Approved static Gateway review frontend (Next.js, port 3005)
 ├── frontend-motorsport/    # motorsport.sarga.co - dedicated motorsport site (Next.js, port 3001)
 ├── frontend-horsesport/    # horsesport.sarga.co - dedicated horse sport site (Next.js, port 3002)
 ├── cms/                    # Shared Strapi CMS (port 1337)
@@ -29,6 +30,7 @@ sarga-website/
 | Site / service    |                           URL | Purpose                                                                   |
 | ----------------- | ----------------------------: | ------------------------------------------------------------------------- |
 | Sarga.co Gateway  |       `http://localhost:3000` | Group entry point and ecosystem overview                                  |
+| Static Gateway    |       `http://localhost:3005` | Approved static Gateway review frontend                                   |
 | Sarga Motorsport  |       `http://localhost:3001` | Dedicated motorsport content, events, news, tickets                       |
 | Sarga Horse Sport |       `http://localhost:3002` | Dedicated horse sport content, events, derby/turf/stable stories, tickets |
 | Strapi CMS        | `http://localhost:1337/admin` | Shared content management for all sites                                   |
@@ -180,6 +182,14 @@ Run the gateway:
 
 ```bash
 cd frontend-gateway
+pnpm install
+pnpm dev
+```
+
+Run the approved static Gateway review frontend:
+
+```bash
+cd frontend-gateway-static
 pnpm install
 pnpm dev
 ```

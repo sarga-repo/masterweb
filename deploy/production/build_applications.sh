@@ -14,9 +14,12 @@ Applications (select at least one):
   --gateway      Build the Gateway frontend.
   --gateway-onepage
                  Build the static one-page Gateway presentation frontend.
+  --gateway-static
+                 Build the static Gateway website frontend.
   --motorsport   Build the Motorsport frontend.
   --horsesport   Build the Horse Sport frontend.
-  --all          Build CMS, Gateway, Gateway one-page, Motorsport, then Horse Sport.
+  --all          Build CMS, Gateway, Gateway one-page, Gateway static,
+                 Motorsport, then Horse Sport.
 
 Options:
   --repo PATH       Repository path (default: /srv/sarga-website).
@@ -75,6 +78,10 @@ while (($#)); do
       add_selected gateway-onepage
       shift
       ;;
+    --gateway-static)
+      add_selected gateway-static
+      shift
+      ;;
     --motorsport)
       add_selected motorsport
       shift
@@ -87,6 +94,7 @@ while (($#)); do
       add_selected cms
       add_selected gateway
       add_selected gateway-onepage
+      add_selected gateway-static
       add_selected motorsport
       add_selected horsesport
       shift
@@ -152,6 +160,7 @@ application_path() {
     cms) printf '%s/cms' "$repo_path" ;;
     gateway) printf '%s/frontend-gateway' "$repo_path" ;;
     gateway-onepage) printf '%s/frontend-gateway-onepage' "$repo_path" ;;
+    gateway-static) printf '%s/frontend-gateway-static' "$repo_path" ;;
     motorsport) printf '%s/frontend-motorsport' "$repo_path" ;;
     horsesport) printf '%s/frontend-horsesport' "$repo_path" ;;
   esac

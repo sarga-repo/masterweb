@@ -31,6 +31,9 @@ jobs:
           - name: Gateway One-page
             directory: frontend-gateway-onepage
             command: pnpm lint && pnpm typecheck && pnpm build
+          - name: Gateway static
+            directory: frontend-gateway-static
+            command: pnpm lint && pnpm typecheck && pnpm build
           - name: Motorsport
             directory: frontend-motorsport
             command: pnpm format:check && pnpm lint && pnpm typecheck && pnpm build

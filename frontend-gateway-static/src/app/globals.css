@@ -827,17 +827,18 @@ button { font: inherit; }
 
 .about-lede { padding: 12px 20px 23px; background: var(--paper); }
 .about-lede-label { display: none; }
-.about-lede p { max-width: 620px; margin: 0 auto; color: #33363b; font-size: 9px; line-height: 1.28; }
+.about-lede p { max-width: 620px; margin: 0 auto; color: #33363b; font-size: 9px; line-height: 1.28; text-align: left; }
 
 .about-vision { padding: 0 20px 36px; }
 .about-vision-image { position: relative; width: 86vw; max-width: 360px; aspect-ratio: 1; margin: 0 auto; overflow: hidden; border-radius: 6px; background: var(--mist); }
 .about-vision-image img { object-fit: cover; }
 .about-copy-block { margin-top: 35px; text-align: center; }
 .about-copy-block h2, .about-journey > h2 { margin: 0; color: #13161b; font-family: var(--font-zalando), sans-serif; font-size: 15px; font-weight: 700; line-height: 1; letter-spacing: -.04em; }
-.about-copy-block p { max-width: 630px; margin: 14px auto 0; color: #33363b; font-size: 9px; line-height: 1.34; }
+.about-copy-block p { max-width: 630px; margin: 14px auto 0; color: #33363b; font-size: 9px; line-height: 1.34; text-align: left; }
 
 .about-structure { padding: 0; }
 .about-structure-copy { padding: 0 20px 30px; }
+.about-structure-copy p { text-align: left; }
 .about-wide-image { position: relative; width: 100%; overflow: hidden; background: var(--mist); }
 .about-wide-image img { object-fit: cover; }
 .about-structure-image { height: 276px; }
@@ -845,7 +846,7 @@ button { font: inherit; }
 .about-people { padding: 28px 0 32px; background: var(--paper); }
 .about-section-intro { padding: 0 20px; text-align: center; }
 .about-section-intro h2 { margin: 0; color: #11151a; font-family: var(--font-zalando), sans-serif; font-size: 18px; font-weight: 700; line-height: 1; letter-spacing: -.045em; }
-.about-section-intro p { max-width: 590px; margin: 13px auto 0; color: #4b4f55; font-size: 9px; line-height: 1.3; }
+.about-section-intro p { max-width: 590px; margin: 13px auto 0; color: #4b4f55; font-size: 9px; line-height: 1.3; text-align: left; }
 .leader-feature-grid { display: grid; gap: 26px; padding: 24px 20px 0; }
 .leader-card { min-width: 0; text-align: center; }
 .leader-photo-button { position: relative; display: block; width: 100%; aspect-ratio: 1; padding: 0; overflow: hidden; border: 0; border-radius: 6px; background: var(--mist); cursor: pointer; }

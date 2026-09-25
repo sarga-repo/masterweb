@@ -17,6 +17,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | 9     | Quality & UAT                 | ✅ Done | 2026-07-04 |
 | 10    | Deployment & handover         | ✅ Done | 2026-07-04 |
 | 11    | Ubuntu staging/production environment handover | ✅ Done | 2026-08-17 |
+| 12    | Motorsport-only production deployment tooling | ✅ Done | 2026-09-25 |
 
 ## Sarga.co Gateway revamp track (`docs/gateway/revamp/`)
 
@@ -14192,3 +14193,46 @@ Status: ✅ Done — 2026-08-29
 - The dev browser still reports existing Next.js image-size and preload
   warnings on About Us; the Journey interaction itself produces no console
   errors.
+
+### Phase 12 — Motorsport-only production deployment tooling
+
+#### What was done
+
+- Added a PostgreSQL-free host initialization path and a Motorsport-only Nginx
+installation mode for a VM that consumes Strapi over public HTTPS.
+- Pinned build/runtime package execution to pnpm 10.22.0 with writable
+sarga home, Corepack, and XDG paths, and removed the local CMS dependency
+from the Motorsport systemd unit.
+- Added a focused exact-commit deployment procedure and external-CMS
+production environment guidance.
+  
+#### Files changed
+
+- deploy/environments/production/motorsport.env.example
+- deploy/production/README.md
+- deploy/production/build_applications.sh
+- deploy/production/initialize_server.sh
+- deploy/production/install_dependencies.sh
+- deploy/production/nginx/README.md
+- deploy/production/nginx/install-sarga-stack.sh
+- deploy/production/systemd/sarga-motorsport.service
+- docs/14_ubuntu_single_vm_production_deployment.md
+- docs/17_ubuntu_staging_production_deployment_playbook.md
+- docs/18_production_deployment_readiness_spec.md
+- docs/PHASE_PROGRESS.md
+  
+#### How verified
+
+- Shell syntax and whitespace checks passed for all changed scripts.
+- Motorsport lint and typecheck passed; the production build completed with
+expected CMS fallback messages because no local CMS environment was used.
+- Ephemeral Linux tests passed for the original full-stack installer, invalid
+mixed-mode arguments, Motorsport-only HTTP/TLS generation, service
+installation, and PostgreSQL-free server initialization.
+  
+#### Notes / caveats
+
+- ShellCheck was unavailable in the local environment.
+- The production CMS hostname, API token, origin TLS, DNS, CORS/WAF behavior,
+and real VM service/reboot checks still require operator validation during
+deployment; no DNS or server state was changed by this phase.

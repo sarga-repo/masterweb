@@ -5,6 +5,12 @@ the shared Strapi CMS, PostgreSQL, Nginx, and Let's Encrypt on one Ubuntu
 22.04.5 LTS virtual machine. It is the approved baseline for staging and the
 initial production topology.
 
+For a VM that runs only Motorsport and consumes an existing CMS over public
+HTTPS, do not follow the CMS/PostgreSQL/snapshot sections in this full-stack
+runbook. Use the focused **Motorsport-only VM with an external CMS** procedure
+in `deploy/production/README.md`. That procedure uses the same unprivileged
+`sarga` runtime while explicitly skipping PostgreSQL and the local CMS unit.
+
 ## 1. Topology and assumptions
 
 Replace the example hostnames throughout this guide:

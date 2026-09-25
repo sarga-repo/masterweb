@@ -1,6 +1,6 @@
 [Unit]
 Description=Sarga Motorsport frontend
-After=network-online.target sarga-cms.service
+After=network-online.target
 Wants=network-online.target
 
 [Service]
@@ -9,7 +9,16 @@ User=sarga
 Group=sarga
 WorkingDirectory=/srv/sarga-website/frontend-motorsport
 EnvironmentFile=/etc/sarga/motorsport.env
-ExecStart=/usr/local/bin/pnpm exec next start --hostname 127.0.0.1 --port 3001
+Environment=HOME=/home/sarga
+Environment=XDG_CACHE_HOME=/home/sarga/.cache
+Environment=XDG_CONFIG_HOME=/home/sarga/.config
+Environment=XDG_DATA_HOME=/home/sarga/.local/share
+Environment=COREPACK_HOME=/home/sarga/.cache/node/corepack
+Environment=COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+Environment=COREPACK_DEFAULT_TO_LATEST=0
+Environment=NPM_CONFIG_USERCONFIG=/home/sarga/.npmrc
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=/usr/bin/env corepack pnpm@10.22.0 exec next start --hostname 127.0.0.1 --port 3001
 Restart=on-failure
 RestartSec=5
 TimeoutStopSec=30

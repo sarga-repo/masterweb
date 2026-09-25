@@ -1,9 +1,10 @@
 # Sarga stack Nginx installer
 
-This directory contains the reviewed all-site Nginx example and a focused
-installer that currently requires Sarga Motorsport and the shared Strapi CMS.
-Gateway, the one-page Gateway presentation, and Horse Sport are optional and
-can be enabled with hostname flags when those applications are deployed.
+This directory contains the reviewed all-site Nginx example and an installer
+that supports either the full Motorsport + shared Strapi stack or a
+Motorsport-only VM connected to an external CMS. Gateway, the one-page Gateway
+presentation, and Horse Sport are optional in full-stack mode and can be
+enabled with hostname flags when those applications are deployed.
 It is part of this repository so proxy configuration remains versioned with
 the applications and systemd units; a separate Nginx repository is not needed.
 
@@ -11,6 +12,31 @@ The installer expects the repository at any location, but the installed
 systemd units continue to use the approved `/srv/sarga-website` deployment
 path. Install Nginx first and prepare `/etc/sarga/cms.env` and
 `/etc/sarga/motorsport.env` before starting services.
+
+## Motorsport-only host with an external CMS
+
+When Strapi runs on another host, configure only the Motorsport virtual host
+and unit:
+
+```bash
+sudo deploy/production/nginx/install-sarga-stack.sh \
+  --motorsport-only \
+  --motorsport-host motorsport.example.com \
+  --start-services
+```
+
+This mode does not require `--cms-host`, `/etc/sarga/cms.env`, or the CMS
+certificate files. It installs only `sarga-motorsport.service` and generates
+only the Motorsport Nginx block. Configure the external public CMS HTTPS origin
+in `/etc/sarga/motorsport.env`; the installer does not proxy or manage it.
+
+For origin TLS, add:
+
+```bash
+  --tls \
+  --motorsport-cert /etc/ssl/sarga/motorsport-fullchain.pem \
+  --motorsport-key /etc/ssl/sarga/motorsport-privkey.pem
+```
 
 ## HTTP-only installation
 
@@ -111,9 +137,9 @@ will not be trusted by browsers connecting directly to the server.
 
 ## What the installer changes
 
-- installs `sarga-cms.service` and `sarga-motorsport.service`, plus the Gateway,
-  one-page Gateway, and Horse Sport units when their hostname flags are
-  supplied;
+- installs `sarga-motorsport.service` and, unless `--motorsport-only` is used,
+  `sarga-cms.service`; Gateway, one-page Gateway, and Horse Sport units are
+  installed when their hostname flags are supplied in full-stack mode;
 - writes `/etc/nginx/sites-available/sarga-stack.conf`;
 - enables that Nginx site without deleting unrelated/default sites;
 - validates and reloads Nginx;

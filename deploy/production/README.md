@@ -4,6 +4,56 @@ The production deployment uses native Ubuntu services: Nginx, Node.js
 applications managed by systemd, and PostgreSQL. Local Docker Compose files are
 not production definitions.
 
+## Motorsport-only VM with an external CMS
+
+Use this path when the VM runs only `frontend-motorsport` and consumes Strapi
+through an existing public HTTPS origin. PostgreSQL, the CMS service, and CMS
+snapshot import are not part of this host.
+
+Install the runtime and create the unprivileged application account without
+PostgreSQL:
+
+```bash
+cd /srv/sarga-website
+sudo deploy/production/install_dependencies.sh --skip-postgres
+sudo deploy/production/initialize_server.sh \
+  --skip-postgres \
+  --fix-repo-ownership
+```
+
+Create `/etc/sarga/motorsport.env` from
+`deploy/environments/production/motorsport.env.example`. Set
+`STRAPI_API_URL`, `STRAPI_API_URL_INTERNAL`, and
+`NEXT_PUBLIC_STRAPI_API_URL` to the same public CMS HTTPS origin. Store the
+least-privilege token only in `STRAPI_API_TOKEN`.
+
+Deploy an approved full commit SHA from a clean checkout, then build and
+install only Motorsport:
+
+```bash
+sudo -u sarga git -C /srv/sarga-website fetch --prune origin
+sudo -u sarga git -C /srv/sarga-website status --short
+sudo -u sarga git -C /srv/sarga-website checkout --detach <APPROVED_FULL_SHA>
+sudo deploy/production/build_applications.sh --motorsport
+sudo deploy/production/nginx/install-sarga-stack.sh \
+  --motorsport-only \
+  --motorsport-host motorsport.example.com \
+  --start-services
+```
+
+The Nginx command above configures HTTP only. Add `--tls`,
+`--motorsport-cert`, and `--motorsport-key` when the origin certificate files
+are installed. Rebuild Motorsport whenever a `NEXT_PUBLIC_*` value changes.
+
+Verify the remote CMS and local/public application paths:
+
+```bash
+curl --fail --show-error --silent https://cms.example.com/admin >/dev/null
+sudo systemctl is-active sarga-motorsport
+curl --fail --show-error --silent http://127.0.0.1:3001/ >/dev/null
+curl --fail --show-error --silent https://motorsport.example.com/ >/dev/null
+```
+
 ## First Motorsport + CMS deployment
 
 The commands below assume the repository has been cloned to

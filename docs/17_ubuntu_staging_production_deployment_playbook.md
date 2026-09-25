@@ -16,6 +16,11 @@ Use this document together with:
 - `docs/09_quality_uat_acceptance.md` and
   `docs/motorsport/revamp/07_testing_uat.md` for release acceptance.
 
+For the narrower production topology where a VM runs only Motorsport and uses
+an existing CMS over public HTTPS, follow the focused procedure at the top of
+`deploy/production/README.md`. Skip this playbook's local CMS, PostgreSQL, and
+snapshot-import steps on that VM.
+
 ## 1. Deployment topology
 
 The supported native Ubuntu topology is:

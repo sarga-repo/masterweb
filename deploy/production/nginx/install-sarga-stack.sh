@@ -11,6 +11,11 @@ HTTP-only setup (useful before certificates are supplied):
     --motorsport-host staging-motorsport.example.com \
     --cms-host staging-cms.example.com
 
+Motorsport-only host using an external CMS:
+  sudo ./install-sarga-stack.sh \
+    --motorsport-only \
+    --motorsport-host motorsport.example.com
+
 Add the other sites whenever they are deployed:
   sudo ./install-sarga-stack.sh \
     --gateway-host www.example.com \
@@ -35,8 +40,9 @@ Options:
   --gateway-onepage-host HOST
 Optional one-page Gateway hostname (port 3004).
   --motorsport-host HOST   Required Motorsport hostname.
+  --motorsport-only        Configure only Motorsport; the CMS is external.
   --horsesport-host HOST   Optional Horse Sport hostname (port 3002).
-  --cms-host HOST          Required CMS hostname.
+  --cms-host HOST          Required CMS hostname unless --motorsport-only.
   --temporary-gateway-static
                            Temporarily route the staging Gateway hostname to
                            the static frontend on port 3005. The generated
@@ -87,6 +93,7 @@ gateway_onepage_host=""
 motorsport_host=""
 horsesport_host=""
 cms_host=""
+motorsport_only=false
 temporary_gateway_static=false
 tls_enabled=false
 start_services=false
@@ -117,6 +124,10 @@ while (($#)); do
       require_value "$1" "${2:-}"
       motorsport_host="$2"
       shift 2
+      ;;
+    --motorsport-only)
+      motorsport_only=true
+      shift
       ;;
     --horsesport-host)
       require_value "$1" "${2:-}"
@@ -202,9 +213,19 @@ done
 
 [[ "${EUID}" -eq 0 ]] || fail "run this installer with sudo"
 [[ -n "$motorsport_host" ]] || fail "--motorsport-host is required"
-[[ -n "$cms_host" ]] || fail "--cms-host is required"
 validate_hostname "$motorsport_host"
-validate_hostname "$cms_host"
+if [[ "$motorsport_only" == true ]]; then
+  [[ -z "$cms_host" ]] || fail "--cms-host cannot be used with --motorsport-only"
+  [[ -z "$gateway_host" && -z "$gateway_onepage_host" && -z "$horsesport_host" ]] ||
+    fail "Gateway and Horse Sport hosts cannot be used with --motorsport-only"
+  [[ "$temporary_gateway_static" == false ]] ||
+    fail "--temporary-gateway-static cannot be used with --motorsport-only"
+  [[ -z "$cms_cert" && -z "$cms_key" ]] ||
+    fail "CMS certificate options cannot be used with --motorsport-only"
+else
+  [[ -n "$cms_host" ]] || fail "--cms-host is required unless --motorsport-only is used"
+  validate_hostname "$cms_host"
+fi
 [[ -z "$gateway_host" ]] || validate_hostname "$gateway_host"
 [[ -z "$gateway_onepage_host" ]] || validate_hostname "$gateway_onepage_host"
 [[ -z "$horsesport_host" ]] || validate_hostname "$horsesport_host"
@@ -215,7 +236,8 @@ if [[ "$temporary_gateway_static" == true ]]; then
     fail "--temporary-gateway-static is restricted to a staging Gateway hostname"
 fi
 
-configured_hosts=("$motorsport_host" "$cms_host")
+configured_hosts=("$motorsport_host")
+[[ "$motorsport_only" == true ]] || configured_hosts+=("$cms_host")
 [[ -z "$gateway_host" ]] || configured_hosts+=("$gateway_host")
 [[ -z "$gateway_onepage_host" ]] || configured_hosts+=("$gateway_onepage_host")
 [[ -z "$horsesport_host" ]] || configured_hosts+=("$horsesport_host")
@@ -238,7 +260,10 @@ if [[ "$temporary_gateway_static" == true ]]; then
 fi
 
 if [[ "$tls_enabled" == true ]]; then
-  tls_paths=("$motorsport_cert" "$motorsport_key" "$cms_cert" "$cms_key")
+  tls_paths=("$motorsport_cert" "$motorsport_key")
+  if [[ "$motorsport_only" != true ]]; then
+    tls_paths+=("$cms_cert" "$cms_key")
+  fi
   if [[ -n "$gateway_host" ]]; then
     tls_paths+=("$gateway_cert" "$gateway_key")
   fi
@@ -257,7 +282,8 @@ if [[ "$tls_enabled" == true ]]; then
 fi
 
 if [[ "$start_services" == true ]]; then
-  [[ -f /etc/sarga/cms.env ]] || fail "missing /etc/sarga/cms.env"
+  [[ "$motorsport_only" == true || -f /etc/sarga/cms.env ]] ||
+    fail "missing /etc/sarga/cms.env"
   [[ -f /etc/sarga/motorsport.env ]] || fail "missing /etc/sarga/motorsport.env"
   [[ -z "$gateway_host" || -f /etc/sarga/gateway.env ]] || fail "missing /etc/sarga/gateway.env"
   [[ -z "$gateway_onepage_host" || -f /etc/sarga/gateway-onepage.env ]] || fail "missing /etc/sarga/gateway-onepage.env"
@@ -275,7 +301,11 @@ nginx_enabled="/etc/nginx/sites-enabled/sarga-stack.conf"
 legacy_nginx_available="/etc/nginx/sites-available/sarga-motorsport-stack.conf"
 legacy_nginx_enabled="/etc/nginx/sites-enabled/sarga-motorsport-stack.conf"
 
-configured_units=(sarga-cms.service sarga-motorsport.service)
+if [[ "$motorsport_only" == true ]]; then
+  configured_units=(sarga-motorsport.service)
+else
+  configured_units=(sarga-cms.service sarga-motorsport.service)
+fi
 [[ -z "$gateway_host" ]] || configured_units+=(sarga-gateway.service)
 [[ -z "$gateway_onepage_host" ]] || configured_units+=(sarga-gateway-onepage.service)
 [[ "$temporary_gateway_static" != true ]] || configured_units+=(sarga-gateway-static.service)
@@ -421,9 +451,11 @@ EOF
       write_tls_server "$horsesport_host" "127.0.0.1:3002" \
         "$horsesport_cert" "$horsesport_key" "60s"
     fi
-    write_redirect_server "$cms_host"
-    write_tls_server "$cms_host" "127.0.0.1:1337" \
-      "$cms_cert" "$cms_key" "300s" "100m"
+    if [[ "$motorsport_only" != true ]]; then
+      write_redirect_server "$cms_host"
+      write_tls_server "$cms_host" "127.0.0.1:1337" \
+        "$cms_cert" "$cms_key" "300s" "100m"
+    fi
   else
     if [[ -n "$gateway_host" ]]; then
       write_http_server "$gateway_host" "127.0.0.1:3000" "60s" "" "$temporary_gateway_static"
@@ -435,7 +467,9 @@ EOF
     if [[ -n "$horsesport_host" ]]; then
       write_http_server "$horsesport_host" "127.0.0.1:3002" "60s"
     fi
-    write_http_server "$cms_host" "127.0.0.1:1337" "300s" "100m"
+    if [[ "$motorsport_only" != true ]]; then
+      write_http_server "$cms_host" "127.0.0.1:1337" "300s" "100m"
+    fi
   fi
 } >"$temporary_config"
 
@@ -499,7 +533,11 @@ printf 'Motorsport: %s -> 127.0.0.1:3001\n' "$motorsport_host"
 if [[ -n "$horsesport_host" ]]; then
   printf 'Horse Sport: %s -> 127.0.0.1:3002\n' "$horsesport_host"
 fi
-printf 'CMS: %s -> 127.0.0.1:1337\n' "$cms_host"
+if [[ "$motorsport_only" == true ]]; then
+  printf 'CMS: external; configure its public HTTPS origin in /etc/sarga/motorsport.env\n'
+else
+  printf 'CMS: %s -> 127.0.0.1:1337\n' "$cms_host"
+fi
 if [[ "$tls_enabled" == true ]]; then
   printf 'TLS mode: client-supplied certificates\n'
 else

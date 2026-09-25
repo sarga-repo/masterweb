@@ -14,6 +14,7 @@ Options:
   --repo-path PATH         Repository directory (default: /srv/sarga-website).
   --db-role NAME           PostgreSQL login role (default: sarga_cms).
   --database NAME          PostgreSQL database (default: sarga_strapi).
+  --skip-postgres          Create only the Linux account and directories.
   --fix-repo-ownership     Recursively assign an existing repository to the
                            application user. Use only for this exact checkout.
   --help                   Show this help.
@@ -40,6 +41,7 @@ repo_path="/srv/sarga-website"
 db_role="sarga_cms"
 database_name="sarga_strapi"
 fix_repo_ownership=false
+skip_postgres=false
 
 while (($#)); do
   case "$1" in
@@ -63,6 +65,10 @@ while (($#)); do
       database_name="$2"
       shift 2
       ;;
+    --skip-postgres)
+      skip_postgres=true
+      shift
+      ;;
     --fix-repo-ownership)
       fix_repo_ownership=true
       shift
@@ -78,17 +84,25 @@ while (($#)); do
 done
 
 [[ "${EUID}" -eq 0 ]] || fail "run this initializer with sudo"
-[[ -t 0 ]] || fail "an interactive terminal is required for a new database role"
+if [[ "$skip_postgres" == false ]]; then
+  [[ -t 0 ]] || fail "an interactive terminal is required for a new database role"
+fi
 [[ "$app_user" =~ ^[a-z_][a-z0-9_-]*$ ]] || fail "invalid Linux user name"
 [[ "$db_role" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || fail "invalid PostgreSQL role name"
 [[ "$database_name" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || fail "invalid database name"
 [[ "$repo_path" == /srv/* && "$repo_path" != "/srv" ]] ||
   fail "--repo-path must be a specific directory below /srv"
 
-for command_name in adduser install systemctl sudo psql createuser createdb; do
+required_commands=(adduser install)
+if [[ "$skip_postgres" == false ]]; then
+  required_commands+=(systemctl sudo psql createuser createdb)
+fi
+for command_name in "${required_commands[@]}"; do
   command -v "$command_name" >/dev/null || fail "required command not found: $command_name"
 done
-systemctl is-active --quiet postgresql || fail "PostgreSQL is not active"
+if [[ "$skip_postgres" == false ]]; then
+  systemctl is-active --quiet postgresql || fail "PostgreSQL is not active"
+fi
 
 if id "$app_user" >/dev/null 2>&1; then
   printf 'Linux user already exists: %s\n' "$app_user"
@@ -110,35 +124,50 @@ elif [[ -n "$(find "$repo_path" -mindepth 1 ! -user "$app_user" -print -quit)" ]
   printf 'Re-run with --fix-repo-ownership after confirming this exact target.\n' >&2
 fi
 
-role_exists="$(sudo -u postgres psql --no-align --tuples-only --dbname=postgres \
-  --command="SELECT 1 FROM pg_roles WHERE rolname = '${db_role}'")"
-if [[ "$role_exists" == "1" ]]; then
-  printf 'PostgreSQL role already exists; password was not changed: %s\n' "$db_role"
+if [[ "$skip_postgres" == false ]]; then
+  role_exists="$(sudo -u postgres psql --no-align --tuples-only --dbname=postgres \
+    --command="SELECT 1 FROM pg_roles WHERE rolname = '${db_role}'")"
+  if [[ "$role_exists" == "1" ]]; then
+    printf 'PostgreSQL role already exists; password was not changed: %s\n' "$db_role"
+  else
+    printf 'Create a unique password for PostgreSQL role %s.\n' "$db_role"
+    sudo -u postgres createuser --login --pwprompt "$db_role"
+  fi
+
+  database_owner="$(sudo -u postgres psql --no-align --tuples-only --dbname=postgres \
+    --command="SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_database WHERE datname = '${database_name}'")"
+  if [[ -z "$database_owner" ]]; then
+    sudo -u postgres createdb --owner="$db_role" --encoding=UTF8 "$database_name"
+    database_owner="$db_role"
+  elif [[ "$database_owner" != "$db_role" ]]; then
+    fail "database $database_name exists but is owned by $database_owner, not $db_role"
+  fi
+fi
+
+if [[ "$skip_postgres" == false ]]; then
+  printf '\nServer application identity and database initialized.\n'
 else
-  printf 'Create a unique staging password for PostgreSQL role %s.\n' "$db_role"
-  sudo -u postgres createuser --login --pwprompt "$db_role"
+  printf '\nServer application identity and directories initialized.\n'
 fi
-
-database_owner="$(sudo -u postgres psql --no-align --tuples-only --dbname=postgres \
-  --command="SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_database WHERE datname = '${database_name}'")"
-if [[ -z "$database_owner" ]]; then
-  sudo -u postgres createdb --owner="$db_role" --encoding=UTF8 "$database_name"
-  database_owner="$db_role"
-elif [[ "$database_owner" != "$db_role" ]]; then
-  fail "database $database_name exists but is owned by $database_owner, not $db_role"
-fi
-
-printf '\nServer application identity and database initialized.\n'
 printf 'Linux user/group: %s/%s\n' "$app_user" "$app_group"
 printf 'Repository path: %s\n' "$repo_path"
 printf 'Environment directory: /etc/sarga\n'
 printf 'Backup directory: /var/backups/sarga\n'
-printf 'PostgreSQL role/database: %s/%s\n' "$db_role" "$database_name"
-cat <<'EOF'
+if [[ "$skip_postgres" == false ]]; then
+  printf 'PostgreSQL role/database: %s/%s\n' "$db_role" "$database_name"
+  cat <<'EOF'
 
 Still required:
   1. Put the prompted database password in /etc/sarga/cms.env.
   2. Clone or update the reviewed repository revision as the application user.
   3. Create the protected CMS and frontend environment files.
 EOF
+else
+  printf 'PostgreSQL: skipped\n'
+  cat <<'EOF'
 
+Still required:
+  1. Clone or update the reviewed repository revision as the application user.
+  2. Create the protected environment files required by the selected apps.
+EOF
+fi

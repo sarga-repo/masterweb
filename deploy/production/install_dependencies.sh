@@ -114,10 +114,14 @@ actual_node_major="$(node --version | sed -E 's/^v([0-9]+).*/\1/')"
 
 command -v corepack >/dev/null || fail "Node.js installation did not provide corepack"
 corepack enable --install-directory /usr/local/bin
-corepack prepare "pnpm@${PNPM_VERSION}" --activate
+COREPACK_ENABLE_DOWNLOAD_PROMPT=0 COREPACK_DEFAULT_TO_LATEST=0 \
+  corepack install --global "pnpm@${PNPM_VERSION}"
 command -v pnpm >/dev/null || fail "Corepack did not provide pnpm"
-[[ "$(pnpm --version)" == "$PNPM_VERSION" ]] ||
-  fail "expected pnpm $PNPM_VERSION, found $(pnpm --version)"
+actual_pnpm_version="$(COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
+  COREPACK_DEFAULT_TO_LATEST=0 \
+  corepack "pnpm@${PNPM_VERSION}" --version)"
+[[ "$actual_pnpm_version" == "$PNPM_VERSION" ]] ||
+  fail "expected pnpm $PNPM_VERSION, found $actual_pnpm_version"
 
 if [[ "$skip_postgres" == false ]]; then
   printf 'Configuring the PostgreSQL Apt repository...\n'
@@ -165,7 +169,7 @@ fi
 
 printf '\nDependency installation completed.\n'
 printf 'Node.js: %s\n' "$(node --version)"
-printf 'pnpm: %s\n' "$(pnpm --version)"
+printf 'pnpm: %s\n' "$actual_pnpm_version"
 if [[ "$skip_postgres" == false ]]; then
   printf 'PostgreSQL client: %s\n' "$(psql --version)"
   pg_isready || true
@@ -177,9 +181,8 @@ cat <<'EOF'
 
 Still required:
   1. Create the sarga user and /srv, /etc/sarga, and backup directories.
-  2. Create the PostgreSQL role and database.
+  2. When PostgreSQL was installed, create its application role and database.
   3. Clone the reviewed Git revision and run build_applications.sh.
-  4. Create the protected CMS and Motorsport environment files.
-  5. Build CMS, import the approved snapshot, then build Motorsport.
-  6. Run deploy/production/nginx/install-sarga-stack.sh.
+  4. Create the protected environment files required by the selected apps.
+  5. Run deploy/production/nginx/install-sarga-stack.sh for this host topology.
 EOF

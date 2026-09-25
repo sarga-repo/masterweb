@@ -2,6 +2,8 @@
 
 set -Eeuo pipefail
 
+readonly PNPM_VERSION="10.22.0"
+
 usage() {
   cat <<'EOF'
 Install locked dependencies and build selected Sarga applications sequentially.
@@ -134,9 +136,10 @@ done
 [[ "$app_user" =~ ^[a-z_][a-z0-9_-]*$ ]] || fail "invalid application user"
 id "$app_user" >/dev/null 2>&1 || fail "application user does not exist: $app_user"
 [[ -d "$repo_path/.git" ]] || fail "repository checkout was not found: $repo_path"
-command -v pnpm >/dev/null || fail "pnpm is not installed"
+command -v corepack >/dev/null || fail "corepack is not installed"
 command -v sudo >/dev/null || fail "sudo is not installed"
 command -v getent >/dev/null || fail "getent is not installed"
+command -v install >/dev/null || fail "install is not installed"
 if [[ "$motorsport_page_single_types_migrate" == true && "$restart_services" != true ]]; then
   fail "--motorsport-page-single-types-migrate requires --restart"
 fi
@@ -153,7 +156,40 @@ trap clear_motorsport_migration_runtime_override EXIT
 app_home="$(getent passwd "$app_user" | cut -d: -f6)"
 [[ -n "$app_home" && -d "$app_home" ]] ||
   fail "home directory is not available for application user: $app_user"
+app_group="$(id -gn "$app_user")"
+install -d -o "$app_user" -g "$app_group" -m 0700 \
+  "$app_home/.cache" \
+  "$app_home/.cache/node" \
+  "$app_home/.cache/node/corepack" \
+  "$app_home/.config" \
+  "$app_home/.local" \
+  "$app_home/.local/share"
+chown -R -- "$app_user:$app_group" \
+  "$app_home/.cache/node/corepack" \
+  "$app_home/.config" \
+  "$app_home/.local"
+corepack_bin="$(command -v corepack)"
 cd "$repo_path"
+
+run_pnpm_as_app_user() {
+  sudo -u "$app_user" --preserve-env \
+    env \
+    HOME="$app_home" \
+    USER="$app_user" \
+    LOGNAME="$app_user" \
+    XDG_CACHE_HOME="$app_home/.cache" \
+    XDG_CONFIG_HOME="$app_home/.config" \
+    XDG_DATA_HOME="$app_home/.local/share" \
+    COREPACK_HOME="$app_home/.cache/node/corepack" \
+    COREPACK_ENABLE_DOWNLOAD_PROMPT=0 \
+    COREPACK_DEFAULT_TO_LATEST=0 \
+    NPM_CONFIG_USERCONFIG="$app_home/.npmrc" \
+    "$corepack_bin" "pnpm@${PNPM_VERSION}" "$@"
+}
+
+actual_pnpm_version="$(run_pnpm_as_app_user --version)"
+[[ "$actual_pnpm_version" == "$PNPM_VERSION" ]] ||
+  fail "expected pnpm $PNPM_VERSION for $app_user, found $actual_pnpm_version"
 
 application_path() {
   case "$1" in
@@ -193,7 +229,7 @@ for application in "${selected[@]}"; do
   app_path="$(application_path "$application")"
   env_path="$(environment_path "$application")"
   printf '\nInstalling locked dependencies for %s...\n' "$application"
-  sudo -u "$app_user" pnpm --dir "$app_path" install --frozen-lockfile
+  run_pnpm_as_app_user --dir "$app_path" install --frozen-lockfile
 
   printf 'Building %s with %s...\n' "$application" "$env_path"
   (
@@ -201,12 +237,9 @@ for application in "${selected[@]}"; do
     set -a
     source "$env_path"
     set +a
-    export HOME="$app_home"
-    export XDG_CACHE_HOME="$app_home/.cache"
-    export COREPACK_HOME="$app_home/.cache/node/corepack"
     [[ "${NODE_ENV:-}" == "production" ]] ||
       fail "$env_path must set NODE_ENV=production"
-    sudo -u "$app_user" --preserve-env pnpm --dir "$app_path" build
+    run_pnpm_as_app_user --dir "$app_path" build
   )
 
   if [[ "$application" != "cms" ]]; then

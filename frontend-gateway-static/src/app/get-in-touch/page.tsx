@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import emailBanner from "../../../assets/images/banners_mobile/get-in-touch-email.png";
-import linkedinBanner from "../../../assets/images/banners_mobile/get-in-touch-linkedin.png";
+import emailBanner from "../../../assets/reference/sarga_feedback_209260923/assets/BANNER_Abstract 3 getintouch.jpg.jpeg";
+import linkedinBanner from "../../../assets/reference/sarga_feedback_209260923/assets/BANNER_Abstract 4 Linkedin.jpg.jpeg";
 import linkedinWhite from "../../../assets/images/logos/linkedin_white.png";
 import { Footer, Header } from "../../components/site-chrome";
 
@@ -26,7 +26,7 @@ export default function GetInTouch() {
       <section className="touch-actions" aria-label="Contact options">
         <article className="touch-card">
           <div className="touch-card-image">
-            <Image src={emailBanner} alt="A SARGA sports venue prepared for collaboration" fill unoptimized loading="eager" sizes="(max-width: 759px) 100vw, 640px" />
+            <Image src={emailBanner} alt="A SARGA sports venue prepared for collaboration" fill loading="eager" sizes="(max-width: 759px) 100vw, 640px" />
             <div className="touch-card-copy">
               <h2>JOIN US IN SHAPING THE FUTURE OF INDONESIA&apos;S SPORTS AND ENTERTAINMENT ECOSYSTEM</h2>
               <a className="touch-action-button" href="mailto:info@sarga.co.id"><MailIcon />SEND EMAIL</a>

@@ -63,6 +63,7 @@ brand revamp tracks. Update this file at the end of **every** completed phase
 | GWR-DEPLOY-1     | Static Gateway staging deployment wiring  | ✅ Done                    | 2026-09-20 |
 | GWR-DEPLOY-2     | Static Gateway Next.js security patch     | ✅ Done                    | 2026-09-20 |
 | GWR-DEPLOY-3     | About mobile paragraph alignment          | ✅ Done                    | 2026-09-20 |
+| GWR-FEEDBACK-1   | Sarga feedback and content adjustments    | ✅ Done                    | 2026-09-25 |
 | GWR-6            | Publications and Ticket Hub                  | ⬜ Todo             | —          |
 | GWR-7            | Cross-route QA and launch readiness          | ⬜ Todo             | —          |
 
@@ -14043,3 +14044,151 @@ Status: ✅ Done — 2026-08-29
 
 - The mobile rule is limited to widths below `760px`; desktop layout rules are
   unchanged.
+
+### GWR-FEEDBACK-1 — Sarga feedback and content adjustments
+
+#### What was done
+
+- Applied Sarga's PDF and workbook feedback across Home, About Us, 360
+  Ecosystem, News, and Get In Touch, including supplied copy corrections,
+  layout refinements, image swaps, responsive behavior, and carousel updates.
+- Connected the downloaded reference artwork and extracted business-unit
+  banners to the static frontend.
+- Restored the Home intro link to its original `read more >` label, Ecosystem
+  destination, and text-only styling after user review.
+- Removed the mistaken hero CTA after clarifying that `SEE WHAT DRIVES US`
+  illustrated the hover state; applied its white/red button states and rounded
+  corners to the existing `DIVE INTO OUR ECOSYSTEM` action.
+- Switched the mobile Home hero to the taller supplied `BANNER_mobile 3.png`
+  and removed the separate HTML title panel and diagonal pattern after
+  confirming the headline is already part of the supplied artwork; the page
+  retains a screen-reader heading without showing duplicate title text. The
+  first mobile viewport allocates space for both the hero and grey intro. On
+  shorter portrait screens, the hero stays top-aligned and crops only the
+  lower track so the headline, horse, and car remain visible.
+- Reduced the mobile Home ecosystem teaser gap between its heading and CTA
+  from `50px` to a fixed `24px`, matching the page 6 feedback; set its top and
+  bottom content insets to the same `24px` as well.
+- Added a `3px` blur to non-selected news cards and leadership profile images
+  in the mobile/tablet sliders; the selected slide stays clear.
+- Recreated the About Us Structure banner in HTML and approved logo artwork.
+  Mobile keeps the complete `4:5` composition; desktop uses a shorter, full-
+  width three-band layout with the same information.
+- Recalibrated the mobile HTML Structure infographic against the supplied full
+  `4:5` `BANNER_Structure.jpg.jpeg`: preserved the three band boundaries and
+  matched heading scale, copy positions, category alignment, business-unit
+  text wraps, logo sizing, and Owned IP row spacing. The `390px` layout follows
+  the reference composition proportionally on narrower phones; desktop rules
+  remain separate. SPORTS and MEDIA & LIFESTYLE are left-aligned, VENUES is
+  centered, and each operating-unit description follows the reference's
+  `2/2/2/3` line wraps. Widened and vertically realigned the mobile Sarga
+  Venues mark to match the sliced banner's proportions and spacing.
+- Added the PORDASI mark to the static frontend's public assets so the complete
+  infographic can render all product marks locally.
+- Replaced the Festival and Indonesia Rising Star text approximations with the
+  supplied logo artwork, and replaced only the SARGA wordmark in the Media &
+  Lifestyle unit with its supplied negative logo.
+- Restacked the desktop Vision and Structure sections in the same order as
+  mobile, removed their rounded card treatments, used `Hero Image.png` for the
+  desktop Vision banner, and made the HTML Structure infographic full-width
+  with a compact desktop layout.
+- Changed About Us Journey from page-scroll-driven panorama movement to an
+  independently scrollable image frame. Added an in-frame `Scroll to Explore`
+  cue with previous/next arrow controls and removed the sticky spacer and old
+  scroll-progress bar.
+- Kept year-only and full-date Journey labels left-aligned on one shared,
+  responsive date rail. Full dates use a smaller responsive size and stay on a
+  single line.
+- Reduced the mobile Journey controls to a `56px` footer with `44px` arrow
+  buttons and moved the cue/navigation below the timeline image viewport;
+  desktop keeps its original toolbar placement and sizing.
+- Removed the secondary property-logo strips from the `/ecosystem` cards, as
+  marked on page 15 of the Sarga feedback PDF; the main business-unit logos,
+  descriptions, and `read more` links remain.
+- Removed the visible eyebrow, title, and descriptive copy from the News hero,
+  as marked on page 16 of the Sarga feedback PDF. The hero artwork stays in
+  place and the page retains its accessible `NEWS` heading.
+- Removed the decorative orange separator from the stacked mobile/tablet
+  Get In Touch layout, as marked on page 18; desktop layout is unchanged.
+
+#### Files changed
+
+- `frontend-gateway-static/src/app/about-us/page.tsx`
+- `frontend-gateway-static/src/app/ecosystem/page.tsx`
+- `frontend-gateway-static/src/app/get-in-touch/page.tsx`
+- `frontend-gateway-static/src/app/globals.css`
+- `frontend-gateway-static/src/app/news/page.tsx`
+- `frontend-gateway-static/src/app/page.tsx`
+- `frontend-gateway-static/src/components/news-slider.tsx`
+- `frontend-gateway-static/src/components/site-chrome.tsx`
+- `frontend-gateway-static/public/pordasi.png`
+- `docs/PHASE_PROGRESS.md`
+
+#### How verified
+
+- `pnpm --dir frontend-gateway-static run typecheck`, `lint`, and `build`
+  passed; `git diff --check` passed.
+- Verified the local production build in a browser on Home, About Us, 360
+  Ecosystem, News, and Get In Touch at mobile `390x844` and desktop
+  `1440x900`; checked responsive navigation, tab changes, swipe interactions,
+  Journey image scrolling, and console errors.
+- Rechecked the Home intro link in the production browser at mobile
+  `480x844` and desktop `1440x900`; confirmed its label, destination, and
+  computed text-only styling.
+- Verified the ecosystem CTA's normal state and `8px` corners at mobile
+  `390x844` and desktop `1440x900`, hovered it to confirm the red/white state,
+  and clicked through to `/ecosystem` in the local production browser.
+- Rechecked `/news` at mobile `390x844` and desktop `1440x900`; confirmed the
+  hero artwork remains visible, the marked copy is absent, the `NEWS` heading
+  remains in the accessibility tree, and there is no horizontal overflow.
+- Verified `/get-in-touch` at `390x844` and `320x740`; the marked separator is
+  hidden and both contact sections remain full-width without horizontal
+  overflow. Rechecked at desktop `1440x900` to confirm its layout is unchanged.
+- Verified the full mobile Home banner in the local dev browser at `430x932`,
+  `414x896`, and `320x568`; the grey intro and `read more` action are visible
+  in each first viewport without horizontal overflow. On the short `320x568`
+  view, the hero is reduced to the available height and remains top-aligned;
+  the title, horse, and car stay visible while the lower track is cropped.
+  Rechecked desktop at `1440x900`; the desktop artwork remains full and the
+  mobile asset stays hidden.
+- Verified the Journey banner at mobile `390x844` and `320x740`, and desktop
+  `1440x900`; confirmed the compact controls sit below the image on mobile,
+  remain above it on desktop, and the forward arrow still scrolls the banner.
+- Measured the Home ecosystem teaser heading-to-CTA gap at `390x844` and
+  `360x800`; both render at `24px` with no horizontal overflow.
+- Verified selected and non-selected blur states in the News and leadership
+  sliders at `390x844` and `820x1180`, including dot selection and focus clarity;
+  confirmed the desktop leadership gallery remains unblurred at `1440x900`.
+- Compared the mobile About Structure rendering at `390x844` with the full
+  reference resized to the same `390x488` frame, checking pixel bounds for each
+  heading, copy group, operating-unit mark, and Owned IP mark. Principal labels
+  and logos align within roughly `0–2px`; the Sarga Venues mark matches the
+  slice within about `1px`. Business-unit descriptions wrap `2/2/2/3`. At
+  `320x800`, confirmed proportional logo sizing, equal Owned IP row tracks,
+  and no horizontal overflow. At `1440x900`, confirmed the full-width desktop
+  infographic retains its desktop-specific layout and logo sizing.
+- Verified desktop Vision and Structure stack vertically without rounded card
+  borders; the desktop Vision banner loads at its native `3841:2251` ratio.
+- Verified the About Us Journey frame in the local dev browser at `390x844`,
+  `320x800`, and `1440x900`. Arrow controls move the panorama; normal vertical
+  page scrolling leaves its horizontal position unchanged. The inner scrollbar
+  is hidden, the old progress bar is absent, and the document has no horizontal
+  overflow.
+- Verified all Journey year/date labels stay on one line at `320x800` and
+  `390x844`, use a common left edge, and keep each milestone description on a
+  shared text start; checked the date scale and alignment again at `1440x900`.
+- Verified the `/ecosystem` cards at mobile and desktop sizes after the update:
+  secondary logo strips are absent across SPORTS, VENUES, and MEDIA & LIFESTYLE,
+  while primary card logos, descriptions, and links remain. The document has no
+  horizontal overflow.
+- Static Gateway typecheck, lint, production build, and `git diff --check`
+  passed after the Structure reconstruction and desktop layout refinements.
+
+#### Notes / caveats
+
+- The downloaded reference files and extracted business-unit banners are under
+  the frontend's ignored `assets/` paths and are available in this local
+  checkout. They are not tracked in Git.
+- The dev browser still reports existing Next.js image-size and preload
+  warnings on About Us; the Journey interaction itself produces no console
+  errors.

@@ -1,20 +1,31 @@
 "use client";
 
 import Image, { type StaticImageData } from "next/image";
-import { type CSSProperties, useEffect, useRef, useState } from "react";
+import { type CSSProperties, useCallback, useEffect, useRef, useState } from "react";
 
-import aboutHero from "../../../assets/images/banners_mobile/about-hero-ecosystem.png";
+import aboutHero from "../../../assets/reference/sarga_feedback_209260923/assets/BANNER_mobile 2.jpg.jpeg";
 import aboutHeroDesktop from "../../../assets/images/banners/about-hero-desktop.png";
-import aboutJourney from "../../../assets/images/banners_mobile/about-journey-panorama.png";
-import aboutStructure from "../../../assets/images/banners_mobile/about-structure-venue.png";
-import aboutVision from "../../../assets/images/banners_mobile/about-vision-track.png";
-import airin from "../../../assets/images/photo_leaders/airin@2x_hd.png";
-import anto from "../../../assets/images/photo_leaders/anto@2x_hd.png";
-import aryo from "../../../assets/images/photo_leaders/aryo@2x.png";
-import felix from "../../../assets/images/photo_leaders/felix@2x.png";
-import nugdha from "../../../assets/images/photo_leaders/nugdha@2x_hd.png";
-import samsul from "../../../assets/images/photo_leaders/samsul@2x_hd.png";
-import zaki from "../../../assets/images/photo_leaders/zaki@2x.png";
+import aboutJourney from "../../../assets/reference/sarga_feedback_209260923/assets/our journey/our journey.jpg.jpeg";
+import aboutVision from "../../../assets/reference/sarga_feedback_209260923/assets/BANNER_Abstract 1 vision-16.jpg.jpeg";
+import aboutVisionDesktop from "../../../assets/images/banners/Hero Image.png";
+import icrLogo from "../../../assets/images/logos/ICR.png";
+import ihrLogo from "../../../assets/images/logos/IHR.png";
+import ijtcLogo from "../../../assets/images/logos/IJCT.png";
+import indonesiaRisingStarLogo from "../../../assets/images/logos/indonesia_rising_star.png";
+import offTheGameLogo from "../../../assets/images/logos/off_the_game_primary_inverse_red.png";
+import sargaCompanyLogo from "../../../assets/images/logos/sarga_co_primary_negative.png";
+import sargaFestivalLogo from "../../../assets/images/logos/sarga_festival_white.png";
+import sargaHorseSportLogo from "../../../assets/images/logos/sarga_horse_sport_main_inverse.png";
+import sargaMotorsportLogo from "../../../assets/images/logos/sarga_motorsoprt_main_brandmark_inverse.png";
+import sargaPrimaryNegativeLogo from "../../../assets/images/logos/sarga_primary_negative.png";
+import sargaVenuesLogo from "../../../assets/images/logos/sarga_veues_stacking_inverse.png";
+import airin from "../../../assets/reference/sarga_feedback_209260923/assets/PHOTOS LEADERS/sources image/webp/airin@2x.webp";
+import anto from "../../../assets/reference/sarga_feedback_209260923/assets/PHOTOS LEADERS/sources image/webp/anto@2x.webp";
+import aryo from "../../../assets/reference/sarga_feedback_209260923/assets/PHOTOS LEADERS/sources image/webp/aryo@2x.webp";
+import felix from "../../../assets/reference/sarga_feedback_209260923/assets/PHOTOS LEADERS/sources image/webp/felix@2x.webp";
+import nugdha from "../../../assets/reference/sarga_feedback_209260923/assets/PHOTOS LEADERS/sources image/webp/nugdha@2x.webp";
+import samsul from "../../../assets/reference/sarga_feedback_209260923/assets/PHOTOS LEADERS/sources image/webp/samsul@2x.webp";
+import zaki from "../../../assets/reference/sarga_feedback_209260923/assets/PHOTOS LEADERS/sources image/webp/zaki@2x.webp";
 import { Footer, Header } from "../../components/site-chrome";
 
 type Leader = {
@@ -78,10 +89,12 @@ const leaders: Leader[] = [
 ];
 
 const journey = [
-  { year: "2023", copy: "SARGA.CO is established with a focus on horse racing." },
-  { year: "2024", copy: "Horse racing events continue to grow the audience and the platform." },
-  { year: "2025", copy: "Pulomas Race Course joins the SARGA.CO ecosystem." },
-  { year: "2026", copy: "Strategic FIA and MGPA partnerships expand the motorsport platform alongside IJTC and Off The Game." },
+  { year: "2023", copy: "Founded SARGA.CO in Jakarta, focusing on horse sports, including horse archery, equestrian, and horse racing." },
+  { year: "2024", copy: "Focused on horse racing and held four horse racing championships across Indonesia." },
+  { year: "04 FEB 2025", copy: "Launched Indonesia’s Horse Racing (IHR)." },
+  { year: "23 APR 2025", copy: "Signed an agreement with PT Pulo Mas Jaya to transform JIEPP into an integrated, world-class sports and entertainment venue for racing, equestrian, polo, and horse archery." },
+  { year: "02 MAR 2026", copy: "Signed a five-year agreement with the Fédération Internationale de l’Automobile (FIA) to become the promoter of the FIA Rallycross World Cup Indonesia." },
+  { year: "24 APR 2026", copy: "Launched the Indonesia Junior Talent Cup (IJTC)." },
 ];
 
 function AboutHero() {
@@ -95,9 +108,80 @@ function AboutHero() {
   );
 }
 
-function LeaderCard({ leader, onOpen }: { leader: Leader; onOpen: (leader: Leader) => void }) {
+function StructureInfographic() {
   return (
-    <article className="leader-card">
+    <figure className="structure-infographic" aria-labelledby="structure-infographic-title">
+      <div className="structure-infographic-corporate">
+        <h3 id="structure-infographic-title">OUR STRUCTURE</h3>
+        <p className="structure-infographic-level">IP Holding (Corporate)</p>
+        <Image className="structure-infographic-company-logo" src={sargaCompanyLogo} alt="SARGA.CO" />
+        <p className="structure-infographic-legal">PT KUDA PACU INDONESIA (SARGA.CO)</p>
+      </div>
+
+      <div className="structure-infographic-ecosystem" aria-labelledby="structure-ecosystem-title">
+        <h3 id="structure-ecosystem-title">OUR ECOSYSTEM</h3>
+        <div className="structure-ecosystem-columns">
+          <div>
+            <h4>SPORTS</h4>
+            <p>Sarga Horse Sport<br />Sarga Motorsport</p>
+          </div>
+          <div>
+            <h4>VENUES</h4>
+            <p>Sarga Venues</p>
+          </div>
+          <div>
+            <h4>MEDIA &amp;<br />LIFESTYLE</h4>
+            <p>Sarga Media &amp; Lifestyle</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="structure-infographic-business">
+        <h3>Business Units (Operating Units)</h3>
+        <div className="structure-business-units">
+          <div className="structure-business-unit">
+            <Image src={sargaHorseSportLogo} alt="SARGA Horse Sport" />
+            <p>Sport IPs, Media Rights and Content,<br className="structure-infographic-mobile-break" /> Competitions, Fan Experiences, Academy</p>
+          </div>
+          <div className="structure-business-unit">
+            <Image src={sargaMotorsportLogo} alt="SARGA Motorsport" />
+            <p>Sport IPs, Media Rights and Content,<br className="structure-infographic-mobile-break" /> Competitions, Fan Experiences, Academy</p>
+          </div>
+          <div className="structure-business-unit structure-business-unit-venues">
+            <Image src={sargaVenuesLogo} alt="SARGA Venues" />
+            <p>Ownership · operation commercialization<br className="structure-infographic-mobile-break" /> of venue infrastructure</p>
+          </div>
+          <div className="structure-business-unit structure-business-unit-media">
+            <div className="structure-media-lockup" aria-label="SARGA Media and Lifestyle">
+              <Image src={sargaPrimaryNegativeLogo} alt="" />
+              <small>MEDIA &amp; LIFESTYLE</small>
+            </div>
+            <p>Lifestyle &amp; Entertainment IPs,<br className="structure-infographic-mobile-break" /> Media Platform, Content, Festivals &amp; Concerts,<br className="structure-infographic-mobile-break" /> Community Experiences</p>
+          </div>
+        </div>
+
+        <h3 className="structure-owned-title">Owned IP (Product)</h3>
+        <div className="structure-owned-rows">
+          <div className="structure-owned-row structure-owned-row-four">
+            <Image src={ihrLogo} alt="Indonesia's Horse Racing" />
+            <Image src="/pordasi.png" alt="PORDASI horse racing championship" width={138} height={133} />
+            <Image src={ijtcLogo} alt="Indonesia Junior Talent Cup" />
+            <Image src={icrLogo} alt="SARGA ICR mark" />
+          </div>
+          <div className="structure-owned-row structure-owned-row-three">
+            <Image src={offTheGameLogo} alt="Off The Game" />
+            <Image src={sargaFestivalLogo} alt="SARGA Festival" />
+            <Image src={indonesiaRisingStarLogo} alt="SARGA.CO Indonesia Rising Star" />
+          </div>
+        </div>
+      </div>
+    </figure>
+  );
+}
+
+function LeaderCard({ leader, onOpen, isActive = false }: { leader: Leader; onOpen: (leader: Leader) => void; isActive?: boolean }) {
+  return (
+    <article className={`leader-card${isActive ? " is-active" : ""}`}>
       <button className="leader-photo-button" type="button" onClick={() => onOpen(leader)} aria-label={`Open profile for ${leader.name}`}>
         <Image src={leader.image} alt={`${leader.name} portrait`} fill loading="eager" sizes="(max-width: 759px) 88vw, 360px" />
       </button>
@@ -127,15 +211,22 @@ function LeaderProfile({ leader, onClose }: { leader: Leader; onClose: () => voi
 function PeopleSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedLeader, setSelectedLeader] = useState<Leader | null>(null);
+  const touchStartX = useRef<number | null>(null);
   const sliderLeaders = leaders.slice(2);
   const move = (direction: 1 | -1) => {
     setActiveIndex((current) => (current + direction + sliderLeaders.length) % sliderLeaders.length);
+  };
+  const handleTouchEnd = (endX: number) => {
+    if (touchStartX.current === null) return;
+    const delta = touchStartX.current - endX;
+    if (Math.abs(delta) > 36) move(delta > 0 ? 1 : -1);
+    touchStartX.current = null;
   };
 
   return (
     <section className="about-people" aria-labelledby="people-title">
       <div className="about-section-intro">
-        <h2 id="people-title">THE PEOPLE BEHIND SARGA</h2>
+        <h2 id="people-title">THE PEOPLE BEHIND SARGA.CO</h2>
         <p>United by a shared vision, our leaders bring together industry experience, entrepreneurial thinking, and a passion for creating experiences that shape the future of Indonesia&apos;s sports and entertainment ecosystem.</p>
       </div>
 
@@ -143,12 +234,16 @@ function PeopleSection() {
         {leaders.slice(0, 2).map((leader) => <LeaderCard key={leader.name} leader={leader} onOpen={setSelectedLeader} />)}
       </div>
 
-      <div className="leader-slider" aria-label="SARGA leadership profiles">
+      <div
+        className="leader-slider"
+        aria-label="SARGA leadership profiles"
+        onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null; }}
+        onTouchEnd={(event) => handleTouchEnd(event.changedTouches[0]?.clientX ?? 0)}
+        onTouchCancel={() => { touchStartX.current = null; }}
+      >
         <div className="leader-slider-track" style={{ "--leader-index": activeIndex } as CSSProperties}>
-          {sliderLeaders.map((leader) => <LeaderCard key={leader.name} leader={leader} onOpen={setSelectedLeader} />)}
+          {sliderLeaders.map((leader, index) => <LeaderCard key={leader.name} leader={leader} onOpen={setSelectedLeader} isActive={index === activeIndex} />)}
         </div>
-        <button className="slider-button leader-slider-button leader-slider-button-prev" type="button" aria-label="Previous leadership profile" onClick={() => move(-1)}>‹</button>
-        <button className="slider-button leader-slider-button leader-slider-button-next" type="button" aria-label="Next leadership profile" onClick={() => move(1)}>›</button>
       </div>
       <div className="leader-dots" role="tablist" aria-label="Leadership profiles">
         {sliderLeaders.map((leader, index) => (
@@ -172,24 +267,40 @@ function PeopleSection() {
 export default function AboutUs() {
   const [menuOpen, setMenuOpen] = useState(false);
   const journeyScrollRef = useRef<HTMLDivElement>(null);
-  const [journeyScrollbar, setJourneyScrollbar] = useState({ left: 0, width: 46 });
+  const [journeyNavigation, setJourneyNavigation] = useState({ canScrollPrevious: false, canScrollNext: true });
 
-  const updateJourneyScrollbar = (element: HTMLDivElement) => {
+  const updateJourneyNavigation = useCallback((element: HTMLDivElement) => {
     const maxScroll = element.scrollWidth - element.clientWidth;
-    const thumbWidth = element.scrollWidth > 0 ? (element.clientWidth / element.scrollWidth) * 100 : 100;
-    const thumbLeft = maxScroll > 0 ? (element.scrollLeft / maxScroll) * (100 - thumbWidth) : 0;
-    setJourneyScrollbar({ left: thumbLeft, width: thumbWidth });
+    setJourneyNavigation({
+      canScrollPrevious: element.scrollLeft > 1,
+      canScrollNext: maxScroll > 1 && element.scrollLeft < maxScroll - 1,
+    });
+  }, []);
+
+  const scrollJourney = (direction: -1 | 1) => {
+    const element = journeyScrollRef.current;
+    if (!element) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    element.scrollBy({ left: direction * element.clientWidth * 0.82, behavior: prefersReducedMotion ? "auto" : "smooth" });
   };
 
   useEffect(() => {
     const element = journeyScrollRef.current;
     if (!element) return;
 
-    const handleResize = () => updateJourneyScrollbar(element);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    const syncNavigation = () => updateJourneyNavigation(element);
+    syncNavigation();
+    const resizeObserver = new ResizeObserver(syncNavigation);
+    resizeObserver.observe(element);
+    const image = element.querySelector("img");
+    image?.addEventListener("load", syncNavigation);
+
+    return () => {
+      resizeObserver.disconnect();
+      image?.removeEventListener("load", syncNavigation);
+    };
+  }, [updateJourneyNavigation]);
 
   return (
     <main className="gateway-about">
@@ -198,12 +309,13 @@ export default function AboutUs() {
 
       <section className="about-lede" aria-label="About SARGA.CO">
         <span className="about-lede-label" aria-hidden="true">ABOUT</span>
-        <p>SARGA.CO is a leading 360° sports and entertainment ecosystem company in Indonesia, providing an integrated platform across intellectual property, media rights, venue operation, and live event experiences. Established in 2023 under PT Kuda Pacu Indonesia (PT KPI), SARGA.CO was founded with a clear ambition: to transform the way sport and entertainment is created, experienced, and commercialized in Indonesia.</p>
+        <p>SARGA.CO is a leading 360° sports and entertainment ecosystem company in Indonesia, providing an integrated platform across intellectual property, media rights, venue operation, and live event experiences. Established in 2023 under PT Kuda Pacu Indonesia (PT KPI), SARGA.CO was founded with a clear ambition: to transform the way sports &amp; entertainment is created, experienced, and commercialized in Indonesia.</p>
       </section>
 
       <section className="about-vision" aria-labelledby="vision-title">
         <div className="about-vision-image">
-          <Image src={aboutVision} alt="Horse racing track and venue at sunset" fill sizes="(max-width: 759px) 86vw, 420px" />
+          <Image className="about-vision-mobile-image" src={aboutVision} alt="Horse racing track and venue at sunset" fill sizes="(max-width: 759px) 86vw, 420px" />
+          <Image className="about-vision-desktop-image" src={aboutVisionDesktop} alt="SARGA sports and entertainment ecosystem across live events, horse sport, and motorsport" fill sizes="(max-width: 418px) 86vw, (max-width: 759px) 360px, 100vw" />
         </div>
         <div className="about-copy-block">
           <h2 id="vision-title">VISION</h2>
@@ -214,10 +326,10 @@ export default function AboutUs() {
       <section className="about-structure" aria-labelledby="structure-title">
         <div className="about-copy-block about-structure-copy">
           <h2 id="structure-title">STRUCTURE</h2>
-          <p>Today, SARGA.CO continues to expand its ecosystem across multiple sporting disciplines and entertainment platforms, guided by one purpose: to create unforgettable experiences, empower the sports and entertainment industry, and shape its future in Indonesia.</p>
+          <p>Today, SARGA.CO continues to expand its ecosystem across multiple sporting disciplines and entertainment platforms, guided by one purpose: to create unforgettable experiences, empower the sports &amp; entertainment industry, and shape its future in Indonesia.</p>
         </div>
-        <div className="about-wide-image about-structure-image">
-          <Image src={aboutStructure} alt="A connected stadium, event, and racing venue at dusk" fill sizes="100vw" />
+      <div className="about-wide-image about-structure-image">
+          <StructureInfographic />
         </div>
       </section>
 
@@ -226,25 +338,43 @@ export default function AboutUs() {
       <section className="about-journey" aria-labelledby="journey-title">
         <h2 id="journey-title">OUR JOURNEY</h2>
         <div className="about-journey-scroll-frame">
+          <div className="journey-explore-toolbar">
+            <p>Scroll to Explore <span aria-hidden="true">→</span></p>
+            <div className="journey-explore-navigation" role="group" aria-label="Journey banner navigation">
+              <button
+                type="button"
+                aria-label="Scroll journey banner backward"
+                disabled={!journeyNavigation.canScrollPrevious}
+                onClick={() => scrollJourney(-1)}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5-7 7 7 7" /></svg>
+              </button>
+              <button
+                type="button"
+                aria-label="Scroll journey banner forward"
+                disabled={!journeyNavigation.canScrollNext}
+                onClick={() => scrollJourney(1)}
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 5 7 7-7 7" /></svg>
+              </button>
+            </div>
+          </div>
           <div
             ref={journeyScrollRef}
             className="about-journey-scroll"
             tabIndex={0}
-            aria-label="Scroll through the SARGA journey from horse sport to media and entertainment"
-            onScroll={(event) => updateJourneyScrollbar(event.currentTarget)}
+            aria-label="Scrollable SARGA journey panorama"
+            onScroll={(event) => updateJourneyNavigation(event.currentTarget)}
           >
             <div className="about-journey-track">
-              <Image src={aboutJourney} alt="A panoramic visual journey from horse racing through venues, motorsport, and live entertainment" width={2172} height={724} loading="eager" />
+              <Image src={aboutJourney} alt="A panoramic visual journey from horse racing through venues, motorsport, and live entertainment" width={aboutJourney.width} height={aboutJourney.height} loading="eager" draggable={false} />
             </div>
-          </div>
-          <div className="journey-scrollbar" aria-hidden="true">
-            <span className="journey-scrollbar-thumb" style={{ left: `${journeyScrollbar.left}%`, width: `${journeyScrollbar.width}%` }} />
           </div>
         </div>
         <div className="journey-list">
           {journey.map((milestone) => (
             <article key={milestone.year} className="journey-item">
-              <h3>{milestone.year}</h3>
+              <h3 className={milestone.year.includes(" ") ? "journey-item-date" : "journey-item-year"}>{milestone.year}</h3>
               <p>{milestone.copy}</p>
             </article>
           ))}

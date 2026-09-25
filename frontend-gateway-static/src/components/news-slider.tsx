@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { type StaticImageData } from "next/image";
-import { type CSSProperties, useState } from "react";
+import { type CSSProperties, useRef, useState } from "react";
 
 import newsKevin from "../../assets/images/news/NEWS_MENYAMBUT_KEVIN_HANSEN.png";
 import newsSraya from "../../assets/images/news/NEWS_SRAYA_RECOGNITION_UNTUK_SOCIAL_IMPACT.png";
@@ -20,7 +20,7 @@ export const newsSlides: NewsSlide[] = [
   {
     title: "SARGA.CO RAIH THE SRAYA RECOGNITION UNTUK SOCIAL IMPACT",
     date: "12/09/2026",
-    description: "Premium national organizer horse derbies, showcasing elite jockeys and managing strict compliance protocols.",
+    description: "SARGA.CO advances social impact and the role of women in Indonesia’s horse racing community.",
     href: "https://news.sarga.co/id/news/sargaco-raih-the-sraya-recognition-untuk-social-impact-dorong-peran-perempuan-di-pacuan-kuda-mvk.html?screen=1",
     image: newsSraya,
     alt: "SARGA.CO receiving the Sraya Recognition for social impact",
@@ -45,17 +45,30 @@ export const newsSlides: NewsSlide[] = [
 
 export function NewsSlider() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const touchStartX = useRef<number | null>(null);
   const move = (direction: 1 | -1) => {
     setActiveSlide((current) => (current + direction + newsSlides.length) % newsSlides.length);
+  };
+  const handleTouchEnd = (endX: number) => {
+    if (touchStartX.current === null) return;
+    const delta = touchStartX.current - endX;
+    if (Math.abs(delta) > 36) move(delta > 0 ? 1 : -1);
+    touchStartX.current = null;
   };
 
   return (
     <section className="news-section" id="news" aria-labelledby="news-title">
       <h2 id="news-title">NEWS</h2>
-      <div className="news-slider" aria-live="polite">
+      <div
+        className="news-slider"
+        aria-live="polite"
+        onTouchStart={(event) => { touchStartX.current = event.touches[0]?.clientX ?? null; }}
+        onTouchEnd={(event) => handleTouchEnd(event.changedTouches[0]?.clientX ?? 0)}
+        onTouchCancel={() => { touchStartX.current = null; }}
+      >
         <div className="news-track" style={{ "--slide-index": activeSlide } as CSSProperties}>
-          {newsSlides.map((slide) => (
-            <article className="news-card" key={slide.title}>
+          {newsSlides.map((slide, index) => (
+            <article className={`news-card${index === activeSlide ? " is-active" : ""}`} key={slide.title}>
               <div className="news-image-wrap">
                 <Image src={slide.image} alt={slide.alt} fill sizes="(max-width: 759px) 79vw, 720px" />
               </div>
@@ -68,8 +81,6 @@ export function NewsSlider() {
             </article>
           ))}
         </div>
-        <button className="slider-button slider-button-prev" type="button" aria-label="Previous news story" onClick={() => move(-1)}>‹</button>
-        <button className="slider-button slider-button-next" type="button" aria-label="Next news story" onClick={() => move(1)}>›</button>
       </div>
       <div className="news-dots" role="tablist" aria-label="News stories">
         {newsSlides.map((slide, index) => (

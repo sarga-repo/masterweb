@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import newsHero from "../../../assets/images/banners_mobile/news-hero.png";
+import newsHero from "../../../assets/reference/sarga_feedback_209260923/assets/BANNER_news.jpg (1).jpeg";
 import newsHeroDesktop from "../../../assets/images/banners/news-hero-desktop.png";
-import newsPressBanner from "../../../assets/images/banners_mobile/news-press-banner.png";
+import newsPressBanner from "../../../assets/reference/sarga_feedback_209260923/assets/BANNER_Abstract 2 360'.jpg.jpeg";
 import { NewsSlider } from "../../components/news-slider";
 import { Footer, Header } from "../../components/site-chrome";
 
@@ -40,14 +40,10 @@ const pressReleases: PressRelease[] = [
 function NewsHero() {
   return (
     <section className="news-page-hero" aria-labelledby="news-page-title">
-      <Image className="news-page-hero-mobile-image" src={newsHero} alt="Equestrian sport at a SARGA event" fill unoptimized loading="eager" sizes="100vw" />
+      <Image className="news-page-hero-mobile-image" src={newsHero} alt="Equestrian sport at a SARGA event" fill loading="eager" sizes="100vw" />
       <Image className="news-page-hero-desktop-image" src={newsHeroDesktop} alt="SARGA sports, motorsport, and live entertainment news coverage" fill loading="eager" sizes="100vw" />
       <div className="news-page-hero-overlay" />
-      <div className="news-page-hero-copy">
-        <p className="news-page-eyebrow news-page-hero-eyebrow">SARGA.CO</p>
-        <h1 id="news-page-title">NEWS</h1>
-        <p>Read the latest news from SARGA.CO and all of the official press releases.</p>
-      </div>
+      <h1 className="sr-only" id="news-page-title">NEWS</h1>
     </section>
   );
 }
@@ -98,7 +94,7 @@ export default function NewsPage() {
       <NewsHero />
       <NewsSlider />
       <section className="news-page-banner" aria-label="SARGA sports and entertainment in motion">
-        <Image src={newsPressBanner} alt="SARGA racecourse and stadium lights in motion" fill sizes="100vw" />
+        <Image src={newsPressBanner} alt="SARGA sports, media, and entertainment campaign artwork" fill sizes="100vw" />
       </section>
       <PressReleaseList />
       <Footer />

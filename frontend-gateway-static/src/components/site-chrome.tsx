@@ -25,6 +25,7 @@ function MenuIcon({ open }: { open: boolean }) {
     <span className={`menu-icon${open ? " is-open" : ""}`} aria-hidden="true">
       <span />
       <span />
+      <span />
     </span>
   );
 }

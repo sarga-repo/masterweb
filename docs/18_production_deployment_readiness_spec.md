@@ -12,6 +12,9 @@ Deploy only `frontend-motorsport` to the new production VM. The VM runs:
 - the Motorsport Next.js application on `127.0.0.1:3001` under systemd;
 - Node.js 22 and pnpm 10.22.0 for server-side builds and runtime.
 
+The production dependency helper accepts Ubuntu 22.04, 24.04, and 26.04 LTS;
+the selected production host currently uses Ubuntu 26.04 (`resolute`).
+
 The existing Strapi CMS remains on another host and is consumed through its
 public HTTPS origin. This VM does **not** run or migrate Strapi, PostgreSQL,
 Gateway, Horse Sport, or a CMS snapshot. GitHub deployment workflows are not

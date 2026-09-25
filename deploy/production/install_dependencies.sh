@@ -59,8 +59,8 @@ command -v apt-get >/dev/null || fail "apt-get was not found; Ubuntu is required
 source /etc/os-release
 [[ "${ID:-}" == "ubuntu" ]] || fail "unsupported operating system: ${ID:-unknown}"
 case "${VERSION_ID:-}" in
-  22.04|24.04) ;;
-  *) fail "supported Ubuntu releases are 22.04 and 24.04; found ${VERSION_ID:-unknown}" ;;
+  22.04|24.04|26.04) ;;
+  *) fail "supported Ubuntu releases are 22.04, 24.04, and 26.04; found ${VERSION_ID:-unknown}" ;;
 esac
 
 export DEBIAN_FRONTEND=noninteractive

@@ -14199,7 +14199,9 @@ Status: ✅ Done — 2026-08-29
 #### What was done
 
 - Added a PostgreSQL-free host initialization path and a Motorsport-only Nginx
-installation mode for a VM that consumes Strapi over public HTTPS.
+  installation mode for a VM that consumes Strapi over public HTTPS.
+- Extended the dependency installer guard to Ubuntu 26.04 LTS after verifying
+  upstream NodeSource and PostgreSQL repository compatibility.
 - Pinned build/runtime package execution to pnpm 10.22.0 with writable
 sarga home, Corepack, and XDG paths, and removed the local CMS dependency
 from the Motorsport systemd unit.

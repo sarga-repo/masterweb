@@ -4,6 +4,10 @@ The production deployment uses native Ubuntu services: Nginx, Node.js
 applications managed by systemd, and PostgreSQL. Local Docker Compose files are
 not production definitions.
 
+The dependency installer supports Ubuntu 22.04, 24.04, and 26.04 LTS. The
+Ubuntu 26.04 path uses NodeSource's distribution-neutral Node.js repository and
+the PostgreSQL community repository's supported `resolute-pgdg` suite.
+
 ## Motorsport-only VM with an external CMS
 
 Use this path when the VM runs only `frontend-motorsport` and consumes Strapi
